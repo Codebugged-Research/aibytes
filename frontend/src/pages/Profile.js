@@ -19,61 +19,74 @@ export const Profile = () => {
   };
 
   const stats = [
-    { icon: Flame, label: 'Day Streak', value: streak, testId: 'profile-streak' },
-    { icon: Zap, label: 'Total XP', value: xp, testId: 'profile-xp' },
-    { icon: Award, label: 'Lessons', value: completedLessons.length, testId: 'profile-lessons' }
+    { icon: Flame, label: 'Day Streak', value: streak, testId: 'profile-streak', gradient: 'from-[#FF6B35] to-[#FF8C42]' },
+    { icon: Zap, label: 'Total XP', value: xp, testId: 'profile-xp', gradient: 'from-[#6248FF] to-[#8B5CF6]' },
+    { icon: Award, label: 'Completed', value: completedLessons.length, testId: 'profile-lessons', gradient: 'from-[#22C55E] to-[#10B981]' }
   ];
 
   return (
     <motion.div
-      className="px-6 py-8 space-y-8"
-      initial={{ opacity: 0, y: 10 }}
+      className="px-6 py-8 space-y-6"
+      initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.4 }}
+      transition={{ duration: 0.5 }}
     >
       {/* Header */}
-      <div className="space-y-4">
-        <h1 className="text-4xl font-bold tracking-tight text-white" data-testid="profile-title">
-          Your Progress
+      <motion.div 
+        className="space-y-2"
+        initial={{ y: -20, opacity: 0 }}
+        animate={{ y: 0, opacity: 1 }}
+        transition={{ delay: 0.2 }}
+      >
+        <h1 className="text-4xl font-bold text-white" data-testid="profile-title">
+          Profile
         </h1>
-        <p className="text-[#BDBDBD] text-base leading-relaxed">
-          Track your AI learning journey
+        <p className="text-[#94A3B8] text-base">
+          Track your learning progress
         </p>
-      </div>
+      </motion.div>
 
       {/* Profile Card */}
-      <Card testId="profile-card" className="text-center space-y-4">
-        <div className="w-24 h-24 rounded-full bg-black border border-[#222222] flex items-center justify-center mx-auto text-5xl">
-          🧠
-        </div>
-        <div>
-          <h2 className="text-2xl font-semibold text-white">AI Learner</h2>
-          <p className="text-[#888888] text-sm mt-1">Foundation Explorer</p>
-        </div>
-      </Card>
+      <motion.div
+        initial={{ scale: 0.9, opacity: 0 }}
+        animate={{ scale: 1, opacity: 1 }}
+        transition={{ delay: 0.3 }}
+      >
+        <Card testId="profile-card" className="text-center bg-gradient-to-br from-[#6248FF]/20 to-[#8B5CF6]/20 border-[#6248FF]/30">
+          <div className="space-y-3">
+            <div className="w-20 h-20 rounded-full bg-gradient-to-br from-[#6248FF] to-[#8B5CF6] flex items-center justify-center mx-auto">
+              <span className="text-4xl">👤</span>
+            </div>
+            <div>
+              <h2 className="text-2xl font-bold text-white">AI Learner</h2>
+              <p className="text-[#94A3B8] text-sm mt-1">Foundation Explorer</p>
+            </div>
+          </div>
+        </Card>
+      </motion.div>
 
       {/* Stats */}
-      <div className="space-y-4">
-        <h2 className="text-2xl font-semibold tracking-tight text-white">Statistics</h2>
-        <div className="grid gap-4">
+      <div className="space-y-3">
+        <h2 className="text-xl font-bold text-white">Statistics</h2>
+        <div className="space-y-3">
           {stats.map((stat, index) => {
             const Icon = stat.icon;
             return (
               <motion.div
                 key={stat.label}
-                initial={{ opacity: 0, x: -20 }}
-                animate={{ opacity: 1, x: 0 }}
-                transition={{ delay: index * 0.1 }}
+                initial={{ x: -30, opacity: 0 }}
+                animate={{ x: 0, opacity: 1 }}
+                transition={{ delay: 0.4 + index * 0.1 }}
               >
                 <Card testId={stat.testId}>
                   <div className="flex items-center justify-between">
                     <div className="flex items-center gap-4">
-                      <div className="w-12 h-12 rounded-full bg-black border border-[#222222] flex items-center justify-center">
-                        <Icon size={24} className="text-white" strokeWidth={1.5} />
+                      <div className={`w-12 h-12 rounded-xl bg-gradient-to-br ${stat.gradient} flex items-center justify-center`}>
+                        <Icon size={24} className="text-white" strokeWidth={2} />
                       </div>
-                      <div className="text-[#BDBDBD]">{stat.label}</div>
+                      <span className="text-white font-semibold">{stat.label}</span>
                     </div>
-                    <div className="text-3xl font-bold text-white">{stat.value}</div>
+                    <span className="text-3xl font-bold text-white">{stat.value}</span>
                   </div>
                 </Card>
               </motion.div>
@@ -82,27 +95,21 @@ export const Profile = () => {
         </div>
       </div>
 
-      {/* Achievements */}
-      <div className="space-y-4">
-        <h2 className="text-2xl font-semibold tracking-tight text-white">Achievements</h2>
-        <Card testId="achievements-card">
-          <div className="text-center py-8">
-            <Award size={48} className="text-[#888888] mx-auto mb-4" strokeWidth={1.5} />
-            <p className="text-[#888888]">Complete more lessons to unlock achievements</p>
-          </div>
-        </Card>
-      </div>
-
-      {/* Reset Button */}
-      <div className="pt-8">
+      {/* Reset */}
+      <motion.div 
+        className="pt-4"
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ delay: 0.7 }}
+      >
         <Button
           onClick={() => setShowReset(!showReset)}
-          variant="ghost"
+          variant="secondary"
           className="w-full"
           testId="reset-progress-button"
         >
           <div className="flex items-center justify-center gap-2">
-            <RotateCcw size={18} strokeWidth={1.5} />
+            <RotateCcw size={18} strokeWidth={2} />
             Reset Progress
           </div>
         </Button>
@@ -110,19 +117,18 @@ export const Profile = () => {
           <motion.div
             initial={{ opacity: 0, height: 0 }}
             animate={{ opacity: 1, height: 'auto' }}
-            className="mt-4"
+            className="mt-3"
           >
             <Button
               onClick={handleReset}
-              variant="secondary"
-              className="w-full"
+              className="w-full bg-gradient-to-r from-[#EF4444] to-[#DC2626]"
               testId="confirm-reset-button"
             >
               Confirm Reset
             </Button>
           </motion.div>
         )}
-      </div>
+      </motion.div>
     </motion.div>
   );
 };
