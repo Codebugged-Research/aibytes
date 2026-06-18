@@ -1,0 +1,35 @@
+{
+  "summary": "First-finish smoke test for AI Quest. Backend curriculum & lesson endpoints work. Full end-to-end lesson flow verified: Home -> Start Lesson -> teach cards + 6 exercises -> Completion screen -> XP earned -> persisted in localStorage on reload -> next lesson unlocked. Profile and Path pages render correctly. Monochrome design intact. One minor non-blocking UI issue: the floating 'Made with Emergent' badge overlays the bottom-nav 'Profile' button area, intercepting clicks via standard click (force=True works).",
+  "tested_scope": ["backend", "frontend", "integration"],
+  "passed": [
+    "GET /api/curriculum returns 200 with correct units/lessons structure",
+    "GET /api/lessons/u0-l1 returns 200, /api/lessons/nonexistent returns 404",
+    "Home page renders with title, streak-count, xp-count, todays-lesson-card",
+    "Navigation to /path works; shows 3 lessons with L1 unlocked, L2/L3 locked",
+    "Start Lesson navigates to /lesson/u0-l1 and lesson player loads",
+    "Teach cards display, exercises (multiple_choice/true_false/fill_blank) render with options",
+    "Answer selection enables Next button; explanation panel appears (Correct!/Not quite)",
+    "Lesson completion screen shows with 'Lesson Complete!' title and XP earned",
+    "XP accrued to home (0 -> 4 XP after one run) and PERSISTED across page reload",
+    "Progress card updated to 1/3 lessons complete after L1 completion",
+    "Lesson 2 (AI vs ML) becomes unlocked on Path; Lesson 3 remains locked",
+    "Profile page shows Day Streak 1, Total XP 4, Lessons 1 and reset-progress-button present",
+    "Monochrome design (black/white/gray) maintained across pages",
+    "data-testid attributes present on all key interactive elements",
+    "Framer Motion transitions render without visible errors"
+  ],
+  "failed": [
+    {
+      "area": "frontend / layout",
+      "issue": "'Made with Emergent' floating badge overlaps the bottom nav (especially the Profile button) and intercepts pointer events; standard Playwright click hits the badge link instead of nav button. Real users on small mobile widths may experience similar tap-target overlap.",
+      "evidence": "Playwright error: '<a id=\"emergent-badge\"> intercepts pointer events' when clicking [data-testid=\"nav-profile\"]. Direct URL navigation and force-click both work.",
+      "priority": "LOW"
+    }
+  ],
+  "action_items": [
+    "Optional: adjust bottom nav z-index or shift Emergent badge so it does not overlap the Profile nav tap target on 390px wide viewports."
+  ],
+  "success_rate": {"backend": "100%", "frontend": "95%"},
+  "retest_needed": false,
+  "full_testing_deferred": true
+}
