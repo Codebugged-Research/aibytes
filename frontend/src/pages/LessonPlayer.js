@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { X, ChevronRight, Check, XCircle, Trophy, Zap } from 'lucide-react';
@@ -21,6 +21,16 @@ export const LessonPlayer = () => {
   const [isCorrect, setIsCorrect] = useState(null);
   const [earnedXP, setEarnedXP] = useState(0);
   const [showCompletion, setShowCompletion] = useState(false);
+  const explanationRef = useRef(null);
+
+  // Auto-scroll the explanation card into view when it appears
+  useEffect(() => {
+    if (!showExplanation) return;
+    const timer = setTimeout(() => {
+      explanationRef.current?.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+    }, 160);
+    return () => clearTimeout(timer);
+  }, [showExplanation]);
 
   useEffect(() => {
     if (lesson) {
@@ -283,6 +293,7 @@ export const LessonPlayer = () => {
                 onFillBlank={handleFillBlank}
                 isCorrect={isCorrect}
                 showExplanation={showExplanation}
+                explanationRef={explanationRef}
               />
             )}
           </motion.div>
@@ -361,13 +372,14 @@ const TeachCard = ({ card }) => {
   );
 };
 
-const ExerciseCard = ({ 
-  exercise, 
-  selectedAnswer, 
-  onAnswerSelect, 
+const ExerciseCard = ({
+  exercise,
+  selectedAnswer,
+  onAnswerSelect,
   onFillBlank,
-  isCorrect, 
-  showExplanation 
+  isCorrect,
+  showExplanation,
+  explanationRef,
 }) => {
   return (
     <div className="space-y-5">
@@ -423,6 +435,7 @@ const ExerciseCard = ({
       <AnimatePresence>
         {showExplanation && (
           <motion.div
+            ref={explanationRef}
             initial={{ opacity: 0, y: 15 }}
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -15 }}
