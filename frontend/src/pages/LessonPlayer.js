@@ -59,7 +59,104 @@ export const LessonPlayer = () => {
     );
   }
 
-  const currentSegment = lesson.segments[currentSegmentIndex];
+  if (showCompletion) {
+    // Confetti particle positions
+    const particles = Array.from({ length: 12 }, (_, i) => ({
+      angle: (i / 12) * 360,
+      color: ['#6248FF','#10B981','#FF6B35','#FFE27C','#8B5CF6','#34D399'][i % 6],
+      delay: i * 0.04
+    }));
+
+    return (
+      <div className="h-full w-full bg-[#F8FAFC] flex items-center justify-center px-6">
+        <motion.div
+          className="max-w-md w-full space-y-6 text-center"
+          initial={{ scale: 0.8, opacity: 0 }}
+          animate={{ scale: 1, opacity: 1 }}
+          transition={{ type: 'spring', stiffness: 260, damping: 20 }}
+        >
+          <div className="relative flex justify-center">
+            {/* Confetti burst */}
+            {particles.map((p, i) => (
+              <motion.div
+                key={i}
+                className="absolute w-3 h-3 rounded-full"
+                style={{ backgroundColor: p.color }}
+                initial={{ scale: 0, x: 0, y: 0, opacity: 1 }}
+                animate={{
+                  scale: [0, 1, 0.6],
+                  x: Math.cos((p.angle * Math.PI) / 180) * 80,
+                  y: Math.sin((p.angle * Math.PI) / 180) * 80,
+                  opacity: [1, 1, 0]
+                }}
+                transition={{ delay: 0.3 + p.delay, duration: 0.75, ease: 'easeOut' }}
+              />
+            ))}
+
+            <motion.div
+              initial={{ scale: 0, rotate: -180 }}
+              animate={{ scale: 1, rotate: 0 }}
+              transition={{ delay: 0.2, type: 'spring', stiffness: 260, damping: 18 }}
+            >
+              <motion.div
+                className="w-24 h-24 rounded-full bg-gradient-to-br from-[#10B981] to-[#059669] mx-auto flex items-center justify-center mb-6 shadow-lg shadow-emerald-200"
+                animate={{ boxShadow: [
+                  '0 8px 24px rgba(16,185,129,0.3)',
+                  '0 8px 40px rgba(16,185,129,0.6)',
+                  '0 8px 24px rgba(16,185,129,0.3)'
+                ] }}
+                transition={{ duration: 2, repeat: Infinity }}
+              >
+                <Trophy size={48} className="text-white" strokeWidth={2} />
+              </motion.div>
+            </motion.div>
+          </div>
+
+          <div className="space-y-2">
+            <h1 className="text-3xl font-extrabold text-slate-900 tracking-tight" data-testid="lesson-complete-title">
+              Lesson Complete!
+            </h1>
+            <p className="text-slate-500 text-base font-bold">
+              You earned <span className="text-violet-600 font-extrabold">{lesson.xp + earnedXP} XP</span>
+            </p>
+          </div>
+
+          <Card testId="completion-card" className="bg-gradient-to-br from-violet-50 to-indigo-50 border-violet-100 shadow-sm">
+            <div className="space-y-2 text-left">
+              <div className="flex items-center gap-2 text-slate-900 font-extrabold text-sm">
+                <Zap size={18} className="text-violet-600" strokeWidth={2.5} />
+                <span>Key Takeaway</span>
+              </div>
+              <p className="text-slate-600 text-xs font-semibold leading-relaxed">
+                {lesson.concept}
+              </p>
+            </div>
+          </Card>
+
+          <div className="space-y-3 pt-2">
+            <Button
+              onClick={() => navigate('/path')}
+              className="w-full font-bold text-sm py-4"
+              testId="continue-button"
+            >
+              Continue Learning
+            </Button>
+            <Button
+              onClick={() => navigate('/')}
+              variant="secondary"
+              className="w-full font-bold text-sm py-4"
+              testId="back-home-button"
+            >
+              Back to Home
+            </Button>
+          </div>
+        </motion.div>
+      </div>
+    );
+  }
+
+  const currentSegment = lesson.segments?.[currentSegmentIndex];
+  if (!currentSegment) return null;
   const isTeachSegment = currentSegment.type === 'teach';
   const currentContent = isTeachSegment 
     ? currentSegment.cards[currentCardIndex]
@@ -148,102 +245,6 @@ export const LessonPlayer = () => {
   const handleClose = () => {
     navigate('/');
   };
-
-  if (showCompletion) {
-    // Confetti particle positions
-    const particles = Array.from({ length: 12 }, (_, i) => ({
-      angle: (i / 12) * 360,
-      color: ['#6248FF','#10B981','#FF6B35','#FFE27C','#8B5CF6','#34D399'][i % 6],
-      delay: i * 0.04
-    }));
-
-    return (
-      <div className="h-full w-full bg-[#F8FAFC] flex items-center justify-center px-6">
-        <motion.div
-          className="max-w-md w-full space-y-6 text-center"
-          initial={{ scale: 0.8, opacity: 0 }}
-          animate={{ scale: 1, opacity: 1 }}
-          transition={{ type: 'spring', stiffness: 260, damping: 20 }}
-        >
-          <div className="relative flex justify-center">
-            {/* Confetti burst */}
-            {particles.map((p, i) => (
-              <motion.div
-                key={i}
-                className="absolute w-3 h-3 rounded-full"
-                style={{ backgroundColor: p.color }}
-                initial={{ scale: 0, x: 0, y: 0, opacity: 1 }}
-                animate={{
-                  scale: [0, 1, 0.6],
-                  x: Math.cos((p.angle * Math.PI) / 180) * 80,
-                  y: Math.sin((p.angle * Math.PI) / 180) * 80,
-                  opacity: [1, 1, 0]
-                }}
-                transition={{ delay: 0.3 + p.delay, duration: 0.75, ease: 'easeOut' }}
-              />
-            ))}
-
-            <motion.div
-              initial={{ scale: 0, rotate: -180 }}
-              animate={{ scale: 1, rotate: 0 }}
-              transition={{ delay: 0.2, type: 'spring', stiffness: 260, damping: 18 }}
-            >
-              <motion.div
-                className="w-24 h-24 rounded-full bg-gradient-to-br from-[#10B981] to-[#059669] mx-auto flex items-center justify-center mb-6 shadow-lg shadow-emerald-200"
-                animate={{ boxShadow: [
-                  '0 8px 24px rgba(16,185,129,0.3)',
-                  '0 8px 40px rgba(16,185,129,0.6)',
-                  '0 8px 24px rgba(16,185,129,0.3)'
-                ] }}
-                transition={{ duration: 2, repeat: Infinity }}
-              >
-                <Trophy size={48} className="text-white" strokeWidth={2} />
-              </motion.div>
-            </motion.div>
-          </div>
-          
-          <div className="space-y-2">
-            <h1 className="text-3xl font-extrabold text-slate-900 tracking-tight" data-testid="lesson-complete-title">
-              Lesson Complete!
-            </h1>
-            <p className="text-slate-500 text-base font-bold">
-              You earned <span className="text-violet-600 font-extrabold">{lesson.xp + earnedXP} XP</span>
-            </p>
-          </div>
-
-          <Card testId="completion-card" className="bg-gradient-to-br from-violet-50 to-indigo-50 border-violet-100 shadow-sm">
-            <div className="space-y-2 text-left">
-              <div className="flex items-center gap-2 text-slate-900 font-extrabold text-sm">
-                <Zap size={18} className="text-violet-600" strokeWidth={2.5} />
-                <span>Key Takeaway</span>
-              </div>
-              <p className="text-slate-600 text-xs font-semibold leading-relaxed">
-                {lesson.concept}
-              </p>
-            </div>
-          </Card>
-
-          <div className="space-y-3 pt-2">
-            <Button 
-              onClick={() => navigate('/path')}
-              className="w-full font-bold text-sm py-4"
-              testId="continue-button"
-            >
-              Continue Learning
-            </Button>
-            <Button 
-              onClick={() => navigate('/')}
-              variant="secondary"
-              className="w-full font-bold text-sm py-4"
-              testId="back-home-button"
-            >
-              Back to Home
-            </Button>
-          </div>
-        </motion.div>
-      </div>
-    );
-  }
 
   return (
     <div className="h-full w-full bg-[#F8FAFC] flex flex-col justify-between overflow-hidden relative">
