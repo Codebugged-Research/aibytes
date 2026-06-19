@@ -1,190 +1,269 @@
+import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { motion } from 'framer-motion';
-import { Flame, Zap, TrendingUp, ChevronRight, Award } from 'lucide-react';
+import { motion, AnimatePresence } from 'framer-motion';
+import { Flame, Zap, TrendingUp, ChevronRight, Award, Check, Sparkles } from 'lucide-react';
 import { useProgress } from '../hooks/useProgress';
 import { useCurriculum } from '../hooks/useData';
-import { getCurrentLesson, isLessonCompleted } from '../utils/storage';
+import { getCurrentLesson, isLessonCompleted, setStreak, addXP } from '../utils/storage';
 import { Button, Card, ProgressBar } from '../components/ui-components';
+import { Skeleton, HomeScreenSkeleton } from '../components/Skeleton';
+import { StreakUnfreeze } from '../components/StreakUnfreeze';
+import { StartLearningTransition } from '../components/StartLearningTransition';
+
+/* Stagger container/item variants */
+const containerVariants = {
+  hidden: {},
+  show: { transition: { staggerChildren: 0.09, delayChildren: 0.05 } }
+};
+const itemVariants = {
+  hidden: { opacity: 0, y: 18, scale: 0.97 },
+  show:   { opacity: 1, y: 0,  scale: 1,
+    transition: { duration: 0.42, ease: [0.22, 1, 0.36, 1] } }
+};
 
 export const Home = () => {
   const navigate = useNavigate();
-  const { xp, streak } = useProgress();
+  const { xp, streak, refreshProgress } = useProgress();
   const { curriculum, loading } = useCurriculum();
+  const [xpPopped, setXpPopped] = useState(false);
+  const [showUnfreeze, setShowUnfreeze] = useState(false);
+  const [showTransition, setShowTransition] = useState(false);
+
+  const handleUnfreezeComplete = () => {
+    const newStreak = streak + 1;
+    setStreak(newStreak);
+    addXP(15);
+    refreshProgress();
+    setShowUnfreeze(false);
+  };
 
   const currentLessonId = getCurrentLesson();
   const completedCount = curriculum?.units?.[0]?.lessons?.filter(l => isLessonCompleted(l.id)).length || 0;
-  const totalLessons = curriculum?.units?.[0]?.lessons?.length || 3;
+  const totalLessons   = curriculum?.units?.[0]?.lessons?.length || 3;
 
-  const handleStartLesson = () => {
-    navigate(`/lesson/${currentLessonId}`);
-  };
+  const handleStartLesson = () => setShowTransition(true);
 
   if (loading) {
     return (
-      <div className="min-h-screen flex items-center justify-center">
-        <motion.div
-          animate={{ rotate: 360 }}
-          transition={{ duration: 1, repeat: Infinity, ease: "linear" }}
-        >
-          <Zap size={48} className="text-[#6248FF]" />
-        </motion.div>
-      </div>
+      <motion.div
+        className="w-full"
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ duration: 0.3 }}
+      >
+        <HomeScreenSkeleton />
+      </motion.div>
     );
   }
 
+  // Weekday demo streak data
+  const weekDays = [
+    { day: 'M', active: true,  isToday: false, label: 'Mon' },
+    { day: 'T', active: true,  isToday: false, label: 'Tue' },
+    { day: 'W', active: true,  isToday: false, label: 'Wed' },
+    { day: 'T', active: false, isToday: true,  label: 'Thu' },
+    { day: 'F', active: false, isToday: false, label: 'Fri' },
+    { day: 'S', active: false, isToday: false, label: 'Sat' },
+    { day: 'S', active: false, isToday: false, label: 'Sun' }
+  ];
+
   return (
-    <motion.div
-      className="px-6 py-8 space-y-6"
-      initial={{ opacity: 0, y: 20 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.5 }}
-    >
-      {/* Header */}
-      <div className="space-y-2">
-        <motion.h1 
-          className="text-4xl font-bold text-white"
-          data-testid="home-title"
-          initial={{ x: -20, opacity: 0 }}
-          animate={{ x: 0, opacity: 1 }}
-          transition={{ delay: 0.2 }}
-        >
-          AIBytes
-        </motion.h1>
-        <motion.p 
-          className="text-[#94A3B8] text-base"
-          initial={{ x: -20, opacity: 0 }}
-          animate={{ x: 0, opacity: 1 }}
-          transition={{ delay: 0.3 }}
-        >
-          Master AI, one byte at a time
-        </motion.p>
-      </div>
-
-      {/* Stats Grid */}
-      <div className="grid grid-cols-3 gap-3">
-        <motion.div
-          initial={{ scale: 0, opacity: 0 }}
-          animate={{ scale: 1, opacity: 1 }}
-          transition={{ delay: 0.4, type: 'spring' }}
-        >
-          <Card testId="streak-card" className="bg-gradient-to-br from-[#FF6B35]/20 to-[#FF6B35]/5 border-[#FF6B35]/30">
-            <div className="text-center space-y-2">
-              <Flame size={28} className="text-[#FF6B35] mx-auto" strokeWidth={2} />
-              <div className="text-2xl font-bold text-white" data-testid="streak-count">{streak}</div>
-              <div className="text-xs text-[#94A3B8] font-medium">Day Streak</div>
-            </div>
-          </Card>
-        </motion.div>
-
-        <motion.div
-          initial={{ scale: 0, opacity: 0 }}
-          animate={{ scale: 1, opacity: 1 }}
-          transition={{ delay: 0.5, type: 'spring' }}
-        >
-          <Card testId="xp-card" className="bg-gradient-to-br from-[#6248FF]/20 to-[#6248FF]/5 border-[#6248FF]/30">
-            <div className="text-center space-y-2">
-              <Zap size={28} className="text-[#6248FF] mx-auto" strokeWidth={2} fill="#6248FF" />
-              <div className="text-2xl font-bold text-white" data-testid="xp-count">{xp}</div>
-              <div className="text-xs text-[#94A3B8] font-medium">Total XP</div>
-            </div>
-          </Card>
-        </motion.div>
-
-        <motion.div
-          initial={{ scale: 0, opacity: 0 }}
-          animate={{ scale: 1, opacity: 1 }}
-          transition={{ delay: 0.6, type: 'spring' }}
-        >
-          <Card testId="lessons-card" className="bg-gradient-to-br from-[#22C55E]/20 to-[#22C55E]/5 border-[#22C55E]/30">
-            <div className="text-center space-y-2">
-              <Award size={28} className="text-[#22C55E] mx-auto" strokeWidth={2} />
-              <div className="text-2xl font-bold text-white">{completedCount}/{totalLessons}</div>
-              <div className="text-xs text-[#94A3B8] font-medium">Lessons</div>
-            </div>
-          </Card>
-        </motion.div>
-      </div>
-
-      {/* Today's Lesson */}
-      <motion.div 
-        className="space-y-4"
-        initial={{ y: 20, opacity: 0 }}
-        animate={{ y: 0, opacity: 1 }}
-        transition={{ delay: 0.7 }}
-      >
+    <>
+      <div className="px-6 py-4 space-y-5">
+        {/* Greeting + minimal CTA */}
         <div className="flex items-center justify-between">
-          <h2 className="text-xl font-bold text-white">Continue Learning</h2>
-          <TrendingUp size={20} className="text-[#6248FF]" strokeWidth={2} />
+          <h1 className="text-3xl font-black text-slate-900 tracking-tight" data-testid="home-title">
+            Master AI.
+          </h1>
+          <motion.button
+            onClick={handleStartLesson}
+            className="flex items-center gap-1 bg-slate-900 text-white text-[11px] font-extrabold px-3.5 py-2 rounded-full shadow-sm"
+            whileHover={{ scale: 1.05 }}
+            whileTap={{ scale: 0.93 }}
+            transition={{ type: 'spring', stiffness: 420, damping: 22 }}
+          >
+            <Sparkles size={10} className="text-violet-400" />
+            <span>Continue</span>
+            <ChevronRight size={10} strokeWidth={3} />
+          </motion.button>
         </div>
-        
-        <Card 
-          interactive 
-          onClick={handleStartLesson} 
-          testId="todays-lesson-card" 
-          className="border-[#6248FF]/50 hover:border-[#6248FF] glow-purple"
-        >
-          <div className="flex items-center gap-4">
-            <div className="w-16 h-16 rounded-xl bg-gradient-to-br from-[#6248FF] to-[#8B5CF6] flex items-center justify-center">
-              <Zap size={32} className="text-white" strokeWidth={2} fill="white" />
-            </div>
-            <div className="flex-1">
-              <div className="text-xs text-[#94A3B8] font-medium mb-1">
-                LESSON {currentLessonId.split('-')[1].substring(1)}
-              </div>
-              <div className="text-base font-bold text-white mb-1">
-                {curriculum?.units?.[0]?.lessons?.find(l => l.id === currentLessonId)?.title || 'Loading...'}
-              </div>
-              <div className="text-sm text-[#64748B]">
-                ~7 minutes
-              </div>
-            </div>
-            <ChevronRight size={24} className="text-[#6248FF]" strokeWidth={2} />
-          </div>
-        </Card>
-      </motion.div>
 
-      {/* Progress Section */}
-      <motion.div 
-        className="space-y-4"
-        initial={{ y: 20, opacity: 0 }}
-        animate={{ y: 0, opacity: 1 }}
-        transition={{ delay: 0.8 }}
-      >
-        <h2 className="text-xl font-bold text-white">Your Progress</h2>
-        
-        <Card testId="progress-card">
-          <div className="space-y-4">
-            <div className="flex items-center justify-between">
-              <span className="text-base font-semibold text-white">Foundations Track</span>
-              <span className="text-sm text-[#6248FF] font-bold">
-                {Math.round((completedCount / totalLessons) * 100)}%
-              </span>
-            </div>
-            <ProgressBar progress={(completedCount / totalLessons) * 100} />
-            <div className="flex items-center justify-between text-sm">
-              <span className="text-[#64748B]">{completedCount} of {totalLessons} completed</span>
-              {completedCount > 0 && (
-                <span className="text-[#22C55E] font-medium">Keep going!</span>
+        {/* Stats Grid — streak is first thing you see */}
+        <div className="grid grid-cols-3 gap-3">
+          {/* Streak */}
+          <motion.div
+            className="bg-[#FFF4F0] border border-orange-100 rounded-2xl p-4 text-center space-y-1 shadow-sm cursor-pointer"
+            whileTap={{ scale: 0.93 }}
+            onClick={() => setShowUnfreeze(true)}
+          >
+            <motion.div
+              animate={{ rotate: [0, -6, 6, -4, 4, 0] }}
+              transition={{ duration: 1.4, repeat: Infinity, repeatDelay: 2 }}
+            >
+              <Flame size={22} className="text-[#FF6B35] mx-auto" strokeWidth={2.5} />
+            </motion.div>
+            <div className="text-xl font-extrabold text-slate-900" data-testid="streak-count">{streak}</div>
+            <div className="text-[9px] text-slate-400 font-bold uppercase tracking-wider">Streak</div>
+          </motion.div>
+
+          {/* XP */}
+          <motion.div
+            className="bg-[#F5F3FF] border border-violet-100 rounded-2xl p-4 text-center space-y-1 shadow-sm relative overflow-hidden"
+            whileTap={{ scale: 0.93 }}
+            onClick={() => { setXpPopped(true); setTimeout(() => setXpPopped(false), 800); }}
+          >
+            <AnimatePresence>
+              {xpPopped && (
+                <motion.div
+                  key="xp-pop"
+                  className="absolute inset-0 flex items-center justify-center pointer-events-none"
+                  initial={{ opacity: 1, scale: 1, y: 0 }}
+                  animate={{ opacity: 0, scale: 1.4, y: -20 }}
+                  exit={{ opacity: 0 }}
+                  transition={{ duration: 0.7 }}
+                >
+                  <span className="text-xs font-black text-violet-600">+XP!</span>
+                </motion.div>
               )}
-            </div>
-          </div>
-        </Card>
-      </motion.div>
+            </AnimatePresence>
+            <Zap size={22} className="text-[#6248FF] mx-auto" strokeWidth={2.5} fill="#6248FF" />
+            <div className="text-xl font-extrabold text-slate-900" data-testid="xp-count">{xp}</div>
+            <div className="text-[9px] text-slate-400 font-bold uppercase tracking-wider">Total XP</div>
+          </motion.div>
 
-      {/* CTA Button */}
-      <motion.div
-        initial={{ y: 20, opacity: 0 }}
-        animate={{ y: 0, opacity: 1 }}
-        transition={{ delay: 0.9 }}
-      >
-        <Button 
-          onClick={handleStartLesson}
-          className="w-full"
-          testId="start-lesson-button"
-        >
-          Start Learning
-        </Button>
-      </motion.div>
-    </motion.div>
+          {/* Lessons */}
+          <motion.div
+            className="bg-[#ECFDF5] border border-emerald-100 rounded-2xl p-4 text-center space-y-1 shadow-sm"
+            whileTap={{ scale: 0.93 }}
+          >
+            <Award size={22} className="text-[#10B981] mx-auto" strokeWidth={2.5} />
+            <div className="text-xl font-extrabold text-slate-900">{completedCount}/{totalLessons}</div>
+            <div className="text-[9px] text-slate-400 font-bold uppercase tracking-wider">Lessons</div>
+          </motion.div>
+        </div>
+
+        {/* Streak Tracker */}
+        <div>
+          <Card className="bg-white border border-slate-150 p-4 shadow-sm relative overflow-hidden cursor-pointer animate-glow-pulse" onClick={() => setShowUnfreeze(true)}>
+            <div className="space-y-4">
+              <div className="flex items-center justify-between">
+                <span className="text-xs font-extrabold text-slate-900">Habit Tracker</span>
+                <motion.span
+                  className="text-[10px] text-[#FF6B35] font-black uppercase tracking-wider"
+                  animate={{ opacity: [1, 0.6, 1] }}
+                  transition={{ duration: 1.8, repeat: Infinity }}
+                >
+                  3 Day Streak active
+                </motion.span>
+              </div>
+
+              {/* Streak Calendar Grid */}
+              <div className="relative flex justify-between items-center pt-1 px-1">
+                {/* Background line */}
+                <div className="absolute left-4 right-4 h-0.5 bg-slate-100 top-1/2 -translate-y-2 z-0" />
+                {/* Active progress line */}
+                <motion.div
+                  className="absolute left-4 h-0.5 bg-gradient-to-r from-orange-500 to-amber-400 top-1/2 -translate-y-2 z-0"
+                  initial={{ width: '0%' }}
+                  animate={{ width: '38%' }}
+                  transition={{ duration: 0.9, delay: 0.4, ease: [0.22, 1, 0.36, 1] }}
+                />
+
+                {weekDays.map((wd, i) => (
+                  <div
+                    key={wd.label}
+                    className="relative z-10 flex flex-col items-center gap-1.5"
+                  >
+                    <motion.div
+                      className={`w-8 h-8 rounded-full flex items-center justify-center border-2 transition-all ${
+                        wd.active
+                          ? 'bg-gradient-to-br from-orange-500 to-amber-500 border-transparent shadow-sm text-white'
+                          : wd.isToday
+                          ? 'bg-white border-orange-500 text-orange-500'
+                          : 'bg-white border-slate-200 text-slate-400'
+                      }`}
+                      whileTap={{ scale: 0.85 }}
+                      animate={wd.isToday ? { scale: [1, 1.08, 1] } : {}}
+                      transition={wd.isToday ? { duration: 1.8, repeat: Infinity } : {}}
+                    >
+                      {wd.active ? (
+                        <motion.div
+                          initial={{ scale: 0, rotate: -45 }}
+                          animate={{ scale: 1, rotate: 0 }}
+                          transition={{ delay: 0.4 + i * 0.07, type: 'spring', stiffness: 450 }}
+                        >
+                          <Check size={14} className="text-white" strokeWidth={3.5} />
+                        </motion.div>
+                      ) : (
+                        <span className="text-[10px] font-extrabold">{wd.day}</span>
+                      )}
+                    </motion.div>
+                    <span className="text-[9px] font-bold text-slate-400 uppercase leading-none">{wd.label}</span>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </Card>
+        </div>
+
+        {/* Progress Section */}
+        <div className="space-y-3">
+          <div className="flex items-center justify-between px-1">
+            <h2 className="text-xs font-extrabold text-slate-950 uppercase tracking-wider">Your Progress</h2>
+            <motion.div
+              animate={{ y: [0, -3, 0] }}
+              transition={{ duration: 1.5, repeat: Infinity, ease: 'easeInOut' }}
+            >
+              <TrendingUp size={14} className="text-[#6248FF]" strokeWidth={2.5} />
+            </motion.div>
+          </div>
+
+          <Card testId="progress-card">
+            <div className="space-y-3">
+              <div className="flex items-center justify-between">
+                <span className="text-sm font-extrabold text-slate-900">Foundations Track</span>
+                <motion.span
+                  className="text-xs text-[#6248FF] font-black"
+                  key={completedCount}
+                  initial={{ scale: 1.4, opacity: 0 }}
+                  animate={{ scale: 1, opacity: 1 }}
+                  transition={{ type: 'spring', stiffness: 400 }}
+                >
+                  {Math.round((completedCount / totalLessons) * 100)}%
+                </motion.span>
+              </div>
+              <ProgressBar progress={(completedCount / totalLessons) * 100} />
+              <div className="flex items-center justify-between text-xs pt-1">
+                <span className="text-slate-400 font-medium">{completedCount} of {totalLessons} completed</span>
+                {completedCount > 0 && (
+                  <motion.span
+                    className="text-emerald-600 font-bold"
+                    initial={{ x: 10, opacity: 0 }}
+                    animate={{ x: 0, opacity: 1 }}
+                  >
+                    Keep going!
+                  </motion.span>
+                )}
+              </div>
+            </div>
+          </Card>
+        </div>
+      </div>
+
+      <AnimatePresence>
+        {showUnfreeze && (
+          <StreakUnfreeze
+            currentStreak={streak}
+            onUnfreezeComplete={handleUnfreezeComplete}
+            onClose={() => setShowUnfreeze(false)}
+          />
+        )}
+      </AnimatePresence>
+
+      <StartLearningTransition
+        isVisible={showTransition}
+        onDone={() => navigate(`/lesson/${currentLessonId}`)}
+      />
+    </>
   );
 };

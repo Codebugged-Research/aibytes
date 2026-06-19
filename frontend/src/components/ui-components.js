@@ -4,9 +4,9 @@ export const Button = ({ children, onClick, variant = 'primary', className = '',
   const baseClass = "font-semibold rounded-xl py-4 px-8 transition-all focus:outline-none";
   
   const variants = {
-    primary: "bg-gradient-to-r from-[#6248FF] to-[#8B5CF6] text-white hover:shadow-lg hover:shadow-[#6248FF]/50 active:scale-95",
-    secondary: "bg-[#1E293B] border border-[#334155] text-white hover:bg-[#334155] hover:border-[#475569]",
-    success: "bg-gradient-to-r from-[#22C55E] to-[#10B981] text-white hover:shadow-lg hover:shadow-[#22C55E]/50"
+    primary: "bg-slate-900 text-white hover:bg-slate-800 hover:shadow-lg hover:shadow-slate-900/10 active:scale-95",
+    secondary: "bg-white border border-slate-200 text-slate-700 hover:bg-slate-50 hover:border-slate-300",
+    success: "bg-emerald-600 text-white hover:bg-emerald-700 hover:shadow-lg hover:shadow-emerald-600/10"
   };
 
   return (
@@ -24,8 +24,8 @@ export const Button = ({ children, onClick, variant = 'primary', className = '',
 };
 
 export const Card = ({ children, className = '', interactive = false, onClick, testId }) => {
-  const baseClass = "bg-[#1E293B]/50 backdrop-blur-sm border border-[#334155] rounded-2xl p-5";
-  const interactiveClass = interactive ? "hover:bg-[#1E293B] hover:border-[#6248FF] hover:-translate-y-1 transition-all cursor-pointer" : "";
+  const baseClass = "bg-white border border-slate-200 rounded-2xl p-5 shadow-sm shadow-slate-100/50";
+  const interactiveClass = interactive ? "hover:bg-slate-50/50 hover:border-slate-300 hover:-translate-y-0.5 hover:shadow transition-all cursor-pointer" : "";
 
   return (
     <motion.div
@@ -41,9 +41,9 @@ export const Card = ({ children, className = '', interactive = false, onClick, t
 
 export const ProgressBar = ({ progress, className = '' }) => {
   return (
-    <div className={`h-2 w-full bg-[#1E293B] rounded-full overflow-hidden ${className}`}>
+    <div className={`h-2 w-full bg-slate-100 rounded-full overflow-hidden ${className}`}>
       <motion.div
-        className="h-full bg-gradient-to-r from-[#6248FF] to-[#8B5CF6] rounded-full"
+        className="h-full bg-violet-600 rounded-full"
         initial={{ width: 0 }}
         animate={{ width: `${progress}%` }}
         transition={{ duration: 0.8, ease: 'easeOut' }}

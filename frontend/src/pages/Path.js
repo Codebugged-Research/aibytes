@@ -1,9 +1,11 @@
 import { useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import { Check, Lock, Circle } from 'lucide-react';
+import { Check, Lock } from 'lucide-react';
 import { useCurriculum } from '../hooks/useData';
 import { isLessonCompleted, getCurrentLesson } from '../utils/storage';
 import { Card } from '../components/ui-components';
+import { getIconForEmoji } from '../utils/icons';
+import { Skeleton } from '../components/Skeleton';
 
 export const Path = () => {
   const navigate = useNavigate();
@@ -20,35 +22,37 @@ export const Path = () => {
 
   if (loading) {
     return (
-      <div className="min-h-screen flex items-center justify-center">
-        <motion.div
-          animate={{ rotate: 360 }}
-          transition={{ duration: 1, repeat: Infinity, ease: "linear" }}
-        >
-          <Circle size={48} className="text-[#6248FF]" />
-        </motion.div>
-      </div>
+      <motion.div
+        className="w-full"
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ duration: 0.3 }}
+      >
+        <Skeleton.PathScreen />
+      </motion.div>
     );
   }
 
+  const unit = curriculum?.units?.[0] || {};
+
   return (
     <motion.div
-      className="px-6 py-8 space-y-6"
+      className="px-6 py-6 space-y-6"
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.5 }}
     >
       {/* Header */}
       <motion.div 
-        className="space-y-2"
+        className="space-y-1"
         initial={{ y: -20, opacity: 0 }}
         animate={{ y: 0, opacity: 1 }}
         transition={{ delay: 0.2 }}
       >
-        <h1 className="text-4xl font-bold text-white" data-testid="path-title">
+        <h1 className="text-3xl font-extrabold text-slate-900 tracking-tight" data-testid="path-title">
           Learning Path
         </h1>
-        <p className="text-[#94A3B8] text-base">
+        <p className="text-slate-400 text-sm font-medium">
           Your journey to AI mastery
         </p>
       </motion.div>
@@ -59,17 +63,17 @@ export const Path = () => {
         animate={{ scale: 1, opacity: 1 }}
         transition={{ delay: 0.3 }}
       >
-        <Card className="bg-gradient-to-r from-[#6248FF]/20 to-[#8B5CF6]/20 border-[#6248FF]/30">
+        <Card className="bg-gradient-to-br from-violet-50 to-indigo-50 border-violet-100 shadow-sm shadow-violet-50/50">
           <div className="flex items-center gap-3">
-            <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-[#6248FF] to-[#8B5CF6] flex items-center justify-center">
-              <span className="text-2xl">{curriculum?.units?.[0]?.tierIcon}</span>
+            <div className="w-12 h-12 rounded-xl bg-violet-600 flex items-center justify-center text-white shadow-md">
+              {getIconForEmoji(unit.tierIcon, { size: 24, className: 'text-white' })}
             </div>
             <div>
-              <h2 className="text-lg font-bold text-white">
-                {curriculum?.units?.[0]?.tier}
+              <h2 className="text-base font-extrabold text-slate-900">
+                {unit.tier}
               </h2>
-              <p className="text-sm text-[#94A3B8]">
-                {curriculum?.units?.[0]?.title}
+              <p className="text-xs text-slate-500 font-medium">
+                {unit.title}
               </p>
             </div>
           </div>
@@ -77,10 +81,11 @@ export const Path = () => {
       </motion.div>
 
       {/* Lessons */}
-      <div className="space-y-4 relative">
+      <div className="space-y-5 relative">
         {/* Connection line */}
-        <div className="absolute left-8 top-0 bottom-0 w-0.5 bg-gradient-to-b from-[#6248FF] via-[#334155] to-transparent" 
-             style={{ height: `${(lessons.length - 1) * 120}px` }} 
+        <div 
+          className="absolute left-8 top-0 bottom-0 w-0.5 bg-slate-200" 
+          style={{ height: `${(lessons.length - 1) * 116}px` }} 
         />
         
         {lessons.map((lesson, index) => {
@@ -91,7 +96,7 @@ export const Path = () => {
           return (
             <motion.div
               key={lesson.id}
-              initial={{ x: -50, opacity: 0 }}
+              initial={{ x: -30, opacity: 0 }}
               animate={{ x: 0, opacity: 1 }}
               transition={{ delay: 0.4 + index * 0.1 }}
               className="relative"
@@ -99,12 +104,12 @@ export const Path = () => {
               {/* Status indicator */}
               <div className={`absolute left-6 top-6 w-4 h-4 rounded-full border-2 flex items-center justify-center z-10 ${
                 completed 
-                  ? 'bg-[#22C55E] border-[#22C55E]' 
+                  ? 'bg-emerald-500 border-emerald-500' 
                   : isCurrent 
-                  ? 'bg-[#6248FF] border-[#6248FF] animate-pulse'
-                  : 'bg-[#1E293B] border-[#334155]'
+                  ? 'bg-violet-600 border-violet-600 animate-pulse'
+                  : 'bg-slate-50 border-slate-300'
               }`}>
-                {completed && <Check size={10} className="text-white" strokeWidth={3} />}
+                {completed && <Check size={10} className="text-white" strokeWidth={3.5} />}
               </div>
 
               <Card
@@ -112,47 +117,47 @@ export const Path = () => {
                 onClick={() => handleLessonClick(lesson.id, isLocked)}
                 testId={`lesson-card-${lesson.id}`}
                 className={`ml-14 ${
-                  isCurrent && !completed ? 'border-[#6248FF] glow-purple' : ''
+                  isCurrent && !completed ? 'border-violet-400 shadow-md shadow-violet-50' : ''
                 } ${
-                  completed ? 'border-[#22C55E]/50' : ''
+                  completed ? 'border-emerald-200' : ''
                 } ${
-                  isLocked ? 'opacity-50' : ''
+                  isLocked ? 'opacity-60 bg-slate-50/50' : ''
                 }`}
               >
                 <div className="flex items-center gap-4">
-                  <div className={`w-14 h-14 rounded-xl flex items-center justify-center text-2xl ${
+                  <div className={`w-12 h-12 rounded-xl flex items-center justify-center shadow-sm ${
                     completed 
-                      ? 'bg-gradient-to-br from-[#22C55E] to-[#10B981]' 
+                      ? 'bg-gradient-to-br from-emerald-500 to-teal-500' 
                       : isLocked
-                      ? 'bg-[#1E293B]'
-                      : 'bg-gradient-to-br from-[#6248FF] to-[#8B5CF6]'
+                      ? 'bg-slate-100 border border-slate-200'
+                      : 'bg-gradient-to-br from-violet-600 to-indigo-600'
                   }`}>
                     {isLocked ? (
-                      <Lock size={24} className="text-[#64748B]" strokeWidth={2} />
+                      <Lock size={18} className="text-slate-400" strokeWidth={2.5} />
                     ) : (
-                      <span>{lesson.icon}</span>
+                      getIconForEmoji(lesson.icon, { size: 20, className: 'text-white' })
                     )}
                   </div>
 
                   <div className="flex-1">
-                    <div className="text-xs text-[#94A3B8] font-medium mb-1">
+                    <div className="text-[10px] text-slate-400 font-extrabold uppercase tracking-wider mb-0.5">
                       LESSON {index + 1}
                     </div>
-                    <div className="text-base font-bold text-white">
+                    <div className="text-sm font-extrabold text-slate-900 leading-tight">
                       {lesson.title}
                     </div>
                     {completed && (
-                      <div className="text-sm text-[#22C55E] mt-1 font-medium">
+                      <div className="text-xs text-emerald-600 mt-1 font-bold">
                         Completed
                       </div>
                     )}
                     {isCurrent && !completed && (
-                      <div className="text-sm text-[#6248FF] mt-1 font-medium">
+                      <div className="text-xs text-violet-600 mt-1 font-bold">
                         Continue
                       </div>
                     )}
                     {isLocked && (
-                      <div className="text-sm text-[#64748B] mt-1">
+                      <div className="text-xs text-slate-400 mt-1 font-medium">
                         Complete previous lesson
                       </div>
                     )}
@@ -160,9 +165,9 @@ export const Path = () => {
 
                   {isCurrent && !completed && (
                     <motion.div
-                      animate={{ scale: [1, 1.2, 1] }}
+                      animate={{ scale: [1, 1.3, 1] }}
                       transition={{ duration: 1.5, repeat: Infinity }}
-                      className="w-2 h-2 bg-[#6248FF] rounded-full"
+                      className="w-2.5 h-2.5 bg-violet-600 rounded-full shadow-sm shadow-violet-400"
                     />
                   )}
                 </div>
