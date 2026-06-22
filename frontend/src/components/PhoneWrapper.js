@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { motion } from 'framer-motion';
 import { Wifi, Signal, Battery } from 'lucide-react';
 
 export const PhoneWrapper = ({ children }) => {
@@ -12,7 +13,7 @@ export const PhoneWrapper = ({ children }) => {
       const strMinutes = minutes < 10 ? '0' + minutes : minutes;
       setTime(`${hours}:${strMinutes}`);
     };
-    
+
     updateTime();
     const interval = setInterval(updateTime, 1000 * 30); // update every 30s
     return () => clearInterval(interval);
@@ -20,8 +21,13 @@ export const PhoneWrapper = ({ children }) => {
 
   return (
     <div className="h-screen w-full bg-slate-100 flex items-center justify-center p-4 md:p-8 overflow-hidden">
-      {/* Phone chassis */}
-      <div className="relative w-full max-w-[375px] h-full max-h-[780px] bg-white rounded-[52px] shadow-2xl border-[10px] border-slate-900 overflow-hidden flex flex-col transition-all">
+      {/* Phone chassis — slides up from below on first load */}
+      <motion.div
+        className="relative w-full max-w-[375px] h-full max-h-[780px] bg-white rounded-[52px] shadow-2xl border-[10px] border-slate-900 overflow-hidden flex flex-col"
+        initial={{ y: 80, opacity: 0, scale: 0.94 }}
+        animate={{ y: 0, opacity: 1, scale: 1 }}
+        transition={{ type: 'spring', stiffness: 240, damping: 26, delay: 0.08 }}
+      >
         {/* Dynamic Island / Notch */}
         <div className="absolute top-3 left-1/2 -translate-x-1/2 w-28 h-7 bg-slate-900 rounded-full z-50 flex items-center justify-center">
           <div className="w-3 h-3 rounded-full bg-slate-850 absolute left-4 border border-slate-800" />
@@ -51,7 +57,7 @@ export const PhoneWrapper = ({ children }) => {
         <div className="h-8 w-full bg-white flex items-center justify-center pb-2 select-none z-40 flex-shrink-0">
           <div className="w-32 h-1.5 bg-slate-900 rounded-full opacity-80" />
         </div>
-      </div>
+      </motion.div>
     </div>
   );
 };

@@ -38,8 +38,9 @@ export const Home = () => {
   };
 
   const currentLessonId = getCurrentLesson();
-  const completedCount = curriculum?.units?.[0]?.lessons?.filter(l => isLessonCompleted(l.id)).length || 0;
-  const totalLessons   = curriculum?.units?.[0]?.lessons?.length || 3;
+  const allLessons = curriculum?.units?.flatMap(u => u.lessons) || [];
+  const completedCount = allLessons.filter(l => isLessonCompleted(l.id)).length;
+  const totalLessons   = allLessons.length || 15;
 
   const handleStartLesson = () => setShowTransition(true);
 
@@ -87,6 +88,40 @@ export const Home = () => {
             <ChevronRight size={10} strokeWidth={3} />
           </motion.button>
         </div>
+
+        {/* XP Level bar */}
+        {(() => {
+          const XP_PER_LEVEL = 20;
+          const level = Math.floor(xp / XP_PER_LEVEL) + 1;
+          const levelXP = xp % XP_PER_LEVEL;
+          const pct = (levelXP / XP_PER_LEVEL) * 100;
+          return (
+            <motion.div
+              className="bg-white border border-slate-150 rounded-2xl px-4 py-3 shadow-sm space-y-1.5"
+              initial={{ opacity: 0, y: -10 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.08 }}
+            >
+              <div className="flex items-center justify-between">
+                <div className="flex items-center gap-1.5">
+                  <div className="w-6 h-6 rounded-full bg-gradient-to-br from-[#6248FF] to-violet-500 flex items-center justify-center">
+                    <Zap size={12} className="text-white" fill="white" strokeWidth={0} />
+                  </div>
+                  <span className="text-xs font-black text-slate-900">Level {level}</span>
+                </div>
+                <span className="text-[10px] font-bold text-slate-400">{levelXP} / {XP_PER_LEVEL} XP</span>
+              </div>
+              <div className="h-2 bg-slate-100 rounded-full overflow-hidden">
+                <motion.div
+                  className="h-full rounded-full bg-gradient-to-r from-[#6248FF] to-violet-400"
+                  initial={{ width: 0 }}
+                  animate={{ width: `${pct}%` }}
+                  transition={{ duration: 0.9, ease: [0.22, 1, 0.36, 1], delay: 0.2 }}
+                />
+              </div>
+            </motion.div>
+          );
+        })()}
 
         {/* Stats Grid — streak is first thing you see */}
         <div className="grid grid-cols-3 gap-3">
@@ -221,7 +256,7 @@ export const Home = () => {
           <Card testId="progress-card">
             <div className="space-y-3">
               <div className="flex items-center justify-between">
-                <span className="text-sm font-extrabold text-slate-900">Foundations Track</span>
+                <span className="text-sm font-extrabold text-slate-900">AI Course</span>
                 <motion.span
                   className="text-xs text-[#6248FF] font-black"
                   key={completedCount}

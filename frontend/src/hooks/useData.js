@@ -28,7 +28,35 @@ export const useCurriculum = () => {
               lessons: [
                 { id: "u0-l1", title: "What is AI, really?", icon: "🧠" },
                 { id: "u0-l2", title: "AI vs ML vs Deep Learning", icon: "🍰" },
-                { id: "u0-l3", title: "Narrow vs General AI", icon: "🎯" }
+                { id: "u0-l3", title: "Narrow vs General AI", icon: "🎯" },
+                { id: "u0-l4", title: "60-Second History: 1950 → ChatGPT", icon: "🕰️" },
+                { id: "u0-l5", title: "How AI \"Thinks\" vs How You Think", icon: "🤔" }
+              ]
+            },
+            {
+              id: 1,
+              title: "Data Foundations",
+              tier: "Data Foundations",
+              tierIcon: "📦",
+              lessons: [
+                { id: "u1-l1", title: "What is Data?", icon: "📦" },
+                { id: "u1-l2", title: "Types of Data", icon: "🗂️" },
+                { id: "u1-l3", title: "Structured vs Unstructured Data", icon: "🗄️" },
+                { id: "u1-l4", title: "Where Data Comes From", icon: "📡" },
+                { id: "u1-l5", title: "Databases & Big Data", icon: "🗃️" }
+              ]
+            },
+            {
+              id: 2,
+              title: "Data Analytics",
+              tier: "Data Analytics",
+              tierIcon: "📊",
+              lessons: [
+                { id: "u2-l1", title: "What is Data Analytics?", icon: "🔎" },
+                { id: "u2-l2", title: "Collecting & Cleaning Data", icon: "🧹" },
+                { id: "u2-l3", title: "Exploring Data (EDA)", icon: "🕵️" },
+                { id: "u2-l4", title: "Data Visualization", icon: "📈" },
+                { id: "u2-l5", title: "Trends & Insights", icon: "💡" }
               ]
             }
           ]
@@ -58,98 +86,15 @@ export const useLesson = (lessonId) => {
         const response = await axios.get(`${API}/lessons/${lessonId}`);
         setLesson(response.data);
       } catch (err) {
-        console.warn(`API error, falling back to local mock for lesson ${lessonId}:`, err.message);
-        setError(err.message);
-        
-        // Comprehensive fallback data matching the backend files
-        const mockLessons = {
-          'u0-l1': {
-            id: 'u0-l1',
-            title: 'What is AI, really?',
-            icon: '🧠',
-            content: [
-              {
-                type: 'text',
-                value: 'Artificial Intelligence (AI) is the simulation of human intelligence processes by machines, especially computer systems.'
-              },
-              {
-                type: 'text',
-                value: 'These processes include learning (the acquisition of information and rules for using it), reasoning (using rules to reach approximate or conclusions), and self-correction.'
-              }
-            ],
-            questions: [
-              {
-                id: 'q1',
-                question: 'Which of these best describes AI?',
-                options: [
-                  'Machines simulating human intelligence processes',
-                  'A simple calculator program',
-                  'Any electrical appliance'
-                ],
-                answer: 0
-              }
-            ]
-          },
-          'u0-l2': {
-            id: 'u0-l2',
-            title: 'AI vs ML vs Deep Learning',
-            icon: '🍰',
-            content: [
-              {
-                type: 'text',
-                value: 'AI is the broad concept of machines being able to carry out tasks in a way that we would consider smart.'
-              },
-              {
-                type: 'text',
-                value: 'Machine Learning (ML) is an application of AI based around the idea that we should be able to give machines access to data and let them learn for themselves.'
-              },
-              {
-                type: 'text',
-                value: 'Deep Learning (DL) is a subset of ML based on artificial neural networks.'
-              }
-            ],
-            questions: [
-              {
-                id: 'q1',
-                question: 'Which of the following is the subset of Machine Learning?',
-                options: [
-                  'Broad AI',
-                  'Deep Learning',
-                  'Robotics'
-                ],
-                answer: 1
-              }
-            ]
-          },
-          'u0-l3': {
-            id: 'u0-l3',
-            title: 'Narrow vs General AI',
-            icon: '🎯',
-            content: [
-              {
-                type: 'text',
-                value: 'Narrow AI (or Weak AI) is AI that is programmed to perform a single, specific task.'
-              },
-              {
-                type: 'text',
-                value: 'General AI (or Strong AI) is AI that has human-like cognitive abilities, allowing it to find solutions to unfamiliar tasks.'
-              }
-            ],
-            questions: [
-              {
-                id: 'q1',
-                question: 'What type of AI is designed for a single specific task?',
-                options: [
-                  'General AI',
-                  'Narrow AI',
-                  'Super AI'
-                ],
-                answer: 1
-              }
-            ]
-          }
-        };
-        setLesson(mockLessons[lessonId] || null);
+        console.warn(`API error, trying local fallback for lesson ${lessonId}:`, err.message);
+        try {
+          const localResponse = await axios.get(`/lessons/${lessonId}.json`);
+          setLesson(localResponse.data);
+        } catch (localErr) {
+          console.warn(`Local fallback also failed for lesson ${lessonId}:`, localErr.message);
+          setError(err.message);
+          setLesson(null);
+        }
       } finally {
         setLoading(false);
       }

@@ -7,6 +7,7 @@ import { Home } from './pages/Home';
 import { Path } from './pages/Path';
 import { Profile } from './pages/Profile';
 import { Activity } from './pages/Activity';
+import { Leaderboard } from './pages/Leaderboard';
 import { LessonPlayer } from './pages/LessonPlayer';
 import { PhoneWrapper } from './components/PhoneWrapper';
 import './App.css';
@@ -67,19 +68,22 @@ function App() {
       <PhoneWrapper>
         <ErrorBoundary>
           <BrowserRouter>
-            {showSplash ? (
-              <SplashScreen onComplete={() => setShowSplash(false)} />
-            ) : (
-              <Routes>
-                <Route element={<Layout />}>
-                  <Route path="/" element={<Home />} />
-                  <Route path="/activity" element={<Activity />} />
-                  <Route path="/path" element={<Path />} />
-                  <Route path="/profile" element={<Profile />} />
-                </Route>
-                <Route path="/lesson/:lessonId" element={<LessonPlayer />} />
-              </Routes>
-            )}
+            <AnimatePresence mode="wait">
+              {showSplash ? (
+                <SplashScreen key="splash" onComplete={() => setShowSplash(false)} />
+              ) : (
+                <Routes>
+                  <Route element={<Layout />}>
+                    <Route path="/" element={<Home />} />
+                    <Route path="/activity" element={<Activity />} />
+                    <Route path="/leaderboard" element={<Leaderboard />} />
+                    <Route path="/path" element={<Path />} />
+                    <Route path="/profile" element={<Profile />} />
+                  </Route>
+                  <Route path="/lesson/:lessonId" element={<LessonPlayer />} />
+                </Routes>
+              )}
+            </AnimatePresence>
           </BrowserRouter>
         </ErrorBoundary>
       </PhoneWrapper>

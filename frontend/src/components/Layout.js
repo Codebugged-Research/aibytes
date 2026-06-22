@@ -1,5 +1,5 @@
 import { Outlet, useLocation, useNavigate } from 'react-router-dom';
-import { Home, Activity, User, Bell, Send } from 'lucide-react';
+import { Home, Trophy, User, Bell, Send } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 
 export const Layout = () => {
@@ -7,10 +7,10 @@ export const Layout = () => {
   const navigate = useNavigate();
 
   const navItems = [
-    { icon: Home,     label: 'Home',     path: '/',         testId: 'nav-home'     },
-    { icon: Activity, label: 'Activity', path: '/activity', testId: 'nav-activity' },
-    { icon: Send,     label: 'Path',     path: '/path',     testId: 'nav-path'     },
-    { icon: User,     label: 'Account',  path: '/profile',  testId: 'nav-profile'  }
+    { icon: Home,    label: 'Home',         path: '/',            testId: 'nav-home'        },
+    { icon: Trophy,  label: 'Leaderboard',  path: '/leaderboard', testId: 'nav-leaderboard' },
+    { icon: Send,    label: 'Path',         path: '/path',        testId: 'nav-path'        },
+    { icon: User,    label: 'Account',      path: '/profile',     testId: 'nav-profile'     }
   ];
 
   const isActive = (path) => location.pathname === path;
@@ -83,7 +83,7 @@ export const Layout = () => {
         animate={{ y: 0, opacity: 1 }}
         transition={{ delay: 0.25, duration: 0.45, ease: [0.22, 1, 0.36, 1] }}
       >
-        <div className="bg-white/95 backdrop-blur-xl border-t border-slate-150 py-3 px-6 shadow-[0_-8px_24px_rgba(15,23,42,0.04)]">
+        <div className="bg-white/95 backdrop-blur-xl border-t border-slate-150 pt-3 pb-6 px-6 shadow-[0_-8px_24px_rgba(15,23,42,0.04)]">
           <div className="flex justify-between items-center max-w-[388px] mx-auto">
             {navItems.map((item) => {
               const Icon = item.icon;
@@ -133,18 +133,20 @@ export const Layout = () => {
                     {item.label}
                   </span>
 
-                  {/* Active indicator dot */}
-                  <AnimatePresence>
-                    {active && (
-                      <motion.div
-                        className="w-1 h-1 rounded-full bg-slate-900 nav-dot"
-                        initial={{ scale: 0, opacity: 0 }}
-                        animate={{ scale: 1, opacity: 1 }}
-                        exit={{ scale: 0, opacity: 0 }}
-                        transition={{ type: 'spring', stiffness: 500, damping: 25 }}
-                      />
-                    )}
-                  </AnimatePresence>
+                  {/* Active indicator dot wrapper to maintain height stability */}
+                  <div className="h-1 flex items-center justify-center">
+                    <AnimatePresence>
+                      {active && (
+                        <motion.div
+                          className="w-1 h-1 rounded-full bg-slate-900 nav-dot"
+                          initial={{ scale: 0, opacity: 0 }}
+                          animate={{ scale: 1, opacity: 1 }}
+                          exit={{ scale: 0, opacity: 0 }}
+                          transition={{ type: 'spring', stiffness: 500, damping: 25 }}
+                        />
+                      )}
+                    </AnimatePresence>
+                  </div>
                 </motion.button>
               );
             })}
