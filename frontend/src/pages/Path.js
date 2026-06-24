@@ -1,14 +1,19 @@
 import { useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import { Check, Zap, Star, ChevronRight } from 'lucide-react';
+import { Check, Zap, Star, ChevronRight, Lock } from 'lucide-react';
 import { useCurriculum } from '../hooks/useData';
 import { isLessonCompleted } from '../utils/storage';
 import { getIconForEmoji } from '../utils/icons';
 import { Skeleton } from '../components/Skeleton';
+import { useState } from 'react';
+import { StartLearningTransition } from '../components/StartLearningTransition';
 
 export const Path = () => {
   const navigate = useNavigate();
   const { curriculum, loading } = useCurriculum();
+  const [pendingLesson, setPendingLesson] = useState(null);
+  const [showTransition, setShowTransition] = useState(false);
+  const startLesson = (id) => { setPendingLesson(id); setShowTransition(true); };
 
   if (loading) {
     return (
@@ -20,9 +25,12 @@ export const Path = () => {
 
   const units = curriculum?.units || [];
 
+  const orderedLessons = units.flatMap((u) => u.lessons);
   const getLessonState = (lesson) => {
     if (isLessonCompleted(lesson.id)) return 'done';
-    return 'current';
+    const idx = orderedLessons.findIndex((l) => l.id === lesson.id);
+    const prevDone = idx <= 0 || isLessonCompleted(orderedLessons[idx - 1].id);
+    return prevDone ? 'current' : 'locked';
   };
 
   return (
@@ -95,6 +103,7 @@ export const Path = () => {
                   const state = getLessonState(lesson);
                   const isDone    = state === 'done';
                   const isCurrent = state === 'current';
+                  const isLocked  = state === 'locked';
                   const isLast    = lessonIndex === lessons.length - 1;
 
                   return (
@@ -117,8 +126,8 @@ export const Path = () => {
                             </>
                           )}
                           <motion.button
-                            onClick={() => navigate(`/lesson/${lesson.id}`)}
-                            disabled={false}
+                            onClick={() => { if (!isLocked) startLesson(lesson.id); }}
+                            disabled={isLocked}
                             data-testid={`lesson-card-${lesson.id}`}
                             className={`w-12 h-12 rounded-2xl flex items-center justify-center shadow-md focus:outline-none relative z-10 ${
                               isDone    ? 'bg-gradient-to-br from-emerald-400 to-teal-500 shadow-emerald-100'
@@ -139,6 +148,8 @@ export const Path = () => {
                               >
                                 <Check size={22} className="text-white" strokeWidth={3} />
                               </motion.div>
+                            ) : isLocked ? (
+                              <Lock size={19} className="text-slate-400" strokeWidth={2.5} />
                             ) : (
                               getIconForEmoji(lesson.icon, { size: 22, className: 'text-white' })
                             )}
@@ -162,14 +173,14 @@ export const Path = () => {
 
                       {/* ── Right: lesson card ─────────────────────────── */}
                       <motion.div
-                        className="flex-1 mb-3"
+                        className="flex-1 min-w-0 mb-3"
                         initial={{ opacity: 0, x: 16 }}
                         animate={{ opacity: 1, x: 0 }}
                         transition={{ delay: 0.1 + lessonIndex * 0.06, duration: 0.35, ease: [0.22, 1, 0.36, 1] }}
                       >
                         <motion.button
-                          onClick={() => navigate(`/lesson/${lesson.id}`)}
-                          disabled={false}
+                          onClick={() => { if (!isLocked) startLesson(lesson.id); }}
+                          disabled={isLocked}
                           className={`w-full text-left rounded-2xl px-4 py-3.5 border transition-colors focus:outline-none ${
                             isDone
                               ? 'bg-emerald-50 border-emerald-100'
@@ -186,7 +197,7 @@ export const Path = () => {
                               }`}>
                                 Lesson {lessonIndex + 1}
                               </p>
-                              <h3 className={`text-sm font-extrabold leading-snug truncate ${
+                              <h3 className={`text-sm font-extrabold leading-snug clamp-2 ${
                                 isDone ? 'text-slate-700' : isCurrent ? 'text-slate-900' : 'text-slate-400'
                               }`}>
                                 {lesson.title}
@@ -214,6 +225,12 @@ export const Path = () => {
                                 <ChevronRight size={13} strokeWidth={3} />
                               </motion.div>
                             )}
+                            {isLocked && (
+                              <div className="flex items-center gap-0.5 text-slate-400 flex-shrink-0">
+                                <Lock size={12} strokeWidth={2.5} />
+                                <span className="text-[10px] font-black">LOCKED</span>
+                              </div>
+                            )}
                           </div>
                         </motion.button>
                       </motion.div>
@@ -225,6 +242,10 @@ export const Path = () => {
           );
         })}
       </div>
+      <StartLearningTransition
+        isVisible={showTransition}
+        onDone={() => navigate(`/lesson/${pendingLesson}`)}
+      />
     </motion.div>
   );
 };

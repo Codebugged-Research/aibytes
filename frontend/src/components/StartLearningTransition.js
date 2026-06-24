@@ -23,6 +23,83 @@ function rgba(col, a) {
   return `rgba(${col.r},${col.g},${col.b},${a})`;
 }
 
+// Synthesized F1 engine + launch sound (Web Audio, no asset files). Scheduled
+// in seconds to match the animation: arrive → brake screech → idle → 3·2·1 revs
+// → launch sweep. Returns a stop() that tears the audio graph down.
+function buildEngine(actx) {
+  const t0 = actx.currentTime + 0.04;
+  const master = actx.createGain();
+  master.gain.value = 0.55;
+  master.connect(actx.destination);
+
+  const oscA = actx.createOscillator(); oscA.type = 'sawtooth';
+  const oscB = actx.createOscillator(); oscB.type = 'square';
+  const filt = actx.createBiquadFilter(); filt.type = 'lowpass';
+  filt.frequency.value = 1300; filt.Q.value = 7;
+  const eg = actx.createGain(); eg.gain.value = 0.0001;
+  oscA.connect(filt); oscB.connect(filt); filt.connect(eg); eg.connect(master);
+
+  const IDLE = 46, IDLE_G = 0.09;
+  oscA.frequency.setValueAtTime(IDLE, t0);
+  oscB.frequency.setValueAtTime(IDLE * 1.5, t0);
+  eg.gain.setValueAtTime(IDLE_G, t0);
+  oscA.start(t0); oscB.start(t0);
+
+  const rev = (at, peak, peakG, dur) => {
+    oscA.frequency.setValueAtTime(IDLE, at);
+    oscA.frequency.exponentialRampToValueAtTime(peak, at + dur * 0.4);
+    oscA.frequency.exponentialRampToValueAtTime(IDLE, at + dur);
+    oscB.frequency.setValueAtTime(IDLE * 1.5, at);
+    oscB.frequency.exponentialRampToValueAtTime(peak * 1.5, at + dur * 0.4);
+    oscB.frequency.exponentialRampToValueAtTime(IDLE * 1.5, at + dur);
+    eg.gain.setValueAtTime(IDLE_G, at);
+    eg.gain.linearRampToValueAtTime(peakG, at + dur * 0.35);
+    eg.gain.linearRampToValueAtTime(IDLE_G, at + dur);
+  };
+
+  const noiseBuf = actx.createBuffer(1, actx.sampleRate, actx.sampleRate);
+  const nd = noiseBuf.getChannelData(0);
+  for (let k = 0; k < nd.length; k += 1) nd[k] = Math.random() * 2 - 1;
+  const noiseBurst = (at, dur, type, freq, q, gain, sweepTo) => {
+    const src = actx.createBufferSource(); src.buffer = noiseBuf; src.loop = true;
+    const bp = actx.createBiquadFilter(); bp.type = type; bp.frequency.value = freq; bp.Q.value = q;
+    if (sweepTo) bp.frequency.exponentialRampToValueAtTime(sweepTo, at + dur);
+    const g = actx.createGain();
+    g.gain.setValueAtTime(0.0001, at);
+    g.gain.linearRampToValueAtTime(gain, at + 0.04);
+    g.gain.linearRampToValueAtTime(0.0001, at + dur);
+    src.connect(bp); bp.connect(g); g.connect(master);
+    src.start(at); src.stop(at + dur + 0.05);
+  };
+
+  rev(t0 + 0.00, 150, 0.34, 0.42);                         // ENTER: arriving rev
+  noiseBurst(t0 + 0.40, 0.26, 'bandpass', 2200, 7, 0.14);  // BRAKE: tire screech
+  rev(t0 + 0.97, 150, 0.36, 0.30);                         // countdown "3"
+  rev(t0 + 1.30, 175, 0.40, 0.30);                         // countdown "2"
+  rev(t0 + 1.63, 200, 0.46, 0.30);                         // countdown "1"
+
+  const tL = t0 + 1.97;                                    // LAUNCH sweep + whoosh
+  oscA.frequency.setValueAtTime(IDLE, tL);
+  oscA.frequency.exponentialRampToValueAtTime(320, tL + 0.42);
+  oscB.frequency.setValueAtTime(IDLE * 1.5, tL);
+  oscB.frequency.exponentialRampToValueAtTime(480, tL + 0.42);
+  eg.gain.setValueAtTime(IDLE_G, tL);
+  eg.gain.linearRampToValueAtTime(0.6, tL + 0.12);
+  eg.gain.linearRampToValueAtTime(0.0001, tL + 0.55);
+  noiseBurst(tL, 0.5, 'lowpass', 500, 1, 0.2, 3000);
+
+  master.gain.setValueAtTime(0.55, t0 + 2.35);
+  master.gain.linearRampToValueAtTime(0.0001, t0 + 2.5);
+  try { oscA.stop(t0 + 2.55); oscB.stop(t0 + 2.55); } catch (e) { /* noop */ }
+
+  let closed = false;
+  return () => {
+    if (closed) return;
+    closed = true;
+    try { actx.close(); } catch (e) { /* noop */ }
+  };
+}
+
 // Sleek side-view F1 car facing LEFT
 function drawCar(ctx, cx, cy, opts = {}) {
   const { shake = 0, tilt = 0, headlights = false, spinL = 0, spinR = 0 } = opts;
@@ -161,6 +238,7 @@ function drawCar(ctx, cx, cy, opts = {}) {
 export const StartLearningTransition = ({ isVisible, onDone }) => {
   const canvasRef = useRef(null);
   const animRef   = useRef(null);
+  const audioRef  = useRef(null);
   const onDoneRef = useRef(onDone);
   useEffect(() => { onDoneRef.current = onDone; }, [onDone]);
 
@@ -169,6 +247,17 @@ export const StartLearningTransition = ({ isVisible, onDone }) => {
     const canvas = canvasRef.current;
     if (!canvas) return;
     const ctx = canvas.getContext('2d');
+
+    // Engine / launch sound — always plays (a one-shot SFX on a deliberate tap),
+    // independent of Byte's narration voice setting.
+    try {
+      const AC = window.AudioContext || window.webkitAudioContext;
+      if (AC) {
+        const actx = new AC();
+        if (actx.state === 'suspended') actx.resume();
+        audioRef.current = buildEngine(actx);
+      }
+    } catch (e) { /* noop */ }
     const dpr = window.devicePixelRatio || 1;
 
     canvas.width  = canvas.offsetWidth  * dpr;
@@ -493,7 +582,7 @@ export const StartLearningTransition = ({ isVisible, onDone }) => {
     };
 
     animRef.current = requestAnimationFrame(draw);
-    return () => cancelAnimationFrame(animRef.current);
+    return () => { cancelAnimationFrame(animRef.current); if (audioRef.current) { audioRef.current(); audioRef.current = null; } };
   }, [isVisible]);
 
   return (

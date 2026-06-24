@@ -1,7 +1,7 @@
 import { motion, AnimatePresence } from 'framer-motion';
-import { Flame, Zap, Award, RotateCcw, ChevronRight, ShieldCheck, AlertCircle } from 'lucide-react';
+import { Flame, Zap, Award, RotateCcw, ChevronRight, ShieldCheck, AlertCircle, LogOut } from 'lucide-react';
 import { useProgress } from '../hooks/useProgress';
-import { getCompletedLessons, resetAllProgress } from '../utils/storage';
+import { getCompletedLessons, resetAllProgress, setOnboarded, setUser } from '../utils/storage';
 import { Button, Card } from '../components/ui-components';
 import { useState, useEffect } from 'react';
 import { Skeleton } from '../components/Skeleton';
@@ -87,6 +87,12 @@ export const Profile = () => {
       </motion.div>
     );
   }
+
+  const handleLogout = () => {
+    setOnboarded(false);
+    setUser(null);
+    window.location.reload();
+  };
 
   return (
     <motion.div
@@ -255,6 +261,24 @@ export const Profile = () => {
             </motion.div>
           )}
         </AnimatePresence>
+      </motion.div>
+
+      {/* Log out */}
+      <motion.div
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ delay: 0.72 }}
+      >
+        <motion.button
+          onClick={handleLogout}
+          className="w-full flex items-center justify-center gap-2 bg-white border border-slate-200 text-red-500 font-bold text-sm py-3.5 rounded-2xl shadow-sm"
+          whileTap={{ scale: 0.96 }}
+          whileHover={{ borderColor: '#FCA5A5', boxShadow: '0 4px 14px rgba(0,0,0,0.07)' }}
+          data-testid="logout-button"
+        >
+          <LogOut size={16} strokeWidth={2.5} />
+          Log Out
+        </motion.button>
       </motion.div>
     </motion.div>
   );

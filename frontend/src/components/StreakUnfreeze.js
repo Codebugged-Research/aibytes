@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Flame, Sparkles } from 'lucide-react';
+import { Mascot } from './Mascot';
 
 export const StreakUnfreeze = ({ currentStreak, onUnfreezeComplete, onClose }) => {
   const [phase, setPhase] = useState('frozen'); // frozen | breaking | unfrozen
@@ -265,6 +266,12 @@ export const StreakUnfreeze = ({ currentStreak, onUnfreezeComplete, onClose }) =
             )}
           </AnimatePresence>
         </div>
+
+        {/* Byte reacts to your streak */}
+        <Mascot
+          mood={phase === 'unfrozen' ? 'celebrate' : phase === 'breaking' ? 'happy' : 'sleepy'}
+          size={76}
+        />
       </div>
     </motion.div>
   );

@@ -6,7 +6,8 @@ const STORAGE_KEYS = {
   LAST_LESSON_DATE: 'aiquest_last_date',
   COMPLETED_LESSONS: 'aiquest_completed',
   CURRENT_LESSON: 'aiquest_current',
-  LESSON_PROGRESS: 'aiquest_lesson_progress'
+  LESSON_PROGRESS: 'aiquest_lesson_progress',
+  VOICE: 'aiquest_voice'
 };
 
 export const getXP = () => {
@@ -102,4 +103,33 @@ export const clearLessonProgress = (lessonId) => {
 
 export const resetAllProgress = () => {
   Object.values(STORAGE_KEYS).forEach(key => localStorage.removeItem(key));
+};
+
+// Sound starts OFF every session and is opt-in via the speaker control. Stored
+// in sessionStorage so each fresh visit begins muted (and any legacy
+// localStorage 'on' value is ignored).
+export const getVoiceEnabled = () => {
+  try { return sessionStorage.getItem(STORAGE_KEYS.VOICE) === 'on'; } catch (e) { return false; }
+};
+
+export const setVoiceEnabled = (enabled) => {
+  try { sessionStorage.setItem(STORAGE_KEYS.VOICE, enabled ? 'on' : 'off'); } catch (e) { /* noop */ }
+};
+
+// Auth/onboarding (MVP — stored locally, independent of progress reset)
+export const getOnboarded = () => {
+  return localStorage.getItem('aiquest_onboarded') === '1';
+};
+
+export const setOnboarded = (value) => {
+  if (value) localStorage.setItem('aiquest_onboarded', '1');
+  else localStorage.removeItem('aiquest_onboarded');
+};
+
+export const getUser = () => {
+  try { return JSON.parse(localStorage.getItem('aiquest_user') || 'null'); } catch (e) { return null; }
+};
+
+export const setUser = (user) => {
+  localStorage.setItem('aiquest_user', JSON.stringify(user || null));
 };

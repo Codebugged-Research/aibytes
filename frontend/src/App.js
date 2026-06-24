@@ -10,6 +10,8 @@ import { Activity } from './pages/Activity';
 import { Leaderboard } from './pages/Leaderboard';
 import { LessonPlayer } from './pages/LessonPlayer';
 import { PhoneWrapper } from './components/PhoneWrapper';
+import { Onboarding } from './components/Onboarding';
+import { getOnboarded } from './utils/storage';
 import './App.css';
 
 class ErrorBoundary extends React.Component {
@@ -52,6 +54,7 @@ class ErrorBoundary extends React.Component {
 
 function App() {
   const [showSplash, setShowSplash] = useState(true);
+  const [isOnboarded, setIsOnboarded] = useState(() => getOnboarded());
 
   useEffect(() => {
     // Check if splash has been shown in this session
@@ -71,6 +74,8 @@ function App() {
             <AnimatePresence mode="wait">
               {showSplash ? (
                 <SplashScreen key="splash" onComplete={() => setShowSplash(false)} />
+              ) : !isOnboarded ? (
+                <Onboarding key="onboarding" onComplete={() => setIsOnboarded(true)} />
               ) : (
                 <Routes>
                   <Route element={<Layout />}>

@@ -1,12 +1,15 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useMemo } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
-import { X, Check, Trophy, Zap, Heart } from 'lucide-react';
+import { X, Check, Zap, Heart, Volume2, VolumeX } from 'lucide-react';
 import { useLesson } from '../hooks/useData';
 import { useProgress } from '../hooks/useProgress';
 import { markLessonComplete, addXP, clearLessonProgress, setCurrentLesson } from '../utils/storage';
 import { Button, Card } from '../components/ui-components';
 import { getIconForEmoji } from '../utils/icons';
+import { Mascot } from '../components/Mascot';
+import { useNarrator } from '../hooks/useSpeech';
+import { buildNarration } from '../utils/narrate';
 
 // ── Particle burst (correct answer celebration) ────────────────────────────────
 const BURST_COLORS = ['#10b981','#34d399','#6248FF','#a78bfa','#fbbf24','#f97316','#06b6d4','#ec4899'];
@@ -82,28 +85,131 @@ const OptionButton = ({ id, text, selected, onClick, revealState, disabled }) =>
 };
 
 // ── Teach card ────────────────────────────────────────────────────────────────
-const TeachCard = ({ card }) => (
-  <Card testId={`teach-card-${card.kind}`} className="space-y-5 shadow-sm">
-    <div>
-      <div className="px-2.5 py-0.5 rounded-lg bg-violet-50 border border-violet-100 shadow-sm inline-block">
-        <span className="text-[10px] uppercase tracking-wider text-violet-600 font-extrabold">{card.kind}</span>
+const KIND_LABEL = {
+  hook: 'Hook', definition: 'Definition', analogy: 'Analogy',
+  example: 'Example', mythbust: 'Myth Buster', visual: 'Compare', compare: 'Compare',
+};
+
+// One karaoke word — lights up as Byte reads it aloud
+const KWord = ({ tok, kind, talking, activeWord }) => {
+  const italic = tok.italic ? ' italic' : '';
+  const reading = talking && activeWord >= 0;
+  let cls;
+  if (reading && tok.wi === activeWord) {
+    cls = 'bg-[#6248FF] text-white rounded-[5px] px-1';
+  } else if (reading && tok.wi < activeWord) {
+    cls = kind === 'title' ? 'text-slate-900' : (tok.bold ? 'text-slate-700 font-bold' : 'text-slate-600');
+  } else if (reading) {
+    cls = 'text-slate-300';
+  } else {
+    cls = kind === 'title' ? 'text-slate-900' : (tok.bold ? 'text-slate-700 font-bold' : 'text-slate-500');
+  }
+  return (<><span className={`transition-colors duration-150 ${cls}${italic}`}>{tok.text}</span>{' '}</>);
+};
+
+// ── Teach card — Byte pops up and reads the lesson aloud ──────────────────────
+const TeachCard = ({ card }) => {
+  const { activeWord, talking, enabled, supported, play, stop, toggle } = useNarrator();
+  const narration = useMemo(() => buildNarration(card.title, card.body), [card.title, card.body]);
+
+  // Auto-read only once the user has opted in — play() no-ops while voice is off
+  useEffect(() => {
+    play(narration);
+    return () => stop();
+  }, [narration, play, stop]);
+
+  const handleToggle = () => { if (toggle()) play(narration); };
+  const handleByteTap = () => { if (enabled) play(narration); else if (toggle()) play(narration); };
+
+  return (
+    <Card testId={`teach-card-${card.kind}`} className="space-y-5 shadow-sm relative overflow-hidden">
+      <div className="flex items-center justify-between">
+        <div className="px-2.5 py-0.5 rounded-lg bg-violet-50 border border-violet-100 shadow-sm">
+          <span className="text-[10px] uppercase tracking-wider text-violet-600 font-extrabold">{KIND_LABEL[card.kind] || card.kind}</span>
+        </div>
+        {supported && (
+          <button
+            onClick={handleToggle}
+            data-testid="voice-toggle"
+            aria-label={enabled ? 'Mute Byte' : 'Let Byte read aloud'}
+            className={`w-8 h-8 rounded-full flex items-center justify-center border transition-colors ${
+              enabled
+                ? 'bg-slate-50 border-slate-200 text-slate-500 hover:text-violet-600 hover:border-violet-200'
+                : 'bg-[#6248FF] border-violet-500 text-white shadow-sm shadow-violet-200'
+            }`}
+          >
+            {enabled ? <Volume2 size={15} strokeWidth={2.4} /> : <VolumeX size={15} strokeWidth={2.4} />}
+          </button>
+        )}
       </div>
-    </div>
-    <h2 className="text-xl font-extrabold text-slate-900 leading-tight">{card.title}</h2>
-    <div className="text-slate-500 text-sm font-medium leading-relaxed" dangerouslySetInnerHTML={{ __html: card.body }} />
-    {card.compare && (
-      <div className="grid grid-cols-2 gap-4 pt-2">
-        {[card.compare.left, card.compare.right].map((side) => (
-          <div key={side.tag} className="bg-slate-50 border border-slate-200 rounded-2xl p-4 text-center space-y-3 shadow-sm">
-            <div className="text-[10px] uppercase tracking-wider text-slate-400 font-extrabold">{side.tag}</div>
-            <div className="flex justify-center">{getIconForEmoji(side.emoji, { size: 28, className: 'text-slate-700' })}</div>
-            <div className="text-xs font-bold text-slate-700 leading-normal" dangerouslySetInnerHTML={{ __html: side.text }} />
+
+      {/* Enable-voice prompt — shown on every card while sound is off, placed
+          above Byte so it never overlaps the character */}
+      {supported && !enabled && (
+        <motion.button
+          type="button"
+          onClick={handleByteTap}
+          data-testid="voice-hint"
+          className="w-full flex items-center justify-center gap-2 bg-violet-50 border border-violet-200 text-[#6248FF] text-xs font-extrabold rounded-xl py-2.5"
+          initial={{ opacity: 0, y: -6 }}
+          animate={{ opacity: 1, y: 0 }}
+          whileTap={{ scale: 0.98 }}
+        >
+          <Volume2 size={15} strokeWidth={2.6} />
+          Tap to hear Byte read this aloud
+        </motion.button>
+      )}
+
+      <div className="flex flex-col items-center pt-1">
+        <motion.div
+          className="relative"
+          initial={{ scale: 0, y: 10 }}
+          animate={{ scale: 1, y: 0 }}
+          transition={{ type: 'spring', stiffness: 300, damping: 18 }}
+        >
+          {talking && (
+            <motion.span
+              className="absolute rounded-full pointer-events-none"
+              style={{ inset: '-8%', border: '2px solid rgba(98,72,255,0.35)' }}
+              animate={{ scale: [1, 1.3], opacity: [0.5, 0] }}
+              transition={{ duration: 1.1, repeat: Infinity, ease: 'easeOut' }}
+            />
+          )}
+          <Mascot mood={talking ? 'talking' : 'thinking'} size={88} onClick={handleByteTap} testId="teach-byte" />
+        </motion.div>
+        {supported && (
+          <div className="text-[10px] font-bold uppercase tracking-wider text-slate-400 mt-1">
+            {talking ? 'Byte is reading…' : enabled ? 'Tap Byte to replay' : 'Tap to hear Byte'}
           </div>
-        ))}
+        )}
       </div>
-    )}
-  </Card>
-);
+
+      <h2 className="text-xl font-extrabold leading-tight text-center">
+        {narration.titleTokens.map((tok, i) => (
+          <KWord key={i} tok={tok} kind="title" talking={talking} activeWord={activeWord} />
+        ))}
+      </h2>
+
+      <p className="text-sm font-medium leading-relaxed">
+        {narration.bodyTokens.map((tok, i) => (tok.br
+          ? <br key={i} />
+          : <KWord key={i} tok={tok} kind="body" talking={talking} activeWord={activeWord} />))}
+      </p>
+
+      {card.compare && (
+        <div className="grid grid-cols-2 gap-4 pt-2">
+          {[card.compare.left, card.compare.right].map((side) => (
+            <div key={side.tag} className="bg-slate-50 border border-slate-200 rounded-2xl p-4 text-center space-y-3 shadow-sm">
+              <div className="text-[10px] uppercase tracking-wider text-slate-400 font-extrabold">{side.tag}</div>
+              <div className="flex justify-center">{getIconForEmoji(side.emoji, { size: 28, className: 'text-slate-700' })}</div>
+              <div className="text-xs font-bold text-slate-700 leading-normal" dangerouslySetInnerHTML={{ __html: side.text }} />
+            </div>
+          ))}
+        </div>
+      )}
+    </Card>
+  );
+};
 
 // ── Exercise card (no inline explanation — it lives in the bottom panel) ───────
 const ExerciseCard = ({ exercise, selectedAnswer, onAnswerSelect, onFillBlank, isRevealed }) => {
@@ -191,14 +297,7 @@ export const LessonPlayer = () => {
   if (loading || !lesson) {
     return (
       <div className="h-full w-full flex items-center justify-center bg-[#F8FAFC]">
-        <motion.div className="relative">
-          <motion.div className="absolute inset-0 bg-violet-400 rounded-full blur-xl opacity-30"
-            animate={{ scale: [1, 1.4, 1], opacity: [0.3, 0.6, 0.3] }}
-            transition={{ duration: 1.4, repeat: Infinity }} />
-          <motion.div animate={{ rotate: 360 }} transition={{ duration: 0.85, repeat: Infinity, ease: 'linear' }}>
-            <Zap size={48} className="text-violet-600 relative z-10" fill="#7c3aed" />
-          </motion.div>
-        </motion.div>
+        <Mascot mood="thinking" size={96} />
       </div>
     );
   }
@@ -229,13 +328,7 @@ export const LessonPlayer = () => {
               />
             ))}
             <motion.div initial={{ scale: 0, rotate: -180 }} animate={{ scale: 1, rotate: 0 }} transition={{ delay: 0.2, type: 'spring', stiffness: 260, damping: 18 }}>
-              <motion.div
-                className="w-24 h-24 rounded-full bg-gradient-to-br from-[#10B981] to-[#059669] mx-auto flex items-center justify-center shadow-lg shadow-emerald-200"
-                animate={{ boxShadow: ['0 8px 24px rgba(16,185,129,0.3)','0 8px 44px rgba(16,185,129,0.65)','0 8px 24px rgba(16,185,129,0.3)'] }}
-                transition={{ duration: 2, repeat: Infinity }}
-              >
-                <Trophy size={48} className="text-white" strokeWidth={2} />
-              </motion.div>
+              <Mascot mood="celebrate" size={124} />
             </motion.div>
           </div>
 
@@ -532,14 +625,7 @@ export const LessonPlayer = () => {
             >
               {isCorrect ? (
                 <div className="flex items-start gap-3">
-                  <motion.div
-                    initial={{ scale: 0, rotate: -30 }}
-                    animate={{ scale: 1, rotate: 0 }}
-                    transition={{ type: 'spring', stiffness: 500, damping: 18 }}
-                    className="w-11 h-11 rounded-full bg-emerald-500 flex items-center justify-center flex-shrink-0 shadow-md shadow-emerald-200"
-                  >
-                    <Check size={22} className="text-white" strokeWidth={3} />
-                  </motion.div>
+                  <Mascot mood="celebrate" size={52} glow={false} className="flex-shrink-0 -mt-1" />
                   <div className="flex-1">
                     <p className="text-emerald-700 font-black text-xl leading-none mb-1">Amazing!</p>
                     <div className="flex items-center gap-2">
@@ -560,14 +646,7 @@ export const LessonPlayer = () => {
               ) : (
                 <div className="space-y-2">
                   <div className="flex items-center gap-3">
-                    <motion.div
-                      initial={{ scale: 0, rotate: 30 }}
-                      animate={{ scale: 1, rotate: 0 }}
-                      transition={{ type: 'spring', stiffness: 500, damping: 18 }}
-                      className="w-11 h-11 rounded-full bg-red-500 flex items-center justify-center flex-shrink-0 shadow-md shadow-red-200"
-                    >
-                      <X size={22} className="text-white" strokeWidth={3} />
-                    </motion.div>
+                    <Mascot mood="sad" size={52} glow={false} className="flex-shrink-0 -my-1" />
                     <p className="text-red-600 font-black text-xl">Incorrect</p>
                   </div>
                   {explanation && (

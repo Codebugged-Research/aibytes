@@ -1,5 +1,6 @@
 import { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
+import { Mascot } from './Mascot';
 
 const TAGLINE = 'Master AI in 10 minutes';
 const LOADING_TIPS = [
@@ -215,6 +216,17 @@ export const SplashScreen = ({ onComplete }) => {
               alt="Kidlin"
               style={{ width: 88, height: 88, objectFit: 'contain', display: 'block' }}
             />
+          </motion.div>
+
+          {/* Byte peeks in to greet you */}
+          <motion.div
+            className="absolute"
+            style={{ bottom: -28, right: -34, zIndex: 20 }}
+            initial={{ opacity: 0, scale: 0, y: 12 }}
+            animate={{ opacity: 1, scale: 1, y: 0 }}
+            transition={{ delay: 0.95, type: 'spring', stiffness: 300, damping: 16 }}
+          >
+            <Mascot mood="wave" size={64} />
           </motion.div>
         </div>
 

@@ -4,11 +4,11 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { Flame, Zap, TrendingUp, ChevronRight, Award, Check, Sparkles } from 'lucide-react';
 import { useProgress } from '../hooks/useProgress';
 import { useCurriculum } from '../hooks/useData';
-import { getCurrentLesson, isLessonCompleted, setStreak, addXP } from '../utils/storage';
+import { isLessonCompleted, setStreak, addXP } from '../utils/storage';
 import { Button, Card, ProgressBar } from '../components/ui-components';
 import { Skeleton, HomeScreenSkeleton } from '../components/Skeleton';
 import { StreakUnfreeze } from '../components/StreakUnfreeze';
-import { StartLearningTransition } from '../components/StartLearningTransition';
+import { MascotCoach } from '../components/Mascot';
 
 /* Stagger container/item variants */
 const containerVariants = {
@@ -27,7 +27,6 @@ export const Home = () => {
   const { curriculum, loading } = useCurriculum();
   const [xpPopped, setXpPopped] = useState(false);
   const [showUnfreeze, setShowUnfreeze] = useState(false);
-  const [showTransition, setShowTransition] = useState(false);
 
   const handleUnfreezeComplete = () => {
     const newStreak = streak + 1;
@@ -37,12 +36,10 @@ export const Home = () => {
     setShowUnfreeze(false);
   };
 
-  const currentLessonId = getCurrentLesson();
   const allLessons = curriculum?.units?.flatMap(u => u.lessons) || [];
   const completedCount = allLessons.filter(l => isLessonCompleted(l.id)).length;
   const totalLessons   = allLessons.length || 15;
 
-  const handleStartLesson = () => setShowTransition(true);
 
   if (loading) {
     return (
@@ -77,17 +74,33 @@ export const Home = () => {
             Master AI.
           </h1>
           <motion.button
-            onClick={handleStartLesson}
+            onClick={() => navigate('/path')}
             className="flex items-center gap-1 bg-slate-900 text-white text-[11px] font-extrabold px-3.5 py-2 rounded-full shadow-sm"
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.93 }}
             transition={{ type: 'spring', stiffness: 420, damping: 22 }}
           >
             <Sparkles size={10} className="text-violet-400" />
-            <span>Continue</span>
+            <span>Let&apos;s start</span>
             <ChevronRight size={10} strokeWidth={3} />
           </motion.button>
         </div>
+
+        {/* Byte — your guide */}
+        <MascotCoach
+          mood="wave"
+          size={58}
+          testId="byte-greeting"
+          message={
+            xp === 0
+              ? "Hi, I'm Byte! Let's start your first AI bite."
+              : completedCount >= totalLessons
+              ? 'You finished every bite! Fancy a refresher?'
+              : streak > 1
+              ? `${streak}-day streak! Keep it sharp — one bite today?`
+              : `Welcome back! ${completedCount} bite${completedCount === 1 ? '' : 's'} down. One more?`
+          }
+        />
 
         {/* XP Level bar */}
         {(() => {
@@ -295,10 +308,6 @@ export const Home = () => {
         )}
       </AnimatePresence>
 
-      <StartLearningTransition
-        isVisible={showTransition}
-        onDone={() => navigate(`/lesson/${currentLessonId}`)}
-      />
     </>
   );
 };
