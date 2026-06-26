@@ -1,9 +1,13 @@
-import { useState } from 'react';
+import { useState, useRef, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
-import { ShieldCheck, Loader2 } from 'lucide-react';
+import { ShieldCheck, Loader2, ArrowLeft, Phone } from 'lucide-react';
 import { Mascot } from './Mascot';
 import { setOnboarded, setUser } from '../utils/storage';
 import { playHappyChime, playPop } from '../utils/sound';
+import { dialForIso } from '../utils/countries';
+import { PhoneField } from './PhoneField';
+import { ThemeToggle } from './ThemeToggle';
 
 const GoogleIcon = ({ size = 18 }) => (
   <svg width={size} height={size} viewBox="0 0 48 48" aria-hidden>
@@ -14,26 +18,28 @@ const GoogleIcon = ({ size = 18 }) => (
   </svg>
 );
 
+const AppleIcon = ({ size = 18 }) => (
+  <svg width={size} height={size} viewBox="0 0 24 24" fill="currentColor" aria-hidden>
+    <path d="M17.05 12.04c-.03-2.6 2.12-3.85 2.22-3.91-1.21-1.77-3.09-2.01-3.76-2.04-1.6-.16-3.12.94-3.93.94-.81 0-2.06-.92-3.39-.89-1.74.03-3.35 1.01-4.25 2.57-1.81 3.14-.46 7.79 1.3 10.34.86 1.25 1.89 2.65 3.23 2.6 1.3-.05 1.79-.84 3.36-.84 1.57 0 2.01.84 3.39.81 1.4-.02 2.29-1.27 3.14-2.53.99-1.45 1.4-2.86 1.42-2.93-.03-.01-2.72-1.04-2.75-4.13zM14.5 4.6c.71-.86 1.19-2.06 1.06-3.25-1.02.04-2.26.68-2.99 1.54-.66.76-1.23 1.98-1.08 3.15 1.14.09 2.3-.58 3.01-1.44z" />
+  </svg>
+);
+
 // celebratory particle burst on success (tuned for a light background)
 const SuccessBurst = () => {
   const colors = ['#6248FF', '#22d3ee', '#8b5cf6', '#10b981', '#ec4899', '#f59e0b'];
   return (
     <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
       {Array.from({ length: 22 }, (_, i) => {
-        const angle = (i / 22) * 360;
+        const angle = (i / 22) * Math.PI * 2;
+        const dist = 90 + Math.random() * 50;
         return (
           <motion.div
             key={i}
-            className="absolute w-2.5 h-2.5 rounded-full"
+            className="absolute w-2 h-2 rounded-full"
             style={{ backgroundColor: colors[i % colors.length] }}
-            initial={{ scale: 0, x: 0, y: 0, opacity: 1 }}
-            animate={{
-              scale: [0, 1.2, 0.4],
-              x: Math.cos((angle * Math.PI) / 180) * (90 + (i % 3) * 22),
-              y: Math.sin((angle * Math.PI) / 180) * (90 + (i % 3) * 22),
-              opacity: [1, 1, 0],
-            }}
-            transition={{ duration: 1, delay: 0.05 + (i % 6) * 0.03, ease: 'easeOut' }}
+            initial={{ x: 0, y: 0, scale: 1, opacity: 1 }}
+            animate={{ x: Math.cos(angle) * dist, y: Math.sin(angle) * dist, scale: 0, opacity: 0 }}
+            transition={{ duration: 0.9, ease: 'easeOut' }}
           />
         );
       })}
@@ -41,20 +47,102 @@ const SuccessBurst = () => {
   );
 };
 
+
+const inputCls =
+  'w-full bg-white border border-slate-200 rounded-2xl py-3 px-4 text-sm font-semibold text-slate-800 placeholder-slate-400 focus:outline-none focus:border-[#6248FF] transition-colors';
+const primaryBtnCls =
+  'w-full bg-[#6248FF] text-white font-bold text-sm rounded-2xl py-3.5 shadow-sm disabled:opacity-40 disabled:cursor-not-allowed transition-opacity';
+const backBtnCls = 'inline-flex items-center gap-1 text-xs font-bold text-slate-400 hover:text-slate-600 transition-colors';
+
+const stepAnim = {
+  initial: { opacity: 0, y: 14 },
+  animate: { opacity: 1, y: 0 },
+  exit: { opacity: 0, y: -14 },
+  transition: { duration: 0.32, ease: [0.22, 1, 0.36, 1] },
+};
+
 export const Onboarding = ({ onComplete }) => {
-  const [step, setStep] = useState('welcome'); // welcome | loading | success
+  const navigate = useNavigate();
+  const [step, setStep] = useState('welcome'); // welcome | loading | phone | otp | details | success
+  const [provider, setProvider] = useState('google'); // label for loading screen
+  const [countryIso, setCountryIso] = useState('IN');
+  const [phone, setPhone] = useState('');
+  const [otp, setOtp] = useState(['', '', '', '', '', '']);
+  const [name, setName] = useState('');
+  const [email, setEmail] = useState('');
+  const [resend, setResend] = useState(0);
+  const otpRefs = useRef([]);
+  const cc = dialForIso(countryIso);
+  const emailValid = /\S+@\S+\.\S+/.test(email.trim());
+
+  // resend countdown while on the OTP step
+  useEffect(() => {
+    if (step !== 'otp' || resend <= 0) return undefined;
+    const t = setTimeout(() => setResend((r) => r - 1), 1000);
+    return () => clearTimeout(t);
+  }, [step, resend]);
 
   const finish = (method, payload) => {
     setUser({ method, ...payload, joinedAt: Date.now() });
     setStep('success');
     playHappyChime();
-    setTimeout(() => { setOnboarded(true); onComplete(); }, 2400);
+    setTimeout(() => { setOnboarded(true); navigate('/', { replace: true }); onComplete(); }, 2400);
   };
 
-  const handleGoogle = () => {
+  const handleOAuth = (which) => {
     playPop();
+    setProvider(which);
     setStep('loading');
-    setTimeout(() => finish('google', { name: 'Learner', email: 'you@gmail.com' }), 1500);
+    const mock = which === 'apple'
+      ? { name: 'Learner', email: 'you@icloud.com' }
+      : { name: 'Learner', email: 'you@gmail.com' };
+    setTimeout(() => finish(which, mock), 1500);
+  };
+
+  const phoneDigits = phone.replace(/\D/g, '');
+
+  const sendCode = () => {
+    if (phoneDigits.length < 6) return;
+    playPop();
+    setOtp(['', '', '', '', '', '']);
+    setResend(30);
+    setStep('otp');
+    setTimeout(() => otpRefs.current[0]?.focus(), 250);
+  };
+
+  const verifyOtp = () => {
+    // Demo: any 6 digits are accepted; collect the user's details next.
+    playPop();
+    setStep('details');
+  };
+
+  const setDigit = (i, v) => {
+    const d = v.replace(/\D/g, '').slice(-1);
+    const next = [...otp];
+    next[i] = d;
+    setOtp(next);
+    if (d && i < 5) otpRefs.current[i + 1]?.focus();
+    if (next.every((x) => x !== '')) setTimeout(verifyOtp, 220);
+  };
+
+  const onOtpKey = (i, e) => {
+    if (e.key === 'Backspace' && !otp[i] && i > 0) otpRefs.current[i - 1]?.focus();
+  };
+
+  const onOtpPaste = (e) => {
+    const txt = (e.clipboardData.getData('text') || '').replace(/\D/g, '').slice(0, 6);
+    if (!txt) return;
+    e.preventDefault();
+    const next = ['', '', '', '', '', ''];
+    for (let k = 0; k < txt.length; k += 1) next[k] = txt[k];
+    setOtp(next);
+    otpRefs.current[Math.min(txt.length, 5)]?.focus();
+    if (txt.length === 6) setTimeout(verifyOtp, 220);
+  };
+
+  const completeDetails = () => {
+    if (!name.trim() || !emailValid) return;
+    finish('phone', { name: name.trim(), email: email.trim(), phone: `${cc} ${phone}` });
   };
 
   const byteMood = step === 'success' ? 'celebrate' : 'wave';
@@ -72,6 +160,10 @@ export const Onboarding = ({ onComplete }) => {
       <div className="absolute -top-20 -right-16 w-72 h-72 rounded-full blur-3xl" style={{ background: 'radial-gradient(circle,rgba(124,92,255,0.12),transparent)' }} />
       <div className="absolute -bottom-24 -left-20 w-72 h-72 rounded-full blur-3xl" style={{ background: 'radial-gradient(circle,rgba(124,92,255,0.08),transparent)' }} />
 
+      <div className="absolute top-5 right-5 z-20">
+        <ThemeToggle />
+      </div>
+
       <div className="relative z-10 h-full w-full flex flex-col items-center justify-center px-8">
         {/* Byte welcomes the user */}
         <div className="relative flex flex-col items-center">
@@ -82,43 +174,64 @@ export const Onboarding = ({ onComplete }) => {
             animate={{ scale: 1, opacity: 1, y: 0 }}
             transition={{ type: 'spring', stiffness: 240, damping: 18 }}
           >
-            <Mascot mood={byteMood} size={120} />
+            <Mascot mood={byteMood} size={108} />
           </motion.div>
         </div>
 
         <div className="w-full mt-3">
           <AnimatePresence mode="wait">
             {step === 'welcome' && (
-              <motion.div
-                key="welcome"
-                initial={{ opacity: 0, y: 14 }}
-                animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0, y: -14 }}
-                transition={{ duration: 0.32, ease: [0.22, 1, 0.36, 1] }}
-                className="space-y-7"
-              >
+              <motion.div key="welcome" {...stepAnim} className="space-y-6">
                 <div className="text-center space-y-3">
                   <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-violet-50 border border-violet-100 text-[11px] font-bold text-violet-600">
                     Hi, I&apos;m Byte — your AI guide
                   </div>
-                  <h1 className="text-3xl font-black tracking-tight text-slate-900 leading-tight" style={{ fontFamily: 'Space Grotesk, sans-serif' }}>
+                  <h1 className="text-3xl font-black tracking-tight text-slate-900 leading-tight" style={{ fontFamily: 'Outfit, sans-serif' }}>
                     Welcome to{' '}
                     <span className="text-transparent bg-clip-text" style={{ backgroundImage: 'linear-gradient(90deg,#6248FF,#8b5cf6)' }}>AIBites</span>
                   </h1>
                   <p className="text-sm text-slate-500 font-medium leading-relaxed px-2">
-                    Master AI in fun 5-minute bites. Let&apos;s set up your account.
+                    Master AI in fun 5-minute bites. Pick how you&apos;d like to sign up.
                   </p>
                 </div>
 
-                <motion.button
-                  onClick={handleGoogle}
-                  data-testid="google-auth"
-                  whileTap={{ scale: 0.98 }}
-                  className="w-full flex items-center justify-center gap-3 bg-white border border-slate-200 text-slate-800 font-bold text-sm rounded-2xl py-3.5 shadow-sm hover:bg-slate-50 transition-colors"
-                >
-                  <GoogleIcon size={19} />
-                  Continue with Google
-                </motion.button>
+                <div className="space-y-2.5">
+                  <motion.button
+                    onClick={() => handleOAuth('google')}
+                    data-testid="google-auth"
+                    whileTap={{ scale: 0.98 }}
+                    className="w-full flex items-center justify-center gap-3 bg-white border border-slate-200 text-slate-800 font-bold text-sm rounded-2xl py-3.5 shadow-sm hover:bg-slate-50 transition-colors"
+                  >
+                    <GoogleIcon size={19} />
+                    Continue with Google
+                  </motion.button>
+
+                  <motion.button
+                    onClick={() => handleOAuth('apple')}
+                    data-testid="apple-auth"
+                    whileTap={{ scale: 0.98 }}
+                    className="w-full flex items-center justify-center gap-2.5 bg-slate-900 text-white dark:bg-white dark:text-slate-900 font-bold text-sm rounded-2xl py-3.5 shadow-sm hover:bg-slate-800 dark:hover:bg-slate-100 transition-colors"
+                  >
+                    <AppleIcon size={18} />
+                    Continue with Apple
+                  </motion.button>
+
+                  <div className="flex items-center gap-3 py-1">
+                    <div className="h-px flex-1 bg-slate-200" />
+                    <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider">or</span>
+                    <div className="h-px flex-1 bg-slate-200" />
+                  </div>
+
+                  <motion.button
+                    onClick={() => { playPop(); setStep('phone'); }}
+                    data-testid="phone-auth"
+                    whileTap={{ scale: 0.98 }}
+                    className="w-full flex items-center justify-center gap-2.5 bg-white border border-slate-200 text-slate-800 font-bold text-sm rounded-2xl py-3.5 shadow-sm hover:bg-slate-50 transition-colors"
+                  >
+                    <Phone size={17} className="text-[#6248FF]" />
+                    Continue with phone
+                  </motion.button>
+                </div>
 
                 <p className="text-[10px] text-slate-400 text-center leading-relaxed px-4">
                   By continuing you agree to our Terms &amp; Privacy Policy.
@@ -126,10 +239,96 @@ export const Onboarding = ({ onComplete }) => {
               </motion.div>
             )}
 
+            {step === 'phone' && (
+              <motion.div key="phone" {...stepAnim} className="space-y-5">
+                <button onClick={() => setStep('welcome')} className={backBtnCls}>
+                  <ArrowLeft size={15} /> Back
+                </button>
+                <div className="text-center space-y-1.5">
+                  <h2 className="text-2xl font-black text-slate-900 tracking-tight" style={{ fontFamily: 'Outfit, sans-serif' }}>Enter your phone</h2>
+                  <p className="text-sm text-slate-500 font-medium">We&apos;ll text you a 6-digit code.</p>
+                </div>
+                <PhoneField
+                  countryIso={countryIso}
+                  onCountry={setCountryIso}
+                  phone={phone}
+                  onPhone={setPhone}
+                  placeholder="Phone number"
+                />
+                <button data-testid="send-code" onClick={sendCode} disabled={phoneDigits.length < 6} className={primaryBtnCls}>
+                  Send code
+                </button>
+              </motion.div>
+            )}
+
+            {step === 'otp' && (
+              <motion.div key="otp" {...stepAnim} className="space-y-5">
+                <button onClick={() => setStep('phone')} className={backBtnCls}>
+                  <ArrowLeft size={15} /> Back
+                </button>
+                <div className="text-center space-y-1.5">
+                  <h2 className="text-2xl font-black text-slate-900 tracking-tight" style={{ fontFamily: 'Outfit, sans-serif' }}>Verify your number</h2>
+                  <p className="text-sm text-slate-500 font-medium">Code sent to {cc} {phone}</p>
+                </div>
+                <div className="flex justify-center gap-2" onPaste={onOtpPaste}>
+                  {otp.map((d, i) => (
+                    <input
+                      key={i}
+                      ref={(el) => { otpRefs.current[i] = el; }}
+                      data-testid={`otp-${i}`}
+                      value={d}
+                      onChange={(e) => setDigit(i, e.target.value)}
+                      onKeyDown={(e) => onOtpKey(i, e)}
+                      inputMode="numeric"
+                      maxLength={1}
+                      className="w-11 h-12 bg-white border-2 border-slate-200 rounded-xl text-center text-xl font-black text-slate-900 focus:outline-none focus:border-[#6248FF] transition-colors"
+                    />
+                  ))}
+                </div>
+                <p className="text-[10px] text-slate-400 text-center">Demo — enter any 6 digits</p>
+                <div className="text-center text-xs text-slate-400 font-semibold">
+                  {resend > 0
+                    ? `Resend code in ${resend}s`
+                    : <button onClick={() => { playPop(); setResend(30); }} className="text-[#6248FF] font-bold">Resend code</button>}
+                </div>
+              </motion.div>
+            )}
+
+            {step === 'details' && (
+              <motion.div key="details" {...stepAnim} className="space-y-5">
+                <div className="text-center space-y-1.5">
+                  <h2 className="text-2xl font-black text-slate-900 tracking-tight" style={{ fontFamily: 'Outfit, sans-serif' }}>Almost there!</h2>
+                  <p className="text-sm text-slate-500 font-medium">Tell Byte what to call you.</p>
+                </div>
+                <div className="space-y-3">
+                  <input
+                    data-testid="name-input"
+                    value={name}
+                    onChange={(e) => setName(e.target.value)}
+                    placeholder="Your name"
+                    autoComplete="name"
+                    className={inputCls}
+                  />
+                  <input
+                    data-testid="email-input"
+                    type="email"
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
+                    placeholder="Email"
+                    autoComplete="email"
+                    className={inputCls}
+                  />
+                </div>
+                <button data-testid="details-continue" onClick={completeDetails} disabled={!name.trim() || !emailValid} className={primaryBtnCls}>
+                  Continue
+                </button>
+              </motion.div>
+            )}
+
             {step === 'loading' && (
               <motion.div key="loading" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="flex flex-col items-center gap-3 pt-2">
                 <Loader2 size={26} className="text-[#6248FF] animate-spin" />
-                <p className="text-sm text-slate-500 font-semibold">Connecting to Google…</p>
+                <p className="text-sm text-slate-500 font-semibold">Connecting to {provider === 'apple' ? 'Apple' : 'Google'}…</p>
               </motion.div>
             )}
 
@@ -138,7 +337,7 @@ export const Onboarding = ({ onComplete }) => {
                 <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-emerald-50 border border-emerald-200 text-[11px] font-black text-emerald-600 uppercase tracking-wider">
                   <ShieldCheck size={13} /> Verified
                 </div>
-                <h2 className="text-3xl font-black text-slate-900 tracking-tight" style={{ fontFamily: 'Space Grotesk, sans-serif' }}>You&apos;re all set!</h2>
+                <h2 className="text-3xl font-black text-slate-900 tracking-tight" style={{ fontFamily: 'Outfit, sans-serif' }}>You&apos;re all set!</h2>
                 <p className="text-sm text-slate-500 font-medium">Byte can&apos;t wait to teach you. Let&apos;s dive in.</p>
               </motion.div>
             )}

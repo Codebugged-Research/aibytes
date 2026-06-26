@@ -234,7 +234,7 @@ export const SplashScreen = ({ onComplete }) => {
         <div>
           <h1
             className="text-5xl font-black tracking-tight flex justify-center"
-            style={{ fontFamily: 'Space Grotesk' }}
+            style={{ fontFamily: 'Outfit, sans-serif' }}
           >
             {'AIBites'.split('').map((char, i) => (
               <motion.span

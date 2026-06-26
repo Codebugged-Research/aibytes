@@ -41,7 +41,7 @@ export const PhoneWrapper = ({ children }) => {
     <div className="h-screen w-full bg-slate-100 flex items-center justify-center p-4 md:p-8 overflow-hidden">
       {/* Phone chassis */}
       <motion.div
-        className="relative w-full max-w-[375px] h-full max-h-[780px] bg-white rounded-[52px] shadow-2xl border-[10px] border-slate-900 overflow-hidden flex flex-col"
+        className="relative w-full max-w-[375px] h-full max-h-[780px] bg-[#F8FAFC] rounded-[52px] shadow-2xl border-[10px] border-slate-900 overflow-hidden flex flex-col"
         initial={{ y: 80, opacity: 0, scale: 0.94 }}
         animate={{ y: 0, opacity: 1, scale: 1 }}
         transition={{ type: 'spring', stiffness: 240, damping: 26, delay: 0.08 }}
@@ -52,7 +52,7 @@ export const PhoneWrapper = ({ children }) => {
         </div>
 
         {/* Status Bar */}
-        <div className="h-11 w-full bg-white flex items-center justify-between px-7 select-none z-40 flex-shrink-0 text-slate-900">
+        <div className="h-11 w-full bg-[#F8FAFC] flex items-center justify-between px-7 select-none z-40 flex-shrink-0 text-slate-900">
           <span className="text-xs font-bold font-sans tracking-tight leading-none pt-1">
             {time || '19:47'}
           </span>
@@ -69,8 +69,8 @@ export const PhoneWrapper = ({ children }) => {
         </div>
 
         {/* Home Indicator */}
-        <div className="h-8 w-full bg-white flex items-center justify-center pb-2 select-none z-40 flex-shrink-0">
-          <div className="w-32 h-1.5 bg-slate-900 rounded-full opacity-80" />
+        <div className="h-8 w-full bg-[#F8FAFC] flex items-center justify-center pb-2 select-none z-40 flex-shrink-0">
+          <div className="w-32 h-1.5 bg-slate-900 dark:bg-slate-600 rounded-full opacity-80" />
         </div>
       </motion.div>
     </div>

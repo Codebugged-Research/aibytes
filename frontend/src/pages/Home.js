@@ -4,7 +4,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { Flame, Zap, TrendingUp, ChevronRight, Award, Check, Sparkles } from 'lucide-react';
 import { useProgress } from '../hooks/useProgress';
 import { useCurriculum } from '../hooks/useData';
-import { isLessonCompleted, setStreak, addXP } from '../utils/storage';
+import { isLessonCompleted, setStreak, addXP, getUser } from '../utils/storage';
 import { Button, Card, ProgressBar } from '../components/ui-components';
 import { Skeleton, HomeScreenSkeleton } from '../components/Skeleton';
 import { StreakUnfreeze } from '../components/StreakUnfreeze';
@@ -39,6 +39,7 @@ export const Home = () => {
   const allLessons = curriculum?.units?.flatMap(u => u.lessons) || [];
   const completedCount = allLessons.filter(l => isLessonCompleted(l.id)).length;
   const totalLessons   = allLessons.length || 15;
+  const firstName = (getUser()?.name || '').trim().split(' ')[0] || 'there';
 
 
   if (loading) {
@@ -70,20 +71,35 @@ export const Home = () => {
       <div className="px-6 py-4 space-y-5">
         {/* Greeting + minimal CTA */}
         <div className="flex items-center justify-between">
-          <h1 className="text-3xl font-black text-slate-900 tracking-tight" data-testid="home-title">
-            Master AI.
+          <h1 className="text-2xl font-black text-slate-900 tracking-tight min-w-0" data-testid="home-title">
+            Hey, <span className="whitespace-nowrap">{firstName} 👋</span>
           </h1>
-          <motion.button
-            onClick={() => navigate('/path')}
-            className="flex items-center gap-1 bg-slate-900 text-white text-[11px] font-extrabold px-3.5 py-2 rounded-full shadow-sm"
-            whileHover={{ scale: 1.05 }}
-            whileTap={{ scale: 0.93 }}
-            transition={{ type: 'spring', stiffness: 420, damping: 22 }}
-          >
-            <Sparkles size={10} className="text-violet-400" />
-            <span>Let&apos;s start</span>
-            <ChevronRight size={10} strokeWidth={3} />
-          </motion.button>
+          <div className="relative flex items-center justify-center">
+            {/* Soft breathing glow behind the button */}
+            <motion.span
+              className="absolute inset-0 rounded-full bg-violet-600/35 blur-md pointer-events-none"
+              animate={{ scale: [0.95, 1.12, 0.95], opacity: [0.4, 0.75, 0.4] }}
+              transition={{ duration: 2.2, repeat: Infinity, ease: 'easeInOut' }}
+            />
+            <motion.button
+              onClick={() => navigate('/path')}
+              className="relative overflow-hidden flex items-center gap-1 bg-slate-900 text-white dark:bg-white dark:text-slate-900 text-[11px] font-extrabold px-3.5 py-2 rounded-full shadow-sm flex-shrink-0 whitespace-nowrap z-10"
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.93 }}
+              transition={{ type: 'spring', stiffness: 420, damping: 22 }}
+            >
+              {/* Shimmer sheen sweep across button */}
+              <motion.span
+                className="absolute inset-0 w-[200%] h-full bg-gradient-to-r from-transparent via-white/20 to-transparent pointer-events-none"
+                style={{ transform: 'skewX(-20deg)', left: '-100%' }}
+                animate={{ x: ['-20%', '120%'] }}
+                transition={{ duration: 2.2, repeat: Infinity, ease: 'easeInOut', repeatDelay: 1 }}
+              />
+              <Sparkles size={10} className="text-violet-400" />
+              <span>Let&apos;s start</span>
+              <ChevronRight size={10} strokeWidth={3} />
+            </motion.button>
+          </div>
         </div>
 
         {/* Byte — your guide */}

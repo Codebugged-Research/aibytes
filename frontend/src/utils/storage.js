@@ -133,3 +133,12 @@ export const getUser = () => {
 export const setUser = (user) => {
   localStorage.setItem('aiquest_user', JSON.stringify(user || null));
 };
+
+// Theme preference — 'light' (default) or 'dark'.
+export const getTheme = () => {
+  try { return localStorage.getItem('aiquest_theme') === 'dark' ? 'dark' : 'light'; } catch (e) { return 'light'; }
+};
+
+export const setTheme = (theme) => {
+  try { localStorage.setItem('aiquest_theme', theme === 'dark' ? 'dark' : 'light'); } catch (e) { /* noop */ }
+};

@@ -1,7 +1,7 @@
 import { useState, useEffect, useMemo } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
-import { X, Check, Zap, Heart, Volume2, VolumeX } from 'lucide-react';
+import { X, Check, Zap, Heart, Volume2, VolumeX, RotateCcw } from 'lucide-react';
 import { useLesson } from '../hooks/useData';
 import { useProgress } from '../hooks/useProgress';
 import { markLessonComplete, addXP, clearLessonProgress, setCurrentLesson } from '../utils/storage';
@@ -86,7 +86,7 @@ const OptionButton = ({ id, text, selected, onClick, revealState, disabled }) =>
 
 // ── Teach card ────────────────────────────────────────────────────────────────
 const KIND_LABEL = {
-  hook: 'Hook', definition: 'Definition', analogy: 'Analogy',
+  hook: 'Did you know?', definition: 'Definition', analogy: 'Analogy',
   example: 'Example', mythbust: 'Myth Buster', visual: 'Compare', compare: 'Compare',
 };
 
@@ -143,22 +143,6 @@ const TeachCard = ({ card }) => {
         )}
       </div>
 
-      {/* Enable-voice prompt — shown on every card while sound is off, placed
-          above Byte so it never overlaps the character */}
-      {supported && !enabled && (
-        <motion.button
-          type="button"
-          onClick={handleByteTap}
-          data-testid="voice-hint"
-          className="w-full flex items-center justify-center gap-2 bg-violet-50 border border-violet-200 text-[#6248FF] text-xs font-extrabold rounded-xl py-2.5"
-          initial={{ opacity: 0, y: -6 }}
-          animate={{ opacity: 1, y: 0 }}
-          whileTap={{ scale: 0.98 }}
-        >
-          <Volume2 size={15} strokeWidth={2.6} />
-          Tap to hear Byte read this aloud
-        </motion.button>
-      )}
 
       <div className="flex flex-col items-center pt-1">
         <motion.div
@@ -281,6 +265,7 @@ export const LessonPlayer = () => {
   const [showExplanation, setShowExplanation]       = useState(false);
   const [earnedXP, setEarnedXP]                     = useState(0);
   const [showCompletion, setShowCompletion]         = useState(false);
+  const [failed, setFailed]                         = useState(false);
 
   // Gamification state
   const [hearts, setHearts]             = useState(3);
@@ -294,10 +279,68 @@ export const LessonPlayer = () => {
     if (lesson) { setCurrentSegmentIndex(0); setCurrentCardIndex(0); }
   }, [lesson]);
 
+  const failLesson = () => {
+    if (earnedXP > 0) { addXP(-earnedXP); refreshProgress(); }
+    clearLessonProgress(lessonId);
+    setFailed(true);
+  };
+
+  const restartLesson = () => {
+    setFailed(false);
+    setShowCompletion(false);
+    setCurrentSegmentIndex(0);
+    setCurrentCardIndex(0);
+    setSelectedAnswer(null);
+    setIsCorrect(null);
+    setShowExplanation(false);
+    setEarnedXP(0);
+    setHearts(3);
+    setCorrectStreak(0);
+    setAnimatingHeart(-1);
+  };
+
   if (loading || !lesson) {
     return (
       <div className="h-full w-full flex items-center justify-center bg-[#F8FAFC]">
         <Mascot mood="thinking" size={96} />
+      </div>
+    );
+  }
+
+  // ── Out-of-hearts (lesson failed) screen ─────────────────────────────────────
+  if (failed) {
+    return (
+      <div className="h-full w-full bg-[#F8FAFC] flex items-center justify-center px-6">
+        <motion.div
+          className="max-w-md w-full space-y-6 text-center"
+          initial={{ scale: 0.85, opacity: 0 }}
+          animate={{ scale: 1, opacity: 1 }}
+          transition={{ type: 'spring', stiffness: 260, damping: 20 }}
+        >
+          <div className="flex justify-center">
+            <Mascot mood="sad" size={124} />
+          </div>
+          <div className="space-y-2">
+            <h1 className="text-3xl font-extrabold text-slate-900 tracking-tight" data-testid="lesson-failed-title">Out of hearts!</h1>
+            <p className="text-sm text-slate-500 font-medium px-4">No worries — mistakes are how you learn. Give this bite another go.</p>
+          </div>
+          <div className="flex items-center justify-center gap-1.5">
+            {[0, 1, 2].map((i) => (
+              <Heart key={i} size={18} fill="#e2e8f0" className="text-slate-200" strokeWidth={0} />
+            ))}
+          </div>
+          <div className="space-y-3 pt-2">
+            <Button onClick={restartLesson} className="w-full font-bold text-sm py-4" testId="retry-button">
+              <span className="flex items-center justify-center gap-2">
+                <RotateCcw size={16} strokeWidth={2.5} />
+                Try again
+              </span>
+            </Button>
+            <Button onClick={() => navigate('/')} variant="secondary" className="w-full font-bold text-sm py-4" testId="fail-home-button">
+              Back to Home
+            </Button>
+          </div>
+        </motion.div>
       </div>
     );
   }
@@ -469,7 +512,11 @@ export const LessonPlayer = () => {
         if (hearts > 0) {
           const idx = hearts - 1;
           setAnimatingHeart(idx);
-          setTimeout(() => { setHearts(prev => Math.max(0, prev - 1)); setAnimatingHeart(-1); }, 380);
+          setTimeout(() => {
+            setHearts(prev => Math.max(0, prev - 1));
+            setAnimatingHeart(-1);
+            if (idx === 0) setTimeout(failLesson, 600);
+          }, 380);
         }
       }
     } else {
@@ -532,7 +579,7 @@ export const LessonPlayer = () => {
       <AnimatePresence>{showBurst && <ParticleBurst />}</AnimatePresence>
 
       {/* ── Header ──────────────────────────────────────────────────── */}
-      <div className="flex-shrink-0 bg-white/95 backdrop-blur-xl border-b border-slate-100 px-5 pt-3.5 pb-3 z-40">
+      <div className="flex-shrink-0 bg-[#F8FAFC] dark:bg-[#0B0B0F] px-5 pt-3.5 pb-3 z-40">
         <div className="flex items-center justify-between mb-3">
           <button
             onClick={() => navigate('/')}
@@ -607,7 +654,7 @@ export const LessonPlayer = () => {
         className={`absolute bottom-0 left-0 right-0 z-40 rounded-t-3xl border-t transition-colors duration-300 ${
           showExplanation && isCorrect  ? 'bg-emerald-50 border-emerald-200' :
           showExplanation && !isCorrect ? 'bg-rose-50 border-red-200' :
-          'bg-white border-slate-100'
+          'bg-[#F8FAFC] dark:bg-[#0B0B0F] border-transparent'
         }`}
         layout
         transition={{ type: 'spring', stiffness: 420, damping: 36 }}

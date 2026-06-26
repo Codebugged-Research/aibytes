@@ -1,10 +1,11 @@
 import { motion, AnimatePresence } from 'framer-motion';
-import { Flame, Zap, Award, RotateCcw, ChevronRight, ShieldCheck, AlertCircle, LogOut } from 'lucide-react';
+import { Flame, Zap, Award, RotateCcw, ChevronRight, ShieldCheck, AlertCircle, LogOut, Palette } from 'lucide-react';
 import { useProgress } from '../hooks/useProgress';
 import { getCompletedLessons, resetAllProgress, setOnboarded, setUser } from '../utils/storage';
 import { Button, Card } from '../components/ui-components';
 import { useState, useEffect } from 'react';
 import { Skeleton } from '../components/Skeleton';
+import { ThemeToggle } from '../components/ThemeToggle';
 
 /* Stagger helpers */
 const containerVariants = {
@@ -91,7 +92,7 @@ export const Profile = () => {
   const handleLogout = () => {
     setOnboarded(false);
     setUser(null);
-    window.location.reload();
+    window.location.href = '/';
   };
 
   return (
@@ -261,6 +262,25 @@ export const Profile = () => {
             </motion.div>
           )}
         </AnimatePresence>
+      </motion.div>
+
+      {/* Appearance / theme */}
+      <motion.div
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ delay: 0.68 }}
+        className="w-full flex items-center justify-between bg-white border border-slate-200 rounded-2xl px-4 py-3 shadow-sm"
+      >
+        <div className="flex items-center gap-3">
+          <div className="w-9 h-9 rounded-full bg-slate-50 flex items-center justify-center text-slate-700">
+            <Palette size={16} strokeWidth={2.4} />
+          </div>
+          <div className="text-left">
+            <p className="text-sm font-bold text-slate-900 leading-tight">Appearance</p>
+            <p className="text-xs text-slate-400 font-medium">Light or dark theme</p>
+          </div>
+        </div>
+        <ThemeToggle />
       </motion.div>
 
       {/* Log out */}
