@@ -117,6 +117,7 @@ struct NotificationsView: View {
 /// inside roars to life with "STREAK RESTORED!". Byte reacts along the way.
 struct StreakUnfreezeView: View {
     let currentStreak: Int
+    var canAfford: Bool = true       // enough XP to pay the 15-XP unfreeze cost
     let onUnfreeze: () -> Void       // fired after the fire celebration (web: 2.4s)
     let onClose: () -> Void
 
@@ -240,11 +241,13 @@ struct StreakUnfreezeView: View {
         switch phase {
         case .frozen:
             VStack(spacing: 6) {
-                Text("Tap to unfreeze your streak!")
-                    .font(Theme.head(24)).foregroundColor(.white)
-                Text("Tapping the ice releases the fire inside.")
+                Text("Your \(currentStreak)-day streak is frozen!")
+                    .font(Theme.head(22)).foregroundColor(.white)
+                Text(canAfford
+                     ? "Tap the ice to restore it for 15 XP."
+                     : "You need 15 XP to restore it — earn more in a lesson first.")
                     .font(Theme.inter(12, .semibold))
-                    .foregroundColor(Color(hex: 0xBAE6FD).opacity(0.8))
+                    .foregroundColor(Color(hex: 0xBAE6FD).opacity(0.85))
             }
             .multilineTextAlignment(.center)
         case .breaking:
@@ -292,10 +295,8 @@ struct StreakUnfreezeView: View {
         .allowsHitTesting(false)
     }
 
-    // MARK: flow
-
     private func tapUnfreeze() {
-        guard phase == .frozen else { return }
+        guard phase == .frozen, canAfford else { return }
         phase = .breaking
         withAnimation(.easeOut(duration: 0.8)) { shardsFly = true }
         UIImpactFeedbackGenerator(style: .heavy).impactOccurred()

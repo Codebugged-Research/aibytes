@@ -17,6 +17,11 @@ final class AppStore: ObservableObject {
     @Published var notifsSeen: Bool {
         didSet { UserDefaults.standard.set(notifsSeen, forKey: "aiquest_notifs_seen") }
     }
+    /// Streak value preserved when a day is missed, so it can be restored via
+    /// the unfreeze flow. 0 means the streak is healthy (nothing to restore).
+    @Published var frozenStreak: Int {
+        didSet { UserDefaults.standard.set(frozenStreak, forKey: "aiquest_frozen_streak") }
+    }
 
 
     private var token: String?
@@ -24,6 +29,7 @@ final class AppStore: ObservableObject {
 
     init() {
         notifsSeen = UserDefaults.standard.bool(forKey: "aiquest_notifs_seen")
+        frozenStreak = UserDefaults.standard.integer(forKey: "aiquest_frozen_streak")
         if UITest.flag("RESET") {
             let ud = UserDefaults.standard
             for key in ["aiquest_token", "aiquest_user", "aiquest_progress", "aiquest_onboarded"] {
@@ -117,12 +123,39 @@ final class AppStore: ObservableObject {
         if progress.lastLessonDate == today { return }
         let cal = Calendar.current
         let yesterday = Self.dateString(cal.date(byAdding: .day, value: -1, to: Date())!)
-        progress.streak = (progress.lastLessonDate == yesterday) ? progress.streak + 1 : 1
+        if progress.lastLessonDate == yesterday {
+            progress.streak += 1                 // continued — streak grows
+        } else {
+            // A day was missed. Preserve the broken streak so it can be restored
+            // via the unfreeze flow, then start today as a fresh 1-day streak.
+            if progress.streak > 1 { frozenStreak = progress.streak }
+            progress.streak = 1
+        }
         progress.lastLessonDate = today
     }
 
+    // MARK: Streak unfreeze
+
+    static let unfreezeCost = 15
+
+    /// True only when there's a broken streak worth restoring and the user can afford it.
+    var canUnfreeze: Bool { frozenStreak > 1 && progress.xp >= Self.unfreezeCost }
+
+    /// Spend XP to restore the broken streak (adds today's day on top).
+    func unfreezeStreak() {
+        guard canUnfreeze else { return }
+        progress.xp -= Self.unfreezeCost
+        progress.streak = frozenStreak
+        frozenStreak = 0
+        persistProgress()
+    }
+
+    /// Let the broken streak go — dismiss the frozen state, keep the fresh streak.
+    func dismissFreeze() { frozenStreak = 0 }
+
     func resetProgress() {
         progress = .empty
+        frozenStreak = 0
         persistProgress()
     }
 
