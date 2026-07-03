@@ -9,6 +9,7 @@ struct RootTabView: View {
     @State private var showChat = false
     @State private var lessonId: String?
     @State private var showNotifs = false
+    @State private var showUnfreeze = false
     @State private var fabPulse = false
     @State private var dragX: CGFloat?          // finger x while dragging the glass pill
     @State private var hoverIdx: Int?           // tab under the pill mid-drag (for haptics)
@@ -55,6 +56,9 @@ struct RootTabView: View {
             }
         }
         .onAppear {
+            if UITest.flag("NOTIFS") { showNotifs = true }
+            // Auto-prompt to restore a broken streak.
+            else if store.frozenStreak > 1 || UITest.flag("UNFREEZE") { showUnfreeze = true }
             guard UITest.active else { return }
             switch UITest.str("TAB") {
             case "leaderboard": tab = .leaderboard
@@ -71,10 +75,21 @@ struct RootTabView: View {
                              onContinueLearning: { lessonId = nil; tab = .path })
                 .environmentObject(store)
         }
+        .fullScreenCover(isPresented: $showUnfreeze) {
+            StreakUnfreezeView(currentStreak: max(store.frozenStreak, store.progress.streak),
+                               canAfford: store.canUnfreeze) {
+                store.unfreezeStreak(); showUnfreeze = false
+            } onClose: {
+                store.dismissFreeze(); showUnfreeze = false
+            }
+        }
         .sheet(isPresented: $showChat) { ByteChatView().environmentObject(store) }
         .sheet(isPresented: $showNotifs) {
-            NotificationsView(openChat: { showNotifs = false; showChat = true },
-                              goPath: { showNotifs = false; tab = .path })
+            NotificationsView(frozenStreak: store.frozenStreak,
+                              openChat: { showNotifs = false; showChat = true },
+                              goPath: { showNotifs = false; tab = .path },
+                              goUnfreeze: { showNotifs = false; tab = .home
+                                            DispatchQueue.main.asyncAfter(deadline: .now() + 0.35) { showUnfreeze = true } })
                 .presentationDetents([.medium, .large])
         }
     }
@@ -119,7 +134,7 @@ struct RootTabView: View {
     @ViewBuilder
     private var content: some View {
         switch tab {
-        case .home:        HomeView(startLesson: start, goPath: { tab = .path })
+        case .home:        HomeView(startLesson: start, goPath: { tab = .path }, openUnfreeze: { showUnfreeze = true })
         case .leaderboard: LeaderboardView()
         case .path:        PathView(startLesson: start)
         case .account:     ProfileView()

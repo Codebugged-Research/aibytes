@@ -7,8 +7,8 @@ struct HomeView: View {
     @EnvironmentObject var store: AppStore
     let startLesson: (String) -> Void
     let goPath: () -> Void
+    var openUnfreeze: () -> Void = {}
 
-    @State private var showUnfreeze = false
     @State private var glowPulse = false
     @State private var shimmer = false
     @State private var habitGlow = false
@@ -42,21 +42,6 @@ struct HomeView: View {
             .padding(.horizontal, 24).padding(.top, 4).padding(.bottom, 120)
         }
         .background(Theme.bg)
-        .onAppear {
-            // Prompt to restore a broken streak (or the UI-test hook).
-            if store.frozenStreak > 1 || UITest.flag("UNFREEZE") { showUnfreeze = true }
-        }
-        // Web shows this as a full-screen overlay, not a half sheet
-        .fullScreenCover(isPresented: $showUnfreeze) {
-            StreakUnfreezeView(currentStreak: max(store.frozenStreak, streak),
-                               canAfford: store.canUnfreeze) {
-                store.unfreezeStreak()          // spends 15 XP, restores the streak
-                showUnfreeze = false
-            } onClose: {
-                store.dismissFreeze()           // let the broken streak go
-                showUnfreeze = false
-            }
-        }
     }
 
     // MARK: greeting + CTA
@@ -135,7 +120,7 @@ struct HomeView: View {
         HStack(spacing: 12) {
             statCard(bg: Theme.tintOrange, border: Theme.tintOrangeB, icon: "flame.fill",
                      tint: Theme.orange, value: "\(streak)", label: "Streak") {
-                         if store.frozenStreak > 1 { showUnfreeze = true }
+                         if store.frozenStreak > 1 { openUnfreeze() }
                      }
             statCard(bg: Theme.tintViolet, border: Theme.tintVioletB, icon: "bolt.fill",
                      tint: Theme.violet, value: "\(xp)", label: "Total XP") {}
@@ -162,7 +147,7 @@ struct HomeView: View {
     // MARK: habit tracker
 
     private var habitTracker: some View {
-        Button { if store.frozenStreak > 1 { showUnfreeze = true } } label: {
+        Button { if store.frozenStreak > 1 { openUnfreeze() } } label: {
             CardBox {
                 VStack(alignment: .leading, spacing: 16) {
                     HStack {

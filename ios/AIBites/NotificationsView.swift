@@ -4,8 +4,10 @@ import SwiftUI
 /// Shell provides the header/nav; this is scroll content with its own title +
 /// close affordance (dismiss works when presented as a sheet, no-op otherwise).
 struct NotificationsView: View {
+    var frozenStreak: Int = 0
     let openChat: () -> Void
     let goPath: () -> Void
+    var goUnfreeze: () -> Void = {}
     @Environment(\.dismiss) private var dismiss
 
     private struct Item: Identifiable {
@@ -20,7 +22,15 @@ struct NotificationsView: View {
     }
 
     private var items: [Item] {
-        [
+        var list: [Item] = []
+        // Streak-frozen alert — shown first, only when a streak is recoverable.
+        if frozenStreak > 1 {
+            list.append(Item(icon: "snowflake", tint: Theme.sky, bg: Theme.tintViolet,
+                title: "Don't worry — your streak is frozen!",
+                body: "You missed a day, but your \(frozenStreak)-day streak isn't lost. Tap here → then tap the ice crystal to spend 15 XP and restore it.",
+                time: "now", action: goUnfreeze))
+        }
+        list.append(contentsOf: [
             Item(icon: "flame.fill", tint: Theme.orange500, bg: Theme.tintOrange,
                  title: "Keep your streak alive",
                  body: "You're on a streak — do today's bite to keep it!",
@@ -33,7 +43,8 @@ struct NotificationsView: View {
                  title: "A tip from Byte",
                  body: "Tap to ask Byte about any concept.",
                  time: "1d", action: openChat),
-        ]
+        ])
+        return list
     }
 
     var body: some View {
