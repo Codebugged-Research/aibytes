@@ -64,7 +64,7 @@ struct LeaderboardView: View {
                     Text("Bronze League").font(Theme.head(16)).foregroundColor(.white)
                 }
                 Spacer()
-                PulsePill(text: "Resets Sun")
+                PulsePill(text: "Resets Sunday")
             }
             .padding(.bottom, 4)
 
