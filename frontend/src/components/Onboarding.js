@@ -1,7 +1,7 @@
 import { useState, useRef, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
-import { ShieldCheck, Loader2, ArrowLeft, Phone } from 'lucide-react';
+import { ShieldCheck, Loader2, ArrowLeft, Phone, Mail } from 'lucide-react';
 import { Mascot } from './Mascot';
 import { setOnboarded, setUser } from '../utils/storage';
 import { playHappyChime, playPop } from '../utils/sound';
@@ -63,13 +63,15 @@ const stepAnim = {
 
 export const Onboarding = ({ onComplete }) => {
   const navigate = useNavigate();
-  const [step, setStep] = useState('welcome'); // welcome | loading | phone | otp | details | success
+  const [step, setStep] = useState('welcome'); // welcome | loading | phone | email | otp | details | success
   const [provider, setProvider] = useState('google'); // label for loading screen
   const [countryIso, setCountryIso] = useState('IN');
   const [phone, setPhone] = useState('');
   const [otp, setOtp] = useState(['', '', '', '', '', '']);
-  const [name, setName] = useState('');
+  const [firstName, setFirstName] = useState('');
+  const [lastName, setLastName] = useState('');
   const [email, setEmail] = useState('');
+  const [loginMethod, setLoginMethod] = useState(''); // 'phone' | 'email'
   const [resend, setResend] = useState(0);
   const otpRefs = useRef([]);
   const cc = dialForIso(countryIso);
@@ -141,8 +143,36 @@ export const Onboarding = ({ onComplete }) => {
   };
 
   const completeDetails = () => {
-    if (!name.trim() || !emailValid) return;
-    finish('phone', { name: name.trim(), email: email.trim(), phone: `${cc} ${phone}` });
+    const isPhone = loginMethod === 'phone';
+    const isEmail = loginMethod === 'email';
+    if (!firstName.trim() || !lastName.trim()) return;
+    if (isPhone && !emailValid) return;
+    const fullName = `${firstName.trim()} ${lastName.trim()}`;
+    if (isPhone) {
+      finish('phone', {
+        name: fullName,
+        firstName: firstName.trim(),
+        lastName: lastName.trim(),
+        email: email.trim(),
+        phone: `${cc} ${phone}`
+      });
+    } else if (isEmail) {
+      finish('email', {
+        name: fullName,
+        firstName: firstName.trim(),
+        lastName: lastName.trim(),
+        email: email.trim()
+      });
+    }
+  };
+
+  const sendEmailCode = () => {
+    if (!emailValid) return;
+    playPop();
+    setOtp(['', '', '', '', '', '']);
+    setResend(30);
+    setStep('otp');
+    setTimeout(() => otpRefs.current[0]?.focus(), 250);
   };
 
   const byteMood = step === 'success' ? 'celebrate' : 'wave';
@@ -223,7 +253,7 @@ export const Onboarding = ({ onComplete }) => {
                   </div>
 
                   <motion.button
-                    onClick={() => { playPop(); setStep('phone'); }}
+                    onClick={() => { playPop(); setLoginMethod('phone'); setStep('phone'); }}
                     data-testid="phone-auth"
                     whileTap={{ scale: 0.98 }}
                     className="w-full flex items-center justify-center gap-2.5 bg-white border border-slate-200 text-slate-800 font-bold text-sm rounded-2xl py-3.5 shadow-sm hover:bg-slate-50 transition-colors"
@@ -231,8 +261,18 @@ export const Onboarding = ({ onComplete }) => {
                     <Phone size={17} className="text-[#6248FF]" />
                     Continue with phone
                   </motion.button>
-                </div>
 
+                  <motion.button
+                    onClick={() => { playPop(); setLoginMethod('email'); setStep('email'); }}
+                    data-testid="email-auth"
+                    whileTap={{ scale: 0.98 }}
+                    className="w-full flex items-center justify-center gap-2.5 bg-white border border-slate-200 text-slate-800 font-bold text-sm rounded-2xl py-3.5 shadow-sm hover:bg-slate-50 transition-colors"
+                  >
+                    <Mail size={17} className="text-[#6248FF]" />
+                    Continue with email
+                  </motion.button>
+
+                </div>
                 <p className="text-[10px] text-slate-400 text-center leading-relaxed px-4">
                   By continuing you agree to our Terms &amp; Privacy Policy.
                 </p>
@@ -260,15 +300,40 @@ export const Onboarding = ({ onComplete }) => {
                 </button>
               </motion.div>
             )}
-
-            {step === 'otp' && (
-              <motion.div key="otp" {...stepAnim} className="space-y-5">
-                <button onClick={() => setStep('phone')} className={backBtnCls}>
+            {step === 'email' && (
+              <motion.div key="email" {...stepAnim} className="space-y-5">
+                <button onClick={() => setStep('welcome')} className={backBtnCls}>
                   <ArrowLeft size={15} /> Back
                 </button>
                 <div className="text-center space-y-1.5">
-                  <h2 className="text-2xl font-black text-slate-900 tracking-tight" style={{ fontFamily: 'Outfit, sans-serif' }}>Verify your number</h2>
-                  <p className="text-sm text-slate-500 font-medium">Code sent to {cc} {phone}</p>
+                  <h2 className="text-2xl font-black text-slate-900 tracking-tight" style={{ fontFamily: 'Outfit, sans-serif' }}>Enter your email</h2>
+                  <p className="text-sm text-slate-500 font-medium">We&apos;ll email you a 6-digit code.</p>
+                </div>
+                <input
+                  data-testid="email-signup-input"
+                  type="email"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  placeholder="name@example.com"
+                  autoComplete="email"
+                  className={inputCls}
+                />
+                <button data-testid="send-email-code" onClick={sendEmailCode} disabled={!emailValid} className={primaryBtnCls}>
+                  Send code
+                </button>
+              </motion.div>
+            )}
+
+            {step === 'otp' && (
+              <motion.div key="otp" {...stepAnim} className="space-y-5">
+                <button onClick={() => setStep(loginMethod === 'phone' ? 'phone' : 'email')} className={backBtnCls}>
+                  <ArrowLeft size={15} /> Back
+                </button>
+                <div className="text-center space-y-1.5">
+                  <h2 className="text-2xl font-black text-slate-900 tracking-tight" style={{ fontFamily: 'Outfit, sans-serif' }}>Verify your identity</h2>
+                  <p className="text-sm text-slate-500 font-medium">
+                    {loginMethod === 'phone' ? `Code sent to ${cc} ${phone}` : `Code sent to ${email}`}
+                  </p>
                 </div>
                 <div className="flex justify-center gap-2" onPaste={onOtpPaste}>
                   {otp.map((d, i) => (
@@ -302,24 +367,39 @@ export const Onboarding = ({ onComplete }) => {
                 </div>
                 <div className="space-y-3">
                   <input
-                    data-testid="name-input"
-                    value={name}
-                    onChange={(e) => setName(e.target.value)}
-                    placeholder="Your name"
-                    autoComplete="name"
+                    data-testid="first-name-input"
+                    value={firstName}
+                    onChange={(e) => setFirstName(e.target.value)}
+                    placeholder="First Name"
+                    autoComplete="given-name"
                     className={inputCls}
                   />
                   <input
-                    data-testid="email-input"
-                    type="email"
-                    value={email}
-                    onChange={(e) => setEmail(e.target.value)}
-                    placeholder="Email"
-                    autoComplete="email"
+                    data-testid="last-name-input"
+                    value={lastName}
+                    onChange={(e) => setLastName(e.target.value)}
+                    placeholder="Last Name"
+                    autoComplete="family-name"
                     className={inputCls}
                   />
+                  {loginMethod === 'phone' && (
+                    <input
+                      data-testid="email-input"
+                      type="email"
+                      value={email}
+                      onChange={(e) => setEmail(e.target.value)}
+                      placeholder="Email Address"
+                      autoComplete="email"
+                      className={inputCls}
+                    />
+                  )}
                 </div>
-                <button data-testid="details-continue" onClick={completeDetails} disabled={!name.trim() || !emailValid} className={primaryBtnCls}>
+                <button
+                  data-testid="details-continue"
+                  onClick={completeDetails}
+                  disabled={!firstName.trim() || !lastName.trim() || (loginMethod === 'phone' && !emailValid)}
+                  className={primaryBtnCls}
+                >
                   Continue
                 </button>
               </motion.div>

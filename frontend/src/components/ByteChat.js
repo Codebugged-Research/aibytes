@@ -161,7 +161,7 @@ export const ByteChat = () => {
                 ) : (
                   <div key={i} className="flex items-end gap-2">
                     <div className="flex-shrink-0 mb-0.5">
-                      <Mascot mood={streaming && i === messages.length - 1 ? 'talking' : 'idle'} size={34} glow={false} />
+                      <Mascot mood="talking" size={34} glow={false} />
                     </div>
                     <div className="max-w-[80%] bg-white border border-slate-150 text-slate-700 text-sm font-medium leading-relaxed rounded-2xl rounded-bl-md px-3.5 py-2.5 shadow-sm whitespace-pre-wrap">
                       {m.content}
