@@ -64,7 +64,7 @@ struct LeaderboardView: View {
                     Text("Bronze League").font(Theme.head(16)).foregroundColor(.white)
                 }
                 Spacer()
-                PulsePill(text: "Resets Sunday")
+                PulsePill(text: "XP resets Sunday")
             }
             .padding(.bottom, 4)
 
@@ -186,6 +186,7 @@ private struct PulsePill: View {
         Text(text)
             .font(Theme.outfit(10, .bold))
             .foregroundColor(.white.opacity(0.7))
+            .lineLimit(1).fixedSize()
             .padding(.horizontal, 10).padding(.vertical, 4)
             .background(Color.white.opacity(0.1))
             .clipShape(Capsule())
