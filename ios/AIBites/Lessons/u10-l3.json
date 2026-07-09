@@ -1,0 +1,222 @@
+{
+  "id": "u10-l3",
+  "unit": 10,
+  "day": 53,
+  "tier": "Tabular Processing",
+  "tierIcon": "🔌",
+  "title": "Variance Thresholding",
+  "icon": "📊",
+  "concept": "Dropping columns with low variance removes features that barely change, as they provide no useful patterns for the model.",
+  "xp": 15,
+  "hearts": 3,
+  "estMinutes": 6,
+  "segments": [
+    {
+      "type": "warmup",
+      "exercises": [
+        {
+          "id": "w1",
+          "type": "multiple_choice",
+          "xp": 1,
+          "prompt": "Warmup: We previously learned that highly correlated columns are redundant. If we have temperature in Celsius and Fahrenheit, why should we drop one?",
+          "options": [
+            {
+              "id": "a",
+              "text": "They contain duplicate information, so keeping both adds unnecessary complexity",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "Celsius is a numerical feature but Fahrenheit is categorical",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "Models can only process temperatures measured in Kelvin",
+              "correct": false
+            }
+          ],
+          "explain": "Spot on! Since one can be perfectly predicted from the other, keeping both is redundant. Today, we'll look at columns that barely change at all."
+        }
+      ]
+    },
+    {
+      "type": "teach",
+      "cards": [
+        {
+          "kind": "hook",
+          "icon": "📱",
+          "title": "The survey where everyone agreed",
+          "body": "Imagine asking 1,000 customers if they like free shipping, and 99.9% of them say \"Yes.\" That column doesn't help you separate big spenders from low spenders because almost every row has the same answer. It has near-zero variation."
+        },
+        {
+          "kind": "definition",
+          "icon": "📊",
+          "title": "Variance Thresholding",
+          "body": "<strong>Variance Thresholding</strong> is a simple feature selection method. It calculates the variance (spread) of each column and drops any feature whose variance falls below a set threshold — meaning it barely changes across your dataset."
+        },
+        {
+          "kind": "analogy",
+          "icon": "📍",
+          "title": "Searching for clues",
+          "body": "If you're investigating a crime and everyone in town wears the exact same uniform, the uniform color is useless for finding the suspect. You look for features that vary, like height or shoe size, because <strong>variation</strong> helps you distinguish individuals."
+        },
+        {
+          "kind": "example",
+          "icon": "👟",
+          "title": "Constant values",
+          "body": "In a dataset of medical patients, if 99% of patients have the column <code>[Has_Heartbeat]</code> set to 'True', this column has almost zero variance. It is useless for predicting who will develop heart disease and should be dropped."
+        },
+        {
+          "kind": "mythbust",
+          "icon": "⚠️",
+          "title": "Zero variance isn't the only target",
+          "body": "We don't just drop columns that are 100% constant (variance of 0). We also drop columns that are 99% constant. Even though they have a tiny bit of variation, they don't have enough signal for a model to learn from."
+        },
+        {
+          "kind": "visual",
+          "icon": "⚖️",
+          "title": "High vs. Low Variance",
+          "body": "Comparing columns by how much their values vary:",
+          "compare": {
+            "left": {
+              "emoji": "📈",
+              "tag": "High Variance (Keep)",
+              "text": "Age: 18, 42, 65, 29...<br>Lots of info to learn from"
+            },
+            "right": {
+              "emoji": "➖",
+              "tag": "Low Variance (Drop)",
+              "text": "Is_Human: Yes, Yes, Yes, Yes...<br>No variation, no signal"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "type": "practice",
+      "exercises": [
+        {
+          "id": "p1",
+          "type": "multiple_choice",
+          "xp": 2,
+          "prompt": "What is variance thresholding used for in feature selection?",
+          "options": [
+            {
+              "id": "a",
+              "text": "To remove features that have very little or no variation",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "To scale all numerical values between 0 and 1",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "To find correlation between two different features",
+              "correct": false
+            },
+            {
+              "id": "d",
+              "text": "To fill in missing values in a dataset",
+              "correct": false
+            }
+          ],
+          "explain": "Variance thresholding removes columns that are nearly constant because they cannot help a model make distinctions."
+        },
+        {
+          "id": "p2",
+          "type": "true_false",
+          "xp": 2,
+          "prompt": "True or false: A column where 100% of the rows have the value '1.0' has a variance of zero.",
+          "options": [
+            {
+              "id": "t",
+              "text": "True",
+              "correct": true
+            },
+            {
+              "id": "f",
+              "text": "False",
+              "correct": false
+            }
+          ],
+          "explain": "True. If a value never changes, its variance is exactly zero, making it completely useless for machine learning models."
+        },
+        {
+          "id": "p3",
+          "type": "fill_blank",
+          "xp": 2,
+          "prompt": "Complete the sentence:",
+          "sentence": "Features that are nearly constant across all rows have low ___ and should be dropped.",
+          "blank": "variance",
+          "words": [
+            "variance",
+            "correlation",
+            "dimension"
+          ],
+          "explain": "Variance is the measure of how spread out a set of numbers is. Low variance means the values barely change."
+        },
+        {
+          "id": "p4",
+          "type": "spot_the_ai",
+          "xp": 2,
+          "prompt": "Which column has the lowest variance?",
+          "options": [
+            {
+              "id": "a",
+              "text": "The planet of residence (Earth for all 5,000 customers)",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "The customer's annual income (ranges from $20k to $200k)",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "The day of the week they logged in (Monday through Sunday)",
+              "correct": false
+            }
+          ],
+          "explain": "Since every single row has the value 'Earth', this column has a variance of exactly zero."
+        }
+      ]
+    },
+    {
+      "type": "boss",
+      "exercises": [
+        {
+          "id": "b1",
+          "type": "multiple_choice",
+          "xp": 5,
+          "prompt": "You are building a spam filter. In your dataset of 10,000 emails, you notice the column 'contains_email_signature' is 'Yes' for 9,998 emails and 'No' for only 2 emails. How should you handle this column?",
+          "options": [
+            {
+              "id": "a",
+              "text": "Drop it using a variance threshold, as it is nearly constant and won't help predict spam",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "Keep it because the 2 emails might contain the absolute secret to spam",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "Duplicate the column to make its variance higher",
+              "correct": false
+            },
+            {
+              "id": "d",
+              "text": "Use it as the primary feature for training the spam classifier",
+              "correct": false
+            }
+          ],
+          "explain": "Marvelous! Since 99.98% of the data has the same value, it has virtually no variance. It cannot help the model distinguish spam from ham. Next: the difference between checking columns one by one versus testing them together!"
+        }
+      ]
+    }
+  ]
+}

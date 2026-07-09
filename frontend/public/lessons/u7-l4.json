@@ -1,0 +1,217 @@
+{
+  "id": "u7-l4",
+  "unit": 7,
+  "day": 39,
+  "tier": "Tabular Processing",
+  "tierIcon": "🗂️",
+  "title": "The Dummy Variable Trap",
+  "icon": "⚠️",
+  "concept": "The dummy variable trap occurs when one-hot encoded columns are perfectly predictable from each other, causing multi-collinearity issues.",
+  "xp": 15,
+  "hearts": 3,
+  "estMinutes": 6,
+  "segments": [
+    {
+      "type": "warmup",
+      "exercises": [
+        {
+          "id": "w1",
+          "type": "multiple_choice",
+          "xp": 1,
+          "prompt": "Warmup: What is the main drawback of using one-hot encoding on a feature with many unique categories?",
+          "options": [
+            {
+              "id": "a",
+              "text": "It creates a massive number of new columns",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "It loses the ordering of the categories",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "It converts numerical features into text",
+              "correct": false
+            }
+          ],
+          "explain": "One-hot encoding creates a new column for every single unique category, which can quickly bloat your dataset size."
+        }
+      ]
+    },
+    {
+      "type": "teach",
+      "cards": [
+        {
+          "kind": "hook",
+          "icon": "🪙",
+          "title": "The redundant coin flip",
+          "body": "If you flip a coin and it isn't heads, it must be tails. You don't need a column for both is_heads and is_tails — knowing one tells you the other instantly."
+        },
+        {
+          "kind": "definition",
+          "icon": "🎓",
+          "title": "The Dummy Variable Trap",
+          "body": "The <strong>dummy variable trap</strong> is a scenario where one-hot encoded columns are perfectly predictable from one another, causing a mathematical issue called multi-collinearity."
+        },
+        {
+          "kind": "analogy",
+          "icon": "💡",
+          "title": "The two-way light switch",
+          "body": "Imagine a room with a single switch. It's either UP (on) or DOWN (off). You don't need two separate switches next to each other that always show opposite states."
+        },
+        {
+          "kind": "example",
+          "icon": "🧑‍🤝‍🧑",
+          "title": "Gender encoding",
+          "body": "When encoding 'Male' and 'Female', if is_male is 1, is_female is 0. If is_male is 0, is_female is 1. One column is redundant, as is_female always equals 1 - is_male."
+        },
+        {
+          "kind": "mythbust",
+          "icon": "🧠",
+          "title": "Always drop one column",
+          "body": "You don't need all columns! To avoid the trap, always drop one of the encoded columns (setting drop_first=True in libraries). If you have N categories, you only need N-1 columns."
+        },
+        {
+          "kind": "visual",
+          "icon": "⚖️",
+          "title": "Before and after dropping",
+          "body": "How dropping the redundant column works:",
+          "compare": {
+            "left": {
+              "emoji": "❌",
+              "tag": "Redundant (Trap)",
+              "text": "is_male: [1, 0, 0]<br>is_female: [0, 1, 1]<br>(Perfect correlation)"
+            },
+            "right": {
+              "emoji": "✅",
+              "tag": "Correct (No Trap)",
+              "text": "is_male: [1, 0, 0]<br>(If 0, they are female)"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "type": "practice",
+      "exercises": [
+        {
+          "id": "p1",
+          "type": "multiple_choice",
+          "xp": 2,
+          "prompt": "What is multi-collinearity in machine learning datasets?",
+          "options": [
+            {
+              "id": "a",
+              "text": "When one or more features can be perfectly predicted from other features",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "When a dataset has too many missing values",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "When the target variable is numerical instead of categorical",
+              "correct": false
+            }
+          ],
+          "explain": "Multi-collinearity occurs when independent variables are highly correlated, confusing algorithms like linear regression."
+        },
+        {
+          "id": "p2",
+          "type": "true_false",
+          "xp": 2,
+          "prompt": "True or false: To avoid the dummy variable trap, you should keep only N-1 columns when one-hot encoding a feature with N categories.",
+          "options": [
+            {
+              "id": "t",
+              "text": "True",
+              "correct": true
+            },
+            {
+              "id": "f",
+              "text": "False",
+              "correct": false
+            }
+          ],
+          "explain": "True. Dropping the first column removes the redundant correlation without losing any information."
+        },
+        {
+          "id": "p3",
+          "type": "fill_blank",
+          "xp": 2,
+          "prompt": "Complete the sentence:",
+          "sentence": "To avoid the dummy variable trap, you should ___ one of the encoded columns.",
+          "blank": "drop",
+          "words": [
+            "drop",
+            "multiply",
+            "add"
+          ],
+          "explain": "Dropping one column prevents perfect predictability among the features."
+        },
+        {
+          "id": "p4",
+          "type": "spot_the_ai",
+          "xp": 2,
+          "prompt": "Which of the following sets of columns has a redundant dummy variable trap for a category with values: [Yes, No]?",
+          "options": [
+            {
+              "id": "a",
+              "text": "is_yes and is_no",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "Only is_yes",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "Only is_no",
+              "correct": false
+            }
+          ],
+          "explain": "Having both columns is redundant because if is_yes is 1, is_no must be 0, and vice versa."
+        }
+      ]
+    },
+    {
+      "type": "boss",
+      "exercises": [
+        {
+          "id": "b1",
+          "type": "multiple_choice",
+          "xp": 5,
+          "prompt": "You are predicting home prices using a model. You one-hot encode a 'heating_type' column with three options: 'Gas', 'Electric', and 'Solar'. If you drop the 'Gas' column to avoid the trap, how does the model know a house has gas heating?",
+          "options": [
+            {
+              "id": "a",
+              "text": "When both is_electric and is_solar are 0",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "The model will completely lose the information about gas heating",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "The model will crash due to missing columns",
+              "correct": false
+            },
+            {
+              "id": "d",
+              "text": "You have to add a separate gas column back in",
+              "correct": false
+            }
+          ],
+          "explain": "Correct! If the house doesn't use Electric or Solar, it must use Gas. The information is preserved perfectly in the remaining columns. Next up: how we handle categories with hundreds or thousands of options!"
+        }
+      ]
+    }
+  ]
+}

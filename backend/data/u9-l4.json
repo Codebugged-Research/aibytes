@@ -1,0 +1,217 @@
+{
+  "id": "u9-l4",
+  "unit": 9,
+  "day": 49,
+  "tier": "Tabular Processing",
+  "tierIcon": "🚨",
+  "title": "Handling Outliers: Trim or Cap?",
+  "icon": "✂️",
+  "concept": "Handling outliers involves either trimming (removing the rows) or capping (clipping values to a threshold), balancing data loss against model distortion.",
+  "xp": 15,
+  "hearts": 3,
+  "estMinutes": 6,
+  "segments": [
+    {
+      "type": "warmup",
+      "exercises": [
+        {
+          "id": "w1",
+          "type": "multiple_choice",
+          "xp": 1,
+          "prompt": "Warmup: How do you calculate the upper fence for outlier detection in the IQR method?",
+          "options": [
+            {
+              "id": "a",
+              "text": "Q3 + 1.5 * IQR",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "Q1 - 1.5 * IQR",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "Median + 3 * Standard Deviation",
+              "correct": false
+            }
+          ],
+          "explain": "Exactly! Any data point above Q3 + 1.5 * IQR is flagged as a high outlier. Now, once we've found these outliers, how do we handle them?"
+        }
+      ]
+    },
+    {
+      "type": "teach",
+      "cards": [
+        {
+          "kind": "hook",
+          "icon": "🍓",
+          "title": "Sorting strawberries",
+          "body": "Imagine sorting strawberries. Some are rotten (errors), while others are just massive (real but rare). Do you throw them in the trash (trimming) or trim them down (capping)?"
+        },
+        {
+          "kind": "definition",
+          "icon": "✂️",
+          "title": "Trim vs. Cap",
+          "body": "When managing outliers, we have two primary strategies: <strong>Trimming</strong> (deleting the entire row containing the outlier) and <strong>Capping</strong> (replacing the extreme value with a set threshold, also called Winsorizing)."
+        },
+        {
+          "kind": "analogy",
+          "icon": "🏎️",
+          "title": "Pruning vs. Speed limits",
+          "body": "Trimming is like pruning dead branches off a tree—they're gone completely. Capping is like using a speed limiter on a car—the car can run fast, but it hits a ceiling and goes no faster than the limit."
+        },
+        {
+          "kind": "example",
+          "icon": "📋",
+          "title": "Typo vs. Wealth",
+          "body": "In a dataset of ages, an entry of 150 is likely a typo. We should <em>trim</em> it. But if we track monthly spending where a few clients spend $100k (far above the $2k average), we might <em>cap</em> their value at $10k."
+        },
+        {
+          "kind": "mythbust",
+          "icon": "🧠",
+          "title": "Don't always trim!",
+          "body": "Should you always trim outliers? Absolutely not! Trimming removes entire rows, meaning you lose other useful data in those rows. Capping preserves the row while keeping extreme variance in check."
+        },
+        {
+          "kind": "visual",
+          "icon": "⚖️",
+          "title": "Comparison of strategies",
+          "body": "The tradeoffs between trimming and capping outliers in your dataset:",
+          "compare": {
+            "left": {
+              "emoji": "🗑️",
+              "tag": "Trimming Outliers",
+              "text": "Deletes outlier rows<br>Reduces dataset size<br>Best for obvious errors"
+            },
+            "right": {
+              "emoji": "🛡️",
+              "tag": "Capping / Winsorizing",
+              "text": "Clips values to fence thresholds<br>Keeps all rows<br>Best for valid extreme values"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "type": "practice",
+      "exercises": [
+        {
+          "id": "p1",
+          "type": "multiple_choice",
+          "xp": 2,
+          "prompt": "Which strategy completely deletes the data rows containing outliers from the dataset?",
+          "options": [
+            {
+              "id": "a",
+              "text": "Trimming",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "Capping",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "Standardizing",
+              "correct": false
+            }
+          ],
+          "explain": "Trimming removes the entire observation (row) from the dataset, which eliminates the outlier but shrinks your data size."
+        },
+        {
+          "id": "p2",
+          "type": "true_false",
+          "xp": 2,
+          "prompt": "True or false: Capping (Winsorizing) changes extreme values to a maximum threshold instead of deleting the row.",
+          "options": [
+            {
+              "id": "t",
+              "text": "True",
+              "correct": true
+            },
+            {
+              "id": "f",
+              "text": "False",
+              "correct": false
+            }
+          ],
+          "explain": "True! Capping keeps the row but replaces the extreme outlier value with a predetermined limit, like the upper IQR fence."
+        },
+        {
+          "id": "p3",
+          "type": "fill_blank",
+          "xp": 2,
+          "prompt": "Complete the sentence:",
+          "sentence": "If an outlier is clearly a typing error (like age = 200), the safest strategy is usually ___.",
+          "blank": "trimming",
+          "words": [
+            "trimming",
+            "capping",
+            "standardizing"
+          ],
+          "explain": "When outliers are clear errors or corruption, deleting them (trimming) is best since the value contains no real information."
+        },
+        {
+          "id": "p4",
+          "type": "spot_the_ai",
+          "xp": 2,
+          "prompt": "What is a major risk of aggressively trimming outliers from a small dataset?",
+          "options": [
+            {
+              "id": "a",
+              "text": "Losing too many rows, which can lead to overfitting or data loss",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "The remaining data will automatically turn into text",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "The standard deviation will double",
+              "correct": false
+            }
+          ],
+          "explain": "Trimming reduces your sample size, and doing it aggressively can strip away valuable, diverse patterns, hurting model training."
+        }
+      ]
+    },
+    {
+      "type": "boss",
+      "exercises": [
+        {
+          "id": "b1",
+          "type": "multiple_choice",
+          "xp": 5,
+          "prompt": "You are training a model to predict student GPA. You notice one student's study hours are recorded as 500 hours/week (impossible since a week only has 168 hours). Another student is recorded studying 80 hours/week (extremely high but possible). How should you handle these two data points?",
+          "options": [
+            {
+              "id": "a",
+              "text": "Trim the 500-hour record (since it is a corrupted error) and cap the 80-hour record (since it is a real but extreme value).",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "Cap the 500-hour record to 168 hours and trim the 80-hour record.",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "Delete both rows because they are outliers.",
+              "correct": false
+            },
+            {
+              "id": "d",
+              "text": "Scale the hours using Min-Max scaling without changes.",
+              "correct": false
+            }
+          ],
+          "explain": "Correct! Impossible values are errors and should be trimmed. Possible but extreme values are best capped to prevent them from distorting the model while retaining the rest of the student's data. Sensational progress on handling outliers!"
+        }
+      ]
+    }
+  ]
+}

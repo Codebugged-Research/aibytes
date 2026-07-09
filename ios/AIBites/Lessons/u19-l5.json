@@ -1,0 +1,251 @@
+{
+  "id": "u19-l5",
+  "unit": 19,
+  "day": 100,
+  "tier": "Classification",
+  "tierIcon": "🔲",
+  "title": "The Softmax Function",
+  "icon": "🌈",
+  "concept": "The Softmax function converts raw model outputs into a probability distribution across multiple classes that sums to exactly 1.0.",
+  "xp": 15,
+  "hearts": 3,
+  "estMinutes": 6,
+  "segments": [
+    {
+      "type": "warmup",
+      "exercises": [
+        {
+          "id": "w1",
+          "type": "multiple_choice",
+          "xp": 1,
+          "prompt": "Recap: If a classification system has 10 classes, why might One-vs-One (OVO) be slower than One-vs-Rest (OVR)?",
+          "options": [
+            {
+              "id": "a",
+              "text": "OVO requires training 45 separate pairwise models, compared to only 10 models for OVR",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "OVO requires training on the entire dataset for every single model",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "OVO only outputs random guesses for more than 5 classes",
+              "correct": false
+            }
+          ],
+          "explain": "Correct! While each pairwise model in OVO is trained on less data, the sheer number of models ($N \\times (N-1)/2$) grows very fast. Now, how do we get true probabilities that add up to 1.0?"
+        }
+      ]
+    },
+    {
+      "type": "teach",
+      "cards": [
+        {
+          "kind": "hook",
+          "icon": "🍰",
+          "title": "Sharing a cake",
+          "body": "If you tell three friends they can have a 'size 8', 'size 5', and 'size 2' slice, they don't know what that means. But if you convert those scores into percentages — 53%, 33%, and 14% of the cake — they know exactly how much they get."
+        },
+        {
+          "kind": "definition",
+          "icon": "🌈",
+          "title": "Softmax function, defined",
+          "body": "The <strong>Softmax function</strong> takes raw, unconstrained numerical scores (logits) from a model and converts them into a <strong>probability distribution</strong> where every score is between 0 and 1, and all scores sum to <strong>exactly 1.0 (100%)</strong>."
+        },
+        {
+          "kind": "analogy",
+          "icon": "⚖️",
+          "title": "A fair scale",
+          "body": "Think of Softmax as a fair scale. No matter how heavy or light the individual objects are, Softmax normalizes them so they represent their exact share of the total weight, ensuring the sum of shares is always 100%."
+        },
+        {
+          "kind": "example",
+          "icon": "🏷️",
+          "title": "Cat, dog, or bird",
+          "body": "If a neural network outputs raw scores of [2.0, 1.0, 0.1] for [Cat, Dog, Bird], Softmax exponentiates and divides them to get probabilities: [0.65, 0.24, 0.11]. The outputs now cleanly represent confidence percentages."
+        },
+        {
+          "kind": "mythbust",
+          "icon": "🚫",
+          "title": "Myth: Simple division works",
+          "body": "Raw scores can be negative (e.g. -1.5). Simple division fails there! Softmax uses exponents ($e^x$) to make all scores positive before dividing, ensuring valid probabilities."
+        },
+        {
+          "kind": "visual",
+          "icon": "⚖️",
+          "title": "Logits vs probabilities",
+          "body": "Comparing raw outputs to Softmax probability outputs:",
+          "compare": {
+            "left": {
+              "emoji": "📊",
+              "tag": "Raw Scores (Logits)",
+              "text": "Can be negative: [2.0, -1.0, 0.5]<br>Do not sum to anything specific"
+            },
+            "right": {
+              "emoji": "🌈",
+              "tag": "Softmax Probabilities",
+              "text": "All positive: [0.80, 0.04, 0.16]<br>Sum to exactly 1.0 (100%)"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "type": "practice",
+      "exercises": [
+        {
+          "id": "p1",
+          "type": "multiple_choice",
+          "xp": 2,
+          "prompt": "What is the primary mathematical requirement of a Softmax output?",
+          "options": [
+            {
+              "id": "a",
+              "text": "The probabilities of all classes must sum to exactly 1.0",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "The output values must all be negative",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "The highest score must always be exactly 100",
+              "correct": false
+            },
+            {
+              "id": "d",
+              "text": "All output values must be equal",
+              "correct": false
+            }
+          ],
+          "explain": "Softmax transforms raw scores into a probability distribution, meaning each value is between 0 and 1, and they all add up to exactly 1.0."
+        },
+        {
+          "id": "p2",
+          "type": "true_false",
+          "xp": 2,
+          "prompt": "True or false: Softmax is commonly used at the very end of multi-class neural networks to produce classification probabilities.",
+          "options": [
+            {
+              "id": "t",
+              "text": "True",
+              "correct": true
+            },
+            {
+              "id": "f",
+              "text": "False",
+              "correct": false
+            }
+          ],
+          "explain": "True! Softmax is the standard final step in multi-class networks to translate internal raw outputs (logits) into clear probabilities."
+        },
+        {
+          "id": "p3",
+          "type": "fill_blank",
+          "xp": 2,
+          "prompt": "Complete the sentence:",
+          "sentence": "By using the mathematical constant ___ to exponentiate raw scores, Softmax guarantees that all output probabilities are positive.",
+          "blank": "e",
+          "words": [
+            "e",
+            "pi",
+            "log"
+          ],
+          "explain": "Softmax calculates $e^x$ for each score $x$. Since $e^x$ is always positive for any real number $x$, the resulting probabilities are guaranteed to be positive."
+        },
+        {
+          "id": "p4",
+          "type": "spot_the_ai",
+          "xp": 2,
+          "prompt": "Which set of outputs could have been produced directly by a Softmax function?",
+          "options": [
+            {
+              "id": "a",
+              "text": "[0.70, 0.20, 0.10]",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "[1.2, -0.2, 0.0]",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "[2.0, 1.0, 0.5]",
+              "correct": false
+            }
+          ],
+          "explain": "Outputs from Softmax must all be positive, lie between 0 and 1, and sum to exactly 1.0. Only [0.70, 0.20, 0.10] fits these criteria."
+        },
+        {
+          "id": "p5",
+          "type": "multiple_choice",
+          "xp": 2,
+          "prompt": "Why can't we just divide raw scores by their sum instead of using Softmax?",
+          "options": [
+            {
+              "id": "a",
+              "text": "Raw scores can be negative, which would lead to invalid or negative probabilities",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "Simple division is too computationally expensive",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "Simple division always produces the number 1.0 for every class",
+              "correct": false
+            },
+            {
+              "id": "d",
+              "text": "Simple division only works if we have exactly two classes",
+              "correct": false
+            }
+          ],
+          "explain": "Yes! Raw scores (logits) frequently contain negative numbers. Softmax uses exponentiation ($e^x$) to ensure all values are positive before dividing."
+        }
+      ]
+    },
+    {
+      "type": "boss",
+      "exercises": [
+        {
+          "id": "b1",
+          "type": "multiple_choice",
+          "xp": 5,
+          "prompt": "A neural network predicts whether a pet is a Cat, Dog, or Rabbit. The raw scores are [3.0, 1.0, -1.0]. After applying Softmax, which pet has the highest probability?",
+          "options": [
+            {
+              "id": "a",
+              "text": "Cat, because its raw score (3.0) is the largest",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "Dog, because its raw score (1.0) is closest to the average",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "Rabbit, because exponentiating negative numbers makes them the largest",
+              "correct": false
+            },
+            {
+              "id": "d",
+              "text": "All three will have an equal 33.3% probability",
+              "correct": false
+            }
+          ],
+          "explain": "Fabulous! Softmax preserves the relative order of the raw scores — the largest raw score (3.0 for Cat) will always translate to the largest probability. And congratulations on finishing Lesson 100! You've officially conquered the first 100 lessons of AI learning and built a rock-solid foundation!"
+        }
+      ]
+    }
+  ]
+}

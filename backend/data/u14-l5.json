@@ -1,0 +1,227 @@
+{
+  "id": "u14-l5",
+  "unit": 14,
+  "day": 75,
+  "tier": "Optimization",
+  "tierIcon": "⚡",
+  "title": "AdaGrad & RMSprop: Adaptive Step Sizes",
+  "icon": "🧠",
+  "concept": "Adaptive algorithms scale learning rates per parameter, giving rare features larger steps and frequent ones smaller, fine-tuned steps.",
+  "xp": 15,
+  "hearts": 3,
+  "estMinutes": 6,
+  "segments": [
+    {
+      "type": "warmup",
+      "exercises": [
+        {
+          "id": "w1",
+          "type": "multiple_choice",
+          "xp": 1,
+          "prompt": "Recap: What is the main purpose of adding Momentum to gradient descent?",
+          "options": [
+            {
+              "id": "a",
+              "text": "To smooth out noisy side-to-side oscillations and roll over local minima.",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "To increase the number of training rows.",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "To compute gradients without math.",
+              "correct": false
+            }
+          ],
+          "explain": "Correct! Momentum uses past steps to guide the current one. Now, how do we adjust steps when some weights update much less than others?"
+        }
+      ]
+    },
+    {
+      "type": "teach",
+      "cards": [
+        {
+          "kind": "hook",
+          "icon": "🔍",
+          "title": "Sparse signals",
+          "body": "In a text model, common words like \"the\" appear on every page. Rare words like \"hyperdrive\" appear once in a million reviews. Should we update their weights at the same speed?"
+        },
+        {
+          "kind": "definition",
+          "icon": "🧠",
+          "title": "Adaptive Learning Rates",
+          "body": "Algorithms like <strong>AdaGrad</strong> and <strong>RMSprop</strong> scale the step size for <em>each weight individually</em> based on how active that weight has been."
+        },
+        {
+          "kind": "analogy",
+          "icon": "🧭",
+          "title": "The search party",
+          "body": "If a scout path is highly traveled (frequent updates), take small, cautious steps (small learning rate). If a path is rarely explored (rare updates), take a giant leap to investigate."
+        },
+        {
+          "kind": "example",
+          "icon": "🧠",
+          "title": "AdaGrad vs. RMSprop",
+          "body": "<strong>AdaGrad</strong> shrinks steps based on the sum of all historical updates, but it can shrink them to zero too fast. <strong>RMSprop</strong> fixes this by focusing only on <em>recent</em> updates."
+        },
+        {
+          "kind": "mythbust",
+          "icon": "🎛️",
+          "title": "Not one global rate",
+          "body": "Most beginners think there is only one 'learning rate' for the whole model. In modern deep learning, every single parameter adjusts its own learning speed dynamically!"
+        },
+        {
+          "kind": "visual",
+          "icon": "⚖️",
+          "title": "Standard vs. Adaptive",
+          "body": "Comparing how parameters learn under different optimization methods:",
+          "compare": {
+            "left": {
+              "emoji": "🌍",
+              "tag": "Standard GD",
+              "text": "One rate fits all weights<br>Sparse features learn slowly"
+            },
+            "right": {
+              "emoji": "🧠",
+              "tag": "AdaGrad/RMSprop",
+              "text": "Per-weight custom rates<br>Rare features get large steps"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "type": "practice",
+      "exercises": [
+        {
+          "id": "p1",
+          "type": "multiple_choice",
+          "xp": 2,
+          "prompt": "Why do we want adaptive learning rates for sparse features (features that rarely show up)?",
+          "options": [
+            {
+              "id": "a",
+              "text": "Because they need larger steps to make meaningful progress when they do appear.",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "Because rare features should be ignored by the model.",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "To make the training run slower.",
+              "correct": false
+            },
+            {
+              "id": "d",
+              "text": "To keep the model's weights positive.",
+              "correct": false
+            }
+          ],
+          "explain": "Correct! Rare features update infrequently. When they do appear, adaptive rates scale up their step size so the model actually learns from them."
+        },
+        {
+          "id": "p2",
+          "type": "true_false",
+          "xp": 2,
+          "prompt": "True or false: RMSprop improves on AdaGrad by scaling steps using only a moving average of recent updates instead of the entire history.",
+          "options": [
+            {
+              "id": "t",
+              "text": "True",
+              "correct": true
+            },
+            {
+              "id": "f",
+              "text": "False",
+              "correct": false
+            }
+          ],
+          "explain": "True! AdaGrad accumulates all history, which can make learning rates shrink to zero too early. RMSprop fixes this by decaying the historical memory."
+        },
+        {
+          "id": "p3",
+          "type": "fill_blank",
+          "xp": 2,
+          "prompt": "Complete the sentence:",
+          "sentence": "Adaptive optimizers dynamically scale the step size for each ___ individually.",
+          "blank": "parameter",
+          "words": [
+            "parameter",
+            "dataset",
+            "computer"
+          ],
+          "explain": "Yes! Individual parameters (weights) get custom learning rates adjusted on the fly based on their update history."
+        },
+        {
+          "id": "p4",
+          "type": "multiple_choice",
+          "xp": 2,
+          "prompt": "What is a drawback of the basic AdaGrad algorithm?",
+          "options": [
+            {
+              "id": "a",
+              "text": "The learning rate can shrink too quickly and prevent the model from learning further.",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "It makes the learning rate grow to infinity.",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "It only works on small datasets.",
+              "correct": false
+            },
+            {
+              "id": "d",
+              "text": "It is only used for image data.",
+              "correct": false
+            }
+          ],
+          "explain": "Exactly. Since AdaGrad continually adds up all past gradients, the denominator grows infinitely, forcing steps to stall. RMSprop resolves this!"
+        }
+      ]
+    },
+    {
+      "type": "boss",
+      "exercises": [
+        {
+          "id": "b1",
+          "type": "multiple_choice",
+          "xp": 5,
+          "prompt": "You are building a text recommendation engine. Words like 'pneumatics' are rare but crucial when they occur. A standard optimizer is learning nothing from them. Which optimizer is best suited to fix this?",
+          "options": [
+            {
+              "id": "a",
+              "text": "RMSprop (or another adaptive learning rate optimizer)",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "Standard Batch Gradient Descent with a fixed learning rate",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "A non-adaptive optimizer with momentum set to zero",
+              "correct": false
+            },
+            {
+              "id": "d",
+              "text": "Stochastic Gradient Descent without any learning rate",
+              "correct": false
+            }
+          ],
+          "explain": "Fabulous! Adaptive optimizers automatically scale up learning rates for infrequently updated features, ensuring sparse signals are not lost. You've conquered the fundamentals of gradient tuning!"
+        }
+      ]
+    }
+  ]
+}

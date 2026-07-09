@@ -1,0 +1,217 @@
+{
+  "id": "u7-l5",
+  "unit": 7,
+  "day": 40,
+  "tier": "Tabular Processing",
+  "tierIcon": "🗂️",
+  "title": "Handling High-Cardinality Data",
+  "icon": "🏙️",
+  "concept": "High-cardinality features have too many unique values for one-hot encoding, requiring alternatives like frequency encoding or target encoding.",
+  "xp": 15,
+  "hearts": 3,
+  "estMinutes": 6,
+  "segments": [
+    {
+      "type": "warmup",
+      "exercises": [
+        {
+          "id": "w1",
+          "type": "multiple_choice",
+          "xp": 1,
+          "prompt": "Warmup: How does dropping one column from a one-hot encoded feature help the machine learning model?",
+          "options": [
+            {
+              "id": "a",
+              "text": "It avoids the dummy variable trap by removing redundant, perfectly correlated columns",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "It makes the model run slower but with more accuracy",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "It converts the categorical features back into text labels",
+              "correct": false
+            }
+          ],
+          "explain": "Dropping one column avoids multi-collinearity (the dummy variable trap) without losing any predictive information."
+        }
+      ]
+    },
+    {
+      "type": "teach",
+      "cards": [
+        {
+          "kind": "hook",
+          "icon": "🗺️",
+          "title": "A map of every zip code",
+          "body": "Imagine a dataset with a zip_code column. There are over 40,000 zip codes in the US. One-hot encoding this would add 40,000 new columns to your dataset!"
+        },
+        {
+          "kind": "definition",
+          "icon": "🎓",
+          "title": "High Cardinality",
+          "body": "<strong>Cardinality</strong> refers to the number of unique values in a column. A feature is <strong>high-cardinality</strong> when it contains hundreds or thousands of unique labels, making one-hot encoding impractical."
+        },
+        {
+          "kind": "analogy",
+          "icon": "🌆",
+          "title": "Grouping small cities",
+          "body": "If you're asking tourists where they live, you don't need a separate category for every tiny village. You might group them by state, region, or simply use 'Other' for rare places."
+        },
+        {
+          "kind": "example",
+          "icon": "🎯",
+          "title": "Target & Frequency encoding",
+          "body": "Instead of one-hot encoding, we can use <strong>frequency encoding</strong> (replacing each category with how often it appears) or <strong>target encoding</strong> (replacing it with the average target value for that category)."
+        },
+        {
+          "kind": "mythbust",
+          "icon": "🧠",
+          "title": "Don't just delete it",
+          "body": "It is tempting to delete high-cardinality columns because they are messy. But variables like 'Zip Code' contain rich spatial and demographic patterns — you just need a better encoding!"
+        },
+        {
+          "kind": "visual",
+          "icon": "⚖️",
+          "title": "Encoding alternatives",
+          "body": "Options for high-cardinality columns:",
+          "compare": {
+            "left": {
+              "emoji": "📈",
+              "tag": "Frequency Encoding",
+              "text": "Replace with count/percentage<br>'NY' → 0.45, 'WY' → 0.02<br>Keeps dataset compact"
+            },
+            "right": {
+              "emoji": "🎯",
+              "tag": "Target Encoding",
+              "text": "Replace with target average<br>'NY' → $500k house avg<br>Direct correlation to target"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "type": "practice",
+      "exercises": [
+        {
+          "id": "p1",
+          "type": "multiple_choice",
+          "xp": 2,
+          "prompt": "What does the term 'cardinality' mean in the context of database columns?",
+          "options": [
+            {
+              "id": "a",
+              "text": "The number of unique values in that column",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "The total number of rows in the table",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "Whether a column contains decimals or integers",
+              "correct": false
+            }
+          ],
+          "explain": "Cardinality measures the uniqueness of values. High cardinality means many unique categories."
+        },
+        {
+          "id": "p2",
+          "type": "true_false",
+          "xp": 2,
+          "prompt": "True or false: One-hot encoding is the best choice for columns like 'IP Address' or 'User ID'.",
+          "options": [
+            {
+              "id": "t",
+              "text": "True",
+              "correct": false
+            },
+            {
+              "id": "f",
+              "text": "False",
+              "correct": true
+            }
+          ],
+          "explain": "False. IP Addresses have extremely high cardinality, and one-hot encoding would blow up the size of your dataset."
+        },
+        {
+          "id": "p3",
+          "type": "fill_blank",
+          "xp": 2,
+          "prompt": "Complete the sentence:",
+          "sentence": "___ encoding replaces each category with the average target value for that group.",
+          "blank": "Target",
+          "words": [
+            "Target",
+            "One-hot",
+            "Label"
+          ],
+          "explain": "Target encoding uses the average outcome of the target variable for each category to represent that label."
+        },
+        {
+          "id": "p4",
+          "type": "spot_the_ai",
+          "xp": 2,
+          "prompt": "Which of the following is a high-cardinality feature?",
+          "options": [
+            {
+              "id": "a",
+              "text": "City name in a global airline dataset",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "Customer membership tier (Bronze, Silver, Gold)",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "Is the user logged in? (Yes, No)",
+              "correct": false
+            }
+          ],
+          "explain": "A global airline dataset will contain thousands of unique city names, making it high-cardinality."
+        }
+      ]
+    },
+    {
+      "type": "boss",
+      "exercises": [
+        {
+          "id": "b1",
+          "type": "multiple_choice",
+          "xp": 5,
+          "prompt": "You are building a fraud detection model and have a merchant_name column with 5,000 unique values. If you use target encoding to replace each merchant name with the historic percentage of fraudulent transactions at that merchant, what is the primary risk?",
+          "options": [
+            {
+              "id": "a",
+              "text": "Overfitting and data leakage, since you're using target information inside your feature",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "Underfitting, because the model won't see any numbers",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "The merchant names will be deleted",
+              "correct": false
+            },
+            {
+              "id": "d",
+              "text": "The dataset will gain 5,000 new columns",
+              "correct": false
+            }
+          ],
+          "explain": "Correct! Target encoding uses the target variable to calculate the feature values, which can lead to severe data leakage and overfitting if not carefully smoothed. Excellent job completing Unit 7 on Feature Encoding!"
+        }
+      ]
+    }
+  ]
+}

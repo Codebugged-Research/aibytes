@@ -1,0 +1,222 @@
+{
+  "id": "u22-l4",
+  "unit": 22,
+  "day": 114,
+  "tier": "Model Evaluation",
+  "tierIcon": "🔄",
+  "title": "Time Series Folds (Rolling Windows)",
+  "icon": "🕰️",
+  "concept": "Time series cross-validation uses rolling or expanding windows to train only on past data and evaluate on future data, avoiding temporal leakage.",
+  "xp": 15,
+  "hearts": 3,
+  "estMinutes": 6,
+  "segments": [
+    {
+      "type": "warmup",
+      "exercises": [
+        {
+          "id": "w1",
+          "type": "multiple_choice",
+          "xp": 1,
+          "prompt": "Recap: What problem does Stratified K-Fold solve when evaluating a classifier?",
+          "options": [
+            {
+              "id": "a",
+              "text": "It prevents folds from randomly missing rare target classes by preserving class ratios.",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "It sorts the data by time to make predictions more chronological.",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "It removes outliers from the training set automatically.",
+              "correct": false
+            }
+          ],
+          "explain": "Correct! Stratification keeps class ratios consistent. But what if our data is ordered by time, and future data points depend on past ones?"
+        }
+      ]
+    },
+    {
+      "type": "teach",
+      "cards": [
+        {
+          "kind": "hook",
+          "icon": "🔮",
+          "title": "Cheating with the future",
+          "body": "Imagine predicting tomorrow's weather by looking at the weather report from next week. That would be cheating! In standard cross-validation, data is shuffled randomly, meaning your model might train on future data to predict the past."
+        },
+        {
+          "kind": "definition",
+          "icon": "🕰️",
+          "title": "What is Time Series Split?",
+          "body": "<strong>Time Series Split</strong> (or rolling/expanding window validation) is a method where we respect the temporal order of data. We train only on past data and validate on future data."
+        },
+        {
+          "kind": "analogy",
+          "icon": "📖",
+          "title": "Reading a mystery novel",
+          "body": "When reading a mystery novel, you can't read chapter 5 to help you guess what happens in chapter 3. You must read <strong>chronologically</strong>. In time series validation, the model's history must grow forward in time."
+        },
+        {
+          "kind": "example",
+          "icon": "📆",
+          "title": "Expanding windows",
+          "body": "In an expanding window split, Fold 1 trains on Month 1 to validate on Month 2. Fold 2 trains on Months 1-2 to validate on Month 3. Fold 3 trains on Months 1-3 to validate on Month 4. The training window expands forward."
+        },
+        {
+          "kind": "mythbust",
+          "icon": "⚠️",
+          "title": "Is random shuffling good?",
+          "body": "We are taught that random shuffling is great for training models. But for time series, random shuffling is <strong>disastrous</strong>. It leaks future information into the past, making the model look artificially accurate."
+        },
+        {
+          "kind": "visual",
+          "icon": "⚖️",
+          "title": "Random vs Time Series Splits",
+          "body": "How training and validation sets differ for time-based data:",
+          "compare": {
+            "left": {
+              "emoji": "🎲",
+              "tag": "Random Split",
+              "text": "Shuffled data.<br>Future leaks into past.<br>Unrealistic time predictions."
+            },
+            "right": {
+              "emoji": "🕰️",
+              "tag": "Time Series Split",
+              "text": "Chronological order.<br>Train on past, test on future.<br>Honest time predictions."
+            }
+          }
+        }
+      ]
+    },
+    {
+      "type": "practice",
+      "exercises": [
+        {
+          "id": "p1",
+          "type": "multiple_choice",
+          "xp": 2,
+          "prompt": "Why is random shuffling bad for time series cross-validation?",
+          "options": [
+            {
+              "id": "a",
+              "text": "It causes future data to leak into the training set, leading to unrealistic validation scores.",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "It increases the number of features in the dataset.",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "It deletes old data points to make room for new ones.",
+              "correct": false
+            },
+            {
+              "id": "d",
+              "text": "It forces the model to use L1 regularization instead of L2.",
+              "correct": false
+            }
+          ],
+          "explain": "Shuffling mixes past and future. If a model trains on future data, it gets an unrealistic advantage that won't exist in production."
+        },
+        {
+          "id": "p2",
+          "type": "true_false",
+          "xp": 2,
+          "prompt": "True or false: In time series cross-validation, the training set must always occur chronologically before the validation set.",
+          "options": [
+            {
+              "id": "t",
+              "text": "True",
+              "correct": true
+            },
+            {
+              "id": "f",
+              "text": "False",
+              "correct": false
+            }
+          ],
+          "explain": "True! To simulate real-world usage, we must always train on past data and validate on future data."
+        },
+        {
+          "id": "p3",
+          "type": "fill_blank",
+          "xp": 2,
+          "prompt": "Complete the sentence:",
+          "sentence": "Time series cross-validation uses an ___ window to add more past data to the training set over time.",
+          "blank": "expanding",
+          "words": [
+            "expanding",
+            "imbalanced",
+            "random"
+          ],
+          "explain": "An expanding window grows chronologically, incorporating more historical data as we move forward in time."
+        },
+        {
+          "id": "p4",
+          "type": "spot_the_ai",
+          "xp": 2,
+          "prompt": "Which of these setups represents a valid time series cross-validation fold?",
+          "options": [
+            {
+              "id": "a",
+              "text": "Training on January through June data, and validating on July data.",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "Training on January, March, and July data, and validating on February data.",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "Training on December data, and validating on October data.",
+              "correct": false
+            }
+          ],
+          "explain": "Training on past data (Jan-Jun) and validating on future data (Jul) strictly respects the arrow of time."
+        }
+      ]
+    },
+    {
+      "type": "boss",
+      "exercises": [
+        {
+          "id": "b1",
+          "type": "multiple_choice",
+          "xp": 5,
+          "prompt": "You are building a model to predict daily retail sales. Using a standard random K-Fold split, your validation accuracy is 98%. However, when you deploy the model, it gets only 55% accuracy on new sales data. What went wrong?",
+          "options": [
+            {
+              "id": "a",
+              "text": "Random K-Fold leaked future sales patterns into the past training data, hiding the model's inability to forecast actual future trends.",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "The learning rate was too high for production data.",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "You should have deleted all historical sales data before deploying.",
+              "correct": false
+            },
+            {
+              "id": "d",
+              "text": "The model overfitted to the class labels of the test set.",
+              "correct": false
+            }
+          ],
+          "explain": "Random splits leak future trends into past training. When deployed, the future is unknown, and the model fails. Time series splits would have caught this! 🕰️"
+        }
+      ]
+    }
+  ]
+}

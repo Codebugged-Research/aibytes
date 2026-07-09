@@ -1,0 +1,222 @@
+{
+  "id": "u22-l2",
+  "unit": 22,
+  "day": 112,
+  "tier": "Model Evaluation",
+  "tierIcon": "🔄",
+  "title": "K-Fold Cross-Validation",
+  "icon": "🪜",
+  "concept": "K-Fold cross-validation splits data into K subsets, training K models to evaluate performance robustly without relying on a single split.",
+  "xp": 15,
+  "hearts": 3,
+  "estMinutes": 6,
+  "segments": [
+    {
+      "type": "warmup",
+      "exercises": [
+        {
+          "id": "w1",
+          "type": "multiple_choice",
+          "xp": 1,
+          "prompt": "Recap: What is the main difference between the validation set and the test set?",
+          "options": [
+            {
+              "id": "a",
+              "text": "The validation set is used to tune model settings, while the test set is used once for a final unbiased evaluation.",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "The test set is used for training the model's weights, while the validation set is not.",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "The validation set is only used after the model is deployed to the real world.",
+              "correct": false
+            }
+          ],
+          "explain": "Correct! We use the validation set to pick settings, and the test set as our final exam. But what if a single train/validation split doesn't represent our whole dataset well?"
+        }
+      ]
+    },
+    {
+      "type": "teach",
+      "cards": [
+        {
+          "kind": "hook",
+          "icon": "🎲",
+          "title": "A lucky split?",
+          "body": "If you randomly split your data once, you might accidentally put all the easy examples in the training set and the hard ones in the validation set. Your model will look like a genius, but it's just luck!"
+        },
+        {
+          "kind": "definition",
+          "icon": "🪜",
+          "title": "What is K-Fold?",
+          "body": "<strong>K-Fold Cross-Validation</strong> is a technique where we split our data into <code>K</code> equal parts (folds). We train the model <code>K</code> times, each time using a different fold as the validation set and the rest for training."
+        },
+        {
+          "kind": "analogy",
+          "icon": "🔄",
+          "title": "Rotating chore chart",
+          "body": "Imagine a team of 5 people. Instead of one person always doing the validation check, you <strong>rotate</strong> the job. In round 1, person A checks B, C, D, and E. In round 2, person B checks the others. Everyone gets a turn."
+        },
+        {
+          "kind": "example",
+          "icon": "📊",
+          "title": "5-Fold validation",
+          "body": "In a 5-Fold split (K=5), we train 5 separate models. Model 1 validates on Fold 1, Model 2 validates on Fold 2, and so on. We then average all 5 validation scores to get a highly reliable performance estimate."
+        },
+        {
+          "kind": "mythbust",
+          "icon": "⚠️",
+          "title": "Do we ship 5 models?",
+          "body": "A common myth is that K-Fold means shipping K different models to production. In reality, we use K-Fold only to <strong>evaluate</strong> our settings. Once we find the best settings, we train one final model on the entire dataset."
+        },
+        {
+          "kind": "visual",
+          "icon": "⚖️",
+          "title": "The K-Fold Rotation",
+          "body": "How data is divided across 5 iterations:",
+          "compare": {
+            "left": {
+              "emoji": "🔄",
+              "tag": "Each Iteration",
+              "text": "4 folds for Training.<br>1 fold for Validation.<br>Folds rotate every run."
+            },
+            "right": {
+              "emoji": "📊",
+              "tag": "Final Score",
+              "text": "K separate scores.<br>Averaged together.<br>Reduces variance from luck."
+            }
+          }
+        }
+      ]
+    },
+    {
+      "type": "practice",
+      "exercises": [
+        {
+          "id": "p1",
+          "type": "multiple_choice",
+          "xp": 2,
+          "prompt": "If you run 5-Fold cross-validation, how many times will the model be trained in total?",
+          "options": [
+            {
+              "id": "a",
+              "text": "5 times",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "1 time",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "25 times",
+              "correct": false
+            },
+            {
+              "id": "d",
+              "text": "It depends on the learning rate",
+              "correct": false
+            }
+          ],
+          "explain": "In K-Fold cross-validation, we train the model exactly K times, rotating the validation fold each time."
+        },
+        {
+          "id": "p2",
+          "type": "true_false",
+          "xp": 2,
+          "prompt": "True or false: K-Fold cross-validation is used to evaluate model settings, but we typically train a final model on all data before shipping.",
+          "options": [
+            {
+              "id": "t",
+              "text": "True",
+              "correct": true
+            },
+            {
+              "id": "f",
+              "text": "False",
+              "correct": false
+            }
+          ],
+          "explain": "True! K-Fold helps us find the best hyperparameters. Once chosen, we train on the full training dataset to maximize data utility."
+        },
+        {
+          "id": "p3",
+          "type": "fill_blank",
+          "xp": 2,
+          "prompt": "Complete the sentence:",
+          "sentence": "K-Fold cross-validation helps prevent a lucky split by rotating which ___ acts as the validation set.",
+          "blank": "fold",
+          "words": [
+            "fold",
+            "parameter",
+            "weight"
+          ],
+          "explain": "By rotating the validation fold, every single data point gets to be used for validation exactly once."
+        },
+        {
+          "id": "p4",
+          "type": "spot_the_ai",
+          "xp": 2,
+          "prompt": "Which of the following scenarios describes the correct way to compute the final cross-validation score?",
+          "options": [
+            {
+              "id": "a",
+              "text": "Train K models, get a validation score for each, and calculate the average of those K scores.",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "Train K models, and pick only the highest validation score as your final metric.",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "Train K models, and average the weights of all models to make a single prediction.",
+              "correct": false
+            }
+          ],
+          "explain": "Averaging all validation scores gives an honest, stable estimate of how the model settings perform across different slices of data."
+        }
+      ]
+    },
+    {
+      "type": "boss",
+      "exercises": [
+        {
+          "id": "b1",
+          "type": "multiple_choice",
+          "xp": 5,
+          "prompt": "You have a small dataset of 200 customer profiles. When you do a simple 80/20 train/validation split, your validation score swings between 65% and 85% depending on the random seed. How can you stabilize your evaluation?",
+          "options": [
+            {
+              "id": "a",
+              "text": "Use K-Fold cross-validation (e.g., K=5 or 10) to train multiple times and average the scores.",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "Discard the validation set and evaluate exclusively on the training set.",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "Add more random seeds until you find one that gives a high score.",
+              "correct": false
+            },
+            {
+              "id": "d",
+              "text": "Only validate on the first 10 customer profiles to keep it consistent.",
+              "correct": false
+            }
+          ],
+          "explain": "On small datasets, a single validation split has high variance. K-Fold cross-validation ensures every data point is used for validation once, giving a much more stable average! 🌟"
+        }
+      ]
+    }
+  ]
+}

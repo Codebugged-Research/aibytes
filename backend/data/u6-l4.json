@@ -1,0 +1,222 @@
+{
+  "id": "u6-l4",
+  "unit": 6,
+  "day": 34,
+  "tier": "Tabular Processing",
+  "tierIcon": "🧹",
+  "title": "Tracking Missingness",
+  "icon": "🏷️",
+  "concept": "Adding binary flags (indicators) to show where data was missing helps models learn patterns from the missingness itself.",
+  "xp": 15,
+  "hearts": 3,
+  "estMinutes": 6,
+  "segments": [
+    {
+      "type": "warmup",
+      "exercises": [
+        {
+          "id": "w1",
+          "type": "multiple_choice",
+          "xp": 1,
+          "prompt": "Recap: When is dropping an entire column of data preferred?",
+          "options": [
+            {
+              "id": "a",
+              "text": "When the column is mostly missing values and cannot be reliably filled",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "When the column contains name values",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "When the column is completely filled with correct numbers",
+              "correct": false
+            }
+          ],
+          "explain": "Correct! If a column is mostly empty, imputation is just guessing, so dropping it is safer."
+        }
+      ]
+    },
+    {
+      "type": "teach",
+      "cards": [
+        {
+          "kind": "hook",
+          "icon": "🕵️",
+          "title": "The clue in the empty space",
+          "body": "If a patient leaves the 'heart rate history' blank on a medical form, is it just random? Or did they skip it because they don't have heart issues? <strong>The absence is information!</strong>"
+        },
+        {
+          "kind": "definition",
+          "icon": "🏷️",
+          "title": "Missing Indicators",
+          "body": "A missing indicator is a <strong>new binary column</strong> (0 or 1) added to a dataset, flagging exactly which values were originally missing before they were imputed."
+        },
+        {
+          "kind": "analogy",
+          "icon": "🩹",
+          "title": "Labeling the patch",
+          "body": "If you patch a hole in a wall with plaster (imputation), it looks clean. But if you place a <strong>small sticky note</strong> on it saying 'patched here', everyone still knows there was a hole."
+        },
+        {
+          "kind": "example",
+          "icon": "📝",
+          "title": "The 'Age_Was_Missing' column",
+          "body": "If you fill missing ages with the average (30), you add a column: <code>Age_Was_Missing</code>. It holds <strong>1</strong> if the age was blank, and <strong>0</strong> if it was real. The AI can see the difference!"
+        },
+        {
+          "kind": "mythbust",
+          "icon": "🧠",
+          "title": "Missing isn't always random",
+          "body": "People assume data goes missing by random luck. But rich people often hide their income, and healthy people skip medical tests. Tracking missingness lets the model <strong>learn these human behaviors</strong>."
+        },
+        {
+          "kind": "visual",
+          "icon": "⚖️",
+          "title": "Imputed vs Imputed + Flagged",
+          "body": "Why simple imputation isn't always enough:",
+          "compare": {
+            "left": {
+              "emoji": "🌫️",
+              "tag": "Only Imputed",
+              "text": "Filled value is 30<br>AI treats it as real '30'<br>No way to know it was a guess"
+            },
+            "right": {
+              "emoji": "🏷️",
+              "tag": "Imputed + Flagged",
+              "text": "Filled value is 30<br>New column flags 'Was_Missing = 1'<br>AI learns a guess was made"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "type": "practice",
+      "exercises": [
+        {
+          "id": "p1",
+          "type": "multiple_choice",
+          "xp": 2,
+          "prompt": "Why should we add a missing indicator column when imputing data?",
+          "options": [
+            {
+              "id": "a",
+              "text": "To let the model know which values were estimated so it can learn from the missingness",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "To make the database file larger and more secure",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "To automatically delete the rows that were filled",
+              "correct": false
+            },
+            {
+              "id": "d",
+              "text": "To change all 1s in the data to 0s",
+              "correct": false
+            }
+          ],
+          "explain": "Yes! The fact that data was missing is often a useful clue for the model's predictions."
+        },
+        {
+          "id": "p2",
+          "type": "true_false",
+          "xp": 2,
+          "prompt": "True or false: Data is always missing completely at random, so tracking missingness is pointless.",
+          "options": [
+            {
+              "id": "t",
+              "text": "True",
+              "correct": false
+            },
+            {
+              "id": "f",
+              "text": "False",
+              "correct": true
+            }
+          ],
+          "explain": "Correct! Data is often missing for systematic reasons (e.g. people skipping questions they find sensitive)."
+        },
+        {
+          "id": "p3",
+          "type": "fill_blank",
+          "xp": 2,
+          "prompt": "Complete the sentence:",
+          "sentence": "A missing indicator column uses ___ values like 0 and 1.",
+          "blank": "binary",
+          "words": [
+            "binary",
+            "negative",
+            "decimal"
+          ],
+          "explain": "Yes, a binary indicator (0 for present, 1 for originally missing) is used to flag the data."
+        },
+        {
+          "id": "p4",
+          "type": "spot_the_ai",
+          "xp": 2,
+          "prompt": "Which one is a missing indicator column?",
+          "options": [
+            {
+              "id": "a",
+              "text": "A column named 'Income_Was_Missing' containing 0s and 1s",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "A column named 'Income' with filled-in averages",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "A list of all missing values removed from the file",
+              "correct": false
+            }
+          ],
+          "explain": "Exactly! It is a separate column flagging the presence of missing values in the original data."
+        }
+      ]
+    },
+    {
+      "type": "boss",
+      "exercises": [
+        {
+          "id": "b1",
+          "type": "multiple_choice",
+          "xp": 5,
+          "prompt": "You are training an AI to predict credit card default. You notice many high-income applicants skip the 'Current Debt' question. If you impute their debt with the average without flagging it, what happens?",
+          "options": [
+            {
+              "id": "a",
+              "text": "The model treats them like average debtors, missing the signal that their silence might indicate high debt",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "The model automatically calculates their exact debt anyway",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "The model refuses to run",
+              "correct": false
+            },
+            {
+              "id": "d",
+              "text": "The applicants' credit scores immediately drop",
+              "correct": false
+            }
+          ],
+          "explain": "Spot on! Without a flag, the model loses the signal hidden in their choice to hide the data. Now, let's look at the ultimate trap: data leakage!"
+        }
+      ]
+    }
+  ]
+}
