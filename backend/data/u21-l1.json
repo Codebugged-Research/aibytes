@@ -2,11 +2,11 @@
   "id": "u21-l1",
   "unit": 21,
   "day": 106,
-  "tier": "Model Evaluation",
-  "tierIcon": "📈",
-  "title": "The Precision-Recall Curve",
-  "icon": "⚖️",
-  "concept": "The Precision-Recall Curve shows the tradeoff between precision and recall across different decision thresholds, helping businesses balance false alarms against missed detections.",
+  "tier": "Optimization",
+  "tierIcon": "⚡",
+  "title": "Stochastic Gradient Descent (SGD)",
+  "icon": "🎲",
+  "concept": "Stochastic Gradient Descent speeds up training by updating weights using just one random data point at a time.",
   "xp": 15,
   "hearts": 3,
   "estMinutes": 6,
@@ -18,25 +18,25 @@
           "id": "w1",
           "type": "multiple_choice",
           "xp": 1,
-          "prompt": "Recap: What does the F1-score measure by combining precision and recall?",
+          "prompt": "Recap: The optimizer uses gradient descent to repeatedly adjust model weights to minimize the…?",
           "options": [
             {
               "id": "a",
-              "text": "The harmonic mean of precision and recall, balancing both false positives and false negatives.",
+              "text": "cost function (overall error)",
               "correct": true
             },
             {
               "id": "b",
-              "text": "The arithmetic mean, highlighting only false positives.",
+              "text": "total size of the training dataset",
               "correct": false
             },
             {
               "id": "c",
-              "text": "The ratio of true positives to the total number of predicted positives.",
+              "text": "number of features in the model",
               "correct": false
             }
           ],
-          "explain": "Correct! The F1-score uses the harmonic mean to give a balanced picture of both precision and recall. Now, let's look at how we navigate the tradeoff between them."
+          "explain": "Right! The optimizer repeatedly adjusts weights to minimize the cost function, reducing overall error. Now, let's speed this up!"
         }
       ]
     },
@@ -45,49 +45,49 @@
       "cards": [
         {
           "kind": "hook",
-          "icon": "🚨",
-          "title": "The security system slider",
-          "body": "Imagine adjusting a home security alarm. If you make it too sensitive, it triggers on passing cats (high recall, low precision). If you make it too strict, it only triggers for actual burglars but might miss a quiet break-in (high precision, low recall)."
+          "icon": "🎲",
+          "title": "Checking every house",
+          "body": "Imagine pricing a home. Standard gradient descent looks at <em>every single house on the market</em> before making a tiny correction. That's incredibly slow!"
         },
         {
           "kind": "definition",
-          "icon": "⚖️",
-          "title": "The threshold tradeoff",
-          "body": "A classification model outputs a probability (like 72%). We use a <strong>decision threshold</strong> to turn that number into a 'Yes' or 'No'. Shifting this threshold slider is what trade-offs precision against recall."
+          "icon": "⚡",
+          "title": "One at a time",
+          "body": "<strong>Stochastic Gradient Descent (SGD)</strong> updates the model's weights using only <strong>one random example</strong> at a time, instead of checking the entire dataset."
         },
         {
           "kind": "analogy",
-          "icon": "🎣",
-          "title": "The fishing net",
-          "body": "Imagine fishing. Using a massive, fine-mesh net catches every single fish (100% recall) but also scoops up leaves, trash, and boots (low precision). Using a small hand spear catches only high-quality fish (high precision) but misses most of the school (low recall)."
+          "icon": "🗺️",
+          "title": "The foggy mountain",
+          "body": "It's like walking down a foggy mountain in the dark. Instead of scanning the entire horizon, you look down, feel the slope under one foot, and take a quick step."
         },
         {
           "kind": "example",
-          "icon": "🏥",
-          "title": "Choosing for business need",
-          "body": "In cancer screening, we want to catch every case, so we prefer high recall (even if we get false alarms). In spam filtering, we don't want to delete important emails, so we demand high precision (even if a few spam emails get through)."
+          "icon": "📊",
+          "title": "Speed vs. Precision",
+          "body": "If you have 1 million users, standard GD computes 1 million errors before updating weights once. SGD makes <strong>1 million updates</strong> in the same time!"
         },
         {
           "kind": "mythbust",
-          "icon": "⚠️",
-          "title": "Can we get 100% of both?",
-          "body": "It is a common myth that a model can always achieve both perfect precision and perfect recall. In the real world, increasing one almost always decreases the other because boundaries between classes are rarely perfectly clean."
+          "icon": "🌪",
+          "title": "Noise is a helper",
+          "body": "You might think checking one point at a time is too messy. But this noise actually helps SGD <strong>jump out of shallow, bad valleys</strong> (local minimums) that trap standard GD."
         },
         {
           "kind": "visual",
-          "icon": "📈",
-          "title": "The PR curve visualization",
-          "body": "The Precision-Recall Curve plots these two metrics at every possible threshold.",
+          "icon": "⚖️",
+          "title": "Batch GD vs. SGD",
+          "body": "Comparing the two ways of descending the error hill:",
           "compare": {
             "left": {
-              "emoji": "⚖️",
-              "tag": "High Threshold",
-              "text": "Few alerts, but highly accurate.<br>High Precision, Low Recall."
+              "emoji": "🐢",
+              "tag": "Batch GD",
+              "text": "Reads all data<br>Slow, steady, direct path"
             },
             "right": {
-              "emoji": "📢",
-              "tag": "Low Threshold",
-              "text": "Many alerts, catching everything.<br>Low Precision, High Recall."
+              "emoji": "🎲",
+              "tag": "SGD",
+              "text": "Reads 1 random row<br>Super fast, zigzag path"
             }
           }
         }
@@ -100,31 +100,36 @@
           "id": "p1",
           "type": "multiple_choice",
           "xp": 2,
-          "prompt": "If you lower the decision threshold of a spam filter from 0.5 to 0.2, what will happen to its recall?",
+          "prompt": "Why is standard Batch Gradient Descent slow on massive datasets?",
           "options": [
             {
               "id": "a",
-              "text": "Recall will increase because it will catch more spam emails overall.",
+              "text": "It must calculate the error for every single row of data before taking a single step.",
               "correct": true
             },
             {
               "id": "b",
-              "text": "Recall will decrease because it will catch fewer spam emails.",
+              "text": "It forgets the weights after every step.",
               "correct": false
             },
             {
               "id": "c",
-              "text": "Recall will stay the same because the dataset hasn't changed.",
+              "text": "It runs in reverse.",
+              "correct": false
+            },
+            {
+              "id": "d",
+              "text": "It only works on small computers.",
               "correct": false
             }
           ],
-          "explain": "Lowering the threshold makes the model more eager to predict 'spam' (positive), which catches more of the actual spam (higher recall) but increases false alarms."
+          "explain": "Yes! Standard Batch GD has to loop through the entire dataset to compute a single weight update, which is slow for big data."
         },
         {
           "id": "p2",
           "type": "true_false",
           "xp": 2,
-          "prompt": "True or false: Shifting the decision threshold is done during model evaluation/deployment, without retargeting or retraining the model itself.",
+          "prompt": "True or false: SGD takes a zigzag path down the error hill because it only uses one random data point at a time.",
           "options": [
             {
               "id": "t",
@@ -137,45 +142,45 @@
               "correct": false
             }
           ],
-          "explain": "True! You don't need to retrain the model to change the threshold. You just adjust the threshold value used to convert predicted probabilities into labels."
+          "explain": "True! Because each random data point is slightly different, the steps bounce around, resulting in a noisy, zigzag path."
         },
         {
           "id": "p3",
           "type": "fill_blank",
           "xp": 2,
           "prompt": "Complete the sentence:",
-          "sentence": "If a business cannot tolerate false alarms, they should select a threshold that maximizes ___.",
-          "blank": "precision",
+          "sentence": "While standard Gradient Descent uses all data for a step, SGD uses just ___ random example.",
+          "blank": "one",
           "words": [
-            "precision",
-            "recall",
-            "accuracy"
+            "one",
+            "hundred",
+            "zero"
           ],
-          "explain": "Precision measures the percentage of alerts that are actually correct. High precision minimizes false alarms (false positives)."
+          "explain": "Exactly! Stochastic means random, and SGD evaluates exactly one random training example to make each step."
         },
         {
           "id": "p4",
           "type": "spot_the_ai",
           "xp": 2,
-          "prompt": "Which scenario correctly demands a high-recall threshold over high-precision?",
+          "prompt": "Which optimization approach updates the model's weights the fastest when working with 10 million rows?",
           "options": [
             {
               "id": "a",
-              "text": "An airport luggage scanner trying to detect explosives, where missing a threat is catastrophic.",
+              "text": "Stochastic Gradient Descent (SGD)",
               "correct": true
             },
             {
               "id": "b",
-              "text": "A push notification service recommending matching clothes, where annoying the user is a bad experience.",
+              "text": "Standard Batch Gradient Descent",
               "correct": false
             },
             {
               "id": "c",
-              "text": "An automated email archiver that stores receipts, where archiving a regular message by accident must be avoided.",
+              "text": "Calculating the weights by hand",
               "correct": false
             }
           ],
-          "explain": "When missing a positive case (a threat) has extreme consequences, we prioritize recall to catch every possible threat, even if it means more manual inspection (false alarms)."
+          "explain": "SGD updates weights immediately after checking each single row, making it dramatically faster to start learning than standard GD."
         }
       ]
     },
@@ -186,30 +191,30 @@
           "id": "b1",
           "type": "multiple_choice",
           "xp": 5,
-          "prompt": "You are deploying a transaction fraud detector for a bank. The bank has a manual review team that is small and easily overwhelmed by false alerts. However, they also face a $100 penalty for every fraudulent transaction that goes undetected. Which threshold strategy is best?",
+          "prompt": "Your model training is taking hours because you have 50 million image files. You switch from standard Gradient Descent to SGD. What should you expect?",
           "options": [
             {
               "id": "a",
-              "text": "Set a moderate-to-high threshold to keep precision high and prevent review team burnout, while monitoring the rate of missed fraud.",
+              "text": "Weights will update millions of times faster, though the path to the bottom will look zigzagged and noisy.",
               "correct": true
             },
             {
               "id": "b",
-              "text": "Set the threshold to 0.0 to flag every transaction as fraud and ensure 100% recall.",
+              "text": "The model will stop training entirely and throw an error.",
               "correct": false
             },
             {
               "id": "c",
-              "text": "Set the threshold to 1.0 to disable all alerts and save manual review time completely.",
+              "text": "The training will take even longer because SGD does more math per step.",
               "correct": false
             },
             {
               "id": "d",
-              "text": "Set a random threshold daily to keep scammers guessing.",
+              "text": "The model will reach a perfect zero error in just one single step.",
               "correct": false
             }
           ],
-          "explain": "By using a moderate-to-high threshold, you protect the small review team from alert fatigue. Monitoring missed fraud ensures you can adjust the threshold if the penalties start costing too much. 🎉"
+          "explain": "Boom! SGD gets to work immediately, taking millions of quick, noisy steps rather than waiting hours for a single steady one. Next: how to get the best of both worlds!"
         }
       ]
     }

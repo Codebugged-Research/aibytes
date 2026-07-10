@@ -3,10 +3,10 @@
   "unit": 10,
   "day": 53,
   "tier": "Tabular Processing",
-  "tierIcon": "🔌",
-  "title": "Variance Thresholding",
-  "icon": "📊",
-  "concept": "Dropping columns with low variance removes features that barely change, as they provide no useful patterns for the model.",
+  "tierIcon": "🧹",
+  "title": "Drop Strategies",
+  "icon": "🚫",
+  "concept": "Sometimes it is safer to drop (delete) rows or columns with missing data rather than trying to impute and guess the values.",
   "xp": 15,
   "hearts": 3,
   "estMinutes": 6,
@@ -18,25 +18,25 @@
           "id": "w1",
           "type": "multiple_choice",
           "xp": 1,
-          "prompt": "Warmup: We previously learned that highly correlated columns are redundant. If we have temperature in Celsius and Fahrenheit, why should we drop one?",
+          "prompt": "Recap: What is the main goal of data imputation?",
           "options": [
             {
               "id": "a",
-              "text": "They contain duplicate information, so keeping both adds unnecessary complexity",
+              "text": "To fill in missing values with estimated numbers or classes",
               "correct": true
             },
             {
               "id": "b",
-              "text": "Celsius is a numerical feature but Fahrenheit is categorical",
+              "text": "To compress files so they take up less space",
               "correct": false
             },
             {
               "id": "c",
-              "text": "Models can only process temperatures measured in Kelvin",
+              "text": "To delete incomplete columns entirely",
               "correct": false
             }
           ],
-          "explain": "Spot on! Since one can be perfectly predicted from the other, keeping both is redundant. Today, we'll look at columns that barely change at all."
+          "explain": "Right! Imputation fills in empty spots with estimated values like the mean or median to keep data complete."
         }
       ]
     },
@@ -45,49 +45,49 @@
       "cards": [
         {
           "kind": "hook",
-          "icon": "📱",
-          "title": "The survey where everyone agreed",
-          "body": "Imagine asking 1,000 customers if they like free shipping, and 99.9% of them say \"Yes.\" That column doesn't help you separate big spenders from low spenders because almost every row has the same answer. It has near-zero variation."
+          "icon": "🗑️",
+          "title": "To fill or to destroy?",
+          "body": "What if a column is 90% blank? Guessing 90% of your data will create a <strong>fake dataset</strong>. Sometimes, deleting is the only honest choice."
         },
         {
           "kind": "definition",
-          "icon": "📊",
-          "title": "Variance Thresholding",
-          "body": "<strong>Variance Thresholding</strong> is a simple feature selection method. It calculates the variance (spread) of each column and drops any feature whose variance falls below a set threshold — meaning it barely changes across your dataset."
+          "icon": "🚫",
+          "title": "Drop Strategies",
+          "body": "Drop strategies involve <strong>removing data</strong> from your dataset. You can drop specific rows (records) or entire columns (features) that have missing values."
         },
         {
           "kind": "analogy",
-          "icon": "📍",
-          "title": "Searching for clues",
-          "body": "If you're investigating a crime and everyone in town wears the exact same uniform, the uniform color is useless for finding the suspect. You look for features that vary, like height or shoe size, because <strong>variation</strong> helps you distinguish individuals."
+          "icon": "📋",
+          "title": "Grading a ruined test",
+          "body": "If a student skips one question, you grade the rest (imputation/drop row). If the ink spilled and erased the <strong>entire back page</strong>, you throw that page out (drop column)."
         },
         {
           "kind": "example",
-          "icon": "👟",
-          "title": "Constant values",
-          "body": "In a dataset of medical patients, if 99% of patients have the column <code>[Has_Heartbeat]</code> set to 'True', this column has almost zero variance. It is useless for predicting who will develop heart disease and should be dropped."
+          "icon": "🚗",
+          "title": "When to drop a column",
+          "body": "You're predicting car prices. The \"sunroof color\" column is 95% blank. Since most cars don't even have a sunroof, it's safest to <strong>drop the column</strong> entirely."
         },
         {
           "kind": "mythbust",
-          "icon": "⚠️",
-          "title": "Zero variance isn't the only target",
-          "body": "We don't just drop columns that are 100% constant (variance of 0). We also drop columns that are 99% constant. Even though they have a tiny bit of variation, they don't have enough signal for a model to learn from."
+          "icon": "🚨",
+          "title": "Dropping has hidden costs",
+          "body": "If you drop every row with even one blank, you might lose <strong>50% of your total rows</strong>! This shrinks your dataset, leaving the model with too little to learn from."
         },
         {
           "kind": "visual",
           "icon": "⚖️",
-          "title": "High vs. Low Variance",
-          "body": "Comparing columns by how much their values vary:",
+          "title": "Drop Row vs Drop Column",
+          "body": "How to choose your deletion strategy:",
           "compare": {
             "left": {
-              "emoji": "📈",
-              "tag": "High Variance (Keep)",
-              "text": "Age: 18, 42, 65, 29...<br>Lots of info to learn from"
+              "emoji": "➖",
+              "tag": "Drop Rows",
+              "text": "Delete incomplete rows<br>Good when few rows have blanks<br>Reduces your total dataset size"
             },
             "right": {
-              "emoji": "➖",
-              "tag": "Low Variance (Drop)",
-              "text": "Is_Human: Yes, Yes, Yes, Yes...<br>No variation, no signal"
+              "emoji": "🚫",
+              "tag": "Drop Columns",
+              "text": "Delete incomplete features<br>Good when column is mostly blank<br>Removes that feature entirely"
             }
           }
         }
@@ -100,87 +100,87 @@
           "id": "p1",
           "type": "multiple_choice",
           "xp": 2,
-          "prompt": "What is variance thresholding used for in feature selection?",
+          "prompt": "When is it most appropriate to drop an entire column of data?",
           "options": [
             {
               "id": "a",
-              "text": "To remove features that have very little or no variation",
+              "text": "When the column is mostly missing values and lacks useful information",
               "correct": true
             },
             {
               "id": "b",
-              "text": "To scale all numerical values between 0 and 1",
+              "text": "When the column contains numbers instead of text",
               "correct": false
             },
             {
               "id": "c",
-              "text": "To find correlation between two different features",
+              "text": "When you want to speed up your internet connection",
               "correct": false
             },
             {
               "id": "d",
-              "text": "To fill in missing values in a dataset",
+              "text": "When the column has zero missing values",
               "correct": false
             }
           ],
-          "explain": "Variance thresholding removes columns that are nearly constant because they cannot help a model make distinctions."
+          "explain": "Exactly! If a column is mostly empty, guessing the missing values is unreliable. Better to drop the whole column."
         },
         {
           "id": "p2",
           "type": "true_false",
           "xp": 2,
-          "prompt": "True or false: A column where 100% of the rows have the value '1.0' has a variance of zero.",
+          "prompt": "True or false: Dropping rows is always better than dropping columns, no matter how many blanks there are.",
           "options": [
             {
               "id": "t",
               "text": "True",
-              "correct": true
+              "correct": false
             },
             {
               "id": "f",
               "text": "False",
-              "correct": false
+              "correct": true
             }
           ],
-          "explain": "True. If a value never changes, its variance is exactly zero, making it completely useless for machine learning models."
+          "explain": "Correct! If you drop rows for every blank, you might accidentally delete a large portion of your dataset."
         },
         {
           "id": "p3",
           "type": "fill_blank",
           "xp": 2,
           "prompt": "Complete the sentence:",
-          "sentence": "Features that are nearly constant across all rows have low ___ and should be dropped.",
-          "blank": "variance",
+          "sentence": "If a column is 99% blank, the safest strategy is to drop the ___.",
+          "blank": "column",
           "words": [
-            "variance",
-            "correlation",
-            "dimension"
+            "column",
+            "row",
+            "file"
           ],
-          "explain": "Variance is the measure of how spread out a set of numbers is. Low variance means the values barely change."
+          "explain": "Yes! With 99% missing, there's not enough real information to keep the column."
         },
         {
           "id": "p4",
           "type": "spot_the_ai",
           "xp": 2,
-          "prompt": "Which column has the lowest variance?",
+          "prompt": "Which one is an example of dropping a row?",
           "options": [
             {
               "id": "a",
-              "text": "The planet of residence (Earth for all 5,000 customers)",
+              "text": "Deleting the entire record of a customer who left their income blank",
               "correct": true
             },
             {
               "id": "b",
-              "text": "The customer's annual income (ranges from $20k to $200k)",
+              "text": "Deleting the 'income' column for all customers",
               "correct": false
             },
             {
               "id": "c",
-              "text": "The day of the week they logged in (Monday through Sunday)",
+              "text": "Replacing a missing income value with the average income",
               "correct": false
             }
           ],
-          "explain": "Since every single row has the value 'Earth', this column has a variance of exactly zero."
+          "explain": "Correct! Dropping a row removes that specific record (horizontal slice) while leaving the rest of the columns intact."
         }
       ]
     },
@@ -191,30 +191,30 @@
           "id": "b1",
           "type": "multiple_choice",
           "xp": 5,
-          "prompt": "You are building a spam filter. In your dataset of 10,000 emails, you notice the column 'contains_email_signature' is 'Yes' for 9,998 emails and 'No' for only 2 emails. How should you handle this column?",
+          "prompt": "You are training a model to predict student grades. 2% of students forgot to write their middle names, and 80% forgot to list their phone numbers. What is the best strategy?",
           "options": [
             {
               "id": "a",
-              "text": "Drop it using a variance threshold, as it is nearly constant and won't help predict spam",
+              "text": "Drop the phone number column, and drop the rows for the 2% missing middle names (or impute them)",
               "correct": true
             },
             {
               "id": "b",
-              "text": "Keep it because the 2 emails might contain the absolute secret to spam",
+              "text": "Drop the middle name column, and keep the phone number column",
               "correct": false
             },
             {
               "id": "c",
-              "text": "Duplicate the column to make its variance higher",
+              "text": "Drop all student rows with any missing value",
               "correct": false
             },
             {
               "id": "d",
-              "text": "Use it as the primary feature for training the spam classifier",
+              "text": "Impute all phone numbers with a constant default like '555-0000'",
               "correct": false
             }
           ],
-          "explain": "Marvelous! Since 99.98% of the data has the same value, it has virtually no variance. It cannot help the model distinguish spam from ham. Next: the difference between checking columns one by one versus testing them together!"
+          "explain": "Perfect choice! The phone column is mostly empty, so drop it. The middle name is only missing in 2% of rows, so dropping those rows or imputing is very safe. Now, let's learn how to track what was missing!"
         }
       ]
     }

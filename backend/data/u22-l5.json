@@ -2,11 +2,11 @@
   "id": "u22-l5",
   "unit": 22,
   "day": 115,
-  "tier": "Model Evaluation",
-  "tierIcon": "🔄",
-  "title": "Your Final Model Evaluation Checklist",
-  "icon": "🎓",
-  "concept": "Evaluating a model requires checking for data leakage, choosing the right split strategy, and validating metrics before shipping.",
+  "tier": "Linear Regression",
+  "tierIcon": "📈",
+  "title": "Adjusted R-Squared: The Real Score",
+  "icon": "🔍",
+  "concept": "Adjusted R-squared measures a model's accuracy while penalizing the addition of useless features, ensuring the score only rises for genuinely valuable predictors.",
   "xp": 15,
   "hearts": 3,
   "estMinutes": 6,
@@ -18,25 +18,25 @@
           "id": "w1",
           "type": "multiple_choice",
           "xp": 1,
-          "prompt": "Recap: What is the golden rule of time series cross-validation?",
+          "prompt": "Recap: If study hours has a coefficient of +3.0 and absences has a coefficient of -5.0, what is the change in predicted test score for 3 more study hours and 2 absences?",
           "options": [
             {
               "id": "a",
-              "text": "Always train on past data and validate on future data to avoid temporal leakage.",
+              "text": "A decrease of 1 point",
               "correct": true
             },
             {
               "id": "b",
-              "text": "Always shuffle the dataset randomly before splitting.",
+              "text": "An increase of 9 points",
               "correct": false
             },
             {
               "id": "c",
-              "text": "Make sure the validation fold has exactly 50% of the total dataset.",
+              "text": "A decrease of 10 points",
               "correct": false
             }
           ],
-          "explain": "Correct! Never let future data leak into the past. Now, let's look at the complete checklist for model evaluation before shipping."
+          "explain": "Correct! (3 * +3.0) + (2 * -5.0) = 9 - 10 = -1 point."
         }
       ]
     },
@@ -45,49 +45,49 @@
       "cards": [
         {
           "kind": "hook",
-          "icon": "🚀",
-          "title": "Are we ready to ship?",
-          "body": "You've trained your model, tuned your settings, and the scores look amazing. But before you launch it to real users, how can you be absolutely sure your evaluation isn't lying to you? Let's go through the final pre-flight checklist!"
+          "icon": "🛒",
+          "title": "Cheating the system",
+          "body": "Imagine a grade report that gives you extra points just for showing up with different colored pens. Standard R-squared behaves exactly like this: it rewards you just for adding features, even if they're useless."
         },
         {
           "kind": "definition",
-          "icon": "🛡️",
-          "title": "Rule 1: Leakage check",
-          "body": "The first item on your checklist is checking for <strong>data leakage</strong>. Ensure that scaling, normalization, and feature engineering were only fit on the training data, never the validation or test sets."
+          "icon": "🔍",
+          "title": "Adjusted R-Squared",
+          "body": "<strong>Adjusted R-squared</strong> is a modified version of R-squared that adjusts for the number of predictors in a model. It penalizes you for adding features that do not improve prediction accuracy."
         },
         {
           "kind": "analogy",
-          "icon": "✈️",
-          "title": "The pre-flight inspection",
-          "body": "Just like a pilot inspects the wings, fuel, and controls before takeoff, a data scientist runs a <strong>checklist</strong>. Skipping a step could mean crashing the model once it meets real-world wind."
+          "icon": "🎒",
+          "title": "Packing for a hike",
+          "body": "Think of your model like a backpack. Adding gear (features) might help you, but each item adds weight. Standard R-squared only looks at utility. Adjusted R-squared subtracts points for the extra weight."
         },
         {
           "kind": "example",
-          "icon": "⚙️",
-          "title": "Choosing the split",
-          "body": "Pick the split strategy that matches your task: <strong>Stratified K-Fold</strong> for rare classification classes, <strong>Time Series Split</strong> for time-ordered data, and <strong>Standard K-Fold</strong> for balanced, independent datasets."
+          "icon": "🎲",
+          "title": "The lottery ticket experiment",
+          "body": "If you predict home prices using size, your R-squared is 0.70. If you add 'random lottery numbers' as a feature, R-squared rises to 0.71. But Adjusted R-squared will drop to 0.68, flagging the useless addition."
         },
         {
           "kind": "mythbust",
           "icon": "⚠️",
-          "title": "Is one metric enough?",
-          "body": "Never rely on a single metric. A model with great accuracy might have terrible precision. A model with great R-squared might make massive errors on outliers. Your checklist must require reviewing <strong>multiple metrics</strong>."
+          "title": "Always smaller than R-squared",
+          "body": "You might think Adjusted R-squared can be larger than regular R-squared. Actually, because of the penalty term, Adjusted R-squared is <em>always</em> less than or equal to R-squared."
         },
         {
           "kind": "visual",
-          "icon": "🎓",
-          "title": "Your Graduation! 🎉",
-          "body": "Congratulations on reaching Day 115! Let's celebrate how far you have come in your machine learning journey:",
+          "icon": "⚖️",
+          "title": "R-Squared vs. Adjusted R-Squared",
+          "body": "How they evaluate adding random inputs:",
           "compare": {
             "left": {
-              "emoji": "🌱",
-              "tag": "Day 1 (Orientation)",
-              "text": "What is data?<br>How do models learn?<br>Simple linear lines."
+              "emoji": "📈",
+              "tag": "R-Squared",
+              "text": "Always goes up or stays same<br>Rewards adding random noise<br>Can lead to overfitting"
             },
             "right": {
-              "emoji": "🚀",
-              "tag": "Day 115 (Validation)",
-              "text": "Cross-validation.<br>Avoiding leakage.<br>Production-ready engineering!"
+              "emoji": "🔍",
+              "tag": "Adjusted R-Squared",
+              "text": "Goes down for useless features<br>Penalizes model complexity<br>Helps select best features"
             }
           }
         }
@@ -100,36 +100,31 @@
           "id": "p1",
           "type": "multiple_choice",
           "xp": 2,
-          "prompt": "Which of the following is a critical step on the model evaluation checklist?",
+          "prompt": "Why does raw (standard) R-squared always increase or stay the same when you add new features to a model?",
           "options": [
             {
               "id": "a",
-              "text": "Verifying that no validation or test data was leaked during feature scaling",
+              "text": "Because mathematically, even random noise can slightly align with the target by pure chance.",
               "correct": true
             },
             {
               "id": "b",
-              "text": "Ensuring the learning rate is set to exactly 1.0",
+              "text": "Because the model automatically converts bad features into good ones.",
               "correct": false
             },
             {
               "id": "c",
-              "text": "Replacing all training data with synthetic random values",
-              "correct": false
-            },
-            {
-              "id": "d",
-              "text": "Verifying that the model achieves 100% accuracy on the test set",
+              "text": "Because adding features always reduces the size of the dataset.",
               "correct": false
             }
           ],
-          "explain": "Data leakage during preprocessing (like fitting a scaler on the entire dataset) is a common mistake that artificially inflates validation scores."
+          "explain": "Correct! Adding any feature gives the model a tiny chance to fit random noise, which artificially inflates the standard R-squared score."
         },
         {
           "id": "p2",
           "type": "true_false",
           "xp": 2,
-          "prompt": "True or false: You should choose your cross-validation strategy based on the structure of your dataset (e.g. time-series vs. imbalanced classes).",
+          "prompt": "True or false: Adjusted R-squared can decrease when you add a new feature to the model.",
           "options": [
             {
               "id": "t",
@@ -142,45 +137,45 @@
               "correct": false
             }
           ],
-          "explain": "True! Matching your evaluation strategy to the data structure prevents leakage and ensures realistic performance estimates."
+          "explain": "True. If the new feature does not improve the model's predictions enough to offset the penalty for complexity, Adjusted R-squared will drop."
         },
         {
           "id": "p3",
           "type": "fill_blank",
           "xp": 2,
           "prompt": "Complete the sentence:",
-          "sentence": "To make sure our model generalizes well, we check for data ___ and evaluate on multiple metrics before shipping.",
-          "blank": "leakage",
+          "sentence": "Adjusted R-squared introduces a ___ for adding features that do not help the model.",
+          "blank": "penalty",
           "words": [
-            "leakage",
-            "scaling",
-            "features"
+            "penalty",
+            "bonus",
+            "coefficient"
           ],
-          "explain": "Preventing data leakage is the single most important rule of honest model evaluation."
+          "explain": "Adjusted R-squared penalizes the model for adding unnecessary variables, helping us avoid overfitting."
         },
         {
           "id": "p4",
           "type": "spot_the_ai",
           "xp": 2,
-          "prompt": "Which of these workflows is ready for production deployment?",
+          "prompt": "You add a student's favorite ice cream flavor to a model predicting their GPA. R-squared changes from 0.45 to 0.46. What is the most likely value of the Adjusted R-squared?",
           "options": [
             {
               "id": "a",
-              "text": "A model with stable metrics across Stratified K-Fold validation, with all scaling fit only on training splits, evaluated on a separate test set.",
-              "correct": true
+              "text": "It increases to 0.48.",
+              "correct": false
             },
             {
               "id": "b",
-              "text": "A model with 99% accuracy on a random split, where the scaler was fit on the whole dataset before splitting.",
+              "text": "It stays exactly at 0.46.",
               "correct": false
             },
             {
               "id": "c",
-              "text": "A model with a 95% training score and a 50% test score, where we adjusted settings to maximize the test score.",
-              "correct": false
+              "text": "It decreases below 0.45.",
+              "correct": true
             }
           ],
-          "explain": "A production-ready model has stable, un-leaked evaluation metrics across representative folds and test sets."
+          "explain": "Correct! Since ice cream flavor is unrelated to GPA, the penalty for adding a useless feature will cause the Adjusted R-squared to decrease."
         }
       ]
     },
@@ -191,30 +186,25 @@
           "id": "b1",
           "type": "multiple_choice",
           "xp": 5,
-          "prompt": "You have checked your model for data leakage, verified the split strategy, and confirmed that your validation scores match your test set performance. You are ready to ship! What is your final step?",
+          "prompt": "You are comparing two models predicting company revenue. Model A uses 3 features (R-squared = 0.82, Adjusted R-squared = 0.81). Model B uses 15 features (R-squared = 0.84, Adjusted R-squared = 0.77). Which model should you choose?",
           "options": [
             {
               "id": "a",
-              "text": "Train one final model on the entire combined training/validation dataset using your chosen settings and deploy it!",
+              "text": "Model A, because it has a higher Adjusted R-squared, indicating it achieves similar accuracy with far fewer useless features.",
               "correct": true
             },
             {
               "id": "b",
-              "text": "Discard all your work and start over with random settings.",
+              "text": "Model B, because its raw R-squared is higher, and we should always choose the model with the highest R-squared.",
               "correct": false
             },
             {
               "id": "c",
-              "text": "Deploy the K-Fold model that got the lowest score to be safe.",
-              "correct": false
-            },
-            {
-              "id": "d",
-              "text": "Train a new model using only the test set.",
+              "text": "Model B, because having more features always makes a model more robust and interpretable.",
               "correct": false
             }
           ],
-          "explain": "You did it! Training on the full training dataset with the selected settings maximizes your data usage for the final production model. Congratulations on completing Day 115! 🎓🎉"
+          "explain": "Spot on! Model A is simpler and more reliable. Adjusted R-squared correctly flags that Model B's extra 12 features are mostly adding noise rather than real predictive power, dragging down its adjusted score. Outstanding job completing the Multiple Linear Regression unit!"
         }
       ]
     }

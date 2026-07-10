@@ -2,11 +2,11 @@
   "id": "u21-l3",
   "unit": 21,
   "day": 108,
-  "tier": "Model Evaluation",
-  "tierIcon": "📈",
-  "title": "AUC: Area Under the Curve",
-  "icon": "📐",
-  "concept": "AUC measures the area under the ROC curve, providing a single metric from 0.5 to 1.0 to evaluate a model's general classification ability.",
+  "tier": "Optimization",
+  "tierIcon": "⚡",
+  "title": "Learning Rate Decay",
+  "icon": "📉",
+  "concept": "Learning Rate Decay gradually shrinks the step size during training to explore quickly at first and settle precisely at the bottom.",
   "xp": 15,
   "hearts": 3,
   "estMinutes": 6,
@@ -18,25 +18,25 @@
           "id": "w1",
           "type": "multiple_choice",
           "xp": 1,
-          "prompt": "Recap: What are the two rates plotted against each other on the ROC curve?",
+          "prompt": "Recap: Why is Mini-Batch Gradient Descent the modern standard for training AI models?",
           "options": [
             {
               "id": "a",
-              "text": "True Positive Rate on the y-axis and False Positive Rate on the x-axis.",
+              "text": "It combines the speed of SGD with the stability of Batch GD by using small groups of data.",
               "correct": true
             },
             {
               "id": "b",
-              "text": "Precision on the y-axis and Recall on the x-axis.",
+              "text": "It ignores the cost function completely to save time.",
               "correct": false
             },
             {
               "id": "c",
-              "text": "True Negative Rate on the y-axis and False Negative Rate on the x-axis.",
+              "text": "It only works when the computer is offline.",
               "correct": false
             }
           ],
-          "explain": "Correct! The ROC curve plots TPR (Recall) against FPR (False Alarm Rate) across all decision thresholds. Let's see how we compress this curve into a single score."
+          "explain": "Correct! Mini-batching is the sweet spot. Now, how do we make sure our steps aren't too big when we get close to the target?"
         }
       ]
     },
@@ -45,49 +45,49 @@
       "cards": [
         {
           "kind": "hook",
-          "icon": "🏆",
-          "title": "Comparing the whole curve",
-          "body": "Imagine comparing two runners. Instead of checking who is ahead at one specific split second (threshold), you want to know who is faster across the entire race. AUC gives us that single summary score for classifiers."
+          "icon": "🚗",
+          "title": "Parking a car",
+          "body": "When driving home, you speed down the highway. But as you pull into your garage, you slow to a crawl. If you kept your highway speed, you'd crash into the wall!"
         },
         {
           "kind": "definition",
-          "icon": "📐",
-          "title": "What is AUC?",
-          "body": "<strong>Area Under the Curve (AUC)</strong> measures the entire two-dimensional area underneath the ROC curve from (0,0) to (1,1). It ranges from 0.5 (random guessing) to 1.0 (perfect classification)."
+          "icon": "📉",
+          "title": "Learning Rate Decay",
+          "body": "<strong>Learning Rate Decay</strong> is the technique of gradually lowering the step size (learning rate) as training progresses over time."
         },
         {
           "kind": "analogy",
-          "icon": "🃏",
-          "title": "The card sorting test",
-          "body": "Think of AUC as a model's ability to rank cards. If you give the model one positive card and one negative card, AUC is the probability that the model correctly assigns a higher probability score to the positive card."
+          "icon": "🎯",
+          "title": "Shaking the board",
+          "body": "Imagine a ball in a bowl. Big shakes (high learning rate) help the ball roll out of small bumps, but keep it bouncing wildly. Shaking more gently (decay) lets it settle right at the bottom."
         },
         {
           "kind": "example",
-          "icon": "📧",
-          "title": "Spam vs ham ranking",
-          "body": "If a spam classifier has an AUC of 0.90, there is a 90% chance that a randomly chosen spam email will get a higher spam probability score than a randomly chosen normal email."
+          "icon": "🔄",
+          "title": "Epoch by epoch",
+          "body": "At epoch 1 (first pass), the learning rate is 0.1. By epoch 50, it decays to 0.01. By epoch 100, it's 0.001, allowing the model to make micro-adjustments."
         },
         {
           "kind": "mythbust",
-          "icon": "⚠️",
-          "title": "Does a high AUC mean ready?",
-          "body": "A high AUC (like 0.95) is great, but it doesn't mean your model is ready for production. You still have to choose a specific decision threshold that fits your business constraints and balances costs."
+          "icon": "🕳",
+          "title": "Don't decay too fast",
+          "body": "If you shrink the learning rate too early, the model stops moving before it ever reaches the valley. Decay must be balanced: fast enough to settle, slow enough to arrive."
         },
         {
           "kind": "visual",
-          "icon": "📊",
-          "title": "Decoding AUC values",
-          "body": "How to interpret the AUC score of a model:",
+          "icon": "⚖️",
+          "title": "Fixed vs. Decaying Rate",
+          "body": "How step sizes behave as the model gets close to the bottom:",
           "compare": {
             "left": {
-              "emoji": "🎲",
-              "tag": "AUC = 0.5",
-              "text": "No better than tossing a coin.<br>Model cannot distinguish positive from negative."
+              "emoji": "🦘",
+              "tag": "Fixed Rate",
+              "text": "Overshoots the bottom<br>Bounces around forever"
             },
             "right": {
               "emoji": "🎯",
-              "tag": "AUC = 1.0",
-              "text": "Perfect separation.<br>All positives ranked above all negatives."
+              "tag": "Decaying Rate",
+              "text": "Big steps early<br>Tiny, precise steps late"
             }
           }
         }
@@ -100,87 +100,92 @@
           "id": "p1",
           "type": "multiple_choice",
           "xp": 2,
-          "prompt": "What is the AUC score of a model that behaves like a random coin flip?",
+          "prompt": "Why is it useful to start training with a large learning rate?",
           "options": [
             {
               "id": "a",
-              "text": "0.5",
+              "text": "To traverse the loss landscape quickly and escape poor initial zones.",
               "correct": true
             },
             {
               "id": "b",
-              "text": "0.0",
+              "text": "To prevent the computer from overheating.",
               "correct": false
             },
             {
               "id": "c",
-              "text": "1.0",
+              "text": "Because large steps are always more accurate.",
               "correct": false
             },
             {
               "id": "d",
-              "text": "0.75",
+              "text": "To save GPU memory during the first steps.",
               "correct": false
             }
           ],
-          "explain": "An AUC of 0.5 represents a random guesser, corresponding to the diagonal line on the ROC curve."
+          "explain": "Yes! Large steps early on help the optimizer make rapid progress and avoid getting stuck in small, shallow local dips."
         },
         {
           "id": "p2",
           "type": "true_false",
           "xp": 2,
-          "prompt": "True or false: A model with an AUC of 0.95 will always outperform a model with an AUC of 0.90 in every business metric, regardless of the chosen threshold.",
+          "prompt": "True or false: If the learning rate never decays, the model might bounce back and forth across the minimum without ever settling.",
           "options": [
             {
               "id": "t",
               "text": "True",
-              "correct": false
+              "correct": true
             },
             {
               "id": "f",
               "text": "False",
-              "correct": true
+              "correct": false
             }
           ],
-          "explain": "False. While 0.95 has better overall separation, the 0.90 model might perform better at a specific, narrow threshold region that your business actually uses."
+          "explain": "True! A fixed learning rate that is too large will overshoot the valley floor and keep orbiting it instead of stopping."
         },
         {
           "id": "p3",
           "type": "fill_blank",
           "xp": 2,
           "prompt": "Complete the sentence:",
-          "sentence": "The maximum possible value for AUC, representing a perfect classifier, is ___.",
-          "blank": "1.0",
+          "sentence": "Learning rate decay gradually ___ the step size as training time increases.",
+          "blank": "shrinks",
           "words": [
-            "1.0",
-            "0.5",
-            "100"
+            "shrinks",
+            "grows",
+            "multiplies"
           ],
-          "explain": "An AUC of 1.0 means the ROC curve completely hugs the top-left corner, covering the entire graph area."
+          "explain": "Correct! Shrunk step sizes let the optimizer perform fine-grained optimization as it nears the lowest error."
         },
         {
           "id": "p4",
-          "type": "spot_the_ai",
+          "type": "multiple_choice",
           "xp": 2,
-          "prompt": "Which of these is the most accurate description of what AUC measures?",
+          "prompt": "What happens if the learning rate decays too quickly?",
           "options": [
             {
               "id": "a",
-              "text": "The probability that a randomly chosen positive instance is ranked higher than a randomly chosen negative instance.",
+              "text": "The steps become too tiny to reach the minimum, stopping progress prematurely.",
               "correct": true
             },
             {
               "id": "b",
-              "text": "The percentage of correct predictions made at a default threshold of 0.5.",
+              "text": "The model will train infinitely fast.",
               "correct": false
             },
             {
               "id": "c",
-              "text": "The ratio of true positives to false positives at the optimal threshold.",
+              "text": "The error automatically drops to zero.",
+              "correct": false
+            },
+            {
+              "id": "d",
+              "text": "The learning rate will double in value.",
               "correct": false
             }
           ],
-          "explain": "AUC is fundamentally a measure of ranking quality: how well the model ranks positive instances higher than negative ones."
+          "explain": "Exactly! If decay is too aggressive, the steps become microscopic before the model gets close to the bottom."
         }
       ]
     },
@@ -191,30 +196,30 @@
           "id": "b1",
           "type": "multiple_choice",
           "xp": 5,
-          "prompt": "You are building a medical diagnostic model for a rare condition. The current model has an accuracy of 99% because 99% of people are healthy, but its AUC is 0.52. The business team wants to deploy it. What is your response?",
+          "prompt": "Your loss graph shows the error dropping quickly at first, but then it flattens out and bounces up and down in a wide band near the bottom. What should you do?",
           "options": [
             {
               "id": "a",
-              "text": "Reject deployment. The AUC of 0.52 shows the model is barely better than random guessing at separating sick from healthy people.",
+              "text": "Implement learning rate decay to shrink the steps so the optimizer can settle into the bottom of the valley.",
               "correct": true
             },
             {
               "id": "b",
-              "text": "Deploy it immediately because 99% accuracy is extremely high.",
+              "text": "Increase the learning rate to make the bounces even larger.",
               "correct": false
             },
             {
               "id": "c",
-              "text": "Retrain the model using accuracy as the cost function to boost it to 100%.",
+              "text": "Delete half of your training dataset to force a straight path.",
               "correct": false
             },
             {
               "id": "d",
-              "text": "Change the target label so that everyone is predicted to be sick.",
+              "text": "Stop training because a bouncing error means the model is broken.",
               "correct": false
             }
           ],
-          "explain": "Accuracy is highly misleading on imbalanced datasets. An AUC of 0.52 tells the true story: the model has almost no ability to actually distinguish sick patients from healthy ones. 🎉"
+          "explain": "Brilliant! Shrinking the learning rate behaves like bringing a car to a gentle halt right at its parking spot. Next: how to use physical momentum to roll over bumps!"
         }
       ]
     }

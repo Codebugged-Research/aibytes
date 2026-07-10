@@ -2,14 +2,14 @@
   "id": "u8-l3",
   "unit": 8,
   "day": 43,
-  "tier": "Tabular Processing",
-  "tierIcon": "🗂️",
-  "title": "Standardization (Z-Score Scaling)",
-  "icon": "📈",
-  "concept": "Standardization centers data around a mean of 0 with a standard deviation of 1, making it resilient to outliers.",
+  "tier": "Model Training Basics",
+  "tierIcon": "🏋️",
+  "title": "The Validation Set: A Second Opinion",
+  "icon": "📊",
+  "concept": "Splitting data into just train and test isn't enough once you need to tune decisions — a validation set gives you a second opinion to tune on, keeping the test set untouched as one honest, final check.",
   "xp": 15,
   "hearts": 3,
-  "estMinutes": 6,
+  "estMinutes": 7,
   "segments": [
     {
       "type": "warmup",
@@ -18,25 +18,44 @@
           "id": "w1",
           "type": "multiple_choice",
           "xp": 1,
-          "prompt": "Warmup: If your dataset has a minimum age of 10 and a maximum of 90, what does an age of 90 scale to using Min-Max scaling?",
+          "prompt": "Recap: Why do we keep test data separate from training data?",
           "options": [
             {
               "id": "a",
-              "text": "1.0",
+              "text": "So we get an honest check of how the model performs on data it has never seen",
               "correct": true
             },
             {
               "id": "b",
-              "text": "0.0",
+              "text": "So the model trains faster",
               "correct": false
             },
             {
               "id": "c",
-              "text": "0.5",
+              "text": "Test data isn't actually needed once training is done",
               "correct": false
             }
           ],
-          "explain": "Correct! The maximum value in Min-Max scaling always maps to 1.0."
+          "explain": "Right — a clean, untouched test set gives an honest final check. But what if you need to make several tuning decisions BEFORE that final check?"
+        },
+        {
+          "id": "w2",
+          "type": "true_false",
+          "xp": 1,
+          "prompt": "True or false: If you keep checking the test set over and over while tweaking your model, it still gives a fully honest, unbiased final score.",
+          "options": [
+            {
+              "id": "t",
+              "text": "True",
+              "correct": false
+            },
+            {
+              "id": "f",
+              "text": "False",
+              "correct": true
+            }
+          ],
+          "explain": "False! Peeking at the test set repeatedly to guide your choices quietly leaks information into it, ruining its honesty."
         }
       ]
     },
@@ -45,49 +64,49 @@
       "cards": [
         {
           "kind": "hook",
-          "icon": "🔬",
-          "title": "Relative performance",
-          "body": "If you got 85% on a math test and 75% on a chemistry test, which was better? If the math class average was 90% but chemistry average was 60%, your chemistry performance was much higher relative to your peers!"
+          "icon": "🍝",
+          "title": "The chef and the food critic",
+          "body": "A chef doesn't serve an experimental new sauce straight to the toughest food critic in town. First, she has a few trusted taste-testers try different versions and give feedback. Only once she's happy does the dish go to the critic — whose verdict she gets exactly once."
         },
         {
           "kind": "definition",
-          "icon": "🎓",
-          "title": "Standardization",
-          "body": "<strong>Standardization</strong> (or <strong>Z-score scaling</strong>) scales values so the mean becomes 0 and the standard deviation becomes 1. The formula is: <code>(x - mean) / standard_deviation</code>."
+          "icon": "📊",
+          "title": "What is a validation set?",
+          "body": "A <strong>validation set</strong> is a separate slice of data — held out from training — used to compare different versions of a model or its settings, so you can tune decisions <em>before</em> ever touching the final test set."
         },
         {
           "kind": "analogy",
-          "icon": "📊",
-          "title": "Grading on a curve",
-          "body": "Instead of grading on a scale of 0 to 100, think of rating performance based on how many steps above or below average someone is. A score of 0 means exactly average."
+          "icon": "📝",
+          "title": "Practice exams vs. the real final",
+          "body": "The <strong>validation set</strong> is like several practice exams: you take them, see what needs work, and adjust your study plan again and again. The <strong>test set</strong> is the real final exam — you sit it exactly once, for an honest, unbiased grade."
         },
         {
           "kind": "example",
-          "icon": "🏠",
-          "title": "Home Prices",
-          "body": "If average home price is $400k with standard deviation of $100k, a house costing $600k has a Z-score of: <code>(600k - 400k) / 100k = +2.0</code>. It is 2 standard deviations above average."
+          "icon": "📧",
+          "title": "Tuning a spam filter",
+          "body": "A team tries 5 different spam-filter settings. They check each one against the <strong>validation set</strong> and pick whichever setting scores best there. Only after that one choice is locked in do they run it once, a single time, against the <strong>test set</strong> to report the final, honest result."
         },
         {
           "kind": "mythbust",
-          "icon": "🧠",
-          "title": "Not bounded",
-          "body": "Unlike Min-Max scaling, standardization does not bound your values to a strict range. An extreme outlier can scale to +5, -10, or more. This is intentional!"
+          "icon": "⚠️",
+          "title": "Two piles of data aren't always enough",
+          "body": "It's tempting to think train + test is the whole story. But if you use the test set to guide multiple tuning decisions, you're secretly training on it by trial and error — its score stops being trustworthy. A validation set exists exactly to prevent that."
         },
         {
           "kind": "visual",
-          "icon": "⚖️",
-          "title": "Z-score scaling shape",
-          "body": "Comparing normalized (bounded) vs. standardized (centered) ranges:",
+          "icon": "📊",
+          "title": "Three piles, three jobs",
+          "body": "Each slice of data has one job, and only one:",
           "compare": {
             "left": {
-              "emoji": "📏",
-              "tag": "Min-Max Normalization",
-              "text": "Strictly bounds values between 0 and 1.<br>Outliers squish normal values together."
+              "emoji": "📘",
+              "tag": "Train + Validation",
+              "text": "Train: learn the pattern<br>Validation: tune decisions,<br>compare versions, repeatedly"
             },
             "right": {
-              "emoji": "📈",
-              "tag": "Standardization",
-              "text": "Centers at 0, unlimited bounds.<br>Outliers don't squish normal values."
+              "emoji": "🔒",
+              "tag": "Test",
+              "text": "Touched exactly once<br>The final, honest report card"
             }
           }
         }
@@ -100,31 +119,36 @@
           "id": "p1",
           "type": "multiple_choice",
           "xp": 2,
-          "prompt": "What is the resulting mean and standard deviation of a feature after standardization?",
+          "prompt": "What is the validation set mainly used for?",
           "options": [
             {
               "id": "a",
-              "text": "Mean = 0, Standard Deviation = 1",
+              "text": "Comparing different model versions or settings while tuning, before the final test",
               "correct": true
             },
             {
               "id": "b",
-              "text": "Mean = 1, Standard Deviation = 0",
+              "text": "Training the model's very first guesses",
               "correct": false
             },
             {
               "id": "c",
-              "text": "Mean = 0.5, Standard Deviation = 0.5",
+              "text": "Reporting the final, official performance number",
+              "correct": false
+            },
+            {
+              "id": "d",
+              "text": "Storing backup copies of the training data",
               "correct": false
             }
           ],
-          "explain": "Standardization mathematically shifts the data distribution to have a center (mean) of 0 and a spread (standard deviation) of 1."
+          "explain": "Exactly! The validation set is where you make tuning decisions, freeing the test set to stay untouched."
         },
         {
           "id": "p2",
           "type": "true_false",
           "xp": 2,
-          "prompt": "True or false: A standardized value (Z-score) can be negative.",
+          "prompt": "True or false: You should only check the test set score once, after all tuning decisions are already finalized.",
           "options": [
             {
               "id": "t",
@@ -137,45 +161,64 @@
               "correct": false
             }
           ],
-          "explain": "True! Any data point that is below the mean will have a negative standardized value (Z-score)."
+          "explain": "True! Checking the test set only once keeps it an honest, unbiased final measurement."
         },
         {
           "id": "p3",
           "type": "fill_blank",
           "xp": 2,
           "prompt": "Complete the sentence:",
-          "sentence": "Standardization scales data by subtracting the mean and dividing by the ___.",
-          "blank": "standard deviation",
+          "sentence": "A ___ set lets you tune and compare model choices without touching the final test set.",
+          "blank": "validation",
           "words": [
-            "standard deviation",
-            "range",
-            "median"
+            "validation",
+            "training",
+            "backup"
           ],
-          "explain": "Dividing by the standard deviation scales the spread so that one unit of the new scale equals one standard deviation."
+          "explain": "The validation set is exactly for tuning and comparing — a second opinion before the final exam."
         },
         {
           "id": "p4",
           "type": "spot_the_ai",
           "xp": 2,
-          "prompt": "A dataset of customer heights has a mean of 170 cm and a standard deviation of 10 cm. What is the Z-score of a customer who is 150 cm tall?",
+          "prompt": "Which of these is the correct, honest way to use a validation set?",
           "options": [
             {
               "id": "a",
-              "text": "-2.0",
+              "text": "Try 6 model settings, pick the best one using validation scores, then check the test set exactly once at the end",
               "correct": true
             },
             {
               "id": "b",
-              "text": "2.0",
+              "text": "Try 6 model settings, checking the test set after each one, and pick whichever scores highest on the test set",
               "correct": false
             },
             {
               "id": "c",
-              "text": "-20.0",
+              "text": "Skip validation entirely and just tune directly against the test set",
               "correct": false
             }
           ],
-          "explain": "Using the formula: (150 - 170) / 10 = -20 / 10 = -2.0, meaning two standard deviations below the mean."
+          "explain": "Correct! Tuning against validation, then checking test just once, keeps the final score honest."
+        },
+        {
+          "id": "p5",
+          "type": "true_false",
+          "xp": 2,
+          "prompt": "True or false: A validation set and a test set do the exact same job, so having both is redundant.",
+          "options": [
+            {
+              "id": "t",
+              "text": "True",
+              "correct": false
+            },
+            {
+              "id": "f",
+              "text": "False",
+              "correct": true
+            }
+          ],
+          "explain": "False! Validation is for repeated tuning; test is for one final, unbiased check. Mixing their roles ruins the honesty of the test score."
         }
       ]
     },
@@ -186,30 +229,59 @@
           "id": "b1",
           "type": "multiple_choice",
           "xp": 5,
-          "prompt": "You are training a model to predict credit scores. One feature is annual_income, which has a mean of $50,000 and a standard deviation of $15,000. An outlier customer has an income of $200,000. If you apply standardization, what will this outlier's value become, and what does it represent?",
+          "prompt": "A team is choosing between 10 different versions of a music-recommendation model. What's the correct process using train, validation, and test sets?",
           "options": [
             {
               "id": "a",
-              "text": "+10.0, meaning their income is 10 standard deviations above the average",
+              "text": "Train all 10 on the training set, compare them on the validation set to pick a winner, then check that one winner on the test set a single time",
               "correct": true
             },
             {
               "id": "b",
-              "text": "1.0, because it is the maximum value",
+              "text": "Train all 10 on the training set, then check all 10 against the test set and report whichever scores highest",
               "correct": false
             },
             {
               "id": "c",
-              "text": "0.0, because the outlier gets centered",
+              "text": "Skip training entirely and just compare all 10 directly on the test set",
               "correct": false
             },
             {
               "id": "d",
-              "text": "-10.0, because it is an outlier",
+              "text": "Train all 10 on the test set directly, since it's the biggest data pile",
               "correct": false
             }
           ],
-          "explain": "Correct! (200k - 50k) / 15k = 150k / 15k = +10.0. This tells the model the customer is 10 standard deviations above the average income. Sensational work conquering Z-score standardization!"
+          "explain": "Exactly! Comparing on validation and touching test only once for the final winner keeps the whole process honest."
+        },
+        {
+          "id": "b2",
+          "type": "multiple_choice",
+          "xp": 5,
+          "prompt": "A student uses the SAME practice exam over and over, memorizing its answer key by trial and error, and then claims their practice score predicts their real SAT score. What's the flaw, and how does it relate to validation vs. test sets?",
+          "options": [
+            {
+              "id": "a",
+              "text": "Reusing one exam to blindly optimize answers is like tuning directly against the test set — repeated use turns it into a tuning tool, not an honest final check",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "There's no flaw — repeated practice on the same exam is exactly what a validation set is for",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "The flaw is that they didn't practice enough different exams, which has nothing to do with validation or test sets",
+              "correct": false
+            },
+            {
+              "id": "d",
+              "text": "The flaw is unrelated — practice exams and real exams should always be identical",
+              "correct": false
+            }
+          ],
+          "explain": "Right! Repeatedly optimizing against the same held-out set — whether an exam or a test set — quietly turns it into a validation tool and destroys its honesty as a final check."
         }
       ]
     }

@@ -2,11 +2,11 @@
   "id": "u12-l2",
   "unit": 12,
   "day": 62,
-  "tier": "Linear Regression",
-  "tierIcon": "🎯",
-  "title": "Mean Squared Error (MSE)",
-  "icon": "🧮",
-  "concept": "Mean Squared Error (MSE) squares each prediction error and averages them, penalizing large mistakes much more heavily than small ones.",
+  "tier": "Tabular Processing",
+  "tierIcon": "🗂️",
+  "title": "Min-Max Scaling (Normalization)",
+  "icon": "📏",
+  "concept": "Min-Max scaling, or normalization, shifts and squashes numeric values into a strict 0 to 1 range.",
   "xp": 15,
   "hearts": 3,
   "estMinutes": 6,
@@ -18,25 +18,25 @@
           "id": "w1",
           "type": "multiple_choice",
           "xp": 1,
-          "prompt": "Recap: Why can't we just add up raw positive and negative errors to find the total cost score?",
+          "prompt": "Warmup: Why do distance-based algorithms like KNN require feature scaling?",
           "options": [
             {
               "id": "a",
-              "text": "Positive and negative errors would cancel each other out",
+              "text": "To prevent features with large numeric ranges from dominating the distance calculations",
               "correct": true
             },
             {
               "id": "b",
-              "text": "The computer would run out of memory",
+              "text": "To speed up database queries",
               "correct": false
             },
             {
               "id": "c",
-              "text": "Negative numbers do not exist in math",
+              "text": "To convert category names into numbers",
               "correct": false
             }
           ],
-          "explain": "Right — raw addition allows positive and negative errors to cancel out, making a poor model look perfect."
+          "explain": "Right! Scaling keeps all features on a level playing field so no single feature dominates purely because of its units."
         }
       ]
     },
@@ -45,49 +45,49 @@
       "cards": [
         {
           "kind": "hook",
-          "icon": "📝",
-          "title": "Grading rules",
-          "body": "Imagine a teacher grading exams. Missing a tiny detail loses you 1 point. But missing an entire section loses you 10 points. The penalty grows faster than the error."
+          "icon": "💯",
+          "title": "Scores out of 100",
+          "body": "Whether a test was graded out of 40 points or 100 points, converting it to a percentage (0% to 100%) makes them instantly comparable. Normalization does the exact same thing for any feature."
         },
         {
           "kind": "definition",
-          "icon": "🧮",
-          "title": "What is Mean Squared Error?",
-          "body": "<strong>Mean Squared Error (MSE)</strong> is the standard cost function for regression. It takes each prediction error (residual), squares it, and averages the results."
+          "icon": "📏",
+          "title": "Min-Max Scaling",
+          "body": "<strong>Min-Max scaling</strong> (often called <strong>normalization</strong>) transforms numeric values so they fit strictly between 0 and 1. The formula is: <code>(x - min) / (max - min)</code>."
         },
         {
           "kind": "analogy",
-          "icon": "🧦",
-          "title": "Clean-up duties",
-          "body": "Squaring errors is like leaving clothes on the floor. Leaving one sock is fine. Leaving ten isn't ten times worse — it's a full-blown disaster!"
+          "icon": "🎛️",
+          "title": "The volume slider",
+          "body": "Think of adjusting the volume on a speaker from 0 (mute) to 1 (max volume). No matter how loud the original sound wave was, the slider maps it to this standard range."
         },
         {
           "kind": "example",
-          "icon": "📐",
-          "title": "How squaring grows",
-          "body": "If you are off by 2 units, the squared penalty is 4. If you are off by 10, the squared penalty is 100! The penalty became 25 times larger for an error only 5 times bigger."
+          "icon": "📊",
+          "title": "Scaling Age",
+          "body": "If the youngest customer is 20 (min) and the oldest is 60 (max), a customer who is 40 (halfway) gets scaled to: <code>(40 - 20) / (60 - 20) = 0.5</code>. A customer who is 60 maps to 1.0."
         },
         {
           "kind": "mythbust",
           "icon": "⚠️",
-          "title": "Not just for positive numbers",
-          "body": "While squaring does remove negative signs, its main purpose is to <strong>penalize large errors heavily</strong>. It forces the model to fix huge misses first."
+          "title": "Strict bounds",
+          "body": "What if new data is outside the original min-max range? If a customer aged 70 signs up, their scaled value is <code>1.25</code>, exceeding 1. We must handle new extremes carefully!"
         },
         {
           "kind": "visual",
           "icon": "⚖️",
-          "title": "Linear vs. squared error",
-          "body": "How the penalty scales for an error of 10:",
+          "title": "How Min-Max works",
+          "body": "Squashing any range of values to fit exactly between 0 and 1:",
           "compare": {
             "left": {
-              "emoji": "📏",
-              "tag": "Linear error",
-              "text": "Penalty of 10.<br>Proportional penalty."
+              "emoji": "🏷️",
+              "tag": "Raw Prices",
+              "text": "$100k (Minimum)<br>$300k (Midpoint)<br>$500k (Maximum)"
             },
             "right": {
-              "emoji": "💥",
-              "tag": "Squared error",
-              "text": "Penalty of 100!<br>Exponentially harsher penalty."
+              "emoji": "📏",
+              "tag": "Normalized",
+              "text": "0.0 (Minimum)<br>0.5 (Midpoint)<br>1.0 (Maximum)"
             }
           }
         }
@@ -100,31 +100,31 @@
           "id": "p1",
           "type": "multiple_choice",
           "xp": 2,
-          "prompt": "How does MSE handle a prediction error of 4 units?",
+          "prompt": "What are the default minimum and maximum values after applying standard Min-Max scaling?",
           "options": [
             {
               "id": "a",
-              "text": "It squares the error, resulting in a penalty of 16",
+              "text": "0 and 1",
               "correct": true
             },
             {
               "id": "b",
-              "text": "It takes the square root, resulting in a penalty of 2",
+              "text": "-1 and 1",
               "correct": false
             },
             {
               "id": "c",
-              "text": "It doubles the error, resulting in a penalty of 8",
+              "text": "Mean of 0 and variance of 1",
               "correct": false
             }
           ],
-          "explain": "MSE squares each error (residual). Since 4 squared is 16, the penalty is 16."
+          "explain": "Min-Max scaling by default squashes all numbers into a strict range between 0 and 1."
         },
         {
           "id": "p2",
           "type": "true_false",
           "xp": 2,
-          "prompt": "True or false: MSE penalizes large errors much more severely than small errors.",
+          "prompt": "True or false: Under Min-Max scaling, the absolute minimum value in the training column will always map to exactly 0.",
           "options": [
             {
               "id": "t",
@@ -137,45 +137,45 @@
               "correct": false
             }
           ],
-          "explain": "True! Because it squares the errors, larger errors create disproportionately higher penalties."
+          "explain": "True! In the formula (x - min) / (max - min), when x is the minimum value, the numerator becomes 0, so the result is 0."
         },
         {
           "id": "p3",
           "type": "fill_blank",
           "xp": 2,
           "prompt": "Complete the sentence:",
-          "sentence": "MSE stands for Mean ___ Error.",
-          "blank": "Squared",
+          "sentence": "The formula for Min-Max scaling is (x - min) divided by ___.",
+          "blank": "max - min",
           "words": [
-            "Squared",
-            "Simple",
-            "Standard"
+            "max - min",
+            "mean",
+            "standard deviation"
           ],
-          "explain": "Mean Squared Error squares the residuals and averages them."
+          "explain": "Dividing by the range (max - min) scales the values so that the maximum value maps to exactly 1."
         },
         {
           "id": "p4",
           "type": "spot_the_ai",
           "xp": 2,
-          "prompt": "For errors of 1, 2, and 3, what is the calculated Mean Squared Error (MSE)?",
+          "prompt": "If the minimum value in a dataset is 10 and the maximum is 50, what does the value 30 scale to under Min-Max scaling?",
           "options": [
             {
               "id": "a",
-              "text": "4.67",
+              "text": "0.5",
               "correct": true
             },
             {
               "id": "b",
-              "text": "2.00",
+              "text": "0.25",
               "correct": false
             },
             {
               "id": "c",
-              "text": "6.00",
+              "text": "0.75",
               "correct": false
             }
           ],
-          "explain": "The squared errors are 1, 4, and 9. Their sum is 14. The mean is 14 divided by 3, which is approximately 4.67."
+          "explain": "Using the formula: (30 - 10) / (50 - 10) = 20 / 40 = 0.5, which is exactly halfway."
         }
       ]
     },
@@ -186,25 +186,30 @@
           "id": "b1",
           "type": "multiple_choice",
           "xp": 5,
-          "prompt": "You are predicting flight delays. A 5-minute delay is minor, but a 120-minute delay ruins a traveler's day completely. Why is MSE a good cost function here?",
+          "prompt": "You are building a regression model to process grayscale images where pixel brightness values range from 0 to 255. You decide to normalize the pixels. If a pixel has a raw value of 127.5, what will its normalized value be, and why?",
           "options": [
             {
               "id": "a",
-              "text": "It penalizes the 120-minute delay exponentially more, forcing the model to avoid huge delays",
+              "text": "0.5, because 127.5 is exactly halfway between the minimum (0) and maximum (255) pixel values",
               "correct": true
             },
             {
               "id": "b",
-              "text": "It ignores the 120-minute delay to keep the flight schedule clean",
+              "text": "0.0, because the minimum pixel value is subtracted",
               "correct": false
             },
             {
               "id": "c",
-              "text": "It automatically adjusts all flight delays to be exactly 10 minutes",
+              "text": "1.0, because it is positive",
+              "correct": false
+            },
+            {
+              "id": "d",
+              "text": "127.5, because normalization does not affect pixel values",
               "correct": false
             }
           ],
-          "explain": "Outstanding! MSE's squared penalty forces the model to focus heavily on preventing large errors. Next: what if we don't want to penalize outliers so harshly?"
+          "explain": "Correct! (127.5 - 0) / (255 - 0) = 127.5 / 255 = 0.5. Normalizing pixel values to a 0-1 range is a standard preprocessing step in image models. Fantastic job mastering Min-Max scaling!"
         }
       ]
     }

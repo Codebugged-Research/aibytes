@@ -3,10 +3,10 @@
   "unit": 10,
   "day": 54,
   "tier": "Tabular Processing",
-  "tierIcon": "🔌",
-  "title": "Filter vs Wrapper Methods",
-  "icon": "🆚",
-  "concept": "Filter methods score features individually before modeling, whereas wrapper methods test different feature combinations by actually training models.",
+  "tierIcon": "🧹",
+  "title": "Tracking Missingness",
+  "icon": "🏷️",
+  "concept": "Adding binary flags (indicators) to show where data was missing helps models learn patterns from the missingness itself.",
   "xp": 15,
   "hearts": 3,
   "estMinutes": 6,
@@ -18,25 +18,25 @@
           "id": "w1",
           "type": "multiple_choice",
           "xp": 1,
-          "prompt": "Warmup: Why do we drop columns with extremely low variance?",
+          "prompt": "Recap: When is dropping an entire column of data preferred?",
           "options": [
             {
               "id": "a",
-              "text": "They are nearly constant and offer no pattern for the model to learn from",
+              "text": "When the column is mostly missing values and cannot be reliably filled",
               "correct": true
             },
             {
               "id": "b",
-              "text": "They cause the model to calculate numbers too quickly",
+              "text": "When the column contains name values",
               "correct": false
             },
             {
               "id": "c",
-              "text": "They have too many different text categories inside them",
+              "text": "When the column is completely filled with correct numbers",
               "correct": false
             }
           ],
-          "explain": "Spot on! If a column doesn't change, it has no predictive power. Now, how do we choose which features to keep?"
+          "explain": "Correct! If a column is mostly empty, imputation is just guessing, so dropping it is safer."
         }
       ]
     },
@@ -45,49 +45,49 @@
       "cards": [
         {
           "kind": "hook",
-          "icon": "📱",
-          "title": "Auditioning a band",
-          "body": "If you're forming a band, you could listen to each musician play solo and rate them (fast and easy). Or, you could have different combinations of musicians play together to see who sounds best (slower, but finds the best chemistry). These are filter and wrapper methods."
+          "icon": "🕵️",
+          "title": "The clue in the empty space",
+          "body": "If a patient leaves the 'heart rate history' blank on a medical form, is it just random? Or did they skip it because they don't have heart issues? <strong>The absence is information!</strong>"
         },
         {
           "kind": "definition",
-          "icon": "🆚",
-          "title": "Filter vs. Wrapper",
-          "body": "<strong>Filter methods</strong> evaluate features individually based on statistical properties (like correlation or variance) before any model is trained. <strong>Wrapper methods</strong> search for the best combination of features by repeatedly training models on different subsets and scoring their performance."
+          "icon": "🏷️",
+          "title": "Missing Indicators",
+          "body": "A missing indicator is a <strong>new binary column</strong> (0 or 1) added to a dataset, flagging exactly which values were originally missing before they were imputed."
         },
         {
           "kind": "analogy",
-          "icon": "📍",
-          "title": "Filtering vs. Wrapping",
-          "body": "Think of <strong>Filter methods</strong> like checking height requirements for basketball players — you 'filter' out players below 6 feet instantly. <strong>Wrapper methods</strong> are like running practice games with different team lineups to see which combination wins."
+          "icon": "🩹",
+          "title": "Labeling the patch",
+          "body": "If you patch a hole in a wall with plaster (imputation), it looks clean. But if you place a <strong>small sticky note</strong> on it saying 'patched here', everyone still knows there was a hole."
         },
         {
           "kind": "example",
-          "icon": "👟",
-          "title": "Speed vs. Accuracy",
-          "body": "If you have 10,000 features, a <strong>Filter</strong> method (like correlation) takes seconds because it's just math on the columns. A <strong>Wrapper</strong> method would have to train thousands of models, which could take hours or days, but might find a better result."
+          "icon": "📝",
+          "title": "The 'Age_Was_Missing' column",
+          "body": "If you fill missing ages with the average (30), you add a column: <code>Age_Was_Missing</code>. It holds <strong>1</strong> if the age was blank, and <strong>0</strong> if it was real. The AI can see the difference!"
         },
         {
           "kind": "mythbust",
-          "icon": "⚠️",
-          "title": "Wrappers aren't always better",
-          "body": "While wrapper methods find features that work well together, they have a major catch: they are slow and highly prone to <strong>overfitting</strong> because they tailormake the feature list to fit a specific model's quirks."
+          "icon": "🧠",
+          "title": "Missing isn't always random",
+          "body": "People assume data goes missing by random luck. But rich people often hide their income, and healthy people skip medical tests. Tracking missingness lets the model <strong>learn these human behaviors</strong>."
         },
         {
           "kind": "visual",
           "icon": "⚖️",
-          "title": "Filter vs. Wrapper",
-          "body": "Contrasting the two feature selection approaches:",
+          "title": "Imputed vs Imputed + Flagged",
+          "body": "Why simple imputation isn't always enough:",
           "compare": {
             "left": {
-              "emoji": "🔍",
-              "tag": "Filter Methods",
-              "text": "Fast statistical scoring<br>Ignores feature interactions<br>Independent of models"
+              "emoji": "🌫️",
+              "tag": "Only Imputed",
+              "text": "Filled value is 30<br>AI treats it as real '30'<br>No way to know it was a guess"
             },
             "right": {
-              "emoji": "📦",
-              "tag": "Wrapper Methods",
-              "text": "Slow iterative search<br>Finds feature chemistry<br>Dependent on models"
+              "emoji": "🏷️",
+              "tag": "Imputed + Flagged",
+              "text": "Filled value is 30<br>New column flags 'Was_Missing = 1'<br>AI learns a guess was made"
             }
           }
         }
@@ -100,36 +100,36 @@
           "id": "p1",
           "type": "multiple_choice",
           "xp": 2,
-          "prompt": "What is the key characteristic of filter methods in feature selection?",
+          "prompt": "Why should we add a missing indicator column when imputing data?",
           "options": [
             {
               "id": "a",
-              "text": "They score features based on statistics before training any models",
+              "text": "To let the model know which values were estimated so it can learn from the missingness",
               "correct": true
             },
             {
               "id": "b",
-              "text": "They wrap the model in a security layer to protect data",
+              "text": "To make the database file larger and more secure",
               "correct": false
             },
             {
               "id": "c",
-              "text": "They require training a model for every single feature",
+              "text": "To automatically delete the rows that were filled",
               "correct": false
             },
             {
               "id": "d",
-              "text": "They only work on image and text datasets",
+              "text": "To change all 1s in the data to 0s",
               "correct": false
             }
           ],
-          "explain": "Filter methods assess features using statistical properties (like correlation) without running a machine learning algorithm."
+          "explain": "Yes! The fact that data was missing is often a useful clue for the model's predictions."
         },
         {
           "id": "p2",
           "type": "true_false",
           "xp": 2,
-          "prompt": "True or false: Wrapper methods are generally faster than filter methods because they use machine learning models.",
+          "prompt": "True or false: Data is always missing completely at random, so tracking missingness is pointless.",
           "options": [
             {
               "id": "t",
@@ -142,45 +142,45 @@
               "correct": true
             }
           ],
-          "explain": "False! Wrapper methods are much slower because they must train and evaluate models on many different feature combinations."
+          "explain": "Correct! Data is often missing for systematic reasons (e.g. people skipping questions they find sensitive)."
         },
         {
           "id": "p3",
           "type": "fill_blank",
           "xp": 2,
           "prompt": "Complete the sentence:",
-          "sentence": "A feature selection method that tests different subsets of features by actually training models is called a ___ method.",
-          "blank": "wrapper",
+          "sentence": "A missing indicator column uses ___ values like 0 and 1.",
+          "blank": "binary",
           "words": [
-            "wrapper",
-            "filter",
-            "scaler"
+            "binary",
+            "negative",
+            "decimal"
           ],
-          "explain": "Wrapper methods 'wrap' the feature selection process around the model training step."
+          "explain": "Yes, a binary indicator (0 for present, 1 for originally missing) is used to flag the data."
         },
         {
           "id": "p4",
           "type": "spot_the_ai",
           "xp": 2,
-          "prompt": "Which scenario describes a filter method?",
+          "prompt": "Which one is a missing indicator column?",
           "options": [
             {
               "id": "a",
-              "text": "Calculating the correlation of 100 columns and keeping the top 10",
+              "text": "A column named 'Income_Was_Missing' containing 0s and 1s",
               "correct": true
             },
             {
               "id": "b",
-              "text": "Training a random forest model 50 times with different combinations of columns",
+              "text": "A column named 'Income' with filled-in averages",
               "correct": false
             },
             {
               "id": "c",
-              "text": "Manually asking domain experts to select columns they think are cool",
+              "text": "A list of all missing values removed from the file",
               "correct": false
             }
           ],
-          "explain": "Calculating correlation is a statistical test independent of model training, making it a filter method."
+          "explain": "Exactly! It is a separate column flagging the presence of missing values in the original data."
         }
       ]
     },
@@ -191,30 +191,30 @@
           "id": "b1",
           "type": "multiple_choice",
           "xp": 5,
-          "prompt": "You have a dataset with 5,000 features and need to build a model in 10 minutes. You want to select the best features quickly. Which approach should you take?",
+          "prompt": "You are training an AI to predict credit card default. You notice many high-income applicants skip the 'Current Debt' question. If you impute their debt with the average without flagging it, what happens?",
           "options": [
             {
               "id": "a",
-              "text": "Run a filter method first to quickly drop thousands of low-signal features",
+              "text": "The model treats them like average debtors, missing the signal that their silence might indicate high debt",
               "correct": true
             },
             {
               "id": "b",
-              "text": "Run a wrapper method on all 5,000 features to get the absolute best combination",
+              "text": "The model automatically calculates their exact debt anyway",
               "correct": false
             },
             {
               "id": "c",
-              "text": "Train the model on all 5,000 features without selecting any",
+              "text": "The model refuses to run",
               "correct": false
             },
             {
               "id": "d",
-              "text": "Ask a colleague to manually read all 5,000 columns",
+              "text": "The applicants' credit scores immediately drop",
               "correct": false
             }
           ],
-          "explain": "Outstanding! A filter method is extremely fast and can trim down the massive feature list in seconds, fitting your tight time limit perfectly. Next: putting it all together to achieve maximum feature density!"
+          "explain": "Spot on! Without a flag, the model loses the signal hidden in their choice to hide the data. Now, let's look at the ultimate trap: data leakage!"
         }
       ]
     }

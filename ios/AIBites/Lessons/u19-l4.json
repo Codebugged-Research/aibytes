@@ -2,11 +2,11 @@
   "id": "u19-l4",
   "unit": 19,
   "day": 99,
-  "tier": "Classification",
-  "tierIcon": "🔲",
-  "title": "One-vs-One (OVO) Multiclass",
-  "icon": "🧠",
-  "concept": "One-vs-One (OVO) solves multi-class classification by training a separate binary model for every possible pair of classes.",
+  "tier": "Linear Regression",
+  "tierIcon": "🎯",
+  "title": "MSE vs MAE: The Outlier Choice",
+  "icon": "🆚",
+  "concept": "Choose MSE when large errors are unacceptable and must be avoided; choose MAE when outliers should not distort the overall model.",
   "xp": 15,
   "hearts": 3,
   "estMinutes": 6,
@@ -18,25 +18,25 @@
           "id": "w1",
           "type": "multiple_choice",
           "xp": 1,
-          "prompt": "Recap: In a 4-class problem, how does One-vs-Rest (OVR) decide the final prediction?",
+          "prompt": "Recap: Which of the following is a key advantage of Mean Absolute Error (MAE)?",
           "options": [
             {
               "id": "a",
-              "text": "It runs all 4 classifiers and selects the class with the highest probability score",
+              "text": "It is less sensitive to outliers than MSE",
               "correct": true
             },
             {
               "id": "b",
-              "text": "It compares all classes in pairs and runs a tournament bracket",
+              "text": "It penalizes large errors exponentially more",
               "correct": false
             },
             {
               "id": "c",
-              "text": "It sums all probabilities and divides by 4 to get an average",
+              "text": "It makes the model train twice as fast",
               "correct": false
             }
           ],
-          "explain": "Correct! OVR runs all class-specific models and picks the one with the highest output score. Now, let's explore an alternative multi-class method."
+          "explain": "Right — because MAE treats errors linearly, single large outliers do not skew the total score as much as they would in MSE."
         }
       ]
     },
@@ -45,49 +45,49 @@
       "cards": [
         {
           "kind": "hook",
-          "icon": "🥊",
-          "title": "Sports tournament",
-          "body": "In a round-robin league, every team plays every other team exactly once. To find the overall winner among Team A, B, and C, we match A vs B, B vs C, and A vs C."
+          "icon": "🌉",
+          "title": "Building a bridge",
+          "body": "If you are building a bridge, a 10-inch mistake is a structural disaster, not just ten 1-inch mistakes. But if you are counting daily steps, one abnormal day shouldn't ruin your average."
         },
         {
           "kind": "definition",
-          "icon": "🧠",
-          "title": "One-vs-One, defined",
-          "body": "<strong>One-vs-One (OVO)</strong> is a multi-class method that trains a binary classifier for <strong>every possible pair of classes</strong>. Each model ignores all other classes except the two it is comparing."
+          "icon": "🆚",
+          "title": "The outlier trade-off",
+          "body": "The choice between <strong>MSE</strong> and <strong>MAE</strong> is about how you handle outliers. MSE pulls the model's line to fit outliers; MAE ignores them to keep the main trend."
         },
         {
           "kind": "analogy",
-          "icon": "⚖️",
-          "title": "Pairwise voting",
-          "body": "Imagine voting for your favorite fruit among Apple, Banana, and Cherry. Instead of rating them individually, you are asked: Apple vs Banana? Banana vs Cherry? Apple vs Cherry? The fruit with the most votes wins."
+          "icon": "📢",
+          "title": "Parenting styles",
+          "body": "MSE is like an overprotective parent who reacts dramatically to any big mistake. MAE is like a relaxed coach who cares about your average and ignores one off-day."
         },
         {
           "kind": "example",
-          "icon": "🦜",
-          "title": "Tallying the votes",
-          "body": "For [Cat, Dog, Bird], OVO trains 3 pairs: 1) Cat vs Dog, 2) Dog vs Bird, 3) Cat vs Bird. If Cat beats Dog, Dog beats Bird, and Cat beats Bird, Cat has 2 votes, Dog 1, Bird 0. Cat wins!"
+          "icon": "🌡️",
+          "title": "Real-world scenarios",
+          "body": "Use MSE in weather forecasting to avoid huge errors (e.g. frost warnings). Use MAE in real estate pricing to prevent a single mansion from skewing normal home predictions."
         },
         {
           "kind": "mythbust",
-          "icon": "📈",
-          "title": "Myth: OVO is always faster",
-          "body": "While each pair's dataset is smaller, you need <em>many</em> more models! For 10 classes, OVR needs 10 models, but OVO needs 45 models ($10 \\times 9 / 2$)."
+          "icon": "⚠️",
+          "title": "No single 'best' choice",
+          "body": "There is no 'better' cost function in general. A model isn't superior just because it uses MSE. The correct choice depends entirely on your business goals and risks."
         },
         {
           "kind": "visual",
           "icon": "⚖️",
-          "title": "OVR vs OVO comparison",
-          "body": "Two different strategies to solve multi-class classification using simple yes/no models:",
+          "title": "How they treat outliers",
+          "body": "Comparing their behaviors under outliers:",
           "compare": {
             "left": {
-              "emoji": "🆚",
-              "tag": "One-vs-Rest (OVR)",
-              "text": "Trains N models<br>Each model compares 1 class vs all others combined"
+              "emoji": "🧲",
+              "tag": "MSE behavior",
+              "text": "Pulls prediction line toward outliers.<br>Prioritizes avoiding big misses."
             },
             "right": {
-              "emoji": "🥊",
-              "tag": "One-vs-One (OVO)",
-              "text": "Trains N*(N-1)/2 models<br>Each model compares a pair of classes directly"
+              "emoji": "🛡️",
+              "tag": "MAE behavior",
+              "text": "Ignores outlier data points.<br>Prioritizes the typical majority."
             }
           }
         }
@@ -100,116 +100,82 @@
           "id": "p1",
           "type": "multiple_choice",
           "xp": 2,
-          "prompt": "How many binary classifiers does One-vs-One (OVO) train for a 4-class classification problem?",
+          "prompt": "If your dataset contains many typos and noisy outliers that you want the model to ignore, which cost function is best?",
           "options": [
             {
               "id": "a",
-              "text": "6",
+              "text": "MAE, because it is robust and resists outlier distortion",
               "correct": true
             },
             {
               "id": "b",
-              "text": "4",
+              "text": "MSE, because it forces the model to fit every typo perfectly",
               "correct": false
             },
             {
               "id": "c",
-              "text": "12",
-              "correct": false
-            },
-            {
-              "id": "d",
-              "text": "8",
+              "text": "Either, since both handle noisy data identically",
               "correct": false
             }
           ],
-          "explain": "For 4 classes, OVO trains $4 \\times (4 - 1) / 2 = 6$ classifiers: (A vs B, A vs C, A vs D, B vs C, B vs D, C vs D)."
+          "explain": "MAE is robust and prevents outlier typos from pulling the line away from the main trend."
         },
         {
           "id": "p2",
           "type": "true_false",
           "xp": 2,
-          "prompt": "True or false: An OVO classifier comparing Cat vs Dog is trained on the entire dataset, including images of Birds.",
+          "prompt": "True or false: If an unusually large error is extremely dangerous in your application, you should use MSE to train your model.",
           "options": [
             {
               "id": "t",
               "text": "True",
-              "correct": false
+              "correct": true
             },
             {
               "id": "f",
               "text": "False",
-              "correct": true
+              "correct": false
             }
           ],
-          "explain": "False! The Cat vs Dog model ignores all other classes, meaning it is only trained on Cat and Dog data, making each individual training set smaller."
+          "explain": "True! MSE's squared penalty forces the model to avoid huge mistakes, even if it allows more small errors."
         },
         {
           "id": "p3",
           "type": "fill_blank",
           "xp": 2,
           "prompt": "Complete the sentence:",
-          "sentence": "In OVO, the final class is selected using a ___ system, where the class that wins the most pairwise matchups is chosen.",
-          "blank": "voting",
+          "sentence": "___ is highly sensitive to outliers because it squares all residuals.",
+          "blank": "MSE",
           "words": [
-            "voting",
-            "averaging",
-            "subtraction"
+            "MSE",
+            "MAE",
+            "None"
           ],
-          "explain": "Each binary classifier casts a vote for its winner. The class with the most votes across all pairings is the final prediction."
+          "explain": "MSE squares errors, so extreme outliers create massive penalties that dominate the cost score."
         },
         {
           "id": "p4",
           "type": "spot_the_ai",
           "xp": 2,
-          "prompt": "Which system is using a One-vs-One (OVO) classification strategy?",
+          "prompt": "Why does a model trained with MSE get pulled toward outlier data points?",
           "options": [
             {
               "id": "a",
-              "text": "A system that trains [Red vs Blue], [Blue vs Green], and [Red vs Green] models",
+              "text": "Because the squared penalty of a large error is huge, forcing the model to minimize it",
               "correct": true
             },
             {
               "id": "b",
-              "text": "A system that trains [Red vs not-Red], [Blue vs not-Blue], and [Green vs not-Green] models",
+              "text": "Because outliers are automatically given higher priority by the algorithm",
               "correct": false
             },
             {
               "id": "c",
-              "text": "A system that trains a single model to predict color codes from 0 to 255",
+              "text": "Because MSE ignores small errors entirely",
               "correct": false
             }
           ],
-          "explain": "OVO focuses exclusively on pairwise comparisons, matching every class against every other class individually."
-        },
-        {
-          "id": "p5",
-          "type": "multiple_choice",
-          "xp": 2,
-          "prompt": "Why might OVO be preferred over OVR for algorithms that do not scale well with large datasets?",
-          "options": [
-            {
-              "id": "a",
-              "text": "Each pairwise classifier is trained on a much smaller subset of the data",
-              "correct": true
-            },
-            {
-              "id": "b",
-              "text": "OVO trains fewer total models than OVR",
-              "correct": false
-            },
-            {
-              "id": "c",
-              "text": "OVO completely eliminates the need for decision thresholds",
-              "correct": false
-            },
-            {
-              "id": "d",
-              "text": "OVO only works on linear boundaries",
-              "correct": false
-            }
-          ],
-          "explain": "Since each classifier only looks at data from two classes, the training set size is much smaller, which helps algorithms that scale poorly on large datasets."
+          "explain": "A large error has a massive squared cost. To lower the overall cost score, the model shifts its line toward the outlier to shrink that specific error."
         }
       ]
     },
@@ -220,30 +186,25 @@
           "id": "b1",
           "type": "multiple_choice",
           "xp": 5,
-          "prompt": "You have a 3-class problem [Apple, Banana, Cherry]. The matchups output: Apple beats Banana, Cherry beats Apple, and Cherry beats Banana. Which class wins?",
+          "prompt": "You are building a system to predict battery life for critical medical devices. Overestimating battery life is dangerous. Which cost function should you choose?",
           "options": [
             {
               "id": "a",
-              "text": "Cherry, with 2 votes",
+              "text": "MSE, because we must heavily penalize and avoid any large overestimations of battery life",
               "correct": true
             },
             {
               "id": "b",
-              "text": "Apple, with 1 vote",
+              "text": "MAE, because medical device data is always clean and linear",
               "correct": false
             },
             {
               "id": "c",
-              "text": "Banana, with 0 votes",
-              "correct": false
-            },
-            {
-              "id": "d",
-              "text": "It's a tie between Apple and Cherry",
+              "text": "Neither, since battery life predictions do not use cost functions",
               "correct": false
             }
           ],
-          "explain": "Spot on! Cherry won against both Apple and Banana, giving it 2 votes. Apple won 1 (against Banana), and Banana won 0. Cherry is the clear winner! You've mastered One-vs-One multiclass!"
+          "explain": "Incredible! When large errors pose critical safety risks, MSE is the correct choice because its squared penalty prioritizes avoiding huge mistakes. Next: what if we want the benefits of both?"
         }
       ]
     }

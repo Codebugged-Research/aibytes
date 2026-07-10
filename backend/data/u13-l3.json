@@ -2,11 +2,11 @@
   "id": "u13-l3",
   "unit": 13,
   "day": 68,
-  "tier": "Optimization",
-  "tierIcon": "🏔️",
-  "title": "Local vs Global Minimums",
-  "icon": "⛰️",
-  "concept": "A global minimum is the lowest possible point of error, while a local minimum is a deceptive shallow dip that can trap the algorithm early.",
+  "tier": "Tabular Processing",
+  "tierIcon": "🚨",
+  "title": "The IQR Method (Box Plots)",
+  "icon": "📦",
+  "concept": "The IQR method uses the middle 50% spread of data to calculate boundary fences, flagging anything beyond 1.5 times the IQR as an outlier.",
   "xp": 15,
   "hearts": 3,
   "estMinutes": 6,
@@ -18,25 +18,25 @@
           "id": "w1",
           "type": "multiple_choice",
           "xp": 1,
-          "prompt": "Recap: What happens if your learning rate is too small?",
+          "prompt": "Warmup: Why is the Z-score method unreliable for detecting outliers in highly skewed data distributions?",
           "options": [
             {
               "id": "a",
-              "text": "The model will take forever to train and may get stuck",
+              "text": "Because the mean and standard deviation are themselves heavily distorted by the outliers",
               "correct": true
             },
             {
               "id": "b",
-              "text": "The model will overshoot the lowest point of the cost function",
+              "text": "Because Z-score only works with text data",
               "correct": false
             },
             {
               "id": "c",
-              "text": "The model will train perfectly and extremely quickly",
+              "text": "Because standard deviations cannot be computed for non-integer numbers",
               "correct": false
             }
           ],
-          "explain": "A learning rate that is too small leads to tiny steps, causing extremely slow training and higher risk of getting stuck."
+          "explain": "Yes! Outliers pull the mean and inflate the standard deviation, which hides the outliers from the Z-score. We need a method based on the median instead."
         }
       ]
     },
@@ -45,49 +45,49 @@
       "cards": [
         {
           "kind": "hook",
-          "icon": "⛰️",
-          "title": "Trapped in a puddle",
-          "body": "Imagine walking downhill in the dark. You step into a small, muddy puddle and find that every direction out goes uphill. You think you've reached the bottom, but the true valley is actually 500 feet lower."
+          "icon": "🍎",
+          "title": "Sorting apples",
+          "body": "Imagine checking the size of apples on a farm. To ignore abnormally tiny or giant ones, you can look at the typical spread of the middle 50% of the harvest to set normal limits."
         },
         {
           "kind": "definition",
-          "icon": "📍",
-          "title": "Local vs Global",
-          "body": "A <strong>local minimum</strong> is a point where the cost is lower than nearby points but not the absolute lowest. The <strong>global minimum</strong> is the absolute lowest error possible."
+          "icon": "📦",
+          "title": "The IQR Method",
+          "body": "The <strong>Interquartile Range (IQR)</strong> measures the spread of the middle 50% of your data. It is calculated by subtracting the 25th percentile (Q1) from the 75th percentile (Q3)."
         },
         {
           "kind": "analogy",
-          "icon": "⛰️",
-          "title": "Dips and valleys",
-          "body": "The terrain of a cost function can have many hills and valleys. A local minimum is just a temporary dip in the mountain, while the global minimum is the deepest valley floor."
+          "icon": "🚧",
+          "title": "Building fences",
+          "body": "Imagine drawing a box around the middle half of your data. The width of this box is the IQR. To find outliers, we build 'fences' 1.5 times the box width away from both ends."
         },
         {
           "kind": "example",
-          "icon": "🤖",
-          "title": "Stuck in a rut",
-          "body": "If a model gets stuck in a local minimum, it might think it has found the best weights, but a much more accurate set of weights exists elsewhere."
+          "icon": "📊",
+          "title": "Calculating boundaries",
+          "body": "If Q1 of test scores is 60 and Q3 is 80, the IQR is 20. The upper fence is Q3 + (1.5 × 20) = 110. The lower fence is Q1 - (1.5 × 20) = 30. Any score outside [30, 110] is an outlier."
         },
         {
           "kind": "mythbust",
-          "icon": "⛰️",
-          "title": "Flatness is not a guarantee",
-          "body": "It's a myth that reaching a flat slope means you have solved the problem. You might have just landed on a flat ledge (called a saddle point) or a shallow ditch."
+          "icon": "🧠",
+          "title": "The 1.5x rule isn't magic",
+          "body": "Why 1.5? It was proposed by statistician John Tukey as a robust rule of thumb. In a bell curve, it aligns closely with the Z-score threshold, but handles skewed data much better."
         },
         {
           "kind": "visual",
           "icon": "⚖️",
-          "title": "Minimum types",
-          "body": "The difference between local and global minimum points on a loss curve:",
+          "title": "Box Plot Boundaries",
+          "body": "How the IQR method partitions data ranges into normal and outliers:",
           "compare": {
             "left": {
-              "emoji": "🕳️",
-              "tag": "Local Minimum",
-              "text": "A small ditch.<br>Slope is zero, but error is still relatively high."
+              "emoji": "📦",
+              "tag": "Inside Fences (Q1 to Q3)",
+              "text": "Middle 50% of data<br>Width = IQR<br>Normal data core"
             },
             "right": {
-              "emoji": "🏆",
-              "tag": "Global Minimum",
-              "text": "The deepest valley.<br>The ultimate destination where error is at its absolute lowest."
+              "emoji": "🚨",
+              "tag": "Outside Fences (1.5x IQR away)",
+              "text": "Outlier region<br>Too far from Q1 or Q3<br>Flagged for inspection"
             }
           }
         }
@@ -100,82 +100,82 @@
           "id": "p1",
           "type": "multiple_choice",
           "xp": 2,
-          "prompt": "Why is a local minimum problematic for Gradient Descent?",
+          "prompt": "If the 25th percentile (Q1) is 10 and the 75th percentile (Q3) is 30, what is the Interquartile Range (IQR)?",
           "options": [
             {
               "id": "a",
-              "text": "It makes the model run out of memory",
-              "correct": false
-            },
-            {
-              "id": "b",
-              "text": "The slope becomes zero, so the algorithm stops, thinking it has reached the best valley",
+              "text": "20",
               "correct": true
             },
             {
+              "id": "b",
+              "text": "40",
+              "correct": false
+            },
+            {
               "id": "c",
-              "text": "It increases the learning rate automatically",
+              "text": "10",
               "correct": false
             }
           ],
-          "explain": "Since the slope is flat at a local minimum, the algorithm thinks it reached the bottom and stops, even though a better solution exists."
+          "explain": "The IQR is calculated by subtracting Q1 from Q3: 30 - 10 = 20."
         },
         {
           "id": "p2",
           "type": "true_false",
           "xp": 2,
-          "prompt": "True or false: Every cost function has only one minimum.",
+          "prompt": "True or false: The IQR method is less affected by extreme outliers than the Z-score method.",
           "options": [
             {
               "id": "t",
               "text": "True",
-              "correct": false
+              "correct": true
             },
             {
               "id": "f",
               "text": "False",
-              "correct": true
+              "correct": false
             }
           ],
-          "explain": "False! Simple linear models often have one minimum, but complex non-linear models can have many local minimums and saddle points."
+          "explain": "True! Since the IQR relies on percentiles (Q1 and Q3) rather than the mean, extreme outliers do not distort the boundaries."
         },
         {
           "id": "p3",
           "type": "fill_blank",
           "xp": 2,
           "prompt": "Complete the sentence:",
-          "sentence": "The absolute lowest point of error across the entire cost function is called the ___ minimum.",
-          "blank": "global",
+          "sentence": "The IQR method flags outliers by placing fences that are ___ times the IQR away from Q1 and Q3.",
+          "blank": "1.5",
           "words": [
-            "global",
-            "local",
-            "saddle"
+            "1.5",
+            "3.0",
+            "0.5"
           ],
-          "explain": "The global minimum represents the absolute best configuration for the model, where the error is as low as it can possibly get."
+          "explain": "The standard convention is to place outlier fences 1.5 times the IQR below Q1 and above Q3."
         },
         {
           "id": "p4",
           "type": "spot_the_ai",
           "xp": 2,
-          "prompt": "Which technique is most likely to help a model escape a local minimum?",
+          "prompt": "Which of the following describes the mathematical upper outlier fence in the IQR method?",
           "options": [
             {
               "id": "a",
-              "text": "Adding a bit of momentum to the steps so they can push up and out of shallow dips",
+              "text": "Q3 + 1.5 * IQR",
               "correct": true
             },
             {
               "id": "b",
-              "text": "Decreasing the size of the dataset so the model has less to learn",
+              "text": "Q1 - 1.5 * IQR",
               "correct": false
             },
             {
               "id": "c",
-              "text": "Setting the learning rate to zero so the weights freeze",
+              "text": "Mean + 3 * Standard Deviation",
               "correct": false
             }
           ],
-          "explain": "Adding momentum (like a rolling ball) or using learning rate schedules helps the optimizer roll past or jump out of small local dips."
+          "explain": "The upper fence is Q3 + 1.5 * IQR. Any data point higher than this value is flagged as an outlier."
         }
       ]
     },
@@ -186,25 +186,30 @@
           "id": "b1",
           "type": "multiple_choice",
           "xp": 5,
-          "prompt": "You are training a complex image classifier. It reaches 70% accuracy and stops improving. The slope is zero, but you know 95% is possible. What happened?",
+          "prompt": "You analyze housing prices where Q1 is $200k, Q3 is $400k, and a luxury home is listed at $800k. Using the IQR method, what are the upper fence and outlier status of the luxury home?",
           "options": [
             {
               "id": "a",
-              "text": "The algorithm got trapped in a local minimum or flat region and thinks it has reached the absolute bottom",
+              "text": "Upper fence is $700k. The home is an outlier because $800k is greater than $700k.",
               "correct": true
             },
             {
               "id": "b",
-              "text": "The computer ran out of processing power to find the global minimum",
+              "text": "Upper fence is $600k. The home is not an outlier.",
               "correct": false
             },
             {
               "id": "c",
-              "text": "The model has reached the global minimum, and 95% is mathematically impossible",
+              "text": "Upper fence is $1.1 million. The home is normal.",
+              "correct": false
+            },
+            {
+              "id": "d",
+              "text": "Upper fence is $400k. The home is an outlier.",
               "correct": false
             }
           ],
-          "explain": "Brilliant! The model got trapped in a local minimum, where local slopes are flat but the error is still higher than the global minimum. You've conquered local vs global minimums!"
+          "explain": "Correct! The IQR is $400k - $200k = $200k. The upper fence is Q3 + (1.5 * IQR) = $400k + (1.5 * $200k) = $400k + $300k = $700k. Since $800k is greater than $700k, it is an outlier. Incredible job mastering the IQR method!"
         }
       ]
     }

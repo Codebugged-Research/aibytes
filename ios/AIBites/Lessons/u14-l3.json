@@ -2,11 +2,11 @@
   "id": "u14-l3",
   "unit": 14,
   "day": 73,
-  "tier": "Optimization",
-  "tierIcon": "⚡",
-  "title": "Learning Rate Decay",
-  "icon": "📉",
-  "concept": "Learning Rate Decay gradually shrinks the step size during training to explore quickly at first and settle precisely at the bottom.",
+  "tier": "Tabular Processing",
+  "tierIcon": "🔌",
+  "title": "Variance Thresholding",
+  "icon": "📊",
+  "concept": "Dropping columns with low variance removes features that barely change, as they provide no useful patterns for the model.",
   "xp": 15,
   "hearts": 3,
   "estMinutes": 6,
@@ -18,25 +18,25 @@
           "id": "w1",
           "type": "multiple_choice",
           "xp": 1,
-          "prompt": "Recap: Why is Mini-Batch Gradient Descent the modern standard for training AI models?",
+          "prompt": "Warmup: We previously learned that highly correlated columns are redundant. If we have temperature in Celsius and Fahrenheit, why should we drop one?",
           "options": [
             {
               "id": "a",
-              "text": "It combines the speed of SGD with the stability of Batch GD by using small groups of data.",
+              "text": "They contain duplicate information, so keeping both adds unnecessary complexity",
               "correct": true
             },
             {
               "id": "b",
-              "text": "It ignores the cost function completely to save time.",
+              "text": "Celsius is a numerical feature but Fahrenheit is categorical",
               "correct": false
             },
             {
               "id": "c",
-              "text": "It only works when the computer is offline.",
+              "text": "Models can only process temperatures measured in Kelvin",
               "correct": false
             }
           ],
-          "explain": "Correct! Mini-batching is the sweet spot. Now, how do we make sure our steps aren't too big when we get close to the target?"
+          "explain": "Spot on! Since one can be perfectly predicted from the other, keeping both is redundant. Today, we'll look at columns that barely change at all."
         }
       ]
     },
@@ -45,49 +45,49 @@
       "cards": [
         {
           "kind": "hook",
-          "icon": "🚗",
-          "title": "Parking a car",
-          "body": "When driving home, you speed down the highway. But as you pull into your garage, you slow to a crawl. If you kept your highway speed, you'd crash into the wall!"
+          "icon": "📱",
+          "title": "The survey where everyone agreed",
+          "body": "Imagine asking 1,000 customers if they like free shipping, and 99.9% of them say \"Yes.\" That column doesn't help you separate big spenders from low spenders because almost every row has the same answer. It has near-zero variation."
         },
         {
           "kind": "definition",
-          "icon": "📉",
-          "title": "Learning Rate Decay",
-          "body": "<strong>Learning Rate Decay</strong> is the technique of gradually lowering the step size (learning rate) as training progresses over time."
+          "icon": "📊",
+          "title": "Variance Thresholding",
+          "body": "<strong>Variance Thresholding</strong> is a simple feature selection method. It calculates the variance (spread) of each column and drops any feature whose variance falls below a set threshold — meaning it barely changes across your dataset."
         },
         {
           "kind": "analogy",
-          "icon": "🎯",
-          "title": "Shaking the board",
-          "body": "Imagine a ball in a bowl. Big shakes (high learning rate) help the ball roll out of small bumps, but keep it bouncing wildly. Shaking more gently (decay) lets it settle right at the bottom."
+          "icon": "📍",
+          "title": "Searching for clues",
+          "body": "If you're investigating a crime and everyone in town wears the exact same uniform, the uniform color is useless for finding the suspect. You look for features that vary, like height or shoe size, because <strong>variation</strong> helps you distinguish individuals."
         },
         {
           "kind": "example",
-          "icon": "🔄",
-          "title": "Epoch by epoch",
-          "body": "At epoch 1 (first pass), the learning rate is 0.1. By epoch 50, it decays to 0.01. By epoch 100, it's 0.001, allowing the model to make micro-adjustments."
+          "icon": "👟",
+          "title": "Constant values",
+          "body": "In a dataset of medical patients, if 99% of patients have the column <code>[Has_Heartbeat]</code> set to 'True', this column has almost zero variance. It is useless for predicting who will develop heart disease and should be dropped."
         },
         {
           "kind": "mythbust",
-          "icon": "🕳",
-          "title": "Don't decay too fast",
-          "body": "If you shrink the learning rate too early, the model stops moving before it ever reaches the valley. Decay must be balanced: fast enough to settle, slow enough to arrive."
+          "icon": "⚠️",
+          "title": "Zero variance isn't the only target",
+          "body": "We don't just drop columns that are 100% constant (variance of 0). We also drop columns that are 99% constant. Even though they have a tiny bit of variation, they don't have enough signal for a model to learn from."
         },
         {
           "kind": "visual",
           "icon": "⚖️",
-          "title": "Fixed vs. Decaying Rate",
-          "body": "How step sizes behave as the model gets close to the bottom:",
+          "title": "High vs. Low Variance",
+          "body": "Comparing columns by how much their values vary:",
           "compare": {
             "left": {
-              "emoji": "🦘",
-              "tag": "Fixed Rate",
-              "text": "Overshoots the bottom<br>Bounces around forever"
+              "emoji": "📈",
+              "tag": "High Variance (Keep)",
+              "text": "Age: 18, 42, 65, 29...<br>Lots of info to learn from"
             },
             "right": {
-              "emoji": "🎯",
-              "tag": "Decaying Rate",
-              "text": "Big steps early<br>Tiny, precise steps late"
+              "emoji": "➖",
+              "tag": "Low Variance (Drop)",
+              "text": "Is_Human: Yes, Yes, Yes, Yes...<br>No variation, no signal"
             }
           }
         }
@@ -100,36 +100,36 @@
           "id": "p1",
           "type": "multiple_choice",
           "xp": 2,
-          "prompt": "Why is it useful to start training with a large learning rate?",
+          "prompt": "What is variance thresholding used for in feature selection?",
           "options": [
             {
               "id": "a",
-              "text": "To traverse the loss landscape quickly and escape poor initial zones.",
+              "text": "To remove features that have very little or no variation",
               "correct": true
             },
             {
               "id": "b",
-              "text": "To prevent the computer from overheating.",
+              "text": "To scale all numerical values between 0 and 1",
               "correct": false
             },
             {
               "id": "c",
-              "text": "Because large steps are always more accurate.",
+              "text": "To find correlation between two different features",
               "correct": false
             },
             {
               "id": "d",
-              "text": "To save GPU memory during the first steps.",
+              "text": "To fill in missing values in a dataset",
               "correct": false
             }
           ],
-          "explain": "Yes! Large steps early on help the optimizer make rapid progress and avoid getting stuck in small, shallow local dips."
+          "explain": "Variance thresholding removes columns that are nearly constant because they cannot help a model make distinctions."
         },
         {
           "id": "p2",
           "type": "true_false",
           "xp": 2,
-          "prompt": "True or false: If the learning rate never decays, the model might bounce back and forth across the minimum without ever settling.",
+          "prompt": "True or false: A column where 100% of the rows have the value '1.0' has a variance of zero.",
           "options": [
             {
               "id": "t",
@@ -142,50 +142,45 @@
               "correct": false
             }
           ],
-          "explain": "True! A fixed learning rate that is too large will overshoot the valley floor and keep orbiting it instead of stopping."
+          "explain": "True. If a value never changes, its variance is exactly zero, making it completely useless for machine learning models."
         },
         {
           "id": "p3",
           "type": "fill_blank",
           "xp": 2,
           "prompt": "Complete the sentence:",
-          "sentence": "Learning rate decay gradually ___ the step size as training time increases.",
-          "blank": "shrinks",
+          "sentence": "Features that are nearly constant across all rows have low ___ and should be dropped.",
+          "blank": "variance",
           "words": [
-            "shrinks",
-            "grows",
-            "multiplies"
+            "variance",
+            "correlation",
+            "dimension"
           ],
-          "explain": "Correct! Shrunk step sizes let the optimizer perform fine-grained optimization as it nears the lowest error."
+          "explain": "Variance is the measure of how spread out a set of numbers is. Low variance means the values barely change."
         },
         {
           "id": "p4",
-          "type": "multiple_choice",
+          "type": "spot_the_ai",
           "xp": 2,
-          "prompt": "What happens if the learning rate decays too quickly?",
+          "prompt": "Which column has the lowest variance?",
           "options": [
             {
               "id": "a",
-              "text": "The steps become too tiny to reach the minimum, stopping progress prematurely.",
+              "text": "The planet of residence (Earth for all 5,000 customers)",
               "correct": true
             },
             {
               "id": "b",
-              "text": "The model will train infinitely fast.",
+              "text": "The customer's annual income (ranges from $20k to $200k)",
               "correct": false
             },
             {
               "id": "c",
-              "text": "The error automatically drops to zero.",
-              "correct": false
-            },
-            {
-              "id": "d",
-              "text": "The learning rate will double in value.",
+              "text": "The day of the week they logged in (Monday through Sunday)",
               "correct": false
             }
           ],
-          "explain": "Exactly! If decay is too aggressive, the steps become microscopic before the model gets close to the bottom."
+          "explain": "Since every single row has the value 'Earth', this column has a variance of exactly zero."
         }
       ]
     },
@@ -196,30 +191,30 @@
           "id": "b1",
           "type": "multiple_choice",
           "xp": 5,
-          "prompt": "Your loss graph shows the error dropping quickly at first, but then it flattens out and bounces up and down in a wide band near the bottom. What should you do?",
+          "prompt": "You are building a spam filter. In your dataset of 10,000 emails, you notice the column 'contains_email_signature' is 'Yes' for 9,998 emails and 'No' for only 2 emails. How should you handle this column?",
           "options": [
             {
               "id": "a",
-              "text": "Implement learning rate decay to shrink the steps so the optimizer can settle into the bottom of the valley.",
+              "text": "Drop it using a variance threshold, as it is nearly constant and won't help predict spam",
               "correct": true
             },
             {
               "id": "b",
-              "text": "Increase the learning rate to make the bounces even larger.",
+              "text": "Keep it because the 2 emails might contain the absolute secret to spam",
               "correct": false
             },
             {
               "id": "c",
-              "text": "Delete half of your training dataset to force a straight path.",
+              "text": "Duplicate the column to make its variance higher",
               "correct": false
             },
             {
               "id": "d",
-              "text": "Stop training because a bouncing error means the model is broken.",
+              "text": "Use it as the primary feature for training the spam classifier",
               "correct": false
             }
           ],
-          "explain": "Brilliant! Shrinking the learning rate behaves like bringing a car to a gentle halt right at its parking spot. Next: how to use physical momentum to roll over bumps!"
+          "explain": "Marvelous! Since 99.98% of the data has the same value, it has virtually no variance. It cannot help the model distinguish spam from ham. Next: the difference between checking columns one by one versus testing them together!"
         }
       ]
     }

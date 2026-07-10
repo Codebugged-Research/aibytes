@@ -2,14 +2,14 @@
   "id": "u7-l3",
   "unit": 7,
   "day": 38,
-  "tier": "Tabular Processing",
-  "tierIcon": "🗂️",
-  "title": "One-Hot Encoding: Unordered Categories",
-  "icon": "📊",
-  "concept": "One-hot encoding converts unordered categories into multiple binary columns, where a single 1 represents the active category.",
+  "tier": "Reinforcement Learning",
+  "tierIcon": "🎮",
+  "title": "Rewards and Penalties: Teaching Good Behavior",
+  "icon": "🏆",
+  "concept": "Reward signals — points earned for good actions and penalties for bad ones — gradually shape an agent's behavior over many repeated trials, the same way treats shape a dog's behavior.",
   "xp": 15,
   "hearts": 3,
-  "estMinutes": 6,
+  "estMinutes": 7,
   "segments": [
     {
       "type": "warmup",
@@ -18,113 +18,31 @@
           "id": "w1",
           "type": "multiple_choice",
           "xp": 1,
-          "prompt": "Warmup: If we encode 'Small', 'Medium', and 'Large' as 0, 1, and 2, which encoding technique did we use?",
+          "prompt": "Recap: In reinforcement learning, what is the environment?",
           "options": [
             {
               "id": "a",
-              "text": "Label Encoding",
+              "text": "The world the agent acts within",
               "correct": true
             },
             {
               "id": "b",
-              "text": "One-Hot Encoding",
+              "text": "The agent's decision-making program",
               "correct": false
             },
             {
               "id": "c",
-              "text": "Numerical Scaling",
+              "text": "A single choice the agent makes",
               "correct": false
             }
           ],
-          "explain": "Label (or ordinal) encoding maps ordered categories directly to numbers to preserve their hierarchy."
-        }
-      ]
-    },
-    {
-      "type": "teach",
-      "cards": [
-        {
-          "kind": "hook",
-          "icon": "🎨",
-          "title": "Red, Blue, or Green?",
-          "body": "If a car is 'Red', it isn't 'greater' or 'less' than a 'Blue' car. Since colors have no natural order, mapping them to 1, 2, and 3 is misleading."
+          "explain": "Right! The environment is everything surrounding and reacting to the agent."
         },
         {
-          "kind": "definition",
-          "icon": "🎓",
-          "title": "One-Hot Encoding",
-          "body": "<strong>One-hot encoding</strong> creates a new binary (0 or 1) column for every unique category. For each row, only the column of the active category gets a 1 ('hot'), and the others get a 0 ('cold')."
-        },
-        {
-          "kind": "analogy",
-          "icon": "🎛️",
-          "title": "The light switch panel",
-          "body": "Imagine a panel of switches, one for each color. If the car is red, you flip the 'Red' switch ON (1) and leave the 'Blue' and 'Green' switches OFF (0)."
-        },
-        {
-          "kind": "example",
-          "icon": "🐶",
-          "title": "Animal classifier",
-          "body": "In a pet database, a 'Species' column with 'Dog', 'Cat', and 'Bird' becomes three columns: is_dog, is_cat, and is_bird. A cat row is represented as: is_dog=0, is_cat=1, is_bird=0."
-        },
-        {
-          "kind": "mythbust",
-          "icon": "🧠",
-          "title": "Not a cure-all",
-          "body": "While one-hot encoding is great for keeping categories independent, it's not perfect. If you have 500 unique categories, it creates 500 new columns, making your dataset massive and sparse."
-        },
-        {
-          "kind": "visual",
-          "icon": "⚖️",
-          "title": "From column to matrix",
-          "body": "How a single column splits into binary columns:",
-          "compare": {
-            "left": {
-              "emoji": "🍎",
-              "tag": "Original",
-              "text": "Row 1: Apple<br>Row 2: Banana<br>Row 3: Orange"
-            },
-            "right": {
-              "emoji": "📊",
-              "tag": "One-Hot",
-              "text": "is_apple: [1, 0, 0]<br>is_banana: [0, 1, 0]<br>is_orange: [0, 0, 1]"
-            }
-          }
-        }
-      ]
-    },
-    {
-      "type": "practice",
-      "exercises": [
-        {
-          "id": "p1",
-          "type": "multiple_choice",
-          "xp": 2,
-          "prompt": "Why is one-hot encoding preferred over label encoding for unordered categories like 'Country'?",
-          "options": [
-            {
-              "id": "a",
-              "text": "Because it avoids implying a mathematical order or ranking between countries",
-              "correct": true
-            },
-            {
-              "id": "b",
-              "text": "Because it reduces the number of columns in the dataset",
-              "correct": false
-            },
-            {
-              "id": "c",
-              "text": "Because computers cannot store numbers larger than 1",
-              "correct": false
-            }
-          ],
-          "explain": "Label encoding would imply that Country 3 is 'greater' than Country 1, whereas one-hot encoding keeps them completely separate and equal."
-        },
-        {
-          "id": "p2",
+          "id": "w2",
           "type": "true_false",
-          "xp": 2,
-          "prompt": "True or false: One-hot encoding a column with 4 unique categories will create 4 new binary columns.",
+          "xp": 1,
+          "prompt": "True or false: An action is one specific choice available to the agent.",
           "options": [
             {
               "id": "t",
@@ -137,45 +55,175 @@
               "correct": false
             }
           ],
-          "explain": "True. Each unique category gets its own yes/no (binary) column."
+          "explain": "True! Actions are the individual moves an agent can choose from."
+        }
+      ]
+    },
+    {
+      "type": "teach",
+      "cards": [
+        {
+          "kind": "hook",
+          "icon": "🐕",
+          "title": "Treats, Sit, Repeat",
+          "body": "A dog doesn't understand the word \"sit\" the first time you say it. But say the command, and the moment its rear hits the floor, hand over a treat. Do this dozens of times, and the dog starts sitting on command — not because it understood English, but because sitting reliably earned a treat."
+        },
+        {
+          "kind": "definition",
+          "icon": "🏆",
+          "title": "What a reward signal actually does",
+          "body": "A <strong>reward signal</strong> is a number handed to the agent after an action — positive for good outcomes, negative (a <strong>penalty</strong>) for bad ones. On its own, one reward barely teaches anything. It's the pattern across <em>many</em> trials that shapes behavior."
+        },
+        {
+          "kind": "analogy",
+          "icon": "🎯",
+          "title": "Warmer, warmer, cold — a guessing game",
+          "body": "Think of the game where a friend says \"warmer\" as you get closer to a hidden object and \"colder\" as you move away. No single \"warmer\" tells you the exact spot, but after enough rounds, those small signals steer you right to it. Rewards and penalties work the same way over many attempts."
+        },
+        {
+          "kind": "example",
+          "icon": "🎓",
+          "title": "Grading a video-game boss fight",
+          "body": "A game-playing agent takes a hit and loses health: <strong>penalty</strong>. It lands an attack: small <strong>reward</strong>. It defeats the boss: big <strong>reward</strong>. Across thousands of attempts, actions that led to more hits and fewer losses start happening more often."
+        },
+        {
+          "kind": "mythbust",
+          "icon": "⚠️",
+          "title": "One reward doesn't teach the whole lesson",
+          "body": "You might assume a single reward instantly \"fixes\" an agent's behavior, like flipping a switch. It doesn't. Behavior shifts gradually, trial by trial, as patterns of reward and penalty build up across many attempts — just like a dog needs many repetitions, not one treat, to reliably sit on command."
+        },
+        {
+          "kind": "visual",
+          "icon": "⚖️",
+          "title": "One trial vs. many trials",
+          "body": "How reward signals actually teach:",
+          "compare": {
+            "left": {
+              "emoji": "1️⃣",
+              "tag": "One trial",
+              "text": "Barely changes<br>behavior at all"
+            },
+            "right": {
+              "emoji": "🔁",
+              "tag": "Many trials",
+              "text": "Good actions repeat more,<br>bad ones fade out"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "type": "practice",
+      "exercises": [
+        {
+          "id": "p1",
+          "type": "multiple_choice",
+          "xp": 2,
+          "prompt": "Why does a dog eventually sit on command after many rounds of treats?",
+          "options": [
+            {
+              "id": "a",
+              "text": "Because sitting has repeatedly been followed by a reward",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "Because it understands the English word \"sit\"",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "Because one treat instantly teaches the full behavior",
+              "correct": false
+            }
+          ],
+          "explain": "Right! Repeated pairing of the action with a reward is what shapes the behavior."
+        },
+        {
+          "id": "p2",
+          "type": "true_false",
+          "xp": 2,
+          "prompt": "True or false: A single reward is usually enough to permanently teach an agent the best behavior.",
+          "options": [
+            {
+              "id": "t",
+              "text": "True",
+              "correct": false
+            },
+            {
+              "id": "f",
+              "text": "False",
+              "correct": true
+            }
+          ],
+          "explain": "False! Behavior shifts gradually across many trials of reward and penalty, not from one signal alone."
         },
         {
           "id": "p3",
           "type": "fill_blank",
           "xp": 2,
           "prompt": "Complete the sentence:",
-          "sentence": "One-hot encoding represents active categories with the number ___.",
-          "blank": "1",
+          "sentence": "Reward and penalty signals shape an agent's behavior gradually, across many ___.",
+          "blank": "trials",
           "words": [
-            "1",
-            "0",
-            "100"
+            "trials",
+            "labels",
+            "clusters"
           ],
-          "explain": "The active category is set to 1 (hot) while all other category columns are set to 0 (cold)."
+          "explain": "It takes repeated attempts — trials — for reward patterns to actually change behavior."
         },
         {
           "id": "p4",
           "type": "spot_the_ai",
           "xp": 2,
-          "prompt": "Which of the following is the correct one-hot encoding for a 'Blue' item in a dataset of [Red, Blue, Green]?",
+          "prompt": "Which of these best shows a reward signal shaping behavior over time?",
           "options": [
             {
               "id": "a",
-              "text": "is_red=0, is_blue=1, is_green=0",
+              "text": "A cat starts running to the kitchen at the sound of a can opener because that sound has repeatedly preceded food",
               "correct": true
             },
             {
               "id": "b",
-              "text": "is_red=1, is_blue=0, is_green=0",
+              "text": "A thermostat displays the current temperature on a screen",
               "correct": false
             },
             {
               "id": "c",
-              "text": "is_red=0, is_blue=0, is_green=1",
+              "text": "A spreadsheet sorts a column of numbers",
               "correct": false
             }
           ],
-          "explain": "Only the is_blue column should be 1 (hot), with the other columns set to 0."
+          "explain": "Right! The cat's behavior changed because that sound reliably paired with a reward (food) many times."
+        },
+        {
+          "id": "p5",
+          "type": "multiple_choice",
+          "xp": 2,
+          "prompt": "A robot vacuum bumps into a wall and its motor briefly reverses (a small penalty). After hundreds of runs, it bumps into far fewer walls. What's happening?",
+          "options": [
+            {
+              "id": "a",
+              "text": "The repeated penalty for bumping walls is gradually discouraging that action",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "The single penalty from the first bump permanently fixed the behavior",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "Penalties have no effect on future actions",
+              "correct": false
+            },
+            {
+              "id": "d",
+              "text": "The vacuum was reprogrammed by a person after every bump",
+              "correct": false
+            }
+          ],
+          "explain": "Exactly! Across hundreds of trials, the repeated penalty makes wall-bumping actions less common."
         }
       ]
     },
@@ -186,30 +234,59 @@
           "id": "b1",
           "type": "multiple_choice",
           "xp": 5,
-          "prompt": "You are encoding a column named pet_type with options: 'Dog', 'Cat', 'Fish', and 'Rabbit'. If you use one-hot encoding, what does a row with a 'Fish' look like?",
+          "prompt": "A language-learning app gives a small reward (a streak point) for a correct answer and a small penalty (a lost heart) for a wrong one. After many days of practice, a student's accuracy on certain question types improves. Which explanation best fits how reward signals work?",
           "options": [
             {
               "id": "a",
-              "text": "is_dog=0, is_cat=0, is_fish=1, is_rabbit=0",
+              "text": "The repeated pattern of rewards and penalties across many attempts gradually reinforced the actions (answers) that worked",
               "correct": true
             },
             {
               "id": "b",
-              "text": "is_dog=0, is_cat=0, is_fish=0, is_rabbit=0",
+              "text": "A single streak point instantly taught the student every correct answer",
               "correct": false
             },
             {
               "id": "c",
-              "text": "is_dog=1, is_cat=1, is_fish=1, is_rabbit=1",
+              "text": "Rewards and penalties only matter on the very first attempt",
               "correct": false
             },
             {
               "id": "d",
-              "text": "is_dog=0, is_cat=0, is_fish=2, is_rabbit=0",
+              "text": "The student's improvement has nothing to do with the reward signals",
               "correct": false
             }
           ],
-          "explain": "Correct! Only the column representing 'Fish' has a value of 1, indicating the presence of that category. Next up: how having all these binary columns can sometimes backfire!"
+          "explain": "Exactly! It's the accumulation of reward and penalty signals across many trials that gradually shapes better behavior."
+        },
+        {
+          "id": "b2",
+          "type": "multiple_choice",
+          "xp": 5,
+          "prompt": "A theme park trains a dolphin to jump through a hoop by giving it a fish every time it jumps a little higher than before, and withholding the fish if it doesn't. Over several weeks, the dolphin reliably jumps through the hoop. Why does this take weeks rather than a single session?",
+          "options": [
+            {
+              "id": "a",
+              "text": "Because behavior is shaped gradually — each rewarded attempt slightly reinforces the action, and it takes many repetitions to build reliable behavior",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "Because dolphins cannot learn from rewards at all",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "Because the fish is a penalty, not a reward",
+              "correct": false
+            },
+            {
+              "id": "d",
+              "text": "Because the hoop is the agent in this scenario",
+              "correct": false
+            }
+          ],
+          "explain": "Exactly! Just like the dog-and-treat example, reliable behavior builds up gradually from many rewarded trials, not from a single signal. Next: what happens when an agent has to choose between trying something new and sticking with what already works."
         }
       ]
     }

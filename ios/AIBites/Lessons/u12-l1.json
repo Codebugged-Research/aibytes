@@ -2,11 +2,11 @@
   "id": "u12-l1",
   "unit": 12,
   "day": 61,
-  "tier": "Linear Regression",
-  "tierIcon": "🎯",
-  "title": "What is a Cost Function?",
-  "icon": "🎯",
-  "concept": "A cost function measures a model's overall prediction error across a dataset, giving a single score we want to minimize.",
+  "tier": "Tabular Processing",
+  "tierIcon": "🗂️",
+  "title": "Why Scale Features?",
+  "icon": "⚖️",
+  "concept": "Features with vastly different ranges (like age vs. income) can confuse machine learning algorithms, making scaling necessary.",
   "xp": 15,
   "hearts": 3,
   "estMinutes": 6,
@@ -18,25 +18,25 @@
           "id": "w1",
           "type": "multiple_choice",
           "xp": 1,
-          "prompt": "Recap: In the ice cream sales scenario, why did a linear regression model perform poorly when the trend was curved?",
+          "prompt": "Warmup: Why is target encoding risky for high-cardinality features with many unique values?",
           "options": [
             {
               "id": "a",
-              "text": "It violated the linearity assumption, as a straight line cannot fit a curved pattern",
+              "text": "It can lead to data leakage and overfitting if not carefully smoothed",
               "correct": true
             },
             {
               "id": "b",
-              "text": "Linear regression cannot handle temperature data",
+              "text": "It creates too many columns in the dataset",
               "correct": false
             },
             {
               "id": "c",
-              "text": "Linear regression only works on datasets with millions of rows",
+              "text": "It deletes the columns completely",
               "correct": false
             }
           ],
-          "explain": "Right — the linearity assumption requires a straight-line relationship. If the actual pattern is curved, a linear model will struggle."
+          "explain": "Dropping high-cardinality values loses information, but target encoding without smoothing risks data leakage and overfitting."
         }
       ]
     },
@@ -45,49 +45,49 @@
       "cards": [
         {
           "kind": "hook",
-          "icon": "🎯",
-          "title": "Archery practice",
-          "body": "When practicing archery, you don't just judge yourself on a single arrow. You want to measure your overall accuracy across all your shots to truly improve."
+          "icon": "🛒",
+          "title": "A skewed filter",
+          "body": "Imagine searching for a house using a scoring system where home size is 500 to 5,000 sq ft, but bedrooms range from 1 to 5. An algorithm calculating similarity will focus entirely on square footage, ignoring the bedrooms!"
         },
         {
           "kind": "definition",
-          "icon": "📊",
-          "title": "What is a cost function?",
-          "body": "A <strong>cost function</strong> (or loss function) is a formula that calculates a single score representing the model's total error across the entire dataset."
+          "icon": "🎓",
+          "title": "Feature Scaling",
+          "body": "<strong>Feature scaling</strong> is the process of transforming numeric features to a similar scale. This ensures that features with larger values (like salary) do not dominate features with smaller values (like age) during model training."
         },
         {
           "kind": "analogy",
-          "icon": "⛳",
-          "title": "Golf scores",
-          "body": "Think of a cost function like a golf score. Lower scores are better. Your ultimate goal is to get this cost score as close to zero as possible."
+          "icon": "🗺️",
+          "title": "Mapping the world",
+          "body": "If you draw a map of your house where 1 inch = 1 foot for the floor plan, but 1 inch = 1 mile for the garden, you cannot compare them. Scaling puts all measurements on the same relative grid so they make sense together."
         },
         {
           "kind": "example",
-          "icon": "🏠",
-          "title": "Predicting home prices",
-          "body": "If your model predicts a house costs $300k but it sells for $350k, the error is $50k. The cost function combines all such errors into one overall score."
+          "icon": "⚖️",
+          "title": "Salary vs. Age",
+          "body": "In a customer dataset, age ranges from 18 to 80, while annual salary ranges from $20,000 to $200,000. Without scaling, a distance-based algorithm treats a $1 difference in salary as equal to a 1-year difference in age!"
         },
         {
           "kind": "mythbust",
-          "icon": "⚠️",
-          "title": "Not just raw addition",
-          "body": "We don't just add up raw errors. If one guess is $10k too high and another is $10k too low, they would cancel out to zero, hiding the model's mistakes!"
+          "icon": "🧠",
+          "title": "Patterns stay the same",
+          "body": "Scaling does not change the shape or pattern of your data! It simply changes the unit of measurement. The relative relationships and distributions between points remain exactly the same."
         },
         {
           "kind": "visual",
           "icon": "⚖️",
-          "title": "Single error vs. cost",
-          "body": "The distinction between one error and the total score:",
+          "title": "Unscaled vs. Scaled",
+          "body": "How feature scaling levels the playing field for your model:",
           "compare": {
             "left": {
-              "emoji": "📏",
-              "tag": "Single error",
-              "text": "The distance from one data point to the prediction line."
+              "emoji": "❌",
+              "tag": "Unscaled Features",
+              "text": "Age: 18 to 80<br>Salary: $20k to $200k<br>Salary dominates calculations"
             },
             "right": {
-              "emoji": "📊",
-              "tag": "Cost function",
-              "text": "The combined total of all errors across the entire dataset."
+              "emoji": "✅",
+              "tag": "Scaled Features",
+              "text": "Age: 0.0 to 1.0<br>Salary: 0.0 to 1.0<br>Both contribute equally"
             }
           }
         }
@@ -100,82 +100,82 @@
           "id": "p1",
           "type": "multiple_choice",
           "xp": 2,
-          "prompt": "What is the main goal of a cost function in machine learning?",
+          "prompt": "Which of the following algorithms is most sensitive to features being on different scales?",
           "options": [
             {
               "id": "a",
-              "text": "To measure the model's overall error and guide it to improve",
+              "text": "Distance-based algorithms like K-Nearest Neighbors (KNN)",
               "correct": true
             },
             {
               "id": "b",
-              "text": "To increase the size of the training dataset",
+              "text": "Decision trees that split on one feature at a time",
               "correct": false
             },
             {
               "id": "c",
-              "text": "To speed up the training process",
+              "text": "Naive Bayes classifiers using independent probabilities",
               "correct": false
             }
           ],
-          "explain": "The cost function outputs a single score showing how wrong the model is. We minimize this score to improve the model."
+          "explain": "Distance-based models calculate geometric distances between data points, so features with larger ranges will dominate the calculation if not scaled."
         },
         {
           "id": "p2",
           "type": "true_false",
           "xp": 2,
-          "prompt": "True or false: We want the output of a cost function to be as close to zero as possible.",
+          "prompt": "True or false: Feature scaling changes the relative ranking of values within a column.",
           "options": [
             {
               "id": "t",
               "text": "True",
-              "correct": true
+              "correct": false
             },
             {
               "id": "f",
               "text": "False",
-              "correct": false
+              "correct": true
             }
           ],
-          "explain": "True! A cost of zero means the model makes perfect predictions with no errors."
+          "explain": "False. Scaling preserves the order and relative differences between data points; it only changes the unit or range of the scale."
         },
         {
           "id": "p3",
           "type": "fill_blank",
           "xp": 2,
           "prompt": "Complete the sentence:",
-          "sentence": "A cost function calculates a single ___ representing the model's total error across all data points.",
-          "blank": "score",
+          "sentence": "Without feature scaling, variables with ___ numerical ranges will dominate distance-based calculations.",
+          "blank": "larger",
           "words": [
-            "score",
-            "feature",
-            "prediction"
+            "larger",
+            "smaller",
+            "negative"
           ],
-          "explain": "The cost function compresses all individual errors into a single numeric score."
+          "explain": "Larger ranges lead to larger absolute differences, which skew distance-based math in their direction."
         },
         {
           "id": "p4",
           "type": "spot_the_ai",
           "xp": 2,
-          "prompt": "Which of the following is a cost function at work?",
+          "prompt": "Which scenario absolutely requires feature scaling for accurate results?",
           "options": [
             {
               "id": "a",
-              "text": "A formula calculating the total distance between all house sales and predicted prices",
+              "text": "Training a K-Nearest Neighbors model on Age (18-90) and Salary ($30k-$200k)",
               "correct": true
             },
             {
               "id": "b",
-              "text": "A database storing the addresses and prices of homes",
+              "text": "Training a Decision Tree on the same dataset",
               "correct": false
             },
             {
               "id": "c",
-              "text": "A chart showing the average home price by city",
+              "text": "Calculating the average age of customers",
               "correct": false
             }
           ],
-          "explain": "A cost function measures error, such as the total distance between actual and predicted house prices."
+          "explain": "K-Nearest Neighbors computes distances between points. Without scaling, the salary range will completely overwhelm the age range."
         }
       ]
     },
@@ -186,25 +186,30 @@
           "id": "b1",
           "type": "multiple_choice",
           "xp": 5,
-          "prompt": "You train two models to predict delivery times. Model A has a cost score of 15.2, and Model B has a cost score of 4.8. Which model should you deploy?",
+          "prompt": "You are building a model to predict health risks using heart rate (60-180 bpm) and blood protein concentration (0.001-0.005 g/L). If you train a distance-based model without scaling, what will happen?",
           "options": [
             {
               "id": "a",
-              "text": "Model B, because a lower cost score means smaller overall errors",
+              "text": "The model will almost entirely ignore blood protein concentration because its values are so small compared to heart rate.",
               "correct": true
             },
             {
               "id": "b",
-              "text": "Model A, because a higher cost score means it learned more",
+              "text": "The model will run much faster but be slightly less accurate.",
               "correct": false
             },
             {
               "id": "c",
-              "text": "Neither, because cost scores cannot compare different models",
+              "text": "The model will automatically scale the data during the training phase.",
+              "correct": false
+            },
+            {
+              "id": "d",
+              "text": "The model will crash due to a division by zero error.",
               "correct": false
             }
           ],
-          "explain": "Perfect! A lower cost score means the predictions are closer to the actual delivery times on average. Next: let's explore the most common way to calculate this score!"
+          "explain": "Correct! The tiny range of blood protein (0.001 to 0.005) is numerically invisible to distance math compared to heart rate (60 to 180). Scaling ensures both contribute. Awesome job starting Unit 8 on Feature Scaling!"
         }
       ]
     }

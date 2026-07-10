@@ -2,11 +2,11 @@
   "id": "u13-l4",
   "unit": 13,
   "day": 69,
-  "tier": "Optimization",
-  "tierIcon": "🏔️",
-  "title": "Gradient Step Calculation",
-  "icon": "📉",
-  "concept": "Calculus uses the derivative (slope) of the cost function to calculate the direction (positive or negative) and magnitude of weight adjustments.",
+  "tier": "Tabular Processing",
+  "tierIcon": "🚨",
+  "title": "Handling Outliers: Trim or Cap?",
+  "icon": "✂️",
+  "concept": "Handling outliers involves either trimming (removing the rows) or capping (clipping values to a threshold), balancing data loss against model distortion.",
   "xp": 15,
   "hearts": 3,
   "estMinutes": 6,
@@ -18,25 +18,25 @@
           "id": "w1",
           "type": "multiple_choice",
           "xp": 1,
-          "prompt": "Recap: What is the difference between a local and a global minimum?",
+          "prompt": "Warmup: How do you calculate the upper fence for outlier detection in the IQR method?",
           "options": [
             {
               "id": "a",
-              "text": "A global minimum is the absolute lowest error point, while a local minimum is just a temporary dip.",
+              "text": "Q3 + 1.5 * IQR",
               "correct": true
             },
             {
               "id": "b",
-              "text": "A local minimum is always better than a global minimum.",
+              "text": "Q1 - 1.5 * IQR",
               "correct": false
             },
             {
               "id": "c",
-              "text": "A global minimum is only found in simple models.",
+              "text": "Median + 3 * Standard Deviation",
               "correct": false
             }
           ],
-          "explain": "A global minimum is the absolute best solution with the lowest overall error. A local minimum is a deceptive local dip."
+          "explain": "Exactly! Any data point above Q3 + 1.5 * IQR is flagged as a high outlier. Now, once we've found these outliers, how do we handle them?"
         }
       ]
     },
@@ -45,49 +45,49 @@
       "cards": [
         {
           "kind": "hook",
-          "icon": "🧭",
-          "title": "Knowing which way to turn",
-          "body": "If you are blindfolded on a hill, how do you know which way is down? You feel the slope. If the ground rises to your left, you step to your right."
+          "icon": "🍓",
+          "title": "Sorting strawberries",
+          "body": "Imagine sorting strawberries. Some are rotten (errors), while others are just massive (real but rare). Do you throw them in the trash (trimming) or trim them down (capping)?"
         },
         {
           "kind": "definition",
-          "icon": "📉",
-          "title": "The Gradient Step",
-          "body": "A <strong>gradient step</strong> is the mathematical update where we subtract a fraction of the gradient (slope) from the current weights: <code>New Weight = Old Weight - (Learning Rate * Slope)</code>."
+          "icon": "✂️",
+          "title": "Trim vs. Cap",
+          "body": "When managing outliers, we have two primary strategies: <strong>Trimming</strong> (deleting the entire row containing the outlier) and <strong>Capping</strong> (replacing the extreme value with a set threshold, also called Winsorizing)."
         },
         {
           "kind": "analogy",
-          "icon": "⚖️",
-          "title": "The sign post",
-          "body": "The slope's direction acts as a signpost. If the slope is positive (uphill), subtracting it moves us backward (downhill). If the slope is negative (downhill), subtracting it moves us forward."
+          "icon": "🏎️",
+          "title": "Pruning vs. Speed limits",
+          "body": "Trimming is like pruning dead branches off a tree—they're gone completely. Capping is like using a speed limiter on a car—the car can run fast, but it hits a ceiling and goes no faster than the limit."
         },
         {
           "kind": "example",
-          "icon": "🧮",
-          "title": "Calculating the shift",
-          "body": "If our weight is 5, the learning rate is 0.1, and the slope is 10 (steeply uphill), the update is <code>5 - (0.1 * 10) = 4</code>. The weight decreases to move downhill."
+          "icon": "📋",
+          "title": "Typo vs. Wealth",
+          "body": "In a dataset of ages, an entry of 150 is likely a typo. We should <em>trim</em> it. But if we track monthly spending where a few clients spend $100k (far above the $2k average), we might <em>cap</em> their value at $10k."
         },
         {
           "kind": "mythbust",
-          "icon": "🧩",
-          "title": "No guesswork",
-          "body": "Gradient Descent doesn't randomly try different weights. It uses the exact mathematical derivative of the cost function to calculate the precise direction of steepest descent."
+          "icon": "🧠",
+          "title": "Don't always trim!",
+          "body": "Should you always trim outliers? Absolutely not! Trimming removes entire rows, meaning you lose other useful data in those rows. Capping preserves the row while keeping extreme variance in check."
         },
         {
           "kind": "visual",
           "icon": "⚖️",
-          "title": "Slope sign updates",
-          "body": "How the sign of the slope determines weight adjustments:",
+          "title": "Comparison of strategies",
+          "body": "The tradeoffs between trimming and capping outliers in your dataset:",
           "compare": {
             "left": {
-              "emoji": "📈",
-              "tag": "Positive Slope",
-              "text": "Slope is positive (uphill).<br>Subtracting it decreases the weight to go left (downhill)."
+              "emoji": "🗑️",
+              "tag": "Trimming Outliers",
+              "text": "Deletes outlier rows<br>Reduces dataset size<br>Best for obvious errors"
             },
             "right": {
-              "emoji": "📉",
-              "tag": "Negative Slope",
-              "text": "Slope is negative (downhill).<br>Subtracting it increases the weight to go right (downhill)."
+              "emoji": "🛡️",
+              "tag": "Capping / Winsorizing",
+              "text": "Clips values to fence thresholds<br>Keeps all rows<br>Best for valid extreme values"
             }
           }
         }
@@ -100,31 +100,31 @@
           "id": "p1",
           "type": "multiple_choice",
           "xp": 2,
-          "prompt": "Why do we subtract the gradient (slope) from the weight instead of adding it?",
+          "prompt": "Which strategy completely deletes the data rows containing outliers from the dataset?",
           "options": [
             {
               "id": "a",
-              "text": "To move downhill toward lower error, since adding it would move us uphill",
+              "text": "Trimming",
               "correct": true
             },
             {
               "id": "b",
-              "text": "Because subtraction is faster for computers to calculate than addition",
+              "text": "Capping",
               "correct": false
             },
             {
               "id": "c",
-              "text": "To keep the weights from becoming negative numbers",
+              "text": "Standardizing",
               "correct": false
             }
           ],
-          "explain": "The gradient points uphill. Since we want to go downhill (minimize error), we must subtract the gradient."
+          "explain": "Trimming removes the entire observation (row) from the dataset, which eliminates the outlier but shrinks your data size."
         },
         {
           "id": "p2",
           "type": "true_false",
           "xp": 2,
-          "prompt": "True or false: If the slope of the cost function is zero, the weight will not change during the update.",
+          "prompt": "True or false: Capping (Winsorizing) changes extreme values to a maximum threshold instead of deleting the row.",
           "options": [
             {
               "id": "t",
@@ -137,45 +137,45 @@
               "correct": false
             }
           ],
-          "explain": "True! When slope is zero, the update term becomes zero, meaning the weights stop changing. The model has converged."
+          "explain": "True! Capping keeps the row but replaces the extreme outlier value with a predetermined limit, like the upper IQR fence."
         },
         {
           "id": "p3",
           "type": "fill_blank",
           "xp": 2,
           "prompt": "Complete the sentence:",
-          "sentence": "The mathematical tool used to calculate the slope of the cost function is the ___.",
-          "blank": "derivative",
+          "sentence": "If an outlier is clearly a typing error (like age = 200), the safest strategy is usually ___.",
+          "blank": "trimming",
           "words": [
-            "derivative",
-            "vector",
-            "probability"
+            "trimming",
+            "capping",
+            "standardizing"
           ],
-          "explain": "In calculus, the derivative measures the rate of change or slope of a function at a specific point."
+          "explain": "When outliers are clear errors or corruption, deleting them (trimming) is best since the value contains no real information."
         },
         {
           "id": "p4",
           "type": "spot_the_ai",
           "xp": 2,
-          "prompt": "If your current weight is 3.0, the learning rate is 0.2, and the slope (gradient) at this point is -5.0, what is the new weight?",
+          "prompt": "What is a major risk of aggressively trimming outliers from a small dataset?",
           "options": [
             {
               "id": "a",
-              "text": "4.0",
+              "text": "Losing too many rows, which can lead to overfitting or data loss",
               "correct": true
             },
             {
               "id": "b",
-              "text": "2.0",
+              "text": "The remaining data will automatically turn into text",
               "correct": false
             },
             {
               "id": "c",
-              "text": "3.0",
+              "text": "The standard deviation will double",
               "correct": false
             }
           ],
-          "explain": "Subtracting the update: <code>3.0 - (0.2 * -5.0) = 3.0 - (-1.0) = 4.0</code>. Since the slope was negative, the weight increased to go downhill."
+          "explain": "Trimming reduces your sample size, and doing it aggressively can strip away valuable, diverse patterns, hurting model training."
         }
       ]
     },
@@ -186,25 +186,30 @@
           "id": "b1",
           "type": "multiple_choice",
           "xp": 5,
-          "prompt": "Your linear model predicts sales. At the current weight, the slope of the error is 50 (steeply positive/uphill). How will the next gradient step adjust the weight?",
+          "prompt": "You are training a model to predict student GPA. You notice one student's study hours are recorded as 500 hours/week (impossible since a week only has 168 hours). Another student is recorded studying 80 hours/week (extremely high but possible). How should you handle these two data points?",
           "options": [
             {
               "id": "a",
-              "text": "It will decrease the weight because a positive slope means we must move backward to go downhill",
+              "text": "Trim the 500-hour record (since it is a corrupted error) and cap the 80-hour record (since it is a real but extreme value).",
               "correct": true
             },
             {
               "id": "b",
-              "text": "It will increase the weight because a positive slope means we should go forward",
+              "text": "Cap the 500-hour record to 168 hours and trim the 80-hour record.",
               "correct": false
             },
             {
               "id": "c",
-              "text": "It will keep the weight the same because the slope is positive",
+              "text": "Delete both rows because they are outliers.",
+              "correct": false
+            },
+            {
+              "id": "d",
+              "text": "Scale the hours using Min-Max scaling without changes.",
               "correct": false
             }
           ],
-          "explain": "Excellent reasoning! A positive slope means going forward goes uphill (increases error). So we subtract it to decrease the weight and move downhill. Brilliant job on gradient calculations!"
+          "explain": "Correct! Impossible values are errors and should be trimmed. Possible but extreme values are best capped to prevent them from distorting the model while retaining the rest of the student's data. Sensational progress on handling outliers!"
         }
       ]
     }

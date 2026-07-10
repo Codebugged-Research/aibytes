@@ -1,0 +1,217 @@
+{
+  "id": "u29-l5",
+  "unit": 29,
+  "day": 150,
+  "tier": "Model Evaluation",
+  "tierIcon": "📈",
+  "title": "Handling Imbalanced Datasets",
+  "icon": "🚨",
+  "concept": "Handling class imbalance using techniques like class weighting or SMOTE helps models learn to recognize rare positive cases instead of ignoring them.",
+  "xp": 15,
+  "hearts": 3,
+  "estMinutes": 6,
+  "segments": [
+    {
+      "type": "warmup",
+      "exercises": [
+        {
+          "id": "w1",
+          "type": "multiple_choice",
+          "xp": 1,
+          "prompt": "Recap: What is the primary characteristic of Log Loss compared to classification accuracy?",
+          "options": [
+            {
+              "id": "a",
+              "text": "Log Loss measures probability calibration and heavily penalizes confident wrong predictions.",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "Log Loss only measures whether the model correctly guessed the class label.",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "Log Loss ignores probability scores and focuses on recall.",
+              "correct": false
+            }
+          ],
+          "explain": "Correct! Log Loss evaluates raw probabilities, punishing errors more severely if the model was highly confident. Let's look at how we handle datasets where the positive class is extremely rare."
+        }
+      ]
+    },
+    {
+      "type": "teach",
+      "cards": [
+        {
+          "kind": "hook",
+          "icon": "💳",
+          "title": "The needle in a haystack",
+          "body": "In credit card fraud detection, 99.9% of transactions are legitimate. A lazy model can predict 'Not Fraud' for every single transaction and achieve 99.9% accuracy! But it fails completely at finding the actual fraud."
+        },
+        {
+          "kind": "definition",
+          "icon": "🚨",
+          "title": "Class imbalance",
+          "body": "<strong>Class imbalance</strong> occurs when one class heavily outnumbers the other. Standard algorithms focus on maximizing overall accuracy, leading them to ignore the rare class completely."
+        },
+        {
+          "kind": "analogy",
+          "icon": "📣",
+          "title": "The megaphone warning",
+          "body": "Imagine a teacher grading homework. If a student ignores rare essay questions but gets all multiple-choice right, they pass. <strong>Class weighting</strong> is like giving the essay questions a megaphone, making them worth 100x more to force focus."
+        },
+        {
+          "kind": "example",
+          "icon": "🧬",
+          "title": "Class weighting vs SMOTE",
+          "body": "To fix imbalance, we can use <strong>class weighting</strong> to penalize mistakes on the rare class more. Or we can use <strong>SMOTE</strong> (Synthetic Minority Over-sampling Technique) to generate new, synthetic examples of the rare class."
+        },
+        {
+          "kind": "mythbust",
+          "icon": "⚠️",
+          "title": "Does duplicating data help?",
+          "body": "You might think simply copying the rare data points over and over helps. While it increases their count, it often causes the model to overfit to those exact points. SMOTE solves this by synthesizing <i>new</i>, similar points."
+        },
+        {
+          "kind": "visual",
+          "icon": "📊",
+          "title": "Imbalance Remedies",
+          "body": "Comparing how different techniques tackle severe class imbalance:",
+          "compare": {
+            "left": {
+              "emoji": "⚖️",
+              "tag": "Class Weighting",
+              "text": "Keep data as-is.<br>Scale the cost function penalty for rare errors."
+            },
+            "right": {
+              "emoji": "🧬",
+              "tag": "SMOTE (Oversampling)",
+              "text": "Synthesize new points.<br>Draws lines between existing rare points to create new data."
+            }
+          }
+        }
+      ]
+    },
+    {
+      "type": "practice",
+      "exercises": [
+        {
+          "id": "p1",
+          "type": "multiple_choice",
+          "xp": 2,
+          "prompt": "What is the primary danger of training a model on a dataset where 99% of samples are class A and 1% are class B?",
+          "options": [
+            {
+              "id": "a",
+              "text": "The model will learn to predict class A every time, ignoring class B while still maintaining 99% accuracy.",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "The model's training process will crash due to mathematical division by zero.",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "The model will overfit to class B and ignore class A completely.",
+              "correct": false
+            }
+          ],
+          "explain": "Since maximizing accuracy is the default goal, the model can simply ignore the rare class and still achieve a very high accuracy score."
+        },
+        {
+          "id": "p2",
+          "type": "true_false",
+          "xp": 2,
+          "prompt": "True or false: SMOTE generates new positive samples by making exact duplicate copies of existing minority class data points.",
+          "options": [
+            {
+              "id": "t",
+              "text": "True",
+              "correct": false
+            },
+            {
+              "id": "f",
+              "text": "False",
+              "correct": true
+            }
+          ],
+          "explain": "False. SMOTE synthesizes new, unique data points along the lines connecting existing minority class points, rather than just copying them."
+        },
+        {
+          "id": "p3",
+          "type": "fill_blank",
+          "xp": 2,
+          "prompt": "Complete the sentence:",
+          "sentence": "To force a model to pay attention to a rare class without changing the dataset, we can apply class ___ during training.",
+          "blank": "weighting",
+          "words": [
+            "weighting",
+            "scaling",
+            "regularization"
+          ],
+          "explain": "Class weighting assigns a higher cost/penalty to misclassifying the minority class, forcing the optimizer to focus on it."
+        },
+        {
+          "id": "p4",
+          "type": "spot_the_ai",
+          "xp": 2,
+          "prompt": "Which of the following is a synthetic oversampling method used for handling imbalanced datasets?",
+          "options": [
+            {
+              "id": "a",
+              "text": "SMOTE",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "L1 Regularization",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "Gradient Descent",
+              "correct": false
+            }
+          ],
+          "explain": "SMOTE (Synthetic Minority Over-sampling Technique) creates synthetic examples of the minority class to balance the dataset."
+        }
+      ]
+    },
+    {
+      "type": "boss",
+      "exercises": [
+        {
+          "id": "b1",
+          "type": "multiple_choice",
+          "xp": 5,
+          "prompt": "You are training a model to detect rare machinery failures (0.05% of the data). A simple model gets 99.95% accuracy by predicting 'No Failure' every time. You apply SMOTE to synthesize failure cases, and train a new model. The new model gets 95% accuracy, but detects 90% of actual failures. What is your conclusion?",
+          "options": [
+            {
+              "id": "a",
+              "text": "The new model is vastly superior for this business problem, as it actually detects failures despite the drop in overall accuracy.",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "The first model is better because 99.95% accuracy is higher than 95%.",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "SMOTE failed because the accuracy decreased.",
+              "correct": false
+            },
+            {
+              "id": "d",
+              "text": "You should discard both models and use random guessing.",
+              "correct": false
+            }
+          ],
+          "explain": "Accuracy is the wrong metric for imbalanced data! The second model is a massive success because it successfully detects 90% of the failures, which is the actual business goal. 🎉"
+        }
+      ]
+    }
+  ]
+}

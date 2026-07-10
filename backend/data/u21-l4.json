@@ -2,11 +2,11 @@
   "id": "u21-l4",
   "unit": 21,
   "day": 109,
-  "tier": "Model Evaluation",
-  "tierIcon": "📈",
-  "title": "Log Loss for Evaluation",
-  "icon": "🧮",
-  "concept": "Log Loss measures how close a model's predicted probabilities are to the actual labels, heavily penalizing confident wrong predictions.",
+  "tier": "Optimization",
+  "tierIcon": "⚡",
+  "title": "Momentum: Rolling Down Hill",
+  "icon": "🚀",
+  "concept": "Momentum speeds up gradient descent by accumulating past step directions to smooth out noise and roll over local valleys.",
   "xp": 15,
   "hearts": 3,
   "estMinutes": 6,
@@ -18,25 +18,25 @@
           "id": "w1",
           "type": "multiple_choice",
           "xp": 1,
-          "prompt": "Recap: What is the main advantage of using AUC over accuracy to evaluate a classifier?",
+          "prompt": "Recap: How does Learning Rate Decay improve gradient descent?",
           "options": [
             {
               "id": "a",
-              "text": "AUC measures ranking performance across all thresholds, making it robust against class imbalance.",
+              "text": "It gradually decreases step size so the model can settle precisely at the minimum.",
               "correct": true
             },
             {
               "id": "b",
-              "text": "AUC is calculated much faster than accuracy.",
+              "text": "It speeds up the steps near the end of training.",
               "correct": false
             },
             {
               "id": "c",
-              "text": "AUC tells you exactly which decision threshold you should use.",
+              "text": "It deletes bad features automatically.",
               "correct": false
             }
           ],
-          "explain": "Correct! AUC evaluates the model's overall ranking ability across all thresholds, whereas accuracy only checks a single threshold. Now let's see how we measure probability calibration directly."
+          "explain": "Right! Shrunk steps let the model slide smoothly into the minimum. Now, what if the path is filled with little valleys and hills?"
         }
       ]
     },
@@ -45,49 +45,49 @@
       "cards": [
         {
           "kind": "hook",
-          "icon": "🌦️",
-          "title": "Confidence matters",
-          "body": "If a forecaster says there is a 99% chance of rain and it is sunny, you lose trust. If they say there is a 51% chance of rain and it is sunny, you are more forgiving. We need a metric that measures this confidence level."
+          "icon": "🛷",
+          "title": "The heavy bobsled",
+          "body": "Imagine a bobsled speeding down a track. If it hits a tiny bump or a small dip, it doesn't instantly stop or reverse — its accumulated speed carries it right over."
         },
         {
           "kind": "definition",
-          "icon": "🧮",
-          "title": "What is Log Loss?",
-          "body": "<strong>Log Loss</strong> (logarithmic loss) evaluates the quality of predicted probabilities. Unlike binary metrics (0 or 1), it penalizes predictions based on how far their probabilities are from the true labels."
+          "icon": "🚀",
+          "title": "Gradient Descent with Momentum",
+          "body": "<strong>Momentum</strong> is a technique where the optimizer remembers the direction of <strong>past steps</strong> and adds a fraction of them to the current step."
         },
         {
           "kind": "analogy",
-          "icon": "🎯",
-          "title": "The betting penalty",
-          "body": "Think of Log Loss as a penalty in a game of bets. If you bet $99 on 'Yes' and 'No' happens, you pay a massive fine. If you bet only $51 on 'Yes' and 'No' happens, your fine is much smaller."
+          "icon": "🔴",
+          "title": "A heavy ball",
+          "body": "Without momentum, the optimizer is like a weightless bead: it stops the second the slope is flat. With momentum, it's a heavy bowling ball rolling past minor bumps."
         },
         {
           "kind": "example",
-          "icon": "🤖",
-          "title": "Penalizing confident errors",
-          "body": "If a transaction is fraud (1): predicting 0.99 fraud probability gives a tiny log loss. Predicting 0.51 gives a moderate log loss. Predicting 0.01 (confident error) triggers an extremely high log loss."
+          "icon": "🌊",
+          "title": "Dampening the bounce",
+          "body": "In narrow valleys, SGD bounces uselessly side-to-side. Momentum averages out these cross-canyon bounces, cancelling them out while accelerating <strong>straight down</strong> the valley."
         },
         {
           "kind": "mythbust",
-          "icon": "⚠️",
-          "title": "Does low error mean calibration?",
-          "body": "A model can have 90% accuracy but terrible calibration if its probabilities are always clustered near 0.5 or extreme 0.99. Log Loss forces the model to output mathematically reliable probabilities."
+          "icon": "🛑",
+          "title": "It can overshoot",
+          "body": "While momentum is great for escaping shallow local minimums, a ball with too much speed can roll right out of the actual global minimum! Tuning is key."
         },
         {
           "kind": "visual",
           "icon": "⚖️",
-          "title": "Log Loss Penalty Scale",
-          "body": "How log loss penalizes predictions when the actual label is 1 (True):",
+          "title": "With vs. Without Momentum",
+          "body": "Comparing how the optimizer handles a noisy, ribbed valley floor:",
           "compare": {
             "left": {
-              "emoji": "✅",
-              "tag": "Prediction: 0.90",
-              "text": "Close to 1.0.<br>Log Loss is very low (approx. 0.10)."
+              "emoji": "🦟",
+              "tag": "No Momentum",
+              "text": "Bounces side-to-side<br>Stops at shallow dips"
             },
             "right": {
-              "emoji": "💥",
-              "tag": "Prediction: 0.01",
-              "text": "Confident error.<br>Log Loss is extremely high (approx. 4.60)."
+              "emoji": "🚀",
+              "tag": "With Momentum",
+              "text": "Smooths side bounces<br>Rolls right through dips"
             }
           }
         }
@@ -100,82 +100,87 @@
           "id": "p1",
           "type": "multiple_choice",
           "xp": 2,
-          "prompt": "For a classification model, is a lower Log Loss or a higher Log Loss better?",
+          "prompt": "What physical property does the Momentum optimizer simulate?",
           "options": [
             {
               "id": "a",
-              "text": "Lower Log Loss, because it represents smaller errors and better calibration.",
+              "text": "Inertia: keeping the model moving in the general direction of previous steps.",
               "correct": true
             },
             {
               "id": "b",
-              "text": "Higher Log Loss, because it indicates the model is learning more patterns.",
+              "text": "Friction: slowing down the model near the start.",
               "correct": false
             },
             {
               "id": "c",
-              "text": "It depends on whether we want high precision or high recall.",
+              "text": "Gravity: pulling the model toward zero weights.",
+              "correct": false
+            },
+            {
+              "id": "d",
+              "text": "Elasticity: bouncing the weights off the maximum values.",
               "correct": false
             }
           ],
-          "explain": "Log Loss is a cost/loss metric, so lower values mean the predicted probabilities are closer to the true labels (better performance)."
+          "explain": "Yes! Momentum acts like inertia, using previous update directions to steer the current step."
         },
         {
           "id": "p2",
           "type": "true_false",
           "xp": 2,
-          "prompt": "True or false: Log Loss only depends on whether the final predicted label (after thresholding) is correct, not on the raw probability.",
+          "prompt": "True or false: Momentum makes the optimizer speed up along directions where gradients point consistently.",
           "options": [
             {
               "id": "t",
               "text": "True",
-              "correct": false
+              "correct": true
             },
             {
               "id": "f",
               "text": "False",
-              "correct": true
+              "correct": false
             }
           ],
-          "explain": "False. Log Loss directly evaluates the raw predicted probability (e.g., 0.85 vs 0.55), penalizing how wrong the model's confidence was."
+          "explain": "True! If successive steps point in the same direction, momentum builds up, accelerating descent along that path."
         },
         {
           "id": "p3",
           "type": "fill_blank",
           "xp": 2,
           "prompt": "Complete the sentence:",
-          "sentence": "A model that predicts 0.99 probability for a positive case that turns out to be negative will receive a very ___ log loss penalty.",
-          "blank": "high",
+          "sentence": "Momentum averages out the side-to-side ___ to focus progress down the valley.",
+          "blank": "oscillations",
           "words": [
-            "high",
-            "low",
-            "stable"
+            "oscillations",
+            "accuracies",
+            "datasets"
           ],
-          "explain": "Because the model was highly confident (0.99) but completely wrong, the logarithmic penalty is extremely large."
+          "explain": "Exactly! Side-to-side bounces (oscillations) cancel each other out, while forward speed is reinforced."
         },
         {
           "id": "p4",
           "type": "spot_the_ai",
           "xp": 2,
-          "prompt": "Which of the following prediction probabilities for a positive class (actual label = 1) yields the lowest (best) log loss?",
+          "prompt": "Which optimizer configuration is best suited to escape a shallow local minimum (a fake valley)?",
           "options": [
             {
               "id": "a",
-              "text": "0.95",
+              "text": "Gradient Descent with Momentum",
               "correct": true
             },
             {
               "id": "b",
-              "text": "0.50",
+              "text": "Standard Gradient Descent without Momentum",
               "correct": false
             },
             {
               "id": "c",
-              "text": "0.05",
+              "text": "A random guess generator",
               "correct": false
             }
           ],
-          "explain": "A probability of 0.95 is closest to the true label of 1, resulting in the smallest penalty (lowest log loss)."
+          "explain": "Momentum carries the optimizer up and out of shallow local dips, letting it continue searching for the lowest point."
         }
       ]
     },
@@ -186,30 +191,30 @@
           "id": "b1",
           "type": "multiple_choice",
           "xp": 5,
-          "prompt": "You are training a self-driving car model to detect pedestrians. Model X predicts 0.90 probability and is correct 90% of the time, but when it misses, it predicted 0.01 probability. Model Y is also correct 90% of the time, but when it misses, its prediction was 0.45. Which model has a better (lower) Log Loss and why?",
+          "prompt": "Your loss landscape is a steep, narrow canyon. Without momentum, your optimizer bounces frantically between the left and right walls, barely moving forward. What changes when you enable momentum?",
           "options": [
             {
               "id": "a",
-              "text": "Model Y, because it is less confidently wrong when it makes mistakes, leading to a much lower log loss.",
+              "text": "The wall-to-wall bounces cancel out, and the optimizer accelerates smoothly down the canyon floor.",
               "correct": true
             },
             {
               "id": "b",
-              "text": "Model X, because predicting 0.01 is more decisive than predicting 0.45.",
+              "text": "The optimizer immediately gets stuck on the first wall it hits.",
               "correct": false
             },
             {
               "id": "c",
-              "text": "Both have the same Log Loss because their overall accuracy is 90%.",
+              "text": "The model deletes the walls of the canyon automatically.",
               "correct": false
             },
             {
               "id": "d",
-              "text": "Model X, because 0.90 is closer to 1.0.",
+              "text": "The learning rate is forced to zero.",
               "correct": false
             }
           ],
-          "explain": "Model Y is much less confidently wrong. Predicting 0.01 for a pedestrian who actually exists creates a huge logarithmic penalty, making Model X's Log Loss much worse. 🎉"
+          "explain": "Spot on! Momentum averages out opposing oscillations and accelerates down consistent slopes. Next: how to customize steps for individual features!"
         }
       ]
     }

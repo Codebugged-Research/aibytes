@@ -2,14 +2,14 @@
   "id": "u8-l5",
   "unit": 8,
   "day": 45,
-  "tier": "Tabular Processing",
-  "tierIcon": "🗂️",
-  "title": "Robust Scaling for Outliers",
-  "icon": "⚠️",
-  "concept": "Robust scaling uses the median and Interquartile Range (IQR) to scale features, preventing extreme outliers from distorting the scale.",
+  "tier": "Model Training Basics",
+  "tierIcon": "🏋️",
+  "title": "Signs Your Model is Overfitting (and What to Do About It)",
+  "icon": "✅",
+  "concept": "Overfitting has a recognizable diagnostic pattern — high training score, much lower validation or test score — and a set of general fixes: more data, a simpler model, or reining in complexity with regularization.",
   "xp": 15,
   "hearts": 3,
-  "estMinutes": 6,
+  "estMinutes": 7,
   "segments": [
     {
       "type": "warmup",
@@ -18,25 +18,44 @@
           "id": "w1",
           "type": "multiple_choice",
           "xp": 1,
-          "prompt": "Warmup: Why does a single extreme outlier hurt Min-Max scaling more than standardization?",
+          "prompt": "Recap: What is the real goal of training a machine learning model?",
           "options": [
             {
               "id": "a",
-              "text": "It forces all the other normal data points to get compressed into a very narrow range near 0 or 1",
+              "text": "Generalizing well to new, unseen data",
               "correct": true
             },
             {
               "id": "b",
-              "text": "It changes the categorical values into text",
+              "text": "Getting the highest possible training score",
               "correct": false
             },
             {
               "id": "c",
-              "text": "It forces the standard deviation to be exactly zero",
+              "text": "Using as much data as physically possible",
               "correct": false
             }
           ],
-          "explain": "Yes! Min-Max uses the absolute maximum, so a massive outlier will pull the max way up and squash the rest of the data."
+          "explain": "Right! Now let's get practical: how do you actually spot when a model has drifted away from that goal into overfitting?"
+        },
+        {
+          "id": "w2",
+          "type": "true_false",
+          "xp": 1,
+          "prompt": "True or false: A validation set can help you notice overfitting before you ever touch the final test set.",
+          "options": [
+            {
+              "id": "t",
+              "text": "True",
+              "correct": true
+            },
+            {
+              "id": "f",
+              "text": "False",
+              "correct": false
+            }
+          ],
+          "explain": "True! Comparing training scores against validation scores is exactly how overfitting gets caught early."
         }
       ]
     },
@@ -45,49 +64,49 @@
       "cards": [
         {
           "kind": "hook",
-          "icon": "💰",
-          "title": "A room with a billionaire",
-          "body": "If 9 teachers making $50k sit in a room with a billionaire, their average income is $100 million. But the middle value (median) is still $50k. Averages can misrepresent a group when outliers exist."
+          "icon": "🩺",
+          "title": "A doctor reading symptoms",
+          "body": "A doctor doesn't need to see a broken bone directly to diagnose it — a specific combination of symptoms (swelling, pain, limited motion) is enough to recognize the pattern. Overfitting has its own recognizable symptom pattern too."
         },
         {
           "kind": "definition",
-          "icon": "🎓",
-          "title": "Robust Scaling",
-          "body": "<strong>Robust scaling</strong> scales features using statistics immune to outliers. It subtracts the <strong>median</strong> (the middle value) and divides by the <strong>Interquartile Range (IQR)</strong> (the range of the middle 50%)."
+          "icon": "🔍",
+          "title": "The tell-tale sign of overfitting",
+          "body": "The clearest diagnostic sign of overfitting is a <strong>big gap</strong>: a high score on training data paired with a much lower score on validation or test data. The bigger that gap, the more the model memorized instead of learned."
         },
         {
           "kind": "analogy",
-          "icon": "🏅",
-          "title": "Diving judges",
-          "body": "In gymnastics or diving, judges throw out the highest and lowest scores to get a 'robust' measure of performance. Robust scaling does this mathematically by ignoring the top and bottom 25%."
+          "icon": "📝",
+          "title": "Acing homework, failing pop quizzes",
+          "body": "A student who aces every homework assignment (which they've seen the answers to before) but bombs every unannounced pop quiz on the same material is showing the exact same pattern as an overfit model: great on the familiar, poor on the new."
         },
         {
           "kind": "example",
-          "icon": "📊",
-          "title": "Developer Salaries",
-          "body": "In a salary dataset ranging from $50k to $150k with a few executives making $5,000,000, robust scaling uses the median salary ($90k) and IQR ($40k). This keeps normal salaries spread out and distinct."
+          "icon": "🛍️",
+          "title": "Diagnosing a shopping recommender",
+          "body": "A recommendation model scores 98% on training data but only 61% on test data — a huge gap, a clear overfitting diagnosis. The team's fixes: gather more varied training data, simplify the model, or apply regularization to discourage it from chasing every quirk (a technique this course explores in depth later)."
         },
         {
           "kind": "mythbust",
-          "icon": "🧠",
-          "title": "Z-score has limits",
-          "body": "Why not just use Z-score standardization? Z-score uses mean and standard deviation. A single outlier drags the mean up and inflates the standard deviation, distorting the scores of everyone else!"
+          "icon": "⚠️",
+          "title": "\"Just train longer\" isn't the fix",
+          "body": "It's tempting to think more training time cures every problem. For overfitting, it's often the opposite — training even longer can let the model memorize the training data's noise even more tightly, widening the gap instead of closing it."
         },
         {
           "kind": "visual",
-          "icon": "⚖️",
-          "title": "Handling Outliers",
-          "body": "How Standard vs. Robust Scaling respond to outliers:",
+          "icon": "✅",
+          "title": "Diagnosis and general fixes",
+          "body": "Spot the pattern, then reach for a fix:",
           "compare": {
             "left": {
-              "emoji": "📈",
-              "tag": "Standard Z-Score",
-              "text": "Uses mean & std dev.<br>Outliers pull the mean.<br>Normal values cluster tightly."
+              "emoji": "🔍",
+              "tag": "The Diagnostic Sign",
+              "text": "Training score: high<br>Validation/test score: much lower"
             },
             "right": {
-              "emoji": "🛡️",
-              "tag": "Robust Scaling",
-              "text": "Uses median & IQR.<br>Outliers are ignored.<br>Normal values stay spread out."
+              "emoji": "🧰",
+              "tag": "General Fixes",
+              "text": "More/varied data<br>A simpler model<br>Regularization (previewed here)"
             }
           }
         }
@@ -100,31 +119,36 @@
           "id": "p1",
           "type": "multiple_choice",
           "xp": 2,
-          "prompt": "Which two statistical metrics does Robust Scaling use to transform features?",
+          "prompt": "What's the clearest diagnostic sign that a model is overfitting?",
           "options": [
             {
               "id": "a",
-              "text": "Median and Interquartile Range (IQR)",
+              "text": "A high training score paired with a much lower validation or test score",
               "correct": true
             },
             {
               "id": "b",
-              "text": "Mean and Standard Deviation",
+              "text": "Low scores on both training and test data",
               "correct": false
             },
             {
               "id": "c",
-              "text": "Minimum and Maximum",
+              "text": "Similar scores on both training and test data",
+              "correct": false
+            },
+            {
+              "id": "d",
+              "text": "The model trains very quickly",
               "correct": false
             }
           ],
-          "explain": "Robust Scaling centers data around the median and scales it using the IQR (middle 50% range) to remain outlier-resistant."
+          "explain": "Exactly! A wide gap between a strong training score and a weak validation/test score is the classic overfitting signature."
         },
         {
           "id": "p2",
           "type": "true_false",
           "xp": 2,
-          "prompt": "True or false: The Interquartile Range (IQR) is heavily influenced by extreme outliers.",
+          "prompt": "True or false: Training a model for even longer is a reliable general fix for overfitting.",
           "options": [
             {
               "id": "t",
@@ -137,45 +161,74 @@
               "correct": true
             }
           ],
-          "explain": "False! The IQR is the range of the middle 50% of the data, so it completely ignores the top 25% and bottom 25% where outliers live."
+          "explain": "False! Training longer often deepens overfitting rather than fixing it — it lets the model memorize noise even harder."
         },
         {
           "id": "p3",
           "type": "fill_blank",
           "xp": 2,
           "prompt": "Complete the sentence:",
-          "sentence": "Robust scaling subtracts the ___ and divides by the Interquartile Range.",
-          "blank": "median",
+          "sentence": "One general fix for overfitting is to make the model ___, so it has less room to memorize noise.",
+          "blank": "simpler",
           "words": [
-            "median",
-            "mean",
-            "minimum"
+            "simpler",
+            "faster",
+            "larger"
           ],
-          "explain": "Subtracting the median centers the feature at its midpoint, which is robust against skewness from outliers."
+          "explain": "A simpler model has less capacity to latch onto quirky noise, pushing it back toward the goldilocks zone."
         },
         {
           "id": "p4",
           "type": "spot_the_ai",
           "xp": 2,
-          "prompt": "Which scaler should you choose for a feature with extreme, unpredictable outliers that you cannot remove?",
+          "prompt": "Which of these situations should raise a red flag for overfitting?",
           "options": [
             {
               "id": "a",
-              "text": "Robust Scaler",
+              "text": "A model scores 96% on training data and 54% on validation data",
               "correct": true
             },
             {
               "id": "b",
-              "text": "Min-Max Scaler",
+              "text": "A model scores 82% on training data and 80% on validation data",
               "correct": false
             },
             {
               "id": "c",
-              "text": "Standard Scaler (Z-score)",
+              "text": "A model scores 75% on training data and 74% on validation data",
               "correct": false
             }
           ],
-          "explain": "Robust Scaler uses median and IQR, making it the only scaler here that is not distorted by extreme outliers."
+          "explain": "Correct! That 42-point gap between training and validation is a textbook overfitting red flag; the other two show consistent, healthy scores."
+        },
+        {
+          "id": "p5",
+          "type": "multiple_choice",
+          "xp": 2,
+          "prompt": "Which of these is a reasonable general fix for an overfitting model?",
+          "options": [
+            {
+              "id": "a",
+              "text": "Gather more varied training data so the model sees a fuller picture of the real pattern",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "Make the model dramatically more complex so it can memorize even more detail",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "Remove the validation set so overfitting can't be detected anymore",
+              "correct": false
+            },
+            {
+              "id": "d",
+              "text": "Train exclusively on a smaller, narrower slice of the same data",
+              "correct": false
+            }
+          ],
+          "explain": "Exactly! More varied data helps a model learn the real pattern instead of memorizing quirks from a narrow slice."
         }
       ]
     },
@@ -186,30 +239,59 @@
           "id": "b1",
           "type": "multiple_choice",
           "xp": 5,
-          "prompt": "You are preparing a dataset of home sizes in a city. Most houses are 1,000 to 3,000 sq ft, but there are a few massive castles over 100,000 sq ft. If you use a standard scaler, the castles will inflate the standard deviation, making all normal houses look almost identical to the model. How should you scale this feature?",
+          "prompt": "A voice-assistant model scores 99% recognizing commands from its training recordings but only 58% on new voices during a live demo. The team has time for exactly one fix before the next demo. Which is the most sensible first move?",
           "options": [
             {
               "id": "a",
-              "text": "Use Robust Scaler, which centers on the median and scales by the IQR, keeping the normal house sizes distinct.",
+              "text": "Simplify the model or gather more varied training voices — both directly address the overfitting gap they diagnosed",
               "correct": true
             },
             {
               "id": "b",
-              "text": "Use Min-Max scaling to force everything between 0 and 1.",
+              "text": "Train it even longer on the exact same recordings",
               "correct": false
             },
             {
               "id": "c",
-              "text": "Avoid scaling entirely and use the raw square footage.",
+              "text": "Make the model even more complex to squeeze out a higher training score",
               "correct": false
             },
             {
               "id": "d",
-              "text": "One-hot encode the square footage.",
+              "text": "Stop checking validation scores so the gap stops showing up",
               "correct": false
             }
           ],
-          "explain": "Correct! Robust Scaler ignores the extreme castle sizes when defining the scale of the middle 50% of homes. This keeps normal home differences highly visible to the model. Sensational work completing Unit 8 on Feature Scaling & Normalization!"
+          "explain": "Right! Simplifying the model or diversifying the training data both target the actual cause of the overfitting gap, unlike the other options which would make it worse or just hide it."
+        },
+        {
+          "id": "b2",
+          "type": "multiple_choice",
+          "xp": 5,
+          "prompt": "Two models are compared. Model A: 90% training, 88% validation. Model B: 99% training, 62% validation. A teammate says \"Model B is clearly better since its training score is higher.\" How would you respond, using what you know about diagnosing overfitting?",
+          "options": [
+            {
+              "id": "a",
+              "text": "Disagree — Model B's huge train-validation gap signals overfitting, while Model A's small, consistent gap suggests it will generalize better in the real world",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "Agree — the higher training score always wins, regardless of validation performance",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "Agree, but only because Model B took longer to train",
+              "correct": false
+            },
+            {
+              "id": "d",
+              "text": "Disagree, but only because Model A used fewer features, which is unrelated to the scores shown",
+              "correct": false
+            }
+          ],
+          "explain": "Exactly! A small, consistent gap (Model A) beats a huge gap (Model B) — Model B's flashy training score is hiding an overfitting problem that will hurt it on real, new data."
         }
       ]
     }

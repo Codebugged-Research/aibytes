@@ -2,11 +2,11 @@
   "id": "u12-l4",
   "unit": 12,
   "day": 64,
-  "tier": "Linear Regression",
-  "tierIcon": "🎯",
-  "title": "MSE vs MAE: The Outlier Choice",
+  "tier": "Tabular Processing",
+  "tierIcon": "🗂️",
+  "title": "Normalization vs Standardization",
   "icon": "🆚",
-  "concept": "Choose MSE when large errors are unacceptable and must be avoided; choose MAE when outliers should not distort the overall model.",
+  "concept": "Choose Min-Max scaling for features with strict boundaries (like image pixels) and standardization for models assuming bell curves.",
   "xp": 15,
   "hearts": 3,
   "estMinutes": 6,
@@ -18,25 +18,25 @@
           "id": "w1",
           "type": "multiple_choice",
           "xp": 1,
-          "prompt": "Recap: Which of the following is a key advantage of Mean Absolute Error (MAE)?",
+          "prompt": "Warmup: If a data point is exactly equal to the average (mean) value of a feature, what will its value be after Z-score standardization?",
           "options": [
             {
               "id": "a",
-              "text": "It is less sensitive to outliers than MSE",
+              "text": "0.0",
               "correct": true
             },
             {
               "id": "b",
-              "text": "It penalizes large errors exponentially more",
+              "text": "1.0",
               "correct": false
             },
             {
               "id": "c",
-              "text": "It makes the model train twice as fast",
+              "text": "-1.0",
               "correct": false
             }
           ],
-          "explain": "Right — because MAE treats errors linearly, single large outliers do not skew the total score as much as they would in MSE."
+          "explain": "Exactly! The mean is subtracted from the value, resulting in 0."
         }
       ]
     },
@@ -45,49 +45,49 @@
       "cards": [
         {
           "kind": "hook",
-          "icon": "🌉",
-          "title": "Building a bridge",
-          "body": "If you are building a bridge, a 10-inch mistake is a structural disaster, not just ten 1-inch mistakes. But if you are counting daily steps, one abnormal day shouldn't ruin your average."
+          "icon": "🧳",
+          "title": "Suitcase vs. Weather",
+          "body": "Packing a suitcase requires fitting things within strict physical boundaries (Min-Max). Dressing for the weather is relative—is it warmer or colder than average (Standardization)? They serve different purposes."
         },
         {
           "kind": "definition",
-          "icon": "🆚",
-          "title": "The outlier trade-off",
-          "body": "The choice between <strong>MSE</strong> and <strong>MAE</strong> is about how you handle outliers. MSE pulls the model's line to fit outliers; MAE ignores them to keep the main trend."
+          "icon": "🎓",
+          "title": "The Right Scaler",
+          "body": "<strong>Min-Max scaling</strong> is best when you need values bounded in a strict range. <strong>Standardization</strong> is ideal when your algorithm assumes normally distributed data, or when the feature has outliers."
         },
         {
           "kind": "analogy",
-          "icon": "📢",
-          "title": "Parenting styles",
-          "body": "MSE is like an overprotective parent who reacts dramatically to any big mistake. MAE is like a relaxed coach who cares about your average and ignores one off-day."
+          "icon": "📐",
+          "title": "Pixels vs. Exams",
+          "body": "Image models need pixels strictly between 0 and 1, so we normalize. But college admissions compare SAT scores relative to the mean, so they standardize scores."
         },
         {
           "kind": "example",
-          "icon": "🌡️",
-          "title": "Real-world scenarios",
-          "body": "Use MSE in weather forecasting to avoid huge errors (e.g. frost warnings). Use MAE in real estate pricing to prevent a single mansion from skewing normal home predictions."
+          "icon": "🤖",
+          "title": "Neural Nets vs. Trees",
+          "body": "Gradient-based models like linear and logistic regression learn faster and more stably when inputs are standardized (centered at 0). However, tree-based models don't care about scale at all!"
         },
         {
           "kind": "mythbust",
-          "icon": "⚠️",
-          "title": "No single 'best' choice",
-          "body": "There is no 'better' cost function in general. A model isn't superior just because it uses MSE. The correct choice depends entirely on your business goals and risks."
+          "icon": "🧠",
+          "title": "No universal winner",
+          "body": "There is no single 'best' scaler. While standardization is often default because it resists outlier distortion, some domains (like computer vision) require normalization."
         },
         {
           "kind": "visual",
           "icon": "⚖️",
-          "title": "How they treat outliers",
-          "body": "Comparing their behaviors under outliers:",
+          "title": "Comparison Summary",
+          "body": "When to use Normalization vs. Standardization:",
           "compare": {
             "left": {
-              "emoji": "🧲",
-              "tag": "MSE behavior",
-              "text": "Pulls prediction line toward outliers.<br>Prioritizes avoiding big misses."
+              "emoji": "📏",
+              "tag": "Normalization (Min-Max)",
+              "text": "Strict bounds (e.g. 0 to 1)<br>Good for bounded inputs<br>Sensitive to outliers"
             },
             "right": {
-              "emoji": "🛡️",
-              "tag": "MAE behavior",
-              "text": "Ignores outlier data points.<br>Prioritizes the typical majority."
+              "emoji": "📈",
+              "tag": "Standardization (Z-Score)",
+              "text": "No boundaries, mean = 0<br>Good for normal curves<br>Less sensitive to outliers"
             }
           }
         }
@@ -100,31 +100,31 @@
           "id": "p1",
           "type": "multiple_choice",
           "xp": 2,
-          "prompt": "If your dataset contains many typos and noisy outliers that you want the model to ignore, which cost function is best?",
+          "prompt": "When is Min-Max scaling (normalization) generally preferred over standardization?",
           "options": [
             {
               "id": "a",
-              "text": "MAE, because it is robust and resists outlier distortion",
+              "text": "When you need your feature values to lie within a strict, predefined range like 0 to 1",
               "correct": true
             },
             {
               "id": "b",
-              "text": "MSE, because it forces the model to fit every typo perfectly",
+              "text": "When your dataset contains extreme outliers",
               "correct": false
             },
             {
               "id": "c",
-              "text": "Either, since both handle noisy data identically",
+              "text": "When you want the mean of the feature to be exactly 0",
               "correct": false
             }
           ],
-          "explain": "MAE is robust and prevents outlier typos from pulling the line away from the main trend."
+          "explain": "Min-Max scaling guarantees a strict boundary (usually 0 to 1), whereas standardized values can go beyond those bounds."
         },
         {
           "id": "p2",
           "type": "true_false",
           "xp": 2,
-          "prompt": "True or false: If an unusually large error is extremely dangerous in your application, you should use MSE to train your model.",
+          "prompt": "True or false: Standardization is generally less sensitive to extreme outliers than Min-Max scaling.",
           "options": [
             {
               "id": "t",
@@ -137,45 +137,45 @@
               "correct": false
             }
           ],
-          "explain": "True! MSE's squared penalty forces the model to avoid huge mistakes, even if it allows more small errors."
+          "explain": "True! Min-Max squashes all non-outlier data points close together when a single massive outlier exists, whereas standardization preserves more relative spread."
         },
         {
           "id": "p3",
           "type": "fill_blank",
           "xp": 2,
           "prompt": "Complete the sentence:",
-          "sentence": "___ is highly sensitive to outliers because it squares all residuals.",
-          "blank": "MSE",
+          "sentence": "___ is preferred when training gradient-based models because centering inputs at zero leads to faster, more stable optimization.",
+          "blank": "Standardization",
           "words": [
-            "MSE",
-            "MAE",
-            "None"
+            "Standardization",
+            "Min-Max scaling",
+            "One-hot encoding"
           ],
-          "explain": "MSE squares errors, so extreme outliers create massive penalties that dominate the cost score."
+          "explain": "Gradient-based models update weights using gradients; centering inputs at zero with standard deviation of 1 makes optimization more stable."
         },
         {
           "id": "p4",
           "type": "spot_the_ai",
           "xp": 2,
-          "prompt": "Why does a model trained with MSE get pulled toward outlier data points?",
+          "prompt": "Which scenario is the best fit for Min-Max normalization?",
           "options": [
             {
               "id": "a",
-              "text": "Because the squared penalty of a large error is huge, forcing the model to minimize it",
+              "text": "Preparing pixel brightness values (0 to 255) for an image classification model",
               "correct": true
             },
             {
               "id": "b",
-              "text": "Because outliers are automatically given higher priority by the algorithm",
+              "text": "Scaling user income in a dataset with multi-millionaire outliers",
               "correct": false
             },
             {
               "id": "c",
-              "text": "Because MSE ignores small errors entirely",
+              "text": "Formatting house prices for a linear regression model that assumes normally distributed data",
               "correct": false
             }
           ],
-          "explain": "A large error has a massive squared cost. To lower the overall cost score, the model shifts its line toward the outlier to shrink that specific error."
+          "explain": "Pixel values have a fixed, strict boundary (0 to 255) and no outliers, making them a perfect candidate for Min-Max normalization."
         }
       ]
     },
@@ -186,25 +186,30 @@
           "id": "b1",
           "type": "multiple_choice",
           "xp": 5,
-          "prompt": "You are building a system to predict battery life for critical medical devices. Overestimating battery life is dangerous. Which cost function should you choose?",
+          "prompt": "You are training a Support Vector Machine (SVM) model on customer data. The age column has normal distribution, but the income column contains major outliers. If you use Min-Max scaling, the normal incomes will get squished together by the outliers. What should you do?",
           "options": [
             {
               "id": "a",
-              "text": "MSE, because we must heavily penalize and avoid any large overestimations of battery life",
+              "text": "Use standardization (Z-score scaling) instead, so the outliers don't compress the normal values into a tiny range.",
               "correct": true
             },
             {
               "id": "b",
-              "text": "MAE, because medical device data is always clean and linear",
+              "text": "Keep Min-Max scaling but delete all customer entries with high income.",
               "correct": false
             },
             {
               "id": "c",
-              "text": "Neither, since battery life predictions do not use cost functions",
+              "text": "Do not scale the features at all.",
+              "correct": false
+            },
+            {
+              "id": "d",
+              "text": "Use target encoding on the income column.",
               "correct": false
             }
           ],
-          "explain": "Incredible! When large errors pose critical safety risks, MSE is the correct choice because its squared penalty prioritizes avoiding huge mistakes. Next: what if we want the benefits of both?"
+          "explain": "Correct! Standardization handles outliers much better than Min-Max scaling because it doesn't compress the main cluster of data points. Brilliant decision-making on scaling choices!"
         }
       ]
     }

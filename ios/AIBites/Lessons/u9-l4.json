@@ -2,14 +2,14 @@
   "id": "u9-l4",
   "unit": 9,
   "day": 49,
-  "tier": "Tabular Processing",
-  "tierIcon": "🚨",
-  "title": "Handling Outliers: Trim or Cap?",
-  "icon": "✂️",
-  "concept": "Handling outliers involves either trimming (removing the rows) or capping (clipping values to a threshold), balancing data loss against model distortion.",
+  "tier": "Feature Engineering",
+  "tierIcon": "🧱",
+  "title": "Domain Knowledge: The Secret Ingredient",
+  "icon": "🧠",
+  "concept": "Understanding the real-world problem you're modeling is what tells you which raw signals are worth turning into features — domain knowledge guides good feature creation.",
   "xp": 15,
   "hearts": 3,
-  "estMinutes": 6,
+  "estMinutes": 7,
   "segments": [
     {
       "type": "warmup",
@@ -18,113 +18,31 @@
           "id": "w1",
           "type": "multiple_choice",
           "xp": 1,
-          "prompt": "Warmup: How do you calculate the upper fence for outlier detection in the IQR method?",
+          "prompt": "Recap: What is feature creation?",
           "options": [
             {
               "id": "a",
-              "text": "Q3 + 1.5 * IQR",
+              "text": "Deriving new, more useful variables from raw data by extracting the signal hidden inside it",
               "correct": true
             },
             {
               "id": "b",
-              "text": "Q1 - 1.5 * IQR",
+              "text": "Deleting any raw data column that looks complicated",
               "correct": false
             },
             {
               "id": "c",
-              "text": "Median + 3 * Standard Deviation",
+              "text": "Picking which algorithm a model will use",
               "correct": false
             }
           ],
-          "explain": "Exactly! Any data point above Q3 + 1.5 * IQR is flagged as a high outlier. Now, once we've found these outliers, how do we handle them?"
-        }
-      ]
-    },
-    {
-      "type": "teach",
-      "cards": [
-        {
-          "kind": "hook",
-          "icon": "🍓",
-          "title": "Sorting strawberries",
-          "body": "Imagine sorting strawberries. Some are rotten (errors), while others are just massive (real but rare). Do you throw them in the trash (trimming) or trim them down (capping)?"
+          "explain": "Right! But here's the catch: how does anyone know WHICH features are worth creating in the first place?"
         },
         {
-          "kind": "definition",
-          "icon": "✂️",
-          "title": "Trim vs. Cap",
-          "body": "When managing outliers, we have two primary strategies: <strong>Trimming</strong> (deleting the entire row containing the outlier) and <strong>Capping</strong> (replacing the extreme value with a set threshold, also called Winsorizing)."
-        },
-        {
-          "kind": "analogy",
-          "icon": "🏎️",
-          "title": "Pruning vs. Speed limits",
-          "body": "Trimming is like pruning dead branches off a tree—they're gone completely. Capping is like using a speed limiter on a car—the car can run fast, but it hits a ceiling and goes no faster than the limit."
-        },
-        {
-          "kind": "example",
-          "icon": "📋",
-          "title": "Typo vs. Wealth",
-          "body": "In a dataset of ages, an entry of 150 is likely a typo. We should <em>trim</em> it. But if we track monthly spending where a few clients spend $100k (far above the $2k average), we might <em>cap</em> their value at $10k."
-        },
-        {
-          "kind": "mythbust",
-          "icon": "🧠",
-          "title": "Don't always trim!",
-          "body": "Should you always trim outliers? Absolutely not! Trimming removes entire rows, meaning you lose other useful data in those rows. Capping preserves the row while keeping extreme variance in check."
-        },
-        {
-          "kind": "visual",
-          "icon": "⚖️",
-          "title": "Comparison of strategies",
-          "body": "The tradeoffs between trimming and capping outliers in your dataset:",
-          "compare": {
-            "left": {
-              "emoji": "🗑️",
-              "tag": "Trimming Outliers",
-              "text": "Deletes outlier rows<br>Reduces dataset size<br>Best for obvious errors"
-            },
-            "right": {
-              "emoji": "🛡️",
-              "tag": "Capping / Winsorizing",
-              "text": "Clips values to fence thresholds<br>Keeps all rows<br>Best for valid extreme values"
-            }
-          }
-        }
-      ]
-    },
-    {
-      "type": "practice",
-      "exercises": [
-        {
-          "id": "p1",
-          "type": "multiple_choice",
-          "xp": 2,
-          "prompt": "Which strategy completely deletes the data rows containing outliers from the dataset?",
-          "options": [
-            {
-              "id": "a",
-              "text": "Trimming",
-              "correct": true
-            },
-            {
-              "id": "b",
-              "text": "Capping",
-              "correct": false
-            },
-            {
-              "id": "c",
-              "text": "Standardizing",
-              "correct": false
-            }
-          ],
-          "explain": "Trimming removes the entire observation (row) from the dataset, which eliminates the outlier but shrinks your data size."
-        },
-        {
-          "id": "p2",
+          "id": "w2",
           "type": "true_false",
-          "xp": 2,
-          "prompt": "True or false: Capping (Winsorizing) changes extreme values to a maximum threshold instead of deleting the row.",
+          "xp": 1,
+          "prompt": "True or false: From a single raw timestamp, you can derive multiple useful features like day_of_week and hour_of_day.",
           "options": [
             {
               "id": "t",
@@ -137,45 +55,180 @@
               "correct": false
             }
           ],
-          "explain": "True! Capping keeps the row but replaces the extreme outlier value with a predetermined limit, like the upper IQR fence."
+          "explain": "True! And knowing that day_of_week matters at all for THIS problem — that takes something more than the timestamp itself."
+        }
+      ]
+    },
+    {
+      "type": "teach",
+      "cards": [
+        {
+          "kind": "hook",
+          "icon": "🩺",
+          "title": "Two people, one patient chart",
+          "body": "Hand the same patient chart to a doctor and to someone with zero medical training. The doctor immediately zeroes in on fever + cough + fatigue together. The other person might just as easily focus on the patient's shoe size."
+        },
+        {
+          "kind": "definition",
+          "icon": "🧠",
+          "title": "What is domain knowledge?",
+          "body": "<strong>Domain knowledge</strong> is real-world understanding of the problem you're modeling. It's what tells you <em>which</em> raw signals are actually worth turning into features in the first place."
+        },
+        {
+          "kind": "analogy",
+          "icon": "🩺",
+          "title": "The doctor vs. the random guesser",
+          "body": "A doctor knows fever, cough, and fatigue combined is a meaningful pattern worth capturing as a feature. A random guesser with no medical background might combine <code>shoe size × zip code</code> — technically a new feature, but a meaningless one. Domain knowledge is what separates the two."
+        },
+        {
+          "kind": "example",
+          "icon": "💳",
+          "title": "Debt-to-income ratio",
+          "body": "Someone with financial domain knowledge, predicting loan default, doesn't just hand over raw <code>income</code> and raw <code>debt</code> separately — they know to combine them into <code>debt-to-income ratio</code>, a feature well known in finance to signal real repayment risk."
+        },
+        {
+          "kind": "mythbust",
+          "icon": "⚠️",
+          "title": "Automation doesn't replace understanding",
+          "body": "It's tempting to think bigger datasets or more automated tools remove the need for real-world understanding. In reality, tools can help generate candidate features — but knowing which combinations actually matter for THIS problem still takes someone who understands it."
+        },
+        {
+          "kind": "visual",
+          "icon": "⚖️",
+          "title": "Random Guessing vs. Domain Knowledge",
+          "body": "Same raw columns, very different feature choices:",
+          "compare": {
+            "left": {
+              "emoji": "🎲",
+              "tag": "Random Guessing",
+              "text": "shoe_size × zip_code<br>Arbitrary combinations<br>No real-world grounding"
+            },
+            "right": {
+              "emoji": "🩺",
+              "tag": "Domain Knowledge",
+              "text": "debt-to-income ratio<br>fever + cough + fatigue<br>Grounded in how the problem actually works"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "type": "practice",
+      "exercises": [
+        {
+          "id": "p1",
+          "type": "multiple_choice",
+          "xp": 2,
+          "prompt": "What is domain knowledge, in the context of feature engineering?",
+          "options": [
+            {
+              "id": "a",
+              "text": "Real-world understanding of the problem, which guides which features are worth creating",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "Knowledge of how to write code in a specific programming language",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "The total number of rows in a raw dataset",
+              "correct": false
+            },
+            {
+              "id": "d",
+              "text": "A type of algorithm used only for text data",
+              "correct": false
+            }
+          ],
+          "explain": "Exactly! Domain knowledge is understanding of the real-world problem — it's what points you toward the features that actually matter."
+        },
+        {
+          "id": "p2",
+          "type": "true_false",
+          "xp": 2,
+          "prompt": "True or false: Someone with no understanding of a problem is just as likely to invent a meaningful feature as someone with real domain expertise.",
+          "options": [
+            {
+              "id": "t",
+              "text": "True",
+              "correct": false
+            },
+            {
+              "id": "f",
+              "text": "False",
+              "correct": true
+            }
+          ],
+          "explain": "False! Without real-world understanding, feature combinations are more likely to be arbitrary and meaningless, like shoe_size × zip_code."
         },
         {
           "id": "p3",
           "type": "fill_blank",
           "xp": 2,
           "prompt": "Complete the sentence:",
-          "sentence": "If an outlier is clearly a typing error (like age = 200), the safest strategy is usually ___.",
-          "blank": "trimming",
+          "sentence": "Combining raw income and raw debt into a debt-to-income ratio is an example of using ___ to create a meaningful feature.",
+          "blank": "domain knowledge",
           "words": [
-            "trimming",
-            "capping",
-            "standardizing"
+            "domain knowledge",
+            "random guessing",
+            "raw storage"
           ],
-          "explain": "When outliers are clear errors or corruption, deleting them (trimming) is best since the value contains no real information."
+          "explain": "Right! Knowing that this specific ratio matters for loan risk comes from financial domain knowledge, not chance."
         },
         {
           "id": "p4",
           "type": "spot_the_ai",
           "xp": 2,
-          "prompt": "What is a major risk of aggressively trimming outliers from a small dataset?",
+          "prompt": "Which of these best demonstrates domain knowledge guiding feature creation?",
           "options": [
             {
               "id": "a",
-              "text": "Losing too many rows, which can lead to overfitting or data loss",
+              "text": "A doctor combines fever, cough, and fatigue into one feature because that combination is a known symptom pattern",
               "correct": true
             },
             {
               "id": "b",
-              "text": "The remaining data will automatically turn into text",
+              "text": "Someone combines a patient's shoe size and zip code into a new feature with no medical reasoning",
               "correct": false
             },
             {
               "id": "c",
-              "text": "The standard deviation will double",
+              "text": "A dataset is left completely raw and unprepared",
               "correct": false
             }
           ],
-          "explain": "Trimming reduces your sample size, and doing it aggressively can strip away valuable, diverse patterns, hurting model training."
+          "explain": "Correct! The doctor's combination is grounded in real medical understanding — that's domain knowledge at work."
+        },
+        {
+          "id": "p5",
+          "type": "multiple_choice",
+          "xp": 2,
+          "prompt": "A team with no background in retail is building a model to predict store sales, and their features are essentially random combinations of raw columns. What does today's lesson suggest they're missing?",
+          "options": [
+            {
+              "id": "a",
+              "text": "Domain knowledge — real-world understanding of retail that would point them toward meaningful features",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "More raw data rows, regardless of what the features actually mean",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "A fancier algorithm, which would fix the random feature choices automatically",
+              "correct": false
+            },
+            {
+              "id": "d",
+              "text": "Nothing — random feature combinations work just as well as informed ones",
+              "correct": false
+            }
+          ],
+          "explain": "Right! Without domain knowledge, feature choices tend to be arbitrary, like the random guesser combining shoe size and zip code."
         }
       ]
     },
@@ -186,30 +239,59 @@
           "id": "b1",
           "type": "multiple_choice",
           "xp": 5,
-          "prompt": "You are training a model to predict student GPA. You notice one student's study hours are recorded as 500 hours/week (impossible since a week only has 168 hours). Another student is recorded studying 80 hours/week (extremely high but possible). How should you handle these two data points?",
+          "prompt": "A hospital's data team (no clinical background) and its doctors both look at the same raw patient records to build a readmission-risk model. Based on today's lesson, who is more likely to propose a genuinely useful feature, and why?",
           "options": [
             {
               "id": "a",
-              "text": "Trim the 500-hour record (since it is a corrupted error) and cap the 80-hour record (since it is a real but extreme value).",
+              "text": "The doctors — their real-world medical understanding points them toward combinations of symptoms and history that actually signal risk",
               "correct": true
             },
             {
               "id": "b",
-              "text": "Cap the 500-hour record to 168 hours and trim the 80-hour record.",
+              "text": "The data team — understanding the real-world problem is irrelevant to choosing good features",
               "correct": false
             },
             {
               "id": "c",
-              "text": "Delete both rows because they are outliers.",
+              "text": "Neither — feature quality has nothing to do with who creates them",
               "correct": false
             },
             {
               "id": "d",
-              "text": "Scale the hours using Min-Max scaling without changes.",
+              "text": "It's random which group proposes better features",
               "correct": false
             }
           ],
-          "explain": "Correct! Impossible values are errors and should be trimmed. Possible but extreme values are best capped to prevent them from distorting the model while retaining the rest of the student's data. Sensational progress on handling outliers!"
+          "explain": "Exactly! Domain knowledge — the doctors' real clinical understanding — is what points toward feature combinations grounded in how the problem actually works."
+        },
+        {
+          "id": "b2",
+          "type": "multiple_choice",
+          "xp": 5,
+          "prompt": "A finance team builds debt-to-income ratio as a feature for loan risk, grounded in real lending knowledge. A different team, with no finance background, builds phone_model × favorite_color for the same problem. Which is more likely to help the model, and why?",
+          "options": [
+            {
+              "id": "a",
+              "text": "debt-to-income ratio — it's grounded in real-world understanding of what actually predicts repayment risk",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "phone_model × favorite_color — more unusual feature combinations are always more powerful",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "Both are equally likely to help, since any combination of raw columns counts as a valid feature",
+              "correct": false
+            },
+            {
+              "id": "d",
+              "text": "Neither — features never affect how well a model performs",
+              "correct": false
+            }
+          ],
+          "explain": "Right! debt-to-income ratio is grounded in real financial understanding of loan risk, while phone_model × favorite_color is an arbitrary combination with no such grounding. Next: you're about to build the actual toolkit for doing this well."
         }
       ]
     }

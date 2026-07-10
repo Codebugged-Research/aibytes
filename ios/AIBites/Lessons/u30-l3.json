@@ -1,0 +1,222 @@
+{
+  "id": "u30-l3",
+  "unit": 30,
+  "day": 153,
+  "tier": "Model Evaluation",
+  "tierIcon": "🔄",
+  "title": "Stratified K-Fold",
+  "icon": "🗂️",
+  "concept": "Stratified K-Fold cross-validation preserves the percentage of each class in every fold, ensuring stable evaluation for rare categories.",
+  "xp": 15,
+  "hearts": 3,
+  "estMinutes": 6,
+  "segments": [
+    {
+      "type": "warmup",
+      "exercises": [
+        {
+          "id": "w1",
+          "type": "multiple_choice",
+          "xp": 1,
+          "prompt": "Recap: What is the main benefit of K-Fold cross-validation over a single train/validation split?",
+          "options": [
+            {
+              "id": "a",
+              "text": "It reduces evaluation variance by averaging scores across different validation folds.",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "It automatically makes the model train twice as fast.",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "It eliminates the need for any training data.",
+              "correct": false
+            }
+          ],
+          "explain": "Correct! K-Fold averages out the luck of a single random split. But what if some categories of our target are extremely rare?"
+        }
+      ]
+    },
+    {
+      "type": "teach",
+      "cards": [
+        {
+          "kind": "hook",
+          "icon": "🧪",
+          "title": "The empty fold",
+          "body": "Imagine you're building a rare disease detector. Only 1% of patients in your dataset have the disease. If you split your data randomly into 10 folds, some folds might end up with zero disease cases! How can you validate on a fold with no examples to find?"
+        },
+        {
+          "kind": "definition",
+          "icon": "🗂️",
+          "title": "What is Stratified K-Fold?",
+          "body": "<strong>Stratified K-Fold</strong> is a variation of K-Fold where each fold is made to contain approximately the same percentage of samples for each target class as the complete dataset."
+        },
+        {
+          "kind": "analogy",
+          "icon": "🍪",
+          "title": "The recipe blend",
+          "body": "Think of your dataset as a chocolate chip cookie dough. If you split it into 5 chunks, you want to make sure every cookie gets a fair share of chocolate chips. <strong>Stratifying</strong> is like making sure each chunk has the same chip-to-dough ratio."
+        },
+        {
+          "kind": "example",
+          "icon": "🏥",
+          "title": "A balanced split",
+          "body": "If your dataset has 90% healthy patients and 10% sick patients, a Stratified K-Fold split will ensure that every single fold contains exactly 90% healthy and 10% sick patients, preventing unbalanced folds."
+        },
+        {
+          "kind": "mythbust",
+          "icon": "⚠️",
+          "title": "Does it balance the classes?",
+          "body": "A common myth is that Stratification balances the overall dataset (making it 50/50). It does <strong>not</strong>. If your data is 99% class A and 1% class B, each fold will still be 99% A and 1% B. It simply keeps the ratio consistent."
+        },
+        {
+          "kind": "visual",
+          "icon": "⚖️",
+          "title": "Standard vs Stratified Folds",
+          "body": "Comparing how standard and stratified K-Fold divide imbalanced classes:",
+          "compare": {
+            "left": {
+              "emoji": "🎲",
+              "tag": "Standard K-Fold",
+              "text": "Purely random.<br>Some folds get 0 rare cases.<br>Unstable evaluation."
+            },
+            "right": {
+              "emoji": "⚖️",
+              "tag": "Stratified K-Fold",
+              "text": "Preserves ratios.<br>Every fold gets rare cases.<br>Consistent evaluation."
+            }
+          }
+        }
+      ]
+    },
+    {
+      "type": "practice",
+      "exercises": [
+        {
+          "id": "p1",
+          "type": "multiple_choice",
+          "xp": 2,
+          "prompt": "When is Stratified K-Fold most important to use compared to standard K-Fold?",
+          "options": [
+            {
+              "id": "a",
+              "text": "When dealing with classification tasks with imbalanced target classes",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "When the dataset has millions of rows and training is slow",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "When training regression models predicting continuous house prices",
+              "correct": false
+            },
+            {
+              "id": "d",
+              "text": "When you want to reduce the number of features in your dataset",
+              "correct": false
+            }
+          ],
+          "explain": "Stratification is crucial for classification tasks with imbalanced classes, ensuring every fold represents all classes proportionally."
+        },
+        {
+          "id": "p2",
+          "type": "true_false",
+          "xp": 2,
+          "prompt": "True or false: Stratified K-Fold changes your training data to make the rare class equal in size to the majority class.",
+          "options": [
+            {
+              "id": "t",
+              "text": "True",
+              "correct": false
+            },
+            {
+              "id": "f",
+              "text": "False",
+              "correct": true
+            }
+          ],
+          "explain": "False. It only preserves the existing ratio of classes in each fold; it does not change the ratio or perform resampling."
+        },
+        {
+          "id": "p3",
+          "type": "fill_blank",
+          "xp": 2,
+          "prompt": "Complete the sentence:",
+          "sentence": "Stratified K-Fold preserves the class ___ in each fold to ensure stable evaluation of rare classes.",
+          "blank": "ratio",
+          "words": [
+            "ratio",
+            "size",
+            "weight"
+          ],
+          "explain": "By keeping the ratio consistent, each fold becomes a miniature, representative version of the overall dataset."
+        },
+        {
+          "id": "p4",
+          "type": "spot_the_ai",
+          "xp": 2,
+          "prompt": "Which of the following distributions across 3 validation folds shows a correctly stratified split for a dataset with 80% Class A and 20% Class B?",
+          "options": [
+            {
+              "id": "a",
+              "text": "Fold 1: 80% A / 20% B; Fold 2: 80% A / 20% B; Fold 3: 80% A / 20% B",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "Fold 1: 100% A / 0% B; Fold 2: 70% A / 30% B; Fold 3: 70% A / 30% B",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "Fold 1: 50% A / 50% B; Fold 2: 50% A / 50% B; Fold 3: 50% A / 50% B",
+              "correct": false
+            }
+          ],
+          "explain": "A stratified split ensures every single fold retains the exact global class distribution (80% A and 20% B)."
+        }
+      ]
+    },
+    {
+      "type": "boss",
+      "exercises": [
+        {
+          "id": "b1",
+          "type": "multiple_choice",
+          "xp": 5,
+          "prompt": "You are building a credit card fraud detector where only 0.5% of transactions are fraudulent. You use a standard 5-Fold cross-validation. On Fold 3, your model gets 100% accuracy, but you realize Fold 3 contained exactly zero fraud cases. How should you fix this?",
+          "options": [
+            {
+              "id": "a",
+              "text": "Switch to Stratified 5-Fold cross-validation to guarantee fraud cases are in every fold.",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "Keep the current setup and celebrate the 100% accuracy on Fold 3.",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "Delete Fold 3 from your evaluation to hide the issue.",
+              "correct": false
+            },
+            {
+              "id": "d",
+              "text": "Duplicate the fraud cases manually until they make up 50% of the dataset.",
+              "correct": false
+            }
+          ],
+          "explain": "Standard K-Fold can leave rare classes out of some folds entirely. Stratified K-Fold guarantees that fraud cases are distributed proportionally across all folds, making your evaluations honest! 🛡️"
+        }
+      ]
+    }
+  ]
+}

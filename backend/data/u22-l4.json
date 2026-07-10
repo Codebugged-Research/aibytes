@@ -2,11 +2,11 @@
   "id": "u22-l4",
   "unit": 22,
   "day": 114,
-  "tier": "Model Evaluation",
-  "tierIcon": "🔄",
-  "title": "Time Series Folds (Rolling Windows)",
-  "icon": "🕰️",
-  "concept": "Time series cross-validation uses rolling or expanding windows to train only on past data and evaluate on future data, avoiding temporal leakage.",
+  "tier": "Linear Regression",
+  "tierIcon": "📈",
+  "title": "Feature Coefficients: Who Gets Credit?",
+  "icon": "📊",
+  "concept": "Feature coefficients represent the expected change in the target variable for a one-unit change in a feature, holding all other features constant.",
   "xp": 15,
   "hearts": 3,
   "estMinutes": 6,
@@ -18,25 +18,25 @@
           "id": "w1",
           "type": "multiple_choice",
           "xp": 1,
-          "prompt": "Recap: What problem does Stratified K-Fold solve when evaluating a classifier?",
+          "prompt": "Recap: What is the primary cause of multicollinearity in a multiple regression model?",
           "options": [
             {
               "id": "a",
-              "text": "It prevents folds from randomly missing rare target classes by preserving class ratios.",
+              "text": "Input features are highly correlated with each other.",
               "correct": true
             },
             {
               "id": "b",
-              "text": "It sorts the data by time to make predictions more chronological.",
+              "text": "The target variable has too many decimal places.",
               "correct": false
             },
             {
               "id": "c",
-              "text": "It removes outliers from the training set automatically.",
+              "text": "All feature coefficients are set to zero.",
               "correct": false
             }
           ],
-          "explain": "Correct! Stratification keeps class ratios consistent. But what if our data is ordered by time, and future data points depend on past ones?"
+          "explain": "Correct! Multicollinearity is caused by high correlation between input features, making it hard to estimate their individual coefficients."
         }
       ]
     },
@@ -45,49 +45,49 @@
       "cards": [
         {
           "kind": "hook",
-          "icon": "🔮",
-          "title": "Cheating with the future",
-          "body": "Imagine predicting tomorrow's weather by looking at the weather report from next week. That would be cheating! In standard cross-validation, data is shuffled randomly, meaning your model might train on future data to predict the past."
+          "icon": "🛒",
+          "title": "Who drove the sale?",
+          "body": "If a store sees a massive spike in sales, was it because of a new TV commercial, a seasonal holiday, or a weekend discount? Feature coefficients help us isolate and measure each event's specific value."
         },
         {
           "kind": "definition",
-          "icon": "🕰️",
-          "title": "What is Time Series Split?",
-          "body": "<strong>Time Series Split</strong> (or rolling/expanding window validation) is a method where we respect the temporal order of data. We train only on past data and validate on future data."
+          "icon": "📊",
+          "title": "Feature Coefficients",
+          "body": "A <strong>feature coefficient</strong> (or weight) represents how much the predicted output changes when that input increases by one unit, assuming all other input features stay exactly the same."
         },
         {
           "kind": "analogy",
-          "icon": "📖",
-          "title": "Reading a mystery novel",
-          "body": "When reading a mystery novel, you can't read chapter 5 to help you guess what happens in chapter 3. You must read <strong>chronologically</strong>. In time series validation, the model's history must grow forward in time."
+          "icon": "🎛️",
+          "title": "Sound board sliders",
+          "body": "Think of coefficients like sliders on an audio mixing board. Each slider controls the volume of one specific instrument (feature). Turning up one slider increases its sound while leaving the others unchanged."
         },
         {
           "kind": "example",
-          "icon": "📆",
-          "title": "Expanding windows",
-          "body": "In an expanding window split, Fold 1 trains on Month 1 to validate on Month 2. Fold 2 trains on Months 1-2 to validate on Month 3. Fold 3 trains on Months 1-3 to validate on Month 4. The training window expands forward."
+          "icon": "🏠",
+          "title": "Deciphering house weights",
+          "body": "In a model predicting house prices, a coefficient of 150 for 'square feet' means every extra square foot adds $150 to the price, assuming the number of bedrooms and location remain constant."
         },
         {
           "kind": "mythbust",
           "icon": "⚠️",
-          "title": "Is random shuffling good?",
-          "body": "We are taught that random shuffling is great for training models. But for time series, random shuffling is <strong>disastrous</strong>. It leaks future information into the past, making the model look artificially accurate."
+          "title": "Scale changes everything",
+          "body": "You might think a feature with a coefficient of 1000 is always more important than one with 0.1. But if the first feature is measured in kilograms and the second in grams, the size of the coefficient is just reflecting the unit scale!"
         },
         {
           "kind": "visual",
           "icon": "⚖️",
-          "title": "Random vs Time Series Splits",
-          "body": "How training and validation sets differ for time-based data:",
+          "title": "Positive vs. Negative Coefficients",
+          "body": "How coefficient signs affect predictions:",
           "compare": {
             "left": {
-              "emoji": "🎲",
-              "tag": "Random Split",
-              "text": "Shuffled data.<br>Future leaks into past.<br>Unrealistic time predictions."
+              "emoji": "📈",
+              "tag": "Positive Coefficient (+)",
+              "text": "As input goes up, prediction goes up<br>Example: Study hours vs. score<br>Direct relationship"
             },
             "right": {
-              "emoji": "🕰️",
-              "tag": "Time Series Split",
-              "text": "Chronological order.<br>Train on past, test on future.<br>Honest time predictions."
+              "emoji": "📉",
+              "tag": "Negative Coefficient (-)",
+              "text": "As input goes up, prediction goes down<br>Example: Absences vs. score<br>Inverse relationship"
             }
           }
         }
@@ -100,36 +100,31 @@
           "id": "p1",
           "type": "multiple_choice",
           "xp": 2,
-          "prompt": "Why is random shuffling bad for time series cross-validation?",
+          "prompt": "What does a negative coefficient for an input feature indicate?",
           "options": [
             {
               "id": "a",
-              "text": "It causes future data to leak into the training set, leading to unrealistic validation scores.",
+              "text": "As the feature increases, the predicted output decreases (holding other features constant).",
               "correct": true
             },
             {
               "id": "b",
-              "text": "It increases the number of features in the dataset.",
+              "text": "The feature is completely useless and should be deleted.",
               "correct": false
             },
             {
               "id": "c",
-              "text": "It deletes old data points to make room for new ones.",
-              "correct": false
-            },
-            {
-              "id": "d",
-              "text": "It forces the model to use L1 regularization instead of L2.",
+              "text": "The model has made a mathematical error.",
               "correct": false
             }
           ],
-          "explain": "Shuffling mixes past and future. If a model trains on future data, it gets an unrealistic advantage that won't exist in production."
+          "explain": "Correct! A negative coefficient represents an inverse relationship: as the input increases, the predicted target decreases."
         },
         {
           "id": "p2",
           "type": "true_false",
           "xp": 2,
-          "prompt": "True or false: In time series cross-validation, the training set must always occur chronologically before the validation set.",
+          "prompt": "True or false: A coefficient tells you the impact of changing a feature while keeping all other features constant.",
           "options": [
             {
               "id": "t",
@@ -142,45 +137,45 @@
               "correct": false
             }
           ],
-          "explain": "True! To simulate real-world usage, we must always train on past data and validate on future data."
+          "explain": "True. The key interpretation of a regression coefficient is the change in the target for a unit change in the feature, holding all other features constant."
         },
         {
           "id": "p3",
           "type": "fill_blank",
           "xp": 2,
           "prompt": "Complete the sentence:",
-          "sentence": "Time series cross-validation uses an ___ window to add more past data to the training set over time.",
-          "blank": "expanding",
+          "sentence": "To compare coefficient sizes fairly, features should be on the same ___ so units don't distort weights.",
+          "blank": "scale",
           "words": [
-            "expanding",
-            "imbalanced",
-            "random"
+            "scale",
+            "row",
+            "sign"
           ],
-          "explain": "An expanding window grows chronologically, incorporating more historical data as we move forward in time."
+          "explain": "Scaling features ensures that coefficients are comparable and not distorted by arbitrary units (like grams vs. kilograms)."
         },
         {
           "id": "p4",
           "type": "spot_the_ai",
           "xp": 2,
-          "prompt": "Which of these setups represents a valid time series cross-validation fold?",
+          "prompt": "Consider a model predicting health scores based on daily exercise minutes and daily fast food calories. Which coefficient makes the most sense?",
           "options": [
             {
               "id": "a",
-              "text": "Training on January through June data, and validating on July data.",
-              "correct": true
+              "text": "A positive coefficient for fast food calories, and a negative coefficient for exercise.",
+              "correct": false
             },
             {
               "id": "b",
-              "text": "Training on January, March, and July data, and validating on February data.",
-              "correct": false
+              "text": "A positive coefficient for exercise, and a negative coefficient for fast food calories.",
+              "correct": true
             },
             {
               "id": "c",
-              "text": "Training on December data, and validating on October data.",
+              "text": "Zero coefficients for both features because they have no impact on health.",
               "correct": false
             }
           ],
-          "explain": "Training on past data (Jan-Jun) and validating on future data (Jul) strictly respects the arrow of time."
+          "explain": "Correct! Exercise generally improves health (positive coefficient), while fast food calories typically lower health scores (negative coefficient)."
         }
       ]
     },
@@ -191,30 +186,25 @@
           "id": "b1",
           "type": "multiple_choice",
           "xp": 5,
-          "prompt": "You are building a model to predict daily retail sales. Using a standard random K-Fold split, your validation accuracy is 98%. However, when you deploy the model, it gets only 55% accuracy on new sales data. What went wrong?",
+          "prompt": "You predict test scores using study hours (coefficient = +5.0) and school absences (coefficient = -8.0). If a student studies 2 hours more but misses 1 class, what is the net predicted change in their score?",
           "options": [
             {
               "id": "a",
-              "text": "Random K-Fold leaked future sales patterns into the past training data, hiding the model's inability to forecast actual future trends.",
+              "text": "An increase of 2 points",
               "correct": true
             },
             {
               "id": "b",
-              "text": "The learning rate was too high for production data.",
+              "text": "An increase of 10 points",
               "correct": false
             },
             {
               "id": "c",
-              "text": "You should have deleted all historical sales data before deploying.",
-              "correct": false
-            },
-            {
-              "id": "d",
-              "text": "The model overfitted to the class labels of the test set.",
+              "text": "A decrease of 8 points",
               "correct": false
             }
           ],
-          "explain": "Random splits leak future trends into past training. When deployed, the future is unknown, and the model fails. Time series splits would have caught this! 🕰️"
+          "explain": "Excellent! The change is calculated as: (2 hours * +5.0/hour) + (1 absence * -8.0/absence) = 10 - 8 = +2. Coefficients let you calculate precise cumulative adjustments to your predictions. Marvelous job interpreting coefficients!"
         }
       ]
     }

@@ -2,11 +2,11 @@
   "id": "u19-l5",
   "unit": 19,
   "day": 100,
-  "tier": "Classification",
-  "tierIcon": "🔲",
-  "title": "The Softmax Function",
-  "icon": "🌈",
-  "concept": "The Softmax function converts raw model outputs into a probability distribution across multiple classes that sums to exactly 1.0.",
+  "tier": "Linear Regression",
+  "tierIcon": "🎯",
+  "title": "Huber Loss: The Best of Both Worlds",
+  "icon": "🛡️",
+  "concept": "Huber Loss combines MSE and MAE, acting like MSE for small errors (smooth gradient) and like MAE for large errors (robust to outliers).",
   "xp": 15,
   "hearts": 3,
   "estMinutes": 6,
@@ -18,25 +18,25 @@
           "id": "w1",
           "type": "multiple_choice",
           "xp": 1,
-          "prompt": "Recap: If a classification system has 10 classes, why might One-vs-One (OVO) be slower than One-vs-Rest (OVR)?",
+          "prompt": "Recap: In which scenario should you prefer Mean Absolute Error (MAE) over Mean Squared Error (MSE)?",
           "options": [
             {
               "id": "a",
-              "text": "OVO requires training 45 separate pairwise models, compared to only 10 models for OVR",
+              "text": "When your data contains outliers you want to prevent from warping your model",
               "correct": true
             },
             {
               "id": "b",
-              "text": "OVO requires training on the entire dataset for every single model",
+              "text": "When any single large mistake is catastrophic and must be avoided",
               "correct": false
             },
             {
               "id": "c",
-              "text": "OVO only outputs random guesses for more than 5 classes",
+              "text": "When you want the model to train without any errors",
               "correct": false
             }
           ],
-          "explain": "Correct! While each pairwise model in OVO is trained on less data, the sheer number of models ($N \\times (N-1)/2$) grows very fast. Now, how do we get true probabilities that add up to 1.0?"
+          "explain": "Right — MAE is less sensitive to outliers because it treats errors linearly instead of squaring them."
         }
       ]
     },
@@ -45,49 +45,49 @@
       "cards": [
         {
           "kind": "hook",
-          "icon": "🍰",
-          "title": "Sharing a cake",
-          "body": "If you tell three friends they can have a 'size 8', 'size 5', and 'size 2' slice, they don't know what that means. But if you convert those scores into percentages — 53%, 33%, and 14% of the cake — they know exactly how much they get."
+          "icon": "🎛️",
+          "title": "Volume safety",
+          "body": "Imagine a volume knob that turns up normally at first, but has a built-in safety limit so it can never get loud enough to hurt your ears. Huber Loss does exactly this with error penalties."
         },
         {
           "kind": "definition",
-          "icon": "🌈",
-          "title": "Softmax function, defined",
-          "body": "The <strong>Softmax function</strong> takes raw, unconstrained numerical scores (logits) from a model and converts them into a <strong>probability distribution</strong> where every score is between 0 and 1, and all scores sum to <strong>exactly 1.0 (100%)</strong>."
+          "icon": "🛡️",
+          "title": "What is Huber Loss?",
+          "body": "<strong>Huber Loss</strong> is a hybrid cost function that combines MSE and MAE. It uses a threshold value (called <strong>delta</strong> or <code>&delta;</code>) to decide when to switch between them."
         },
         {
           "kind": "analogy",
-          "icon": "⚖️",
-          "title": "A fair scale",
-          "body": "Think of Softmax as a fair scale. No matter how heavy or light the individual objects are, Softmax normalizes them so they represent their exact share of the total weight, ensuring the sum of shares is always 100%."
+          "icon": "👔",
+          "title": "Smart management",
+          "body": "Huber Loss is like a smart manager. For small mistakes, they give you detailed, precise feedback (MSE). But for massive external disasters, they remain calm and treat it linearly (MAE)."
         },
         {
           "kind": "example",
-          "icon": "🏷️",
-          "title": "Cat, dog, or bird",
-          "body": "If a multiclass classifier outputs raw scores of [2.0, 1.0, 0.1] for [Cat, Dog, Bird], Softmax exponentiates and divides them to get probabilities: [0.65, 0.24, 0.11]. The outputs now cleanly represent confidence percentages."
+          "icon": "🤖",
+          "title": "Self-driving cars",
+          "body": "In self-driving cars, minor lane adjustments should be smooth (MSE zone). But a sudden sensor glitch (an outlier) shouldn't cause the car to steer wildly off the road (MAE zone)."
         },
         {
           "kind": "mythbust",
-          "icon": "🚫",
-          "title": "Myth: Simple division works",
-          "body": "Raw scores can be negative (e.g. -1.5). Simple division fails there! Softmax uses exponents ($e^x$) to make all scores positive before dividing, ensuring valid probabilities."
+          "icon": "⚠️",
+          "title": "Not a magic bullet",
+          "body": "Huber Loss seems perfect, but it adds complexity. You have to manually choose and tune the <strong>delta threshold</strong>. If you set it poorly, you lose its hybrid benefits."
         },
         {
           "kind": "visual",
           "icon": "⚖️",
-          "title": "Logits vs probabilities",
-          "body": "Comparing raw outputs to Softmax probability outputs:",
+          "title": "Huber Loss zones",
+          "body": "How Huber Loss handles different error sizes:",
           "compare": {
             "left": {
-              "emoji": "📊",
-              "tag": "Raw Scores (Logits)",
-              "text": "Can be negative: [2.0, -1.0, 0.5]<br>Do not sum to anything specific"
+              "emoji": "🧮",
+              "tag": "Small Error (< Delta)",
+              "text": "Acts like MSE.<br>Squares error for smooth, precise optimization."
             },
             "right": {
-              "emoji": "🌈",
-              "tag": "Softmax Probabilities",
-              "text": "All positive: [0.80, 0.04, 0.16]<br>Sum to exactly 1.0 (100%)"
+              "emoji": "🛡️",
+              "tag": "Large Error (> Delta)",
+              "text": "Acts like MAE.<br>Treats error linearly to resist outlier panic."
             }
           }
         }
@@ -100,36 +100,31 @@
           "id": "p1",
           "type": "multiple_choice",
           "xp": 2,
-          "prompt": "What is the primary mathematical requirement of a Softmax output?",
+          "prompt": "How does Huber Loss handle large prediction errors?",
           "options": [
             {
               "id": "a",
-              "text": "The probabilities of all classes must sum to exactly 1.0",
+              "text": "It treats them linearly, just like MAE",
               "correct": true
             },
             {
               "id": "b",
-              "text": "The output values must all be negative",
+              "text": "It squares them, just like MSE",
               "correct": false
             },
             {
               "id": "c",
-              "text": "The highest score must always be exactly 100",
-              "correct": false
-            },
-            {
-              "id": "d",
-              "text": "All output values must be equal",
+              "text": "It ignores them entirely",
               "correct": false
             }
           ],
-          "explain": "Softmax transforms raw scores into a probability distribution, meaning each value is between 0 and 1, and they all add up to exactly 1.0."
+          "explain": "For errors larger than the threshold (delta), Huber Loss switches from a squared penalty to a linear penalty to resist outliers."
         },
         {
           "id": "p2",
           "type": "true_false",
           "xp": 2,
-          "prompt": "True or false: Softmax is commonly used at the very end of multinomial logistic regression to produce classification probabilities.",
+          "prompt": "True or false: Huber Loss acts like MSE for small errors and MAE for large errors.",
           "options": [
             {
               "id": "t",
@@ -142,74 +137,45 @@
               "correct": false
             }
           ],
-          "explain": "True! Softmax is the standard final step in multinomial logistic regression to translate internal raw scores (logits) into clear probabilities."
+          "explain": "True! It provides a smooth squared penalty for minor mistakes and a linear penalty for extreme ones."
         },
         {
           "id": "p3",
           "type": "fill_blank",
           "xp": 2,
           "prompt": "Complete the sentence:",
-          "sentence": "By using the mathematical constant ___ to exponentiate raw scores, Softmax guarantees that all output probabilities are positive.",
-          "blank": "e",
+          "sentence": "Huber Loss uses a threshold parameter called ___ to decide where to switch from MSE to MAE.",
+          "blank": "delta",
           "words": [
-            "e",
-            "pi",
-            "log"
+            "delta",
+            "gamma",
+            "lambda"
           ],
-          "explain": "Softmax calculates $e^x$ for each score $x$. Since $e^x$ is always positive for any real number $x$, the resulting probabilities are guaranteed to be positive."
+          "explain": "The threshold delta (indicated by the Greek letter &delta;) defines the boundary between the MSE and MAE behavior zones."
         },
         {
           "id": "p4",
           "type": "spot_the_ai",
           "xp": 2,
-          "prompt": "Which set of outputs could have been produced directly by a Softmax function?",
+          "prompt": "What is one downside of using Huber Loss compared to simple MSE or MAE?",
           "options": [
             {
               "id": "a",
-              "text": "[0.70, 0.20, 0.10]",
+              "text": "You must manually choose and tune the threshold parameter (delta)",
               "correct": true
             },
             {
               "id": "b",
-              "text": "[1.2, -0.2, 0.0]",
+              "text": "It can only be used to solve classification problems",
               "correct": false
             },
             {
               "id": "c",
-              "text": "[2.0, 1.0, 0.5]",
+              "text": "It requires twice as much training data to converge",
               "correct": false
             }
           ],
-          "explain": "Outputs from Softmax must all be positive, lie between 0 and 1, and sum to exactly 1.0. Only [0.70, 0.20, 0.10] fits these criteria."
-        },
-        {
-          "id": "p5",
-          "type": "multiple_choice",
-          "xp": 2,
-          "prompt": "Why can't we just divide raw scores by their sum instead of using Softmax?",
-          "options": [
-            {
-              "id": "a",
-              "text": "Raw scores can be negative, which would lead to invalid or negative probabilities",
-              "correct": true
-            },
-            {
-              "id": "b",
-              "text": "Simple division is too computationally expensive",
-              "correct": false
-            },
-            {
-              "id": "c",
-              "text": "Simple division always produces the number 1.0 for every class",
-              "correct": false
-            },
-            {
-              "id": "d",
-              "text": "Simple division only works if we have exactly two classes",
-              "correct": false
-            }
-          ],
-          "explain": "Yes! Raw scores (logits) frequently contain negative numbers. Softmax uses exponentiation ($e^x$) to ensure all values are positive before dividing."
+          "explain": "Tuning the threshold delta adds an extra step to the modeling process, requiring validation to find the best value."
         }
       ]
     },
@@ -220,30 +186,25 @@
           "id": "b1",
           "type": "multiple_choice",
           "xp": 5,
-          "prompt": "A multiclass classifier predicts whether a pet is a Cat, Dog, or Rabbit. The raw scores are [3.0, 1.0, -1.0]. After applying Softmax, which pet has the highest probability?",
+          "prompt": "You are training a robot to navigate a room. It needs smooth, precise movements (which MSE helps with), but occasionally its GPS sensor glitches and reports a coordinate miles away. Why is Huber Loss the best choice?",
           "options": [
             {
               "id": "a",
-              "text": "Cat, because its raw score (3.0) is the largest",
+              "text": "It allows precise adjustments for normal movements (MSE zone) but won't let sensor glitches crash the robot (MAE zone)",
               "correct": true
             },
             {
               "id": "b",
-              "text": "Dog, because its raw score (1.0) is closest to the average",
+              "text": "It filters out all coordinates and makes the robot navigate blindly",
               "correct": false
             },
             {
               "id": "c",
-              "text": "Rabbit, because exponentiating negative numbers makes them the largest",
-              "correct": false
-            },
-            {
-              "id": "d",
-              "text": "All three will have an equal 33.3% probability",
+              "text": "It converts the robot's coordinates into simple linear equations automatically",
               "correct": false
             }
           ],
-          "explain": "Fabulous! Softmax preserves the relative order of the raw scores — the largest raw score (3.0 for Cat) will always translate to the largest probability. And congratulations on finishing Lesson 100! You've officially conquered the first 100 lessons of AI learning and built a rock-solid foundation!"
+          "explain": "Brilliant! Huber Loss offers the smooth optimization of MSE for small errors and the outlier resistance of MAE for large errors, making it ideal for noisy real-world robotics. Congratulations on completing the Cost Functions unit!"
         }
       ]
     }

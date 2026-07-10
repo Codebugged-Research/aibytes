@@ -2,129 +2,23 @@
   "id": "u8-l1",
   "unit": 8,
   "day": 41,
-  "tier": "Tabular Processing",
-  "tierIcon": "🗂️",
-  "title": "Why Scale Features?",
-  "icon": "⚖️",
-  "concept": "Features with vastly different ranges (like age vs. income) can confuse machine learning algorithms, making scaling necessary.",
+  "tier": "Model Training Basics",
+  "tierIcon": "🏋️",
+  "title": "How a Model Actually Gets \"Trained\"",
+  "icon": "🏋️",
+  "concept": "Training a model is a repeating loop: make a guess, check how wrong it was, nudge the guess to be less wrong, and repeat thousands of times until the guesses are good enough.",
   "xp": 15,
   "hearts": 3,
-  "estMinutes": 6,
+  "estMinutes": 7,
   "segments": [
     {
       "type": "warmup",
       "exercises": [
         {
           "id": "w1",
-          "type": "multiple_choice",
-          "xp": 1,
-          "prompt": "Warmup: Why is target encoding risky for high-cardinality features with many unique values?",
-          "options": [
-            {
-              "id": "a",
-              "text": "It can lead to data leakage and overfitting if not carefully smoothed",
-              "correct": true
-            },
-            {
-              "id": "b",
-              "text": "It creates too many columns in the dataset",
-              "correct": false
-            },
-            {
-              "id": "c",
-              "text": "It deletes the columns completely",
-              "correct": false
-            }
-          ],
-          "explain": "Dropping high-cardinality values loses information, but target encoding without smoothing risks data leakage and overfitting."
-        }
-      ]
-    },
-    {
-      "type": "teach",
-      "cards": [
-        {
-          "kind": "hook",
-          "icon": "🛒",
-          "title": "A skewed filter",
-          "body": "Imagine searching for a house using a scoring system where home size is 500 to 5,000 sq ft, but bedrooms range from 1 to 5. An algorithm calculating similarity will focus entirely on square footage, ignoring the bedrooms!"
-        },
-        {
-          "kind": "definition",
-          "icon": "🎓",
-          "title": "Feature Scaling",
-          "body": "<strong>Feature scaling</strong> is the process of transforming numeric features to a similar scale. This ensures that features with larger values (like salary) do not dominate features with smaller values (like age) during model training."
-        },
-        {
-          "kind": "analogy",
-          "icon": "🗺️",
-          "title": "Mapping the world",
-          "body": "If you draw a map of your house where 1 inch = 1 foot for the floor plan, but 1 inch = 1 mile for the garden, you cannot compare them. Scaling puts all measurements on the same relative grid so they make sense together."
-        },
-        {
-          "kind": "example",
-          "icon": "⚖️",
-          "title": "Salary vs. Age",
-          "body": "In a customer dataset, age ranges from 18 to 80, while annual salary ranges from $20,000 to $200,000. Without scaling, a distance-based algorithm treats a $1 difference in salary as equal to a 1-year difference in age!"
-        },
-        {
-          "kind": "mythbust",
-          "icon": "🧠",
-          "title": "Patterns stay the same",
-          "body": "Scaling does not change the shape or pattern of your data! It simply changes the unit of measurement. The relative relationships and distributions between points remain exactly the same."
-        },
-        {
-          "kind": "visual",
-          "icon": "⚖️",
-          "title": "Unscaled vs. Scaled",
-          "body": "How feature scaling levels the playing field for your model:",
-          "compare": {
-            "left": {
-              "emoji": "❌",
-              "tag": "Unscaled Features",
-              "text": "Age: 18 to 80<br>Salary: $20k to $200k<br>Salary dominates calculations"
-            },
-            "right": {
-              "emoji": "✅",
-              "tag": "Scaled Features",
-              "text": "Age: 0.0 to 1.0<br>Salary: 0.0 to 1.0<br>Both contribute equally"
-            }
-          }
-        }
-      ]
-    },
-    {
-      "type": "practice",
-      "exercises": [
-        {
-          "id": "p1",
-          "type": "multiple_choice",
-          "xp": 2,
-          "prompt": "Which of the following algorithms is most sensitive to features being on different scales?",
-          "options": [
-            {
-              "id": "a",
-              "text": "Distance-based algorithms like K-Nearest Neighbors (KNN)",
-              "correct": true
-            },
-            {
-              "id": "b",
-              "text": "Decision trees that split on one feature at a time",
-              "correct": false
-            },
-            {
-              "id": "c",
-              "text": "Naive Bayes classifiers using independent probabilities",
-              "correct": false
-            }
-          ],
-          "explain": "Distance-based models calculate geometric distances between data points, so features with larger ranges will dominate the calculation if not scaled."
-        },
-        {
-          "id": "p2",
           "type": "true_false",
-          "xp": 2,
-          "prompt": "True or false: Feature scaling changes the relative ranking of values within a column.",
+          "xp": 1,
+          "prompt": "Recap: A model that scores perfectly on training data but poorly on new data is a healthy, well-trained model.",
           "options": [
             {
               "id": "t",
@@ -137,45 +31,204 @@
               "correct": true
             }
           ],
-          "explain": "False. Scaling preserves the order and relative differences between data points; it only changes the unit or range of the scale."
+          "explain": "False — you learned that's a sign of overfitting. Today we go deeper: what is actually happening, step by step, while a model trains in the first place?"
+        },
+        {
+          "id": "w2",
+          "type": "multiple_choice",
+          "xp": 1,
+          "prompt": "Recap: Why do we test a model on data it has never seen (like you learned with train vs. test data)?",
+          "options": [
+            {
+              "id": "a",
+              "text": "To see if it truly learned a pattern, not just memorized examples",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "Because training data runs out of storage space",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "Testing isn't actually necessary if training went well",
+              "correct": false
+            }
+          ],
+          "explain": "Right! Now let's zoom into training itself — the process that happens *before* any testing even starts."
+        }
+      ]
+    },
+    {
+      "type": "teach",
+      "cards": [
+        {
+          "kind": "hook",
+          "icon": "🏀",
+          "title": "Learning to shoot free throws",
+          "body": "Mia's first free throw airballs completely. She notices it fell short, so she pushes a little harder next time. That one sails long, so she eases up slightly. Shot after shot, her aim keeps tightening — she's not guessing randomly anymore, she's <em>adjusting</em> based on what just happened."
+        },
+        {
+          "kind": "definition",
+          "icon": "🔁",
+          "title": "What is the training loop?",
+          "body": "Training a model means repeating four steps over and over: <strong>1) start with a guess, 2) make a prediction, 3) measure how wrong it was, 4) nudge the guess to reduce that error</strong> — then repeat, often thousands of times, until the predictions are good enough."
+        },
+        {
+          "kind": "analogy",
+          "icon": "🎯",
+          "title": "The model is Mia at the free-throw line",
+          "body": "<strong>Initialize</strong> = Mia's very first, untrained attempt. <strong>Predict</strong> = each shot she takes. <strong>Measure error</strong> = noticing the ball landed short or long. <strong>Adjust</strong> = correcting her arm angle. <strong>Repeat</strong> = shot after shot after shot, getting closer to the hoop each time."
+        },
+        {
+          "kind": "example",
+          "icon": "🍋",
+          "title": "A lemonade-price bot",
+          "body": "A bot starts by guessing a random price: $3. It sells almost nothing (way too high), so it lowers the price. Next day it sells out fast (too cheap, left money on the table), so it raises the price slightly. After many days of this predict-measure-adjust cycle, it settles near the price that sells the most cups for the most profit."
+        },
+        {
+          "kind": "mythbust",
+          "icon": "⚠️",
+          "title": "Training isn't one magic step",
+          "body": "It's tempting to picture training as the computer \"instantly figuring it out.\" In reality, a model's very first guesses are usually bad — even random. Good performance only shows up after many, many rounds of predict → check error → adjust."
+        },
+        {
+          "kind": "visual",
+          "icon": "🔁",
+          "title": "One pass vs. the training loop",
+          "body": "Why repetition is the whole point:",
+          "compare": {
+            "left": {
+              "emoji": "🎲",
+              "tag": "Single Guess",
+              "text": "Guess once, keep it forever<br>Usually stays wildly wrong"
+            },
+            "right": {
+              "emoji": "🔁",
+              "tag": "Training Loop",
+              "text": "Guess → check error → adjust<br>Repeated until good enough"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "type": "practice",
+      "exercises": [
+        {
+          "id": "p1",
+          "type": "multiple_choice",
+          "xp": 2,
+          "prompt": "What is the very first step in the training loop, before a model has learned anything?",
+          "options": [
+            {
+              "id": "a",
+              "text": "It starts with an initial guess — often random or arbitrary",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "It starts by already knowing the correct answer for every case",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "It starts by deleting all the training data",
+              "correct": false
+            },
+            {
+              "id": "d",
+              "text": "It starts by testing on brand-new data first",
+              "correct": false
+            }
+          ],
+          "explain": "Every training loop begins with some starting guess, which is usually far from correct — that's expected and normal."
+        },
+        {
+          "id": "p2",
+          "type": "true_false",
+          "xp": 2,
+          "prompt": "True or false: After a model makes a prediction, the next step is to measure how wrong that prediction was.",
+          "options": [
+            {
+              "id": "t",
+              "text": "True",
+              "correct": true
+            },
+            {
+              "id": "f",
+              "text": "False",
+              "correct": false
+            }
+          ],
+          "explain": "True! Measuring the error is what tells the model which direction to adjust in next."
         },
         {
           "id": "p3",
           "type": "fill_blank",
           "xp": 2,
           "prompt": "Complete the sentence:",
-          "sentence": "Without feature scaling, variables with ___ numerical ranges will dominate distance-based calculations.",
-          "blank": "larger",
+          "sentence": "Training is a loop of predict, measure error, and ___ — repeated many times.",
+          "blank": "adjust",
           "words": [
-            "larger",
-            "smaller",
-            "negative"
+            "adjust",
+            "delete",
+            "memorize"
           ],
-          "explain": "Larger ranges lead to larger absolute differences, which skew distance-based math in their direction."
+          "explain": "After measuring the error, the model nudges its guess to reduce that error, then predicts again."
         },
         {
           "id": "p4",
           "type": "spot_the_ai",
           "xp": 2,
-          "prompt": "Which scenario absolutely requires feature scaling for accurate results?",
+          "prompt": "Which of these best describes what's happening during model training?",
           "options": [
             {
               "id": "a",
-              "text": "Training a K-Nearest Neighbors model on Age (18-90) and Salary ($30k-$200k)",
+              "text": "A weather model keeps adjusting its rules after each day it predicts wrong, getting more accurate over time",
               "correct": true
             },
             {
               "id": "b",
-              "text": "Training a Decision Tree on the same dataset",
+              "text": "A weather model is given the exact answer key and never changes anything",
               "correct": false
             },
             {
               "id": "c",
-              "text": "Calculating the average age of customers",
+              "text": "A weather model makes one prediction and is immediately finished forever",
               "correct": false
             }
           ],
-          "explain": "K-Nearest Neighbors computes distances between points. Without scaling, the salary range will completely overwhelm the age range."
+          "explain": "Correct! Real training involves repeated cycles of predicting, checking error, and adjusting — not a single one-shot guess."
+        },
+        {
+          "id": "p5",
+          "type": "multiple_choice",
+          "xp": 2,
+          "prompt": "A model's early training predictions are usually way off. What does this tell you?",
+          "options": [
+            {
+              "id": "a",
+              "text": "That's normal — the model hasn't had enough rounds of adjustment yet",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "The model is broken and should be thrown out immediately",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "The model has already overfit to the training data",
+              "correct": false
+            },
+            {
+              "id": "d",
+              "text": "Training must have already finished",
+              "correct": false
+            }
+          ],
+          "explain": "Bad early guesses are expected — that's exactly why the loop repeats so many times, tightening the aim like Mia's free throws."
         }
       ]
     },
@@ -186,30 +239,59 @@
           "id": "b1",
           "type": "multiple_choice",
           "xp": 5,
-          "prompt": "You are building a model to predict health risks using heart rate (60-180 bpm) and blood protein concentration (0.001-0.005 g/L). If you train a distance-based model without scaling, what will happen?",
+          "prompt": "Put these training loop steps in the order they actually happen: (1) adjust the guess, (2) make a prediction, (3) start with an initial guess, (4) measure the error.",
           "options": [
             {
               "id": "a",
-              "text": "The model will almost entirely ignore blood protein concentration because its values are so small compared to heart rate.",
+              "text": "3 → 2 → 4 → 1, then repeat",
               "correct": true
             },
             {
               "id": "b",
-              "text": "The model will run much faster but be slightly less accurate.",
+              "text": "1 → 3 → 2 → 4, then stop",
               "correct": false
             },
             {
               "id": "c",
-              "text": "The model will automatically scale the data during the training phase.",
+              "text": "4 → 2 → 1 → 3, then stop",
               "correct": false
             },
             {
               "id": "d",
-              "text": "The model will crash due to a division by zero error.",
+              "text": "2 → 4 → 3 → 1, then repeat",
               "correct": false
             }
           ],
-          "explain": "Correct! The tiny range of blood protein (0.001 to 0.005) is numerically invisible to distance math compared to heart rate (60 to 180). Scaling ensures both contribute. Awesome job starting Unit 8 on Feature Scaling!"
+          "explain": "Exactly! Initialize, predict, measure error, adjust — then loop back to predicting again with the improved guess."
+        },
+        {
+          "id": "b2",
+          "type": "multiple_choice",
+          "xp": 5,
+          "prompt": "A robot arm is learning to stack blocks. On attempt 1 it knocks the tower over immediately. By attempt 50, it stacks blocks smoothly almost every time. What best explains this improvement?",
+          "options": [
+            {
+              "id": "a",
+              "text": "Across 50 attempts, it repeatedly predicted a move, saw how much it missed by, and adjusted — the training loop in action",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "It got lucky on attempt 50 with no connection to the earlier attempts",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "Someone manually reprogrammed it between every single attempt",
+              "correct": false
+            },
+            {
+              "id": "d",
+              "text": "It memorized the exact same tower it will be tested on later",
+              "correct": false
+            }
+          ],
+          "explain": "Right! Steady improvement across many attempts is the signature of a training loop nudging the guess closer each round."
         }
       ]
     }

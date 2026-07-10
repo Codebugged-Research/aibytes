@@ -2,11 +2,11 @@
   "id": "u13-l5",
   "unit": 13,
   "day": 70,
-  "tier": "Optimization",
-  "tierIcon": "🏔️",
-  "title": "Putting it Together: The Optimizer",
-  "icon": "🔄",
-  "concept": "The optimizer uses gradient descent to repeatedly adjust model weights to minimize the cost function during training.",
+  "tier": "Tabular Processing",
+  "tierIcon": "🚨",
+  "title": "When Outliers are the Goal",
+  "icon": "🔍",
+  "concept": "In anomaly detection tasks like fraud detection or equipment failure, outliers are the target events we want to predict rather than ignore.",
   "xp": 15,
   "hearts": 3,
   "estMinutes": 6,
@@ -18,25 +18,25 @@
           "id": "w1",
           "type": "multiple_choice",
           "xp": 1,
-          "prompt": "Recap: What is the update rule for a weight in Gradient Descent?",
+          "prompt": "Warmup: When is capping (Winsorizing) an outlier preferred over trimming (deleting the row)?",
           "options": [
             {
               "id": "a",
-              "text": "New Weight = Old Weight - (Learning Rate * Slope)",
+              "text": "When the outlier is a valid but extreme measurement, and deleting the row would lose other valuable feature data",
               "correct": true
             },
             {
               "id": "b",
-              "text": "New Weight = Old Weight + (Learning Rate * Slope)",
+              "text": "When the outlier is a clear system error or typo",
               "correct": false
             },
             {
               "id": "c",
-              "text": "New Weight = Learning Rate / Slope",
+              "text": "When you want to reduce the dataset size to speed up training",
               "correct": false
             }
           ],
-          "explain": "To go downhill, we subtract the product of the learning rate and the slope (gradient) from the old weight."
+          "explain": "Correct! Capping is ideal when the extreme value is real, allowing you to retain the row's other features while neutralizing the outlier's distortion."
         }
       ]
     },
@@ -45,49 +45,49 @@
       "cards": [
         {
           "kind": "hook",
-          "icon": "🔄",
-          "title": "The loop of learning",
-          "body": "Think of how a child learns to throw a ball. They throw, see how far off they were, adjust their arm angle, and throw again. They repeat this loop until they hit the target."
+          "icon": "💳",
+          "title": "A sudden card charge",
+          "body": "If your credit card is suddenly charged for a purchase in another country, the bank blocks the card. They aren't trying to clean their data; they're looking for that single transaction because it's fraud."
         },
         {
           "kind": "definition",
-          "icon": "⚙️",
-          "title": "The Optimizer",
-          "body": "An <strong>optimizer</strong> is the algorithm that updates the model's weights during training using the gradient step loop to minimize the cost function."
+          "icon": "🔍",
+          "title": "Anomaly Detection",
+          "body": "In <strong>anomaly detection</strong>, outliers are not noise to be cleaned—they are the target signals. Models are trained to identify these rare observations because they represent significant real-world events."
         },
         {
           "kind": "analogy",
-          "icon": "🧠",
-          "title": "The brain of training",
-          "body": "If the neural network is the body that makes guesses, the optimizer is the brain that learns from mistakes and decides how to adjust the muscles (weights) for the next try."
+          "icon": "💂‍♂️",
+          "title": "The security guard",
+          "body": "Imagine a security guard monitoring a feed. 99% of the time, nothing happens. The guard ignores the normal footage and actively looks for the one outlier frame where someone climbs the fence."
         },
         {
           "kind": "example",
-          "icon": "📊",
-          "title": "The training cycle",
-          "body": "During training, we feed in data, calculate the loss, find the gradients, and let the optimizer update the weights. We repeat this cycle thousands of times (called epochs) until the error stops shrinking."
+          "icon": "🚨",
+          "title": "Critical Anomaly Targets",
+          "body": "Credit card fraud (0.1% of transactions), factory machine failures (which happen once every few months), and cyberattacks on servers are all examples of outliers that we actively want to predict."
         },
         {
           "kind": "mythbust",
-          "icon": "🛑",
-          "title": "More than basic GD",
-          "body": "While basic Gradient Descent is the foundation, modern optimizers (like Adam or SGD) are smarter. They adjust the learning rate on the fly to help models train faster and escape local minimums."
+          "icon": "🧠",
+          "title": "Imbalance breaks classifiers",
+          "body": "Can we use standard classification models here? Usually not! Because outliers are so rare, standard models get 99.9% accuracy just by predicting 'no fraud' every time. We need specialized anomaly detection."
         },
         {
           "kind": "visual",
           "icon": "⚖️",
-          "title": "The optimization loop",
-          "body": "How predictions and optimizations loop together during training:",
+          "title": "Cleaning vs. Detection",
+          "body": "How we treat outliers differently depending on the project's goal:",
           "compare": {
             "left": {
-              "emoji": "🔮",
-              "tag": "Predict & Measure",
-              "text": "Model makes predictions.<br>Cost function measures how wrong the predictions were."
+              "emoji": "🧹",
+              "tag": "Data Cleaning",
+              "text": "Outliers are noise<br>We trim or cap them<br>Goal: Predict general trends"
             },
             "right": {
-              "emoji": "⚙️",
-              "tag": "Optimize & Adjust",
-              "text": "Optimizer calculates slopes.<br>Updates weights to lower the error for the next round."
+              "emoji": "🔍",
+              "tag": "Anomaly Detection",
+              "text": "Outliers are signals<br>We preserve & flag them<br>Goal: Catch the outliers"
             }
           }
         }
@@ -100,31 +100,31 @@
           "id": "p1",
           "type": "multiple_choice",
           "xp": 2,
-          "prompt": "What is the primary role of an optimizer in machine learning?",
+          "prompt": "What is the primary objective of anomaly detection?",
           "options": [
             {
               "id": "a",
-              "text": "To collect and clean the training dataset",
-              "correct": false
-            },
-            {
-              "id": "b",
-              "text": "To adjust model weights based on error gradients to minimize the cost function",
+              "text": "To identify rare and unusual data points",
               "correct": true
             },
             {
+              "id": "b",
+              "text": "To clean standard data by deleting typos",
+              "correct": false
+            },
+            {
               "id": "c",
-              "text": "To deploy the model to the cloud",
+              "text": "To make all data points conform to the mean",
               "correct": false
             }
           ],
-          "explain": "The optimizer is responsible for implementing the update rules to minimize the cost function over time."
+          "explain": "Anomaly detection focuses on finding rare, unusual patterns that deviate significantly from standard behavior."
         },
         {
           "id": "p2",
           "type": "true_false",
           "xp": 2,
-          "prompt": "True or false: The optimization loop runs only once during the entire training process.",
+          "prompt": "True or false: Standard classification models perform exceptionally well on anomaly detection without any modification.",
           "options": [
             {
               "id": "t",
@@ -137,45 +137,45 @@
               "correct": true
             }
           ],
-          "explain": "False! The optimizer runs iteratively over many epochs, repeatedly adjusting weights as it sees the data."
+          "explain": "False! Extreme class imbalance (very few anomalies) forces standard classifiers to ignore anomalies to maximize overall accuracy."
         },
         {
           "id": "p3",
           "type": "fill_blank",
           "xp": 2,
           "prompt": "Complete the sentence:",
-          "sentence": "One complete pass of the entire training dataset through the optimization loop is called an ___.",
-          "blank": "epoch",
+          "sentence": "In credit card fraud detection, outliers are considered to be the ___ that we want to predict.",
+          "blank": "signal",
           "words": [
-            "epoch",
-            "iteration",
-            "gradient"
+            "signal",
+            "noise",
+            "error"
           ],
-          "explain": "An epoch is one full cycle where the model sees all training data and updates its parameters accordingly."
+          "explain": "In anomaly detection, the outliers are the valuable 'signal' we want to detect, rather than 'noise' we want to filter out."
         },
         {
           "id": "p4",
           "type": "spot_the_ai",
           "xp": 2,
-          "prompt": "Which of the following is a commonly used modern optimization algorithm?",
+          "prompt": "Which of the following is a classic application of anomaly detection?",
           "options": [
             {
               "id": "a",
-              "text": "Adam",
+              "text": "Predicting when a factory engine is about to fail",
               "correct": true
             },
             {
               "id": "b",
-              "text": "Python",
+              "text": "Predicting the house price based on square footage",
               "correct": false
             },
             {
               "id": "c",
-              "text": "CSV",
+              "text": "Sorting customer emails by language",
               "correct": false
             }
           ],
-          "explain": "Adam (Adaptive Moment Estimation) is one of the most popular and robust optimizers used in modern deep learning."
+          "explain": "Engine failures are rare and abnormal events (outliers), making them a textbook use case for anomaly detection."
         }
       ]
     },
@@ -186,25 +186,30 @@
           "id": "b1",
           "type": "multiple_choice",
           "xp": 5,
-          "prompt": "You are building a self-correcting thermostat. It measures how far the room temperature is from the target (loss) and updates its heating dial (weights). What acts as the optimizer here?",
+          "prompt": "You are designing an email spam filter. Normal emails constitute 99.9% of the traffic, while new phishing emails make up 0.1% and behave very differently from normal emails. If you treat this as a standard cleaning problem and trim outliers, what happens?",
           "options": [
             {
               "id": "a",
-              "text": "The algorithm that calculates the temperature error and adjusts the dial step-by-step to minimize it",
+              "text": "You will delete the phishing emails, leaving the system completely unprotected against them.",
               "correct": true
             },
             {
               "id": "b",
-              "text": "The temperature sensor that measures the current heat",
+              "text": "The system will become 100% secure.",
               "correct": false
             },
             {
               "id": "c",
-              "text": "The physical dial itself",
+              "text": "Phishing emails will be automatically renamed.",
+              "correct": false
+            },
+            {
+              "id": "d",
+              "text": "The normal emails will be deleted instead.",
               "correct": false
             }
           ],
-          "explain": "Brilliant! The optimizer is the logic that takes the error, calculates the correction, and adjusts the parameters (the dial) iteratively. Congratulations on completing the Gradient Descent Fundamentals unit!"
+          "explain": "Correct! If you treat anomalies as noise to be cleaned, you remove the very thing you are trying to catch, leaving your system vulnerable. Superb work completing Unit 9 on Outliers & Data Anomalies!"
         }
       ]
     }

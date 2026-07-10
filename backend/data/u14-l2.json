@@ -2,11 +2,11 @@
   "id": "u14-l2",
   "unit": 14,
   "day": 72,
-  "tier": "Optimization",
-  "tierIcon": "⚡",
-  "title": "Mini-Batch Gradient Descent",
-  "icon": "📦",
-  "concept": "Mini-Batch Gradient Descent updates weights using a small group of random examples at once, balancing speed and stability.",
+  "tier": "Tabular Processing",
+  "tierIcon": "🔌",
+  "title": "Correlation: Finding Redundant Columns",
+  "icon": "🤝",
+  "concept": "Dropping highly correlated features removes redundant information, simplifying the model without losing predictive power.",
   "xp": 15,
   "hearts": 3,
   "estMinutes": 6,
@@ -18,25 +18,25 @@
           "id": "w1",
           "type": "multiple_choice",
           "xp": 1,
-          "prompt": "Recap: What is the main benefit of Stochastic Gradient Descent (SGD) over standard Batch Gradient Descent?",
+          "prompt": "Warmup: In the previous lesson, we learned about the 'Curse of Dimensionality.' Why do too many features (columns) hurt a model?",
           "options": [
             {
               "id": "a",
-              "text": "It updates weights much faster because it only checks one random example at a time.",
+              "text": "They add noise, slow down training, and make the model prone to overfitting",
               "correct": true
             },
             {
               "id": "b",
-              "text": "It always follows a perfectly straight path to the bottom.",
+              "text": "They make the dataset too simple for the model to learn anything",
               "correct": false
             },
             {
               "id": "c",
-              "text": "It does not require any training data to learn.",
+              "text": "They automatically delete the model's weights",
               "correct": false
             }
           ],
-          "explain": "Correct! SGD is lightning fast because it doesn't wait to check the whole dataset. But can we make it less chaotic?"
+          "explain": "Right! Too many columns increase noise and complexity, making models slow and less accurate on new data. Now, what if the columns repeat the same info?"
         }
       ]
     },
@@ -45,49 +45,49 @@
       "cards": [
         {
           "kind": "hook",
-          "icon": "📦",
-          "title": "The goldilocks choice",
-          "body": "Reading all 1 million rows of data is too slow. Reading just 1 row at a time is too erratic. Why not read a small, manageable pack of rows instead?"
+          "icon": "📱",
+          "title": "Reading two identical newspapers",
+          "body": "If you buy two copies of the same newspaper, you don't get twice as much news. You just waste money. In data science, having columns that tell the exact same story wastes computational power and confuses your model."
         },
         {
           "kind": "definition",
-          "icon": "📦",
-          "title": "Mini-Batch Gradient Descent",
-          "body": "<strong>Mini-Batch Gradient Descent</strong> splits the dataset into small, random groups called <strong>batches</strong> (typically 32, 64, or 128 rows) to update weights."
+          "icon": "🤝",
+          "title": "What is correlation?",
+          "body": "<strong>Correlation</strong> measures how closely two features move together. If feature A always goes up when feature B goes up, they are highly correlated and contain <strong>redundant</strong> information."
         },
         {
           "kind": "analogy",
-          "icon": "🛍️",
-          "title": "Shopping in batches",
-          "body": "If you're stocking a pantry, you don't buy 1 can of soup per trip (SGD), nor do you wait to buy 5,000 cans at once (Batch GD). You buy a grocery bag of 32 cans."
+          "icon": "📍",
+          "title": "Temperature scales",
+          "body": "Imagine a dataset with columns for <code>[Temp_Celsius, Temp_Fahrenheit]</code>. Knowing one tells you the other perfectly. Keeping both in your model is redundant; dropping one makes your model simpler with zero loss of information."
         },
         {
           "kind": "example",
-          "icon": "💻",
-          "title": "GPU superpower",
-          "body": "Modern computer chips (GPUs) can process small groups of numbers in parallel. Processing a batch of 64 rows takes almost the <strong>same time</strong> as processing just 1!"
+          "icon": "👟",
+          "title": "Income vs. Tax paid",
+          "body": "In a financial dataset, <code>[Monthly_Income]</code> and <code>[Income_Tax_Paid]</code> are highly correlated. Instead of keeping both and forcing the model to learn their relationship, we can drop one to keep our model clean and fast."
         },
         {
           "kind": "mythbust",
-          "icon": "📐",
-          "title": "Size does matter",
-          "body": "Batch size is a crucial setting. A batch too small (like 2) behaves like noisy SGD. A batch too large (like 10,000) wastes memory and slows updates."
+          "icon": "⚠️",
+          "title": "Correlation isn't causation, but...",
+          "body": "While correlation doesn't mean one feature causes the other, for feature selection, we don't care about cause. If two features are highly correlated, they are mathematically redundant. We drop one purely to simplify the input."
         },
         {
           "kind": "visual",
           "icon": "⚖️",
-          "title": "Comparing batch sizes",
-          "body": "How the size of the batch affects training speed and path quality:",
+          "title": "Redundant vs. Independent",
+          "body": "How features relate to each other:",
           "compare": {
             "left": {
-              "emoji": "🎲",
-              "tag": "SGD (Batch = 1)",
-              "text": "Lightning fast updates<br>Path is highly chaotic"
+              "emoji": "🔄",
+              "tag": "Correlated (Redundant)",
+              "text": "Temp in C & Temp in F<br>Drop one to simplify"
             },
             "right": {
-              "emoji": "📦",
-              "tag": "Mini-Batch (32-128)",
-              "text": "GPU-friendly speed<br>Path is smooth and steady"
+              "emoji": "📐",
+              "tag": "Independent (Keep both)",
+              "text": "House size & House age<br>Different stories"
             }
           }
         }
@@ -100,92 +100,87 @@
           "id": "p1",
           "type": "multiple_choice",
           "xp": 2,
-          "prompt": "What is a 'mini-batch' in gradient descent?",
+          "prompt": "What happens when you train a model with two features that are 100% correlated?",
           "options": [
             {
               "id": "a",
-              "text": "A small, randomly selected subset of the training data.",
+              "text": "You waste computing power on redundant information",
               "correct": true
             },
             {
               "id": "b",
-              "text": "A smaller version of the full model.",
+              "text": "The model automatically averages them together",
               "correct": false
             },
             {
               "id": "c",
-              "text": "A single pixel in an image dataset.",
+              "text": "The model's accuracy instantly drops to zero",
               "correct": false
             },
             {
               "id": "d",
-              "text": "A tool for deleting old weights.",
+              "text": "The dataset becomes twice as large in rows",
               "correct": false
             }
           ],
-          "explain": "Yes! A mini-batch is a small group of data points (like 32 or 64) processed together."
+          "explain": "Correlated features supply duplicate information, making the model unnecessarily complex and slower."
         },
         {
           "id": "p2",
           "type": "true_false",
           "xp": 2,
-          "prompt": "True or false: Modern GPUs are designed to process mini-batches in parallel, making them highly efficient.",
+          "prompt": "True or false: Dropping one of two highly correlated features will cause your model to lose important information.",
           "options": [
             {
               "id": "t",
               "text": "True",
-              "correct": true
+              "correct": false
             },
             {
               "id": "f",
               "text": "False",
-              "correct": false
+              "correct": true
             }
           ],
-          "explain": "True! GPUs excel at matrix operations, meaning they can process 32 or 64 rows simultaneously in almost the same time as a single row."
+          "explain": "False! Because they tell the same story, the remaining feature holds almost all the predictive power."
         },
         {
           "id": "p3",
           "type": "fill_blank",
           "xp": 2,
           "prompt": "Complete the sentence:",
-          "sentence": "A common mini-batch size used in training models is ___ examples.",
-          "blank": "64",
+          "sentence": "If two columns move together in a predictable pattern, they are highly ___.",
+          "blank": "correlated",
           "words": [
-            "64",
-            "1000000",
-            "0"
+            "correlated",
+            "normalized",
+            "scaled"
           ],
-          "explain": "Powers of two like 32, 64, or 128 are standard mini-batch sizes because they fit neatly into GPU memory hardware."
+          "explain": "Correlation measures the strength and direction of a linear relationship between two variables."
         },
         {
           "id": "p4",
-          "type": "multiple_choice",
+          "type": "spot_the_ai",
           "xp": 2,
-          "prompt": "What happens if your mini-batch size is set to the size of your entire dataset?",
+          "prompt": "Which pair of features is most likely to be highly correlated?",
           "options": [
             {
               "id": "a",
-              "text": "It behaves exactly like standard Batch Gradient Descent.",
+              "text": "Total sales revenue and sales tax collected",
               "correct": true
             },
             {
               "id": "b",
-              "text": "It behaves exactly like Stochastic Gradient Descent (SGD).",
+              "text": "A customer's age and their shoe size",
               "correct": false
             },
             {
               "id": "c",
-              "text": "The training will run infinitely fast.",
-              "correct": false
-            },
-            {
-              "id": "d",
-              "text": "The model will run out of memory instantly.",
+              "text": "The car's weight and the owner's zip code",
               "correct": false
             }
           ],
-          "explain": "Spot on! If the batch is the entire dataset, you are back to standard Batch GD, losing the speed advantage."
+          "explain": "Sales tax is a direct percentage of sales revenue, making them extremely correlated."
         }
       ]
     },
@@ -196,30 +191,30 @@
           "id": "b1",
           "type": "multiple_choice",
           "xp": 5,
-          "prompt": "You are training a model on 100,000 reviews. Standard GD takes 10 minutes per step. SGD is too noisy. You configure a batch size of 64. What is the result?",
+          "prompt": "You are predicting car prices. Your columns are: car_weight, engine_size, fuel_efficiency, and weight_in_grams. You notice car_weight and weight_in_grams have a correlation of 1.0. What should you do?",
           "options": [
             {
               "id": "a",
-              "text": "You get fast weight updates leveraging parallel GPU hardware, with a path that is much smoother than SGD.",
+              "text": "Drop weight_in_grams because it is completely redundant with car_weight",
               "correct": true
             },
             {
               "id": "b",
-              "text": "The model will train slower than standard GD because of the extra partitions.",
+              "text": "Keep both to double the mathematical weight of the car",
               "correct": false
             },
             {
               "id": "c",
-              "text": "The accuracy will drop to zero because 64 is too small of a number.",
+              "text": "Drop both columns to avoid any correlation in the dataset",
               "correct": false
             },
             {
               "id": "d",
-              "text": "The model will only learn from the first 64 reviews and ignore the rest.",
+              "text": "Multiply the two columns together to create a new feature",
               "correct": false
             }
           ],
-          "explain": "Fantastic! Mini-batch GD is the industry standard because it blends speed, GPU parallelization, and path stability. Next: how to adjust step sizes dynamically as we learn!"
+          "explain": "Splendid! Since they represent the exact same physical property in different units, keeping both is redundant. Dropping weight_in_grams leaves you with a simpler, cleaner dataset. Next: how to drop columns that don't change at all!"
         }
       ]
     }

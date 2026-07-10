@@ -2,14 +2,14 @@
   "id": "u8-l4",
   "unit": 8,
   "day": 44,
-  "tier": "Tabular Processing",
-  "tierIcon": "🗂️",
-  "title": "Normalization vs Standardization",
-  "icon": "🆚",
-  "concept": "Choose Min-Max scaling for features with strict boundaries (like image pixels) and standardization for models assuming bell curves.",
+  "tier": "Model Training Basics",
+  "tierIcon": "🏋️",
+  "title": "Generalization: The Real Goal of Machine Learning",
+  "icon": "🎯",
+  "concept": "A model's true purpose isn't nailing the data it already saw — it's generalizing: performing well on brand-new data it will meet in the real world.",
   "xp": 15,
   "hearts": 3,
-  "estMinutes": 6,
+  "estMinutes": 7,
   "segments": [
     {
       "type": "warmup",
@@ -18,113 +18,31 @@
           "id": "w1",
           "type": "multiple_choice",
           "xp": 1,
-          "prompt": "Warmup: If a data point is exactly equal to the average (mean) value of a feature, what will its value be after Z-score standardization?",
+          "prompt": "Recap: A model that's too complex tends to memorize noise instead of the real pattern. What's that failure called?",
           "options": [
             {
               "id": "a",
-              "text": "0.0",
+              "text": "Overfitting",
               "correct": true
             },
             {
               "id": "b",
-              "text": "1.0",
+              "text": "Underfitting",
               "correct": false
             },
             {
               "id": "c",
-              "text": "-1.0",
+              "text": "Validating",
               "correct": false
             }
           ],
-          "explain": "Exactly! The mean is subtracted from the value, resulting in 0."
-        }
-      ]
-    },
-    {
-      "type": "teach",
-      "cards": [
-        {
-          "kind": "hook",
-          "icon": "🧳",
-          "title": "Suitcase vs. Weather",
-          "body": "Packing a suitcase requires fitting things within strict physical boundaries (Min-Max). Dressing for the weather is relative—is it warmer or colder than average (Standardization)? They serve different purposes."
+          "explain": "Right! Now let's name the actual goal every model is chasing — the thing overfitting and underfitting both get in the way of."
         },
         {
-          "kind": "definition",
-          "icon": "🎓",
-          "title": "The Right Scaler",
-          "body": "<strong>Min-Max scaling</strong> is best when you need values bounded in a strict range. <strong>Standardization</strong> is ideal when your algorithm assumes normally distributed data, or when the feature has outliers."
-        },
-        {
-          "kind": "analogy",
-          "icon": "📐",
-          "title": "Pixels vs. Exams",
-          "body": "Image models need pixels strictly between 0 and 1, so we normalize. But college admissions compare SAT scores relative to the mean, so they standardize scores."
-        },
-        {
-          "kind": "example",
-          "icon": "🤖",
-          "title": "Neural Nets vs. Trees",
-          "body": "Deep learning models learn faster and more stably when inputs are standardized (centered at 0). However, tree-based models don't care about scale at all!"
-        },
-        {
-          "kind": "mythbust",
-          "icon": "🧠",
-          "title": "No universal winner",
-          "body": "There is no single 'best' scaler. While standardization is often default because it resists outlier distortion, some domains (like computer vision) require normalization."
-        },
-        {
-          "kind": "visual",
-          "icon": "⚖️",
-          "title": "Comparison Summary",
-          "body": "When to use Normalization vs. Standardization:",
-          "compare": {
-            "left": {
-              "emoji": "📏",
-              "tag": "Normalization (Min-Max)",
-              "text": "Strict bounds (e.g. 0 to 1)<br>Good for bounded inputs<br>Sensitive to outliers"
-            },
-            "right": {
-              "emoji": "📈",
-              "tag": "Standardization (Z-Score)",
-              "text": "No boundaries, mean = 0<br>Good for normal curves<br>Less sensitive to outliers"
-            }
-          }
-        }
-      ]
-    },
-    {
-      "type": "practice",
-      "exercises": [
-        {
-          "id": "p1",
-          "type": "multiple_choice",
-          "xp": 2,
-          "prompt": "When is Min-Max scaling (normalization) generally preferred over standardization?",
-          "options": [
-            {
-              "id": "a",
-              "text": "When you need your feature values to lie within a strict, predefined range like 0 to 1",
-              "correct": true
-            },
-            {
-              "id": "b",
-              "text": "When your dataset contains extreme outliers",
-              "correct": false
-            },
-            {
-              "id": "c",
-              "text": "When you want the mean of the feature to be exactly 0",
-              "correct": false
-            }
-          ],
-          "explain": "Min-Max scaling guarantees a strict boundary (usually 0 to 1), whereas standardized values can go beyond those bounds."
-        },
-        {
-          "id": "p2",
+          "id": "w2",
           "type": "true_false",
-          "xp": 2,
-          "prompt": "True or false: Standardization is generally less sensitive to extreme outliers than Min-Max scaling.",
+          "xp": 1,
+          "prompt": "True or false: The whole point of splitting data into train, validation, and test is ultimately to check how well a model handles data it hasn't seen before.",
           "options": [
             {
               "id": "t",
@@ -137,45 +55,180 @@
               "correct": false
             }
           ],
-          "explain": "True! Min-Max squashes all non-outlier data points close together when a single massive outlier exists, whereas standardization preserves more relative spread."
+          "explain": "True! Every split, every check — it all exists to answer one question: will this work on new data?"
+        }
+      ]
+    },
+    {
+      "type": "teach",
+      "cards": [
+        {
+          "kind": "hook",
+          "icon": "🚗",
+          "title": "Two driving students",
+          "body": "Student A practices only in one empty parking lot, over and over, until the turns feel automatic. Student B practices on many different streets — busy roads, tight corners, rain, night driving. On test day, in an unfamiliar neighborhood, only one of them is actually ready."
+        },
+        {
+          "kind": "definition",
+          "icon": "🎯",
+          "title": "What is generalization?",
+          "body": "<strong>Generalization</strong> is a model's ability to perform well on new, unseen data — not just the exact examples it trained on. It's the real goal of training: not to memorize, but to learn something that transfers."
+        },
+        {
+          "kind": "analogy",
+          "icon": "🍳",
+          "title": "The chef who understands technique",
+          "body": "A chef who only knows 5 exact recipes from school is stuck the moment an ingredient is missing. A chef who understands <em>why</em> a sauce thickens or a dough rises can improvise with almost any new ingredient. Real learning generalizes; rote memorization doesn't."
+        },
+        {
+          "kind": "example",
+          "icon": "🌧️",
+          "title": "A self-driving car meets new weather",
+          "body": "A self-driving model trained only on sunny California roads may drive beautifully there — but the real test is dropping it into rainy Seattle traffic it has never encountered. If it still performs well, it has generalized. If it falls apart, it only ever memorized California."
+        },
+        {
+          "kind": "mythbust",
+          "icon": "⚠️",
+          "title": "Nailing the training data isn't the finish line",
+          "body": "It's tempting to treat a perfect training score as success. But training data is just practice material — the real finish line is how the model handles situations it has never met, out in the real world."
+        },
+        {
+          "kind": "visual",
+          "icon": "🎯",
+          "title": "Memorization vs. generalization",
+          "body": "Two very different kinds of \"success\":",
+          "compare": {
+            "left": {
+              "emoji": "📼",
+              "tag": "Memorization",
+              "text": "Nails the exact training examples<br>Falls apart on anything new"
+            },
+            "right": {
+              "emoji": "🎯",
+              "tag": "Generalization",
+              "text": "Learned the real pattern<br>Performs well on new situations"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "type": "practice",
+      "exercises": [
+        {
+          "id": "p1",
+          "type": "multiple_choice",
+          "xp": 2,
+          "prompt": "What is generalization, in a machine learning model?",
+          "options": [
+            {
+              "id": "a",
+              "text": "The ability to perform well on new data it has never seen before",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "The ability to memorize the training data perfectly",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "The speed at which a model trains",
+              "correct": false
+            },
+            {
+              "id": "d",
+              "text": "The number of features a model uses",
+              "correct": false
+            }
+          ],
+          "explain": "Exactly! Generalization is about handling new situations well, not memorizing old ones."
+        },
+        {
+          "id": "p2",
+          "type": "true_false",
+          "xp": 2,
+          "prompt": "True or false: The real goal of training a model is to score as high as possible on the training data.",
+          "options": [
+            {
+              "id": "t",
+              "text": "True",
+              "correct": false
+            },
+            {
+              "id": "f",
+              "text": "False",
+              "correct": true
+            }
+          ],
+          "explain": "False! The training score is just a means to an end — the real goal is generalizing well to new, unseen data."
         },
         {
           "id": "p3",
           "type": "fill_blank",
           "xp": 2,
           "prompt": "Complete the sentence:",
-          "sentence": "___ is preferred when training neural networks because centering inputs at zero leads to faster, more stable optimization.",
-          "blank": "Standardization",
+          "sentence": "A model that ___ well can handle new situations it never trained on.",
+          "blank": "generalizes",
           "words": [
-            "Standardization",
-            "Min-Max scaling",
-            "One-hot encoding"
+            "generalizes",
+            "memorizes",
+            "overfits"
           ],
-          "explain": "Neural networks update weights using gradients; centering inputs at zero with standard deviation of 1 makes optimization more stable."
+          "explain": "Generalizing means the model learned something that transfers to new, unseen situations."
         },
         {
           "id": "p4",
           "type": "spot_the_ai",
           "xp": 2,
-          "prompt": "Which scenario is the best fit for Min-Max normalization?",
+          "prompt": "Which of these shows a model that has genuinely generalized?",
           "options": [
             {
               "id": "a",
-              "text": "Preparing pixel brightness values (0 to 255) for an image classification neural network",
+              "text": "A handwriting model trained on thousands of different people's handwriting correctly reads a brand-new person's handwriting it has never seen",
               "correct": true
             },
             {
               "id": "b",
-              "text": "Scaling user income in a dataset with multi-millionaire outliers",
+              "text": "A handwriting model perfectly reads the exact training samples it memorized, but fails on anyone else's handwriting",
               "correct": false
             },
             {
               "id": "c",
-              "text": "Formatting house prices for a linear regression model that assumes normally distributed data",
+              "text": "A handwriting model that hasn't been trained on any data at all",
               "correct": false
             }
           ],
-          "explain": "Pixel values have a fixed, strict boundary (0 to 255) and no outliers, making them a perfect candidate for Min-Max normalization."
+          "explain": "Correct! Performing well on a genuinely new person's handwriting is real evidence of generalization."
+        },
+        {
+          "id": "p5",
+          "type": "multiple_choice",
+          "xp": 2,
+          "prompt": "Why do we ultimately care about train/validation/test splits and about avoiding both underfitting and overfitting?",
+          "options": [
+            {
+              "id": "a",
+              "text": "All of it is in service of one goal: a model that generalizes well to new, real-world data",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "Because more data splits always look more impressive on a report",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "Because it's required by law for every model",
+              "correct": false
+            },
+            {
+              "id": "d",
+              "text": "Because it makes the training data itself smaller and faster to store",
+              "correct": false
+            }
+          ],
+          "explain": "Exactly! Every technique this unit covers — the training loop, avoiding over/underfitting, validation — all exists to serve generalization."
         }
       ]
     },
@@ -186,30 +239,59 @@
           "id": "b1",
           "type": "multiple_choice",
           "xp": 5,
-          "prompt": "You are training a Support Vector Machine (SVM) model on customer data. The age column has normal distribution, but the income column contains major outliers. If you use Min-Max scaling, the normal incomes will get squished together by the outliers. What should you do?",
+          "prompt": "Two fruit-sorting models both score 97% on their training photos. Model A scores 95% on new fruit photos. Model B scores 40% on new fruit photos. Which model actually achieved the real goal of machine learning, and why?",
           "options": [
             {
               "id": "a",
-              "text": "Use standardization (Z-score scaling) instead, so the outliers don't compress the normal values into a tiny range.",
+              "text": "Model A — it generalized, performing well on new data, which is the actual goal, not just the training score",
               "correct": true
             },
             {
               "id": "b",
-              "text": "Keep Min-Max scaling but delete all customer entries with high income.",
+              "text": "Model B — it's fine, since both scored the same on training data",
               "correct": false
             },
             {
               "id": "c",
-              "text": "Do not scale the features at all.",
+              "text": "Both equally — training score is all that matters",
               "correct": false
             },
             {
               "id": "d",
-              "text": "Use target encoding on the income column.",
+              "text": "Neither — a 97% training score is a failure regardless of anything else",
               "correct": false
             }
           ],
-          "explain": "Correct! Standardization handles outliers much better than Min-Max scaling because it doesn't compress the main cluster of data points. Brilliant decision-making on scaling choices!"
+          "explain": "Right! Model A's strong score on brand-new photos shows real generalization — the true goal. Model B's training score was hiding an overfitting problem."
+        },
+        {
+          "id": "b2",
+          "type": "multiple_choice",
+          "xp": 5,
+          "prompt": "A hiring manager says: \"Our resume-screening model is amazing — it got 100% on every resume in our historical dataset.\" What's the most important follow-up question, based on what generalization actually means?",
+          "options": [
+            {
+              "id": "a",
+              "text": "\"How does it perform on new resumes it has never seen before?\" — since that's the real measure of whether it generalizes",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "\"How fast did it reach 100%?\" — since speed is what matters most",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "No follow-up needed — 100% on historical data proves it's ready for real use",
+              "correct": false
+            },
+            {
+              "id": "d",
+              "text": "\"Can we remove the test set to save storage space?\" — since it already scored perfectly",
+              "correct": false
+            }
+          ],
+          "explain": "Exactly! A perfect score on data it already saw says nothing about generalization — the only question that matters is how it handles brand-new resumes."
         }
       ]
     }

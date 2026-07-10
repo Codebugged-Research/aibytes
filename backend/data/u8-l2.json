@@ -2,14 +2,14 @@
   "id": "u8-l2",
   "unit": 8,
   "day": 42,
-  "tier": "Tabular Processing",
-  "tierIcon": "🗂️",
-  "title": "Min-Max Scaling (Normalization)",
-  "icon": "📏",
-  "concept": "Min-Max scaling, or normalization, shifts and squashes numeric values into a strict 0 to 1 range.",
+  "tier": "Model Training Basics",
+  "tierIcon": "🏋️",
+  "title": "Underfitting vs. Overfitting: The Two Failure Modes",
+  "icon": "⚖️",
+  "concept": "Underfitting is a model too simple to catch the real pattern; overfitting is a model so complex it memorizes noise instead. Good models sit in the goldilocks zone between the two.",
   "xp": 15,
   "hearts": 3,
-  "estMinutes": 6,
+  "estMinutes": 7,
   "segments": [
     {
       "type": "warmup",
@@ -18,113 +18,31 @@
           "id": "w1",
           "type": "multiple_choice",
           "xp": 1,
-          "prompt": "Warmup: Why do distance-based algorithms like KNN require feature scaling?",
+          "prompt": "Recap: What does it mean when a model overfits?",
           "options": [
             {
               "id": "a",
-              "text": "To prevent features with large numeric ranges from dominating the distance calculations",
+              "text": "It memorizes quirks of the training data instead of learning the general pattern",
               "correct": true
             },
             {
               "id": "b",
-              "text": "To speed up database queries",
+              "text": "It refuses to make any predictions at all",
               "correct": false
             },
             {
               "id": "c",
-              "text": "To convert category names into numbers",
+              "text": "It trains too quickly and finishes early",
               "correct": false
             }
           ],
-          "explain": "Right! Scaling keeps all features on a level playing field so no single feature dominates purely because of its units."
-        }
-      ]
-    },
-    {
-      "type": "teach",
-      "cards": [
-        {
-          "kind": "hook",
-          "icon": "💯",
-          "title": "Scores out of 100",
-          "body": "Whether a test was graded out of 40 points or 100 points, converting it to a percentage (0% to 100%) makes them instantly comparable. Normalization does the exact same thing for any feature."
+          "explain": "Right — you've met overfitting already. Today: it turns out there's an opposite failure too."
         },
         {
-          "kind": "definition",
-          "icon": "📏",
-          "title": "Min-Max Scaling",
-          "body": "<strong>Min-Max scaling</strong> (often called <strong>normalization</strong>) transforms numeric values so they fit strictly between 0 and 1. The formula is: <code>(x - min) / (max - min)</code>."
-        },
-        {
-          "kind": "analogy",
-          "icon": "🎛️",
-          "title": "The volume slider",
-          "body": "Think of adjusting the volume on a speaker from 0 (mute) to 1 (max volume). No matter how loud the original sound wave was, the slider maps it to this standard range."
-        },
-        {
-          "kind": "example",
-          "icon": "📊",
-          "title": "Scaling Age",
-          "body": "If the youngest customer is 20 (min) and the oldest is 60 (max), a customer who is 40 (halfway) gets scaled to: <code>(40 - 20) / (60 - 20) = 0.5</code>. A customer who is 60 maps to 1.0."
-        },
-        {
-          "kind": "mythbust",
-          "icon": "⚠️",
-          "title": "Strict bounds",
-          "body": "What if new data is outside the original min-max range? If a customer aged 70 signs up, their scaled value is <code>1.25</code>, exceeding 1. We must handle new extremes carefully!"
-        },
-        {
-          "kind": "visual",
-          "icon": "⚖️",
-          "title": "How Min-Max works",
-          "body": "Squashing any range of values to fit exactly between 0 and 1:",
-          "compare": {
-            "left": {
-              "emoji": "🏷️",
-              "tag": "Raw Prices",
-              "text": "$100k (Minimum)<br>$300k (Midpoint)<br>$500k (Maximum)"
-            },
-            "right": {
-              "emoji": "📏",
-              "tag": "Normalized",
-              "text": "0.0 (Minimum)<br>0.5 (Midpoint)<br>1.0 (Maximum)"
-            }
-          }
-        }
-      ]
-    },
-    {
-      "type": "practice",
-      "exercises": [
-        {
-          "id": "p1",
-          "type": "multiple_choice",
-          "xp": 2,
-          "prompt": "What are the default minimum and maximum values after applying standard Min-Max scaling?",
-          "options": [
-            {
-              "id": "a",
-              "text": "0 and 1",
-              "correct": true
-            },
-            {
-              "id": "b",
-              "text": "-1 and 1",
-              "correct": false
-            },
-            {
-              "id": "c",
-              "text": "Mean of 0 and variance of 1",
-              "correct": false
-            }
-          ],
-          "explain": "Min-Max scaling by default squashes all numbers into a strict range between 0 and 1."
-        },
-        {
-          "id": "p2",
+          "id": "w2",
           "type": "true_false",
-          "xp": 2,
-          "prompt": "True or false: Under Min-Max scaling, the absolute minimum value in the training column will always map to exactly 0.",
+          "xp": 1,
+          "prompt": "True or false: A model can also fail by being too simple, not just by being too complex.",
           "options": [
             {
               "id": "t",
@@ -137,45 +55,180 @@
               "correct": false
             }
           ],
-          "explain": "True! In the formula (x - min) / (max - min), when x is the minimum value, the numerator becomes 0, so the result is 0."
+          "explain": "True! That failure mode has a name too: underfitting. Let's meet it."
+        }
+      ]
+    },
+    {
+      "type": "teach",
+      "cards": [
+        {
+          "kind": "hook",
+          "icon": "🥣",
+          "title": "Goldilocks and the model",
+          "body": "One porridge is too plain and bland — it misses the point entirely. Another is stuffed with so many random ingredients it tastes like nothing in particular. The one Goldilocks actually wants sits right in between: just enough flavor, nothing extra. Models have the same three zones."
+        },
+        {
+          "kind": "definition",
+          "icon": "📉",
+          "title": "What is underfitting?",
+          "body": "<strong>Underfitting</strong> is when a model is too simple to capture the real pattern in the data. It performs poorly on training data <em>and</em> on new data, because it never learned enough in the first place."
+        },
+        {
+          "kind": "analogy",
+          "icon": "📖",
+          "title": "Three students, three outcomes",
+          "body": "Student A barely skims the chapter titles and misses the whole subject — that's <strong>underfitting</strong>. Student B memorizes every word of the textbook without understanding it — that's <strong>overfitting</strong>. Student C actually understands the concepts well enough to handle new questions — that's the goldilocks zone: a good fit."
+        },
+        {
+          "kind": "example",
+          "icon": "🏠",
+          "title": "Pricing houses, two ways",
+          "body": "An <strong>underfit</strong> house-price model just guesses the same average price for every house, ignoring size or location entirely — wrong almost everywhere. An <strong>overfit</strong> model memorizes the exact price of every house it saw, down to quirky one-off deals — perfect on those houses, wrong on any new one."
+        },
+        {
+          "kind": "mythbust",
+          "icon": "⚠️",
+          "title": "More complexity isn't automatically better",
+          "body": "It's tempting to think a more complicated model always wins. But past a certain point, extra complexity doesn't add understanding — it just starts memorizing noise, sliding straight from a good fit into overfitting."
+        },
+        {
+          "kind": "visual",
+          "icon": "⚖️",
+          "title": "Two failure modes, one spectrum",
+          "body": "Both ends of the spectrum fail — for opposite reasons:",
+          "compare": {
+            "left": {
+              "emoji": "📉",
+              "tag": "Underfitting",
+              "text": "Too simple<br>Misses the pattern<br>Bad on training AND new data"
+            },
+            "right": {
+              "emoji": "📈",
+              "tag": "Overfitting",
+              "text": "Too complex<br>Memorizes noise<br>Great on training, bad on new data"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "type": "practice",
+      "exercises": [
+        {
+          "id": "p1",
+          "type": "multiple_choice",
+          "xp": 2,
+          "prompt": "A model scores poorly on BOTH its training data and new test data. What does this suggest?",
+          "options": [
+            {
+              "id": "a",
+              "text": "The model is likely underfitting — too simple to capture the pattern at all",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "The model is overfitting badly",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "The model has achieved a perfect goldilocks fit",
+              "correct": false
+            },
+            {
+              "id": "d",
+              "text": "The training data must be corrupted",
+              "correct": false
+            }
+          ],
+          "explain": "Exactly — poor scores on both sets (not just a big gap between them) is the signature of underfitting."
+        },
+        {
+          "id": "p2",
+          "type": "true_false",
+          "xp": 2,
+          "prompt": "True or false: Underfitting and overfitting are actually the same problem with different names.",
+          "options": [
+            {
+              "id": "t",
+              "text": "True",
+              "correct": false
+            },
+            {
+              "id": "f",
+              "text": "False",
+              "correct": true
+            }
+          ],
+          "explain": "False! They're opposite failures — one from too little learning (underfitting), one from too much memorizing (overfitting)."
         },
         {
           "id": "p3",
           "type": "fill_blank",
           "xp": 2,
           "prompt": "Complete the sentence:",
-          "sentence": "The formula for Min-Max scaling is (x - min) divided by ___.",
-          "blank": "max - min",
+          "sentence": "A model that is too ___ to capture the real pattern is underfitting.",
+          "blank": "simple",
           "words": [
-            "max - min",
-            "mean",
-            "standard deviation"
+            "simple",
+            "complex",
+            "large"
           ],
-          "explain": "Dividing by the range (max - min) scales the values so that the maximum value maps to exactly 1."
+          "explain": "Underfitting comes from a model that's too simple to learn the pattern in the first place."
         },
         {
           "id": "p4",
           "type": "spot_the_ai",
           "xp": 2,
-          "prompt": "If the minimum value in a dataset is 10 and the maximum is 50, what does the value 30 scale to under Min-Max scaling?",
+          "prompt": "Which of these describes an underfit model?",
           "options": [
             {
               "id": "a",
-              "text": "0.5",
+              "text": "A model that predicts the same flat price for every house, regardless of size, location, or condition",
               "correct": true
             },
             {
               "id": "b",
-              "text": "0.25",
+              "text": "A model that nails every training house's price perfectly but is way off on any new house",
               "correct": false
             },
             {
               "id": "c",
-              "text": "0.75",
+              "text": "A model that performs consistently well on both training and new houses",
               "correct": false
             }
           ],
-          "explain": "Using the formula: (30 - 10) / (50 - 10) = 20 / 40 = 0.5, which is exactly halfway."
+          "explain": "Right! Ignoring the real differences between houses and guessing one flat answer is a classic underfitting symptom."
+        },
+        {
+          "id": "p5",
+          "type": "multiple_choice",
+          "xp": 2,
+          "prompt": "Where does the best-performing model usually sit, in terms of complexity?",
+          "options": [
+            {
+              "id": "a",
+              "text": "In the goldilocks zone — complex enough to learn the real pattern, not so complex it memorizes noise",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "At maximum possible complexity, always",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "At minimum possible complexity, always",
+              "correct": false
+            },
+            {
+              "id": "d",
+              "text": "Complexity has no effect on performance",
+              "correct": false
+            }
+          ],
+          "explain": "Exactly — too simple underfits, too complex overfits, and the sweet spot is in between."
         }
       ]
     },
@@ -186,30 +239,59 @@
           "id": "b1",
           "type": "multiple_choice",
           "xp": 5,
-          "prompt": "You are building a regression model to process grayscale images where pixel brightness values range from 0 to 255. You decide to normalize the pixels. If a pixel has a raw value of 127.5, what will its normalized value be, and why?",
+          "prompt": "Model X scores 55% on training data and 53% on test data. Model Y scores 99% on training data and 58% on test data. How should you describe each?",
           "options": [
             {
               "id": "a",
-              "text": "0.5, because 127.5 is exactly halfway between the minimum (0) and maximum (255) pixel values",
+              "text": "Model X is underfitting (low everywhere); Model Y is overfitting (huge gap between training and test)",
               "correct": true
             },
             {
               "id": "b",
-              "text": "0.0, because the minimum pixel value is subtracted",
+              "text": "Both models are overfitting equally",
               "correct": false
             },
             {
               "id": "c",
-              "text": "1.0, because it is positive",
+              "text": "Model X is overfitting; Model Y is underfitting",
               "correct": false
             },
             {
               "id": "d",
-              "text": "127.5, because normalization does not affect pixel values",
+              "text": "Both models have achieved a perfect goldilocks fit",
               "correct": false
             }
           ],
-          "explain": "Correct! (127.5 - 0) / (255 - 0) = 127.5 / 255 = 0.5. Normalizing pixel values to a 0-1 range is a standard preprocessing step in image models. Fantastic job mastering Min-Max scaling!"
+          "explain": "Exactly! Low-everywhere scores point to underfitting; a huge train-vs-test gap points to overfitting."
+        },
+        {
+          "id": "b2",
+          "type": "multiple_choice",
+          "xp": 5,
+          "prompt": "A team's plant-disease model underfits, so they make it dramatically more complex to fix it. Now training accuracy is 100%, but test accuracy dropped from 60% to 45%. What happened?",
+          "options": [
+            {
+              "id": "a",
+              "text": "They overcorrected — the model swung past the goldilocks zone straight into overfitting",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "The model is now perfectly fixed, since training accuracy is 100%",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "The model is still underfitting",
+              "correct": false
+            },
+            {
+              "id": "d",
+              "text": "Test accuracy dropping is unrelated to the complexity change",
+              "correct": false
+            }
+          ],
+          "explain": "Right! Adding complexity to fix underfitting can easily overshoot into overfitting — that's why the goldilocks zone matters so much."
         }
       ]
     }

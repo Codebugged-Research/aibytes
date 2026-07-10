@@ -2,14 +2,14 @@
   "id": "u7-l4",
   "unit": 7,
   "day": 39,
-  "tier": "Tabular Processing",
-  "tierIcon": "🗂️",
-  "title": "The Dummy Variable Trap",
-  "icon": "⚠️",
-  "concept": "The dummy variable trap occurs when one-hot encoded columns are perfectly predictable from each other, causing multi-collinearity issues.",
+  "tier": "Reinforcement Learning",
+  "tierIcon": "🎮",
+  "title": "Exploration vs Exploitation",
+  "icon": "🗺️",
+  "concept": "An agent constantly faces a trade-off: exploit the action it already knows works well, or explore a new action that might work even better.",
   "xp": 15,
   "hearts": 3,
-  "estMinutes": 6,
+  "estMinutes": 7,
   "segments": [
     {
       "type": "warmup",
@@ -18,25 +18,44 @@
           "id": "w1",
           "type": "multiple_choice",
           "xp": 1,
-          "prompt": "Warmup: What is the main drawback of using one-hot encoding on a feature with many unique categories?",
+          "prompt": "Recap: How does an agent's behavior usually change after many trials of rewards and penalties?",
           "options": [
             {
               "id": "a",
-              "text": "It creates a massive number of new columns",
+              "text": "Good actions happen more often, bad ones fade out",
               "correct": true
             },
             {
               "id": "b",
-              "text": "It loses the ordering of the categories",
+              "text": "Nothing changes no matter how many trials happen",
               "correct": false
             },
             {
               "id": "c",
-              "text": "It converts numerical features into text",
+              "text": "The agent stops taking any actions",
               "correct": false
             }
           ],
-          "explain": "One-hot encoding creates a new column for every single unique category, which can quickly bloat your dataset size."
+          "explain": "Right! Repeated reward signals gradually shift the agent toward better actions."
+        },
+        {
+          "id": "w2",
+          "type": "true_false",
+          "xp": 1,
+          "prompt": "True or false: A single reward is usually enough to fully teach an agent the best behavior.",
+          "options": [
+            {
+              "id": "t",
+              "text": "True",
+              "correct": false
+            },
+            {
+              "id": "f",
+              "text": "False",
+              "correct": true
+            }
+          ],
+          "explain": "False! It takes many trials of rewards and penalties for behavior to reliably shift."
         }
       ]
     },
@@ -45,49 +64,49 @@
       "cards": [
         {
           "kind": "hook",
-          "icon": "🪙",
-          "title": "The redundant coin flip",
-          "body": "If you flip a coin and it isn't heads, it must be tails. You don't need a column for both is_heads and is_tails — knowing one tells you the other instantly."
+          "icon": "🍜",
+          "title": "The Same Noodle Shop, Every Friday",
+          "body": "You know a noodle shop that's always good — you order the same dish every Friday and you're always happy. Two blocks away, a new ramen place just opened. It might be even better... or it might be a letdown. Do you play it safe, or take the risk?"
         },
         {
           "kind": "definition",
-          "icon": "🎓",
-          "title": "The Dummy Variable Trap",
-          "body": "The <strong>dummy variable trap</strong> is a scenario where one-hot encoded columns are perfectly predictable from one another, causing a mathematical issue called multi-collinearity."
+          "icon": "🗺️",
+          "title": "Two competing strategies",
+          "body": "<strong>Exploitation</strong> means picking the action already known to give a good reward. <strong>Exploration</strong> means trying a new, untested action to see if it might pay off even better. An agent needs both — too much of either one holds it back."
         },
         {
           "kind": "analogy",
-          "icon": "💡",
-          "title": "The two-way light switch",
-          "body": "Imagine a room with a single switch. It's either UP (on) or DOWN (off). You don't need two separate switches next to each other that always show opposite states."
+          "icon": "🍽️",
+          "title": "Favorite restaurant vs. trying somewhere new",
+          "body": "Always eating at your favorite restaurant (exploiting) guarantees a meal you know you'll enjoy — but you'll never discover if a new spot is even better. Always trying somewhere new (exploring) means you might find a hidden gem, or you might end up with several disappointing meals along the way."
         },
         {
           "kind": "example",
-          "icon": "🧑‍🤝‍🧑",
-          "title": "Gender encoding",
-          "body": "When encoding 'Male' and 'Female', if is_male is 1, is_female is 0. If is_male is 0, is_female is 1. One column is redundant, as is_female always equals 1 - is_male."
+          "icon": "🎰",
+          "title": "Two vending machines, one better than the other",
+          "body": "Imagine two snack machines. One has given you a good snack every time you've tried it. The other you've never used — it could be amazing or terrible. Sticking only with the known machine is exploitation. Testing the mystery machine, even though the first one already works, is exploration."
         },
         {
           "kind": "mythbust",
-          "icon": "🧠",
-          "title": "Always drop one column",
-          "body": "You don't need all columns! To avoid the trap, always drop one of the encoded columns (setting drop_first=True in libraries). If you have N categories, you only need N-1 columns."
+          "icon": "⚠️",
+          "title": "Exploring isn't wasted effort",
+          "body": "It's tempting to think exploring is just a mistake or a distraction from \"the real goal.\" It's not — without ever exploring, an agent can get stuck repeating a decent-but-not-great action forever, never discovering something better nearby."
         },
         {
           "kind": "visual",
           "icon": "⚖️",
-          "title": "Before and after dropping",
-          "body": "How dropping the redundant column works:",
+          "title": "Exploit vs. explore",
+          "body": "Two strategies, two different payoffs:",
           "compare": {
             "left": {
-              "emoji": "❌",
-              "tag": "Redundant (Trap)",
-              "text": "is_male: [1, 0, 0]<br>is_female: [0, 1, 1]<br>(Perfect correlation)"
+              "emoji": "✅",
+              "tag": "Exploitation",
+              "text": "Reliable reward<br>from what's known to work"
             },
             "right": {
-              "emoji": "✅",
-              "tag": "Correct (No Trap)",
-              "text": "is_male: [1, 0, 0]<br>(If 0, they are female)"
+              "emoji": "🔍",
+              "tag": "Exploration",
+              "text": "Uncertain outcome,<br>chance of a bigger reward"
             }
           }
         }
@@ -100,31 +119,31 @@
           "id": "p1",
           "type": "multiple_choice",
           "xp": 2,
-          "prompt": "What is multi-collinearity in machine learning datasets?",
+          "prompt": "Choosing your usual go-to lunch spot because you know you'll enjoy it is an example of:",
           "options": [
             {
               "id": "a",
-              "text": "When one or more features can be perfectly predicted from other features",
+              "text": "Exploitation",
               "correct": true
             },
             {
               "id": "b",
-              "text": "When a dataset has too many missing values",
+              "text": "Exploration",
               "correct": false
             },
             {
               "id": "c",
-              "text": "When the target variable is numerical instead of categorical",
+              "text": "A penalty",
               "correct": false
             }
           ],
-          "explain": "Multi-collinearity occurs when independent variables are highly correlated, confusing algorithms like linear regression."
+          "explain": "Right! Sticking with what's already known to be good is exploitation."
         },
         {
           "id": "p2",
           "type": "true_false",
           "xp": 2,
-          "prompt": "True or false: To avoid the dummy variable trap, you should keep only N-1 columns when one-hot encoding a feature with N categories.",
+          "prompt": "True or false: Exploration means trying an action the agent hasn't tested much, even though the outcome is uncertain.",
           "options": [
             {
               "id": "t",
@@ -137,45 +156,74 @@
               "correct": false
             }
           ],
-          "explain": "True. Dropping the first column removes the redundant correlation without losing any information."
+          "explain": "True! Exploration is about testing the unknown to see if it pays off."
         },
         {
           "id": "p3",
           "type": "fill_blank",
           "xp": 2,
           "prompt": "Complete the sentence:",
-          "sentence": "To avoid the dummy variable trap, you should ___ one of the encoded columns.",
-          "blank": "drop",
+          "sentence": "Sticking with the action already known to work well is called ___, while trying something new is called exploration.",
+          "blank": "exploitation",
           "words": [
-            "drop",
-            "multiply",
-            "add"
+            "exploitation",
+            "penalty",
+            "environment"
           ],
-          "explain": "Dropping one column prevents perfect predictability among the features."
+          "explain": "Exploitation means leaning on the action you already know gives a good reward."
         },
         {
           "id": "p4",
           "type": "spot_the_ai",
           "xp": 2,
-          "prompt": "Which of the following sets of columns has a redundant dummy variable trap for a category with values: [Yes, No]?",
+          "prompt": "Which of these best describes exploration rather than exploitation?",
           "options": [
             {
               "id": "a",
-              "text": "is_yes and is_no",
+              "text": "A music app occasionally recommends a totally new artist you've never listened to, instead of only your usual favorites",
               "correct": true
             },
             {
               "id": "b",
-              "text": "Only is_yes",
+              "text": "A music app only ever plays the exact songs you've already rated 5 stars",
               "correct": false
             },
             {
               "id": "c",
-              "text": "Only is_no",
+              "text": "A calendar app reminds you of an appointment",
               "correct": false
             }
           ],
-          "explain": "Having both columns is redundant because if is_yes is 1, is_no must be 0, and vice versa."
+          "explain": "Right! Recommending something untested, even at the risk of a miss, is exploration."
+        },
+        {
+          "id": "p5",
+          "type": "multiple_choice",
+          "xp": 2,
+          "prompt": "A game-playing agent has found one strategy that reliably wins about 60% of matches. It has never tried a completely different strategy that could be better or worse. What's the risk of only exploiting the known strategy forever?",
+          "options": [
+            {
+              "id": "a",
+              "text": "It may never discover a better strategy that was available all along",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "It will definitely start losing every match",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "There is no risk — exploiting is always the correct choice",
+              "correct": false
+            },
+            {
+              "id": "d",
+              "text": "The agent will stop receiving rewards altogether",
+              "correct": false
+            }
+          ],
+          "explain": "Exactly! Without any exploration, the agent can get stuck with a decent strategy while a better one goes undiscovered."
         }
       ]
     },
@@ -186,30 +234,59 @@
           "id": "b1",
           "type": "multiple_choice",
           "xp": 5,
-          "prompt": "You are predicting home prices using a model. You one-hot encode a 'heating_type' column with three options: 'Gas', 'Electric', and 'Solar'. If you drop the 'Gas' column to avoid the trap, how does the model know a house has gas heating?",
+          "prompt": "A food delivery app usually routes drivers along the same well-known road every time (fast and predictable), but occasionally sends a driver down a road it has less data on, which could be faster or could be slower. Why would the app intentionally do this sometimes?",
           "options": [
             {
               "id": "a",
-              "text": "When both is_electric and is_solar are 0",
+              "text": "To explore the less-known road so it might discover an even better route, instead of only exploiting the familiar one",
               "correct": true
             },
             {
               "id": "b",
-              "text": "The model will completely lose the information about gas heating",
+              "text": "Because the app is broken and picking roads at random",
               "correct": false
             },
             {
               "id": "c",
-              "text": "The model will crash due to missing columns",
+              "text": "Because exploring guarantees a faster trip every single time",
               "correct": false
             },
             {
               "id": "d",
-              "text": "You have to add a separate gas column back in",
+              "text": "Because the well-known road is actually the environment, not an action",
               "correct": false
             }
           ],
-          "explain": "Correct! If the house doesn't use Electric or Solar, it must use Gas. The information is preserved perfectly in the remaining columns. Next up: how we handle categories with hundreds or thousands of options!"
+          "explain": "Exactly! Occasionally exploring untested routes is how the app can discover something better than what it already exploits."
+        },
+        {
+          "id": "b2",
+          "type": "multiple_choice",
+          "xp": 5,
+          "prompt": "An agent playing a simple game has two buttons. Button A has been pressed 100 times and reliably gives a small reward. Button B has been pressed only twice, with mixed results. A purely exploit-only agent will press only Button A forever. What's the downside of that strategy?",
+          "options": [
+            {
+              "id": "a",
+              "text": "The agent may never learn whether Button B could actually give a bigger reward, since it barely explored it",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "There is no downside — Button A is proven to work, so it's always the best long-term choice",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "Pressing Button A repeatedly counts as exploration",
+              "correct": false
+            },
+            {
+              "id": "d",
+              "text": "The agent would receive no reward at all from Button A",
+              "correct": false
+            }
+          ],
+          "explain": "Exactly! With only two tries, Button B is still mostly unknown — a purely exploit-only agent risks missing out on a better option it never gave a fair shot. Next: let's see reinforcement learning at work in games, robots, and the real world."
         }
       ]
     }
