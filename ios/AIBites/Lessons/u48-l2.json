@@ -1,0 +1,222 @@
+{
+  "id": "u48-l2",
+  "unit": 48,
+  "day": 242,
+  "tier": "Time Series Evaluation",
+  "tierIcon": "📐",
+  "title": "Time Series Split: Rolling Origin",
+  "icon": "🚶",
+  "concept": "Training on the past, testing on the immediate future, and rolling the cut-off forward (walk-forward validation).",
+  "xp": 15,
+  "hearts": 3,
+  "estMinutes": 7,
+  "segments": [
+    {
+      "type": "warmup",
+      "exercises": [
+        {
+          "id": "w1",
+          "type": "multiple_choice",
+          "xp": 1,
+          "prompt": "Recap: What is the main danger of using standard shuffled K-Fold cross-validation on time series data?",
+          "options": [
+            {
+              "id": "a",
+              "text": "Leaking future data into the training set, violating the chronological order.",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "Reducing the training time too much.",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "Preventing the model from learning linear relationships.",
+              "correct": false
+            }
+          ],
+          "explain": "Correct! Shuffling time series data breaks the chronological order, leaking future data into training."
+        }
+      ]
+    },
+    {
+      "type": "teach",
+      "cards": [
+        {
+          "kind": "hook",
+          "icon": "🚶",
+          "title": "The rolling horizon",
+          "body": "How does a real weather forecaster test their method? They don't shuffle history. They pretend they are at Monday, predict Tuesday, and check if they were right. Then they add Tuesday to their history, predict Wednesday, and check. They walk forward in time!"
+        },
+        {
+          "kind": "definition",
+          "icon": "📐",
+          "title": "What is walk-forward validation?",
+          "body": "<strong>Walk-forward validation</strong> (or a Time Series Split) is a method where we split data chronologically. In Fold 1, we train on the oldest data (e.g., months 1-3) and test on the next period (month 4). In Fold 2, we roll the cutoff point forward, training on months 1-4 and testing on month 5."
+        },
+        {
+          "kind": "analogy",
+          "icon": "🔦",
+          "title": "Walking with a flashlight",
+          "body": "Think of walk-forward validation like walking down a dark path with a flashlight. You can only see the ground you've already walked on (the past). To test how well you can navigate, you take a step forward into the dark (the future), see if you stepped in a puddle (the test), and then add that spot to your path before taking the next step."
+        },
+        {
+          "kind": "example",
+          "icon": "🍞",
+          "title": "Predicting bread sales",
+          "body": "A grocery store wants to test their bread sales forecaster:<br>• <strong>Fold 1:</strong> Train on Jan-Jun, test on Jul.<br>• <strong>Fold 2:</strong> Train on Jan-Jul, test on Aug.<br>• <strong>Fold 3:</strong> Train on Jan-Aug, test on Sep.<br>This exactly mimics how the store will use the model in real life."
+        },
+        {
+          "kind": "mythbust",
+          "icon": "🔄",
+          "title": "Expanding vs. Sliding windows",
+          "body": "<strong>Myth:</strong> You must always keep all past history in the training set.<br><strong>Reality:</strong> You can choose an <em>expanding window</em> (using all past history) or a <em>sliding window</em> (e.g., always training on the last 3 months). Sliding windows are ideal when older patterns become obsolete or irrelevant."
+        },
+        {
+          "kind": "visual",
+          "icon": "⚖️",
+          "title": "Expanding vs. Sliding",
+          "body": "Comparing window styles in walk-forward validation:",
+          "compare": {
+            "left": {
+              "emoji": "📈",
+              "tag": "Expanding Window",
+              "text": "Training window grows over time.<br>Folds keep all past history.<br>Ideal for long-term trends."
+            },
+            "right": {
+              "emoji": "🎞️",
+              "tag": "Sliding Window",
+              "text": "Training window size stays fixed.<br>Oldest data points are dropped.<br>Ideal when old patterns change."
+            }
+          }
+        }
+      ]
+    },
+    {
+      "type": "practice",
+      "exercises": [
+        {
+          "id": "p1",
+          "type": "multiple_choice",
+          "xp": 2,
+          "prompt": "How does walk-forward validation (Time Series Split) operate?",
+          "options": [
+            {
+              "id": "a",
+              "text": "It trains on the past and tests on the immediate future, rolling the cutoff point forward chronologically.",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "It shuffles the entire dataset and picks random test points.",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "It splits the data into even-numbered days for training and odd-numbered days for testing.",
+              "correct": false
+            },
+            {
+              "id": "d",
+              "text": "It only tests the model on the very first day of the dataset.",
+              "correct": false
+            }
+          ],
+          "explain": "Exactly! Walk-forward validation simulates real life by training on the past and testing on the immediate future."
+        },
+        {
+          "id": "p2",
+          "type": "true_false",
+          "xp": 2,
+          "prompt": "True or false: In a Time Series Split, the test set always comes chronologically after the training set.",
+          "options": [
+            {
+              "id": "t",
+              "text": "True",
+              "correct": true
+            },
+            {
+              "id": "f",
+              "text": "False",
+              "correct": false
+            }
+          ],
+          "explain": "True. To avoid look-ahead bias, the test data must always represent a future period relative to the training data."
+        },
+        {
+          "id": "p3",
+          "type": "fill_blank",
+          "xp": 2,
+          "prompt": "Complete the sentence:",
+          "sentence": "In walk-forward validation, the training set only contains data from the ___ relative to the test set.",
+          "blank": "past",
+          "words": [
+            "past",
+            "future",
+            "middle"
+          ],
+          "explain": "To accurately evaluate our forecast, we must train only on past data relative to our test target."
+        },
+        {
+          "id": "p4",
+          "type": "spot_the_ai",
+          "xp": 2,
+          "prompt": "Which configuration represents a valid evaluation fold in walk-forward validation?",
+          "options": [
+            {
+              "id": "a",
+              "text": "Train on Days 1-50, test on Days 51-60.",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "Train on Days 10-20 and Days 40-50, test on Days 21-39.",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "Train on Days 30-50, test on Days 1-10.",
+              "correct": false
+            }
+          ],
+          "explain": "Training on days 1-50 and testing on days 51-60 is correct because the test set is sequentially after the training set."
+        }
+      ]
+    },
+    {
+      "type": "boss",
+      "exercises": [
+        {
+          "id": "b1",
+          "type": "multiple_choice",
+          "xp": 5,
+          "prompt": "You are setting up a Time Series Split for a model predicting monthly website traffic. Which of the following fold sequences correctly follows walk-forward validation?",
+          "options": [
+            {
+              "id": "a",
+              "text": "Fold 1: Train Jan-Mar, Test Apr. Fold 2: Train Jan-Apr, Test May. Fold 3: Train Jan-May, Test Jun.",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "Fold 1: Train Jan, Test Feb. Fold 2: Train Mar, Test Apr. Fold 3: Train May, Test Jun.",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "Fold 1: Train Apr, Test Jan-Mar. Fold 2: Train May, Test Jan-Apr. Fold 3: Train Jun, Test Jan-May.",
+              "correct": false
+            },
+            {
+              "id": "d",
+              "text": "Fold 1: Train Jan-Jun, Test random days in Jan-Jun.",
+              "correct": false
+            }
+          ],
+          "explain": "Correct! This sequence rolls the training boundary forward chronologically, always testing on the immediate next month."
+        }
+      ]
+    }
+  ]
+}

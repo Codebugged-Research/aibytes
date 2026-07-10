@@ -1,0 +1,222 @@
+{
+  "id": "u43-l3",
+  "unit": 43,
+  "day": 218,
+  "tier": "Ensemble Learning",
+  "tierIcon": "🚀",
+  "title": "AdaBoost: Adaptive Weight Updates",
+  "icon": "⚖️",
+  "concept": "AdaBoost (Adaptive Boosting) is an algorithm that updates the weights of training points after each step, increasing the weight of misclassified points so the next model focuses on them.",
+  "xp": 15,
+  "hearts": 3,
+  "estMinutes": 7,
+  "segments": [
+    {
+      "type": "warmup",
+      "exercises": [
+        {
+          "id": "w1",
+          "type": "multiple_choice",
+          "xp": 1,
+          "prompt": "Recap: What is the most common weak learner used in boosting?",
+          "options": [
+            {
+              "id": "a",
+              "text": "A decision stump (a tree with depth = 1).",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "A deep decision tree with no max depth.",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "A linear regression line.",
+              "correct": false
+            }
+          ],
+          "explain": "Correct! Stumps are the standard building blocks of boosting."
+        }
+      ]
+    },
+    {
+      "type": "teach",
+      "cards": [
+        {
+          "kind": "hook",
+          "icon": "⚖️",
+          "title": "Highlighting your mistakes",
+          "body": "When you study, you might highlight your incorrect answers in bright yellow marker. The next time you open your notebook, your eyes are immediately drawn to those yellow highlights. AdaBoost does this mathematically by increasing the 'weight' of mistaken rows, drawing the next model's attention to them."
+        },
+        {
+          "kind": "definition",
+          "icon": "⚖️",
+          "title": "AdaBoost: Adaptive row weights",
+          "body": "<strong>AdaBoost</strong> (Adaptive Boosting) starts by assigning equal weight to all training rows. After training a stump, it checks which rows were misclassified. It **increases the weights** of those incorrect rows and **decreases the weights** of the correct ones. The next stump is trained to minimize weighted error, forcing it to focus on the highlighted rows."
+        },
+        {
+          "kind": "analogy",
+          "icon": "📣",
+          "title": "A teacher balancing student voices",
+          "body": "Imagine a teacher asking a class questions. 8 students answer correctly, but 2 quiet students make mistakes. On the next round, the teacher tells the correct students to whisper, while giving a megaphone to the 2 incorrect students. The teacher is 'increasing the weight' of the voices that need help, ensuring their mistakes get corrected."
+        },
+        {
+          "kind": "example",
+          "icon": "📊",
+          "title": "Adjusting the weights",
+          "body": "We have 4 rows, each starting with weight **0.25**. Stump 1 predicts rows 1, 2, 3 correctly, but misses row 4. AdaBoost updates: rows 1, 2, 3 weights drop to **0.1** (easy/correct). Row 4 weight surges to **0.7** (hard/mistake). When training Stump 2, missing row 4 carries 7 times the penalty of missing any other row, forcing Stump 2 to split on row 4."
+        },
+        {
+          "kind": "mythbust",
+          "icon": "⚠️",
+          "title": "Row weights don't delete data",
+          "body": "You might assume AdaBoost deletes correct rows to focus on errors. In reality, all rows remain in the dataset. The algorithm simply multiplies the loss contribution of each row by its weight during training. Correct rows still guide the model, they just carry less influence than the highlighted mistakes."
+        },
+        {
+          "kind": "visual",
+          "icon": "⚖️",
+          "title": "AdaBoost Weight Adjustments",
+          "body": "How weights shift based on prediction accuracy:",
+          "compare": {
+            "left": {
+              "emoji": "✅",
+              "tag": "Correct Predictions",
+              "text": "Weights DECREASE.<br>Carry less penalty in next round.<br>Model already understands these patterns."
+            },
+            "right": {
+              "emoji": "❌",
+              "tag": "Incorrect Predictions",
+              "text": "Weights INCREASE.<br>Carry heavy penalty in next round.<br>Forces next stump to resolve these mistakes."
+            }
+          }
+        }
+      ]
+    },
+    {
+      "type": "practice",
+      "exercises": [
+        {
+          "id": "p1",
+          "type": "multiple_choice",
+          "xp": 2,
+          "prompt": "How does AdaBoost ensure that the next model in the sequence focuses on previous mistakes?",
+          "options": [
+            {
+              "id": "a",
+              "text": "It increases the mathematical weight of misclassified training rows.",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "It deletes all rows that were predicted correctly.",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "It decreases the learning rate to 0.",
+              "correct": false
+            },
+            {
+              "id": "d",
+              "text": "It swaps the features randomly.",
+              "correct": false
+            }
+          ],
+          "explain": "Correct! AdaBoost dynamically scales row weights, increasing them for misclassified points."
+        },
+        {
+          "id": "p2",
+          "type": "true_false",
+          "xp": 2,
+          "prompt": "True or false: At the very start of the AdaBoost training process, all training rows are assigned equal weights.",
+          "options": [
+            {
+              "id": "t",
+              "text": "True",
+              "correct": true
+            },
+            {
+              "id": "f",
+              "text": "False",
+              "correct": false
+            }
+          ],
+          "explain": "True! AdaBoost starts with uniform weights, then updates them iteratively after each model runs."
+        },
+        {
+          "id": "p3",
+          "type": "fill_blank",
+          "xp": 2,
+          "prompt": "Complete the sentence:",
+          "sentence": "If a row is predicted correctly by the current stump, AdaBoost will ___ its weight for the next round.",
+          "blank": "decrease",
+          "words": [
+            "decrease",
+            "increase",
+            "double"
+          ],
+          "explain": "Correct predictions have their weights decreased since the model already knows how to handle them."
+        },
+        {
+          "id": "p4",
+          "type": "spot_the_ai",
+          "xp": 2,
+          "prompt": "Which scenario represents AdaBoost updating weights?",
+          "options": [
+            {
+              "id": "a",
+              "text": "Row A (fraud, predicted as safe) has its weight updated from 0.1 to 0.6.",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "Row A is removed from the dataset.",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "Row A has its numerical features standardized to Z-scores.",
+              "correct": false
+            }
+          ],
+          "explain": "Correct! Increasing the weight of a misclassified row is the AdaBoost update mechanism."
+        }
+      ]
+    },
+    {
+      "type": "boss",
+      "exercises": [
+        {
+          "id": "b1",
+          "type": "multiple_choice",
+          "xp": 5,
+          "prompt": "A model trains on 100 customer records. Stump 1 achieves 99% accuracy, missing only 1 customer. What will happen to the weight of that single missed customer record, and how will it affect Stump 2?",
+          "options": [
+            {
+              "id": "a",
+              "text": "Its weight will surge dramatically, forcing Stump 2 to construct a question specifically to separate or classify that single record correctly.",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "Its weight will drop to 0, causing Stump 2 to ignore it.",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "It will have no effect, as 1% error is ignored.",
+              "correct": false
+            },
+            {
+              "id": "d",
+              "text": "The record will be deleted.",
+              "correct": false
+            }
+          ],
+          "explain": "Exactly! Because the error rate was so low, that single missed record's weight will increase significantly. This high weight acts like a siren, forcing Stump 2 to split on it. Next, let's learn how we determine the final vote strength of each stump!"
+        }
+      ]
+    }
+  ]
+}

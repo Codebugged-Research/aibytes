@@ -1,0 +1,222 @@
+{
+  "id": "u48-l1",
+  "unit": 48,
+  "day": 241,
+  "tier": "Time Series Evaluation",
+  "tierIcon": "📐",
+  "title": "Why K-Fold Fails on Time Series",
+  "icon": "⚠️",
+  "concept": "Standard cross-validation shuffles data, leaking future points into past training, violating time order.",
+  "xp": 15,
+  "hearts": 3,
+  "estMinutes": 7,
+  "segments": [
+    {
+      "type": "warmup",
+      "exercises": [
+        {
+          "id": "w1",
+          "type": "multiple_choice",
+          "xp": 1,
+          "prompt": "Recap: What makes time series data unique compared to standard tabular data?",
+          "options": [
+            {
+              "id": "a",
+              "text": "The data points are ordered by time, and future points depend on past points.",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "The data points are completely independent of each other.",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "Time series data cannot have any noise or random shifts.",
+              "correct": false
+            }
+          ],
+          "explain": "Correct! In time series, sequence and timing are everything."
+        }
+      ]
+    },
+    {
+      "type": "teach",
+      "cards": [
+        {
+          "kind": "hook",
+          "icon": "⏰",
+          "title": "Predicting with tomorrow's news",
+          "body": "Imagine a weather forecast model trained by using tomorrow's rainfall to predict today's weather. It would look incredibly accurate! But in the real world, you can't read tomorrow's newspaper today. Violating the arrow of time is cheating."
+        },
+        {
+          "kind": "definition",
+          "icon": "⚠️",
+          "title": "The temporal leakage trap",
+          "body": "Standard cross-validation (K-Fold) shuffles data randomly. For time series, this shatters the timeline, mixing future data into training and past data into testing. This creates <strong>look-ahead bias</strong> (also called temporal data leakage), making your model look perfect in testing but useless in real life."
+        },
+        {
+          "kind": "analogy",
+          "icon": "📖",
+          "title": "Reading the final chapter first",
+          "body": "Think of K-Fold cross-validation on time series like shuffling the pages of a mystery novel and reading them. If you read a page from Chapter 10 before predicting what happens in Chapter 5, the mystery is already spoiled. You must read the book in chronological order to test your true detective skills."
+        },
+        {
+          "kind": "example",
+          "icon": "💹",
+          "title": "The Wednesday stock predictor",
+          "body": "Suppose we shuffle daily stock prices from 2026. The training set includes Monday, Wednesday, and Friday. The model is tested on Tuesday and Thursday. Because the model already knows Wednesday's price, predicting Tuesday is trivial. But when deployed next Monday, it will fail because it cannot see Tuesday's price."
+        },
+        {
+          "kind": "mythbust",
+          "icon": "🛡️",
+          "title": "High test accuracy is not a guarantee",
+          "body": "<strong>Myth:</strong> If a model gets 98% accuracy on shuffled time series data, it will perform just as well in production.<br><strong>Reality:</strong> The model is just memorizing patterns by peeking at the future. Shuffling data breaks the chronological order, hiding the fact that the model cannot forecast when future points are unavailable."
+        },
+        {
+          "kind": "visual",
+          "icon": "⚖️",
+          "title": "K-Fold vs. Time Series Split",
+          "body": "How data splitting methods affect temporal integrity:",
+          "compare": {
+            "left": {
+              "emoji": "🔀",
+              "tag": "K-Fold (Shuffled)",
+              "text": "Shuffles data randomly.<br>Future data leaks into the past.<br>Causes look-ahead cheating."
+            },
+            "right": {
+              "emoji": "⏳",
+              "tag": "Time Series Split",
+              "text": "Keeps chronological order.<br>Uses only past data to train.<br>Simulates the real world."
+            }
+          }
+        }
+      ]
+    },
+    {
+      "type": "practice",
+      "exercises": [
+        {
+          "id": "p1",
+          "type": "multiple_choice",
+          "xp": 2,
+          "prompt": "Why is random shuffling bad when splitting time series data for training and testing?",
+          "options": [
+            {
+              "id": "a",
+              "text": "It mixes future data into the training set, causing look-ahead bias (data leakage).",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "It deletes random data points, reducing the size of the dataset.",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "It forces the model to use categorical classification.",
+              "correct": false
+            },
+            {
+              "id": "d",
+              "text": "It makes the model run slower in production.",
+              "correct": false
+            }
+          ],
+          "explain": "Exactly! Shuffling allows the model to peek into the future, creating an unrealistic test scenario."
+        },
+        {
+          "id": "p2",
+          "type": "true_false",
+          "xp": 2,
+          "prompt": "True or false: Shuffling time series data before splitting it can make a model look much more accurate during testing than it actually is.",
+          "options": [
+            {
+              "id": "t",
+              "text": "True",
+              "correct": true
+            },
+            {
+              "id": "f",
+              "text": "False",
+              "correct": false
+            }
+          ],
+          "explain": "True. Shuffling creates look-ahead bias, making the model seem highly accurate when it's actually cheating."
+        },
+        {
+          "id": "p3",
+          "type": "fill_blank",
+          "xp": 2,
+          "prompt": "Complete the sentence:",
+          "sentence": "Standard K-Fold shuffles data randomly, which leaks ___ data into the training process.",
+          "blank": "future",
+          "words": [
+            "future",
+            "past",
+            "noisy"
+          ],
+          "explain": "Standard K-Fold shuffles the timeline, letting future values leak into the past training data."
+        },
+        {
+          "id": "p4",
+          "type": "spot_the_ai",
+          "xp": 2,
+          "prompt": "Which scenario represents an invalid evaluation due to temporal data leakage?",
+          "options": [
+            {
+              "id": "a",
+              "text": "Predicting June sales using a model trained on shuffled data containing July and August sales.",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "Predicting tomorrow's temperature using only today's and yesterday's historical readings.",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "Predicting Monday's traffic using historical data from previous Mondays.",
+              "correct": false
+            }
+          ],
+          "explain": "Predicting June sales using a model that has already seen July and August data is cheating because it uses future data."
+        }
+      ]
+    },
+    {
+      "type": "boss",
+      "exercises": [
+        {
+          "id": "b1",
+          "type": "multiple_choice",
+          "xp": 5,
+          "prompt": "You are building a model to forecast ice cream sales. During testing with shuffled K-Fold, your model gets 98% accuracy. When you deploy it, its accuracy drops to 50%. What went wrong?",
+          "options": [
+            {
+              "id": "a",
+              "text": "The shuffled split leaked future summer data into training, creating an unrealistic testing scenario that failed in real-time prediction.",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "The model did not have enough features to predict ice cream flavors.",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "Ice cream sales are completely random and cannot be forecasted.",
+              "correct": false
+            },
+            {
+              "id": "d",
+              "text": "Shuffling caused the model to lose its pre-trained coefficients.",
+              "correct": false
+            }
+          ],
+          "explain": "Exactly! Shuffling allowed the model to leverage future summer indicators to predict spring sales during training. When deployed, the future wasn't visible, so performance collapsed."
+        }
+      ]
+    }
+  ]
+}

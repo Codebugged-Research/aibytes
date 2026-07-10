@@ -1,0 +1,217 @@
+{
+  "id": "u36-l4",
+  "unit": 36,
+  "day": 184,
+  "tier": "k-Nearest Neighbors",
+  "tierIcon": "👣",
+  "title": "When kNN Struggles",
+  "icon": "⚖️",
+  "concept": "Limitations of kNN: slow on huge datasets (scans all points), and sensitive to irrelevant features that stretch distance measurements.",
+  "xp": 15,
+  "hearts": 3,
+  "estMinutes": 7,
+  "segments": [
+    {
+      "type": "warmup",
+      "exercises": [
+        {
+          "id": "w1",
+          "type": "multiple_choice",
+          "xp": 1,
+          "prompt": "Recap: What is the main reason to choose an odd number for k in kNN?",
+          "options": [
+            {
+              "id": "a",
+              "text": "To prevent tie votes between two categories.",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "To speed up the distance calculation.",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "To make the decision boundary more jagged.",
+              "correct": false
+            }
+          ],
+          "explain": "Right! An odd k ensures there is a clear majority and prevents voting deadlocks."
+        }
+      ]
+    },
+    {
+      "type": "teach",
+      "cards": [
+        {
+          "kind": "hook",
+          "icon": "🔍",
+          "title": "The search through everything",
+          "body": "Imagine entering a library with a million books to find the 3 most similar books to the one in your hand. If the books aren't organized, you have to measure the similarity of your book against every single one of those million books! That's what kNN does every time it makes a prediction. As your data grows, kNN gets very, very slow."
+        },
+        {
+          "kind": "definition",
+          "icon": "⚖️",
+          "title": "kNN struggles",
+          "body": "kNN has two main weaknesses: it is <strong>computationally slow</strong> on large datasets because it calculates distances to all points, and it is <strong>sensitive to irrelevant features</strong> that distort how distance is measured."
+        },
+        {
+          "kind": "analogy",
+          "icon": "🗺️",
+          "title": "Stretching the map",
+          "body": "Imagine mapping houses by two features: <code>Distance to School (miles)</code> and <code>Number of roof tiles</code>. Roof tiles are completely irrelevant to house value, but because their numbers are huge (thousands), they stretch that axis of the map. The distance calculation gets dominated by roof tiles, ignoring the school!"
+        },
+        {
+          "kind": "example",
+          "icon": "🐢",
+          "title": "The slow search",
+          "body": "If an online store has 10 million products and wants to recommend similar items using kNN, it has to calculate the distance from the user's item to all 10 million items for every single click. This takes too long for a live website!"
+        },
+        {
+          "kind": "mythbust",
+          "icon": "⚡",
+          "title": "The training illusion",
+          "body": "You might think because kNN has \"zero training time\" it is the fastest algorithm. The catch is that kNN pushes all the work to the prediction phase. Other models spend time training but predict instantly. kNN is lazy upfront, but pays the price later."
+        },
+        {
+          "kind": "visual",
+          "icon": "📊",
+          "title": "Why features matter",
+          "body": "How raw numbers and irrelevant features confuse kNN:",
+          "compare": {
+            "left": {
+              "emoji": "🐢",
+              "tag": "Large Dataset Slowness",
+              "text": "Must calculate distance to<br>every single point in memory<br>for every new prediction."
+            },
+            "right": {
+              "emoji": "📐",
+              "tag": "Irrelevant Feature Distortion",
+              "text": "Axis scales or useless features<br>(like ID numbers) warp distance<br>and ruin similarity matches."
+            }
+          }
+        }
+      ]
+    },
+    {
+      "type": "practice",
+      "exercises": [
+        {
+          "id": "p1",
+          "type": "multiple_choice",
+          "xp": 2,
+          "prompt": "Why does kNN get slow when the dataset contains millions of points?",
+          "options": [
+            {
+              "id": "a",
+              "text": "Because it has to calculate the distance from the new point to every single stored point in the dataset.",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "Because the formulas become more complex with more data.",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "Because it has to calculate Z-scores for every column first.",
+              "correct": false
+            }
+          ],
+          "explain": "Exactly! kNN calculates distance to every single reference point for every single prediction, which becomes extremely slow as data scales."
+        },
+        {
+          "id": "p2",
+          "type": "true_false",
+          "xp": 2,
+          "prompt": "True or False: Useless or irrelevant features (like a customer's favorite color when predicting credit card fraud) can confuse kNN by stretching the distance measurements.",
+          "options": [
+            {
+              "id": "t",
+              "text": "True",
+              "correct": true
+            },
+            {
+              "id": "f",
+              "text": "False",
+              "correct": false
+            }
+          ],
+          "explain": "True! kNN treats every feature as a dimension on the map. Useless features add extra distance that warps who the true nearest neighbors are."
+        },
+        {
+          "id": "p3",
+          "type": "fill_blank",
+          "xp": 2,
+          "prompt": "Complete the sentence about kNN's speed tradeoff:",
+          "sentence": "kNN has zero ___ time because it just stores the data, but it is slow during prediction.",
+          "blank": "training",
+          "words": [
+            "training",
+            "prediction",
+            "distance"
+          ],
+          "explain": "kNN is a lazy learner: it does no training upfront, but does all the heavy distance calculations during prediction."
+        },
+        {
+          "id": "p4",
+          "type": "spot_the_ai",
+          "xp": 2,
+          "prompt": "Which of these describes a kNN model failing due to irrelevant features?",
+          "options": [
+            {
+              "id": "a",
+              "text": "A model fails to recommend good books because the distance calculation is dominated by the random book ID numbers instead of genres.",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "A model recommends good books by looking at what genres similar readers purchased.",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "A model runs very fast because it only has 10 data points to search.",
+              "correct": false
+            }
+          ],
+          "explain": "Yes! When irrelevant numbers like ID codes are included in distance calculations, they distort the 'nearness' and ruin predictions."
+        }
+      ]
+    },
+    {
+      "type": "boss",
+      "exercises": [
+        {
+          "id": "b1",
+          "type": "multiple_choice",
+          "xp": 5,
+          "prompt": "You are designing a real-time spam filter for a chat app that handles 10,000 messages per second. Why might kNN be a poor choice for this system?",
+          "options": [
+            {
+              "id": "a",
+              "text": "Because calculating distance to thousands of past messages for 10,000 new messages every second is too slow for real-time processing.",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "Because kNN cannot handle text messages under any circumstances.",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "Because kNN is only used for predicting continuous house prices.",
+              "correct": false
+            },
+            {
+              "id": "d",
+              "text": "Because kNN requires a long training phase before it can start filtering spam.",
+              "correct": false
+            }
+          ],
+          "explain": "Superb! kNN's prediction phase requires calculating distances to all points. Doing this 10,000 times per second on a large dataset will crash or lag the system. We need models with instant prediction times for high-speed tasks!"
+        }
+      ]
+    }
+  ]
+}

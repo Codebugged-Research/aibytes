@@ -1,0 +1,222 @@
+{
+  "id": "u42-l4",
+  "unit": 42,
+  "day": 214,
+  "tier": "Ensemble Learning",
+  "tierIcon": "🌳",
+  "title": "Random Forests: Trees with Random Choices",
+  "icon": "🌲",
+  "concept": "A Random Forest is an extension of bagging that builds diverse decision trees by restricting each split to a random subset of features, preventing any single strong feature from dominating.",
+  "xp": 15,
+  "hearts": 3,
+  "estMinutes": 7,
+  "segments": [
+    {
+      "type": "warmup",
+      "exercises": [
+        {
+          "id": "w1",
+          "type": "multiple_choice",
+          "xp": 1,
+          "prompt": "Recap: What is bagging?",
+          "options": [
+            {
+              "id": "a",
+              "text": "Training multiple models in parallel on bootstrap samples, then aggregating them.",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "Pruning a single decision tree recursively.",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "Measuring distance to the nearest centroid.",
+              "correct": false
+            }
+          ],
+          "explain": "Correct! Bagging combines bootstrap sampling with aggregation."
+        }
+      ]
+    },
+    {
+      "type": "teach",
+      "cards": [
+        {
+          "kind": "hook",
+          "icon": "🌲",
+          "title": "The copycat problem",
+          "body": "If you train 100 decision trees on slightly different bootstrap samples, but your dataset has one extremely strong feature (e.g. 'Income' for predicting wealth), *every single tree* will choose to split on Income at the very top. Your trees will look almost identical, ruining the diversity of your crowd. We need a way to force the trees to be different."
+        },
+        {
+          "kind": "definition",
+          "icon": "🌲",
+          "title": "Random Forest: Feature randomness",
+          "body": "A <strong>Random Forest</strong> solves the copycat problem. When building each tree, it uses bagging to select rows, but it also restricts each node split to a **random subset of features** (columns). If Income is blocked from a tree's root, it's forced to look at other features, discovering hidden patterns."
+        },
+        {
+          "kind": "analogy",
+          "icon": "🕵️",
+          "title": "Detectives with restricted clues",
+          "body": "If 10 detectives investigate a case, and the murder weapon is visible, they will all focus on it. If you lock the weapon in a drawer for some detectives, they are forced to study the footprints, the timetable, or the motives. By restricting their clues, you get a much broader, richer investigation."
+        },
+        {
+          "kind": "example",
+          "icon": "📊",
+          "title": "Feature selection at the node",
+          "body": "A dataset has features: Age, Income, Location, Gender. At the root of Tree 1, the algorithm randomly selects only `[Location, Gender]` as candidates. It splits on Location. At Tree 2's root, it selects `[Age, Income]` and splits on Income. The trees develop completely different questions, maximizing ensemble diversity."
+        },
+        {
+          "kind": "mythbust",
+          "icon": "⚠️",
+          "title": "Random Forests don't need a test set to monitor error",
+          "body": "You might think you always need a validation split to check a forest's health. Because of bagging, about 37% of training rows are left out of each bootstrap sample (called **Out-Of-Bag** or OOB data). We can test each tree on its OOB rows, giving us a built-in error estimate without peeking at the test set."
+        },
+        {
+          "kind": "visual",
+          "icon": "🌳",
+          "title": "Bagging vs. Random Forest",
+          "body": "How feature selection differs in tree ensembles:",
+          "compare": {
+            "left": {
+              "emoji": "🛍️",
+              "tag": "Standard Bagging",
+              "text": "Random rows (bootstrap).<br>Looks at ALL features at each split.<br>Strong features dominate all trees."
+            },
+            "right": {
+              "emoji": "🌲",
+              "tag": "Random Forest",
+              "text": "Random rows + Random features.<br>Restricts features at each split.<br>Guarantees highly diverse trees."
+            }
+          }
+        }
+      ]
+    },
+    {
+      "type": "practice",
+      "exercises": [
+        {
+          "id": "p1",
+          "type": "multiple_choice",
+          "xp": 2,
+          "prompt": "How does a Random Forest introduce diversity among its decision trees?",
+          "options": [
+            {
+              "id": "a",
+              "text": "By training each tree on random rows (bagging) and limiting each split to a random subset of features.",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "By forcing all trees to have the exact same split questions.",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "By scaling all feature numbers between 0 and 1.",
+              "correct": false
+            },
+            {
+              "id": "d",
+              "text": "By deleting 50% of the trees after training.",
+              "correct": false
+            }
+          ],
+          "explain": "Correct! Random Forests use both row bootstrapping and feature subset selection to maximize tree diversity."
+        },
+        {
+          "id": "p2",
+          "type": "true_false",
+          "xp": 2,
+          "prompt": "True or false: Out-Of-Bag (OOB) data refers to the training rows that were left out of a specific tree's bootstrap sample.",
+          "options": [
+            {
+              "id": "t",
+              "text": "True",
+              "correct": true
+            },
+            {
+              "id": "f",
+              "text": "False",
+              "correct": false
+            }
+          ],
+          "explain": "True! About 37% of data is left out of each bootstrap sample, serving as a built-in validation set."
+        },
+        {
+          "id": "p3",
+          "type": "fill_blank",
+          "xp": 2,
+          "prompt": "Complete the sentence:",
+          "sentence": "By restricting splits to a random subset of features, Random Forests prevent a single ___ feature from dominating all trees.",
+          "blank": "strong",
+          "words": [
+            "strong",
+            "missing",
+            "categorical"
+          ],
+          "explain": "Restricting features allows weaker but useful features to get selected, improving diversity."
+        },
+        {
+          "id": "p4",
+          "type": "spot_the_ai",
+          "xp": 2,
+          "prompt": "Which process describes a Random Forest building a split?",
+          "options": [
+            {
+              "id": "a",
+              "text": "A node randomly selects 3 out of 10 available features, then finds the best split among those 3.",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "A node evaluates all 10 features and splits on the absolute best one.",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "A node splits the dataset in half alphabetically.",
+              "correct": false
+            }
+          ],
+          "explain": "Correct! Limiting the candidates to a random subset before splitting is the hallmark of a Random Forest."
+        }
+      ]
+    },
+    {
+      "type": "boss",
+      "exercises": [
+        {
+          "id": "b1",
+          "type": "multiple_choice",
+          "xp": 5,
+          "prompt": "A dataset predicting customer churn has one highly predictive column, 'Last Login Date'. In a standard bagging ensemble of 50 trees, almost every tree splits on this column first. In a Random Forest of 50 trees, only some split on it first. What is the impact?",
+          "options": [
+            {
+              "id": "a",
+              "text": "The Random Forest is more diverse and robust, because trees without the login feature are forced to find patterns in other columns (like payment history or app usage).",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "The Random Forest is less accurate, because 'Last Login Date' should be in every tree.",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "The Random Forest runs slower because it has to calculate entropy for more columns.",
+              "correct": false
+            },
+            {
+              "id": "d",
+              "text": "The trees are identical in both ensembles.",
+              "correct": false
+            }
+          ],
+          "explain": "Exactly! By blocking the dominant feature from some trees, we force them to learn from other columns, discovering secondary patterns. This creates a smarter, more robust crowd. Next, let's look at why this algorithm dominates tabular ML!"
+        }
+      ]
+    }
+  ]
+}

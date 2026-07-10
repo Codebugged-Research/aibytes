@@ -1,0 +1,222 @@
+{
+  "id": "u46-l2",
+  "unit": 46,
+  "day": 232,
+  "tier": "Time Series Features",
+  "tierIcon": "🧱",
+  "title": "Rolling Windows: Smoothing the Path",
+  "icon": "🔄",
+  "concept": "Rolling windows calculate statistics (like average or maximum) over a fixed window of recent time steps (e.g., past 7 days) to capture short-term trends and smooth out noise.",
+  "xp": 15,
+  "hearts": 3,
+  "estMinutes": 7,
+  "segments": [
+    {
+      "type": "warmup",
+      "exercises": [
+        {
+          "id": "w1",
+          "type": "multiple_choice",
+          "xp": 1,
+          "prompt": "Recap: In time series, if you want to use the value from one step ago to predict the current step, what feature are you creating?",
+          "options": [
+            {
+              "id": "a",
+              "text": "A lag feature",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "A rolling average",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "An expanding feature",
+              "correct": false
+            }
+          ],
+          "explain": "Correct! Shifting a value from one step ago creates a lag feature (specifically, Lag 1)."
+        }
+      ]
+    },
+    {
+      "type": "teach",
+      "cards": [
+        {
+          "kind": "hook",
+          "icon": "🍔",
+          "title": "The noise of daily spikes",
+          "body": "Imagine you run a restaurant. On Monday you serve 50 guests. On Tuesday, a tour bus stops by and you serve 200. On Wednesday, it's back to 60. If your predictive model only looks at yesterday's numbers, it will wildly over-predict or under-predict. We need a way to smooth out these random daily spikes."
+        },
+        {
+          "kind": "definition",
+          "icon": "🔄",
+          "title": "What is a Rolling Window?",
+          "body": "A <strong>rolling window</strong> (or moving window) takes a fixed number of past time steps (like the last 7 days) and calculates a summary statistic (like the average, maximum, or standard deviation) over just those steps. As time moves forward, the window slides, always keeping the same size."
+        },
+        {
+          "kind": "analogy",
+          "icon": "🚂",
+          "title": "A passenger train window",
+          "body": "Imagine looking out of a window on a moving train. You can only see the scenery directly in front of the window (e.g., the last 5 miles of track). As the train moves, old scenery leaves your view and new scenery enters. You always see exactly a 5-mile 'slice' of the journey."
+        },
+        {
+          "kind": "example",
+          "icon": "📈",
+          "title": "Calculating a 7-day average",
+          "body": "Instead of just using yesterday's sales, a store calculates a <code>7-day rolling average</code>. For Friday's prediction, it averages sales from last Saturday through Thursday. This average absorbs the random spikes and dips, giving the model a stable baseline of recent performance."
+        },
+        {
+          "kind": "mythbust",
+          "icon": "⚠️",
+          "title": "It doesn't remember forever",
+          "body": "You might think a rolling window captures all past history. In fact, a rolling window has 'short-term memory'. A 7-day rolling window completely forgets any data older than 7 days. If there was a huge sales spike 8 days ago, the window won't see it at all."
+        },
+        {
+          "kind": "visual",
+          "icon": "⚖️",
+          "title": "How the window slides",
+          "body": "Visualizing a 3-day rolling window over daily temperatures:",
+          "compare": {
+            "left": {
+              "emoji": "📅",
+              "tag": "Day 4 Window (Days 1-3)",
+              "text": "Window contents:<br>Day 1: 70°F<br>Day 2: 72°F<br>Day 3: 74°F<br><strong>Average: 72°F</strong>"
+            },
+            "right": {
+              "emoji": "🔄",
+              "tag": "Day 5 Window (Days 2-4)",
+              "text": "Window slides forward:<br>Day 2: 72°F<br>Day 3: 74°F<br>Day 4: 76°F<br><strong>Average: 74°F</strong>"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "type": "practice",
+      "exercises": [
+        {
+          "id": "p1",
+          "type": "multiple_choice",
+          "xp": 2,
+          "prompt": "What happens to the window size in a rolling window feature as time moves forward?",
+          "options": [
+            {
+              "id": "a",
+              "text": "The window size remains fixed (e.g., always 7 days).",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "The window size grows to include all history.",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "The window size shrinks to focus only on the most recent step.",
+              "correct": false
+            },
+            {
+              "id": "d",
+              "text": "The window size resets to zero every week.",
+              "correct": false
+            }
+          ],
+          "explain": "Correct! A rolling window always maintains a constant, fixed number of steps."
+        },
+        {
+          "id": "p2",
+          "type": "true_false",
+          "xp": 2,
+          "prompt": "True or false: Using a rolling average helps to smooth out temporary spikes (noise) in your time series data.",
+          "options": [
+            {
+              "id": "t",
+              "text": "True",
+              "correct": true
+            },
+            {
+              "id": "f",
+              "text": "False",
+              "correct": false
+            }
+          ],
+          "explain": "True! Rolling averages smooth out short-term fluctuations, revealing the underlying trend."
+        },
+        {
+          "id": "p3",
+          "type": "fill_blank",
+          "xp": 2,
+          "prompt": "Complete the sentence:",
+          "sentence": "A rolling window calculation that takes the highest value in the window is called a rolling ___.",
+          "blank": "maximum",
+          "words": [
+            "maximum",
+            "average",
+            "standard deviation"
+          ],
+          "explain": "A rolling maximum finds the highest value within the window range."
+        },
+        {
+          "id": "p4",
+          "type": "spot_the_ai",
+          "xp": 2,
+          "prompt": "Which of these describes a rolling window feature?",
+          "options": [
+            {
+              "id": "a",
+              "text": "The average temperature of the last 3 days, updated daily.",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "The total number of visitors since the website launched last year.",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "A flag indicating whether today is a federal holiday.",
+              "correct": false
+            }
+          ],
+          "explain": "Correct! The last 3 days is a fixed-size window that slides forward each day."
+        }
+      ]
+    },
+    {
+      "type": "boss",
+      "exercises": [
+        {
+          "id": "b1",
+          "type": "multiple_choice",
+          "xp": 5,
+          "prompt": "If you have a daily dataset and create a 30-day rolling standard deviation feature, what is this feature measuring?",
+          "options": [
+            {
+              "id": "a",
+              "text": "How much the values have fluctuated (volatility) over the past 30 days.",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "The exact value from 30 days ago.",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "The average value of the last 3 days.",
+              "correct": false
+            },
+            {
+              "id": "d",
+              "text": "The overall trend direction (upward or downward).",
+              "correct": false
+            }
+          ],
+          "explain": "Exactly! Standard deviation measures variation. A rolling standard deviation tells the model how volatile or unstable the values have been over the fixed 30-day window. Next: how to capture repeating calendar cycles!"
+        }
+      ]
+    }
+  ]
+}

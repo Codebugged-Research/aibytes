@@ -1,0 +1,222 @@
+{
+  "id": "u46-l1",
+  "unit": 46,
+  "day": 231,
+  "tier": "Time Series Features",
+  "tierIcon": "🧱",
+  "title": "Lag Features: Looking Backwards",
+  "icon": "⏳",
+  "concept": "Lag features use previous time steps (like yesterday's value or value from last week) as features to help a model predict the current or future value.",
+  "xp": 15,
+  "hearts": 3,
+  "estMinutes": 7,
+  "segments": [
+    {
+      "type": "warmup",
+      "exercises": [
+        {
+          "id": "w1",
+          "type": "multiple_choice",
+          "xp": 1,
+          "prompt": "Recap: What makes a time series dataset unique compared to standard tabular data?",
+          "options": [
+            {
+              "id": "a",
+              "text": "The chronological order of rows matters because data is collected sequentially over time.",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "Rows can be shuffled in any order without losing critical temporal patterns.",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "It must only contain integers and cannot have missing values.",
+              "correct": false
+            }
+          ],
+          "explain": "Exactly! In a time series, the chronological order of the data points is critical for predicting future steps."
+        }
+      ]
+    },
+    {
+      "type": "teach",
+      "cards": [
+        {
+          "kind": "hook",
+          "icon": "🌡️",
+          "title": "Predicting today's weather",
+          "body": "If you want to guess today's temperature, what is the single most useful piece of information? It is yesterday's temperature! In time series forecasting, the immediate past is often the strongest clue for the future. We can feed this past data into our model by shifting it forward."
+        },
+        {
+          "kind": "definition",
+          "icon": "⏳",
+          "title": "What is a Lag Feature?",
+          "body": "A <strong>lag feature</strong> is created by shifting time series values backward in time. For example, if we want to predict the value at time <code>t</code>, we use the value from one step ago (<code>t-1</code>), two steps ago (<code>t-2</code>), or even further back as input features."
+        },
+        {
+          "kind": "analogy",
+          "icon": "📰",
+          "title": "Yesterday's newspaper",
+          "body": "Imagine you are trying to guess today's news headlines, but you've been asleep. The best starting point is reading yesterday's newspaper (Lag 1) or the day before yesterday's (Lag 2). By looking at yesterday's edition, you get the context of what is happening right now."
+        },
+        {
+          "kind": "example",
+          "icon": "🍪",
+          "title": "Bakery cookie sales",
+          "body": "A bakery wants to predict how many cookies it will sell today. They create a feature called <code>Sales_Yesterday</code> (Lag 1) and another called <code>Sales_Last_Week</code> (Lag 7). If sales last Friday were high, there is a good chance sales this Friday will be high too!"
+        },
+        {
+          "kind": "mythbust",
+          "icon": "⚠️",
+          "title": "Not all lags are useful",
+          "body": "You might think adding 100 lag features (going back 100 days) will make your model incredibly smart. In reality, adding too many lags makes the model slow, complex, and prone to overfitting on noise. The most recent lags (like yesterday) are usually the most predictive."
+        },
+        {
+          "kind": "visual",
+          "icon": "⚖️",
+          "title": "How shifting works",
+          "body": "Visualizing lag features by shifting values:",
+          "compare": {
+            "left": {
+              "emoji": "📅",
+              "tag": "Original Time Series",
+              "text": "Day 1: 100 sales<br>Day 2: 120 sales<br>Day 3: 130 sales"
+            },
+            "right": {
+              "emoji": "⏳",
+              "tag": "Lag 1 Feature",
+              "text": "Day 1: N/A (No yesterday)<br>Day 2: 100 (Day 1 sales)<br>Day 3: 120 (Day 2 sales)"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "type": "practice",
+      "exercises": [
+        {
+          "id": "p1",
+          "type": "multiple_choice",
+          "xp": 2,
+          "prompt": "If you are predicting sales for Thursday, what is the Lag 1 feature value?",
+          "options": [
+            {
+              "id": "a",
+              "text": "Wednesday's sales",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "Tuesday's sales",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "Thursday's sales",
+              "correct": false
+            },
+            {
+              "id": "d",
+              "text": "Friday's sales",
+              "correct": false
+            }
+          ],
+          "explain": "Correct! Lag 1 shifts the series by one step, so the prediction feature for Thursday is Wednesday's actual sales."
+        },
+        {
+          "id": "p2",
+          "type": "true_false",
+          "xp": 2,
+          "prompt": "True or false: Creating a Lag 7 feature for weekly data is useful because it captures patterns from the exact same day last week.",
+          "options": [
+            {
+              "id": "t",
+              "text": "True",
+              "correct": true
+            },
+            {
+              "id": "f",
+              "text": "False",
+              "correct": false
+            }
+          ],
+          "explain": "True! A Lag 7 feature captures weekly seasonality, like comparing Sunday sales to the previous Sunday's sales."
+        },
+        {
+          "id": "p3",
+          "type": "fill_blank",
+          "xp": 2,
+          "prompt": "Complete the sentence:",
+          "sentence": "To predict the value at time t, a Lag 2 feature represents the value at time ___.",
+          "blank": "t-2",
+          "words": [
+            "t-2",
+            "t+2",
+            "t-1"
+          ],
+          "explain": "Lag 2 shifts the values by two time steps backward, which is represented as t-2."
+        },
+        {
+          "id": "p4",
+          "type": "spot_the_ai",
+          "xp": 2,
+          "prompt": "Which one of these represents a correct daily Lag 1 feature?",
+          "options": [
+            {
+              "id": "a",
+              "text": "Today's feature is yesterday's recorded temperature of 72°F.",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "Today's feature is tomorrow's forecast temperature of 78°F.",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "Today's feature is the average temperature of the entire month.",
+              "correct": false
+            }
+          ],
+          "explain": "Correct! Using yesterday's value to predict today's is the definition of a Lag 1 feature."
+        }
+      ]
+    },
+    {
+      "type": "boss",
+      "exercises": [
+        {
+          "id": "b1",
+          "type": "multiple_choice",
+          "xp": 5,
+          "prompt": "Why does the first row of a dataset often have an empty (NaN or Null) value when you create a Lag 1 feature?",
+          "options": [
+            {
+              "id": "a",
+              "text": "Because there is no historical data point prior to the very first day in the dataset.",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "Because lag features are always calculated incorrectly by machine learning models.",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "Because the first day's value is deleted to save memory.",
+              "correct": false
+            },
+            {
+              "id": "d",
+              "text": "Because lag features only work for weekends.",
+              "correct": false
+            }
+          ],
+          "explain": "Exactly! Since a Lag 1 feature looks back one step, the first row of your dataset has no 'yesterday' to look back to, resulting in an empty or missing value. Next: how to combine multiple past steps into a rolling window!"
+        }
+      ]
+    }
+  ]
+}

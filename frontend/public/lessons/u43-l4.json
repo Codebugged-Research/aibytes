@@ -1,0 +1,222 @@
+{
+  "id": "u43-l4",
+  "unit": 43,
+  "day": 219,
+  "tier": "Ensemble Learning",
+  "tierIcon": "🚀",
+  "title": "Weighted Voting",
+  "icon": "🗳️",
+  "concept": "In boosting, the final prediction is a weighted vote where each base model's vote strength is determined by its accuracy during training — highly accurate models get louder votes.",
+  "xp": 15,
+  "hearts": 3,
+  "estMinutes": 7,
+  "segments": [
+    {
+      "type": "warmup",
+      "exercises": [
+        {
+          "id": "w1",
+          "type": "multiple_choice",
+          "xp": 1,
+          "prompt": "Recap: What happens to a misclassified row's weight in AdaBoost?",
+          "options": [
+            {
+              "id": "a",
+              "text": "It increases, making it a high priority for the next model.",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "It decreases, allowing the model to focus on easy rows.",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "It is reset to 0.",
+              "correct": false
+            }
+          ],
+          "explain": "Correct! Error rows get weight increases."
+        }
+      ]
+    },
+    {
+      "type": "teach",
+      "cards": [
+        {
+          "kind": "hook",
+          "icon": "🗳️",
+          "title": "The unequal committee",
+          "body": "If you ask a panel of 3 people for weather advice — a professional meteorologist, a farmer who tracks seasons, and a random passerby — do you give their opinions equal weight? Probably not. You trust the meteorologist's prediction the most. In boosting ensembles, we calculate a mathematical weight for each model based on how accurate it was."
+        },
+        {
+          "kind": "definition",
+          "icon": "🗳️",
+          "title": "Weighted Voting: Model influence",
+          "body": "In bagging, all trees get an equal vote. In boosting, we use **weighted voting**. Each base model is assigned an influence score (often called **Amount of Say** or **alpha**). Stumps with high accuracy get high alpha scores (loud votes); stumps that perform near random guess levels get alpha scores near zero."
+        },
+        {
+          "kind": "analogy",
+          "icon": "📢",
+          "title": "Megaphones for experts",
+          "body": "Think of alpha weights like megaphones. An expert model gets a large, loud megaphone. A model that is barely better than a coin flip gets a tiny, quiet megaphone. When it's time to vote, the loud megaphone easily drowns out the quiet ones."
+        },
+        {
+          "kind": "example",
+          "icon": "📊",
+          "title": "Resolving a split vote",
+          "body": "An ensemble has 3 stumps predicting if a customer will buy a product. Stump 1 (accuracy 90%, alpha = **2.0**) votes Yes. Stump 2 (accuracy 55%, alpha = **0.2**) votes No. Stump 3 (accuracy 52%, alpha = **0.1**) votes No. Although there are two 'No' votes vs one 'Yes', the weighted sum is: Yes (2.0) vs No (0.2 + 0.1 = 0.3). The final prediction is Yes."
+        },
+        {
+          "kind": "mythbust",
+          "icon": "⚠️",
+          "title": "Even terrible models can help",
+          "body": "You might assume a model with an accuracy of 10% is useless and gets an alpha of 0. In binary classification, a model that is wrong 90% of the time is actually highly useful — you can just flip its prediction to be right 90% of the time! Boosting algorithms give high alpha scores to both highly accurate *and* highly inaccurate models (with a negative sign to flip their vote)."
+        },
+        {
+          "kind": "visual",
+          "icon": "🗳️",
+          "title": "Weighted voting vs. Equal voting",
+          "body": "Comparing voting mechanics in bagging vs. boosting:",
+          "compare": {
+            "left": {
+              "emoji": "🗳️",
+              "tag": "Equal Voting (Bagging)",
+              "text": "All trees have the same say.<br>Vote count: 1 tree = 1 vote.<br>Simple majority wins."
+            },
+            "right": {
+              "emoji": "📢",
+              "tag": "Weighted Voting (Boosting)",
+              "text": "Model say depends on training accuracy.<br>Vote count: Model vote * alpha weight.<br>Highest weighted sum wins."
+            }
+          }
+        }
+      ]
+    },
+    {
+      "type": "practice",
+      "exercises": [
+        {
+          "id": "p1",
+          "type": "multiple_choice",
+          "xp": 2,
+          "prompt": "How is a base model's voting power (Amount of Say / alpha) determined in boosting?",
+          "options": [
+            {
+              "id": "a",
+              "text": "It is calculated based on the model's prediction accuracy during training.",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "It is assigned randomly by the user.",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "All models are automatically given equal say.",
+              "correct": false
+            },
+            {
+              "id": "d",
+              "text": "It is determined by the size of the validation set.",
+              "correct": false
+            }
+          ],
+          "explain": "Correct! The more accurate the base learner during training, the higher its voting weight (alpha)."
+        },
+        {
+          "id": "p2",
+          "type": "true_false",
+          "xp": 2,
+          "prompt": "True or false: In a boosting weighted vote, a single model with a high accuracy weight can outvote multiple weaker models combined.",
+          "options": [
+            {
+              "id": "t",
+              "text": "True",
+              "correct": true
+            },
+            {
+              "id": "f",
+              "text": "False",
+              "correct": false
+            }
+          ],
+          "explain": "True! A model with a large alpha (e.g. 2.0) carries more influence than several models with low alpha values (e.g. 0.1) combined."
+        },
+        {
+          "id": "p3",
+          "type": "fill_blank",
+          "xp": 2,
+          "prompt": "Complete the sentence:",
+          "sentence": "If a base learner has an accuracy rate of exactly 50% (no better than a coin flip), its alpha voting weight will be close to ___.",
+          "blank": "zero",
+          "words": [
+            "zero",
+            "one",
+            "ten"
+          ],
+          "explain": "A model that performs at coin-flip levels adds no information, so its voting power drops to zero."
+        },
+        {
+          "id": "p4",
+          "type": "spot_the_ai",
+          "xp": 2,
+          "prompt": "Which prediction is the result of a weighted vote?",
+          "options": [
+            {
+              "id": "a",
+              "text": "Classify as 'Spam' because the weighted vote sum is Spam: 2.4, Inbox: 0.8.",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "Classify as 'Spam' because 3 out of 4 trees predicted Spam.",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "Classify as 'Spam' because it was the default value.",
+              "correct": false
+            }
+          ],
+          "explain": "Correct! Resolving a vote based on the sum of model weights (alpha) is weighted voting."
+        }
+      ]
+    },
+    {
+      "type": "boss",
+      "exercises": [
+        {
+          "id": "b1",
+          "type": "multiple_choice",
+          "xp": 5,
+          "prompt": "An AdaBoost ensemble classifies a medical scan. Stump A (alpha = 1.8) predicts 'Healthy'. Stump B (alpha = 0.8) and Stump C (alpha = 0.7) predict 'Risk'. What is the final ensemble classification, and why?",
+          "options": [
+            {
+              "id": "a",
+              "text": "'Healthy', because the voting weight of Stump A (1.8) is greater than the combined weight of Stump B and C (0.8 + 0.7 = 1.5).",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "'Risk', because two stumps voted Risk vs. one voting Healthy.",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "A tie, because the number of votes is split.",
+              "correct": false
+            },
+            {
+              "id": "d",
+              "text": "Healthy, because Stump A was trained first.",
+              "correct": false
+            }
+          ],
+          "explain": "Exactly! Weighted voting sum: Healthy = 1.8; Risk = 0.8 + 0.7 = 1.5. Since Healthy has the higher weighted score, it wins the vote, demonstrating how a strong model can outvote multiple weaker ones. Next, let's compare bagging and boosting side-by-side!"
+        }
+      ]
+    }
+  ]
+}

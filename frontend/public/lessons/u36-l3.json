@@ -1,0 +1,217 @@
+{
+  "id": "u36-l3",
+  "unit": 36,
+  "day": 183,
+  "tier": "k-Nearest Neighbors",
+  "tierIcon": "👣",
+  "title": "Choosing k: Small vs. Large Neighborhoods",
+  "icon": "🔢",
+  "concept": "The tradeoff between small k (sensitive to outliers) and large k (boundary smoothing), and using odd numbers to prevent ties.",
+  "xp": 15,
+  "hearts": 3,
+  "estMinutes": 7,
+  "segments": [
+    {
+      "type": "warmup",
+      "exercises": [
+        {
+          "id": "w1",
+          "type": "multiple_choice",
+          "xp": 1,
+          "prompt": "Recap: What is the main difference between Manhattan distance and straight-line distance?",
+          "options": [
+            {
+              "id": "a",
+              "text": "Manhattan distance measures paths along grid lines (up and across), while straight-line distance measures a direct diagonal path.",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "Manhattan distance is always shorter than straight-line distance.",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "Straight-line distance can only be used on actual physical maps.",
+              "correct": false
+            }
+          ],
+          "explain": "Exactly! Manhattan distance is grid-constrained, while straight-line distance is a direct diagonal shortcut."
+        }
+      ]
+    },
+    {
+      "type": "teach",
+      "cards": [
+        {
+          "kind": "hook",
+          "icon": "⭕",
+          "title": "Setting the boundary",
+          "body": "If you want to know what a cool trend is, do you ask just 1 person, or do you take a poll of 50 people? Asking 1 person is quick but risky (they might have weird tastes). Asking 50 people is safer but takes longer, and you might lose the local detail. Choosing the number of neighbors (<strong>k</strong>) in kNN is the exact same tradeoff!"
+        },
+        {
+          "kind": "definition",
+          "icon": "🔢",
+          "title": "Small vs. large k",
+          "body": "Choosing <strong>k</strong> determines the size of the neighborhood. A <strong>small k</strong> (like k = 1) looks at tiny details but is easily fooled by noise. A <strong>large k</strong> (like k = 15) is stable but can wash out small patterns, making the decision boundaries too smooth."
+        },
+        {
+          "kind": "analogy",
+          "icon": "🗣️",
+          "title": "Rumors vs. surveys",
+          "body": "If k = 1, it's like believing the very first rumor you hear. If that single neighbor is incorrect (an outlier), you make a mistake. If k = 15, you survey a crowd. One weird rumor gets outvoted by the majority, giving you a much more reliable answer."
+        },
+        {
+          "kind": "example",
+          "icon": "⚖️",
+          "title": "No tie-breaker needed",
+          "body": "If you have 2 categories (Red vs. Blue) and choose an even neighbor count like k = 4, you might get a tie: 2 Red and 2 Blue votes! To avoid this deadlock, we always choose an <strong>odd number</strong> for k (like 3, 5, or 7) so there is always a clear winner."
+        },
+        {
+          "kind": "mythbust",
+          "icon": "⚠️",
+          "title": "More neighbors isn't always better",
+          "body": "You might think choosing the largest possible k is best. But if you have 100 points and set k = 100, every vote will just predict the most common category in the entire dataset, ignoring where the new point actually is! Keep k reasonably small."
+        },
+        {
+          "kind": "visual",
+          "icon": "🎯",
+          "title": "Comparing neighborhoods",
+          "body": "How k size affects decision sensitivity:",
+          "compare": {
+            "left": {
+              "emoji": "⚡",
+              "tag": "Small k (e.g. k = 1)",
+              "text": "Highly sensitive to outliers.<br>Jagged boundaries.<br>Easily fooled by noise."
+            },
+            "right": {
+              "emoji": "🌊",
+              "tag": "Large k (e.g. k = 15)",
+              "text": "Smooth boundaries.<br>Filters out noisy points.<br>May ignore small, real groups."
+            }
+          }
+        }
+      ]
+    },
+    {
+      "type": "practice",
+      "exercises": [
+        {
+          "id": "p1",
+          "type": "multiple_choice",
+          "xp": 2,
+          "prompt": "Why is a model with k = 1 highly sensitive to noise or outliers?",
+          "options": [
+            {
+              "id": "a",
+              "text": "Because it makes its decision based on a single closest point, which might be an error or anomaly.",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "Because it ignores the closest point entirely.",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "Because it requires too many votes to make a decision.",
+              "correct": false
+            }
+          ],
+          "explain": "Spot on. If k = 1, a single misplaced data point will completely dictate the prediction for anything near it."
+        },
+        {
+          "id": "p2",
+          "type": "true_false",
+          "xp": 2,
+          "prompt": "True or False: We should choose an odd number for k (like 3 or 5) when we have two categories to avoid voting ties.",
+          "options": [
+            {
+              "id": "t",
+              "text": "True",
+              "correct": true
+            },
+            {
+              "id": "f",
+              "text": "False",
+              "correct": false
+            }
+          ],
+          "explain": "True! An odd number ensures there is always a majority winner and prevents deadlocks."
+        },
+        {
+          "id": "p3",
+          "type": "fill_blank",
+          "xp": 2,
+          "prompt": "Complete the description of the k-tradeoff:",
+          "sentence": "A very ___ value of k makes the model stable but might smooth out important local patterns.",
+          "blank": "large",
+          "words": [
+            "large",
+            "small",
+            "odd"
+          ],
+          "explain": "A large k considers a wider neighborhood, smoothing out noise but potentially washing away smaller distinct groups."
+        },
+        {
+          "id": "p4",
+          "type": "spot_the_ai",
+          "xp": 2,
+          "prompt": "Which of these scenarios shows the risk of choosing k = 1?",
+          "options": [
+            {
+              "id": "a",
+              "text": "An email is classified as spam just because its closest neighbor happens to be a single mislabeled spam email.",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "An email is classified as spam after taking a vote among 9 nearby emails.",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "An email is classified as spam because the word 'free' was found in it.",
+              "correct": false
+            }
+          ],
+          "explain": "Yes! Making a decision based on just 1 neighbor makes the system fragile to individual anomalies."
+        }
+      ]
+    },
+    {
+      "type": "boss",
+      "exercises": [
+        {
+          "id": "b1",
+          "type": "multiple_choice",
+          "xp": 5,
+          "prompt": "You are setting up kNN to identify fake coins. You have a dataset of 100 coins (90 genuine, 10 fake). If you set k = 100, what will the model predict for any new coin you test?",
+          "options": [
+            {
+              "id": "a",
+              "text": "It will always predict 'genuine' because genuine coins hold the absolute majority (90 out of 100) in the entire dataset.",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "It will look at the 1 closest neighbor and predict based on that.",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "It will crash because k cannot be equal to the number of data points.",
+              "correct": false
+            },
+            {
+              "id": "d",
+              "text": "It will correctly identify fake coins because it checks every single coin.",
+              "correct": false
+            }
+          ],
+          "explain": "Perfect! If k is equal to the total dataset size, the model uses all points for every vote. The majority category (genuine) will win every single time, rendering the coordinates useless! Keep k small relative to the dataset size."
+        }
+      ]
+    }
+  ]
+}
