@@ -1,0 +1,217 @@
+{
+  "id": "u55-l2",
+  "unit": 55,
+  "day": 277,
+  "tier": "Mini Project: Churn Predictor",
+  "tierIcon": "🏁",
+  "title": "Tuning the Model",
+  "icon": "🎛️",
+  "concept": "Grid Search tests every combination of max_depth and number of trees on the rebalanced churn data, hunting for the settings that push the validation F1-Score as high as possible.",
+  "xp": 15,
+  "hearts": 3,
+  "estMinutes": 7,
+  "segments": [
+    {
+      "type": "warmup",
+      "exercises": [
+        {
+          "id": "w1",
+          "type": "multiple_choice",
+          "xp": 2,
+          "prompt": "Recap: After SMOTE and class weights, StreamBox's validation F1-Score rose from 0.28 to about 0.63. What should StreamBox try next to push it even higher?",
+          "options": [
+            {
+              "id": "a",
+              "text": "Search over the model's own settings — like tree depth and forest size — to find a better-tuned Random Forest",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "Give up, since 0.63 must be the ceiling for this model",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "Go back to guessing \"stay\" for every customer",
+              "correct": false
+            }
+          ],
+          "explain": "Exactly — the data is now balanced, but the model's own knobs haven't been optimized yet. That's what tuning is for."
+        }
+      ]
+    },
+    {
+      "type": "teach",
+      "cards": [
+        {
+          "kind": "hook",
+          "icon": "🎛️",
+          "title": "Same recipe, different oven settings",
+          "body": "StreamBox's Random Forest has been baking with default settings this whole time — 100 trees, no depth limit. That's like never adjusting your oven temperature. The default just isn't always the best fit for your specific dish."
+        },
+        {
+          "kind": "definition",
+          "icon": "🔍",
+          "title": "What is Grid Search, again?",
+          "body": "<strong>Grid Search</strong> systematically tries every combination of hyperparameter values you list — like testing every square on a Battleship grid — and measures each one's score on the validation set, so you can pick the true winner instead of guessing."
+        },
+        {
+          "kind": "analogy",
+          "icon": "🌳",
+          "title": "Depth and crowd size",
+          "body": "Think of <code>max_depth</code> as how many follow-up questions each tree is allowed to ask before deciding, and the number of trees as how many separate juries vote on the final answer. Too shallow or too small a jury misses patterns; too deep or too large risks overfitting or wasting time."
+        },
+        {
+          "kind": "example",
+          "icon": "🧮",
+          "title": "Building StreamBox's grid",
+          "body": "StreamBox tests <code>max_depth</code> of 5, 10, 20, or unlimited (4 options) against forest sizes of 50, 100, or 200 trees (3 options). That's 4 × 3 = 12 total combinations, each trained and scored on the validation set."
+        },
+        {
+          "kind": "mythbust",
+          "icon": "⚠️",
+          "title": "More trees isn't automatically better",
+          "body": "It's tempting to think 200 trees always beats 50. In reality, past a certain point extra trees mostly cost more computing time without meaningfully raising the score — and an overly deep max_depth can make the forest memorize noise instead of generalizing."
+        },
+        {
+          "kind": "visual",
+          "icon": "🏆",
+          "title": "Before vs. After Tuning",
+          "body": "The winning combination StreamBox found:",
+          "compare": {
+            "left": {
+              "emoji": "🎲",
+              "tag": "Untuned (Default)",
+              "text": "100 trees<br>Unlimited depth<br>Validation F1: 0.63"
+            },
+            "right": {
+              "emoji": "🏆",
+              "tag": "Tuned (Grid Search)",
+              "text": "200 trees<br>max_depth: 10<br>Validation F1: 0.70"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "type": "practice",
+      "exercises": [
+        {
+          "id": "p1",
+          "type": "multiple_choice",
+          "xp": 2,
+          "prompt": "StreamBox's grid tests 4 values of max_depth against 3 values for number of trees. How many total combinations does Grid Search train and score?",
+          "options": [
+            {
+              "id": "a",
+              "text": "12",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "7",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "4",
+              "correct": false
+            }
+          ],
+          "explain": "4 × 3 = 12. Grid Search trains and evaluates one model for every possible pairing of the listed values."
+        },
+        {
+          "id": "p2",
+          "type": "true_false",
+          "xp": 2,
+          "prompt": "True or false: Grid Search should pick its winning combination based on training set performance, since that's the data the model has already learned from.",
+          "options": [
+            {
+              "id": "t",
+              "text": "True",
+              "correct": false
+            },
+            {
+              "id": "f",
+              "text": "False",
+              "correct": true
+            }
+          ],
+          "explain": "False. Scoring on the training set would just reward memorization. Grid Search picks the winning combination based on validation set performance, so the choice reflects how well it generalizes to new customers."
+        },
+        {
+          "id": "p3",
+          "type": "fill_blank",
+          "xp": 2,
+          "prompt": "Complete the sentence:",
+          "sentence": "Grid Search trains one model for every combination in the ___ of hyperparameter values, then keeps the version with the best validation score.",
+          "blank": "grid",
+          "words": [
+            "grid",
+            "dataset",
+            "gradient"
+          ],
+          "explain": "The \"grid\" is the full set of combinations formed by crossing every listed value for each hyperparameter."
+        },
+        {
+          "id": "p4",
+          "type": "spot_the_ai",
+          "xp": 2,
+          "prompt": "Which max_depth and tree-count combination gave StreamBox's Random Forest the best validation F1-Score?",
+          "options": [
+            {
+              "id": "a",
+              "text": "max_depth 10, 200 trees",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "max_depth unlimited, 50 trees",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "max_depth 5, 100 trees",
+              "correct": false
+            }
+          ],
+          "explain": "Correct — this combination lets each tree ask a reasonable number of questions while a large jury of 200 trees votes, without overfitting to noise."
+        }
+      ]
+    },
+    {
+      "type": "boss",
+      "exercises": [
+        {
+          "id": "b1",
+          "type": "multiple_choice",
+          "xp": 5,
+          "prompt": "StreamBox's Grid Search finds that max_depth=10 with 200 trees gives the best validation F1-Score (0.70), beating both shallower and deeper options, and beating smaller and larger forests. Why is validation-set F1-Score — not training accuracy — the right way to pick the winning combination?",
+          "options": [
+            {
+              "id": "a",
+              "text": "Because F1-Score balances precision and recall (which matters for imbalanced churn data), and testing on validation data the model hasn't trained on shows how well it will generalize to new customers",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "Because training accuracy is mathematically impossible to calculate for Random Forests",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "Because validation data always produces a higher score than training data",
+              "correct": false
+            },
+            {
+              "id": "d",
+              "text": "It doesn't matter which metric or dataset you use, as long as you pick some winner",
+              "correct": false
+            }
+          ],
+          "explain": "Exactly right! Picking based on training performance would reward overfitting, and accuracy alone would hide how badly the model still treats the rare churn class. Validation F1-Score is the honest, balanced signal. Next: turning this score into real business dollars."
+        }
+      ]
+    }
+  ]
+}

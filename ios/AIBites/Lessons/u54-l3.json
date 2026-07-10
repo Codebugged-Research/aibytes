@@ -1,0 +1,222 @@
+{
+  "id": "u54-l3",
+  "unit": 54,
+  "day": 273,
+  "tier": "Mini Project: Churn Predictor",
+  "tierIcon": "🎯",
+  "title": "Engineering the Features",
+  "icon": "🔨",
+  "concept": "Feature engineering transforms cleaned raw columns — like a signup date or a plan name — into new numeric inputs, such as tenure in months or one-hot encoded categories, that carry more predictive signal for the model.",
+  "xp": 15,
+  "hearts": 3,
+  "estMinutes": 7,
+  "segments": [
+    {
+      "type": "warmup",
+      "exercises": [
+        {
+          "id": "w1",
+          "type": "multiple_choice",
+          "xp": 1,
+          "prompt": "Recap: In StreamBox's data, why was a watch_hours value of 9,999 a problem?",
+          "options": [
+            {
+              "id": "a",
+              "text": "It's physically impossible in a 30-day month (max 720 hours), making it an outlier",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "It's too small to matter",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "It's the target variable",
+              "correct": false
+            }
+          ],
+          "explain": "Right! A 30-day month has at most 720 hours, so 9,999 is an outlier that needed cleaning."
+        }
+      ]
+    },
+    {
+      "type": "teach",
+      "cards": [
+        {
+          "kind": "hook",
+          "icon": "📅",
+          "title": "A date the model can't read",
+          "body": "StreamBox's data is clean now, but signup_date still just says \"2023-01-15\". A model can't do math with a date string — it needs a number that actually says something about churn risk, like how long this customer has stuck around."
+        },
+        {
+          "kind": "definition",
+          "icon": "🔨",
+          "title": "Feature engineering",
+          "body": "<strong>Feature engineering</strong> means transforming cleaned raw columns into new inputs — called features — that carry more predictive signal than the raw column did on its own."
+        },
+        {
+          "kind": "analogy",
+          "icon": "🥣",
+          "title": "Batter, not flour and eggs",
+          "body": "An oven can't bake with a bag of flour and a carton of eggs sitting side by side — they have to be mixed into batter first. Feature engineering is that mixing step: raw columns become the actual \"batter\" the model can work with."
+        },
+        {
+          "kind": "example",
+          "icon": "🛠️",
+          "title": "Three transforms for StreamBox",
+          "body": "Signup date <code>2023-01-15</code> becomes <code>tenure_months: 18</code> (measured against today). Plan type <code>\"Standard\"</code> becomes three one-hot columns: <code>is_basic: 0, is_standard: 1, is_premium: 0</code>. And <code>watch_hours</code> (0–720) gets scaled down to a <code>0–1</code> range so no single feature overpowers the others."
+        },
+        {
+          "kind": "mythbust",
+          "icon": "⚠️",
+          "title": "Having the column isn't the same as using it",
+          "body": "You might think that since signup_date is already in the dataset, the model \"already knows\" how long someone's been a customer. In reality, a raw date string is meaningless to a model — it has to be converted into a number like tenure_months before it carries any signal."
+        },
+        {
+          "kind": "visual",
+          "icon": "🔀",
+          "title": "Raw Column vs. Engineered Feature",
+          "body": "The same information, made usable:",
+          "compare": {
+            "left": {
+              "emoji": "📄",
+              "tag": "Raw Column",
+              "text": "signup_date: \"2023-01-15\"<br>plan_type: \"Standard\"<br>watch_hours: 340"
+            },
+            "right": {
+              "emoji": "⚙️",
+              "tag": "Engineered Feature",
+              "text": "tenure_months: 18<br>is_standard: 1<br>watch_hours_scaled: 0.47"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "type": "practice",
+      "exercises": [
+        {
+          "id": "p1",
+          "type": "multiple_choice",
+          "xp": 2,
+          "prompt": "Why does StreamBox convert plan_type into one-hot encoded columns instead of feeding the model the word \"Standard\" directly?",
+          "options": [
+            {
+              "id": "a",
+              "text": "Models need numeric inputs, and one-hot encoding turns each category into its own binary (0/1) column",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "It makes the file smaller",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "It removes the need for cleaning",
+              "correct": false
+            },
+            {
+              "id": "d",
+              "text": "It changes plan_type into the target variable",
+              "correct": false
+            }
+          ],
+          "explain": "Correct! One-hot encoding converts a text category into numeric 0/1 columns the model can actually use."
+        },
+        {
+          "id": "p2",
+          "type": "true_false",
+          "xp": 2,
+          "prompt": "True or false: Scaling watch_hours down to a 0–1 range changes what the number means, not just its scale.",
+          "options": [
+            {
+              "id": "t",
+              "text": "True",
+              "correct": false
+            },
+            {
+              "id": "f",
+              "text": "False",
+              "correct": true
+            }
+          ],
+          "explain": "False! Scaling keeps the relative differences between customers — it just puts the numbers on a comparable range so one feature doesn't dominate."
+        },
+        {
+          "id": "p3",
+          "type": "fill_blank",
+          "xp": 2,
+          "prompt": "Complete the sentence:",
+          "sentence": "Converting signup_date into a number of months since signup creates a new feature called ___.",
+          "blank": "tenure_months",
+          "words": [
+            "tenure_months",
+            "churned",
+            "watch_hours"
+          ],
+          "explain": "tenure_months turns a raw date into a number that directly signals how long someone has been a customer."
+        },
+        {
+          "id": "p4",
+          "type": "spot_the_ai",
+          "xp": 2,
+          "prompt": "Which of these is a properly engineered feature, ready for a model?",
+          "options": [
+            {
+              "id": "a",
+              "text": "tenure_months: 18",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "signup_date: \"Jan 15, 2023\"",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "plan_type: \"Standard\"",
+              "correct": false
+            }
+          ],
+          "explain": "Correct! tenure_months is a clean number derived from the raw date — exactly what a model needs."
+        }
+      ]
+    },
+    {
+      "type": "boss",
+      "exercises": [
+        {
+          "id": "b1",
+          "type": "multiple_choice",
+          "xp": 5,
+          "prompt": "A StreamBox customer signed up on 2023-01-15 (today is 2024-07-15), is on the \"Premium\" plan, and watched 340 of a possible 720 hours last month. Which set of engineered features correctly represents this customer for the model?",
+          "options": [
+            {
+              "id": "a",
+              "text": "tenure_months: 18, is_basic: 0, is_standard: 0, is_premium: 1, watch_hours_scaled: 0.47",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "tenure_months: 2024, is_premium: \"yes\", watch_hours: 340",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "signup_date: \"2023-01-15\", plan_type: \"Premium\", watch_hours: 340",
+              "correct": false
+            },
+            {
+              "id": "d",
+              "text": "tenure_months: 18, is_premium: 1, watch_hours_scaled: 340",
+              "correct": false
+            }
+          ],
+          "explain": "Exactly! 18 months of tenure, a one-hot flag for Premium, and watch hours scaled to roughly 0.47 (340/720) are all properly engineered numeric features. Next: it's finally time to pick a model and train it!"
+        }
+      ]
+    }
+  ]
+}

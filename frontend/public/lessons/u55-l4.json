@@ -1,0 +1,217 @@
+{
+  "id": "u55-l4",
+  "unit": 55,
+  "day": 279,
+  "tier": "Mini Project: Churn Predictor",
+  "tierIcon": "🏁",
+  "title": "Serializing and Serving the Model",
+  "icon": "📡",
+  "concept": "The final tuned model gets saved to a file so it can be loaded anywhere, and the support dashboard calls a prediction API to fetch a live churn-risk score for each customer, while StreamBox keeps watching for drift that could make the saved model stale.",
+  "xp": 15,
+  "hearts": 3,
+  "estMinutes": 7,
+  "segments": [
+    {
+      "type": "warmup",
+      "exercises": [
+        {
+          "id": "w1",
+          "type": "multiple_choice",
+          "xp": 2,
+          "prompt": "Recap: StreamBox picked a decision threshold of 0.3 because a missed churner costs about 20 times more than an unnecessary discount. What's left before this model can actually help support agents day to day?",
+          "options": [
+            {
+              "id": "a",
+              "text": "The trained model needs to be saved to a file and connected to the tools the support team actually uses",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "Nothing — a trained model automatically appears inside every app the company owns",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "The model needs to be retrained completely from scratch every single day",
+              "correct": false
+            }
+          ],
+          "explain": "A model sitting inside a training notebook doesn't help anyone yet — it has to be saved and plugged into real tools."
+        }
+      ]
+    },
+    {
+      "type": "teach",
+      "cards": [
+        {
+          "kind": "hook",
+          "icon": "🧊",
+          "title": "From notebook to dashboard",
+          "body": "Right now, StreamBox's tuned Random Forest only exists inside the data scientist's training session — powerful, but trapped. The support team, who actually talks to at-risk customers, can't use it at all yet."
+        },
+        {
+          "kind": "definition",
+          "icon": "💾",
+          "title": "Serializing the final model",
+          "body": "StreamBox <strong>serializes</strong> the tuned Random Forest — saving its trees, splits, and settings to a file called <code>churn_model_v1.pkl</code> — freezing it exactly as it finished training, ready to be loaded anywhere without retraining."
+        },
+        {
+          "kind": "analogy",
+          "icon": "📦",
+          "title": "Shipping a finished product",
+          "body": "Training a model is like assembling a product in a workshop. Serialization is boxing it up so it can be shipped anywhere — the support dashboard, a mobile app, or a nightly batch job — and unpacked in perfect working condition."
+        },
+        {
+          "kind": "example",
+          "icon": "📡",
+          "title": "The support dashboard's live lookup",
+          "body": "When a support agent opens customer #48213's profile, the dashboard sends that customer's features to a churn-prediction API. The loaded model scores them in milliseconds and returns a churn-risk score — say <code>0.82</code>, or 82% — which the dashboard shows as a red \"High Risk\" badge."
+        },
+        {
+          "kind": "mythbust",
+          "icon": "⚠️",
+          "title": "Serving a model isn't a one-time task",
+          "body": "It's easy to assume that once a model is saved and connected, the job is done forever. In reality, StreamBox must keep watching for <strong>drift</strong> — like a hit new show shifting everyone's watch_hours patterns — since a model trained on old behavior can quietly get worse at spotting tomorrow's churners."
+        },
+        {
+          "kind": "visual",
+          "icon": "🔄",
+          "title": "Training Once, Serving Continuously",
+          "body": "Two very different phases of the model's life:",
+          "compare": {
+            "left": {
+              "emoji": "🏋️",
+              "tag": "Training (Happens Once)",
+              "text": "Tune on historical data<br>Pick the best settings<br>Save to churn_model_v1.pkl"
+            },
+            "right": {
+              "emoji": "📡",
+              "tag": "Serving (Happens Constantly)",
+              "text": "Dashboard calls the API<br>Get a live risk score<br>Watch for drift over time"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "type": "practice",
+      "exercises": [
+        {
+          "id": "p1",
+          "type": "multiple_choice",
+          "xp": 2,
+          "prompt": "What does serializing StreamBox's final Random Forest actually accomplish?",
+          "options": [
+            {
+              "id": "a",
+              "text": "It saves the fully-trained model's trees and settings to a file, so it can be loaded and reused without retraining",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "It deletes the model in order to save disk space",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "It converts the trained model back into raw, unprocessed training data",
+              "correct": false
+            }
+          ],
+          "explain": "Serialization freezes the trained model's state into a file, ready for instant reuse anywhere it's needed."
+        },
+        {
+          "id": "p2",
+          "type": "true_false",
+          "xp": 2,
+          "prompt": "True or false: The customer support dashboard needs to understand exactly how the Random Forest's 200 trees vote in order to display a churn-risk score.",
+          "options": [
+            {
+              "id": "t",
+              "text": "True",
+              "correct": false
+            },
+            {
+              "id": "f",
+              "text": "False",
+              "correct": true
+            }
+          ],
+          "explain": "False. The dashboard just calls the prediction API with a customer's data and receives a risk score back — it doesn't need to know anything about the model's internal workings."
+        },
+        {
+          "id": "p3",
+          "type": "fill_blank",
+          "xp": 2,
+          "prompt": "Complete the sentence:",
+          "sentence": "Even after StreamBox's model is deployed, the team must keep monitoring for ___, since real customer behavior can shift and make an old model less accurate.",
+          "blank": "drift",
+          "words": [
+            "drift",
+            "overfitting",
+            "encoding"
+          ],
+          "explain": "Drift — a change in incoming data patterns or in the relationship between features and churn — is exactly what ongoing monitoring after deployment is meant to catch."
+        },
+        {
+          "id": "p4",
+          "type": "spot_the_ai",
+          "xp": 2,
+          "prompt": "Which of these is the best sign that StreamBox's deployed churn model might be suffering from drift and need retraining?",
+          "options": [
+            {
+              "id": "a",
+              "text": "Average watch_hours and support_ticket patterns among current customers look noticeably different than they did when the model was trained",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "The support dashboard's loading spinner takes two extra seconds to appear",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "The model file's name still says v1 after several months",
+              "correct": false
+            }
+          ],
+          "explain": "A real shift in the incoming data's patterns compared to training time is the classic signature of drift."
+        }
+      ]
+    },
+    {
+      "type": "boss",
+      "exercises": [
+        {
+          "id": "b1",
+          "type": "multiple_choice",
+          "xp": 5,
+          "prompt": "StreamBox saves its tuned Random Forest to churn_model_v1.pkl and wires it into the support dashboard's prediction API. Six months later, StreamBox launches a wildly popular new show that changes how almost everyone uses the app. What should StreamBox do, and why?",
+          "options": [
+            {
+              "id": "a",
+              "text": "Monitor for data drift, and if customer behavior patterns have meaningfully shifted, retrain the model on fresh data so its churn predictions stay accurate",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "Nothing — once a model is deployed and serving predictions, it stays accurate forever",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "Immediately delete the model, since any change in behavior means it's now completely useless",
+              "correct": false
+            },
+            {
+              "id": "d",
+              "text": "Simply rename the file to churn_model_v2.pkl without changing anything else about it",
+              "correct": false
+            }
+          ],
+          "explain": "Exactly! Deployment isn't the finish line — it's the start of an ongoing cycle of monitoring, and retraining when the world genuinely changes. You now know the full lifecycle of a real machine learning system, end to end!"
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,222 @@
+{
+  "id": "u54-l1",
+  "unit": 54,
+  "day": 271,
+  "tier": "Mini Project: Churn Predictor",
+  "tierIcon": "🎯",
+  "title": "Defining the Problem: What Are We Predicting?",
+  "icon": "🎯",
+  "concept": "Churn prediction asks a machine learning model to output a binary label — will this customer cancel or not — using raw signals like watch hours, plan type, and support activity as its input.",
+  "xp": 15,
+  "hearts": 3,
+  "estMinutes": 7,
+  "segments": [
+    {
+      "type": "warmup",
+      "exercises": [
+        {
+          "id": "w1",
+          "type": "multiple_choice",
+          "xp": 1,
+          "prompt": "Recap: What is a feedback loop in machine learning?",
+          "options": [
+            {
+              "id": "a",
+              "text": "When a model's predictions influence the future data it's later trained on, creating a self-reinforcing cycle.",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "A method for saving a trained model to disk.",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "A technique for splitting data into train and test sets.",
+              "correct": false
+            }
+          ],
+          "explain": "Exactly! Feedback loops happen when predictions shape the very data used to retrain the model later."
+        }
+      ]
+    },
+    {
+      "type": "teach",
+      "cards": [
+        {
+          "kind": "hook",
+          "icon": "📉",
+          "title": "The quiet goodbye",
+          "body": "Every month, some of StreamBox's subscribers just... stop. No complaint, no phone call — their card gets charged, they don't watch anything, and next month they cancel. By the time StreamBox notices, the customer is already gone."
+        },
+        {
+          "kind": "definition",
+          "icon": "🎯",
+          "title": "Churn prediction = binary classification",
+          "body": "<strong>Churn</strong> means a customer cancels their subscription. Predicting churn is a <strong>binary classification</strong> problem: for each customer, the model outputs one of two labels — <code>churned: yes</code> or <code>churned: no</code>."
+        },
+        {
+          "kind": "analogy",
+          "icon": "🩺",
+          "title": "A checkup before the symptoms show",
+          "body": "Predicting churn is like a doctor checking vital signs before a patient feels sick. StreamBox isn't waiting for the cancellation email — it's reading the early signs (falling watch time, a failed payment) to flag risk in advance."
+        },
+        {
+          "kind": "example",
+          "icon": "📋",
+          "title": "What StreamBox already has",
+          "body": "StreamBox's database holds real signals for all 500,000 subscribers: <code>watch_hours</code> (last 30 days), <code>plan_type</code> (Basic/Standard/Premium), <code>support_tickets</code> (count filed), <code>signup_date</code>, and <code>payment_failures</code> (recent declined charges). None of these say \"churn\" directly — the model has to learn the connection."
+        },
+        {
+          "kind": "mythbust",
+          "icon": "⚠️",
+          "title": "Not fortune-telling",
+          "body": "You might think a churn model predicts exactly why a specific person will cancel. In reality, it only estimates a probability — like \"this customer has a 78% chance of canceling next month\" — based on patterns across thousands of past customers, not a certainty about any one person."
+        },
+        {
+          "kind": "visual",
+          "icon": "🔀",
+          "title": "Target vs. Raw Data",
+          "body": "What the model predicts vs. what it's given to work with:",
+          "compare": {
+            "left": {
+              "emoji": "🎯",
+              "tag": "Target Variable",
+              "text": "churned: yes<br>or churned: no"
+            },
+            "right": {
+              "emoji": "📊",
+              "tag": "Raw Data",
+              "text": "watch_hours, plan_type,<br>support_tickets, signup_date,<br>payment_failures"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "type": "practice",
+      "exercises": [
+        {
+          "id": "p1",
+          "type": "multiple_choice",
+          "xp": 2,
+          "prompt": "What is the target variable StreamBox wants to predict?",
+          "options": [
+            {
+              "id": "a",
+              "text": "Whether a customer will churn (yes/no)",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "The customer's watch_hours value",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "The customer's plan_type",
+              "correct": false
+            },
+            {
+              "id": "d",
+              "text": "The customer's signup_date",
+              "correct": false
+            }
+          ],
+          "explain": "Correct! churned: yes/no is exactly what the model is trying to predict — everything else is an input."
+        },
+        {
+          "id": "p2",
+          "type": "true_false",
+          "xp": 2,
+          "prompt": "True or false: Predicting whether a customer will churn is a regression problem.",
+          "options": [
+            {
+              "id": "t",
+              "text": "True",
+              "correct": false
+            },
+            {
+              "id": "f",
+              "text": "False",
+              "correct": true
+            }
+          ],
+          "explain": "False! Churn has only two possible outcomes (yes/no), which makes it a classification problem, not regression."
+        },
+        {
+          "id": "p3",
+          "type": "fill_blank",
+          "xp": 2,
+          "prompt": "Complete the sentence:",
+          "sentence": "Because churn only has two possible outcomes, it's framed as a ___ classification problem.",
+          "blank": "binary",
+          "words": [
+            "binary",
+            "continuous",
+            "clustering"
+          ],
+          "explain": "Binary classification means the model chooses between exactly two labels: churned or not churned."
+        },
+        {
+          "id": "p4",
+          "type": "spot_the_ai",
+          "xp": 2,
+          "prompt": "Which of these is a piece of raw input data, not the target variable?",
+          "options": [
+            {
+              "id": "a",
+              "text": "support_tickets: 3 filed this month",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "churned: yes",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "churned: no",
+              "correct": false
+            }
+          ],
+          "explain": "Correct! support_tickets is one of the raw signals fed into the model — churned is the label it's trying to predict."
+        }
+      ]
+    },
+    {
+      "type": "boss",
+      "exercises": [
+        {
+          "id": "b1",
+          "type": "multiple_choice",
+          "xp": 5,
+          "prompt": "StreamBox's data team pulls together watch_hours, plan_type, support_tickets, signup_date, and payment_failures for 500,000 customers, plus a record of who actually canceled last month. How should this be framed as a machine learning problem?",
+          "options": [
+            {
+              "id": "a",
+              "text": "Binary classification: use the five signals as input features to predict a churned: yes/no label for each customer.",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "Regression: use churned status to predict the exact number of watch hours next month.",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "Binary classification: use signup_date alone, ignoring every other column.",
+              "correct": false
+            },
+            {
+              "id": "d",
+              "text": "This can't be modeled without knowing exactly why each customer canceled.",
+              "correct": false
+            }
+          ],
+          "explain": "Exactly! Five raw signals become the input features, and the model learns to output a binary churned: yes/no label. Next: before any of that data can train a model, StreamBox has to clean it up first!"
+        }
+      ]
+    }
+  ]
+}

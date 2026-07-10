@@ -1,0 +1,217 @@
+{
+  "id": "u55-l3",
+  "unit": 55,
+  "day": 278,
+  "tier": "Mini Project: Churn Predictor",
+  "tierIcon": "🏁",
+  "title": "Final Evaluation & The Business Impact",
+  "icon": "💰",
+  "concept": "Precision and Recall translate into real dollars once you attach a cost to each mistake — the price of an unnecessary discount vs. the price of losing a customer — and that cost ratio should set the decision threshold.",
+  "xp": 15,
+  "hearts": 3,
+  "estMinutes": 7,
+  "segments": [
+    {
+      "type": "warmup",
+      "exercises": [
+        {
+          "id": "w1",
+          "type": "multiple_choice",
+          "xp": 2,
+          "prompt": "Recap: StreamBox's tuned Random Forest (max_depth=10, 200 trees) reached a validation F1-Score of 0.70. Is F1-Score alone enough to decide if this model is ready to launch?",
+          "options": [
+            {
+              "id": "a",
+              "text": "Not quite — F1-Score is a great health check, but the real question is whether its mistakes are affordable in dollars",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "Yes, F1-Score is literally measured in dollars",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "No metric ever matters, only gut feeling",
+              "correct": false
+            }
+          ],
+          "explain": "F1-Score tells you the model is well-balanced, but StreamBox still needs to know: what does each of its mistakes actually cost the business?"
+        }
+      ]
+    },
+    {
+      "type": "teach",
+      "cards": [
+        {
+          "kind": "hook",
+          "icon": "💸",
+          "title": "Two very different kinds of \"wrong\"",
+          "body": "If StreamBox's model wrongly flags a happy customer as \"at risk,\" support sends them a small discount they didn't need — mildly annoying, cheap. If it wrongly clears a customer who was about to cancel, StreamBox loses them entirely, along with every dollar they would've paid for years. Those two mistakes are NOT equally expensive."
+        },
+        {
+          "kind": "definition",
+          "icon": "🧾",
+          "title": "False positives and false negatives, in dollars",
+          "body": "A <strong>false positive</strong> here means offering a retention discount to someone who wouldn't have churned — StreamBox estimates that costs about <code>$30</code> per offer. A <strong>false negative</strong> means missing a real churner who then cancels — StreamBox estimates that costs about <code>$600</code> in lost future revenue per customer."
+        },
+        {
+          "kind": "analogy",
+          "icon": "☔",
+          "title": "The umbrella decision",
+          "body": "Carrying an umbrella on a sunny day (a false positive) just means a little extra weight in your bag. Leaving it home during a downpour (a false negative) means getting soaked. When one mistake is so much more painful than the other, it's smart to lean toward over-preparing."
+        },
+        {
+          "kind": "example",
+          "icon": "📉",
+          "title": "Pricing StreamBox's validation mistakes",
+          "body": "On a 100,000-customer validation slice (5,000 real churners), the tuned model at its default cutoff produces 1,500 false positives and 1,500 false negatives. Cost: 1,500 × $30 = $45,000 in unnecessary discounts, plus 1,500 × $600 = $900,000 in lost customers — a total of $945,000."
+        },
+        {
+          "kind": "mythbust",
+          "icon": "⚠️",
+          "title": "The \"safest\" threshold isn't always the cheapest",
+          "body": "You might assume being stingy with discounts (a stricter cutoff) protects the budget. But when a lost customer costs 20 times more than a discount, being too cautious about false alarms actually costs StreamBox far more in the long run, by letting more real churners slip away."
+        },
+        {
+          "kind": "visual",
+          "icon": "🎚️",
+          "title": "Shifting the Decision Threshold",
+          "body": "Lowering the cutoff catches more churners, at the price of a few more discounts:",
+          "compare": {
+            "left": {
+              "emoji": "🔒",
+              "tag": "Threshold 0.5 (Default)",
+              "text": "1,500 missed churners<br>1,500 extra discounts<br>Total cost: $945,000"
+            },
+            "right": {
+              "emoji": "🔓",
+              "tag": "Threshold 0.3 (Looser)",
+              "text": "750 missed churners<br>4,250 extra discounts<br>Total cost: $577,500"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "type": "practice",
+      "exercises": [
+        {
+          "id": "p1",
+          "type": "multiple_choice",
+          "xp": 2,
+          "prompt": "Why does StreamBox estimate a false negative (a missed churner) as costing far more than a false positive (an unneeded discount)?",
+          "options": [
+            {
+              "id": "a",
+              "text": "Because losing a paying customer forfeits all of their future revenue, while a discount is just a small one-time cost",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "Because false negatives happen far more often than false positives",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "Because discounts always cost more than a subscription does",
+              "correct": false
+            }
+          ],
+          "explain": "The lost lifetime value of a customer (about $600 estimated) dwarfs the cost of a single discount offer ($30) — roughly a 20-to-1 gap."
+        },
+        {
+          "id": "p2",
+          "type": "true_false",
+          "xp": 2,
+          "prompt": "True or false: Since losing a customer costs about 20 times more than sending an unneeded discount, it can make business sense to lower the decision threshold and accept more false positives in exchange for fewer false negatives.",
+          "options": [
+            {
+              "id": "t",
+              "text": "True",
+              "correct": true
+            },
+            {
+              "id": "f",
+              "text": "False",
+              "correct": false
+            }
+          ],
+          "explain": "True — when one type of mistake is far more expensive, shifting the threshold to catch more of the costly kind (false negatives) usually lowers the total cost, even if it means more of the cheap kind (false positives)."
+        },
+        {
+          "id": "p3",
+          "type": "fill_blank",
+          "xp": 2,
+          "prompt": "Complete the sentence:",
+          "sentence": "Lowering the decision threshold makes the model flag more customers as \"at risk,\" which raises ___ but can also raise false positives.",
+          "blank": "recall",
+          "words": [
+            "recall",
+            "precision",
+            "accuracy"
+          ],
+          "explain": "A looser threshold catches more true churners (higher recall), typically at the cost of more false alarms (lower precision)."
+        },
+        {
+          "id": "p4",
+          "type": "spot_the_ai",
+          "xp": 2,
+          "prompt": "At StreamBox's default threshold (0.5), the total mistake cost is $945,000. At a looser threshold (0.3), it drops to $577,500. What does this comparison prove?",
+          "options": [
+            {
+              "id": "a",
+              "text": "The best threshold isn't necessarily the highest-accuracy one or the \"default\" 0.5 cutoff — it's the one that minimizes real business cost",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "Threshold never actually affects the total cost of a model's mistakes",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "StreamBox should always pick the absolute loosest threshold possible, no matter the costs",
+              "correct": false
+            }
+          ],
+          "explain": "Exactly — the right threshold depends on the actual dollar costs of each mistake type, not a default value or a single metric alone."
+        }
+      ]
+    },
+    {
+      "type": "boss",
+      "exercises": [
+        {
+          "id": "b1",
+          "type": "multiple_choice",
+          "xp": 5,
+          "prompt": "StreamBox settles on threshold 0.3, saving roughly $367,500 compared to the default 0.5 cutoff, by trading more (cheap) unnecessary discounts for far fewer (expensive) missed churners. What's the core lesson behind this decision?",
+          "options": [
+            {
+              "id": "a",
+              "text": "The right decision threshold depends on the real-world costs of false positives vs. false negatives, not just abstract metrics like accuracy or a default 50% cutoff",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "Precision should always be maximized above every other consideration",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "Recall should always be maximized above every other consideration, no matter the cost",
+              "correct": false
+            },
+            {
+              "id": "d",
+              "text": "Business costs are irrelevant once a model's F1-Score is good enough",
+              "correct": false
+            }
+          ],
+          "explain": "Exactly right! Great machine learning isn't just about high scores — it's about connecting those scores to real-world consequences and choosing the setup that actually helps the business. Next: getting this model out of the notebook and into production."
+        }
+      ]
+    }
+  ]
+}

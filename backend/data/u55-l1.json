@@ -1,0 +1,217 @@
+{
+  "id": "u55-l1",
+  "unit": 55,
+  "day": 276,
+  "tier": "Mini Project: Churn Predictor",
+  "tierIcon": "🏁",
+  "title": "Fixing the Imbalance",
+  "icon": "⚖️",
+  "concept": "SMOTE creates synthetic examples of the rare churn cases while class weights tell the model to treat every missed churner as a much bigger mistake, both fighting the same 95%-vs-5% imbalance.",
+  "xp": 15,
+  "hearts": 3,
+  "estMinutes": 7,
+  "segments": [
+    {
+      "type": "warmup",
+      "exercises": [
+        {
+          "id": "w1",
+          "type": "multiple_choice",
+          "xp": 2,
+          "prompt": "Recap: StreamBox's Random Forest hit 95% accuracy but only caught 18% of real churners, for an F1-Score of just 0.28. What's really going on?",
+          "options": [
+            {
+              "id": "a",
+              "text": "The model learned to mostly predict \"will stay\" because churners are so rare, it barely gets penalized for missing them",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "The model is broken and should be deleted entirely",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "95% accuracy means the model is doing great and needs no changes",
+              "correct": false
+            }
+          ],
+          "explain": "Exactly — with 475,000 stayers and only 25,000 churners, guessing \"stay\" every single time would already score about 95% accuracy. The model took that lazy shortcut."
+        }
+      ]
+    },
+    {
+      "type": "teach",
+      "cards": [
+        {
+          "kind": "hook",
+          "icon": "🚨",
+          "title": "The model that never rings the alarm",
+          "body": "Imagine a smoke detector that stays silent 95% of the time a house is fine, but also stays silent during an actual fire — because fires are rare, so \"never beep\" was still \"right\" most of the time. That's StreamBox's churn model right now."
+        },
+        {
+          "kind": "definition",
+          "icon": "🧬",
+          "title": "What is SMOTE?",
+          "body": "<strong>SMOTE</strong> (Synthetic Minority Over-sampling Technique) looks at existing churn examples, finds ones with similar traits, and draws a line between them — then plants brand-new, synthetic churn examples along that line. It doesn't copy rows; it invents believable new ones."
+        },
+        {
+          "kind": "analogy",
+          "icon": "🤝",
+          "title": "Making new friends",
+          "body": "If a party has 19 people from one group and just 1 from another, that lone guest looks out of place. SMOTE is like inviting a few of that guest's close friends — similar in personality — so the room finally has enough of both groups to notice patterns in each."
+        },
+        {
+          "kind": "example",
+          "icon": "📊",
+          "title": "Rebalancing StreamBox's training data",
+          "body": "In the 400,000-customer training set, only about 20,000 rows are churners. SMOTE studies those 20,000 and generates 80,000 new synthetic churn examples, growing the churn group to 100,000 out of 480,000 total rows — no longer a rounding error the model can ignore."
+        },
+        {
+          "kind": "mythbust",
+          "icon": "⚠️",
+          "title": "Class weights don't touch the data at all",
+          "body": "It's a common mix-up to think class weights add or remove rows the way SMOTE does. They don't — the dataset size never changes. Class weights simply tell the training algorithm: \"a missed churner costs about 19 times more than a false alarm,\" so it fights harder to catch them."
+        },
+        {
+          "kind": "visual",
+          "icon": "⚖️",
+          "title": "Two Fixes for One Problem",
+          "body": "Different tools, same goal — teach the model that churn matters:",
+          "compare": {
+            "left": {
+              "emoji": "🧬",
+              "tag": "SMOTE",
+              "text": "Creates new synthetic<br>minority examples<br>Changes the dataset"
+            },
+            "right": {
+              "emoji": "⚖️",
+              "tag": "Class Weights",
+              "text": "Penalizes missed<br>minority mistakes more<br>Changes the training, not the data"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "type": "practice",
+      "exercises": [
+        {
+          "id": "p1",
+          "type": "multiple_choice",
+          "xp": 2,
+          "prompt": "StreamBox's training set has 380,000 \"stayed\" customers and 20,000 \"churned\" customers. Roughly how many times more should a missed churner be penalized under class weights, to balance the two groups?",
+          "options": [
+            {
+              "id": "a",
+              "text": "About 19 times",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "About 2 times",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "Exactly the same, weights don't need to differ",
+              "correct": false
+            }
+          ],
+          "explain": "380,000 ÷ 20,000 = 19. Class weights roughly balance the influence of each group by penalizing the rare class about 19x more."
+        },
+        {
+          "id": "p2",
+          "type": "true_false",
+          "xp": 2,
+          "prompt": "True or false: After applying SMOTE to the training set, StreamBox's validation and test sets should also have synthetic churn rows mixed in.",
+          "options": [
+            {
+              "id": "t",
+              "text": "True",
+              "correct": false
+            },
+            {
+              "id": "f",
+              "text": "False",
+              "correct": true
+            }
+          ],
+          "explain": "False. SMOTE is applied only to the training set. Validation and test sets must stay real, untouched data, or you'd be evaluating the model on fake, easy examples."
+        },
+        {
+          "id": "p3",
+          "type": "fill_blank",
+          "xp": 2,
+          "prompt": "Complete the sentence:",
+          "sentence": "SMOTE fixes imbalance by generating ___ minority-class examples, while class weights fix it by changing how mistakes are penalized.",
+          "blank": "synthetic",
+          "words": [
+            "synthetic",
+            "duplicate",
+            "random"
+          ],
+          "explain": "SMOTE specifically creates new synthetic points along the lines between real minority examples — not exact duplicates and not pure random noise."
+        },
+        {
+          "id": "p4",
+          "type": "spot_the_ai",
+          "xp": 2,
+          "prompt": "Which statement best describes what class weights actually do during training?",
+          "options": [
+            {
+              "id": "a",
+              "text": "Tell the cost function that missing a churner should count as a much bigger error than missing a loyal customer",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "Delete majority-class rows until the two classes match in size",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "Copy each minority row 19 times so it appears more often",
+              "correct": false
+            }
+          ],
+          "explain": "Class weights operate purely inside the cost function's penalty — they never touch the dataset itself, unlike undersampling or duplication."
+        }
+      ]
+    },
+    {
+      "type": "boss",
+      "exercises": [
+        {
+          "id": "b1",
+          "type": "multiple_choice",
+          "xp": 5,
+          "prompt": "StreamBox retrains its Random Forest using SMOTE-balanced training data and class weights together. On the untouched validation set, recall jumps from 18% to 74% while precision dips from 61% to 56% — and F1-Score climbs from 0.28 to about 0.63. Was this a good trade?",
+          "options": [
+            {
+              "id": "a",
+              "text": "Yes — the model went from missing 82% of churners to catching about three-quarters of them, a huge, worthwhile gain even though it now flags a few more false alarms",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "No — any drop in precision automatically means the model got worse overall",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "No — StreamBox should have retrained the model using the validation data instead",
+              "correct": false
+            },
+            {
+              "id": "d",
+              "text": "This trade is meaningless because F1-Score can't combine precision and recall",
+              "correct": false
+            }
+          ],
+          "explain": "Exactly! Recall more than quadrupled while precision only dipped a little — F1-Score more than doubled. This is real progress, but there's still room to squeeze more out of the model's own settings. Next up: tuning it with Grid Search!"
+        }
+      ]
+    }
+  ]
+}

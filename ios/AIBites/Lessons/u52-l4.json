@@ -1,0 +1,222 @@
+{
+  "id": "u52-l4",
+  "unit": 52,
+  "day": 264,
+  "tier": "MLOps",
+  "tierIcon": "💾",
+  "title": "Model Portability & OS Traps",
+  "icon": "🌐",
+  "concept": "Model portability means a serialized model works identically no matter what computer or operating system loads it — a guarantee that requires careful attention to matching software versions.",
+  "xp": 15,
+  "hearts": 3,
+  "estMinutes": 7,
+  "segments": [
+    {
+      "type": "warmup",
+      "exercises": [
+        {
+          "id": "w1",
+          "type": "multiple_choice",
+          "xp": 1,
+          "prompt": "Recap: What does a server need to make a new prediction after loading a saved model?",
+          "options": [
+            {
+              "id": "a",
+              "text": "Just the new input data — not the original training dataset.",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "The entire original training dataset, every time.",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "A brand-new retraining session for each request.",
+              "correct": false
+            }
+          ],
+          "explain": "Correct! Once loaded, a model only needs new inputs, not the original training data."
+        }
+      ]
+    },
+    {
+      "type": "teach",
+      "cards": [
+        {
+          "kind": "hook",
+          "icon": "🔌",
+          "title": "The universal travel adapter",
+          "body": "If you bring a hair dryer built for US outlets to Europe, it might not fit the socket, or worse, it could short-circuit on the different voltage. A model trained on one developer's laptop faces a similar risk when deployed to a completely different cloud server."
+        },
+        {
+          "kind": "definition",
+          "icon": "🌐",
+          "title": "Portability: Working everywhere",
+          "body": "<strong>Portability</strong> means a serialized model loads and predicts identically regardless of which machine, operating system, or software environment it's loaded on. Achieving this requires matching library versions between where the model was saved and where it's loaded."
+        },
+        {
+          "kind": "analogy",
+          "icon": "📜",
+          "title": "A recipe written in a foreign language",
+          "body": "A saved model file is like a recipe. If the chef reading it (the loading server) uses a slightly different 'cookbook edition' (library version) than the chef who wrote it (the training environment), some instructions might be misread or fail entirely, even though the recipe itself never changed."
+        },
+        {
+          "kind": "example",
+          "icon": "⚠️",
+          "title": "The classic version mismatch",
+          "body": "A model is trained and saved using library version 1.2 on a developer's Mac. Later, it's loaded on a cloud server running an older library version 1.0. The load either fails with an error, or worse, silently produces slightly different predictions because internal formats changed between versions."
+        },
+        {
+          "kind": "mythbust",
+          "icon": "⚠️",
+          "title": "A 'saved' model isn't automatically future-proof",
+          "body": "It's tempting to assume a serialized file will always work perfectly forever, on any machine. In reality, software libraries update constantly, and a model saved with one version can become incompatible or behave unpredictably when loaded years later with a newer version."
+        },
+        {
+          "kind": "visual",
+          "icon": "🌐",
+          "title": "Portable vs. Fragile Deployment",
+          "body": "Matching environments prevents silent failures:",
+          "compare": {
+            "left": {
+              "emoji": "✅",
+              "tag": "Portable Setup",
+              "text": "Same library versions used to save and load.<br>Consistent, predictable behavior."
+            },
+            "right": {
+              "emoji": "⚠️",
+              "tag": "Fragile Setup",
+              "text": "Mismatched library versions.<br>Load errors or silent prediction drift."
+            }
+          }
+        }
+      ]
+    },
+    {
+      "type": "practice",
+      "exercises": [
+        {
+          "id": "p1",
+          "type": "multiple_choice",
+          "xp": 2,
+          "prompt": "What does it mean for a serialized model to be 'portable'?",
+          "options": [
+            {
+              "id": "a",
+              "text": "It loads and predicts identically regardless of which machine or software environment it's loaded on.",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "It can only ever be loaded on the exact same computer it was trained on.",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "It automatically retrains itself on any new machine.",
+              "correct": false
+            },
+            {
+              "id": "d",
+              "text": "It compresses the model file to the smallest possible size.",
+              "correct": false
+            }
+          ],
+          "explain": "Correct! Portability means consistent behavior across different machines and environments."
+        },
+        {
+          "id": "p2",
+          "type": "true_false",
+          "xp": 2,
+          "prompt": "True or false: A model saved with one library version is guaranteed to load and behave identically when opened years later using a much newer library version.",
+          "options": [
+            {
+              "id": "t",
+              "text": "True",
+              "correct": false
+            },
+            {
+              "id": "f",
+              "text": "False",
+              "correct": true
+            }
+          ],
+          "explain": "False! Library version mismatches over time can cause load failures or silently different predictions."
+        },
+        {
+          "id": "p3",
+          "type": "fill_blank",
+          "xp": 2,
+          "prompt": "Complete the sentence:",
+          "sentence": "A mismatch in ___ versions between saving and loading a model can cause errors or silent prediction drift.",
+          "blank": "library",
+          "words": [
+            "library",
+            "color",
+            "font"
+          ],
+          "explain": "Matching software library versions is essential for reliable model portability."
+        },
+        {
+          "id": "p4",
+          "type": "spot_the_ai",
+          "xp": 2,
+          "prompt": "Which practice best protects against a model portability trap?",
+          "options": [
+            {
+              "id": "a",
+              "text": "A team documents and pins the exact library version used to train a model, and installs that same version on the production server before loading it.",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "A team trains a model using whatever random library version happens to be installed that day, with no record kept.",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "A team assumes all library versions are always perfectly interchangeable.",
+              "correct": false
+            }
+          ],
+          "explain": "Correct! Pinning and matching exact library versions is the standard defense against portability traps."
+        }
+      ]
+    },
+    {
+      "type": "boss",
+      "exercises": [
+        {
+          "id": "b1",
+          "type": "multiple_choice",
+          "xp": 5,
+          "prompt": "A team trains a model on a data scientist's laptop using library version 2.1, then deploys it to a production server that has an older library version 1.8 pre-installed, without updating it. The server successfully loads the file, but predictions seem subtly different from testing. What likely happened, and what's the fix?",
+          "options": [
+            {
+              "id": "a",
+              "text": "A version mismatch caused subtly different internal behavior; the fix is to install the matching library version (2.1) on the production server.",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "The model file is permanently corrupted and must be retrained from absolute scratch.",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "This is expected normal behavior and requires no fix.",
+              "correct": false
+            },
+            {
+              "id": "d",
+              "text": "The server's hardware needs to be physically replaced.",
+              "correct": false
+            }
+          ],
+          "explain": "Exactly! Version mismatches between training and serving environments are a classic silent bug — the reliable fix is matching library versions exactly. Next, let's look at how teams track and manage multiple model versions over time!"
+        }
+      ]
+    }
+  ]
+}
