@@ -25,12 +25,10 @@ export const Path = () => {
 
   const units = curriculum?.units || [];
 
-  const orderedLessons = units.flatMap((u) => u.lessons);
   const getLessonState = (lesson) => {
     if (isLessonCompleted(lesson.id)) return 'done';
-    const idx = orderedLessons.findIndex((l) => l.id === lesson.id);
-    const prevDone = idx <= 0 || isLessonCompleted(orderedLessons[idx - 1].id);
-    return prevDone ? 'current' : 'locked';
+    // ponytail: all lessons unlocked for now; restore sequential gating by reverting this to check prevDone
+    return 'current';
   };
 
   return (

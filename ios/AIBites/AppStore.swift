@@ -70,6 +70,18 @@ final class AppStore: ObservableObject {
         persistProgress()
     }
 
+    /// Apply an AuthResponse that's already been verified server-side (Google,
+    /// future Apple) — no client-supplied identity to trust, just apply it.
+    func applyAuth(_ res: AuthResponse) {
+        token = res.token
+        user = res.user
+        progress = res.progress
+        persistAuth()
+        onboarded = true
+        d.set(true, forKey: "aiquest_onboarded")
+        persistProgress()
+    }
+
     func logout() {
         token = nil; user = nil; onboarded = false; progress = .empty
         ["aiquest_token", "aiquest_user", "aiquest_progress", "aiquest_onboarded"]
@@ -89,10 +101,8 @@ final class AppStore: ObservableObject {
     }
 
     func isLocked(_ id: String) -> Bool {
-        let order = orderedLessons
-        guard let idx = order.firstIndex(of: id) else { return false }
-        if idx == 0 { return false }
-        return !isCompleted(order[idx - 1])
+        // ponytail: all lessons unlocked for now; restore sequential gating by reverting this to the prevDone check
+        return false
     }
 
     func point(for id: String) -> LessonPoint {
