@@ -2,11 +2,11 @@
   "id": "u69-l3",
   "unit": 69,
   "day": 348,
-  "tier": "The Forward Pass Capstone",
-  "tierIcon": "🏆",
-  "title": "Common Forward-Pass Bugs & Debugging",
-  "icon": "🔍",
-  "concept": "Debugging a forward pass involves checking for shape mismatches in matrix operations and catching NaN (Not a Number) errors caused by mathematical illegal steps like division by zero.",
+  "tier": "The Training Loop",
+  "tierIcon": "🔄",
+  "title": "Shuffling Data Between Epochs",
+  "icon": "🔀",
+  "concept": "Shuffling data before each epoch ensures the model does not learn patterns based on the arbitrary order of rows, preventing biased weight updates.",
   "xp": 15,
   "hearts": 3,
   "estMinutes": 7,
@@ -18,25 +18,25 @@
           "id": "w1",
           "type": "multiple_choice",
           "xp": 1,
-          "prompt": "Recap: In a computation graph, what do the nodes represent?",
+          "prompt": "Recap: Why does a small batch size help escape local minima?",
           "options": [
             {
               "id": "a",
-              "text": "Mathematical operations or variables.",
+              "text": "The noisy, bumpy gradients can bounce the model out of shallow plateaus.",
               "correct": true
             },
             {
               "id": "b",
-              "text": "The epochs of the training loop.",
+              "text": "It uses less total training data.",
               "correct": false
             },
             {
               "id": "c",
-              "text": "The columns of the training dataset.",
+              "text": "It automatically prunes the network.",
               "correct": false
             }
           ],
-          "explain": "Correct! Nodes represent variables or the math operations run on them."
+          "explain": "Correct! Noisy gradients act like bumps that push the optimizer past shallow local traps."
         }
       ]
     },
@@ -45,49 +45,49 @@
       "cards": [
         {
           "kind": "hook",
-          "icon": "🔍",
-          "title": "When the screen displays 'NaN'",
-          "body": "You run your new neural network code and wait. Instead of predictions, the console prints: `Loss: NaN` (Not a Number). You scroll up and find a shape mismatch error. These two bugs are the most common forward-pass errors in deep learning. Let's learn how to spot and fix them!"
+          "icon": "🔀",
+          "title": "The stacked deck of cards",
+          "body": "If you try to learn how to play cards, and the deck is never shuffled, you'll start memorizing the sequence: 'a Red 3 is always followed by a Black Jack.' You aren't learning the rules of the game; you're just memorizing the order of the cards. To prevent this, we must shuffle our data before every epoch."
         },
         {
           "kind": "definition",
-          "icon": "🔍",
-          "title": "Shape Mismatches and NaNs",
-          "body": "- **Shape Mismatch** occurs when matrix sizes don't align for multiplication (e.g. trying to multiply a 3-column input by a 4-row weight grid). - **NaN Errors** occur when an illegal mathematical operation runs (e.g. taking the logarithm of 0 in cross-entropy), creating an undefined value that spreads like a virus through the network."
+          "icon": "🔀",
+          "title": "Data Shuffling",
+          "body": "<strong>Shuffling</strong> is the process of randomizing the order of training rows at the start of each epoch. This ensures that each batch contains a different, random mix of examples, preventing the model from learning patterns based on row sequences."
         },
         {
           "kind": "analogy",
-          "icon": "🧩",
-          "title": "Lego bricks that don't fit",
-          "body": "A shape mismatch is like trying to snap a 3-stud Lego brick onto a 4-stud slot — they simply don't fit, and the program crashes. A NaN error is like dropping a drop of black ink into a clean glass of milk: the moment it enters, it mixes and turns the entire glass black (every subsequent calculation becomes NaN)."
+          "icon": "🎒",
+          "title": "The vocabulary flashcards",
+          "body": "Think of studying flashcards. If you study them in the exact same order every day, your brain learns: 'card 4 is apple, card 5 is banana.' You start guessing the answer based on what card came before, rather than the word itself. Shuffling the deck forces you to evaluate each card independently."
         },
         {
           "kind": "example",
-          "icon": "🧮",
-          "title": "The shape alignment rule",
-          "body": "To multiply matrix A by matrix B, the **columns of A must equal the rows of B**. If you pass a batch of 32 images with 10 features (shape 32-by-10) to a layer whose weight matrix has 9 rows (shape 9-by-5), it crashes. You must resize the weight matrix to have exactly 10 rows (10-by-5) to align the shapes."
+          "icon": "📧",
+          "title": "The grouped email trap",
+          "body": "A dataset has 100 spams followed by 900 normal emails. Without shuffling, Batch 1 contains only spam, pushing weights heavily toward 'spam'. Batches 2-10 contain only normal emails, warping the weights back. Shuffling guarantees each batch has a healthy mix, leading to smooth, balanced updates."
         },
         {
           "kind": "mythbust",
           "icon": "⚠️",
-          "title": "Calculators don't warning-alert for NaNs early",
-          "body": "You might expect the computer to stop immediately when a NaN first appears. In reality, modern chips will run millions of calculations with NaN values without crashing, only displaying the error at the very end when printing the final loss. Checking layer outputs early (print debugging) is essential to catch the source."
+          "title": "Shuffling isn't for time series",
+          "body": "You might think shuffling is a universal rule for all ML. As we learned in Unit 48, for **time series data**, chronological order is the most important feature (the future depends on the past). Shuffling time series data breaks the sequence and destroys the model, so we only shuffle standard tabular or image datasets."
         },
         {
           "kind": "visual",
-          "icon": "⚖️",
-          "title": "Shape Alignment",
-          "body": "How matrix shapes must align to multiply:",
+          "icon": "🔀",
+          "title": "Unshuffled vs. Shuffled Batches",
+          "body": "Why order randomization matters:",
           "compare": {
             "left": {
-              "emoji": "✅",
-              "tag": "Aligned (Works)",
-              "text": "Matrix A: 32 rows × 10 cols.<br>Matrix B: 10 rows × 5 cols.<br>Cols of A (10) == Rows of B (10)."
+              "emoji": "⚠️",
+              "tag": "Unshuffled (Grouped)",
+              "text": "Batch 1: All Spams.<br>Batch 2: All Normal.<br>Causes model to over-correct weights back and forth."
             },
             "right": {
-              "emoji": "❌",
-              "tag": "Mismatched (Crashes)",
-              "text": "Matrix A: 32 rows × 10 cols.<br>Matrix B: 9 rows × 5 cols.<br>Cols of A (10) != Rows of B (9)."
+              "emoji": "🔀",
+              "tag": "Shuffled",
+              "text": "Every batch has a random mix.<br>Stabilizes weight updates.<br>Model learns true features, not row order."
             }
           }
         }
@@ -100,87 +100,87 @@
           "id": "p1",
           "type": "multiple_choice",
           "xp": 2,
-          "prompt": "What causes a 'shape mismatch' error during a forward pass?",
+          "prompt": "Why do we shuffle training data at the start of each epoch?",
           "options": [
             {
               "id": "a",
-              "text": "Trying to multiply matrices whose dimensions do not align (columns of the first does not equal rows of the second).",
+              "text": "To ensure each batch has a random mix, preventing the model from learning patterns based on the arbitrary order of rows.",
               "correct": true
             },
             {
               "id": "b",
-              "text": "Using the wrong learning rate in the optimizer.",
+              "text": "To automatically remove missing values from the dataset.",
               "correct": false
             },
             {
               "id": "c",
-              "text": "Applying a ReLU activation function to negative values.",
+              "text": "To speed up the GPU matrix multiplication calculations.",
               "correct": false
             },
             {
               "id": "d",
-              "text": "Failing to shuffle the training data.",
+              "text": "To change the model's loss function.",
               "correct": false
             }
           ],
-          "explain": "Correct! Shape mismatches occur when matrix dimensions do not align for multiplication."
+          "explain": "Correct! Shuffling breaks row order bias, forcing the model to learn genuine features."
         },
         {
           "id": "p2",
           "type": "true_false",
           "xp": 2,
-          "prompt": "True or false: Once a NaN (Not a Number) value is generated inside a layer, it will likely spread through all subsequent calculations, turning the final loss score into NaN.",
+          "prompt": "True or false: Shuffling data before training is highly recommended for time series forecasting models.",
           "options": [
             {
               "id": "t",
               "text": "True",
-              "correct": true
+              "correct": false
             },
             {
               "id": "f",
               "text": "False",
-              "correct": false
+              "correct": true
             }
           ],
-          "explain": "True! NaNs propagate through math operations, corrupting the entire forward pass output."
+          "explain": "False! Time series data relies on chronological order; shuffling breaks the temporal dependency and ruins the model."
         },
         {
           "id": "p3",
           "type": "fill_blank",
           "xp": 2,
           "prompt": "Complete the sentence:",
-          "sentence": "If your input matrix has 12 columns, the weight matrix of the next layer must have exactly ___ rows to avoid a shape mismatch.",
-          "blank": "12",
+          "sentence": "If your training data is sorted (e.g. all fraud cases at the top), failing to ___ will cause unbalanced batch updates.",
+          "blank": "shuffle",
           "words": [
-            "12",
-            "1",
-            "120"
+            "shuffle",
+            "prune",
+            "normalize"
           ],
-          "explain": "The rows of the weight matrix must match the columns of the input matrix (12)."
+          "explain": "Shuffling is essential to mix sorted data classes before dividing them into batches."
         },
         {
           "id": "p4",
           "type": "spot_the_ai",
           "xp": 2,
-          "prompt": "Which of these is a potential cause of a NaN error during loss calculation?",
+          "prompt": "A dataset contains 100 images (50 cats, 50 dogs). Which batch creation setup is best?",
           "options": [
             {
               "id": "a",
-              "text": "The model predicts exactly 0.0 for a true label of 1, causing the Cross-Entropy log(0) calculation (which is undefined).",
+              "text": "Shuffle the 100 images randomly, then divide them into 5 batches of 20.",
               "correct": true
             },
             {
               "id": "b",
-              "text": "The batch size is set to a power of 2.",
+              "text": "Keep all 50 cats first, producing 2.5 batches of only cats and 2.5 batches of only dogs.",
               "correct": false
             },
             {
               "id": "c",
-              "text": "The data was shuffled before the epoch started.",
+              "text": "Sort the images by file size before batching.",
               "correct": false
             }
           ],
-          "explain": "Correct! Taking the logarithm of 0 is mathematically undefined, yielding a NaN error in cross-entropy loss."
+          "explain": "Correct! Shuffling ensures every batch has a healthy mix of both categories, leading to stable updates."
         }
       ]
     },
@@ -191,30 +191,30 @@
           "id": "b1",
           "type": "multiple_choice",
           "xp": 5,
-          "prompt": "You are debugging a deep network. The console prints 'Loss: NaN'. You print the outputs of each layer and find: Layer 1 = normal numbers, Layer 2 = normal numbers, Layer 3 (Softmax output) = [0.0, 0.0, 0.0] due to a numerical underflow, Layer 4 (Loss) = NaN. Where is the bug, and how do you fix it?",
+          "prompt": "You are training a classification model. The dataset is sorted by class label. In Epoch 1, the model gets stuck oscillating wildly. You add a shuffling step before each epoch, and the training curve stabilizes immediately. What caused this fix?",
           "options": [
             {
               "id": "a",
-              "text": "The bug is at Layer 3: the Softmax outputs collapsed to all 0s, causing the Loss layer to compute log(0) = NaN. The fix is to add a tiny constant (e.g. 1e-15) inside the log calculation to prevent log(0).",
+              "text": "Shuffling mixed the classes, ensuring each batch gave a balanced gradient update, ending the violent weight swings caused by single-class batches.",
               "correct": true
             },
             {
               "id": "b",
-              "text": "The bug is in the input data: some images were missing.",
+              "text": "Shuffling deleted the outliers that were causing the oscillations.",
               "correct": false
             },
             {
               "id": "c",
-              "text": "The bug is in Layer 1: the weights were not scaled.",
+              "text": "Shuffling converted the activation functions to ReLU.",
               "correct": false
             },
             {
               "id": "d",
-              "text": "Delete the model file and run a grid search on batch size.",
+              "text": "Shuffling reduced the number of weights in the network.",
               "correct": false
             }
           ],
-          "explain": "Exactly! Layer 3 outputting all 0s caused the subsequent log(0) calculation in the loss layer, generating the NaN. Adding a tiny safety epsilon (constant) prevents log(0) and stabilizes training. Next, let's look at how we bridge this forward pass into the backward learning pass!"
+          "explain": "Exactly! Sorted batches cause the model to make extreme adjustments back and forth (e.g. all-spam updates vs. all-normal updates). Shuffling ensures each batch provides a balanced, stable correction signal. Next, let's learn how we track this progress over time using learning curves!"
         }
       ]
     }

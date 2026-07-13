@@ -2,11 +2,11 @@
   "id": "u68-l3",
   "unit": 68,
   "day": 343,
-  "tier": "The Training Loop",
-  "tierIcon": "🔄",
-  "title": "Shuffling Data Between Epochs",
-  "icon": "🔀",
-  "concept": "Shuffling data before each epoch ensures the model does not learn patterns based on the arbitrary order of rows, preventing biased weight updates.",
+  "tier": "Training Deep Networks",
+  "tierIcon": "📐",
+  "title": "KL Divergence: Comparing Two Probability Distributions",
+  "icon": "🌀",
+  "concept": "Kullback-Leibler (KL) Divergence is a loss metric that measures how much one probability distribution differs from a reference target distribution.",
   "xp": 15,
   "hearts": 3,
   "estMinutes": 7,
@@ -18,25 +18,25 @@
           "id": "w1",
           "type": "multiple_choice",
           "xp": 1,
-          "prompt": "Recap: Why does a small batch size help escape local minima?",
+          "prompt": "Recap: What is the benefit of Huber Loss over MSE?",
           "options": [
             {
               "id": "a",
-              "text": "The noisy, bumpy gradients can bounce the model out of shallow plateaus.",
+              "text": "It is less sensitive to extreme outliers because it transitions to a linear penalty for large errors.",
               "correct": true
             },
             {
               "id": "b",
-              "text": "It uses less total training data.",
+              "text": "It runs twice as fast on GPUs.",
               "correct": false
             },
             {
               "id": "c",
-              "text": "It automatically prunes the network.",
+              "text": "It deletes all negative numbers.",
               "correct": false
             }
           ],
-          "explain": "Correct! Noisy gradients act like bumps that push the optimizer past shallow local traps."
+          "explain": "Correct! Huber's linear tail protects against outlier distortion."
         }
       ]
     },
@@ -45,49 +45,49 @@
       "cards": [
         {
           "kind": "hook",
-          "icon": "🔀",
-          "title": "The stacked deck of cards",
-          "body": "If you try to learn how to play cards, and the deck is never shuffled, you'll start memorizing the sequence: 'a Red 3 is always followed by a Black Jack.' You aren't learning the rules of the game; you're just memorizing the order of the cards. To prevent this, we must shuffle our data before every epoch."
+          "icon": "🌀",
+          "title": "Matching the weather forecast",
+          "body": "Imagine a weather channel predicts: 60% Rain, 30% Cloudy, 10% Sunny. A rival channel predicts: 50% Rain, 40% Cloudy, 10% Sunny. How do you measure how different these two complete forecasts are? You aren't comparing single numbers; you are comparing two entire probability distributions. We measure this difference using KL Divergence."
         },
         {
           "kind": "definition",
-          "icon": "🔀",
-          "title": "Data Shuffling",
-          "body": "<strong>Shuffling</strong> is the process of randomizing the order of training rows at the start of each epoch. This ensures that each batch contains a different, random mix of examples, preventing the model from learning patterns based on row sequences."
+          "icon": "🌀",
+          "title": "KL Divergence: The distribution gap",
+          "body": "<strong>Kullback-Leibler Divergence</strong> (KL Divergence) is a measure of how one probability distribution (like a model's predicted categories) deviates from a second, reference distribution (like the true target categories). It calculates the 'relative entropy' between the two."
         },
         {
           "kind": "analogy",
-          "icon": "🎒",
-          "title": "The vocabulary flashcards",
-          "body": "Think of studying flashcards. If you study them in the exact same order every day, your brain learns: 'card 4 is apple, card 5 is banana.' You start guessing the answer based on what card came before, rather than the word itself. Shuffling the deck forces you to evaluate each card independently."
+          "icon": "⚖️",
+          "title": "Overlaying two transparent maps",
+          "body": "Imagine printing two scatter plots on transparent sheets and overlaying them. If the dots align perfectly, the difference is **0**. If the shapes drift apart, the mismatch grows. KL Divergence is the score of this mismatch: if the model's probability shape matches the target shape, KL is 0; as they drift, the score rises."
         },
         {
           "kind": "example",
-          "icon": "📧",
-          "title": "The grouped email trap",
-          "body": "A dataset has 100 spams followed by 900 normal emails. Without shuffling, Batch 1 contains only spam, pushing weights heavily toward 'spam'. Batches 2-10 contain only normal emails, warping the weights back. Shuffling guarantees each batch has a healthy mix, leading to smooth, balanced updates."
+          "icon": "🎨",
+          "title": "Generating images and compressing data",
+          "body": "In advanced models (like Variational Autoencoders or model distillation), we want the model's internal representations to match a standard normal distribution (a bell curve). We add a KL Divergence term to the loss function to penalize the model whenever its internal distribution departs from that clean bell shape."
         },
         {
           "kind": "mythbust",
           "icon": "⚠️",
-          "title": "Shuffling isn't for time series",
-          "body": "You might think shuffling is a universal rule for all ML. As we learned in Unit 48, for **time series data**, chronological order is the most important feature (the future depends on the past). Shuffling time series data breaks the sequence and destroys the model, so we only shuffle standard tabular or image datasets."
+          "title": "KL Divergence is not a true distance metric",
+          "body": "You might assume KL Divergence is like measuring the distance between two points, where the distance from A to B equals B to A. In math, KL is **asymmetric**: the divergence of distribution P from Q is *not* equal to Q from P. This is why it is called a 'divergence' rather than a 'distance'."
         },
         {
           "kind": "visual",
-          "icon": "🔀",
-          "title": "Unshuffled vs. Shuffled Batches",
-          "body": "Why order randomization matters:",
+          "icon": "⚖️",
+          "title": "KL Divergence Alignment",
+          "body": "How KL scores distribution matches:",
           "compare": {
             "left": {
-              "emoji": "⚠️",
-              "tag": "Unshuffled (Grouped)",
-              "text": "Batch 1: All Spams.<br>Batch 2: All Normal.<br>Causes model to over-correct weights back and forth."
+              "emoji": "🎯",
+              "tag": "Aligned (KL = 0)",
+              "text": "Predicted: [60% A, 30% B, 10% C]<br>Target: [60% A, 30% B, 10% C].<br>Perfect match."
             },
             "right": {
-              "emoji": "🔀",
-              "tag": "Shuffled",
-              "text": "Every batch has a random mix.<br>Stabilizes weight updates.<br>Model learns true features, not row order."
+              "emoji": "🌀",
+              "tag": "Diverged (KL > 0)",
+              "text": "Predicted: [10% A, 80% B, 10% C]<br>Target: [60% A, 30% B, 10% C].<br>High divergence score."
             }
           }
         }
@@ -100,36 +100,36 @@
           "id": "p1",
           "type": "multiple_choice",
           "xp": 2,
-          "prompt": "Why do we shuffle training data at the start of each epoch?",
+          "prompt": "What does KL Divergence measure?",
           "options": [
             {
               "id": "a",
-              "text": "To ensure each batch has a random mix, preventing the model from learning patterns based on the arbitrary order of rows.",
+              "text": "How much one probability distribution differs from a reference target distribution.",
               "correct": true
             },
             {
               "id": "b",
-              "text": "To automatically remove missing values from the dataset.",
+              "text": "The straight-line distance between two coordinates in a grid.",
               "correct": false
             },
             {
               "id": "c",
-              "text": "To speed up the GPU matrix multiplication calculations.",
+              "text": "The training speed of an optimizer in epochs.",
               "correct": false
             },
             {
               "id": "d",
-              "text": "To change the model's loss function.",
+              "text": "The number of hidden neurons in a layer.",
               "correct": false
             }
           ],
-          "explain": "Correct! Shuffling breaks row order bias, forcing the model to learn genuine features."
+          "explain": "Correct! KL Divergence is a metric for comparing two complete probability distributions."
         },
         {
           "id": "p2",
           "type": "true_false",
           "xp": 2,
-          "prompt": "True or false: Shuffling data before training is highly recommended for time series forecasting models.",
+          "prompt": "True or false: KL Divergence is symmetric, meaning the divergence of distribution A from B is always mathematically identical to the divergence of B from A.",
           "options": [
             {
               "id": "t",
@@ -142,45 +142,45 @@
               "correct": true
             }
           ],
-          "explain": "False! Time series data relies on chronological order; shuffling breaks the temporal dependency and ruins the model."
+          "explain": "False! KL is asymmetric, which is why it is classified as a divergence rather than a distance metric."
         },
         {
           "id": "p3",
           "type": "fill_blank",
           "xp": 2,
           "prompt": "Complete the sentence:",
-          "sentence": "If your training data is sorted (e.g. all fraud cases at the top), failing to ___ will cause unbalanced batch updates.",
-          "blank": "shuffle",
+          "sentence": "If the model's predicted probability distribution matches the target reference distribution perfectly, the KL Divergence score is ___.",
+          "blank": "zero",
           "words": [
-            "shuffle",
-            "prune",
-            "normalize"
+            "zero",
+            "one",
+            "infinity"
           ],
-          "explain": "Shuffling is essential to mix sorted data classes before dividing them into batches."
+          "explain": "A perfect match between distributions means zero divergence, yielding a score of 0."
         },
         {
           "id": "p4",
           "type": "spot_the_ai",
           "xp": 2,
-          "prompt": "A dataset contains 100 images (50 cats, 50 dogs). Which batch creation setup is best?",
+          "prompt": "In which advanced deep learning scenario is KL Divergence commonly used as a loss term?",
           "options": [
             {
               "id": "a",
-              "text": "Shuffle the 100 images randomly, then divide them into 5 batches of 20.",
+              "text": "Training a generative model to force its internal representation distribution to match a clean bell curve.",
               "correct": true
             },
             {
               "id": "b",
-              "text": "Keep all 50 cats first, producing 2.5 batches of only cats and 2.5 batches of only dogs.",
+              "text": "Fitting a simple linear regression line to 10 points.",
               "correct": false
             },
             {
               "id": "c",
-              "text": "Sort the images by file size before batching.",
+              "text": "Running a grid search for decision tree depth.",
               "correct": false
             }
           ],
-          "explain": "Correct! Shuffling ensures every batch has a healthy mix of both categories, leading to stable updates."
+          "explain": "Correct! Generative models use KL loss to align internal distributions with target bell curves. "
         }
       ]
     },
@@ -191,30 +191,30 @@
           "id": "b1",
           "type": "multiple_choice",
           "xp": 5,
-          "prompt": "You are training a classification model. The dataset is sorted by class label. In Epoch 1, the model gets stuck oscillating wildly. You add a shuffling step before each epoch, and the training curve stabilizes immediately. What caused this fix?",
+          "prompt": "You are training a model to mimic a larger, smarter 'teacher' model. The teacher outputs a Softmax distribution of `[0.7, 0.2, 0.1]` for an image. Your student model outputs `[0.4, 0.4, 0.2]`. Which loss metric should you use to measure how well the student is mimicking the teacher's distribution?",
           "options": [
             {
               "id": "a",
-              "text": "Shuffling mixed the classes, ensuring each batch gave a balanced gradient update, ending the violent weight swings caused by single-class batches.",
+              "text": "KL Divergence, because it specifically measures the difference between two probability distributions.",
               "correct": true
             },
             {
               "id": "b",
-              "text": "Shuffling deleted the outliers that were causing the oscillations.",
+              "text": "Plain Mean Squared Error (MSE).",
               "correct": false
             },
             {
               "id": "c",
-              "text": "Shuffling converted the activation functions to ReLU.",
+              "text": "Binary Cross-Entropy.",
               "correct": false
             },
             {
               "id": "d",
-              "text": "Shuffling reduced the number of weights in the network.",
+              "text": "Gini Impurity.",
               "correct": false
             }
           ],
-          "explain": "Exactly! Sorted batches cause the model to make extreme adjustments back and forth (e.g. all-spam updates vs. all-normal updates). Shuffling ensures each batch provides a balanced, stable correction signal. Next, let's learn how we track this progress over time using learning curves!"
+          "explain": "Exactly! KL Divergence is the standard tool for comparing complete probability distributions, making it ideal for knowledge distillation (mimicking a teacher model). Next, let's learn how we combine multiple different loss goals into one total score!"
         }
       ]
     }

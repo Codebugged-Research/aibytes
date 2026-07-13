@@ -2,11 +2,11 @@
   "id": "u68-l1",
   "unit": 68,
   "day": 341,
-  "tier": "The Training Loop",
-  "tierIcon": "🔄",
-  "title": "Epochs, Batches & Iterations",
-  "icon": "🔄",
-  "concept": "Epochs, batches, and iterations define the core vocabulary of the neural network training loop, tracking how data is partitioned and processed over time.",
+  "tier": "Training Deep Networks",
+  "tierIcon": "📐",
+  "title": "MSE & MAE Revisited for Deep Networks",
+  "icon": "📐",
+  "concept": "Revisiting Mean Squared Error (MSE) and Mean Absolute Error (MAE) as loss functions that drive gradient updates in deep regression networks, where squared errors lead to stronger backpropagated signals.",
   "xp": 15,
   "hearts": 3,
   "estMinutes": 7,
@@ -18,25 +18,25 @@
           "id": "w1",
           "type": "multiple_choice",
           "xp": 1,
-          "prompt": "Recap: Which loss function is best for a binary classification task?",
+          "prompt": "Recap: What is the main goal of label smoothing?",
           "options": [
             {
               "id": "a",
-              "text": "Binary Cross-Entropy.",
+              "text": "To prevent model overconfidence by training on slightly softened target labels, improving test generalization.",
               "correct": true
             },
             {
               "id": "b",
-              "text": "Categorical Cross-Entropy.",
+              "text": "To convert text classifications into Z-scores.",
               "correct": false
             },
             {
               "id": "c",
-              "text": "Mean Squared Error.",
+              "text": "To prune the weakest branches of a decision tree.",
               "correct": false
             }
           ],
-          "explain": "Correct! BCE is the standard loss for binary (yes/no) classification."
+          "explain": "Correct! Label smoothing prevents overfitting by softening hard 0/1 targets."
         }
       ]
     },
@@ -45,49 +45,49 @@
       "cards": [
         {
           "kind": "hook",
-          "icon": "🔄",
-          "title": "The semester syllabus",
-          "body": "If you are studying a textbook, you don't just read the whole thing in one second. You divide it into chapters (batches), study them one by one (iterations), and when you finish the entire book, you start over again to review (epochs). This structured schedule is how a training loop is organized."
+          "icon": "📐",
+          "title": "The weight of a mistake",
+          "body": "In classical ML, we used MSE and MAE to evaluate how well a line fit some points. In deep learning, these aren't just report cards — they are the engine. The way MSE squares mistakes vs. how MAE keeps them linear determines how hard the network's weights get pushed during backpropagation."
         },
         {
           "kind": "definition",
-          "icon": "🔄",
-          "title": "The Training Vocabulary",
-          "body": "Three core terms define the loop: 1. **Batch Size** is the number of rows processed in one step. 2. **Iteration** (or step) is one forward/backward pass over a single batch. 3. **Epoch** is one complete pass over the *entire* dataset."
+          "icon": "📐",
+          "title": "MSE & MAE as Gradient Engines",
+          "body": "For continuous predictions (regression), deep networks use **Mean Squared Error (MSE)** or **Mean Absolute Error (MAE)**. MSE squares the error ($Error^2$), meaning large mistakes generate exponentially larger gradient correction signals. MAE treats all errors proportionally ($|Error|$), generating a constant gradient signal regardless of mistake size."
         },
         {
           "kind": "analogy",
-          "icon": "📚",
-          "title": "The homework assignment",
-          "body": "Think of training like completing a workbook with 100 pages. If you do 10 pages at a time, your batch size is 10. Each 10-page block takes one study session (one iteration). After 10 study sessions, you've completed all 100 pages — that is one epoch. To master the material, you review the workbook 5 times (5 epochs)."
+          "icon": "⚖️",
+          "title": "The strict boss vs. the steady reviewer",
+          "body": "Think of MSE like a boss who ignores tiny mistakes, but screams if you make a huge error — squaring the penalty to force you to fix it immediately. MAE is like a steady reviewer: they give the same level of correction for a small typo as they do for a large one, keeping feedback constant."
         },
         {
           "kind": "example",
-          "icon": "📊",
-          "title": "Calculating the loop",
-          "body": "A dataset has 1,000 rows. We set a batch size of 100. - **1 Iteration** processes 100 rows. - It takes **10 Iterations** to cover all 1,000 rows. - Once 10 iterations finish, **1 Epoch** is complete. If we train for 50 epochs, the model runs 500 total iterations."
+          "icon": "📈",
+          "title": "Calculating the correction strength",
+          "body": "If the model's prediction is off by 4 units: - Under **MSE**, the squared error is $16$. The gradient correction signal is large, forcing the weights to adjust rapidly. - Under **MAE**, the absolute error is $4$. The gradient signal is constant, adjusting the weights at the same speed as if the error was only 1 unit."
         },
         {
           "kind": "mythbust",
           "icon": "⚠️",
-          "title": "An epoch isn't a single step",
-          "body": "Beginners often get confused between iterations and epochs, thinking one epoch means the model adjusted its weights once. In reality, weights are adjusted at the end of *every single iteration* (every batch). A single epoch containing 100 batches will adjust the model's weights 100 times."
+          "title": "MSE can be highly sensitive to outliers in DL",
+          "body": "You might assume MSE is always the best choice because it corrects large errors fast. In deep learning, if your training data has extreme outliers (noisy rows), MSE's squaring effect will force the network to warp its weights to fit those outliers, ruining normal predictions. MAE is much more robust here since it doesn't square errors."
         },
         {
           "kind": "visual",
           "icon": "⚖️",
-          "title": "Epoch vs. Iteration",
-          "body": "How data coverage is measured during training:",
+          "title": "MSE vs. MAE Gradient Behavior",
+          "body": "How mistake size affects weight correction signals:",
           "compare": {
             "left": {
-              "emoji": "🔄",
-              "tag": "Iteration (Step)",
-              "text": "One batch of data processed.<br>Weights updated once.<br>e.g. step 1 out of 10."
+              "emoji": "💥",
+              "tag": "MSE (Squared)",
+              "text": "Large errors = massive gradients.<br>Small errors = tiny gradients.<br>Highly sensitive to outliers."
             },
             "right": {
-              "emoji": "📚",
-              "tag": "Epoch",
-              "text": "Entire dataset processed once.<br>Contains many iterations.<br>e.g. completed review 1."
+              "emoji": "📏",
+              "tag": "MAE (Absolute)",
+              "text": "Constant gradient strength.<br>Updates weights at a steady pace.<br>Robust to noisy outliers."
             }
           }
         }
@@ -100,87 +100,87 @@
           "id": "p1",
           "type": "multiple_choice",
           "xp": 2,
-          "prompt": "What does a single 'epoch' represent in neural network training?",
+          "prompt": "How does MSE behave differently from MAE when a deep network makes a large prediction error?",
           "options": [
             {
               "id": "a",
-              "text": "One complete pass of the training algorithm over the entire dataset.",
+              "text": "MSE squares the error, generating an exponentially larger gradient update signal than MAE.",
               "correct": true
             },
             {
               "id": "b",
-              "text": "A single gradient update on one batch of data.",
+              "text": "MSE ignores large errors and only corrects small ones.",
               "correct": false
             },
             {
               "id": "c",
-              "text": "The time it takes to save the model file to disk.",
+              "text": "MSE automatically clips the loss to 0.",
               "correct": false
             },
             {
               "id": "d",
-              "text": "The number of inputs in the first layer.",
+              "text": "MSE converts the regression task into a classification task.",
               "correct": false
             }
           ],
-          "explain": "Correct! One epoch means the model has seen every training example exactly once."
+          "explain": "Correct! MSE squares the error, meaning large misses generate powerful gradient updates."
         },
         {
           "id": "p2",
           "type": "true_false",
           "xp": 2,
-          "prompt": "True or false: Model weights are only updated once per epoch, at the very end of the dataset.",
+          "prompt": "True or false: MAE is generally preferred over MSE when your deep learning training dataset contains highly noisy outliers.",
           "options": [
             {
               "id": "t",
               "text": "True",
-              "correct": false
+              "correct": true
             },
             {
               "id": "f",
               "text": "False",
-              "correct": true
+              "correct": false
             }
           ],
-          "explain": "False! Weights are updated at the end of every iteration (every batch), which happens multiple times per epoch."
+          "explain": "True! Since MAE doesn't square errors, it is robust to outliers and prevents them from warping the weights."
         },
         {
           "id": "p3",
           "type": "fill_blank",
           "xp": 2,
           "prompt": "Complete the sentence:",
-          "sentence": "If a dataset has 500 rows and the batch size is 50, it will take ___ iterations to complete one epoch.",
-          "blank": "10",
+          "sentence": "Because MSE ___ the error, a single massive outlier can heavily distort the network's learned weights.",
+          "blank": "squares",
           "words": [
-            "10",
-            "50",
-            "500"
+            "squares",
+            "standardizes",
+            "prunes"
           ],
-          "explain": "It takes 10 iterations to process all 500 rows when processing 50 rows per batch (500 / 50 = 10)."
+          "explain": "MSE squares the error term, making it highly sensitive to large outliers."
         },
         {
           "id": "p4",
           "type": "spot_the_ai",
           "xp": 2,
-          "prompt": "A model trains for 5 epochs on a dataset with 4 batches. How many total weight update iterations will occur?",
+          "prompt": "A model predicts a house price of $300k (true = $200k). What is the absolute error (MAE), and what is the squared error (MSE)?",
           "options": [
             {
               "id": "a",
-              "text": "20 iterations, because 5 epochs * 4 batches = 20.",
+              "text": "Absolute error = $100k; Squared error = 10,000,000,000.",
               "correct": true
             },
             {
               "id": "b",
-              "text": "5 iterations, because updates only happen once per epoch.",
+              "text": "Absolute error = $100; Squared error = $10,000.",
               "correct": false
             },
             {
               "id": "c",
-              "text": "4 iterations, because the batch size is 4.",
+              "text": "Both values are $100k.",
               "correct": false
             }
           ],
-          "explain": "Correct! Weights update every batch, so 4 updates per epoch * 5 epochs = 20 total iterations."
+          "explain": "Correct! Absolute error = |300,000 - 200,000| = 100,000. Squared error = 100,000^2 = 10,000,000,000."
         }
       ]
     },
@@ -191,30 +191,30 @@
           "id": "b1",
           "type": "multiple_choice",
           "xp": 5,
-          "prompt": "A dataset has 10,000 training examples. You set the batch size to 100 and configure training for 10 epochs. How many iterations will run, and how many times will the model's weights be updated?",
+          "prompt": "You are training a deep network to estimate taxi trip durations. The dataset has some extreme outliers due to GPS glitches (e.g. 5-minute trips logged as 10 hours). Under MSE loss, the model's accuracy on normal trips is poor. What should you do?",
           "options": [
             {
               "id": "a",
-              "text": "1,000 iterations total (100 per epoch * 10 epochs), resulting in 1,000 weight updates.",
+              "text": "Switch to MAE loss, because its linear penalty is robust to the glitch outliers and prevents them from dominating weight updates.",
               "correct": true
             },
             {
               "id": "b",
-              "text": "10 iterations total, resulting in 10 weight updates.",
+              "text": "Keep MSE loss but double the learning rate to bypass the outliers.",
               "correct": false
             },
             {
               "id": "c",
-              "text": "100 iterations total, resulting in 1,000 weight updates.",
+              "text": "Switch to Binary Cross-Entropy loss.",
               "correct": false
             },
             {
               "id": "d",
-              "text": "10,000 iterations total, resulting in 100 weight updates.",
+              "text": "Delete the model since outliers make deep learning impossible.",
               "correct": false
             }
           ],
-          "explain": "Exactly! One epoch requires 10,000 / 100 = 100 iterations. For 10 epochs, that is 100 * 10 = 1,000 iterations total. Since weights update every iteration, we get 1,000 updates. Next, let's look at the tradeoffs of choosing different batch sizes!"
+          "explain": "Exactly! Outliers heavily distort MSE training due to the squaring effect. Switching to MAE ensures a steady, linear penalty, keeping normal predictions stable. Next, let's look at a loss function that combines the best of both worlds: Huber Loss!"
         }
       ]
     }

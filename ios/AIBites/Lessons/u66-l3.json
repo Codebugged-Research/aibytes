@@ -3,10 +3,10 @@
   "unit": 66,
   "day": 333,
   "tier": "Training Deep Networks",
-  "tierIcon": "🎯",
-  "title": "Categorical Cross-Entropy: Measuring Multi-Class Wrongness",
-  "icon": "🎨",
-  "concept": "Categorical Cross-Entropy is the standard loss function for multi-class classification, comparing the model's Softmax probability distribution to the true one-hot label.",
+  "tierIcon": "➡️",
+  "title": "Layer by Layer: Tracing a Single Prediction",
+  "icon": "🔍",
+  "concept": "To trace a forward pass, we calculate the weighted sum of inputs at a layer, apply the activation function, and pass those outputs as inputs to the next layer.",
   "xp": 15,
   "hearts": 3,
   "estMinutes": 7,
@@ -18,25 +18,25 @@
           "id": "w1",
           "type": "multiple_choice",
           "xp": 1,
-          "prompt": "Recap: What is the math scaling used by BCE to penalize confident wrong predictions?",
+          "prompt": "Recap: What is a weight matrix?",
           "options": [
             {
               "id": "a",
-              "text": "Logarithmic scaling, which makes the penalty grow exponentially as the prediction misses.",
+              "text": "A grid of numbers representing all the weight connections in a layer.",
               "correct": true
             },
             {
               "id": "b",
-              "text": "Linear scaling, which increases the penalty by a flat rate.",
+              "text": "A list of the network's prediction errors.",
               "correct": false
             },
             {
               "id": "c",
-              "text": "No scaling; all mistakes carry the same flat penalty.",
+              "text": "A special activation function.",
               "correct": false
             }
           ],
-          "explain": "Correct! BCE uses log scaling to penalize confident wrong guesses exponentially."
+          "explain": "Correct! A weight matrix organizes all the layer's weights into a grid for parallel math."
         }
       ]
     },
@@ -45,49 +45,49 @@
       "cards": [
         {
           "kind": "hook",
-          "icon": "🎨",
-          "title": "Sorting a basket of fruit",
-          "body": "If you are sorting apples, bananas, and cherries, you can't just use a simple yes/no switch. You need a model that outputs three probabilities (e.g. 70% Apple, 20% Banana, 10% Cherry) and compares them to the true category. This is what Categorical Cross-Entropy does."
+          "icon": "🔍",
+          "title": "Inside the black box",
+          "body": "If you open a neural network mid-prediction, what actually happens? It looks like a storm of numbers. But if we freeze time and look at just one path, we can trace the exact arithmetic that turns an input into a prediction. Let's do a hand-trace of a tiny network!"
         },
         {
           "kind": "definition",
-          "icon": "🎨",
-          "title": "Categorical Cross-Entropy (CCE)",
-          "body": "<strong>Categorical Cross-Entropy</strong> is the standard loss function for multi-class classification (predicting one of three or more distinct classes). It measures the difference between two probability distributions: the model's output scores (from Softmax) and the true categories (stored as one-hot vectors)."
+          "icon": "🔍",
+          "title": "The Step-by-Step Trace",
+          "body": "A forward trace has 3 steps per layer: 1. **Receive inputs** (from the previous layer), 2. **Multiply and sum** (inputs * weights), 3. **Apply activation** (e.g. ReLU or Sigmoid). The final activation output becomes the input for the next layer."
         },
         {
           "kind": "analogy",
-          "icon": "📊",
-          "title": "The distribution overlap",
-          "body": "Think of the true label as a perfect distribution: `[1.0, 0.0, 0.0]` (100% Apple). The model outputs: `[0.8, 0.1, 0.1]` (80% Apple). CCE measures how well the model's distribution overlaps with the target. If the model predicted `[0.05, 0.9, 0.05]` (only 5% Apple), the overlap is terrible, yielding a high CCE loss."
+          "icon": "✉️",
+          "title": "The telephone game",
+          "body": "Tracing forward propagation is like the game of telephone. Person 1 whispers a message (input) to Person 2. Person 2 interprets it, adds their own spin (weights), translates it (activation), and whispers the new message forward to Person 3. The message is modified at each station but only ever moves forward."
         },
         {
           "kind": "example",
-          "icon": "🐶",
-          "title": "Evaluating a pet picture",
-          "body": "A picture is a Dog. True label (one-hot): `[Cat: 0, Dog: 1, Bird: 0]`. The model's Softmax output is: `[Cat: 0.1, Dog: 0.7, Bird: 0.2]`. CCE looks at the model's score for the correct class (Dog = 0.7) and calculates a moderate loss of **0.36**. If the Dog score was 0.01, CCE loss would spike to **4.6**."
+          "icon": "📊",
+          "title": "A numeric walkthrough",
+          "body": "Input is `[2.0]`. It connects to a hidden neuron with weight `[3.0]`. 1. Weighted sum: `2.0 * 3.0 = 6.0`. 2. Apply ReLU activation: since 6.0 is positive, the output is `6.0`. This output `6.0` is now passed forward as the input to the next layer."
         },
         {
           "kind": "mythbust",
           "icon": "⚠️",
-          "title": "CCE only cares about the correct class score",
-          "body": "You might assume CCE runs complex math on all output classes equally. In standard one-hot classification, because the incorrect classes have true labels of `0`, CCE math simplifies to looking *only* at the correct class's probability. It penalizes the model based on how far that one correct probability is from 1.0."
+          "title": "Bias is just a special input",
+          "body": "You might wonder how 'bias' fits into this trace. In every layer, we add a bias term (a constant offset) to the weighted sum before the activation function. Conceptually, bias is like a weight connected to an input that is always exactly `1`, shifting the activation threshold up or down."
         },
         {
           "kind": "visual",
           "icon": "⚖️",
-          "title": "One-Hot vs. Prediction Distribution",
-          "body": "Comparing distributions in CCE:",
+          "title": "One Neuron's Math",
+          "body": "The calculations inside a single neuron:",
           "compare": {
             "left": {
-              "emoji": "🏷️",
-              "tag": "True Label (One-Hot)",
-              "text": "Apple: 1.0<br>Banana: 0.0<br>Cherry: 0.0"
+              "emoji": "🧮",
+              "tag": "Weighted Sum",
+              "text": "(Input 1 * Weight 1) + (Input 2 * Weight 2) + Bias.<br>e.g. (2 * 0.5) + (4 * 0.5) + 1 = 4.0."
             },
             "right": {
-              "emoji": "📊",
-              "tag": "Model Prediction",
-              "text": "Apple: 0.8 (loss calculated here)<br>Banana: 0.1<br>Cherry: 0.1"
+              "emoji": "⚡",
+              "tag": "Activation Output",
+              "text": "Apply function to sum.<br>e.g. ReLU(4.0) = 4.0.<br>This value is sent to the next layer."
             }
           }
         }
@@ -100,36 +100,36 @@
           "id": "p1",
           "type": "multiple_choice",
           "xp": 2,
-          "prompt": "When is Categorical Cross-Entropy used as the loss function?",
+          "prompt": "An input value of 4 connects to a neuron with a weight of 0.5 and a bias of 1. What is the weighted sum before activation?",
           "options": [
             {
               "id": "a",
-              "text": "In multi-class classification tasks where you want to sort data into one of three or more categories.",
+              "text": "3.0, because (4 * 0.5) + 1 = 3.0.",
               "correct": true
             },
             {
               "id": "b",
-              "text": "In simple binary classification with only two categories.",
+              "text": "2.0, because 4 * 0.5 = 2.0.",
               "correct": false
             },
             {
               "id": "c",
-              "text": "In regression tasks predicting house prices.",
+              "text": "5.0, because 4 + 0.5 + 1 = 5.0.",
               "correct": false
             },
             {
               "id": "d",
-              "text": "In unsupervised clustering models.",
+              "text": "0.0, due to threshold clipping.",
               "correct": false
             }
           ],
-          "explain": "Correct! CCE is the standard loss function for multi-class classification tasks."
+          "explain": "Correct! Weighted sum = (input * weight) + bias = (4 * 0.5) + 1 = 3.0."
         },
         {
           "id": "p2",
           "type": "true_false",
           "xp": 2,
-          "prompt": "True or false: Under standard one-hot encoding, CCE loss evaluates the model based on how close its predicted probability for the *correct* class is to 1.0.",
+          "prompt": "True or false: The output of a hidden layer's activation function is passed forward as the direct input to the next layer.",
           "options": [
             {
               "id": "t",
@@ -142,45 +142,45 @@
               "correct": false
             }
           ],
-          "explain": "True! Since incorrect classes are multiplied by 0 in the math, CCE focuses on the correct class's score."
+          "explain": "True! Each layer's activation outputs serve as the inputs for the succeeding layer."
         },
         {
           "id": "p3",
           "type": "fill_blank",
           "xp": 2,
           "prompt": "Complete the sentence:",
-          "sentence": "To prepare a multi-class output layer for CCE loss, we apply the ___ activation function to turn raw scores into probabilities.",
-          "blank": "Softmax",
+          "sentence": "To calculate a neuron's activation, we apply the activation function to the weighted sum plus the ___ term.",
+          "blank": "bias",
           "words": [
-            "Softmax",
-            "Sigmoid",
-            "ReLU"
+            "bias",
+            "matrix",
+            "gradient"
           ],
-          "explain": "Softmax squashes a list of raw scores into a probability distribution that sums to 1.0, preparing it for CCE."
+          "explain": "The bias is added to the weighted sum of inputs before applying the activation function."
         },
         {
           "id": "p4",
           "type": "spot_the_ai",
           "xp": 2,
-          "prompt": "A picture is a Cat. True labels: [Cat: 1, Dog: 0]. Model predicts: [Cat: 0.02, Dog: 0.98]. What is the CCE loss score, and why?",
+          "prompt": "An input of -2 connects to a neuron with weight 3 and bias 1. If we use a ReLU activation function, what is the final activation output?",
           "options": [
             {
               "id": "a",
-              "text": "Extremely high, because the correct class (Cat) received a very low probability score of 0.02.",
+              "text": "0.0, because the weighted sum is -5, and ReLU(-5) = 0.0.",
               "correct": true
             },
             {
               "id": "b",
-              "text": "Near zero, because the Dog score was very high.",
+              "text": "-5.0, because ReLU preserves negative values.",
               "correct": false
             },
             {
               "id": "c",
-              "text": "Zero, because the model was confident in its guess.",
+              "text": "1.0, because only the bias is returned.",
               "correct": false
             }
           ],
-          "explain": "Correct! Since the correct class (Cat) only received a 2% score, the CCE loss is massive, triggering a strong correction signal."
+          "explain": "Correct! Weighted sum = (-2 * 3) + 1 = -5. Since -5 is negative, ReLU clips it to exactly 0.0."
         }
       ]
     },
@@ -191,30 +191,30 @@
           "id": "b1",
           "type": "multiple_choice",
           "xp": 5,
-          "prompt": "A model classifies handwritten digits (0-9). For an image of a '3', the Softmax output is: `[score for 3: 0.90, other scores sum to 0.10]`. What is the CCE loss, and what does it tell the optimizer?",
+          "prompt": "A hidden neuron receives an input of 2 with weight 1.5, and bias -1. It uses a Sigmoid activation function. What is the activation output of this neuron, and what does it represent?",
           "options": [
             {
               "id": "a",
-              "text": "The loss is very low (around 0.10) because the model assigned a high 90% probability to the correct digit; only small weight updates are needed.",
+              "text": "Sigmoid(2.0) = 0.88; it represents a squashed activation value between 0 and 1 passed to the next layer.",
               "correct": true
             },
             {
               "id": "b",
-              "text": "The loss is infinite because the other classes were not 0.",
+              "text": "Sigmoid(-1.0) = 0.27; it represents a negative loss value.",
               "correct": false
             },
             {
               "id": "c",
-              "text": "The loss is high because 0.90 is not a perfect 1.0.",
+              "text": "2.0, because Sigmoid has no effect on positive values.",
               "correct": false
             },
             {
               "id": "d",
-              "text": "The weights are reset because the prediction was correct.",
+              "text": "0.0, because the bias was negative.",
               "correct": false
             }
           ],
-          "explain": "Exactly! Since the correct class received a high score of 0.90, the CCE loss is low (approx. 0.10), indicating the model is mostly correct and only needs minor tuning. Next, let's explore why cross-entropy is preferred over MSE for classification tasks!"
+          "explain": "Exactly! Weighted sum = (2 * 1.5) - 1 = 2.0. Sigmoid(2.0) squashes this to approximately 0.88, which is passed forward. Next, let's look at how we run this trace for many items at once using batches!"
         }
       ]
     }

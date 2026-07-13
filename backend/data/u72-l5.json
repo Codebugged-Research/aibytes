@@ -1,0 +1,222 @@
+{
+  "id": "u72-l5",
+  "unit": 72,
+  "day": 365,
+  "tier": "Backpropagation",
+  "tierIcon": "⬅️",
+  "title": "Why Forward Activations Must Be Stored",
+  "icon": "💾",
+  "concept": "Backpropagation needs the values produced during the forward pass, so neural networks cache activations in RAM to know which neurons fired and how strongly when it is time to compute gradients.",
+  "xp": 15,
+  "hearts": 3,
+  "estMinutes": 7,
+  "segments": [
+    {
+      "type": "warmup",
+      "exercises": [
+        {
+          "id": "w1",
+          "type": "multiple_choice",
+          "xp": 1,
+          "prompt": "Recap: Besides weights, what other neuron parameter gets updated during backpropagation?",
+          "options": [
+            {
+              "id": "a",
+              "text": "Biases.",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "Folder names.",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "Screen brightness.",
+              "correct": false
+            }
+          ],
+          "explain": "Correct! Biases get gradients too because they shift the neuron's baseline."
+        }
+      ]
+    },
+    {
+      "type": "teach",
+      "cards": [
+        {
+          "kind": "hook",
+          "icon": "📝",
+          "title": "You cannot grade a test you forgot to save",
+          "body": "Imagine a teacher trying to explain which questions you missed, but the answer sheet was thrown away right after you finished. Without the saved answers, the teacher cannot point to what went wrong. Backprop has the same problem if forward activations are not stored."
+        },
+        {
+          "kind": "definition",
+          "icon": "💾",
+          "title": "Backprop needs saved activations",
+          "body": "During the forward pass, the network stores important intermediate values called <strong>activations</strong> in memory (RAM). During the backward pass, it uses those saved values to calculate gradients correctly. Without them, the network would not know which neurons fired or how strongly."
+        },
+        {
+          "kind": "analogy",
+          "icon": "🎥",
+          "title": "Saving checkpoints in a replay",
+          "body": "Think of a video game replay. If you saved checkpoints at each level, you can jump back and inspect exactly what happened. If you saved nothing, you would have to replay everything from scratch — and you still might miss the exact moment a mistake happened."
+        },
+        {
+          "kind": "example",
+          "icon": "🚦",
+          "title": "Why ReLU needs memory",
+          "body": "Suppose a hidden neuron used ReLU. During the forward pass, it either output a positive value or got cut to 0. During backprop, the model must know which case happened, because an active ReLU passes gradient while an inactive one blocks it. That forward activation has to be remembered."
+        },
+        {
+          "kind": "mythbust",
+          "icon": "⚠️",
+          "title": "The backward pass cannot just guess",
+          "body": "It might sound like the model could simply 'figure it out later.' Not safely. Backprop needs the actual values from the forward pass. Throwing them away would force extra recomputation and can break the logic of which neurons were active."
+        },
+        {
+          "kind": "visual",
+          "icon": "📦",
+          "title": "Stored vs. forgotten activations",
+          "body": "Why caching forward values matters during training:",
+          "compare": {
+            "left": {
+              "emoji": "✅",
+              "tag": "Stored in RAM",
+              "text": "Backward pass can inspect earlier neuron outputs.<br>Knows which gates were open.<br>Can compute gradients correctly."
+            },
+            "right": {
+              "emoji": "❌",
+              "tag": "Thrown Away",
+              "text": "Backward pass loses key clues.<br>Must recompute or guess earlier states.<br>Training becomes harder or wasteful."
+            }
+          }
+        }
+      ]
+    },
+    {
+      "type": "practice",
+      "exercises": [
+        {
+          "id": "p1",
+          "type": "multiple_choice",
+          "xp": 2,
+          "prompt": "Why does a neural network store forward activations during training?",
+          "options": [
+            {
+              "id": "a",
+              "text": "Because the backward pass needs those saved values to compute gradients correctly.",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "Because activations are the final labels of the dataset.",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "Because storing them makes the model skip the loss function.",
+              "correct": false
+            },
+            {
+              "id": "d",
+              "text": "Because activations must be uploaded to the internet after each batch.",
+              "correct": false
+            }
+          ],
+          "explain": "Correct. Backprop needs the earlier forward values as evidence for its gradient calculations."
+        },
+        {
+          "id": "p2",
+          "type": "true_false",
+          "xp": 2,
+          "prompt": "True or false: If a ReLU neuron was inactive during the forward pass, the backward pass needs to know that fact to decide whether gradient should be blocked.",
+          "options": [
+            {
+              "id": "t",
+              "text": "True",
+              "correct": true
+            },
+            {
+              "id": "f",
+              "text": "False",
+              "correct": false
+            }
+          ],
+          "explain": "True! The network must remember whether the ReLU was active or inactive."
+        },
+        {
+          "id": "p3",
+          "type": "fill_blank",
+          "xp": 2,
+          "prompt": "Complete the sentence:",
+          "sentence": "During training, forward activations are usually cached in ___ for the backward pass.",
+          "blank": "RAM",
+          "words": [
+            "RAM",
+            "paper",
+            "weather"
+          ],
+          "explain": "RAM is the right idea: the model keeps these intermediate values in memory so backprop can use them right away."
+        },
+        {
+          "id": "p4",
+          "type": "spot_the_ai",
+          "xp": 2,
+          "prompt": "Which situation shows why saved activations matter?",
+          "options": [
+            {
+              "id": "a",
+              "text": "During backprop, the model checks whether a hidden ReLU neuron output 0 earlier so it knows whether to block or pass the gradient.",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "A student renames the model file before class starts.",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "A phone downloads a new wallpaper during training.",
+              "correct": false
+            }
+          ],
+          "explain": "Exactly. Backprop needs the saved forward output to know what that neuron did earlier."
+        }
+      ]
+    },
+    {
+      "type": "boss",
+      "exercises": [
+        {
+          "id": "b1",
+          "type": "multiple_choice",
+          "xp": 5,
+          "prompt": "A student says, 'Why not delete every hidden activation after the forward pass and just do backprop later?' What is the best response?",
+          "options": [
+            {
+              "id": "a",
+              "text": "Because backprop needs those earlier activation values to know which neurons fired and how strongly, so deleting them removes clues needed for correct gradients.",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "Because activations are only stored for decoration in the training graph.",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "Because deleting activations automatically changes the labels in the dataset.",
+              "correct": false
+            },
+            {
+              "id": "d",
+              "text": "Because the loss function can only run if activations are printed on the screen.",
+              "correct": false
+            }
+          ],
+          "explain": "Exactly. The backward pass depends on the forward pass leaving behind usable clues in memory. You now understand how gradients enter the output layer, pass through activation gates, flow across hidden layers, reach biases, and rely on stored activations to make learning possible."
+        }
+      ]
+    }
+  ]
+}

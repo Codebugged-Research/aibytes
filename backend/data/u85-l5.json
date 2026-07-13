@@ -1,0 +1,222 @@
+{
+  "id": "u85-l5",
+  "unit": 85,
+  "day": 430,
+  "tier": "Practical Deep Learning",
+  "tierIcon": "🪶",
+  "title": "Choosing a Compression Strategy",
+  "icon": "🧭",
+  "concept": "Choosing a compression strategy starts with the deployment bottleneck: quantization is often a quick first size-and-speed win, pruning removes less useful parts, and distillation helps when a strong teacher can train a smaller student for a new target device.",
+  "xp": 15,
+  "hearts": 3,
+  "estMinutes": 7,
+  "segments": [
+    {
+      "type": "warmup",
+      "exercises": [
+        {
+          "id": "w1",
+          "type": "multiple_choice",
+          "xp": 1,
+          "prompt": "Recap: What does the accuracy-size-speed tradeoff remind engineers to do?",
+          "options": [
+            {
+              "id": "a",
+              "text": "Balance model quality against deployment limits instead of optimizing only one metric.",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "Ignore latency whenever a neural network is involved.",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "Assume every product needs the exact same model size.",
+              "correct": false
+            }
+          ],
+          "explain": "Exactly. Once you accept the tradeoff, you can choose the compression method that best matches your bottleneck."
+        }
+      ]
+    },
+    {
+      "type": "teach",
+      "cards": [
+        {
+          "kind": "hook",
+          "icon": "🧰",
+          "title": "Use the right wrench for the real problem",
+          "body": "If a bolt is loose, you do not begin with a chainsaw. Compression strategy works the same way: first identify what hurts most — memory, latency, power, or the need for a smaller architecture — then pick the tool that matches that problem."
+        },
+        {
+          "kind": "definition",
+          "icon": "🧭",
+          "title": "Choose from the bottleneck backward",
+          "body": "A simple <strong>decision matrix</strong> asks: <em>What is the main constraint?</em> If you want a relatively quick size-and-speed win on the same model, <strong>quantization</strong> is often a strong first try. If the model seems to have extra low-value parts, <strong>pruning</strong> may help. If you have a strong large model and can retrain a smaller one for deployment, <strong>distillation</strong> is a natural fit."
+        },
+        {
+          "kind": "analogy",
+          "icon": "🧳",
+          "title": "Three travel fixes for three different problems",
+          "body": "If your bag is just a little overweight, you remove a few items. If the containers themselves are bulky, you swap them for lighter ones. If the book is too long to carry, you bring a strong summary. Pruning, quantization, and distillation solve different versions of “too much model.”"
+        },
+        {
+          "kind": "example",
+          "icon": "📲",
+          "title": "Different scenarios, different first moves",
+          "body": "A team shipping a model to phones might try quantization first for an easy memory win. A team that sees lots of redundancy after training might explore pruning. A team with an excellent cloud model and time to retrain may choose distillation to create a compact student built for the device from the start."
+        },
+        {
+          "kind": "mythbust",
+          "icon": "⚠️",
+          "title": "Do not start by stacking every trick blindly",
+          "body": "A common myth is that the smartest plan is to apply every compression method immediately. Usually the better move is to start with the most relevant constraint, measure the result, and then add more compression only if the deployment target still is not met."
+        },
+        {
+          "kind": "visual",
+          "icon": "⚖️",
+          "title": "Quick squeeze vs. new compact student",
+          "body": "Some strategies mainly edit the existing model. Others create a new smaller one.",
+          "compare": {
+            "left": {
+              "emoji": "🔧",
+              "tag": "Quantization / pruning first",
+              "text": "Good when the current model already works.<br>Try to shrink or speed up the same model.<br>Often a practical first pass."
+            },
+            "right": {
+              "emoji": "🎓",
+              "tag": "Distillation first",
+              "text": "Good when a strong teacher already exists.<br>Train a smaller student for the target device.<br>Useful when you want a new compact model family."
+            }
+          }
+        }
+      ]
+    },
+    {
+      "type": "practice",
+      "exercises": [
+        {
+          "id": "p1",
+          "type": "multiple_choice",
+          "xp": 2,
+          "prompt": "If a trained model already works well and you want a relatively simple first attempt to cut memory use, which strategy is often a sensible starting point?",
+          "options": [
+            {
+              "id": "a",
+              "text": "Quantization.",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "Adding many more layers.",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "Deleting the validation set.",
+              "correct": false
+            },
+            {
+              "id": "d",
+              "text": "Ignoring deployment limits until launch day.",
+              "correct": false
+            }
+          ],
+          "explain": "Right. Quantization is often attractive because it can shrink the same model without redesigning the whole pipeline."
+        },
+        {
+          "id": "p2",
+          "type": "true_false",
+          "xp": 2,
+          "prompt": "True or false: If you have a strong large model and can afford retraining, distillation can be a good way to build a smaller deployment model.",
+          "options": [
+            {
+              "id": "t",
+              "text": "True",
+              "correct": true
+            },
+            {
+              "id": "f",
+              "text": "False",
+              "correct": false
+            }
+          ],
+          "explain": "True. That is one of the classic situations where distillation shines."
+        },
+        {
+          "id": "p3",
+          "type": "fill_blank",
+          "xp": 2,
+          "prompt": "Complete the sentence:",
+          "sentence": "If a model contains many low-value weights, ___ aims to remove some of them.",
+          "blank": "pruning",
+          "words": [
+            "pruning",
+            "labeling",
+            "batching"
+          ],
+          "explain": "Pruning is correct. It trims away parts believed to matter less."
+        },
+        {
+          "id": "p4",
+          "type": "spot_the_ai",
+          "xp": 2,
+          "prompt": "Which team sounds like the best match for distillation?",
+          "options": [
+            {
+              "id": "a",
+              "text": "They have a very strong server teacher model and want to retrain a smaller version for phones.",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "They refuse to retrain anything and only want to pretend constraints do not exist.",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "They need a smaller model, so they make the current model larger first.",
+              "correct": false
+            }
+          ],
+          "explain": "Exactly. Distillation is a natural fit when a strong teacher can supervise a compact student."
+        }
+      ]
+    },
+    {
+      "type": "boss",
+      "exercises": [
+        {
+          "id": "b1",
+          "type": "multiple_choice",
+          "xp": 5,
+          "prompt": "A smart-speaker team has an excellent large cloud model. Now it needs a much smaller on-device model and is willing to retrain for the target hardware. What is the best first compression strategy?",
+          "options": [
+            {
+              "id": "a",
+              "text": "Start with distillation so a smaller student learns from the strong teacher.",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "Ignore the teacher and assume a random tiny model will match it automatically.",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "Only add more parameters, because compression always starts by making models bigger.",
+              "correct": false
+            },
+            {
+              "id": "d",
+              "text": "Treat latency, memory, and device limits as unrelated to model choice.",
+              "correct": false
+            }
+          ],
+          "explain": "Exactly. Because a strong teacher already exists and retraining is allowed, distillation is the clearest first move."
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,222 @@
+{
+  "id": "u76-l4",
+  "unit": 76,
+  "day": 384,
+  "tier": "Regularization",
+  "tierIcon": "🌧️",
+  "title": "Scaling Outputs at Inference",
+  "icon": "⚖️",
+  "concept": "Because dropout trains with only part of a layer active at once, scaling helps the full network produce a similar average signal when making real predictions.",
+  "xp": 15,
+  "hearts": 3,
+  "estMinutes": 7,
+  "segments": [
+    {
+      "type": "warmup",
+      "exercises": [
+        {
+          "id": "w1",
+          "type": "multiple_choice",
+          "xp": 1,
+          "prompt": "Recap: Why do we turn dropout off at inference time?",
+          "options": [
+            {
+              "id": "a",
+              "text": "So predictions use the full network consistently instead of adding random missing neurons.",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "So the model forgets everything it learned during training.",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "So the labels can be re-generated on the fly.",
+              "correct": false
+            }
+          ],
+          "explain": "Right. Inference should be steady and repeatable, so dropout is turned off."
+        }
+      ]
+    },
+    {
+      "type": "teach",
+      "cards": [
+        {
+          "kind": "hook",
+          "icon": "🔊",
+          "title": "Rehearsing with half the choir, performing with the full choir",
+          "body": "Imagine a choir that often rehearses with some singers absent. On concert night, everyone shows up. If each singer used the same volume as during rehearsal, the whole performance might suddenly sound too loud. A neural network faces a similar issue when dropout is off and the full layer comes back online."
+        },
+        {
+          "kind": "definition",
+          "icon": "⚖️",
+          "title": "Why scaling is needed",
+          "body": "With dropout, a layer practiced during training while some neurons were missing. At inference, all neurons are active again. <strong>Scaling</strong> keeps the full network's average signal close to what the next layer learned to expect, so prediction-time activations do not become unexpectedly strong."
+        },
+        {
+          "kind": "analogy",
+          "icon": "🥣",
+          "title": "A recipe tested with fewer cooks",
+          "body": "If a soup recipe was rehearsed with only some cooks adding spices, then suddenly every cook pours in a full scoop on serving day, the flavor can overshoot. Scaling is like adjusting the final scoops so the taste matches the level the recipe was trained around."
+        },
+        {
+          "kind": "example",
+          "icon": "📶",
+          "title": "Keeping the signal at the expected strength",
+          "body": "Suppose a hidden layer learned while part of its neurons were often muted. If inference suddenly lets every neuron contribute at full strength, the next layer may receive a bigger combined signal than it practiced with. Scaling brings that combined signal back toward the usual average level."
+        },
+        {
+          "kind": "mythbust",
+          "icon": "⚠️",
+          "title": "Scaling is not changing the model's opinion",
+          "body": "Scaling does not invent new features or erase learned ones. It simply keeps the magnitude of the signal in the same ballpark the model saw during dropout training. Many modern libraries handle this automatically, often by scaling during training instead of at inference."
+        },
+        {
+          "kind": "visual",
+          "icon": "📏",
+          "title": "Unscaled full signal vs. matched signal",
+          "body": "The goal is not to weaken the model. It is to keep the average signal level familiar.",
+          "compare": {
+            "left": {
+              "emoji": "📈",
+              "tag": "No matching",
+              "text": "All neurons return at full strength.<br>Combined signal can jump too high.<br>Later layers see a surprise."
+            },
+            "right": {
+              "emoji": "🎚️",
+              "tag": "Scaled signal",
+              "text": "Full network is active.<br>Average signal stays closer to training-time expectations.<br>Predictions remain more stable."
+            }
+          }
+        }
+      ]
+    },
+    {
+      "type": "practice",
+      "exercises": [
+        {
+          "id": "p1",
+          "type": "multiple_choice",
+          "xp": 2,
+          "prompt": "Why might a network need scaling when dropout is turned off for inference?",
+          "options": [
+            {
+              "id": "a",
+              "text": "Because the full layer may send a stronger combined signal than the next layer saw during dropout training.",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "Because scaling changes the labels into probabilities.",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "Because inference always removes the loss function entirely.",
+              "correct": false
+            },
+            {
+              "id": "d",
+              "text": "Because all neurons must be deleted after training.",
+              "correct": false
+            }
+          ],
+          "explain": "Correct. Scaling is about matching the expected average signal, not about changing the task."
+        },
+        {
+          "id": "p2",
+          "type": "true_false",
+          "xp": 2,
+          "prompt": "True or false: The purpose of scaling is to keep prediction-time signals closer to the average strength the network learned with during dropout training.",
+          "options": [
+            {
+              "id": "t",
+              "text": "True",
+              "correct": true
+            },
+            {
+              "id": "f",
+              "text": "False",
+              "correct": false
+            }
+          ],
+          "explain": "True. The model should not be surprised by a much larger combined signal at inference time."
+        },
+        {
+          "id": "p3",
+          "type": "fill_blank",
+          "xp": 2,
+          "prompt": "Complete the sentence:",
+          "sentence": "Scaling helps match the expected average ___ seen by the next layer.",
+          "blank": "signal",
+          "words": [
+            "signal",
+            "folder",
+            "keyboard"
+          ],
+          "explain": "Yes. The whole point is to keep the prediction-time signal near the familiar training-time range."
+        },
+        {
+          "id": "p4",
+          "type": "spot_the_ai",
+          "xp": 2,
+          "prompt": "Which explanation best fits scaling with dropout?",
+          "options": [
+            {
+              "id": "a",
+              "text": "Since more neurons are active at inference than during dropout training, scaling keeps the combined output from becoming unexpectedly large on average.",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "Scaling exists so every neuron can choose a new label during prediction.",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "Scaling permanently disables the output layer after training.",
+              "correct": false
+            }
+          ],
+          "explain": "Exactly. Scaling is about expected signal size, not about changing model structure or labels."
+        }
+      ]
+    },
+    {
+      "type": "boss",
+      "exercises": [
+        {
+          "id": "b1",
+          "type": "multiple_choice",
+          "xp": 5,
+          "prompt": "A team trains a recommendation network with dropout, then turns dropout off for prediction. Suddenly the next layer receives noticeably stronger activations than it saw during training. What is the best interpretation?",
+          "options": [
+            {
+              "id": "a",
+              "text": "The full network is now sending a larger combined signal, so scaling is needed to keep the average activation level aligned with training-time expectations.",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "The network has forgotten how to make predictions and needs all labels rewritten.",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "This proves dropout can never be used with hidden layers.",
+              "correct": false
+            },
+            {
+              "id": "d",
+              "text": "The solution is to turn dropout on during inference so predictions stay random.",
+              "correct": false
+            }
+          ],
+          "explain": "Right. When all neurons come back online, the signal can become stronger than what later layers practiced with. Matching that expected average keeps inference more stable. Last up: the bigger intuition behind dropout as an ensemble trick."
+        }
+      ]
+    }
+  ]
+}

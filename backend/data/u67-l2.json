@@ -3,10 +3,10 @@
   "unit": 67,
   "day": 337,
   "tier": "Training Deep Networks",
-  "tierIcon": "📐",
-  "title": "Huber Loss in Deep Learning Contexts",
-  "icon": "🧭",
-  "concept": "Huber Loss is a hybrid loss function that behaves like MSE for small errors and MAE for large errors, combining fast convergence with robust outlier handling.",
+  "tierIcon": "🎯",
+  "title": "Binary Cross-Entropy: Measuring Yes/No Wrongness",
+  "icon": "✅",
+  "concept": "Binary Cross-Entropy is the standard loss function for two-class problems, penalizing confident wrong predictions exponentially while rewarding correct ones.",
   "xp": 15,
   "hearts": 3,
   "estMinutes": 7,
@@ -18,25 +18,25 @@
           "id": "w1",
           "type": "multiple_choice",
           "xp": 1,
-          "prompt": "Recap: Why is MAE robust to outliers?",
+          "prompt": "Recap: Why is accuracy not used as a training loss function?",
           "options": [
             {
               "id": "a",
-              "text": "It uses absolute differences, meaning it does not square and amplify large errors.",
+              "text": "Accuracy is not smooth or continuous, so it cannot calculate tiny gradient updates.",
               "correct": true
             },
             {
               "id": "b",
-              "text": "It automatically deletes all outlier rows.",
+              "text": "Accuracy can never reach 100%.",
               "correct": false
             },
             {
               "id": "c",
-              "text": "It only works on binary categories.",
+              "text": "Accuracy only works for regression models.",
               "correct": false
             }
           ],
-          "explain": "Correct! Absolute differences keep the penalty linear rather than quadratic, preventing outliers from dominating."
+          "explain": "Correct! We need a smooth, continuous function to compute gradient updates."
         }
       ]
     },
@@ -45,49 +45,49 @@
       "cards": [
         {
           "kind": "hook",
-          "icon": "🧭",
-          "title": "The balanced supervisor",
-          "body": "If you are learning a task, you want a supervisor who is patient. If you make a tiny typo, they give you gentle guidance to help you refine it (like MSE). If you make a massive mistake, they don't scream and fire you; they keep their feedback steady and controlled (like MAE). Huber Loss is this balanced supervisor."
+          "icon": "⚖️",
+          "title": "Overconfidence punished",
+          "body": "If you are unsure about an answer on a test and guess wrong, it's a minor mistake. But if you walk up to the teacher, confidently swear you are 100% correct, and are proven completely wrong, you look foolish. Binary Cross-Entropy is a math function that mimics this: it heavily punishes models that are confidently wrong."
         },
         {
           "kind": "definition",
-          "icon": "🧭",
-          "title": "Huber Loss: The Hybrid",
-          "body": "<strong>Huber Loss</strong> is a hybrid loss function for regression. It uses a threshold parameter (called **delta**). For errors smaller than delta, it behaves like **MSE** (quadratic, smooth). For errors larger than delta, it behaves like **MAE** (linear, robust)."
+          "icon": "✅",
+          "title": "Binary Cross-Entropy (BCE)",
+          "body": "<strong>Binary Cross-Entropy</strong> (also called Log Loss) is the standard loss function for binary classification (two classes: 0 or 1). It uses logarithmic scaling to penalize wrong predictions: the penalty grows exponentially as a wrong prediction's confidence approaches 100%."
         },
         {
           "kind": "analogy",
-          "icon": "🛣️",
-          "title": "The curved ramp to the highway",
-          "body": "Imagine a road. Near your destination (small error), the road has a smooth, curved bowl shape, guiding you gently to the center. Far away from your destination (large error), the road turns into a straight, steady ramp with a constant slope. This transition prevents the slope from becoming too steep at the edges."
+          "icon": "📊",
+          "title": "The stretching rubber band",
+          "body": "Think of BCE like a rubber band connected to the true label. If the true label is 1, and your prediction is 0.9, the band is relaxed (low loss). If your prediction drops to 0.5, the band stretches (medium loss). If you confidently predict 0.01, the band stretches to its limit and snaps (huge, near-infinite loss penalty)."
         },
         {
           "kind": "example",
-          "icon": "📊",
-          "title": "Tuning the threshold",
-          "body": "If we set delta = `1.0`: - An error of 0.5 (small) uses MSE math: $0.5^2 / 2 = 0.125$. - An error of 10.0 (large outlier) uses MAE math: linear penalty of $9.5$. The outlier is penalized, but not squared to $100$, keeping the model stable."
+          "icon": "📧",
+          "title": "Traded penalties",
+          "body": "If true label = 1, and the model predicts: - 0.99 -> loss is **0.01** (very low), - 0.50 -> loss is **0.69** (moderate), - 0.01 -> loss is **4.60** (extremely high). Confidently wrong guesses are punished with massive penalties, forcing the optimizer to make major adjustments."
         },
         {
           "kind": "mythbust",
           "icon": "⚠️",
-          "title": "Huber loss has a tunable knob",
-          "body": "You might assume Huber loss works automatically without tuning. In reality, the threshold (delta) is a hyperparameter you must set before training. If delta is too large, it behaves entirely like MSE; if too small, it behaves like MAE. Tuning delta on your validation set is key to finding the right balance for your noise level."
+          "title": "It works on probabilities, not raw outputs",
+          "body": "You might think BCE can be run on any raw output score from the model. In reality, BCE math requires inputs strictly between 0 and 1, representing probabilities. This is why we *must* apply a Sigmoid activation function at the output layer before running the BCE loss calculation."
         },
         {
           "kind": "visual",
           "icon": "⚖️",
-          "title": "Huber Loss Behavior",
-          "body": "How Huber combines MSE and MAE shapes:",
+          "title": "BCE Penalty Curve",
+          "body": "How BCE loss scales as predictions miss a True Label of 1:",
           "compare": {
             "left": {
-              "emoji": "🎯",
-              "tag": "Small Errors (< Delta)",
-              "text": "Behaves like MSE.<br>Smooth curve near zero.<br>Helps model converge precisely."
+              "emoji": "😊",
+              "tag": "Near the Target (Predict > 0.9)",
+              "text": "Prediction matches target.<br>Loss is near zero.<br>No correction needed."
             },
             "right": {
-              "emoji": "🧭",
-              "tag": "Large Errors (> Delta)",
-              "text": "Behaves like MAE.<br>Steady, linear slope.<br>Protects against outlier spikes."
+              "emoji": "🤬",
+              "tag": "Confidently Wrong (Predict < 0.01)",
+              "text": "Prediction is opposite of target.<br>Loss climbs exponentially to infinity.<br>Massive correction triggered."
             }
           }
         }
@@ -100,36 +100,36 @@
           "id": "p1",
           "type": "multiple_choice",
           "xp": 2,
-          "prompt": "How does Huber Loss handle large outlier errors compared to small errors?",
+          "prompt": "What kind of classification tasks is Binary Cross-Entropy used for?",
           "options": [
             {
               "id": "a",
-              "text": "It treats small errors quadratically (like MSE) and large errors linearly (like MAE).",
+              "text": "Binary classification tasks, which have exactly two possible output categories (0 or 1).",
               "correct": true
             },
             {
               "id": "b",
-              "text": "It ignores small errors and only squares large ones.",
+              "text": "Regression tasks predicting continuous house prices.",
               "correct": false
             },
             {
               "id": "c",
-              "text": "It uses cross-entropy for large errors.",
+              "text": "Unsupervised clustering of customer records.",
               "correct": false
             },
             {
               "id": "d",
-              "text": "It clips all errors to a maximum value of 1.0.",
+              "text": "Multi-class classification with 10 different categories.",
               "correct": false
             }
           ],
-          "explain": "Correct! Huber is a hybrid: quadratic for small errors, linear for large ones."
+          "explain": "Correct! BCE is the standard loss for binary (two-class) classification."
         },
         {
           "id": "p2",
           "type": "true_false",
           "xp": 2,
-          "prompt": "True or false: The threshold parameter (delta) in Huber Loss is a learned weight that the model updates automatically during backpropagation.",
+          "prompt": "True or false: Under Binary Cross-Entropy loss, a prediction of 0.5 carries a much larger penalty than a confidently wrong prediction of 0.01 (when the true label is 1).",
           "options": [
             {
               "id": "t",
@@ -142,45 +142,45 @@
               "correct": true
             }
           ],
-          "explain": "False! Delta is a hyperparameter (a knob you set before training starts), not a learned weight."
+          "explain": "False! Confidently wrong predictions (0.01 when target is 1) carry exponentially larger penalties than unsure predictions (0.5)."
         },
         {
           "id": "p3",
           "type": "fill_blank",
           "xp": 2,
           "prompt": "Complete the sentence:",
-          "sentence": "Huber Loss transitions from quadratic to linear error penalties based on a threshold hyperparameter called ___.",
-          "blank": "delta",
+          "sentence": "Because BCE math requires probability values between 0 and 1, we must apply a ___ activation function to the output neuron first.",
+          "blank": "Sigmoid",
           "words": [
-            "delta",
-            "alpha",
-            "bias"
+            "Sigmoid",
+            "ReLU",
+            "Variance"
           ],
-          "explain": "The Greek letter delta is the standard name for the Huber loss threshold parameter."
+          "explain": "Sigmoid squashes the output to a 0-to-1 range, preparing it for the BCE loss calculation."
         },
         {
           "id": "p4",
           "type": "spot_the_ai",
           "xp": 2,
-          "prompt": "Which loss curve is smooth at the center but transitions into flat, constant slopes at the far edges?",
+          "prompt": "A model predicts a 0.99 probability that a transaction is safe (label = 0). What is the BCE loss score, and why?",
           "options": [
             {
               "id": "a",
-              "text": "Huber Loss.",
+              "text": "Extremely high, because the model was highly confident but completely wrong.",
               "correct": true
             },
             {
               "id": "b",
-              "text": "Mean Squared Error (MSE).",
+              "text": "Near zero, because 0.99 is a very high score.",
               "correct": false
             },
             {
               "id": "c",
-              "text": "Binary Cross-Entropy.",
+              "text": "Zero, because the model was confident.",
               "correct": false
             }
           ],
-          "explain": "Correct! Huber combines the curved center of MSE with the straight slopes of MAE."
+          "explain": "Correct! Predicting 0.99 (Safe) when the true label is 0 (Fraud) is a confident miss, triggering a massive BCE loss penalty."
         }
       ]
     },
@@ -191,30 +191,30 @@
           "id": "b1",
           "type": "multiple_choice",
           "xp": 5,
-          "prompt": "You are training a deep network to predict delivery times. You want the model to converge smoothly for close predictions, but you also have some massive traffic-jam outliers that you don't want to warp your weights. Which loss function fits best?",
+          "prompt": "An email is spam (label = 1). The model's raw output is passed through Sigmoid, yielding a 0.02 probability of spam. What is the impact on Binary Cross-Entropy loss and the subsequent backpropagation step?",
           "options": [
             {
               "id": "a",
-              "text": "Huber Loss, because it provides quadratic precision for small errors but caps the outlier penalty linearly.",
+              "text": "The loss is extremely high because the model confidently missed the target; this generates a strong gradient signal to adjust the weights.",
               "correct": true
             },
             {
               "id": "b",
-              "text": "Plain MSE, because outliers should be squared to maximize penalty.",
+              "text": "The loss is near zero because 0.02 is close to 0; no weight adjustments occur.",
               "correct": false
             },
             {
               "id": "c",
-              "text": "Categorical Cross-Entropy, because delivery times are categories.",
+              "text": "The activation function collapses because the loss was negative.",
               "correct": false
             },
             {
               "id": "d",
-              "text": "No loss function can handle both requirements.",
+              "text": "The weights are immediately reset to random values.",
               "correct": false
             }
           ],
-          "explain": "Exactly! Huber Loss is the perfect compromise here, giving you the precision of MSE for normal cases and the robustness of MAE for outliers. Next, let's learn how we compare entire probability distributions using KL Divergence!"
+          "explain": "Exactly! Predicting 0.02 when the target is 1 is a confident miss. BCE penalizes this heavily, producing a large loss score and generating a powerful gradient to correct the weights. Next, let's see how we scale this concept to multi-class problems using Categorical Cross-Entropy!"
         }
       ]
     }

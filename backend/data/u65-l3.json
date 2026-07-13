@@ -3,10 +3,10 @@
   "unit": 65,
   "day": 328,
   "tier": "Training Deep Networks",
-  "tierIcon": "➡️",
-  "title": "Layer by Layer: Tracing a Single Prediction",
-  "icon": "🔍",
-  "concept": "To trace a forward pass, we calculate the weighted sum of inputs at a layer, apply the activation function, and pass those outputs as inputs to the next layer.",
+  "tierIcon": "🎯",
+  "title": "Adam: Combining Momentum + RMSprop",
+  "icon": "🏆",
+  "concept": "Adam (Adaptive Moment Estimation) combines the velocity/smoothing idea from Momentum with the per-parameter adaptive rates from RMSprop, making it one of the most popular default optimizers in deep learning.",
   "xp": 15,
   "hearts": 3,
   "estMinutes": 7,
@@ -18,25 +18,25 @@
           "id": "w1",
           "type": "multiple_choice",
           "xp": 1,
-          "prompt": "Recap: What is a weight matrix?",
+          "prompt": "Recap: what problem does RMSprop's moving average solve compared to AdaGrad?",
           "options": [
             {
               "id": "a",
-              "text": "A grid of numbers representing all the weight connections in a layer.",
+              "text": "It stops the learning rate from shrinking to near-zero over long training runs",
               "correct": true
             },
             {
               "id": "b",
-              "text": "A list of the network's prediction errors.",
+              "text": "It removes the need for a learning rate entirely",
               "correct": false
             },
             {
               "id": "c",
-              "text": "A special activation function.",
+              "text": "It makes training use less data",
               "correct": false
             }
           ],
-          "explain": "Correct! A weight matrix organizes all the layer's weights into a grid for parallel math."
+          "explain": "Right — RMSprop keeps learning rates usable over long training runs. But RMSprop still doesn't smooth out zig-zagging the way Momentum does. What if one optimizer could do both?"
         }
       ]
     },
@@ -45,49 +45,49 @@
       "cards": [
         {
           "kind": "hook",
-          "icon": "🔍",
-          "title": "Inside the black box",
-          "body": "If you open a neural network mid-prediction, what actually happens? It looks like a storm of numbers. But if we freeze time and look at just one path, we can trace the exact arithmetic that turns an input into a prediction. Let's do a hand-trace of a tiny network!"
+          "icon": "🏆",
+          "title": "What if you could have both?",
+          "body": "Momentum smooths out zig-zagging by building up velocity from past gradients. RMSprop gives every parameter its own adaptive learning rate. Each one solves a different problem. So which should you use? Turns out — why not both at once?"
         },
         {
           "kind": "definition",
-          "icon": "🔍",
-          "title": "The Step-by-Step Trace",
-          "body": "A forward trace has 3 steps per layer: 1. **Receive inputs** (from the previous layer), 2. **Multiply and sum** (inputs * weights), 3. **Apply activation** (e.g. ReLU or Sigmoid). The final activation output becomes the input for the next layer."
+          "icon": "🏆",
+          "title": "Adam: Adaptive Moment Estimation",
+          "body": "<strong>Adam</strong> tracks TWO running averages for every parameter: a velocity-like average of past gradients (just like Momentum) AND a moving average of squared gradients (just like RMSprop). It combines both to decide which direction to move AND how big a step to take."
         },
         {
           "kind": "analogy",
-          "icon": "✉️",
-          "title": "The telephone game",
-          "body": "Tracing forward propagation is like the game of telephone. Person 1 whispers a message (input) to Person 2. Person 2 interprets it, adds their own spin (weights), translates it (activation), and whispers the new message forward to Person 3. The message is modified at each station but only ever moves forward."
+          "icon": "🚗",
+          "title": "Cruise control plus adjustable suspension",
+          "body": "Momentum is like cruise control — it builds up smooth, steady speed instead of jerking the pedal every second. RMSprop is like adjustable suspension — each wheel reacts to its own bumps. Adam is a car with BOTH: smooth accelerating motion AND per-wheel adjustment to the terrain."
         },
         {
           "kind": "example",
-          "icon": "📊",
-          "title": "A numeric walkthrough",
-          "body": "Input is `[2.0]`. It connects to a hidden neuron with weight `[3.0]`. 1. Weighted sum: `2.0 * 3.0 = 6.0`. 2. Apply ReLU activation: since 6.0 is positive, the output is `6.0`. This output `6.0` is now passed forward as the input to the next layer."
+          "icon": "🥇",
+          "title": "Gliding through a steep ravine",
+          "body": "On the same steep, ravine-shaped loss landscape that made plain SGD zig-zag back and forth, Adam glides smoothly toward the minimum: its Momentum-style velocity smooths out the zig-zagging direction, while its RMSprop-style adaptive rates correctly size each parameter's step along the way."
         },
         {
           "kind": "mythbust",
           "icon": "⚠️",
-          "title": "Bias is just a special input",
-          "body": "You might wonder how 'bias' fits into this trace. In every layer, we add a bias term (a constant offset) to the weighted sum before the activation function. Conceptually, bias is like a weight connected to an input that is always exactly `1`, shifting the activation threshold up or down."
+          "title": "Popular default ≠ always the best choice",
+          "body": "It's tempting to think Adam is simply the objectively \"best\" optimizer since it's the most common default. That's not quite right — Adam is popular because it converges fast and needs very little manual tuning, which makes it a fantastic low-effort default. But on some problems, well-tuned plain SGD with Momentum can still generalize better."
         },
         {
           "kind": "visual",
           "icon": "⚖️",
-          "title": "One Neuron's Math",
-          "body": "The calculations inside a single neuron:",
+          "title": "Two separate fixes vs. one combined optimizer",
+          "body": "How the pieces come together:",
           "compare": {
             "left": {
-              "emoji": "🧮",
-              "tag": "Weighted Sum",
-              "text": "(Input 1 * Weight 1) + (Input 2 * Weight 2) + Bias.<br>e.g. (2 * 0.5) + (4 * 0.5) + 1 = 4.0."
+              "emoji": "🏒🔋",
+              "tag": "Momentum + RMSprop",
+              "text": "Each solves ONE problem alone:<br>smoothing zig-zags, OR adapting per-parameter rates"
             },
             "right": {
-              "emoji": "⚡",
-              "tag": "Activation Output",
-              "text": "Apply function to sum.<br>e.g. ReLU(4.0) = 4.0.<br>This value is sent to the next layer."
+              "emoji": "🏆",
+              "tag": "Adam",
+              "text": "Combines BOTH:<br>velocity smoothing AND per-parameter adaptive rates"
             }
           }
         }
@@ -100,87 +100,82 @@
           "id": "p1",
           "type": "multiple_choice",
           "xp": 2,
-          "prompt": "An input value of 4 connects to a neuron with a weight of 0.5 and a bias of 1. What is the weighted sum before activation?",
+          "prompt": "What two ideas does Adam combine into one optimizer?",
           "options": [
             {
               "id": "a",
-              "text": "3.0, because (4 * 0.5) + 1 = 3.0.",
+              "text": "Momentum's velocity smoothing and RMSprop's per-parameter adaptive rates",
               "correct": true
             },
             {
               "id": "b",
-              "text": "2.0, because 4 * 0.5 = 2.0.",
+              "text": "AdaGrad's full accumulation and Nesterov's look-ahead",
               "correct": false
             },
             {
               "id": "c",
-              "text": "5.0, because 4 + 0.5 + 1 = 5.0.",
-              "correct": false
-            },
-            {
-              "id": "d",
-              "text": "0.0, due to threshold clipping.",
+              "text": "Two entirely different loss functions",
               "correct": false
             }
           ],
-          "explain": "Correct! Weighted sum = (input * weight) + bias = (4 * 0.5) + 1 = 3.0."
+          "explain": "Correct! Adam tracks a Momentum-style velocity average AND an RMSprop-style adaptive-rate average, together."
         },
         {
           "id": "p2",
           "type": "true_false",
           "xp": 2,
-          "prompt": "True or false: The output of a hidden layer's activation function is passed forward as the direct input to the next layer.",
+          "prompt": "True or false: Adam tracks only ONE running average per parameter, just like RMSprop.",
           "options": [
             {
               "id": "t",
               "text": "True",
-              "correct": true
+              "correct": false
             },
             {
               "id": "f",
               "text": "False",
-              "correct": false
+              "correct": true
             }
           ],
-          "explain": "True! Each layer's activation outputs serve as the inputs for the succeeding layer."
+          "explain": "False. Adam tracks TWO running averages per parameter — a momentum-style average of gradients, and an RMSprop-style average of squared gradients."
         },
         {
           "id": "p3",
           "type": "fill_blank",
           "xp": 2,
           "prompt": "Complete the sentence:",
-          "sentence": "To calculate a neuron's activation, we apply the activation function to the weighted sum plus the ___ term.",
-          "blank": "bias",
+          "sentence": "Adam stands for Adaptive ___ Estimation.",
+          "blank": "Moment",
           "words": [
-            "bias",
-            "matrix",
-            "gradient"
+            "Moment",
+            "Movement",
+            "Momentum"
           ],
-          "explain": "The bias is added to the weighted sum of inputs before applying the activation function."
+          "explain": "Adam = Adaptive Moment Estimation — it estimates two \"moments\" (running averages) of the gradients for each parameter."
         },
         {
           "id": "p4",
           "type": "spot_the_ai",
           "xp": 2,
-          "prompt": "An input of -2 connects to a neuron with weight 3 and bias 1. If we use a ReLU activation function, what is the final activation output?",
+          "prompt": "You want an optimizer that smooths out zig-zagging on steep ravines AND gives rarely-updated parameters bigger individual steps, all in one algorithm, with minimal manual tuning. Which optimizer fits?",
           "options": [
             {
               "id": "a",
-              "text": "0.0, because the weighted sum is -5, and ReLU(-5) = 0.0.",
+              "text": "Adam",
               "correct": true
             },
             {
               "id": "b",
-              "text": "-5.0, because ReLU preserves negative values.",
+              "text": "Plain SGD",
               "correct": false
             },
             {
               "id": "c",
-              "text": "1.0, because only the bias is returned.",
+              "text": "Plain Momentum alone",
               "correct": false
             }
           ],
-          "explain": "Correct! Weighted sum = (-2 * 3) + 1 = -5. Since -5 is negative, ReLU clips it to exactly 0.0."
+          "explain": "Adam is exactly this combination: Momentum's smoothing plus RMSprop's per-parameter adaptive rates."
         }
       ]
     },
@@ -191,30 +186,30 @@
           "id": "b1",
           "type": "multiple_choice",
           "xp": 5,
-          "prompt": "A hidden neuron receives an input of 2 with weight 1.5, and bias -1. It uses a Sigmoid activation function. What is the activation output of this neuron, and what does it represent?",
+          "prompt": "You're picking a default optimizer for a new deep learning project. You want something that combines smooth, momentum-based direction with per-parameter adaptive step sizes, converges quickly, and needs little manual tuning. Which optimizer is the natural choice, and why?",
           "options": [
             {
               "id": "a",
-              "text": "Sigmoid(2.0) = 0.88; it represents a squashed activation value between 0 and 1 passed to the next layer.",
+              "text": "Adam, because it combines Momentum's velocity smoothing with RMSprop's adaptive per-parameter learning rates into one well-behaved default",
               "correct": true
             },
             {
               "id": "b",
-              "text": "Sigmoid(-1.0) = 0.27; it represents a negative loss value.",
+              "text": "AdaGrad, because it never forgets any past gradient",
               "correct": false
             },
             {
               "id": "c",
-              "text": "2.0, because Sigmoid has no effect on positive values.",
+              "text": "Plain SGD, because it has no extra bookkeeping",
               "correct": false
             },
             {
               "id": "d",
-              "text": "0.0, because the bias was negative.",
+              "text": "Nesterov, because it only uses momentum's look-ahead",
               "correct": false
             }
           ],
-          "explain": "Exactly! Weighted sum = (2 * 1.5) - 1 = 2.0. Sigmoid(2.0) squashes this to approximately 0.88, which is passed forward. Next, let's look at how we run this trace for many items at once using batches!"
+          "explain": "Exactly right! Adam is a fantastic all-around default — but the way it blends weight decay (a regularization technique) into its adaptive updates isn't quite ideal. Next up: AdamW, a small but important fix."
         }
       ]
     }

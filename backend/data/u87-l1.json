@@ -1,0 +1,222 @@
+{
+  "id": "u87-l1",
+  "unit": 87,
+  "day": 436,
+  "tier": "Practical Deep Learning",
+  "tierIcon": "🪶",
+  "title": "Why Memory Becomes the Bottleneck",
+  "icon": "🪶",
+  "concept": "Training often becomes memory-limited before it becomes compute-limited, because the GPU must hold model weights, activations, gradients, optimizer state, and a whole batch of data at the same time.",
+  "xp": 15,
+  "hearts": 3,
+  "estMinutes": 7,
+  "segments": [
+    {
+      "type": "warmup",
+      "exercises": [
+        {
+          "id": "w1",
+          "type": "multiple_choice",
+          "xp": 1,
+          "prompt": "Recap: Why do teams often compress or shrink a model before deployment?",
+          "options": [
+            {
+              "id": "a",
+              "text": "Because real devices have tight memory, speed, and power limits.",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "Because smaller models never need training.",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "Because compression guarantees perfect accuracy.",
+              "correct": false
+            }
+          ],
+          "explain": "Exactly. Hardware limits matter in deployment, and the same idea shows up during training when memory fills up."
+        }
+      ]
+    },
+    {
+      "type": "teach",
+      "cards": [
+        {
+          "kind": "hook",
+          "icon": "🚧",
+          "title": "The GPU is fast, but the shelf is full",
+          "body": "A training run can fail even on a very powerful GPU if the memory fills up first. In deep learning, the bottleneck is often not how quickly the chip can multiply numbers, but whether it can keep all the needed tensors in memory at once."
+        },
+        {
+          "kind": "definition",
+          "icon": "🧠",
+          "title": "What memory has to hold",
+          "body": "During training, memory is busy storing <strong>model parameters</strong>, <strong>activations from the forward pass</strong>, <strong>gradients</strong>, optimizer state, and the current batch of data. If any of that grows too large, RAM or VRAM runs out before the model can finish the step."
+        },
+        {
+          "kind": "analogy",
+          "icon": "🧺",
+          "title": "Laundry baskets, not just washing speed",
+          "body": "Imagine a laundry room with a fast washer but only a tiny floor area. Even if the machine is quick, the room jams up if too many baskets, clothes, and supplies are piled around it. Training is similar: not enough space can stop the workflow before raw speed matters."
+        },
+        {
+          "kind": "example",
+          "icon": "🖼️",
+          "title": "Why batch size changes everything",
+          "body": "Suppose a model trains fine with batches of 8 images but crashes with batches of 64. The model weights did not suddenly get larger. What changed is that the network now has to store activations for many more examples at the same time, so peak memory jumps."
+        },
+        {
+          "kind": "mythbust",
+          "icon": "⚠️",
+          "title": "It is not only about parameter count",
+          "body": "People often assume the weights are the whole story. But in training, <strong>activations can be a huge memory cost</strong>, especially in deep models or with large batches. A model can have manageable parameter size and still run out of memory during backpropagation."
+        },
+        {
+          "kind": "visual",
+          "icon": "📊",
+          "title": "Where memory pressure grows",
+          "body": "Different choices increase memory in different ways.",
+          "compare": {
+            "left": {
+              "emoji": "📦",
+              "tag": "Bigger batch",
+              "text": "More examples are active at once.<br>Activation memory rises quickly.<br>Often the first thing that triggers out-of-memory errors."
+            },
+            "right": {
+              "emoji": "🏗️",
+              "tag": "Bigger model",
+              "text": "More weights and often more intermediate tensors.<br>May also increase optimizer state.<br>Can fill memory even before you raise batch size."
+            }
+          }
+        }
+      ]
+    },
+    {
+      "type": "practice",
+      "exercises": [
+        {
+          "id": "p1",
+          "type": "multiple_choice",
+          "xp": 2,
+          "prompt": "Why can training hit a memory limit even when the GPU still has plenty of raw compute power?",
+          "options": [
+            {
+              "id": "a",
+              "text": "Because all the needed tensors must fit in memory during the step.",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "Because memory and compute are always the same thing.",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "Because activations are stored on paper instead of the GPU.",
+              "correct": false
+            },
+            {
+              "id": "d",
+              "text": "Because bigger batches reduce memory use.",
+              "correct": false
+            }
+          ],
+          "explain": "Right. A chip can be capable of lots of math, but the training step still fails if the required tensors do not fit."
+        },
+        {
+          "id": "p2",
+          "type": "true_false",
+          "xp": 2,
+          "prompt": "True or false: During training, stored activations can be a major part of memory use.",
+          "options": [
+            {
+              "id": "t",
+              "text": "True",
+              "correct": true
+            },
+            {
+              "id": "f",
+              "text": "False",
+              "correct": false
+            }
+          ],
+          "explain": "True. Backpropagation needs information from the forward pass, so activations often take a large share of memory."
+        },
+        {
+          "id": "p3",
+          "type": "fill_blank",
+          "xp": 2,
+          "prompt": "Complete the sentence:",
+          "sentence": "When the model keeps forward-pass values for backpropagation, those stored ___ take memory.",
+          "blank": "activations",
+          "words": [
+            "activations",
+            "labels",
+            "folders"
+          ],
+          "explain": "Activations is correct. They are the intermediate outputs produced inside the network."
+        },
+        {
+          "id": "p4",
+          "type": "spot_the_ai",
+          "xp": 2,
+          "prompt": "Which situation best shows memory becoming the bottleneck?",
+          "options": [
+            {
+              "id": "a",
+              "text": "A team doubles batch size and immediately gets an out-of-memory error, even though the GPU is otherwise powerful.",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "A team chooses brighter slide colors for a conference talk.",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "A model trains faster after moving to a larger GPU with more memory headroom.",
+              "correct": false
+            }
+          ],
+          "explain": "The first story is the clearest example: the failure comes from peak memory use, not from the idea of deep learning itself."
+        }
+      ]
+    },
+    {
+      "type": "boss",
+      "exercises": [
+        {
+          "id": "b1",
+          "type": "multiple_choice",
+          "xp": 5,
+          "prompt": "A team trains a vision model. Batch size 8 works, batch size 32 crashes, and the model weights themselves have not changed. What is the best explanation?",
+          "options": [
+            {
+              "id": "a",
+              "text": "The larger batch forces the GPU to store many more activations and other tensors at once.",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "The math rules changed when the batch size changed.",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "Bigger batches automatically delete gradients, so the crash must be unrelated.",
+              "correct": false
+            },
+            {
+              "id": "d",
+              "text": "Parameter count becomes zero at small batch sizes and huge at large batch sizes.",
+              "correct": false
+            }
+          ],
+          "explain": "Exactly. Raising batch size increases peak memory because more examples move through the network together and their intermediate values must be stored."
+        }
+      ]
+    }
+  ]
+}

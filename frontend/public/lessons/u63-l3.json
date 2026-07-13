@@ -2,11 +2,11 @@
   "id": "u63-l3",
   "unit": 63,
   "day": 318,
-  "tier": "Training Deep Networks",
-  "tierIcon": "🏔️",
-  "title": "The Problem with Plain SGD",
-  "icon": "🥷",
-  "concept": "Plain SGD zig-zags inefficiently across steep ravines in the loss landscape, and can get stuck oscillating or stalling on flat plateaus and saddle points — the exact terrain deep networks are full of.",
+  "tier": "Neural Network Basics",
+  "tierIcon": "🌈",
+  "title": "ELU: Exponential Linear Unit",
+  "icon": "📉",
+  "concept": "ELU smooths out negative inputs with a curved (exponential) shape instead of a straight line, helping push average outputs closer to zero, which speeds up learning.",
   "xp": 15,
   "hearts": 3,
   "estMinutes": 7,
@@ -18,25 +18,25 @@
           "id": "w1",
           "type": "multiple_choice",
           "xp": 1,
-          "prompt": "Recap: Why do deep learning training loops usually update weights using mini-batches instead of the full dataset every step?",
+          "prompt": "Recap: what makes PReLU different from Leaky ReLU?",
           "options": [
             {
               "id": "a",
-              "text": "Full-batch updates are too slow and memory-heavy for huge datasets and networks",
+              "text": "PReLU's slope for negative inputs is learned during training, not fixed",
               "correct": true
             },
             {
               "id": "b",
-              "text": "It has nothing to do with speed or memory — it's just a coding convention",
+              "text": "PReLU has no negative inputs at all",
               "correct": false
             },
             {
               "id": "c",
-              "text": "Full-batch updates actually use LESS memory than mini-batches",
+              "text": "PReLU only works in the output layer",
               "correct": false
             }
           ],
-          "explain": "Right! Mini-batches keep training fast and GPU-friendly. But even with the right batch size, plain SGD still struggles once it hits the deep network's tricky terrain..."
+          "explain": "Right — PReLU learns its slope. But Leaky ReLU and PReLU both still use a straight line for negative inputs. What if that line curved instead?"
         }
       ]
     },
@@ -45,49 +45,49 @@
       "cards": [
         {
           "kind": "hook",
-          "icon": "🥷",
-          "title": "A clumsy tightrope walker",
-          "body": "Drop plain SGD into a narrow, steep-walled ravine in the loss landscape, and instead of marching straight down the middle, it lurches side to side — wasting steps bouncing off the walls."
+          "icon": "📉",
+          "title": "Straight lines aren't the only option",
+          "body": "ReLU, Leaky ReLU, and PReLU all handle negative inputs with a straight line — just with different slopes. But activation functions don't have to use straight lines at all. What if the negative side bent into a smooth curve instead?"
         },
         {
           "kind": "definition",
-          "icon": "⚡",
-          "title": "Zig-zagging in ravines",
-          "body": "When the loss surface is much steeper in one direction than another (a <strong>ravine</strong>), each SGD step gets dominated by the steep direction, so the path oscillates back and forth across the ravine instead of moving smoothly along it toward the bottom."
+          "icon": "📐",
+          "title": "ELU: a curve for negative inputs",
+          "body": "<strong>ELU (Exponential Linear Unit)</strong> keeps positive inputs unchanged, just like ReLU. But for negative inputs, instead of a straight sloped line, it uses a smooth curved (exponential) shape that gently flattens out and levels off near a small negative value, instead of dropping in a straight line forever."
         },
         {
           "kind": "analogy",
-          "icon": "🎿",
-          "title": "Skiing a narrow, steep-walled gully",
-          "body": "Imagine skiing down a narrow gully with steep walls: instead of carving smoothly down the middle, you keep bouncing wall to wall, losing speed and time with every bounce, barely making forward progress."
+          "icon": "🛝",
+          "title": "A ramp that curves into a landing",
+          "body": "A straight-line slope (like Leaky ReLU) is a ramp that keeps descending forever, the further negative you go. ELU's curve is more like a playground slide that bends and flattens near the bottom, gently leveling off instead of continuing downward without limit."
         },
         {
           "kind": "example",
-          "icon": "🧊",
-          "title": "Stuck on the flats",
-          "body": "On a long flat plateau — barely any slope in any direction — the gradient is tiny, so SGD's steps shrink to a crawl. It can wander for a long time before finding a direction that leads back downhill."
+          "icon": "🔢",
+          "title": "ELU levels off, it doesn't keep dropping",
+          "body": "As inputs get more and more negative — <code>-1</code>, <code>-5</code>, <code>-20</code> — a straight-sloped function like Leaky ReLU keeps outputting more and more negative numbers, without limit. ELU's curve, however, flattens out and gets closer and closer to a small fixed negative number, no matter how negative the input gets."
         },
         {
           "kind": "mythbust",
           "icon": "⚠️",
-          "title": "Saddle points aren't 'stuck forever,' but they're slow",
-          "body": "You might think a saddle point completely traps an optimizer like a true minimum would. In reality, plain SGD CAN eventually escape — the flat directions aren't perfectly flat — but it can crawl agonizingly slowly through the flat stretch first."
+          "title": "The curve isn't just for looks",
+          "body": "You might assume ELU's curved shape is just a fancier-looking version of Leaky ReLU with no real benefit. In reality, that curve helps push the network's average output closer to zero (rather than staying solidly positive, like ReLU tends to), which in practice can help a network learn faster."
         },
         {
           "kind": "visual",
           "icon": "⚖️",
-          "title": "Ravine zig-zag vs. plateau stall",
-          "body": "Two ways plain SGD wastes steps:",
+          "title": "Straight slope vs. smooth curve",
+          "body": "How the two shapes compare:",
           "compare": {
             "left": {
-              "emoji": "🎢",
-              "tag": "Steep Ravines",
-              "text": "Bounces wall to wall<br>Zig-zags instead of progressing"
+              "emoji": "🍂",
+              "tag": "Leaky ReLU",
+              "text": "Straight line for negative inputs<br>Keeps dropping without limit"
             },
             "right": {
-              "emoji": "🏜️",
-              "tag": "Flat Plateaus",
-              "text": "Tiny gradient, tiny steps<br>Crawls toward a stall"
+              "emoji": "📉",
+              "tag": "ELU",
+              "text": "Smooth curve for negative inputs<br>Levels off near a small negative value"
             }
           }
         }
@@ -100,31 +100,31 @@
           "id": "p1",
           "type": "multiple_choice",
           "xp": 2,
-          "prompt": "What happens when plain SGD encounters a narrow ravine in the loss landscape (steep side walls, gentle slope along the bottom)?",
+          "prompt": "How does ELU handle negative inputs differently from Leaky ReLU?",
           "options": [
             {
               "id": "a",
-              "text": "It zig-zags, oscillating side to side instead of moving smoothly down the ravine toward the bottom",
+              "text": "It uses a smooth curved (exponential) shape instead of a straight line",
               "correct": true
             },
             {
               "id": "b",
-              "text": "It ignores the ravine and moves in a perfectly straight line",
+              "text": "It outputs exactly 0, same as regular ReLU",
               "correct": false
             },
             {
               "id": "c",
-              "text": "It immediately finds the global minimum",
+              "text": "It doubles every negative input",
               "correct": false
             }
           ],
-          "explain": "Right! Each step gets dominated by the steep side-to-side slope, wasting motion instead of progressing along the ravine."
+          "explain": "Right — ELU replaces the straight negative-side line with a smooth exponential curve."
         },
         {
           "id": "p2",
           "type": "true_false",
           "xp": 2,
-          "prompt": "True or false: on a flat plateau, the gradient is large, so SGD moves quickly across it.",
+          "prompt": "True or false: as inputs get more and more negative, ELU's output keeps dropping without any limit, just like a straight-line slope.",
           "options": [
             {
               "id": "t",
@@ -137,45 +137,45 @@
               "correct": true
             }
           ],
-          "explain": "False! On a flat plateau the gradient is TINY, so plain SGD's steps shrink and it can crawl for a long stretch before escaping."
+          "explain": "False! ELU's curve flattens out and levels off near a small negative value instead of dropping forever."
         },
         {
           "id": "p3",
           "type": "fill_blank",
           "xp": 2,
           "prompt": "Complete the sentence:",
-          "sentence": "Plain SGD tends to ___ back and forth across steep-walled ravines instead of moving smoothly down them.",
-          "blank": "zigzag",
+          "sentence": "ELU stands for ___ Linear Unit.",
+          "blank": "Exponential",
           "words": [
-            "zigzag",
-            "freeze",
-            "teleport"
+            "Exponential",
+            "Extended",
+            "Even"
           ],
-          "explain": "That side-to-side zigzag wastes steps that could have gone toward making real progress down the ravine."
+          "explain": "ELU = Exponential Linear Unit, named for its curved negative side."
         },
         {
           "id": "p4",
           "type": "spot_the_ai",
           "xp": 2,
-          "prompt": "Which training log pattern is a telltale sign of plain SGD struggling in a steep ravine?",
+          "prompt": "Which activation function's negative-input shape is a smooth curve that levels off, rather than a straight sloped line?",
           "options": [
             {
               "id": "a",
-              "text": "The loss bounces sharply up and down step after step instead of steadily decreasing",
+              "text": "ELU",
               "correct": true
             },
             {
               "id": "b",
-              "text": "The loss decreases smoothly and steadily every single step",
+              "text": "Leaky ReLU",
               "correct": false
             },
             {
               "id": "c",
-              "text": "The loss instantly drops to zero on the first step",
+              "text": "PReLU",
               "correct": false
             }
           ],
-          "explain": "Right — a bouncing, jagged loss curve is the classic sign of SGD zig-zagging across a steep-walled ravine."
+          "explain": "ELU uses a curved, exponential shape for negative inputs instead of a straight line."
         }
       ]
     },
@@ -186,30 +186,30 @@
           "id": "b1",
           "type": "multiple_choice",
           "xp": 5,
-          "prompt": "You're watching a deep network's training loss curve. For hundreds of steps it barely moves at all — the changes are almost too small to see. What's the most likely explanation, and is the optimizer 'stuck' forever?",
+          "prompt": "A team wants their network's average neuron output to sit closer to zero (rather than skewing solidly positive like ReLU tends to produce), hoping it'll help the network learn a bit faster. Which activation function is built for exactly this, and how does it achieve it?",
           "options": [
             {
               "id": "a",
-              "text": "It's likely crawling across a flat plateau where the gradient is tiny; plain SGD isn't permanently stuck, but it can take a very long time to find a direction back downhill",
+              "text": "ELU, because its smooth curved shape for negative inputs pushes average outputs closer to zero instead of a straight-line slope or a hard cutoff at 0",
               "correct": true
             },
             {
               "id": "b",
-              "text": "The network has finished training perfectly and reached zero error",
+              "text": "Regular ReLU, because chopping negatives to 0 already centers outputs around zero",
               "correct": false
             },
             {
               "id": "c",
-              "text": "This means the loss landscape has no more weights left to adjust",
+              "text": "Softmax, because probabilities always average to zero",
               "correct": false
             },
             {
               "id": "d",
-              "text": "The optimizer is broken and will never move again no matter what",
+              "text": "PReLU, because learnable slopes always produce curves",
               "correct": false
             }
           ],
-          "explain": "Exactly! Flat plateaus cause tiny gradients and painfully slow crawling — not a permanent trap, but a real slowdown. Next up: a fix that carries momentum through exactly these kinds of flat, sluggish stretches."
+          "explain": "Exactly! ELU's curve helps center outputs closer to zero. So far every activation function we've covered uses a straight edge or a single curve. Next up: two newer functions built differently — smooth from end to end, and self-gated."
         }
       ]
     }

@@ -2,11 +2,11 @@
   "id": "u69-l2",
   "unit": 69,
   "day": 347,
-  "tier": "The Forward Pass Capstone",
-  "tierIcon": "🏆",
-  "title": "Visualizing the Computation Graph",
-  "icon": "🧬",
-  "concept": "A computation graph is a visual flowchart of nodes and arrows representing the sequence of mathematical operations inside a model, showing exactly how inputs combine to produce the loss.",
+  "tier": "The Training Loop",
+  "tierIcon": "🔄",
+  "title": "Batch Size Tradeoffs: Small vs. Large",
+  "icon": "⚖️",
+  "concept": "Choosing a batch size involves a critical tradeoff — large batches are faster and yield stable gradients but use more GPU memory, while small batches introduce noise that can help escape local minima.",
   "xp": 15,
   "hearts": 3,
   "estMinutes": 7,
@@ -18,25 +18,25 @@
           "id": "w1",
           "type": "multiple_choice",
           "xp": 1,
-          "prompt": "Recap: Does the loss function update model weights?",
+          "prompt": "Recap: What is the difference between an epoch and an iteration?",
           "options": [
             {
               "id": "a",
-              "text": "No, it only measures the error; weights remain frozen until the backward pass.",
+              "text": "An epoch is a pass over the entire dataset; an iteration is a pass over a single batch.",
               "correct": true
             },
             {
               "id": "b",
-              "text": "Yes, weights are adjusted during loss calculation.",
+              "text": "An epoch only happens during testing.",
               "correct": false
             },
             {
               "id": "c",
-              "text": "Yes, but only in the output layer.",
+              "text": "Iterations are only used for regression.",
               "correct": false
             }
           ],
-          "explain": "Correct! Loss only measures error; updates happen in the backward pass."
+          "explain": "Correct! Epoch = full dataset; Iteration = one batch."
         }
       ]
     },
@@ -45,49 +45,49 @@
       "cards": [
         {
           "kind": "hook",
-          "icon": "🧬",
-          "title": "The blueprints of a factory",
-          "body": "If you walk into a massive factory, the noise and movement are overwhelming. To understand it, you look at the blueprint: a flowchart showing how pipes connect, where ingredients mix, and where the final product exits. In deep learning, we use a similar blueprint called a computation graph."
+          "icon": "⚖️",
+          "title": "The team project size",
+          "body": "If you assign a task to a group of 3 people, they coordinate quickly, but their work is noisy and carries individual bias (small batch). If you assign it to a group of 1,000 people, they produce a very stable, averaged result, but coordinating them uses massive room space and resources (large batch). Choosing a batch size is this exact tradeoff."
         },
         {
           "kind": "definition",
-          "icon": "🧬",
-          "title": "The Computation Graph",
-          "body": "A <strong>computation graph</strong> is a visual flowchart representing mathematical operations. **Nodes** represent variables (like inputs, weights, or bias) or operations (like multiplication, addition, or activation). **Arrows** represent the flow of data from one operation to the next, ending at the loss node."
+          "icon": "⚖️",
+          "title": "The Batch Tradeoff",
+          "body": "- **Large Batches** (e.g. 256 or 512 rows) produce a very stable average gradient, making learning smooth, and maximize GPU parallel hardware. However, they use more active GPU memory. - **Small Batches** (e.g. 16 or 32 rows) are noisy, but this noise can help the optimizer jump out of shallow local minima. They use very little memory."
         },
         {
           "kind": "analogy",
-          "icon": "🧭",
-          "title": "A recipe flowchart",
-          "body": "Think of a computation graph like a recipe flowchart. Node A: crack eggs. Node B: add flour. Arrow: pour both into Node C (bowl) and mix (addition operation). Arrow: bake in Node D (oven, activation function). The graph shows the exact sequence of steps and connections needed to bake the cake."
+          "icon": "🏒",
+          "title": "A smooth slide vs. a bumpy ride",
+          "body": "A large batch is like sliding down a smooth, icy slope: you move in a clean, predictable line directly to the bottom. A small batch is like riding a mountain bike down a bumpy dirt trail: you bounce left and right. While bumpy, those bounces can actually help you hop over small rocks (shallow plateaus) that would stop the smooth slide."
         },
         {
           "kind": "example",
-          "icon": "🧮",
-          "title": "A single neuron graph",
-          "body": "For a single neuron, the graph shows: 1. Input $X$ and Weight $W$ feed into a **Multiplication node** ($X \times W$), 2. This result and Bias $B$ feed into an **Addition node** ($XW + B$), 3. This sum feeds into an **Activation node** (e.g. ReLU), outputting the final prediction. The graph tracks every step visual-style."
+          "icon": "📊",
+          "title": "Standard batch sizes",
+          "body": "Common batch sizes are powers of 2 (16, 32, 64, 128, 256) because computer memory is structured in binary blocks. A team with a high-end GPU might use 256 to speed up training, while a developer on a laptop might drop to 32 to avoid 'Out of Memory' crashes."
         },
         {
           "kind": "mythbust",
           "icon": "⚠️",
-          "title": "Graphs aren't just for humans",
-          "body": "You might think computation graphs are only used by developers for slides. In reality, deep learning libraries (like PyTorch or TensorFlow) construct these graphs internally under the hood. The computer uses the graph to know exactly which operations were run, which is essential to calculate the gradients during backpropagation later."
+          "title": "Larger isn't always better for final accuracy",
+          "body": "You might assume a batch size of 4,096 is the best because it calculates the cleanest average gradient. In practice, models trained on extremely large batch sizes often generalize *worse* on new test data because the smooth updates lack the noise needed to escape poor local minima during training."
         },
         {
           "kind": "visual",
           "icon": "⚖️",
-          "title": "A Computation Graph Node",
-          "body": "How a simple addition operation is represented:",
+          "title": "Small vs. Large Batch Sizes",
+          "body": "Comparing the two training styles:",
           "compare": {
             "left": {
-              "emoji": "📥",
-              "tag": "Inputs (Arrows in)",
-              "text": "Variable A (value = 2).<br>Variable B (value = 3).<br>Both point to the node."
+              "emoji": "🚗",
+              "tag": "Small Batch (e.g. 16)",
+              "text": "Noisy gradient updates.<br>Helps escape local minima.<br>Low GPU memory usage."
             },
             "right": {
-              "emoji": "➕",
-              "tag": "Node & Output (Arrow out)",
-              "text": "Operation: Addition (+).<br>Computes: 2 + 3 = 5.<br>Result points forward."
+              "emoji": "🚌",
+              "tag": "Large Batch (e.g. 256)",
+              "text": "Stable gradient updates.<br>Faster parallel hardware speed.<br>High GPU memory usage."
             }
           }
         }
@@ -100,36 +100,36 @@
           "id": "p1",
           "type": "multiple_choice",
           "xp": 2,
-          "prompt": "What is a computation graph in deep learning?",
+          "prompt": "What is a disadvantage of using an extremely large batch size (like 4,096)?",
           "options": [
             {
               "id": "a",
-              "text": "A visual flowchart where nodes represent operations/variables and arrows represent data flow, showing how inputs produce the loss.",
+              "text": "It requires high GPU memory and can lead to worse generalization because updates lack the noise needed to escape poor local minima.",
               "correct": true
             },
             {
               "id": "b",
-              "text": "A graph plotting training accuracy vs. epoch number.",
+              "text": "It makes training run much slower on parallel hardware.",
               "correct": false
             },
             {
               "id": "c",
-              "text": "A list of the coordinates of all the weights in a layer.",
+              "text": "It causes the model weights file to become corrupted.",
               "correct": false
             },
             {
               "id": "d",
-              "text": "A directory structure of model files.",
+              "text": "It can only be used on binary classification tasks.",
               "correct": false
             }
           ],
-          "explain": "Correct! Computation graphs map out the flow of mathematical operations inside the model."
+          "explain": "Correct! Large batches demand high memory and lack helpful noise, which can hurt generalization."
         },
         {
           "id": "p2",
           "type": "true_false",
           "xp": 2,
-          "prompt": "True or false: Deep learning libraries construct computation graphs internally to track operations, which is essential for backpropagation math.",
+          "prompt": "True or false: Small batch sizes (like 16 or 32) are generally preferred when you want to minimize GPU active memory usage.",
           "options": [
             {
               "id": "t",
@@ -142,45 +142,45 @@
               "correct": false
             }
           ],
-          "explain": "True! The graph records the history of calculations so the computer knows how to propagate gradients backward later."
+          "explain": "True! Small batches process fewer rows at once, keeping the memory footprint low."
         },
         {
           "id": "p3",
           "type": "fill_blank",
           "xp": 2,
           "prompt": "Complete the sentence:",
-          "sentence": "In a computation graph, arrows represent the flow of ___ from one operation node to the next.",
-          "blank": "data",
+          "sentence": "Because computer memory is structured in binary blocks, batch sizes are typically set as powers of ___.",
+          "blank": "2",
           "words": [
-            "data",
-            "bias",
-            "entropy"
+            "2",
+            "10",
+            "5"
           ],
-          "explain": "Arrows indicate the direction data moves through the sequence of calculations."
+          "explain": "Powers of 2 (16, 32, 64, 128, etc.) maximize memory alignment and speed on computer chips."
         },
         {
           "id": "p4",
           "type": "spot_the_ai",
           "xp": 2,
-          "prompt": "Which of these is a node in a computation graph?",
+          "prompt": "Which of these is a benefit of the 'noisy' gradients produced by small batch sizes?",
           "options": [
             {
               "id": "a",
-              "text": "An addition operation (+) that takes two inputs and outputs their sum.",
+              "text": "The noise can help the optimizer bounce out of shallow, poor local minima in the loss landscape.",
               "correct": true
             },
             {
               "id": "b",
-              "text": "A learning rate decay curve.",
+              "text": "The noise automatically increases the training accuracy to 100%.",
               "correct": false
             },
             {
               "id": "c",
-              "text": "A validation dataset split.",
+              "text": "The noise makes predictions run faster in production.",
               "correct": false
             }
           ],
-          "explain": "Correct! Operational steps like addition (+) are represented as nodes in the graph."
+          "explain": "Correct! The random variance in small batches helps models navigate complex loss landscapes."
         }
       ]
     },
@@ -191,30 +191,30 @@
           "id": "b1",
           "type": "multiple_choice",
           "xp": 5,
-          "prompt": "You design a network that multiplies input A by weight B, adds bias C, and then applies a ReLU activation function. How is this represented in a computation graph?",
+          "prompt": "A developer training a large image classifier gets an error: 'RuntimeError: CUDA out of memory.' What change should they make to resolve this, and what is the trade-off?",
           "options": [
             {
               "id": "a",
-              "text": "A and B feed into a Multiplication node -> output feeds into an Addition node along with C -> output feeds into a ReLU activation node.",
+              "text": "Decrease the batch size (e.g. from 128 to 32); this reduces active GPU memory usage but makes training take more total iterations per epoch.",
               "correct": true
             },
             {
               "id": "b",
-              "text": "A, B, and C all feed into a single ReLU node in parallel, with no multiplication step.",
+              "text": "Increase the batch size to 512 to speed up the memory clearing.",
               "correct": false
             },
             {
               "id": "c",
-              "text": "A and C feed into a Sigmoid node, bypassing B entirely.",
+              "text": "Switch from Cross-Entropy loss to MSE loss.",
               "correct": false
             },
             {
               "id": "d",
-              "text": "The graph is flat with no nodes because the model is simple.",
+              "text": "Double the number of hidden layers to absorb the memory.",
               "correct": false
             }
           ],
-          "explain": "Exactly! The graph maps the calculations sequentially: multiplication first, then addition, and finally activation. Next, let's look at how we debug common errors in this forward pipeline!"
+          "explain": "Exactly! Out-of-memory errors mean the GPU RAM is full. Lowering the batch size reduces the size of the stacked matrices in memory, resolving the error at the cost of running more steps per epoch. Next, let's learn why we must shuffle our data between these epochs!"
         }
       ]
     }

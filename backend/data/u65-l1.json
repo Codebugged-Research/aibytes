@@ -3,10 +3,10 @@
   "unit": 65,
   "day": 326,
   "tier": "Training Deep Networks",
-  "tierIcon": "➡️",
-  "title": "Forward Propagation: Data Flowing Through a Network",
-  "icon": "➡️",
-  "concept": "Forward propagation is the process where input data flows sequentially forward through each layer of a neural network to produce a final prediction.",
+  "tierIcon": "🎯",
+  "title": "AdaGrad: Adapting Per-Parameter Learning Rates",
+  "icon": "📈",
+  "concept": "Instead of one global learning rate for all weights, AdaGrad gives each individual parameter its own learning rate that shrinks based on how much that parameter has already been updated — rarely-updated parameters keep taking bigger steps.",
   "xp": 15,
   "hearts": 3,
   "estMinutes": 7,
@@ -18,25 +18,25 @@
           "id": "w1",
           "type": "multiple_choice",
           "xp": 1,
-          "prompt": "Recap: What is the main benefit of AdamW over plain Adam?",
+          "prompt": "Recap: what makes Nesterov Accelerated Gradient different from plain Momentum?",
           "options": [
             {
               "id": "a",
-              "text": "It decouples weight decay (regularization) from the main gradient update for better generalization.",
+              "text": "It peeks ahead to where momentum is about to carry it, and corrects course from that lookahead point",
               "correct": true
             },
             {
               "id": "b",
-              "text": "It runs in parallel across multiple GPUs automatically.",
+              "text": "It removes velocity entirely and uses only the raw gradient",
               "correct": false
             },
             {
               "id": "c",
-              "text": "It deletes all negative activation values.",
+              "text": "It only works on the output layer",
               "correct": false
             }
           ],
-          "explain": "Correct! AdamW improves on Adam by separating weight decay from the gradient steps."
+          "explain": "Right — Nesterov looks ahead before computing its gradient. But Momentum and Nesterov both still use ONE shared learning rate for every weight in the network. What if different weights need different speeds?"
         }
       ]
     },
@@ -45,49 +45,49 @@
       "cards": [
         {
           "kind": "hook",
-          "icon": "🌊",
-          "title": "The downstream river",
-          "body": "If you drop a leaf in a fast-flowing river, it travels downstream. It passes the first bend, floats under a bridge, and eventually reaches the ocean. It only ever moves in one direction — forward. Data in a neural network travels the same way during a prediction."
+          "icon": "🚰",
+          "title": "One learning rate doesn't fit all weights",
+          "body": "Some weights in a network get updated on almost every single training example — like a weight tied to a super common word. Others barely get touched — like a weight tied to a rare feature that shows up once in a thousand examples. Momentum and Nesterov still force ALL of these weights to share one identical learning rate. Is that fair?"
         },
         {
           "kind": "definition",
-          "icon": "➡️",
-          "title": "Forward Propagation",
-          "body": "<strong>Forward propagation</strong> (or forward pass) is the process of feeding input data (e.g. an image) into a neural network and running calculations layer-by-layer to produce a prediction at the output layer."
+          "icon": "📈",
+          "title": "AdaGrad: adapting per-parameter learning rates",
+          "body": "<strong>AdaGrad</strong> (Adaptive Gradient) gives every individual parameter its OWN learning rate. It keeps a running total of how much each parameter has already been updated — the bigger that total, the more AdaGrad shrinks that parameter's learning rate. Parameters updated a lot get smaller steps; parameters rarely touched keep taking bigger steps."
         },
         {
           "kind": "analogy",
-          "icon": "🏭",
-          "title": "The factory assembly line",
-          "body": "Think of forward propagation like a factory assembly line. Raw materials (input layer) enter. Station 1 adds parts (first hidden layer). Station 2 paints it (second hidden layer). The final station packs it (output layer). Each station performs its specific task and passes the product forward until the final car rolls out."
+          "icon": "🎚️",
+          "title": "Adjustable faucets, not one master valve",
+          "body": "Plain SGD and Momentum are like a single master valve controlling water flow to every faucet in a building at once — turn it up, and EVERY faucet gets more pressure, whether it needs it or not. AdaGrad replaces that with a separate adjustable faucet for every single room, tuned to how much that room has already used."
         },
         {
           "kind": "example",
-          "icon": "🤖",
-          "title": "Classifying a handwritten digit",
-          "body": "An image of a handwritten '7' enters. The **Input Layer** reads the pixel values. The **Hidden Layer** combines these pixels to detect lines and corners. The **Output Layer** outputs the final probability score for the digit 7. The data moved sequentially forward at every step."
+          "icon": "🔤",
+          "title": "Rare words vs. common words",
+          "body": "In a text model, the weight for the word <code>\"the\"</code> gets updated on almost every training example, so AdaGrad keeps shrinking its learning rate. The weight for the rare word <code>\"aardvark\"</code> gets updated only a handful of times, so AdaGrad keeps its learning rate large — giving that rare weight a real chance to learn something useful when it finally does appear."
         },
         {
           "kind": "mythbust",
           "icon": "⚠️",
-          "title": "Forward pass doesn't adjust weights",
-          "body": "Beginners often think the model learns and adjusts its weights during the forward pass. In reality, during forward propagation, all weights are **frozen**. The network is only using its current rules to make a guess; the learning and adjustment happen later in the backward pass."
+          "title": "It rescales the step size, not the direction",
+          "body": "It's tempting to think AdaGrad is a totally different way of finding which way to go. It isn't — AdaGrad still follows the exact same gradient direction as before. All it changes is how BIG each parameter's step is. And there's a catch: because AdaGrad keeps adding up every squared gradient since training began and never forgets any of it, each parameter's learning rate can only ever shrink — it never grows back."
         },
         {
           "kind": "visual",
           "icon": "⚖️",
-          "title": "Forward Flow",
-          "body": "How data moves through the network layers:",
+          "title": "One shared rate vs. many adjusted rates",
+          "body": "How the two approaches compare:",
           "compare": {
             "left": {
-              "emoji": "📥",
-              "tag": "Input -> Hidden",
-              "text": "Raw features enter.<br>Multiplied by weights.<br>Activation function applied."
+              "emoji": "🏒",
+              "tag": "SGD / Momentum",
+              "text": "One shared learning rate<br>Same step size for every weight"
             },
             "right": {
-              "emoji": "📤",
-              "tag": "Hidden -> Output",
-              "text": "Processed features passed forward.<br>Final output calculated.<br>Prediction returned."
+              "emoji": "📈",
+              "tag": "AdaGrad",
+              "text": "Each weight gets its own rate<br>Rare weights: bigger steps; frequent weights: smaller steps"
             }
           }
         }
@@ -100,36 +100,31 @@
           "id": "p1",
           "type": "multiple_choice",
           "xp": 2,
-          "prompt": "What is the primary direction of data flow during forward propagation?",
+          "prompt": "What does AdaGrad track for each individual parameter in order to adjust its learning rate?",
           "options": [
             {
               "id": "a",
-              "text": "Sequentially forward from the input layer, through hidden layers, to the output layer.",
+              "text": "A running total of that parameter's past squared gradients",
               "correct": true
             },
             {
               "id": "b",
-              "text": "Backward from the output layer to the input layer to adjust weights.",
+              "text": "The parameter's raw current value",
               "correct": false
             },
             {
               "id": "c",
-              "text": "Randomly jumping between layers to maximize entropy.",
-              "correct": false
-            },
-            {
-              "id": "d",
-              "text": "Only within the hidden layers without ever reaching the output.",
+              "text": "How many total training examples exist",
               "correct": false
             }
           ],
-          "explain": "Correct! Forward propagation flows strictly forward from input to output."
+          "explain": "Correct! AdaGrad accumulates each parameter's squared gradients over time and uses that running total to shrink its learning rate."
         },
         {
           "id": "p2",
           "type": "true_false",
           "xp": 2,
-          "prompt": "True or false: A neural network updates and corrects its weight parameters during the forward propagation phase.",
+          "prompt": "True or false: AdaGrad uses the exact same learning rate for every parameter in the network, just like plain SGD.",
           "options": [
             {
               "id": "t",
@@ -142,45 +137,45 @@
               "correct": true
             }
           ],
-          "explain": "False! Weights are frozen during the forward pass; updates only happen during the backward pass."
+          "explain": "False. AdaGrad's whole point is giving each individual parameter its own, separately adjusted learning rate."
         },
         {
           "id": "p3",
           "type": "fill_blank",
           "xp": 2,
           "prompt": "Complete the sentence:",
-          "sentence": "Forward propagation is the process used by a neural network to make a ___.",
-          "blank": "prediction",
+          "sentence": "AdaGrad shrinks a parameter's learning rate based on how much that parameter has already been ___.",
+          "blank": "updated",
           "words": [
-            "prediction",
-            "gradient",
-            "weight"
+            "updated",
+            "initialized",
+            "copied"
           ],
-          "explain": "The goal of the forward pass is to compute a prediction for a given input."
+          "explain": "AdaGrad accumulates a running total tied to how often (and how strongly) each parameter has been updated so far."
         },
         {
           "id": "p4",
           "type": "spot_the_ai",
           "xp": 2,
-          "prompt": "Which scenario represents forward propagation?",
+          "prompt": "A network has one weight connected to a rare feature seen in only 2% of examples, and another connected to a common feature seen in every example. Which optimizer automatically gives the rare-feature weight bigger updates and the common-feature weight smaller ones?",
           "options": [
             {
               "id": "a",
-              "text": "A trained model accepts an email's words, calculates layer values, and outputs a 90% probability that it is spam.",
+              "text": "AdaGrad",
               "correct": true
             },
             {
               "id": "b",
-              "text": "A model compares its prediction to the correct label and adjusts its weights.",
+              "text": "Plain SGD",
               "correct": false
             },
             {
               "id": "c",
-              "text": "A developer writes a python script to collect raw training data.",
+              "text": "Plain Momentum",
               "correct": false
             }
           ],
-          "explain": "Correct! Computing layer values from input to output to get a prediction is forward propagation."
+          "explain": "AdaGrad is built exactly for this: per-parameter learning rates that stay large for rarely-updated weights and shrink for frequently-updated ones."
         }
       ]
     },
@@ -191,30 +186,30 @@
           "id": "b1",
           "type": "multiple_choice",
           "xp": 5,
-          "prompt": "You are running a neural network in production to classify images. A user uploads a new image. What phase of the model is triggered, and are the weights updated?",
+          "prompt": "In a text classifier, the word \"the\" appears in nearly every training example, while the word \"zeitgeist\" appears in only 3 out of 100,000 examples. Which optimizer property specifically helps make sure \"zeitgeist\" still gets a meaningful update instead of being drowned out by constant updates to \"the\"?",
           "options": [
             {
               "id": "a",
-              "text": "Forward propagation is triggered to compute the classification; the weights remain completely frozen.",
+              "text": "AdaGrad's per-parameter learning rate, which shrinks for frequently-updated weights like \"the\" but stays larger for rarely-updated weights like \"zeitgeist\"",
               "correct": true
             },
             {
               "id": "b",
-              "text": "Backward propagation is triggered; the weights are adjusted based on the user's feedback.",
+              "text": "Momentum's velocity buildup",
               "correct": false
             },
             {
               "id": "c",
-              "text": "Both forward and backward passes run, updating the weights for the next user.",
+              "text": "Simply using a bigger batch size",
               "correct": false
             },
             {
               "id": "d",
-              "text": "The activation functions are disabled to speed up the server response.",
+              "text": "Switching from ReLU to Sigmoid",
               "correct": false
             }
           ],
-          "explain": "Exactly! When making live predictions (inference), we only run the forward pass to get the answer, and the model's weights remain frozen. Next, let's look at how we calculate these layer transformations at scale using matrix math!"
+          "explain": "Exactly right! AdaGrad's per-parameter rates are great for rare features — but there's a catch: because it accumulates EVERY squared gradient since training began, forever, its learning rates only ever shrink, and can eventually grind training to a near-halt. Next up: how RMSprop fixes that."
         }
       ]
     }

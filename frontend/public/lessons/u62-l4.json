@@ -3,10 +3,10 @@
   "unit": 62,
   "day": 314,
   "tier": "Neural Network Basics",
-  "tierIcon": "🌈",
-  "title": "Swish & GELU: Smooth Modern Activations",
-  "icon": "🌊",
-  "concept": "Newer activation functions that are smooth and self-gated (using the input's own sigmoid to scale itself); used in many modern large-scale networks for slightly better performance than ReLU.",
+  "tierIcon": "🧠",
+  "title": "ReLU: The Modern Default",
+  "icon": "⚡",
+  "concept": "ReLU (Rectified Linear Unit) is a strikingly simple activation function: it outputs 0 for negative inputs, and the input itself unchanged for positive inputs — and it's the most common activation function in modern networks.",
   "xp": 15,
   "hearts": 3,
   "estMinutes": 7,
@@ -18,25 +18,25 @@
           "id": "w1",
           "type": "multiple_choice",
           "xp": 1,
-          "prompt": "Recap: what makes ELU's negative-input shape different from a straight sloped line?",
+          "prompt": "Recap: what range does Sigmoid squash any input into?",
           "options": [
             {
               "id": "a",
-              "text": "It's a smooth curve that levels off near a small negative value",
+              "text": "0 to 1",
               "correct": true
             },
             {
               "id": "b",
-              "text": "It jumps straight to a big negative number",
+              "text": "-1 to 1",
               "correct": false
             },
             {
               "id": "c",
-              "text": "It's identical to ReLU's hard cutoff at 0",
+              "text": "-1000 to 1000",
               "correct": false
             }
           ],
-          "explain": "Right — ELU curves and levels off. Every function so far picks ONE fixed rule and applies it everywhere. What if a function could decide, input by input, how much of itself to let through?"
+          "explain": "Right — Sigmoid always lands between 0 and 1. Now meet an activation function that barely does any math at all."
         }
       ]
     },
@@ -45,49 +45,49 @@
       "cards": [
         {
           "kind": "hook",
-          "icon": "🌊",
-          "title": "What if the input decided its own fate?",
-          "body": "So far, every activation function follows one fixed rule for every input: chop negatives, add a slope, curve it. But some of the newest activation functions — used inside cutting-edge large-scale networks — let each input help decide how much of itself gets through."
+          "icon": "⚡",
+          "title": "The activation function that does almost nothing",
+          "body": "Sigmoid and Tanh both involve smooth, curvy math to squash numbers down. ReLU throws that out. For half of all possible inputs, it does literally nothing at all — and it's still the most popular activation function in modern deep learning."
         },
         {
           "kind": "definition",
-          "icon": "🚪",
-          "title": "Self-gated: the input scales itself",
-          "body": "<strong>Swish</strong> and <strong>GELU</strong> are both smooth, self-gated activation functions. \"Self-gated\" means each input value is multiplied by a Sigmoid-like gate calculated from that <em>same</em> input — so the input itself decides, moment to moment, how much of its own signal to let through, rather than following one fixed rule for every value."
+          "icon": "✂️",
+          "title": "ReLU: chop off the negatives",
+          "body": "<strong>ReLU</strong> (Rectified Linear Unit) follows one simple rule: if the input is negative, output <code>0</code>. If the input is positive (or zero), output that exact same number, completely unchanged. No smooth curve — just a sharp bend at zero."
         },
         {
           "kind": "analogy",
-          "icon": "🚦",
-          "title": "A gate that reads its own traffic",
-          "body": "ReLU is like a gate that only checks one thing: is the car (input) positive or negative? Fully open or fully shut, nothing in between. Swish and GELU are gates that also look at how strong the incoming signal is, smoothly opening wider for confident signals and narrowing — but never slamming fully shut — for weak or negative ones."
+          "icon": "🚰",
+          "title": "A one-way valve",
+          "body": "Think of ReLU like a one-way valve on a pipe: it blocks anything trying to flow backward (negative numbers become 0), but lets forward flow (positive numbers) through at full, unchanged pressure."
         },
         {
           "kind": "example",
           "icon": "🔢",
-          "title": "Smooth everywhere, unlike ReLU's sharp bend",
-          "body": "ReLU has one sharp bend right at 0 — a hard corner. Swish and GELU have no sharp corners anywhere: the whole curve bends smoothly, even right around 0, and can even dip slightly negative for small negative inputs before curving back up — instead of hard-clipping straight to zero."
+          "title": "Running numbers through ReLU",
+          "body": "Input <code>-5</code> → output <code>0</code>. Input <code>0</code> → output <code>0</code>. Input <code>3</code> → output <code>3</code>. Input <code>42</code> → output <code>42</code>. Negative numbers get chopped to zero; positive numbers pass through untouched."
         },
         {
           "kind": "mythbust",
           "icon": "⚠️",
-          "title": "Not just ReLU with extra steps",
-          "body": "You might assume Swish and GELU are just fancier, slower versions of ReLU with no real payoff. In reality, many modern large-scale networks — including several state-of-the-art language and image models — use Swish or GELU specifically because their smoothness tends to squeeze out slightly better performance than ReLU."
+          "title": "Simple doesn't mean weak",
+          "body": "You might assume something this simple — just chop off the negatives — must be a weak, toy activation function. In reality, ReLU is the <strong>default</strong> choice in most modern large networks, because it's fast to compute and trains deep networks more reliably than Sigmoid or Tanh."
         },
         {
           "kind": "visual",
           "icon": "⚖️",
-          "title": "Sharp gate vs. smooth self-gate",
-          "body": "How the two styles compare:",
+          "title": "Smooth curve vs. sharp bend",
+          "body": "Two very different shapes, two different trade-offs:",
           "compare": {
             "left": {
-              "emoji": "⚡",
-              "tag": "ReLU",
-              "text": "Sharp corner at 0<br>Fixed rule: pass through or block"
+              "emoji": "🌊",
+              "tag": "Sigmoid / Tanh",
+              "text": "Smooth curve<br>Slower to compute"
             },
             "right": {
-              "emoji": "🌊",
-              "tag": "Swish / GELU",
-              "text": "Smooth curve everywhere<br>Self-gated: input helps scale itself"
+              "emoji": "⚡",
+              "tag": "ReLU",
+              "text": "Sharp bend at zero<br>Fast, simple, most common today"
             }
           }
         }
@@ -100,82 +100,87 @@
           "id": "p1",
           "type": "multiple_choice",
           "xp": 2,
-          "prompt": "What does it mean for Swish and GELU to be \"self-gated\"?",
+          "prompt": "What does ReLU output when given a negative input, like -7?",
           "options": [
             {
               "id": "a",
-              "text": "Each input is scaled by a gate calculated from that same input",
+              "text": "0",
               "correct": true
             },
             {
               "id": "b",
-              "text": "They only activate every other neuron",
+              "text": "-7 unchanged",
               "correct": false
             },
             {
               "id": "c",
-              "text": "They gate the output layer only",
+              "text": "7 (flipped positive)",
+              "correct": false
+            },
+            {
+              "id": "d",
+              "text": "1",
               "correct": false
             }
           ],
-          "explain": "Right — self-gated means the input's own value helps determine how much of it passes through."
+          "explain": "Correct — ReLU chops any negative input down to exactly 0."
         },
         {
           "id": "p2",
           "type": "true_false",
           "xp": 2,
-          "prompt": "True or false: Swish and GELU have a sharp corner at 0, just like ReLU.",
+          "prompt": "True or false: ReLU outputs the exact same number it receives, whenever that number is positive.",
           "options": [
             {
               "id": "t",
               "text": "True",
-              "correct": false
+              "correct": true
             },
             {
               "id": "f",
               "text": "False",
-              "correct": true
+              "correct": false
             }
           ],
-          "explain": "False! Swish and GELU are smooth everywhere, with no sharp corners."
+          "explain": "True! For positive inputs, ReLU passes the number through completely unchanged."
         },
         {
           "id": "p3",
           "type": "fill_blank",
           "xp": 2,
           "prompt": "Complete the sentence:",
-          "sentence": "Swish and GELU are described as smooth and self-___, meaning the input helps scale itself.",
-          "blank": "gated",
+          "sentence": "ReLU stands for Rectified Linear ___.",
+          "blank": "Unit",
           "words": [
-            "gated",
-            "layered",
-            "weighted"
+            "Unit",
+            "Layer",
+            "Network"
           ],
-          "explain": "Self-gated: the input's own value determines how much of itself passes through."
+          "explain": "ReLU = Rectified Linear Unit."
         },
         {
           "id": "p4",
           "type": "spot_the_ai",
           "xp": 2,
-          "prompt": "Which kind of activation function is used in many modern large-scale networks for its smooth, self-gated shape?",
+          "prompt": "A neuron computes a weighted sum of 12. What does that neuron output after applying ReLU?",
           "options": [
             {
               "id": "a",
-              "text": "Swish or GELU",
+              "text": "12",
               "correct": true
             },
             {
               "id": "b",
-              "text": "Basic step function",
+              "text": "0",
               "correct": false
             },
             {
               "id": "c",
-              "text": "Regular Sigmoid alone",
+              "text": "1",
               "correct": false
             }
           ],
-          "explain": "Swish and GELU's smoothness and self-gating make them common choices in modern large-scale networks."
+          "explain": "Since 12 is positive, ReLU passes it through completely unchanged."
         }
       ]
     },
@@ -186,30 +191,30 @@
           "id": "b1",
           "type": "multiple_choice",
           "xp": 5,
-          "prompt": "A research team building a large modern language model wants an activation function that's smooth everywhere (no sharp corners) and lets each input help scale itself, aiming for a small performance edge over plain ReLU. Which activation function(s) fit this description, and why?",
+          "prompt": "You're training an enormous network with millions of neurons and need every activation calculation to be as fast as possible. Which activation function is the modern industry default for exactly this reason, and why?",
           "options": [
             {
               "id": "a",
-              "text": "Swish or GELU, because both are smooth, self-gated functions where the input's own value determines how much of itself passes through",
+              "text": "ReLU, because its rule (chop negatives, pass positives through) is far simpler and faster to compute than Sigmoid or Tanh's smooth curves",
               "correct": true
             },
             {
               "id": "b",
-              "text": "Regular ReLU, because sharp corners always train faster",
+              "text": "Sigmoid, because probabilities are always the fastest thing to compute",
               "correct": false
             },
             {
               "id": "c",
-              "text": "Softmax, because it's used in every layer of modern networks",
+              "text": "Tanh, because negative outputs make training faster",
               "correct": false
             },
             {
               "id": "d",
-              "text": "Leaky ReLU, because its fixed slope is inherently self-gated",
+              "text": "None of them — speed doesn't depend on the activation function",
               "correct": false
             }
           ],
-          "explain": "Exactly! Swish and GELU bring smoothness and self-gating to modern large-scale networks. You've now met eight different activation functions across two units. Time to line them all up and figure out when to reach for each one."
+          "explain": "Exactly! ReLU's simplicity makes it the go-to choice for speed at scale. There's one more activation function worth knowing — one that doesn't work neuron-by-neuron, but across a whole layer at once."
         }
       ]
     }

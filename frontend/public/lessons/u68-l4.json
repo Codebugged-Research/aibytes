@@ -2,11 +2,11 @@
   "id": "u68-l4",
   "unit": 68,
   "day": 344,
-  "tier": "The Training Loop",
-  "tierIcon": "🔄",
-  "title": "Learning Curves: Tracking Loss Over Time",
-  "icon": "📊",
-  "concept": "A learning curve plots training and validation loss over successive epochs, serving as the primary diagnostic tool to detect underfitting and overfitting in deep models.",
+  "tier": "Training Deep Networks",
+  "tierIcon": "📐",
+  "title": "Custom & Combined Loss Functions",
+  "icon": "🧩",
+  "concept": "For advanced multi-task networks that predict multiple targets at once, we combine different loss metrics into a single weighted total loss score to guide the optimizer.",
   "xp": 15,
   "hearts": 3,
   "estMinutes": 7,
@@ -18,25 +18,25 @@
           "id": "w1",
           "type": "multiple_choice",
           "xp": 1,
-          "prompt": "Recap: In which scenario should you NOT shuffle your training data?",
+          "prompt": "Recap: Why is KL Divergence called a divergence rather than a distance?",
           "options": [
             {
               "id": "a",
-              "text": "In time series forecasting, where chronological order is a critical feature.",
+              "text": "It is asymmetric, meaning the score of P from Q is not equal to Q from P.",
               "correct": true
             },
             {
               "id": "b",
-              "text": "In image classification.",
+              "text": "It can only be calculated on flat 2D grids.",
               "correct": false
             },
             {
               "id": "c",
-              "text": "In standard tabular house price prediction.",
+              "text": "It does not use gradients during training.",
               "correct": false
             }
           ],
-          "explain": "Correct! Shuffling time series data breaks the temporal order, ruining the model."
+          "explain": "Correct! KL Divergence is asymmetric, which separates it from standard distance metrics."
         }
       ]
     },
@@ -45,49 +45,49 @@
       "cards": [
         {
           "kind": "hook",
-          "icon": "📊",
-          "title": "The medical monitor",
-          "body": "A doctor doesn't just guess if a patient is recovering; they check the heart monitor over time. In deep learning, a learning curve is that heart monitor. By plotting the loss score of both training and validation sets over each epoch, we can instantly see if the model is learning, stalling, or overfitting."
+          "icon": "🧩",
+          "title": "The multi-talented athlete",
+          "body": "If you are training a triathlete, you can't just measure their running speed. You must measure swimming, cycling, and running. If they are fast runners but slow swimmers, you need a single total score that balances all three events. In advanced deep learning, we combine different loss scores into a single weighted total loss."
         },
         {
           "kind": "definition",
-          "icon": "📊",
-          "title": "The Learning Curve",
-          "body": "A <strong>learning curve</strong> is a line graph where the horizontal axis is **Epochs** and the vertical axis is **Loss** (error). We plot two lines: **Training Loss** (error on training rows) and **Validation Loss** (error on unseen validation rows)."
+          "icon": "🧩",
+          "title": "Combined Loss: Multi-task training",
+          "body": "A <strong>combined loss function</strong> blends different loss metrics (e.g. MSE and Categorical Cross-Entropy) into a single score. This is used in **multi-task learning**, where one neural network makes multiple different predictions from the same input."
         },
         {
           "kind": "analogy",
-          "icon": "📈",
-          "title": "Studying vs. exam performance",
-          "body": "Think of training loss as your score on practice quizzes (questions you've seen). It should steadily go down (fewer mistakes). Validation loss is your score on the real exams (questions you haven't seen). If your practice score is perfect but your exam score starts getting worse, you are memorizing (overfitting)."
+          "icon": "⚖️",
+          "title": "Grading a project",
+          "body": "Think of a combined loss like a final grade on a class project. The teacher scores: 70% on content accuracy, 20% on visual design, and 10% on spelling. You add them up to get one final grade. During training, the network's weights adjust to improve this combined total grade, rather than just one part."
         },
         {
           "kind": "example",
-          "icon": "📊",
-          "title": "Reading the curves",
-          "body": "- **Normal Learning**: Both training and validation loss curves slope downward together, leveling off at a low error rate. - **Overfitting**: Training loss continues to slide toward 0, but the validation loss curve starts bending upward, showing the model is getting worse on new data."
+          "icon": "🚗",
+          "title": "Self-driving car targets",
+          "body": "A self-driving car model must predict two things: 1) **Steering angle** (regression target, uses MSE loss), and 2) **Stop sign detected** (binary classification, uses Cross-Entropy). We sum them: `Total Loss = (Steering MSE) + (Stop Sign BCE)`. The optimizer minimizes this combined score."
         },
         {
           "kind": "mythbust",
           "icon": "⚠️",
-          "title": "Training loss doesn't tell the whole story",
-          "body": "It's easy to look only at the training loss, see it reach 0.01, and celebrate. In deep learning, a training loss of 0.01 is often a warning sign: it means the model has likely overfit by memorizing the training set. You must *always* cross-reference with the validation curve to confirm true generalization."
+          "title": "Weighting the parts is essential",
+          "body": "You might think you can just add different losses together directly. In reality, different losses scale differently — an MSE of $10,000$ will completely drown out a Cross-Entropy loss of $0.5$. We must multiply each part by a weight factor (e.g. `0.001 * MSE`) to balance their influence during training."
         },
         {
           "kind": "visual",
-          "icon": "⚖️",
-          "title": "Diagnostic Learning Curves",
-          "body": "How curves reveal model health:",
+          "icon": "🧩",
+          "title": "Combined Loss Architecture",
+          "body": "How multiple losses merge into one training signal:",
           "compare": {
             "left": {
-              "emoji": "📈",
-              "tag": "Good Fit",
-              "text": "Both training and validation lines drop.<br>They stay close and level off.<br>Model generalizes well."
+              "emoji": "🚗",
+              "tag": "Task 1 (Steering)",
+              "text": "Continuous angle prediction.<br>Uses MSE Loss.<br>Multiplied by Weight A (e.g. 0.01)."
             },
             "right": {
-              "emoji": "⚠️",
-              "tag": "Overfitting",
-              "text": "Training line drops to near 0.<br>Validation line bends upward.<br>Model has memorized training data."
+              "emoji": "🛑",
+              "tag": "Task 2 (Stop Sign)",
+              "text": "Binary classification.<br>Uses Cross-Entropy Loss.<br>Multiplied by Weight B (e.g. 1.0)."
             }
           }
         }
@@ -100,87 +100,87 @@
           "id": "p1",
           "type": "multiple_choice",
           "xp": 2,
-          "prompt": "What does an upward bend in the validation loss curve indicate (while training loss continues to drop)?",
+          "prompt": "When does a neural network require a combined loss function?",
           "options": [
             {
               "id": "a",
-              "text": "The model is overfitting, memorizing training details and losing accuracy on new data.",
+              "text": "In multi-task learning, when one network makes multiple different predictions (like regression and classification) from the same input.",
               "correct": true
             },
             {
               "id": "b",
-              "text": "The model is underfitting and needs to train for more epochs.",
+              "text": "When the dataset is completely clean with zero missing values.",
               "correct": false
             },
             {
               "id": "c",
-              "text": "The loss function has been successfully optimized to 0.",
+              "text": "When we want to disable all activation functions.",
               "correct": false
             },
             {
               "id": "d",
-              "text": "The batch size is too small.",
+              "text": "Only when training on CPUs instead of GPUs.",
               "correct": false
             }
           ],
-          "explain": "Correct! If validation error rises while training error drops, the model is overfitting."
+          "explain": "Correct! Combined loss is used to balance multiple different prediction targets in a single network."
         },
         {
           "id": "p2",
           "type": "true_false",
           "xp": 2,
-          "prompt": "True or false: A training loss of 0.001 is a guaranteed sign of a perfect model that will perform well on new test data.",
+          "prompt": "True or false: When combining different loss functions (like MSE and Cross-Entropy), we must use weight factors to prevent one loss from dominating the other.",
           "options": [
             {
               "id": "t",
               "text": "True",
-              "correct": false
+              "correct": true
             },
             {
               "id": "f",
               "text": "False",
-              "correct": true
+              "correct": false
             }
           ],
-          "explain": "False! Near-zero training loss often indicates the model has overfit and memorized the training set."
+          "explain": "True! Losses scale differently, so weights are required to balance their influence on training gradients."
         },
         {
           "id": "p3",
           "type": "fill_blank",
           "xp": 2,
           "prompt": "Complete the sentence:",
-          "sentence": "A learning curve plots ___ on the vertical axis and epochs on the horizontal axis.",
-          "blank": "loss",
+          "sentence": "A single network that predicts both house price (regression) and sale probability (classification) is an example of ___ learning.",
+          "blank": "multi-task",
           "words": [
-            "loss",
-            "accuracy",
-            "weights"
+            "multi-task",
+            "unsupervised",
+            "sequential"
           ],
-          "explain": "Learning curves typically plot loss (error) to track optimization progress."
+          "explain": "Multi-task learning involves training a single model to perform multiple distinct prediction tasks."
         },
         {
           "id": "p4",
           "type": "spot_the_ai",
           "xp": 2,
-          "prompt": "Which curve trend represents a healthy, well-generalizing model?",
+          "prompt": "Which formula represents a combined loss function for a model predicting object bounding box (MSE) and category (CCE)?",
           "options": [
             {
               "id": "a",
-              "text": "Both train and validation loss drop together and level off close to each other.",
+              "text": "Total Loss = (0.3 * Bounding Box MSE) + (0.7 * Category CCE)",
               "correct": true
             },
             {
               "id": "b",
-              "text": "Train loss drops to 0, while validation loss spikes to infinity.",
+              "text": "Total Loss = Bounding Box MSE / Category CCE",
               "correct": false
             },
             {
               "id": "c",
-              "text": "Both curves remain flat at their initial high error value.",
+              "text": "Total Loss = Bounding Box MSE only",
               "correct": false
             }
           ],
-          "explain": "Correct! Curves that decrease together and stabilize represent healthy learning."
+          "explain": "Correct! Summing the weighted components of both targets represents a combined loss."
         }
       ]
     },
@@ -191,30 +191,30 @@
           "id": "b1",
           "type": "multiple_choice",
           "xp": 5,
-          "prompt": "You are training a deep network. Around epoch 20, the training loss is 0.4 and validation loss is 0.45. By epoch 50, training loss drops to 0.1, but validation loss has climbed to 0.8. At which epoch should you stop training and save your model?",
+          "prompt": "You build a model to detect cancer cells in medical scans. The model outputs: 1. Cell coordinate box (uses MSE), and 2. Is malignant? (uses BCE). During training, the MSE loss is high, causing the model to ignore malignant classification errors. How do you resolve this?",
           "options": [
             {
               "id": "a",
-              "text": "Around epoch 20, because that was the point before the model began overfitting (where validation loss was at its lowest).",
+              "text": "Adjust the combined loss weights, increasing the weight factor for the malignant BCE loss to balance its influence against the larger MSE scale.",
               "correct": true
             },
             {
               "id": "b",
-              "text": "Epoch 50, because training loss is at its lowest.",
+              "text": "Delete the BCE loss and use MSE for both tasks.",
               "correct": false
             },
             {
               "id": "c",
-              "text": "Epoch 1, to ensure the model has no bias.",
+              "text": "Increase the learning rate to make the MSE loss smaller.",
               "correct": false
             },
             {
               "id": "d",
-              "text": "Let it run to epoch 100 to see if the validation loss drops again.",
+              "text": "Switch the activation function to ReLU at the output layer.",
               "correct": false
             }
           ],
-          "explain": "Exactly! The goal is to maximize performance on unseen data. After epoch 20, the validation curve starts climbing, showing the model is overfitting. The best model is captured at the valley of the validation curve. Next, let's learn how we automate this exit using Early Stopping!"
+          "explain": "Exactly! If one loss dominates, we adjust the weight factors in the combined loss function to scale their gradient signals, ensuring the optimizer pays attention to both tasks. Next, let's look at the decision matrix for choosing the right loss function!"
         }
       ]
     }

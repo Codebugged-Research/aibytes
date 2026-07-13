@@ -1,0 +1,222 @@
+{
+  "id": "u74-l1",
+  "unit": 74,
+  "day": 371,
+  "tier": "Training Deep Networks",
+  "tierIcon": "🎲",
+  "title": "Why Zero Initialization Fails",
+  "icon": "🎲",
+  "concept": "If every hidden neuron starts with the same zero weights, they produce the same outputs, receive the same gradients, and keep learning the same feature instead of specializing.",
+  "xp": 15,
+  "hearts": 3,
+  "estMinutes": 7,
+  "segments": [
+    {
+      "type": "warmup",
+      "exercises": [
+        {
+          "id": "w1",
+          "type": "multiple_choice",
+          "xp": 1,
+          "prompt": "Recap: During training, what do weights control inside a neuron?",
+          "options": [
+            {
+              "id": "a",
+              "text": "How strongly the neuron's inputs influence its output.",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "Which day the lesson appears on.",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "Whether the dataset needs labels.",
+              "correct": false
+            }
+          ],
+          "explain": "Right. Weights decide how much each input matters, so starting them well matters a lot for learning."
+        }
+      ]
+    },
+    {
+      "type": "teach",
+      "cards": [
+        {
+          "kind": "hook",
+          "icon": "🪞",
+          "title": "Five mirrors, one reflection",
+          "body": "Imagine hiring five detectives, but they all begin with the exact same map, the exact same clue list, and the exact same first guess. They will all chase the same suspect. A hidden layer with all-zero weights has the same problem: every neuron begins as a mirror copy of the others."
+        },
+        {
+          "kind": "definition",
+          "icon": "🎲",
+          "title": "The symmetry problem",
+          "body": "<strong>Zero initialization</strong> means starting every hidden-layer weight at 0. That sounds tidy, but it creates <strong>symmetry</strong>: neurons in the same layer produce the same output, get the same gradient during backprop, and receive the same update. Instead of learning different patterns, they stay clones."
+        },
+        {
+          "kind": "analogy",
+          "icon": "🎤",
+          "title": "A choir singing one note",
+          "body": "A choir sounds rich because different singers carry different parts. If every singer starts on the same note and copies the same adjustment each time, the choir never becomes harmony — it stays one loud duplicate. Zero-initialized neurons do that in a network."
+        },
+        {
+          "kind": "example",
+          "icon": "🖼️",
+          "title": "Three identical feature hunters",
+          "body": "Suppose an image model has three hidden neurons meant to discover useful patterns like edges, curves, or textures. If all three start with zero weights, the same input gives all three the same activation. Backprop then gives them the same correction, so after the update they are still identical. The network wastes three neurons learning one feature three times."
+        },
+        {
+          "kind": "mythbust",
+          "icon": "⚠️",
+          "title": "Zero is not a harmless blank slate",
+          "body": "A common myth is that zero is the fairest possible starting point because nobody gets an advantage. But hidden neurons are supposed to become different from one another. If they all start identically, training has no reason to split them apart."
+        },
+        {
+          "kind": "visual",
+          "icon": "⚖️",
+          "title": "Clones vs. specialists",
+          "body": "Initialization should help neurons diverge into different jobs.",
+          "compare": {
+            "left": {
+              "emoji": "🪞",
+              "tag": "All zeros",
+              "text": "Same output from each neuron<br>Same gradient for each neuron<br>They keep learning duplicate features"
+            },
+            "right": {
+              "emoji": "🌱",
+              "tag": "Different starting weights",
+              "text": "Neurons respond a little differently<br>Updates begin to separate their roles<br>The layer can learn multiple features"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "type": "practice",
+      "exercises": [
+        {
+          "id": "p1",
+          "type": "multiple_choice",
+          "xp": 2,
+          "prompt": "Why do all-zero hidden-layer weights usually hurt a deep network?",
+          "options": [
+            {
+              "id": "a",
+              "text": "Because neurons in the same layer stay identical and learn the same thing.",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "Because zero weights automatically delete the training data.",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "Because backpropagation refuses to run when it sees any zero.",
+              "correct": false
+            },
+            {
+              "id": "d",
+              "text": "Because zero weights always make the loss exactly perfect.",
+              "correct": false
+            }
+          ],
+          "explain": "Exactly. The main problem is symmetry: identical neurons get identical updates and fail to specialize."
+        },
+        {
+          "id": "p2",
+          "type": "true_false",
+          "xp": 2,
+          "prompt": "True or false: If two hidden neurons start with the same weights and see the same inputs, backprop can give them the same updates step after step.",
+          "options": [
+            {
+              "id": "t",
+              "text": "True",
+              "correct": true
+            },
+            {
+              "id": "f",
+              "text": "False",
+              "correct": false
+            }
+          ],
+          "explain": "True. Identical neurons behave identically, so training keeps them locked together unless something breaks that symmetry."
+        },
+        {
+          "id": "p3",
+          "type": "fill_blank",
+          "xp": 2,
+          "prompt": "Complete the sentence:",
+          "sentence": "Zero initialization fails because hidden neurons stay too ___ to one another.",
+          "blank": "similar",
+          "words": [
+            "similar",
+            "random",
+            "deep"
+          ],
+          "explain": "Yes. If neurons stay too similar, the layer cannot spread work across different features."
+        },
+        {
+          "id": "p4",
+          "type": "spot_the_ai",
+          "xp": 2,
+          "prompt": "Which situation best shows the symmetry problem?",
+          "options": [
+            {
+              "id": "a",
+              "text": "Four hidden neurons all start at zero, make the same outputs, and keep receiving the same updates.",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "Four hidden neurons begin with slightly different values and slowly specialize.",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "A model lowers its loss after several gradient steps.",
+              "correct": false
+            }
+          ],
+          "explain": "Correct. The symmetry problem is specifically about neurons becoming stuck as copies of one another."
+        }
+      ]
+    },
+    {
+      "type": "boss",
+      "exercises": [
+        {
+          "id": "b1",
+          "type": "multiple_choice",
+          "xp": 5,
+          "prompt": "A photo classifier has six hidden neurons in one layer, and all six weights start at 0. After the first backward pass, each neuron gets the same gradient pattern. What is the biggest risk?",
+          "options": [
+            {
+              "id": "a",
+              "text": "The neurons will keep learning the same feature, so the layer acts like one neuron copied six times.",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "The network will become unsupervised automatically.",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "The labels will be rewritten to match the predictions.",
+              "correct": false
+            },
+            {
+              "id": "d",
+              "text": "The loss function will disappear from training.",
+              "correct": false
+            }
+          ],
+          "explain": "Exactly. With identical starts and identical gradients, the neurons stay locked together instead of dividing up the job of feature learning."
+        }
+      ]
+    }
+  ]
+}

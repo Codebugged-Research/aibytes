@@ -3,10 +3,10 @@
   "unit": 66,
   "day": 334,
   "tier": "Training Deep Networks",
-  "tierIcon": "🎯",
-  "title": "Cross-Entropy vs. MSE for Classification",
-  "icon": "⚖️",
-  "concept": "Cross-entropy is preferred over Mean Squared Error (MSE) for classification because it produces stronger, faster gradient updates for confidently wrong predictions.",
+  "tierIcon": "➡️",
+  "title": "Batch Forward Passes: Processing Many Examples at Once",
+  "icon": "📦",
+  "concept": "A batch forward pass processes multiple training examples simultaneously in parallel using matrix operations, maximizing GPU efficiency.",
   "xp": 15,
   "hearts": 3,
   "estMinutes": 7,
@@ -18,25 +18,25 @@
           "id": "w1",
           "type": "multiple_choice",
           "xp": 1,
-          "prompt": "Recap: What does Categorical Cross-Entropy measure?",
+          "prompt": "Recap: What is the correct order of operations inside a single neuron?",
           "options": [
             {
               "id": "a",
-              "text": "The difference between the model's Softmax probability distribution and the true one-hot label.",
+              "text": "Multiply inputs by weights, add bias, then apply activation function.",
               "correct": true
             },
             {
               "id": "b",
-              "text": "The distance between the predicted number and the true continuous target.",
+              "text": "Apply activation function, multiply by weights, then add bias.",
               "correct": false
             },
             {
               "id": "c",
-              "text": "The variance of the input weights.",
+              "text": "Add bias, apply activation function, then multiply by weights.",
               "correct": false
             }
           ],
-          "explain": "Correct! CCE compares the predicted distribution against the correct classification label."
+          "explain": "Correct! We sum the weighted inputs plus bias, then apply the activation function."
         }
       ]
     },
@@ -45,49 +45,49 @@
       "cards": [
         {
           "kind": "hook",
-          "icon": "⚖️",
-          "title": "The sleepy judge vs. the strict referee",
-          "body": "If you make a terrible, confident mistake on the field, a sleepy judge might calmly deduct a point and move on (weak signal). A strict referee will immediately blow a whistle, throw a flag, and penalize you heavily (strong signal). In deep learning classification, MSE is the sleepy judge; Cross-Entropy is the strict referee."
+          "icon": "📦",
+          "title": "The post office sorting bins",
+          "body": "If a post office has 1,000 letters, and the mail carrier delivers them one-by-one to the destination, it takes all day. Instead, they pack 32 letters into a single crate and deliver them to the sorting machine together. Processing data in batches is how neural networks stay fast."
         },
         {
           "kind": "definition",
-          "icon": "⚖️",
-          "title": "The gradient signal difference",
-          "body": "During training, we calculate updates using gradients. When a model is confidently wrong, we need a **strong gradient** to fix it. **Mean Squared Error (MSE)** updates grow weak and slow when a Sigmoid/Softmax output is near 0 or 1, causing learning to stall. **Cross-Entropy** maintains a sharp, powerful gradient signal for wrong answers, speeding up training."
+          "icon": "📦",
+          "title": "Batch Processing",
+          "body": "Instead of running forward propagation for one row of data at a time, we group multiple rows together into a **batch** (e.g. batch size of 32 or 64). The inputs are stacked into a larger matrix, allowing the GPU to compute predictions for the entire batch in parallel."
         },
         {
           "kind": "analogy",
-          "icon": "🏁",
-          "title": "The flat plateau vs. the steep slide",
-          "body": "Imagine rolling a ball toward a hole. Under MSE, if you miss the target completely, the landscape becomes a flat plateau — the ball has no slope to roll down (the gradient vanishes). Under Cross-Entropy, missing the target creates a steep, vertical slide: the further you miss, the steeper the slope, forcing the ball to roll back to the target immediately."
+          "icon": "🚌",
+          "title": "Taking the bus vs. individual cars",
+          "body": "Processing one row at a time is like 32 people driving 32 separate cars to the same office — high traffic, high overhead. Batch processing is like putting all 32 people on a single bus: they travel together, use one vehicle (one GPU calculation step), and arrive at the same time efficiently."
         },
         {
           "kind": "example",
-          "icon": "📧",
-          "title": "The vanishing gradient",
-          "body": "A model predicts a 0.001 probability of spam (target = 1). If we use MSE, the calculation slope (gradient) drops to near **0**, so the model barely adjusts its weights. If we use Cross-Entropy, the loss is high, and the math guarantees a **strong, constant gradient** that immediately forces the model to correct itself."
+          "icon": "📊",
+          "title": "Stacking the inputs",
+          "body": "If we predict house prices with 3 features, one house is a list: `[size, bedrooms, age]`. A batch of 32 houses is a grid with 32 rows and 3 columns. When we multiply this 32-by-3 input matrix by our 3-by-5 weight matrix, we get a 32-by-5 output matrix containing the hidden values for all 32 houses in one go."
         },
         {
           "kind": "mythbust",
           "icon": "⚠️",
-          "title": "MSE isn't 'broken'",
-          "body": "You might think MSE is a bad loss function. In reality, MSE is excellent for **regression** tasks (predicting numbers like house prices). The problem only occurs when we combine MSE with squashing activations like Sigmoid/Softmax in classification, which flattens the gradients at the edges. Cross-Entropy is mathematically designed to cancel out this flattening effect."
+          "title": "Batches don't mix customer data",
+          "body": "You might worry that stacking rows into a batch means the model mixes up different customers' data. In matrix multiplication, the rows remain completely independent. The math computes each row's prediction separately; they are simply grouped in the same step to maximize hardware speed."
         },
         {
           "kind": "visual",
           "icon": "⚖️",
-          "title": "MSE vs. Cross-Entropy Gradients",
-          "body": "How gradient strength reacts to a confidently wrong guess:",
+          "title": "Single vs. Batch Forward Pass",
+          "body": "How data is fed into the model:",
           "compare": {
             "left": {
-              "emoji": "🐌",
-              "tag": "MSE Classification Loss",
-              "text": "Gradient shrinks to near 0.<br>Weights barely adjust.<br>Model remains stuck/slow to learn."
+              "emoji": "🚗",
+              "tag": "Single Pass (Batch Size = 1)",
+              "text": "One row of data processed.<br>Outputs one prediction.<br>High overhead per row."
             },
             "right": {
-              "emoji": "🏎️",
-              "tag": "Cross-Entropy Loss",
-              "text": "Gradient remains large and sharp.<br>Weights adjust immediately.<br>Model learns rapidly."
+              "emoji": "🚌",
+              "tag": "Batch Pass (Batch Size = 32)",
+              "text": "32 rows stacked as a matrix.<br>Outputs 32 predictions in parallel.<br>Low hardware overhead."
             }
           }
         }
@@ -100,87 +100,87 @@
           "id": "p1",
           "type": "multiple_choice",
           "xp": 2,
-          "prompt": "Why is Cross-Entropy preferred over MSE for classification tasks in deep learning?",
+          "prompt": "What does a batch size of 32 mean in a forward pass?",
           "options": [
             {
               "id": "a",
-              "text": "It provides a strong, constant gradient signal for confidently wrong predictions, preventing training from stalling.",
+              "text": "32 training rows are stacked into a matrix and processed in parallel to compute 32 predictions.",
               "correct": true
             },
             {
               "id": "b",
-              "text": "It requires fewer weight matrix operations to calculate.",
+              "text": "The model has exactly 32 hidden layers.",
               "correct": false
             },
             {
               "id": "c",
-              "text": "It automatically scales all input features between 0 and 1.",
+              "text": "The model will be retrained 32 times.",
               "correct": false
             },
             {
               "id": "d",
-              "text": "It limits the maximum depth of the hidden layers.",
+              "text": "The weights are multiplied by 32.",
               "correct": false
             }
           ],
-          "explain": "Correct! Cross-Entropy avoids the vanishing gradient problem at the activation edges, keeping learning active."
+          "explain": "Correct! Batch size determines how many training examples are processed together in parallel."
         },
         {
           "id": "p2",
           "type": "true_false",
           "xp": 2,
-          "prompt": "True or false: Combining MSE loss with a Sigmoid output activation for classification can cause training to stall because the gradients become very flat at the edges.",
+          "prompt": "True or false: Stacking rows into a batch causes different customers' data features to mix together, corrupting individual predictions.",
           "options": [
             {
               "id": "t",
               "text": "True",
-              "correct": true
+              "correct": false
             },
             {
               "id": "f",
               "text": "False",
-              "correct": false
+              "correct": true
             }
           ],
-          "explain": "True! The Sigmoid curve flattens out at the edges, which flattens MSE gradients and stalls training."
+          "explain": "False! Matrix math keeps rows mathematically independent; they are only grouped for parallel computation speed."
         },
         {
           "id": "p3",
           "type": "fill_blank",
           "xp": 2,
           "prompt": "Complete the sentence:",
-          "sentence": "While MSE is ideal for regression, ___ is the preferred choice for classification.",
-          "blank": "Cross-Entropy",
+          "sentence": "Batch processing is designed to maximize the parallel efficiency of computer chips like ___.",
+          "blank": "GPUs",
           "words": [
-            "Cross-Entropy",
-            "Huber Loss",
-            "Gini Impurity"
+            "GPUs",
+            "hard drives",
+            "sensors"
           ],
-          "explain": "Cross-Entropy is the standard loss choice for classification tasks."
+          "explain": "GPUs are built for parallel matrix math, making batch processing highly efficient."
         },
         {
           "id": "p4",
           "type": "spot_the_ai",
           "xp": 2,
-          "prompt": "Which loss function behaves like a 'steep slide' that forces the model to correct confidently wrong guesses immediately?",
+          "prompt": "A model has a batch size of 64. If we have 640 total training rows, how many batch forward passes are needed to process all the data once?",
           "options": [
             {
               "id": "a",
-              "text": "Binary or Categorical Cross-Entropy.",
+              "text": "10, because 640 / 64 = 10.",
               "correct": true
             },
             {
               "id": "b",
-              "text": "Mean Squared Error (MSE).",
+              "text": "640, because each row is processed individually.",
               "correct": false
             },
             {
               "id": "c",
-              "text": "Variance Thresholding.",
+              "text": "1, because all data is processed at once.",
               "correct": false
             }
           ],
-          "explain": "Correct! Cross-Entropy maintains steep slopes (strong gradients) for wrong predictions, forcing rapid correction."
+          "explain": "Correct! 10 separate batches of 64 rows will cover all 640 training rows."
         }
       ]
     },
@@ -191,30 +191,30 @@
           "id": "b1",
           "type": "multiple_choice",
           "xp": 5,
-          "prompt": "You build a neural network to identify plant diseases. Using MSE loss, the network stalls during training, failing to improve from 50% accuracy. You switch the loss function to Categorical Cross-Entropy, and the accuracy rises to 92% in 3 epochs. What caused this change?",
+          "prompt": "You are training a deep network on a large image dataset. You change your batch size from 1 to 64. What is the impact on training speed and memory usage on your GPU?",
           "options": [
             {
               "id": "a",
-              "text": "Cross-Entropy resolved the vanishing gradient issue at the Sigmoid/Softmax boundaries, providing sharp gradients that allowed the weights to update correctly.",
+              "text": "Training speed increases significantly because the GPU processes 64 images in parallel, but GPU memory usage increases because more data is held in RAM at once.",
               "correct": true
             },
             {
               "id": "b",
-              "text": "Cross-Entropy automatically doubled the learning rate of the optimizer.",
+              "text": "Training runs slower because 64 images take longer to upload than 1.",
               "correct": false
             },
             {
               "id": "c",
-              "text": "MSE was disabled because it doesn't work on GPUs.",
+              "text": "GPU memory usage drops to zero because of the batching structure.",
               "correct": false
             },
             {
               "id": "d",
-              "text": "The model converted itself to a random forest.",
+              "text": "There is no difference in speed or memory usage.",
               "correct": false
             }
           ],
-          "explain": "Exactly! MSE combined with Sigmoid/Softmax creates flat gradient plateaus where the model gets stuck. Cross-Entropy mathematically cancels this flattening, keeping the gradients steep and active. Next, let's look at a clever regularization trick: Label Smoothing!"
+          "explain": "Exactly! Batching leverages the GPU's parallel cores to speed up training, but stacking more rows requires more active memory to hold the intermediate activations. Next, let's trace a full forward pass from start to finish on a real classification task!"
         }
       ]
     }

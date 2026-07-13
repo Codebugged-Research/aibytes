@@ -2,11 +2,11 @@
   "id": "u69-l1",
   "unit": 69,
   "day": 346,
-  "tier": "The Forward Pass Capstone",
-  "tierIcon": "🏆",
-  "title": "Full Walkthrough: Raw Input → Forward Pass → Prediction → Loss",
-  "icon": "🏁",
-  "concept": "A complete trace of a neural network's forward pipeline starts with loading features, passes them through weighted matrix layers with activations, and finishes by evaluating accuracy using a loss function.",
+  "tier": "The Training Loop",
+  "tierIcon": "🔄",
+  "title": "Epochs, Batches & Iterations",
+  "icon": "🔄",
+  "concept": "Epochs, batches, and iterations define the core vocabulary of the neural network training loop, tracking how data is partitioned and processed over time.",
   "xp": 15,
   "hearts": 3,
   "estMinutes": 7,
@@ -18,25 +18,25 @@
           "id": "w1",
           "type": "multiple_choice",
           "xp": 1,
-          "prompt": "Recap: What triggers early stopping during training?",
+          "prompt": "Recap: Which loss function is best for a binary classification task?",
           "options": [
             {
               "id": "a",
-              "text": "Validation loss stops improving and begins to rise for a set number of epochs (patience).",
+              "text": "Binary Cross-Entropy.",
               "correct": true
             },
             {
               "id": "b",
-              "text": "Training loss drops below zero.",
+              "text": "Categorical Cross-Entropy.",
               "correct": false
             },
             {
               "id": "c",
-              "text": "A manual check-engine light fires on the server.",
+              "text": "Mean Squared Error.",
               "correct": false
             }
           ],
-          "explain": "Correct! Early stopping halts training when validation loss stops dropping, preventing overfitting."
+          "explain": "Correct! BCE is the standard loss for binary (yes/no) classification."
         }
       ]
     },
@@ -45,49 +45,49 @@
       "cards": [
         {
           "kind": "hook",
-          "icon": "🏁",
-          "title": "The complete workflow under the microscope",
-          "body": "We have explored forward propagation, activations, batching, and loss. Now, let's tie them all together in a single continuous walkthrough, tracking a single input all the way from raw feature to final loss score. Let's trace the full pipeline!"
+          "icon": "🔄",
+          "title": "The semester syllabus",
+          "body": "If you are studying a textbook, you don't just read the whole thing in one second. You divide it into chapters (batches), study them one by one (iterations), and when you finish the entire book, you start over again to review (epochs). This structured schedule is how a training loop is organized."
         },
         {
           "kind": "definition",
-          "icon": "🏁",
-          "title": "The Prediction-to-Error Sequence",
-          "body": "The complete forward pipeline has 3 phases: 1. **Data Load** (inputs stacked into matrices), 2. **Forward Propagation** (matrix multiplication + activation layer-by-layer to output probabilities), 3. **Loss Computation** (comparing the output to the true label to calculate the error score)."
+          "icon": "🔄",
+          "title": "The Training Vocabulary",
+          "body": "Three core terms define the loop: 1. **Batch Size** is the number of rows processed in one step. 2. **Iteration** (or step) is one forward/backward pass over a single batch. 3. **Epoch** is one complete pass over the *entire* dataset."
         },
         {
           "kind": "analogy",
-          "icon": "🎯",
-          "title": "Building a custom house and getting it inspected",
-          "body": "Think of the complete sequence like building a house. Input is the raw lumber and blueprints. Forward pass is the framing, wiring, and painting (layer transformations). Prediction is the completed house. Loss is the inspector's detailed report checking every room against the build standards and listing all the flaws."
+          "icon": "📚",
+          "title": "The homework assignment",
+          "body": "Think of training like completing a workbook with 100 pages. If you do 10 pages at a time, your batch size is 10. Each 10-page block takes one study session (one iteration). After 10 study sessions, you've completed all 100 pages — that is one epoch. To master the material, you review the workbook 5 times (5 epochs)."
         },
         {
           "kind": "example",
-          "icon": "📧",
-          "title": "The spam filter walkthrough",
-          "body": "An email arrives. 1. Input: `[word count = 10, contains_free = 1]`. 2. Hidden Layer: weighted sum + ReLU outputs `1.2`. 3. Output Layer: sum + Sigmoid outputs `0.90` (prediction: 90% spam). 4. Loss: the true label was 1 (Spam). BCE compares 0.90 to 1.0, calculating a low loss of **0.10**."
+          "icon": "📊",
+          "title": "Calculating the loop",
+          "body": "A dataset has 1,000 rows. We set a batch size of 100. - **1 Iteration** processes 100 rows. - It takes **10 Iterations** to cover all 1,000 rows. - Once 10 iterations finish, **1 Epoch** is complete. If we train for 50 epochs, the model runs 500 total iterations."
         },
         {
           "kind": "mythbust",
           "icon": "⚠️",
-          "title": "Loss doesn't update the model yet",
-          "body": "It's easy to assume the model learns during the loss calculation. The loss function only *measures* the error. The model remains completely unchanged after this step; the calculated loss is simply the 'error card' passed backward during backpropagation to update the weights later."
+          "title": "An epoch isn't a single step",
+          "body": "Beginners often get confused between iterations and epochs, thinking one epoch means the model adjusted its weights once. In reality, weights are adjusted at the end of *every single iteration* (every batch). A single epoch containing 100 batches will adjust the model's weights 100 times."
         },
         {
           "kind": "visual",
           "icon": "⚖️",
-          "title": "The Full Forward-Loss Sequence",
-          "body": "Data flow from input to error score:",
+          "title": "Epoch vs. Iteration",
+          "body": "How data coverage is measured during training:",
           "compare": {
             "left": {
-              "emoji": "📥",
-              "tag": "Forward Pass (Predict)",
-              "text": "Input loaded.<br>Layer math transforms features.<br>Output squashed to probability."
+              "emoji": "🔄",
+              "tag": "Iteration (Step)",
+              "text": "One batch of data processed.<br>Weights updated once.<br>e.g. step 1 out of 10."
             },
             "right": {
-              "emoji": "🎯",
-              "tag": "Loss Pass (Evaluate)",
-              "text": "True label compared.<br>Loss function calculates error score.<br>Ready for backpropagation."
+              "emoji": "📚",
+              "tag": "Epoch",
+              "text": "Entire dataset processed once.<br>Contains many iterations.<br>e.g. completed review 1."
             }
           }
         }
@@ -100,36 +100,36 @@
           "id": "p1",
           "type": "multiple_choice",
           "xp": 2,
-          "prompt": "What is the final output of the complete forward-plus-loss sequence?",
+          "prompt": "What does a single 'epoch' represent in neural network training?",
           "options": [
             {
               "id": "a",
-              "text": "A single numerical loss score representing how far the prediction was from the true target.",
+              "text": "One complete pass of the training algorithm over the entire dataset.",
               "correct": true
             },
             {
               "id": "b",
-              "text": "A set of updated connection weights.",
+              "text": "A single gradient update on one batch of data.",
               "correct": false
             },
             {
               "id": "c",
-              "text": "A new training dataset.",
+              "text": "The time it takes to save the model file to disk.",
               "correct": false
             },
             {
               "id": "d",
-              "text": "A list of optimized hyperparameters.",
+              "text": "The number of inputs in the first layer.",
               "correct": false
             }
           ],
-          "explain": "Correct! The end goal of the forward-plus-loss sequence is to calculate the numerical loss score."
+          "explain": "Correct! One epoch means the model has seen every training example exactly once."
         },
         {
           "id": "p2",
           "type": "true_false",
           "xp": 2,
-          "prompt": "True or false: During the loss calculation step, the model's weights are immediately adjusted based on the error value.",
+          "prompt": "True or false: Model weights are only updated once per epoch, at the very end of the dataset.",
           "options": [
             {
               "id": "t",
@@ -142,45 +142,45 @@
               "correct": true
             }
           ],
-          "explain": "False! Loss only measures the error; weights are updated later during the backward pass."
+          "explain": "False! Weights are updated at the end of every iteration (every batch), which happens multiple times per epoch."
         },
         {
           "id": "p3",
           "type": "fill_blank",
           "xp": 2,
           "prompt": "Complete the sentence:",
-          "sentence": "The complete pipeline is a one-way flow starting with input features, running forward to a prediction, and ending at a ___ score.",
-          "blank": "loss",
+          "sentence": "If a dataset has 500 rows and the batch size is 50, it will take ___ iterations to complete one epoch.",
+          "blank": "10",
           "words": [
-            "loss",
-            "gradient",
-            "weight"
+            "10",
+            "50",
+            "500"
           ],
-          "explain": "The sequence starts with inputs and finishes at the loss score."
+          "explain": "It takes 10 iterations to process all 500 rows when processing 50 rows per batch (500 / 50 = 10)."
         },
         {
           "id": "p4",
           "type": "spot_the_ai",
           "xp": 2,
-          "prompt": "Which scenario represents the complete forward-plus-loss sequence?",
+          "prompt": "A model trains for 5 epochs on a dataset with 4 batches. How many total weight update iterations will occur?",
           "options": [
             {
               "id": "a",
-              "text": "A model reads patient age/weight, runs layer math, outputs an 80% risk score, compares it to the true label (Healthy), and calculates a high loss.",
+              "text": "20 iterations, because 5 epochs * 4 batches = 20.",
               "correct": true
             },
             {
               "id": "b",
-              "text": "A model adjusts its weights using SGD momentum.",
+              "text": "5 iterations, because updates only happen once per epoch.",
               "correct": false
             },
             {
               "id": "c",
-              "text": "A developer splits a dataset into training and test sets.",
+              "text": "4 iterations, because the batch size is 4.",
               "correct": false
             }
           ],
-          "explain": "Correct! Data flow from inputs to output prediction and ending at loss error calculation is the complete sequence."
+          "explain": "Correct! Weights update every batch, so 4 updates per epoch * 5 epochs = 20 total iterations."
         }
       ]
     },
@@ -191,30 +191,30 @@
           "id": "b1",
           "type": "multiple_choice",
           "xp": 5,
-          "prompt": "You trace a deep network predicting user clicks. The input is loaded, the forward pass runs through 3 hidden layers, the output layer squashes the result to a click probability of 0.10, and CCE loss compares this to the true label (Clicked = 1), returning a high loss of 2.30. What is the status of the model?",
+          "prompt": "A dataset has 10,000 training examples. You set the batch size to 100 and configure training for 10 epochs. How many iterations will run, and how many times will the model's weights be updated?",
           "options": [
             {
               "id": "a",
-              "text": "The prediction is made and the error (2.30) is calculated, but the model's weights remain frozen and unchanged until the backward pass runs.",
+              "text": "1,000 iterations total (100 per epoch * 10 epochs), resulting in 1,000 weight updates.",
               "correct": true
             },
             {
               "id": "b",
-              "text": "The model has learned from the error and updated its weights to fix the prediction.",
+              "text": "10 iterations total, resulting in 10 weight updates.",
               "correct": false
             },
             {
               "id": "c",
-              "text": "The model's activations collapsed because the loss was high.",
+              "text": "100 iterations total, resulting in 1,000 weight updates.",
               "correct": false
             },
             {
               "id": "d",
-              "text": "The weights are reset because the prediction was wrong.",
+              "text": "10,000 iterations total, resulting in 100 weight updates.",
               "correct": false
             }
           ],
-          "explain": "Exactly! The forward pass and loss step are complete, but no learning has happened yet. The loss score of 2.30 is now passed to the backward pass (backpropagation) to update the weights. Next, let's learn how we visualize this entire sequence as a computation graph!"
+          "explain": "Exactly! One epoch requires 10,000 / 100 = 100 iterations. For 10 epochs, that is 100 * 10 = 1,000 iterations total. Since weights update every iteration, we get 1,000 updates. Next, let's look at the tradeoffs of choosing different batch sizes!"
         }
       ]
     }

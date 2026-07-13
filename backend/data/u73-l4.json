@@ -1,0 +1,222 @@
+{
+  "id": "u73-l4",
+  "unit": 73,
+  "day": 369,
+  "tier": "Backpropagation",
+  "tierIcon": "🛠️",
+  "title": "Exploding Gradients",
+  "icon": "💥",
+  "concept": "Exploding gradients happen when backprop signals grow too large, causing wild weight jumps and unstable training; gradient clipping caps the step before it gets dangerous.",
+  "xp": 15,
+  "hearts": 3,
+  "estMinutes": 7,
+  "segments": [
+    {
+      "type": "warmup",
+      "exercises": [
+        {
+          "id": "w1",
+          "type": "multiple_choice",
+          "xp": 1,
+          "prompt": "Recap: What happens to early layers when gradients vanish?",
+          "options": [
+            {
+              "id": "a",
+              "text": "They receive updates that are so tiny that learning nearly freezes.",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "They automatically become output layers.",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "They double in size every epoch.",
+              "correct": false
+            }
+          ],
+          "explain": "Correct. Vanishing gradients mean the early layers barely get any learning signal."
+        }
+      ]
+    },
+    {
+      "type": "teach",
+      "cards": [
+        {
+          "kind": "hook",
+          "icon": "💥",
+          "title": "When the fix is way too strong",
+          "body": "Imagine trying to steer a bike back onto the sidewalk, but you yank the handlebars so hard that the bike shoots the other way and starts wobbling even more. Exploding gradients are like that: the correction signal becomes too strong and destabilizes training."
+        },
+        {
+          "kind": "definition",
+          "icon": "📣",
+          "title": "What exploding gradients are",
+          "body": "In some networks, the backward signal grows instead of shrinking. Then a weight update can become huge, causing the model to jump wildly instead of learning smoothly. <strong>Gradient clipping</strong> is a safety trick that trims overly large gradients before the update step happens."
+        },
+        {
+          "kind": "analogy",
+          "icon": "🎤",
+          "title": "Microphone feedback",
+          "body": "If a microphone points at a speaker, a tiny sound can loop, grow, and suddenly become a painful screech. Exploding gradients are a bit like that: a signal feeds backward, swells too much, and drowns out stable learning."
+        },
+        {
+          "kind": "example",
+          "icon": "📈",
+          "title": "One bad jump",
+          "body": "Suppose training loss has been around 0.9, then one backward pass creates a huge gradient. The next update launches the weights so far that the loss spikes to 80 or turns into NaN. The model did not get smarter; it overreacted."
+        },
+        {
+          "kind": "mythbust",
+          "icon": "⚠️",
+          "title": "Bigger is not always better",
+          "body": "A common myth is that giant gradients mean the model is learning super fast. Usually they mean the update is too violent. If the step is huge, the model can leap past good solutions and wreck the progress it already made."
+        },
+        {
+          "kind": "visual",
+          "icon": "⚖️",
+          "title": "Unclipped vs. clipped updates",
+          "body": "Gradient clipping keeps the update from becoming dangerously large.",
+          "compare": {
+            "left": {
+              "emoji": "🚫",
+              "tag": "No clipping",
+              "text": "Huge gradient causes a giant jump.<br>Loss may spike or become NaN."
+            },
+            "right": {
+              "emoji": "🪖",
+              "tag": "With clipping",
+              "text": "Oversized gradient gets capped first.<br>The update stays within a safer range."
+            }
+          }
+        }
+      ]
+    },
+    {
+      "type": "practice",
+      "exercises": [
+        {
+          "id": "p1",
+          "type": "multiple_choice",
+          "xp": 2,
+          "prompt": "What is gradient clipping mainly trying to do?",
+          "options": [
+            {
+              "id": "a",
+              "text": "Cap overly large gradients before they cause a dangerous update.",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "Erase the loss function after each batch.",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "Add more layers so the network is deeper.",
+              "correct": false
+            },
+            {
+              "id": "d",
+              "text": "Turn every gradient into exactly zero.",
+              "correct": false
+            }
+          ],
+          "explain": "Exactly. Clipping is a safety limit, not a way to delete learning."
+        },
+        {
+          "id": "p2",
+          "type": "true_false",
+          "xp": 2,
+          "prompt": "True or false: Exploding gradients often show up as sudden loss spikes or NaN values during training.",
+          "options": [
+            {
+              "id": "t",
+              "text": "True",
+              "correct": true
+            },
+            {
+              "id": "f",
+              "text": "False",
+              "correct": false
+            }
+          ],
+          "explain": "True. Huge updates can make training unstable, causing dramatic jumps or undefined values."
+        },
+        {
+          "id": "p3",
+          "type": "fill_blank",
+          "xp": 2,
+          "prompt": "Complete the sentence:",
+          "sentence": "Gradient clipping acts like a safety ___ on the size of an update.",
+          "blank": "cap",
+          "words": [
+            "cap",
+            "camera",
+            "calendar"
+          ],
+          "explain": "Yes. Clipping caps an oversized gradient before it can launch the weights too far."
+        },
+        {
+          "id": "p4",
+          "type": "spot_the_ai",
+          "xp": 2,
+          "prompt": "Which training pattern sounds most like exploding gradients?",
+          "options": [
+            {
+              "id": "a",
+              "text": "Loss is stable for a while, then suddenly shoots upward after one enormous update.",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "Early layers learn slowly but steadily over many steps.",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "The dataset contains more than one class label.",
+              "correct": false
+            }
+          ],
+          "explain": "Correct. Exploding gradients usually look like unstable jumps, not gentle slow learning."
+        }
+      ]
+    },
+    {
+      "type": "boss",
+      "exercises": [
+        {
+          "id": "b1",
+          "type": "multiple_choice",
+          "xp": 5,
+          "prompt": "A language model is training normally, then one batch sends the loss from 1.1 to NaN. Your logs show extremely large gradients right before the crash. Which explanation fits best?",
+          "options": [
+            {
+              "id": "a",
+              "text": "The gradients exploded, causing a huge update; clipping can help cap the step and keep training stable.",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "The model learned perfectly and stopped needing a loss.",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "The gradients vanished, so the model must have updated too little.",
+              "correct": false
+            },
+            {
+              "id": "d",
+              "text": "The batch automatically changed the labels inside the dataset.",
+              "correct": false
+            }
+          ],
+          "explain": "Exactly. Extremely large gradients can create a destructive update, and clipping is a common safety guard against that kind of blow-up."
+        }
+      ]
+    }
+  ]
+}

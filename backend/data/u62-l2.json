@@ -3,10 +3,10 @@
   "unit": 62,
   "day": 312,
   "tier": "Neural Network Basics",
-  "tierIcon": "🌈",
-  "title": "Parametric ReLU (PReLU): Learnable Slopes",
-  "icon": "🎛️",
-  "concept": "Instead of a fixed small slope for negative inputs like Leaky ReLU uses, PReLU lets the network learn the best slope for negative inputs during training, adapting it per neuron.",
+  "tierIcon": "🧠",
+  "title": "Why We Need Activation Functions",
+  "icon": "⚠️",
+  "concept": "The core insight: without a nonlinear activation function, stacking any number of neuron layers mathematically collapses into a single straight line — no more powerful than one perceptron. Activation functions are what let deep networks bend and curve.",
   "xp": 15,
   "hearts": 3,
   "estMinutes": 7,
@@ -18,25 +18,25 @@
           "id": "w1",
           "type": "multiple_choice",
           "xp": 1,
-          "prompt": "Recap: what does Leaky ReLU do differently from regular ReLU for negative inputs?",
+          "prompt": "Recap: what does a weight control on a connection between two neurons?",
           "options": [
             {
               "id": "a",
-              "text": "It multiplies them by a small slope instead of zeroing them out",
+              "text": "How much influence one neuron's signal has on the next",
               "correct": true
             },
             {
               "id": "b",
-              "text": "It doubles them",
+              "text": "How many neurons are in a layer",
               "correct": false
             },
             {
               "id": "c",
-              "text": "It ignores them completely, same as ReLU",
+              "text": "The color of the neuron",
               "correct": false
             }
           ],
-          "explain": "Right — Leaky ReLU keeps a small trickle alive. But who decides exactly how small that slope should be?"
+          "explain": "Right — a weight tunes a connection's strength. Now: what happens if you stack a huge pile of weighted connections together?"
         }
       ]
     },
@@ -45,49 +45,49 @@
       "cards": [
         {
           "kind": "hook",
-          "icon": "🎛️",
-          "title": "Who picks the slope?",
-          "body": "Leaky ReLU's slope — usually 0.01 — is a number a human picks before training even starts, and it stays fixed forever. But what if the best slope is different for every neuron? What if the network could just figure that out itself?"
+          "icon": "📏",
+          "title": "A suspicious shortcut",
+          "body": "Here's a strange fact: you can stack 100 layers of neurons together, but if you skip one crucial ingredient, all 100 layers combined can be replaced by a single layer — with zero extra power gained. What's missing?"
         },
         {
           "kind": "definition",
-          "icon": "📖",
-          "title": "PReLU: a slope the network learns",
-          "body": "<strong>Parametric ReLU (PReLU)</strong> works just like Leaky ReLU — small slope for negative inputs, unchanged for positive inputs — except that slope isn't fixed. It's a learnable parameter, adjusted during training the same way weights are, and each neuron can end up with its own personal slope."
+          "icon": "⚠️",
+          "title": "The nonlinearity requirement",
+          "body": "An <strong>activation function</strong> is a small math step applied to a neuron's weighted sum before passing it along. Without a <strong>nonlinear</strong> activation function, stacking layers mathematically collapses into a single straight line — no better than one perceptron. Activation functions let a network bend and curve instead."
         },
         {
           "kind": "analogy",
-          "icon": "🎚️",
-          "title": "A dial the network turns itself",
-          "body": "Leaky ReLU is like a faucet permanently set to a fixed trickle by the plumber before you ever turn it on. PReLU is a faucet with a dial the house learns to adjust on its own — tightening or loosening the trickle for each room (neuron) until it finds the setting that works best."
+          "icon": "📐",
+          "title": "Stacking rulers still makes a ruler",
+          "body": "Imagine gluing ten straight rulers end to end — no matter how many you glue, you still just get one longer straight line. Neuron layers work the same way: without a bend added between them, stacking layers keeps producing one straight line, no matter how many you stack."
         },
         {
           "kind": "example",
-          "icon": "🔢",
-          "title": "Different neurons, different slopes",
-          "body": "After training, Neuron A might learn a slope of <code>0.02</code> for its negative inputs, while Neuron B — solving a different part of the problem — learns a slope of <code>0.15</code>. Leaky ReLU would force both neurons to use the exact same fixed slope; PReLU lets each one adapt."
+          "icon": "🧮",
+          "title": "Two straight rules squished into one",
+          "body": "Say layer 1 doubles a number, and layer 2 adds 3. \"Double, then add 3\" is still just one straight-line rule you could write in a single step. Stack as many \"double and shift\" layers as you like — it always simplifies back down to one line's worth of math. An activation function breaks that shortcut by bending the numbers first."
         },
         {
           "kind": "mythbust",
-          "icon": "⚠️",
-          "title": "Not extra layers — just extra learnable numbers",
-          "body": "You might assume PReLU makes a network far more complex, since it 'learns' something new. In reality, it only adds one extra learnable number per neuron — the slope — updated by the exact same training process that already adjusts every weight."
+          "icon": "❌",
+          "title": "More layers isn't automatically more power",
+          "body": "You might think adding more hidden layers always makes a network smarter. Without nonlinear activation functions in between, extra layers add <strong>zero</strong> extra power — a 50-layer network with no activation functions is mathematically no more capable than a single perceptron."
         },
         {
           "kind": "visual",
           "icon": "⚖️",
-          "title": "Fixed slope vs. learned slope",
-          "body": "How the two compare:",
+          "title": "Flat stack vs. bent stack",
+          "body": "The difference one ingredient makes:",
           "compare": {
             "left": {
-              "emoji": "🍂",
-              "tag": "Leaky ReLU",
-              "text": "Slope fixed by a human, e.g. 0.01<br>Same for every neuron, forever"
+              "emoji": "📏",
+              "tag": "No activation function",
+              "text": "Straight lines stacked on straight lines<br>Collapses into ONE straight line"
             },
             "right": {
-              "emoji": "🎛️",
-              "tag": "PReLU",
-              "text": "Slope learned during training<br>Can differ for every neuron"
+              "emoji": "〰️",
+              "tag": "With activation function",
+              "text": "Each layer adds a bend<br>Can curve around complex shapes"
             }
           }
         }
@@ -100,31 +100,31 @@
           "id": "p1",
           "type": "multiple_choice",
           "xp": 2,
-          "prompt": "What does PReLU learn during training that Leaky ReLU does not?",
+          "prompt": "What happens if you stack many neuron layers WITHOUT any nonlinear activation function between them?",
           "options": [
             {
               "id": "a",
-              "text": "The exact slope to use for negative inputs",
+              "text": "The whole stack mathematically collapses into the same power as one straight line",
               "correct": true
             },
             {
               "id": "b",
-              "text": "The number of layers in the network",
+              "text": "Each extra layer roughly doubles the network's power",
               "correct": false
             },
             {
               "id": "c",
-              "text": "Whether to use Softmax or Sigmoid",
+              "text": "The network becomes impossible to compute",
               "correct": false
             }
           ],
-          "explain": "Right — PReLU treats the negative-input slope as a learnable parameter, not a fixed human choice."
+          "explain": "Correct — without nonlinearity, stacked layers simplify back down to one straight line, gaining nothing."
         },
         {
           "id": "p2",
           "type": "true_false",
           "xp": 2,
-          "prompt": "True or false: in PReLU, every neuron is forced to use the exact same slope for negative inputs.",
+          "prompt": "True or false: a 20-layer network with NO activation functions can solve problems a single perceptron cannot.",
           "options": [
             {
               "id": "t",
@@ -137,45 +137,45 @@
               "correct": true
             }
           ],
-          "explain": "False! PReLU can let each neuron learn its own personal slope."
+          "explain": "False. With no activation functions, those 20 layers collapse into the same straight-line power as a single perceptron."
         },
         {
           "id": "p3",
           "type": "fill_blank",
           "xp": 2,
           "prompt": "Complete the sentence:",
-          "sentence": "PReLU stands for ___ ReLU, because its slope is a learnable parameter.",
-          "blank": "Parametric",
+          "sentence": "Without activation functions, stacked layers can only draw a straight ___.",
+          "blank": "line",
           "words": [
-            "Parametric",
-            "Permanent",
-            "Positive"
+            "line",
+            "circle",
+            "cube"
           ],
-          "explain": "PReLU = Parametric ReLU — 'parametric' because the slope is a learnable parameter."
+          "explain": "Stacked layers with no activation function always collapse into drawing a single straight line."
         },
         {
           "id": "p4",
           "type": "spot_the_ai",
           "xp": 2,
-          "prompt": "Which activation function adjusts its negative-input slope automatically during training, the same way weights get adjusted?",
+          "prompt": "Which setup could learn a curvy, complex decision boundary — not just a straight line?",
           "options": [
             {
               "id": "a",
-              "text": "PReLU",
+              "text": "Many layers, each with a nonlinear activation function",
               "correct": true
             },
             {
               "id": "b",
-              "text": "Leaky ReLU",
+              "text": "Many layers, but with no activation functions at all",
               "correct": false
             },
             {
               "id": "c",
-              "text": "Regular ReLU",
+              "text": "A single perceptron with no activation function",
               "correct": false
             }
           ],
-          "explain": "PReLU treats the slope as a learnable parameter, updated right alongside the network's weights."
+          "explain": "Nonlinear activation functions between layers are exactly what lets a network bend around complex shapes."
         }
       ]
     },
@@ -186,30 +186,30 @@
           "id": "b1",
           "type": "multiple_choice",
           "xp": 5,
-          "prompt": "Two neurons in the same network handle very different kinds of negative inputs — one needs a gentle slope, the other needs a much steeper one. Regular Leaky ReLU forces both to share one fixed slope. Which activation function solves this, and how?",
+          "prompt": "An engineer builds a 10-layer network but forgets to add activation functions between the layers. A teammate says, \"Don't worry, more layers always means more power anyway.\" What's wrong with that reasoning?",
           "options": [
             {
               "id": "a",
-              "text": "PReLU, because it lets each neuron learn its own slope for negative inputs during training instead of using one fixed value for all of them",
+              "text": "It's wrong — without nonlinear activation functions, all 10 layers mathematically collapse into one straight line, no more powerful than a single perceptron",
               "correct": true
             },
             {
               "id": "b",
-              "text": "Softmax, because it distributes values across categories",
+              "text": "Nothing is wrong — more layers always means more power, activation functions are optional",
               "correct": false
             },
             {
               "id": "c",
-              "text": "Regular ReLU, because simplicity always wins",
+              "text": "It's wrong because 10 layers is too few to matter either way",
               "correct": false
             },
             {
               "id": "d",
-              "text": "Leaky ReLU, because its fixed slope already adapts automatically",
+              "text": "It's wrong because activation functions only matter in the output layer",
               "correct": false
             }
           ],
-          "explain": "Exactly! PReLU frees each neuron to learn its own best slope. But straight lines — even learnable ones — aren't the only option for the negative side. Next up: an activation function that curves instead."
+          "explain": "Exactly right! Nonlinearity is what makes extra layers actually count. Now that you know WHY activation functions matter, it's time to meet the actual functions — starting with two classic \"squashing\" curves."
         }
       ]
     }

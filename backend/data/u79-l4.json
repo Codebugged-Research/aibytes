@@ -1,0 +1,222 @@
+{
+  "id": "u79-l4",
+  "unit": 79,
+  "day": 399,
+  "tier": "Training Deep Networks",
+  "tierIcon": "🩺",
+  "title": "Gradient Checking",
+  "icon": "✅",
+  "concept": "Gradient checking is a debugging trick for backprop: compare the gradient your code says a weight should have with the tiny numerical change you observe when you nudge that weight up and down.",
+  "xp": 15,
+  "hearts": 3,
+  "estMinutes": 7,
+  "segments": [
+    {
+      "type": "warmup",
+      "exercises": [
+        {
+          "id": "w1",
+          "type": "multiple_choice",
+          "xp": 1,
+          "prompt": "Recap: If training loss is low but validation loss is much higher, what is the usual diagnosis?",
+          "options": [
+            {
+              "id": "a",
+              "text": "Overfitting.",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "Underfitting.",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "Perfect calibration.",
+              "correct": false
+            }
+          ],
+          "explain": "Right. Curve reading helps you choose what to inspect next. Sometimes the next question is whether your gradients themselves are correct."
+        }
+      ]
+    },
+    {
+      "type": "teach",
+      "cards": [
+        {
+          "kind": "hook",
+          "icon": "🧾",
+          "title": "Checking the restaurant bill twice",
+          "body": "If a restaurant receipt looks suspicious, you might total the numbers by hand to make sure the register did not make a mistake. Gradient checking does the same thing for backprop: it asks whether the fast answer from code matches a slower, simpler reality check."
+        },
+        {
+          "kind": "definition",
+          "icon": "✅",
+          "title": "What gradient checking does",
+          "body": "<strong>Gradient checking</strong> compares two estimates of the same gradient. One estimate comes from <strong>backpropagation</strong> in your code. The other comes from a tiny <strong>finite-difference</strong> experiment: nudge one weight a little up and a little down, measure how the loss changes, and see whether that change agrees with backprop."
+        },
+        {
+          "kind": "analogy",
+          "icon": "🧭",
+          "title": "Compass vs. a few careful footsteps",
+          "body": "Backprop is like a compass telling you which way downhill is immediately. Gradient checking is like taking one small step north and one south to verify the slope for yourself. The compass is faster, but the tiny test helps prove it is pointing the right way."
+        },
+        {
+          "kind": "example",
+          "icon": "🔬",
+          "title": "The tiny nudge test",
+          "body": "Suppose backprop says one weight should decrease because its gradient is positive. You then raise that weight by a tiny amount and the loss gets worse, and lower it by a tiny amount and the loss gets better. That numerical evidence agrees with backprop. If the two stories strongly disagree, there may be a bug in the derivative code."
+        },
+        {
+          "kind": "mythbust",
+          "icon": "⚠️",
+          "title": "This is a debugger, not a training strategy",
+          "body": "A common myth is that gradient checking should run during normal training. It should not. It is far too slow for every step. You usually run it on a very small model or mini-batch when you suspect your backprop implementation is wrong."
+        },
+        {
+          "kind": "visual",
+          "icon": "⚖️",
+          "title": "Two ways to estimate the slope",
+          "body": "The key question is simple: do the fast math and the slow reality check tell the same story?",
+          "compare": {
+            "left": {
+              "emoji": "⚙️",
+              "tag": "Analytic gradient",
+              "text": "Computed by backprop.<br>Fast and used during training.<br>Can hide coding mistakes if implemented wrong."
+            },
+            "right": {
+              "emoji": "🪜",
+              "tag": "Numerical check",
+              "text": "Computed by tiny weight nudges.<br>Slow but intuitive.<br>Useful for catching derivative bugs."
+            }
+          }
+        }
+      ]
+    },
+    {
+      "type": "practice",
+      "exercises": [
+        {
+          "id": "p1",
+          "type": "multiple_choice",
+          "xp": 2,
+          "prompt": "What is the main purpose of gradient checking?",
+          "options": [
+            {
+              "id": "a",
+              "text": "To verify that backprop's gradients match a small numerical reality check.",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "To replace the loss function with a simpler one.",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "To guarantee zero overfitting on the validation set.",
+              "correct": false
+            },
+            {
+              "id": "d",
+              "text": "To make every epoch train faster.",
+              "correct": false
+            }
+          ],
+          "explain": "Correct. Gradient checking is about trust in the derivative code, not speed or generalization."
+        },
+        {
+          "id": "p2",
+          "type": "true_false",
+          "xp": 2,
+          "prompt": "True or false: If numerical nudges and backprop disagree strongly on a small test case, you may have a bug in your gradient implementation.",
+          "options": [
+            {
+              "id": "t",
+              "text": "True",
+              "correct": true
+            },
+            {
+              "id": "f",
+              "text": "False",
+              "correct": false
+            }
+          ],
+          "explain": "True. Strong disagreement is exactly the warning sign gradient checking is meant to expose."
+        },
+        {
+          "id": "p3",
+          "type": "fill_blank",
+          "xp": 2,
+          "prompt": "Complete the sentence:",
+          "sentence": "Gradient checking compares an analytic gradient from backprop with a tiny ___ estimate based on nudging a weight.",
+          "blank": "numerical",
+          "words": [
+            "numerical",
+            "categorical",
+            "dropout"
+          ],
+          "explain": "Numerical is correct. The nudge-based estimate is the slower reference answer."
+        },
+        {
+          "id": "p4",
+          "type": "spot_the_ai",
+          "xp": 2,
+          "prompt": "Which debugging plan uses gradient checking correctly?",
+          "options": [
+            {
+              "id": "a",
+              "text": "Run it on a tiny example when you suspect your custom backprop code is wrong, then turn it off for normal training.",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "Run it on every batch forever because slow checks always improve accuracy.",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "Use it instead of a validation set to measure overfitting.",
+              "correct": false
+            }
+          ],
+          "explain": "Exactly. It is a precision debugging tool, not a permanent training feature."
+        }
+      ]
+    },
+    {
+      "type": "boss",
+      "exercises": [
+        {
+          "id": "b1",
+          "type": "multiple_choice",
+          "xp": 5,
+          "prompt": "You write a custom layer. Backprop says a certain weight should increase, but when you nudge that weight slightly upward the loss gets worse, and when you nudge it slightly downward the loss gets better. What is the best conclusion?",
+          "options": [
+            {
+              "id": "a",
+              "text": "Your analytic gradient may have the wrong sign or another derivative bug, so gradient checking found a backprop problem.",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "The disagreement proves the validation set is too small.",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "This always happens in healthy training, so no debugging is needed.",
+              "correct": false
+            },
+            {
+              "id": "d",
+              "text": "The best fix is to remove the loss function and trust backprop anyway.",
+              "correct": false
+            }
+          ],
+          "explain": "Exactly. The slow numerical probe is disagreeing with the analytic gradient, which is the classic signal of a derivative implementation bug."
+        }
+      ]
+    }
+  ]
+}

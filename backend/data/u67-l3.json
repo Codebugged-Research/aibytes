@@ -3,10 +3,10 @@
   "unit": 67,
   "day": 338,
   "tier": "Training Deep Networks",
-  "tierIcon": "📐",
-  "title": "KL Divergence: Comparing Two Probability Distributions",
-  "icon": "🌀",
-  "concept": "Kullback-Leibler (KL) Divergence is a loss metric that measures how much one probability distribution differs from a reference target distribution.",
+  "tierIcon": "🎯",
+  "title": "Categorical Cross-Entropy: Measuring Multi-Class Wrongness",
+  "icon": "🎨",
+  "concept": "Categorical Cross-Entropy is the standard loss function for multi-class classification, comparing the model's Softmax probability distribution to the true one-hot label.",
   "xp": 15,
   "hearts": 3,
   "estMinutes": 7,
@@ -18,25 +18,25 @@
           "id": "w1",
           "type": "multiple_choice",
           "xp": 1,
-          "prompt": "Recap: What is the benefit of Huber Loss over MSE?",
+          "prompt": "Recap: What is the math scaling used by BCE to penalize confident wrong predictions?",
           "options": [
             {
               "id": "a",
-              "text": "It is less sensitive to extreme outliers because it transitions to a linear penalty for large errors.",
+              "text": "Logarithmic scaling, which makes the penalty grow exponentially as the prediction misses.",
               "correct": true
             },
             {
               "id": "b",
-              "text": "It runs twice as fast on GPUs.",
+              "text": "Linear scaling, which increases the penalty by a flat rate.",
               "correct": false
             },
             {
               "id": "c",
-              "text": "It deletes all negative numbers.",
+              "text": "No scaling; all mistakes carry the same flat penalty.",
               "correct": false
             }
           ],
-          "explain": "Correct! Huber's linear tail protects against outlier distortion."
+          "explain": "Correct! BCE uses log scaling to penalize confident wrong guesses exponentially."
         }
       ]
     },
@@ -45,49 +45,49 @@
       "cards": [
         {
           "kind": "hook",
-          "icon": "🌀",
-          "title": "Matching the weather forecast",
-          "body": "Imagine a weather channel predicts: 60% Rain, 30% Cloudy, 10% Sunny. A rival channel predicts: 50% Rain, 40% Cloudy, 10% Sunny. How do you measure how different these two complete forecasts are? You aren't comparing single numbers; you are comparing two entire probability distributions. We measure this difference using KL Divergence."
+          "icon": "🎨",
+          "title": "Sorting a basket of fruit",
+          "body": "If you are sorting apples, bananas, and cherries, you can't just use a simple yes/no switch. You need a model that outputs three probabilities (e.g. 70% Apple, 20% Banana, 10% Cherry) and compares them to the true category. This is what Categorical Cross-Entropy does."
         },
         {
           "kind": "definition",
-          "icon": "🌀",
-          "title": "KL Divergence: The distribution gap",
-          "body": "<strong>Kullback-Leibler Divergence</strong> (KL Divergence) is a measure of how one probability distribution (like a model's predicted categories) deviates from a second, reference distribution (like the true target categories). It calculates the 'relative entropy' between the two."
+          "icon": "🎨",
+          "title": "Categorical Cross-Entropy (CCE)",
+          "body": "<strong>Categorical Cross-Entropy</strong> is the standard loss function for multi-class classification (predicting one of three or more distinct classes). It measures the difference between two probability distributions: the model's output scores (from Softmax) and the true categories (stored as one-hot vectors)."
         },
         {
           "kind": "analogy",
-          "icon": "⚖️",
-          "title": "Overlaying two transparent maps",
-          "body": "Imagine printing two scatter plots on transparent sheets and overlaying them. If the dots align perfectly, the difference is **0**. If the shapes drift apart, the mismatch grows. KL Divergence is the score of this mismatch: if the model's probability shape matches the target shape, KL is 0; as they drift, the score rises."
+          "icon": "📊",
+          "title": "The distribution overlap",
+          "body": "Think of the true label as a perfect distribution: `[1.0, 0.0, 0.0]` (100% Apple). The model outputs: `[0.8, 0.1, 0.1]` (80% Apple). CCE measures how well the model's distribution overlaps with the target. If the model predicted `[0.05, 0.9, 0.05]` (only 5% Apple), the overlap is terrible, yielding a high CCE loss."
         },
         {
           "kind": "example",
-          "icon": "🎨",
-          "title": "Generating images and compressing data",
-          "body": "In advanced models (like Variational Autoencoders or model distillation), we want the model's internal representations to match a standard normal distribution (a bell curve). We add a KL Divergence term to the loss function to penalize the model whenever its internal distribution departs from that clean bell shape."
+          "icon": "🐶",
+          "title": "Evaluating a pet picture",
+          "body": "A picture is a Dog. True label (one-hot): `[Cat: 0, Dog: 1, Bird: 0]`. The model's Softmax output is: `[Cat: 0.1, Dog: 0.7, Bird: 0.2]`. CCE looks at the model's score for the correct class (Dog = 0.7) and calculates a moderate loss of **0.36**. If the Dog score was 0.01, CCE loss would spike to **4.6**."
         },
         {
           "kind": "mythbust",
           "icon": "⚠️",
-          "title": "KL Divergence is not a true distance metric",
-          "body": "You might assume KL Divergence is like measuring the distance between two points, where the distance from A to B equals B to A. In math, KL is **asymmetric**: the divergence of distribution P from Q is *not* equal to Q from P. This is why it is called a 'divergence' rather than a 'distance'."
+          "title": "CCE only cares about the correct class score",
+          "body": "You might assume CCE runs complex math on all output classes equally. In standard one-hot classification, because the incorrect classes have true labels of `0`, CCE math simplifies to looking *only* at the correct class's probability. It penalizes the model based on how far that one correct probability is from 1.0."
         },
         {
           "kind": "visual",
           "icon": "⚖️",
-          "title": "KL Divergence Alignment",
-          "body": "How KL scores distribution matches:",
+          "title": "One-Hot vs. Prediction Distribution",
+          "body": "Comparing distributions in CCE:",
           "compare": {
             "left": {
-              "emoji": "🎯",
-              "tag": "Aligned (KL = 0)",
-              "text": "Predicted: [60% A, 30% B, 10% C]<br>Target: [60% A, 30% B, 10% C].<br>Perfect match."
+              "emoji": "🏷️",
+              "tag": "True Label (One-Hot)",
+              "text": "Apple: 1.0<br>Banana: 0.0<br>Cherry: 0.0"
             },
             "right": {
-              "emoji": "🌀",
-              "tag": "Diverged (KL > 0)",
-              "text": "Predicted: [10% A, 80% B, 10% C]<br>Target: [60% A, 30% B, 10% C].<br>High divergence score."
+              "emoji": "📊",
+              "tag": "Model Prediction",
+              "text": "Apple: 0.8 (loss calculated here)<br>Banana: 0.1<br>Cherry: 0.1"
             }
           }
         }
@@ -100,87 +100,87 @@
           "id": "p1",
           "type": "multiple_choice",
           "xp": 2,
-          "prompt": "What does KL Divergence measure?",
+          "prompt": "When is Categorical Cross-Entropy used as the loss function?",
           "options": [
             {
               "id": "a",
-              "text": "How much one probability distribution differs from a reference target distribution.",
+              "text": "In multi-class classification tasks where you want to sort data into one of three or more categories.",
               "correct": true
             },
             {
               "id": "b",
-              "text": "The straight-line distance between two coordinates in a grid.",
+              "text": "In simple binary classification with only two categories.",
               "correct": false
             },
             {
               "id": "c",
-              "text": "The training speed of an optimizer in epochs.",
+              "text": "In regression tasks predicting house prices.",
               "correct": false
             },
             {
               "id": "d",
-              "text": "The number of hidden neurons in a layer.",
+              "text": "In unsupervised clustering models.",
               "correct": false
             }
           ],
-          "explain": "Correct! KL Divergence is a metric for comparing two complete probability distributions."
+          "explain": "Correct! CCE is the standard loss function for multi-class classification tasks."
         },
         {
           "id": "p2",
           "type": "true_false",
           "xp": 2,
-          "prompt": "True or false: KL Divergence is symmetric, meaning the divergence of distribution A from B is always mathematically identical to the divergence of B from A.",
+          "prompt": "True or false: Under standard one-hot encoding, CCE loss evaluates the model based on how close its predicted probability for the *correct* class is to 1.0.",
           "options": [
             {
               "id": "t",
               "text": "True",
-              "correct": false
+              "correct": true
             },
             {
               "id": "f",
               "text": "False",
-              "correct": true
+              "correct": false
             }
           ],
-          "explain": "False! KL is asymmetric, which is why it is classified as a divergence rather than a distance metric."
+          "explain": "True! Since incorrect classes are multiplied by 0 in the math, CCE focuses on the correct class's score."
         },
         {
           "id": "p3",
           "type": "fill_blank",
           "xp": 2,
           "prompt": "Complete the sentence:",
-          "sentence": "If the model's predicted probability distribution matches the target reference distribution perfectly, the KL Divergence score is ___.",
-          "blank": "zero",
+          "sentence": "To prepare a multi-class output layer for CCE loss, we apply the ___ activation function to turn raw scores into probabilities.",
+          "blank": "Softmax",
           "words": [
-            "zero",
-            "one",
-            "infinity"
+            "Softmax",
+            "Sigmoid",
+            "ReLU"
           ],
-          "explain": "A perfect match between distributions means zero divergence, yielding a score of 0."
+          "explain": "Softmax squashes a list of raw scores into a probability distribution that sums to 1.0, preparing it for CCE."
         },
         {
           "id": "p4",
           "type": "spot_the_ai",
           "xp": 2,
-          "prompt": "In which advanced deep learning scenario is KL Divergence commonly used as a loss term?",
+          "prompt": "A picture is a Cat. True labels: [Cat: 1, Dog: 0]. Model predicts: [Cat: 0.02, Dog: 0.98]. What is the CCE loss score, and why?",
           "options": [
             {
               "id": "a",
-              "text": "Training a generative model to force its internal representation distribution to match a clean bell curve.",
+              "text": "Extremely high, because the correct class (Cat) received a very low probability score of 0.02.",
               "correct": true
             },
             {
               "id": "b",
-              "text": "Fitting a simple linear regression line to 10 points.",
+              "text": "Near zero, because the Dog score was very high.",
               "correct": false
             },
             {
               "id": "c",
-              "text": "Running a grid search for decision tree depth.",
+              "text": "Zero, because the model was confident in its guess.",
               "correct": false
             }
           ],
-          "explain": "Correct! Generative models use KL loss to align internal distributions with target bell curves. "
+          "explain": "Correct! Since the correct class (Cat) only received a 2% score, the CCE loss is massive, triggering a strong correction signal."
         }
       ]
     },
@@ -191,30 +191,30 @@
           "id": "b1",
           "type": "multiple_choice",
           "xp": 5,
-          "prompt": "You are training a model to mimic a larger, smarter 'teacher' model. The teacher outputs a Softmax distribution of `[0.7, 0.2, 0.1]` for an image. Your student model outputs `[0.4, 0.4, 0.2]`. Which loss metric should you use to measure how well the student is mimicking the teacher's distribution?",
+          "prompt": "A model classifies handwritten digits (0-9). For an image of a '3', the Softmax output is: `[score for 3: 0.90, other scores sum to 0.10]`. What is the CCE loss, and what does it tell the optimizer?",
           "options": [
             {
               "id": "a",
-              "text": "KL Divergence, because it specifically measures the difference between two probability distributions.",
+              "text": "The loss is very low (around 0.10) because the model assigned a high 90% probability to the correct digit; only small weight updates are needed.",
               "correct": true
             },
             {
               "id": "b",
-              "text": "Plain Mean Squared Error (MSE).",
+              "text": "The loss is infinite because the other classes were not 0.",
               "correct": false
             },
             {
               "id": "c",
-              "text": "Binary Cross-Entropy.",
+              "text": "The loss is high because 0.90 is not a perfect 1.0.",
               "correct": false
             },
             {
               "id": "d",
-              "text": "Gini Impurity.",
+              "text": "The weights are reset because the prediction was correct.",
               "correct": false
             }
           ],
-          "explain": "Exactly! KL Divergence is the standard tool for comparing complete probability distributions, making it ideal for knowledge distillation (mimicking a teacher model). Next, let's learn how we combine multiple different loss goals into one total score!"
+          "explain": "Exactly! Since the correct class received a high score of 0.90, the CCE loss is low (approx. 0.10), indicating the model is mostly correct and only needs minor tuning. Next, let's explore why cross-entropy is preferred over MSE for classification tasks!"
         }
       ]
     }

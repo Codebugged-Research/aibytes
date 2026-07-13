@@ -1,0 +1,222 @@
+{
+  "id": "u87-l2",
+  "unit": 87,
+  "day": 437,
+  "tier": "Practical Deep Learning",
+  "tierIcon": "🪶",
+  "title": "Gradient Accumulation",
+  "icon": "🧱",
+  "concept": "Gradient accumulation simulates a larger effective batch by processing several smaller micro-batches, collecting their gradients, and updating the weights only after those smaller passes are combined.",
+  "xp": 15,
+  "hearts": 3,
+  "estMinutes": 7,
+  "segments": [
+    {
+      "type": "warmup",
+      "exercises": [
+        {
+          "id": "w1",
+          "type": "multiple_choice",
+          "xp": 1,
+          "prompt": "Recap: Which training choice most directly raises memory by forcing more examples through the network at once?",
+          "options": [
+            {
+              "id": "a",
+              "text": "Increasing batch size",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "Using a shorter filename",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "Saving results on a different day",
+              "correct": false
+            }
+          ],
+          "explain": "Exactly. Larger batches often improve training behavior, but they can also exceed memory limits."
+        }
+      ]
+    },
+    {
+      "type": "teach",
+      "cards": [
+        {
+          "kind": "hook",
+          "icon": "🧱",
+          "title": "Build a wall one brick at a time",
+          "body": "What if you want the steadier learning behavior of a large batch, but your GPU only fits a small one? Gradient accumulation is the workaround: you process several smaller pieces, then combine their learning signal before taking one optimizer step."
+        },
+        {
+          "kind": "definition",
+          "icon": "📚",
+          "title": "What accumulation does",
+          "body": "With <strong>gradient accumulation</strong>, the model runs forward and backward on a small micro-batch, keeps the resulting gradients, then repeats that process a few times. Only after enough micro-batches have been collected does the optimizer update the weights, creating a larger <strong>effective batch</strong> without needing that whole batch in memory at once."
+        },
+        {
+          "kind": "analogy",
+          "icon": "🧾",
+          "title": "Add receipts before paying",
+          "body": "Imagine buying items with a running tab. Instead of paying after every single item, you gather a few receipts, total them up, and then make one payment. Accumulation works similarly: several small gradient contributions are gathered before one update happens."
+        },
+        {
+          "kind": "example",
+          "icon": "📦",
+          "title": "Small GPU, larger effective batch",
+          "body": "Suppose your GPU fits only 16 examples at once, but you want training behavior closer to batch 64. You can process four micro-batches of 16, accumulate their gradients, and then update once. Peak memory stays close to 16-example training, but the update reflects 64 examples total."
+        },
+        {
+          "kind": "mythbust",
+          "icon": "⏱️",
+          "title": "It saves memory, not time",
+          "body": "Gradient accumulation is not a magical speed boost. You still run multiple forward and backward passes, so wall-clock time may increase. Its main value is letting you act like you used a larger batch <strong>without needing the full batch in memory at once</strong>."
+        },
+        {
+          "kind": "visual",
+          "icon": "⚖️",
+          "title": "Direct large batch vs. accumulated small batches",
+          "body": "These two approaches can aim for a similar effective batch, but their memory shape is different.",
+          "compare": {
+            "left": {
+              "emoji": "🛻",
+              "tag": "One large batch",
+              "text": "Fewer optimizer steps.<br>Needs enough memory for the whole batch at once.<br>Can crash if peak VRAM is too high."
+            },
+            "right": {
+              "emoji": "🧱",
+              "tag": "Accumulated micro-batches",
+              "text": "Processes smaller chunks one by one.<br>Lower peak memory per pass.<br>Usually takes more total time per full effective batch."
+            }
+          }
+        }
+      ]
+    },
+    {
+      "type": "practice",
+      "exercises": [
+        {
+          "id": "p1",
+          "type": "multiple_choice",
+          "xp": 2,
+          "prompt": "What problem is gradient accumulation mainly trying to solve?",
+          "options": [
+            {
+              "id": "a",
+              "text": "Wanting a larger effective batch without fitting that whole batch in memory at once.",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "Wanting to delete the model weights after every example.",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "Wanting to make labels unnecessary.",
+              "correct": false
+            },
+            {
+              "id": "d",
+              "text": "Wanting to skip backpropagation completely.",
+              "correct": false
+            }
+          ],
+          "explain": "Right. It is a memory workaround for batch size, not a replacement for the whole training process."
+        },
+        {
+          "id": "p2",
+          "type": "true_false",
+          "xp": 2,
+          "prompt": "True or false: Gradient accumulation gives the memory footprint of a small batch while pretending, in effect, to learn from a larger one.",
+          "options": [
+            {
+              "id": "t",
+              "text": "True",
+              "correct": true
+            },
+            {
+              "id": "f",
+              "text": "False",
+              "correct": false
+            }
+          ],
+          "explain": "True. That is the core idea: small passes, larger combined update."
+        },
+        {
+          "id": "p3",
+          "type": "fill_blank",
+          "xp": 2,
+          "prompt": "Complete the sentence:",
+          "sentence": "Several micro-batches together create a larger effective ___.",
+          "blank": "batch",
+          "words": [
+            "batch",
+            "screen",
+            "folder"
+          ],
+          "explain": "Batch is correct. The model updates only after enough small batches have been combined."
+        },
+        {
+          "id": "p4",
+          "type": "spot_the_ai",
+          "xp": 2,
+          "prompt": "Which training plan best matches gradient accumulation?",
+          "options": [
+            {
+              "id": "a",
+              "text": "Run four small batches, keep their gradients, then update the weights once.",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "Use one giant batch that already crashes the GPU.",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "Skip the backward pass to save time.",
+              "correct": false
+            }
+          ],
+          "explain": "Exactly. Accumulation collects several smaller gradient signals before one optimizer step."
+        }
+      ]
+    },
+    {
+      "type": "boss",
+      "exercises": [
+        {
+          "id": "b1",
+          "type": "multiple_choice",
+          "xp": 5,
+          "prompt": "A researcher wants batch-64 behavior, but the GPU only fits 16 examples at a time. Which choice best fits?",
+          "options": [
+            {
+              "id": "a",
+              "text": "Process four micro-batches of 16, accumulate gradients, then update once.",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "Pretend the GPU has more memory and do batch 64 anyway.",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "Remove the optimizer step forever.",
+              "correct": false
+            },
+            {
+              "id": "d",
+              "text": "Use fewer labels so memory disappears.",
+              "correct": false
+            }
+          ],
+          "explain": "Exactly. Gradient accumulation is the practical way to simulate the larger batch without needing all 64 examples resident at once."
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,222 @@
+{
+  "id": "u86-l3",
+  "unit": 86,
+  "day": 433,
+  "tier": "Practical Deep Learning",
+  "tierIcon": "🖥️",
+  "title": "Distributed Training Basics",
+  "icon": "🌐",
+  "concept": "Distributed training lets multiple GPUs or machines share a training job by processing different pieces of the work and then combining their updates into one model.",
+  "xp": 15,
+  "hearts": 3,
+  "estMinutes": 7,
+  "segments": [
+    {
+      "type": "warmup",
+      "exercises": [
+        {
+          "id": "w1",
+          "type": "multiple_choice",
+          "xp": 1,
+          "prompt": "Recap: Why might mixed precision help on a single GPU?",
+          "options": [
+            {
+              "id": "a",
+              "text": "It can lower memory use and often speed up supported training workloads.",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "It removes the need for batches.",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "It turns one GPU into infinitely many GPUs.",
+              "correct": false
+            }
+          ],
+          "explain": "Exactly. But sometimes one GPU is still too slow or too small, which is where distributed training enters the picture."
+        }
+      ]
+    },
+    {
+      "type": "teach",
+      "cards": [
+        {
+          "kind": "hook",
+          "icon": "🚚",
+          "title": "One person cannot move the whole warehouse alone",
+          "body": "If one worker can move 10 boxes per minute, a giant warehouse job may still take too long. Bringing in a team can help, but the team also has to coordinate. Distributed training follows that same logic."
+        },
+        {
+          "kind": "definition",
+          "icon": "🌐",
+          "title": "Split the work, then combine the learning",
+          "body": "<strong>Distributed training</strong> uses multiple GPUs or machines to share one learning job. Each worker processes part of the data or part of the model’s computation, then the system combines those results so all workers stay aligned on one overall model."
+        },
+        {
+          "kind": "analogy",
+          "icon": "📝",
+          "title": "Several graders, one answer key",
+          "body": "Imagine several teachers grading different stacks of quizzes. They can work faster than one teacher alone, but only if they keep using the same answer key and compare notes often enough. Distributed training also needs coordination so the model does not drift into different versions on different workers."
+        },
+        {
+          "kind": "example",
+          "icon": "📈",
+          "title": "Bigger dataset, shorter wall-clock time",
+          "body": "Suppose a model would take two weeks to train on one GPU. If several GPUs each process a slice of the training batch and then share updates, the team may reduce the total training time a lot. This is one reason large labs and companies rely on clusters instead of single accelerators."
+        },
+        {
+          "kind": "mythbust",
+          "icon": "⚠️",
+          "title": "More machines do not mean free perfect speedup",
+          "body": "A common myth is that 8 GPUs always make training exactly 8 times faster. In reality, workers must communicate, wait for one another, and move data around. Distributed training helps, but coordination overhead means the gains are usually less than perfectly linear."
+        },
+        {
+          "kind": "visual",
+          "icon": "⚖️",
+          "title": "Solo worker vs. coordinated team",
+          "body": "Scaling out can help, but teamwork brings both speed and coordination costs.",
+          "compare": {
+            "left": {
+              "emoji": "👤",
+              "tag": "Single device",
+              "text": "Simple setup<br>No cross-worker communication<br>May be too slow or too small for the job"
+            },
+            "right": {
+              "emoji": "👥",
+              "tag": "Distributed setup",
+              "text": "Shares work across devices<br>Can train larger or faster jobs<br>Needs synchronization and communication"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "type": "practice",
+      "exercises": [
+        {
+          "id": "p1",
+          "type": "multiple_choice",
+          "xp": 2,
+          "prompt": "When is distributed training most worth considering?",
+          "options": [
+            {
+              "id": "a",
+              "text": "When one device is too slow or cannot comfortably handle the training job alone.",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "When you want to avoid using any data at all.",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "When the model is already tiny and finishes instantly.",
+              "correct": false
+            },
+            {
+              "id": "d",
+              "text": "When you need fewer engineering moving parts.",
+              "correct": false
+            }
+          ],
+          "explain": "Correct. Distributed setups add complexity, so they pay off mainly when one device is not enough."
+        },
+        {
+          "id": "p2",
+          "type": "true_false",
+          "xp": 2,
+          "prompt": "True or false: Adding more GPUs guarantees perfectly linear speedup with no extra overhead.",
+          "options": [
+            {
+              "id": "t",
+              "text": "True",
+              "correct": false
+            },
+            {
+              "id": "f",
+              "text": "False",
+              "correct": true
+            }
+          ],
+          "explain": "False. Workers have to communicate and stay synchronized, so scaling has costs."
+        },
+        {
+          "id": "p3",
+          "type": "fill_blank",
+          "xp": 2,
+          "prompt": "Complete the sentence:",
+          "sentence": "After different workers process their share, they usually need to ___ updates so the model stays aligned.",
+          "blank": "synchronize",
+          "words": [
+            "synchronize",
+            "erase",
+            "freeze"
+          ],
+          "explain": "Exactly. Distributed training works only if the workers keep their model state coordinated."
+        },
+        {
+          "id": "p4",
+          "type": "spot_the_ai",
+          "xp": 2,
+          "prompt": "Which story best describes distributed training?",
+          "options": [
+            {
+              "id": "a",
+              "text": "Several GPUs each handle part of the training work and then combine updates into one shared model.",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "A team changes the chart colors in a dashboard to make the model feel faster.",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "One CPU core trains the whole model while the others stay idle on purpose.",
+              "correct": false
+            }
+          ],
+          "explain": "Right. The key pattern is split computation plus shared learning."
+        }
+      ]
+    },
+    {
+      "type": "boss",
+      "exercises": [
+        {
+          "id": "b1",
+          "type": "multiple_choice",
+          "xp": 5,
+          "prompt": "A lab has a training job that would take far too long on one accelerator. They plan to use several GPUs, each processing part of the workload and then sharing results. What is the main idea behind this approach?",
+          "options": [
+            {
+              "id": "a",
+              "text": "Distributed training shares the job across workers, then synchronizes their learning into one model.",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "Distributed training prevents workers from ever communicating with one another.",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "Distributed training means each GPU should learn a completely unrelated model.",
+              "correct": false
+            },
+            {
+              "id": "d",
+              "text": "Distributed training only matters for image rendering, not neural networks.",
+              "correct": false
+            }
+          ],
+          "explain": "Exactly. The whole point is to split the heavy work while still keeping one coherent learned model."
+        }
+      ]
+    }
+  ]
+}

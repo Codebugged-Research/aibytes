@@ -1,0 +1,222 @@
+{
+  "id": "u72-l1",
+  "unit": 72,
+  "day": 361,
+  "tier": "Backpropagation",
+  "tierIcon": "⬅️",
+  "title": "Tracing Gradients Through the Output Layer",
+  "icon": "⬅️",
+  "concept": "Backpropagation begins at the loss and sends the first correction signal into the output layer, telling the final neuron whether its prediction was too high or too low.",
+  "xp": 15,
+  "hearts": 3,
+  "estMinutes": 7,
+  "segments": [
+    {
+      "type": "warmup",
+      "exercises": [
+        {
+          "id": "w1",
+          "type": "multiple_choice",
+          "xp": 1,
+          "prompt": "Recap: In backpropagation, where does the backward signal start?",
+          "options": [
+            {
+              "id": "a",
+              "text": "At the loss node, after the prediction is compared with the true answer.",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "At the input layer, before any prediction is made.",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "Inside the dataset, before the model runs.",
+              "correct": false
+            }
+          ],
+          "explain": "Correct! Backprop starts after the model measures error with the loss function."
+        }
+      ]
+    },
+    {
+      "type": "teach",
+      "cards": [
+        {
+          "kind": "hook",
+          "icon": "🎯",
+          "title": "The moment the score comes back",
+          "body": "A basketball arcade machine flashes your score right after the ball lands. If you missed left, the first useful feedback goes to your final shot, not to your shoes. Backprop works the same way: the loss speaks first to the network's final output."
+        },
+        {
+          "kind": "definition",
+          "icon": "⬅️",
+          "title": "The output layer gets first feedback",
+          "body": "In backpropagation, the <strong>output layer</strong> is the first layer to receive the error signal from the loss. That signal tells the output neuron whether its prediction was too high, too low, or already close to correct."
+        },
+        {
+          "kind": "analogy",
+          "icon": "🏁",
+          "title": "The coach starts at the finish line",
+          "body": "Imagine a relay race replay. The coach watches the final runner cross the line and gives feedback there first: too slow, too wide, too early. Only after that does the coach trace the mistake back through the earlier runners."
+        },
+        {
+          "kind": "example",
+          "icon": "📧",
+          "title": "A spam score that was too confident",
+          "body": "A network predicts <code>0.95</code> for 'Spam,' but the real label is <code>0</code> (not spam). The loss becomes high, so the output neuron receives a strong backward message: 'Your final score was much too high.' That correction is the first step before blame moves into the hidden layer behind it."
+        },
+        {
+          "kind": "mythbust",
+          "icon": "⚠️",
+          "title": "The gradient is not the update yet",
+          "body": "It is easy to think the output layer instantly changes its weights the moment the loss is known. Not yet. First, backprop calculates the correction signal (gradient). The actual weight update happens after those gradients are collected."
+        },
+        {
+          "kind": "visual",
+          "icon": "🔄",
+          "title": "Forward result vs. backward feedback",
+          "body": "The same output neuron plays two different roles in training:",
+          "compare": {
+            "left": {
+              "emoji": "➡️",
+              "tag": "Forward Pass",
+              "text": "Output neuron makes the final prediction.<br>Example: 'Spam = 95%'.<br>Loss then checks if that guess was right."
+            },
+            "right": {
+              "emoji": "⬅️",
+              "tag": "Backward Pass",
+              "text": "Loss sends feedback into that same neuron.<br>Example: 'That 95% was too high.'<br>This starts the correction chain."
+            }
+          }
+        }
+      ]
+    },
+    {
+      "type": "practice",
+      "exercises": [
+        {
+          "id": "p1",
+          "type": "multiple_choice",
+          "xp": 2,
+          "prompt": "Which part of the network receives the loss signal first during backpropagation?",
+          "options": [
+            {
+              "id": "a",
+              "text": "The output layer, because it made the final prediction that the loss measured.",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "The input layer, because it saw the raw data first.",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "A random hidden layer chosen by the optimizer.",
+              "correct": false
+            },
+            {
+              "id": "d",
+              "text": "No layer receives it; the loss updates the weights directly.",
+              "correct": false
+            }
+          ],
+          "explain": "Correct! The loss compares the final prediction to the true answer, so the output layer gets the first backward feedback."
+        },
+        {
+          "id": "p2",
+          "type": "true_false",
+          "xp": 2,
+          "prompt": "True or false: If the output prediction is far from the true answer, the backward signal arriving at the output layer is usually stronger than if the prediction was already close.",
+          "options": [
+            {
+              "id": "t",
+              "text": "True",
+              "correct": true
+            },
+            {
+              "id": "f",
+              "text": "False",
+              "correct": false
+            }
+          ],
+          "explain": "True! Bigger mistakes usually create a stronger correction signal at the output layer."
+        },
+        {
+          "id": "p3",
+          "type": "fill_blank",
+          "xp": 2,
+          "prompt": "Complete the sentence:",
+          "sentence": "Backpropagation starts at the loss and first flows into the ___ layer.",
+          "blank": "output",
+          "words": [
+            "output",
+            "input",
+            "dataset"
+          ],
+          "explain": "The output layer made the final prediction, so it receives the first correction."
+        },
+        {
+          "id": "p4",
+          "type": "spot_the_ai",
+          "xp": 2,
+          "prompt": "Which scenario best shows the first step of backpropagation?",
+          "options": [
+            {
+              "id": "a",
+              "text": "A model predicts 10% chance of rain, the real label says rain happened, and the loss sends a strong correction into the final output neuron.",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "A model skips the loss and directly rewrites every weight with random values.",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "A dataset is shuffled before the next epoch begins.",
+              "correct": false
+            }
+          ],
+          "explain": "Exactly. The first backward step is the loss sending correction into the output neuron that made the wrong prediction."
+        }
+      ]
+    },
+    {
+      "type": "boss",
+      "exercises": [
+        {
+          "id": "b1",
+          "type": "multiple_choice",
+          "xp": 5,
+          "prompt": "A network predicts that an image is 'Cat' with 0.97 confidence, but the true label is 'Dog.' What is the most accurate description of what happens first in backpropagation?",
+          "options": [
+            {
+              "id": "a",
+              "text": "The loss sends a strong correction signal into the output layer, telling the final prediction it was confidently wrong before blame is passed to earlier layers.",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "The input pixels are immediately changed so the image looks more like a dog.",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "The hidden layers update themselves before the output layer receives any feedback.",
+              "correct": false
+            },
+            {
+              "id": "d",
+              "text": "The model deletes the wrong class and adds a new output neuron.",
+              "correct": false
+            }
+          ],
+          "explain": "Exactly! The loss first corrects the output layer because that is where the wrong final decision was made. Next, we will see how activation functions can either pass, shrink, or block that signal as it moves backward."
+        }
+      ]
+    }
+  ]
+}

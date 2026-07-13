@@ -3,10 +3,10 @@
   "unit": 66,
   "day": 332,
   "tier": "Training Deep Networks",
-  "tierIcon": "🎯",
-  "title": "Binary Cross-Entropy: Measuring Yes/No Wrongness",
-  "icon": "✅",
-  "concept": "Binary Cross-Entropy is the standard loss function for two-class problems, penalizing confident wrong predictions exponentially while rewarding correct ones.",
+  "tierIcon": "➡️",
+  "title": "The Matrix Multiplication View",
+  "icon": "✖️",
+  "concept": "Conceptually, we compute a layer's outputs by combining all inputs with all weights simultaneously using matrix math, rather than calculating each neuron individually.",
   "xp": 15,
   "hearts": 3,
   "estMinutes": 7,
@@ -18,25 +18,25 @@
           "id": "w1",
           "type": "multiple_choice",
           "xp": 1,
-          "prompt": "Recap: Why is accuracy not used as a training loss function?",
+          "prompt": "Recap: Are weights updated during forward propagation?",
           "options": [
             {
               "id": "a",
-              "text": "Accuracy is not smooth or continuous, so it cannot calculate tiny gradient updates.",
+              "text": "No, weights are frozen during the forward pass.",
               "correct": true
             },
             {
               "id": "b",
-              "text": "Accuracy can never reach 100%.",
+              "text": "Yes, weights adjust after every layer.",
               "correct": false
             },
             {
               "id": "c",
-              "text": "Accuracy only works for regression models.",
+              "text": "Yes, but only in the input layer.",
               "correct": false
             }
           ],
-          "explain": "Correct! We need a smooth, continuous function to compute gradient updates."
+          "explain": "Correct! Weights are completely frozen during forward propagation."
         }
       ]
     },
@@ -45,49 +45,49 @@
       "cards": [
         {
           "kind": "hook",
-          "icon": "⚖️",
-          "title": "Overconfidence punished",
-          "body": "If you are unsure about an answer on a test and guess wrong, it's a minor mistake. But if you walk up to the teacher, confidently swear you are 100% correct, and are proven completely wrong, you look foolish. Binary Cross-Entropy is a math function that mimics this: it heavily punishes models that are confidently wrong."
+          "icon": "➕",
+          "title": "Calculators with 1,000 hands",
+          "body": "If you had to multiply 100 pairs of numbers, doing them one by one would take minutes. But what if you had a calculator with 100 hands that could multiply all 100 pairs at the exact same millisecond? That parallel capability is why neural networks rely on matrix multiplication."
         },
         {
           "kind": "definition",
-          "icon": "✅",
-          "title": "Binary Cross-Entropy (BCE)",
-          "body": "<strong>Binary Cross-Entropy</strong> (also called Log Loss) is the standard loss function for binary classification (two classes: 0 or 1). It uses logarithmic scaling to penalize wrong predictions: the penalty grows exponentially as a wrong prediction's confidence approaches 100%."
+          "icon": "✖️",
+          "title": "The Layer Transformation",
+          "body": "Instead of calculating each neuron's weighted sum one-by-one, a neural network groups all the inputs into one list (vector) and all the weights into a grid (matrix). A single **matrix multiplication** step computes the outputs for all neurons in the layer simultaneously."
         },
         {
           "kind": "analogy",
-          "icon": "📊",
-          "title": "The stretching rubber band",
-          "body": "Think of BCE like a rubber band connected to the true label. If the true label is 1, and your prediction is 0.9, the band is relaxed (low loss). If your prediction drops to 0.5, the band stretches (medium loss). If you confidently predict 0.01, the band stretches to its limit and snaps (huge, near-infinite loss penalty)."
+          "icon": "🍳",
+          "title": "The master kitchen prep",
+          "body": "If a restaurant needs to chop 10 onions, 10 carrots, and 10 peppers, one chef doing them one-by-one is slow. Matrix multiplication is like a specialized food processor: you dump all the vegetables (inputs) and blade settings (weights) in at once, press a button, and get the fully chopped mix instantly."
         },
         {
           "kind": "example",
-          "icon": "📧",
-          "title": "Traded penalties",
-          "body": "If true label = 1, and the model predicts: - 0.99 -> loss is **0.01** (very low), - 0.50 -> loss is **0.69** (moderate), - 0.01 -> loss is **4.60** (extremely high). Confidently wrong guesses are punished with massive penalties, forcing the optimizer to make major adjustments."
+          "icon": "📊",
+          "title": "Visualizing the grid",
+          "body": "In a layer with 3 inputs and 2 hidden neurons, there are 6 connections (weights). We arrange the weights in a 3-by-2 grid. Multiplying the 3 inputs by this 3-by-2 grid yields the 2 hidden neuron outputs in one step, making calculation extremely efficient on hardware like GPUs."
         },
         {
           "kind": "mythbust",
           "icon": "⚠️",
-          "title": "It works on probabilities, not raw outputs",
-          "body": "You might think BCE can be run on any raw output score from the model. In reality, BCE math requires inputs strictly between 0 and 1, representing probabilities. This is why we *must* apply a Sigmoid activation function at the output layer before running the BCE loss calculation."
+          "title": "Matrix math isn't a new algorithm",
+          "body": "You might think using matrices changes the behavior of the model. In reality, matrix multiplication is just a mathematical shortcut. It produces the exact same numeric results as calculating each neuron individually, but it runs hundreds of times faster on modern chips."
         },
         {
           "kind": "visual",
           "icon": "⚖️",
-          "title": "BCE Penalty Curve",
-          "body": "How BCE loss scales as predictions miss a True Label of 1:",
+          "title": "Individual vs. Matrix Calculation",
+          "body": "How we calculate a layer's output:",
           "compare": {
             "left": {
-              "emoji": "😊",
-              "tag": "Near the Target (Predict > 0.9)",
-              "text": "Prediction matches target.<br>Loss is near zero.<br>No correction needed."
+              "emoji": "🐌",
+              "tag": "Neuron by Neuron",
+              "text": "Calculate Neuron 1 output.<br>Then calculate Neuron 2 output.<br>Slow, sequential calculation."
             },
             "right": {
-              "emoji": "🤬",
-              "tag": "Confidently Wrong (Predict < 0.01)",
-              "text": "Prediction is opposite of target.<br>Loss climbs exponentially to infinity.<br>Massive correction triggered."
+              "emoji": "🏎️",
+              "tag": "Matrix Multiplication",
+              "text": "Inputs combined as a vector.<br>Weights combined as a grid (matrix).<br>All outputs calculated in one parallel step."
             }
           }
         }
@@ -100,36 +100,36 @@
           "id": "p1",
           "type": "multiple_choice",
           "xp": 2,
-          "prompt": "What kind of classification tasks is Binary Cross-Entropy used for?",
+          "prompt": "What is the main benefit of using matrix multiplication to calculate layer outputs?",
           "options": [
             {
               "id": "a",
-              "text": "Binary classification tasks, which have exactly two possible output categories (0 or 1).",
+              "text": "It computes the outputs for all neurons in a layer in a single, parallel step, making it much faster.",
               "correct": true
             },
             {
               "id": "b",
-              "text": "Regression tasks predicting continuous house prices.",
+              "text": "It automatically corrects prediction errors without needing backpropagation.",
               "correct": false
             },
             {
               "id": "c",
-              "text": "Unsupervised clustering of customer records.",
+              "text": "It reduces the number of weights in the network.",
               "correct": false
             },
             {
               "id": "d",
-              "text": "Multi-class classification with 10 different categories.",
+              "text": "It forces all activation values to be positive.",
               "correct": false
             }
           ],
-          "explain": "Correct! BCE is the standard loss for binary (two-class) classification."
+          "explain": "Correct! Matrix multiplication calculates all outputs in a layer simultaneously, maximizing hardware efficiency."
         },
         {
           "id": "p2",
           "type": "true_false",
           "xp": 2,
-          "prompt": "True or false: Under Binary Cross-Entropy loss, a prediction of 0.5 carries a much larger penalty than a confidently wrong prediction of 0.01 (when the true label is 1).",
+          "prompt": "True or false: Calculating a layer's outputs using matrix multiplication produces different numerical results than calculating each neuron individually.",
           "options": [
             {
               "id": "t",
@@ -142,45 +142,45 @@
               "correct": true
             }
           ],
-          "explain": "False! Confidently wrong predictions (0.01 when target is 1) carry exponentially larger penalties than unsure predictions (0.5)."
+          "explain": "False! Matrix math is simply a speed shortcut; it yields the exact same numerical results."
         },
         {
           "id": "p3",
           "type": "fill_blank",
           "xp": 2,
           "prompt": "Complete the sentence:",
-          "sentence": "Because BCE math requires probability values between 0 and 1, we must apply a ___ activation function to the output neuron first.",
-          "blank": "Sigmoid",
+          "sentence": "In neural networks, we arrange a layer's weights into a grid called a ___.",
+          "blank": "matrix",
           "words": [
-            "Sigmoid",
-            "ReLU",
-            "Variance"
+            "matrix",
+            "vector",
+            "centroid"
           ],
-          "explain": "Sigmoid squashes the output to a 0-to-1 range, preparing it for the BCE loss calculation."
+          "explain": "A matrix is a two-dimensional grid of numbers (weights) used in calculations."
         },
         {
           "id": "p4",
           "type": "spot_the_ai",
           "xp": 2,
-          "prompt": "A model predicts a 0.99 probability that a transaction is safe (label = 0). What is the BCE loss score, and why?",
+          "prompt": "Which hardware component is specifically optimized to run these massive parallel matrix multiplications?",
           "options": [
             {
               "id": "a",
-              "text": "Extremely high, because the model was highly confident but completely wrong.",
+              "text": "A Graphics Processing Unit (GPU), which has thousands of small cores built for parallel math.",
               "correct": true
             },
             {
               "id": "b",
-              "text": "Near zero, because 0.99 is a very high score.",
+              "text": "A standard computer hard drive.",
               "correct": false
             },
             {
               "id": "c",
-              "text": "Zero, because the model was confident.",
+              "text": "A computer mouse.",
               "correct": false
             }
           ],
-          "explain": "Correct! Predicting 0.99 (Safe) when the true label is 0 (Fraud) is a confident miss, triggering a massive BCE loss penalty."
+          "explain": "Correct! GPUs are built specifically to handle parallel matrix math, which is why they are essential for deep learning."
         }
       ]
     },
@@ -191,30 +191,30 @@
           "id": "b1",
           "type": "multiple_choice",
           "xp": 5,
-          "prompt": "An email is spam (label = 1). The model's raw output is passed through Sigmoid, yielding a 0.02 probability of spam. What is the impact on Binary Cross-Entropy loss and the subsequent backpropagation step?",
+          "prompt": "A neural network layer has 1,000 inputs and 500 hidden neurons, resulting in 500,000 weight connections. How does the system compute this layer's output during forward propagation?",
           "options": [
             {
               "id": "a",
-              "text": "The loss is extremely high because the model confidently missed the target; this generates a strong gradient signal to adjust the weights.",
+              "text": "It packages the 1,000 inputs as a vector and the 500,000 weights as a 1,000-by-500 matrix, then computes the output in one parallel step.",
               "correct": true
             },
             {
               "id": "b",
-              "text": "The loss is near zero because 0.02 is close to 0; no weight adjustments occur.",
+              "text": "It calculates each of the 500,000 connections one-by-one sequentially.",
               "correct": false
             },
             {
               "id": "c",
-              "text": "The activation function collapses because the loss was negative.",
+              "text": "It discards 90% of the weights to make calculation possible.",
               "correct": false
             },
             {
               "id": "d",
-              "text": "The weights are immediately reset to random values.",
+              "text": "It asks the user to input the pre-calculated weights.",
               "correct": false
             }
           ],
-          "explain": "Exactly! Predicting 0.02 when the target is 1 is a confident miss. BCE penalizes this heavily, producing a large loss score and generating a powerful gradient to correct the weights. Next, let's see how we scale this concept to multi-class problems using Categorical Cross-Entropy!"
+          "explain": "Exactly! By using a 1,000-by-500 matrix, we run the 500,000 multiplications in parallel, which modern GPUs can do in fractions of a millisecond. Next, let's walk through how a single prediction actually traces through these layers step-by-step!"
         }
       ]
     }

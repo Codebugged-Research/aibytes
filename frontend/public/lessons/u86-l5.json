@@ -1,0 +1,222 @@
+{
+  "id": "u86-l5",
+  "unit": 86,
+  "day": 435,
+  "tier": "Practical Deep Learning",
+  "tierIcon": "🖥️",
+  "title": "Scaling Decision Matrix",
+  "icon": "🧭",
+  "concept": "A scaling decision matrix starts simple: stay on one GPU if the model fits and training time is acceptable, add efficiency tricks or distributed training only when memory, speed, or model size becomes the real bottleneck.",
+  "xp": 15,
+  "hearts": 3,
+  "estMinutes": 7,
+  "segments": [
+    {
+      "type": "warmup",
+      "exercises": [
+        {
+          "id": "w1",
+          "type": "multiple_choice",
+          "xp": 1,
+          "prompt": "Recap: What is the key difference between data parallelism and model parallelism?",
+          "options": [
+            {
+              "id": "a",
+              "text": "Data parallelism copies the model across devices, while model parallelism splits one oversized model across devices.",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "Data parallelism only works on CPUs, while model parallelism only works on GPUs.",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "There is no real difference between them.",
+              "correct": false
+            }
+          ],
+          "explain": "Exactly. Once you know the tools, the real practical question becomes when each one is worth the complexity."
+        }
+      ]
+    },
+    {
+      "type": "teach",
+      "cards": [
+        {
+          "kind": "hook",
+          "icon": "🎒",
+          "title": "Do not rent a moving crew for a backpack",
+          "body": "If all you need is to carry a backpack across the street, hiring a truck fleet would be silly. But if you are moving a whole house, extra vehicles suddenly make sense. Scaling deep learning works the same way: choose the smallest setup that truly solves the job."
+        },
+        {
+          "kind": "definition",
+          "icon": "🧭",
+          "title": "Start from the bottleneck, not from the hype",
+          "body": "A <strong>scaling decision matrix</strong> asks a few simple questions. Does the model fit on one GPU? Is the training time acceptable? Is memory the real problem, or is throughput the problem? If one GPU works, stay simple. If memory is tight, try tricks like mixed precision. If the job is still too slow, consider data parallelism. If the model itself does not fit, consider model parallel or larger multi-machine systems."
+        },
+        {
+          "kind": "analogy",
+          "icon": "🚲",
+          "title": "Bike, van, or freight truck",
+          "body": "You do not choose transportation by prestige. A bike is perfect for one bag, a van is useful for a larger load, and a freight truck is for something much bigger. In training, one GPU, multi-GPU data parallelism, and model-parallel clusters are different vehicles for different loads."
+        },
+        {
+          "kind": "example",
+          "icon": "🧪",
+          "title": "Prototype first, scale only if the evidence says so",
+          "body": "A small research team fine-tuning a moderate vision model may be perfectly happy on one GPU with mixed precision. A company retraining a giant recommendation or language model every day may need several GPUs. The right answer comes from measured bottlenecks, not from wanting the most impressive setup."
+        },
+        {
+          "kind": "mythbust",
+          "icon": "⚠️",
+          "title": "Distributed training is not a badge of seriousness",
+          "body": "A common myth is that “real” deep learning always uses a cluster. In practice, distributed systems add debugging, communication, scheduling, and cost overhead. If one GPU meets the need, that is often the smarter engineering choice."
+        },
+        {
+          "kind": "visual",
+          "icon": "⚖️",
+          "title": "Simple first, bigger only when needed",
+          "body": "The scaling path usually grows with the bottleneck.",
+          "compare": {
+            "left": {
+              "emoji": "🎯",
+              "tag": "One-GPU path",
+              "text": "Model fits comfortably<br>Training time is acceptable<br>Lower complexity and lower coordination cost"
+            },
+            "right": {
+              "emoji": "🏗️",
+              "tag": "Scale-out path",
+              "text": "Use when memory or speed truly blocks progress<br>May involve mixed precision, more GPUs, or model splitting<br>Higher engineering and communication overhead"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "type": "practice",
+      "exercises": [
+        {
+          "id": "p1",
+          "type": "multiple_choice",
+          "xp": 2,
+          "prompt": "When is a single GPU often still the best choice?",
+          "options": [
+            {
+              "id": "a",
+              "text": "When the model fits, the runtime is acceptable, and extra distributed complexity would not buy much.",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "When the model is too large to fit on any single device.",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "When communication overhead is the main goal.",
+              "correct": false
+            },
+            {
+              "id": "d",
+              "text": "When a team wants to prove it can use a cluster even if it is unnecessary.",
+              "correct": false
+            }
+          ],
+          "explain": "Correct. Simpler infrastructure is usually the better choice when it already meets the need."
+        },
+        {
+          "id": "p2",
+          "type": "true_false",
+          "xp": 2,
+          "prompt": "True or false: If training feels slow, distributed training should always be the very first scaling step.",
+          "options": [
+            {
+              "id": "t",
+              "text": "True",
+              "correct": false
+            },
+            {
+              "id": "f",
+              "text": "False",
+              "correct": true
+            }
+          ],
+          "explain": "False. First identify the bottleneck. Sometimes mixed precision, a smaller batch change, or simply more patience is enough."
+        },
+        {
+          "id": "p3",
+          "type": "fill_blank",
+          "xp": 2,
+          "prompt": "Complete the sentence:",
+          "sentence": "A good scaling decision usually begins by identifying the real ___.",
+          "blank": "bottleneck",
+          "words": [
+            "bottleneck",
+            "mascot",
+            "diagram"
+          ],
+          "explain": "Exactly. The right scaling tool depends on what is actually limiting progress."
+        },
+        {
+          "id": "p4",
+          "type": "spot_the_ai",
+          "xp": 2,
+          "prompt": "Which team is making the most sensible scaling decision?",
+          "options": [
+            {
+              "id": "a",
+              "text": "A team keeps training on one GPU because the model fits, the runtime is acceptable, and distributed setup would add complexity without solving a real problem.",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "A team moves to a complex multi-node cluster before testing whether the model even fits on one GPU.",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "A team chooses model parallelism only because it sounds more advanced in a presentation.",
+              "correct": false
+            }
+          ],
+          "explain": "Right. Good scaling decisions come from actual constraints, not from hype."
+        }
+      ]
+    },
+    {
+      "type": "boss",
+      "exercises": [
+        {
+          "id": "b1",
+          "type": "multiple_choice",
+          "xp": 5,
+          "prompt": "A team is fine-tuning a model that fits on one 24 GB GPU. With mixed precision, it trains overnight, and the product deadline is comfortable. Which scaling choice best fits the decision matrix?",
+          "options": [
+            {
+              "id": "a",
+              "text": "Stay on one GPU, because the job already fits and the runtime is acceptable without extra distributed overhead.",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "Jump immediately to model parallelism, because every serious project should use several machines.",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "Refuse mixed precision and wait until a larger cluster appears.",
+              "correct": false
+            },
+            {
+              "id": "d",
+              "text": "Split the model across devices even though the model already fits and the bottleneck is gone.",
+              "correct": false
+            }
+          ],
+          "explain": "Exactly. The decision matrix is about solving the actual bottleneck with the least unnecessary complexity. If one GPU already does the job, that is often the right answer."
+        }
+      ]
+    }
+  ]
+}

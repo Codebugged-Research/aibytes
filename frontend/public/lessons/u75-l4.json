@@ -1,0 +1,222 @@
+{
+  "id": "u75-l4",
+  "unit": 75,
+  "day": 379,
+  "tier": "Training Deep Networks",
+  "tierIcon": "🧪",
+  "title": "Training vs. Inference in Batch Norm",
+  "icon": "🔄",
+  "concept": "During training, batch norm uses the current mini-batch to compute its statistics; during inference, it switches to stored running averages so predictions stay consistent even on one example at a time.",
+  "xp": 15,
+  "hearts": 3,
+  "estMinutes": 7,
+  "segments": [
+    {
+      "type": "warmup",
+      "exercises": [
+        {
+          "id": "w1",
+          "type": "multiple_choice",
+          "xp": 1,
+          "prompt": "Recap: Why does batch norm include learnable scale and shift after normalization?",
+          "options": [
+            {
+              "id": "a",
+              "text": "So the network can keep useful flexibility after the activations are stabilized.",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "So the labels can be renamed mid-training.",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "So every hidden layer can be skipped forever.",
+              "correct": false
+            }
+          ],
+          "explain": "Correct. Batch norm stabilizes the activations first, then still lets the network tune their final range."
+        }
+      ]
+    },
+    {
+      "type": "teach",
+      "cards": [
+        {
+          "kind": "hook",
+          "icon": "🍲",
+          "title": "Cooking a whole pot vs. serving one bowl",
+          "body": "While cooking soup, you can taste the whole pot to judge its average flavor. But when serving one bowl later, you do not remeasure the entire pot from scratch each time. Batch norm faces a similar difference between training on batches and making predictions for individual examples."
+        },
+        {
+          "kind": "definition",
+          "icon": "🔄",
+          "title": "Two modes, two sources of statistics",
+          "body": "During <strong>training</strong>, batch norm uses the current mini-batch to estimate the center and spread of activations. During <strong>inference</strong> (prediction time), it usually uses stored <strong>running averages</strong> collected during training instead. That way, predictions do not depend on which other examples happen to be nearby."
+        },
+        {
+          "kind": "analogy",
+          "icon": "📊",
+          "title": "Practice scores vs. season averages",
+          "body": "A coach might study the average performance from many practice sessions to set expectations for game day. They would not redefine the benchmark every time one player takes a single shot. Running averages play that benchmark role for batch norm during inference."
+        },
+        {
+          "kind": "example",
+          "icon": "📱",
+          "title": "One photo at prediction time",
+          "body": "Imagine an app that classifies one user-uploaded photo at a time. There may be no meaningful batch around that photo, so using fresh batch statistics would be unreliable. Instead, batch norm uses the running averages learned during training to normalize the activations consistently."
+        },
+        {
+          "kind": "mythbust",
+          "icon": "⚠️",
+          "title": "Inference should not depend on random neighbors",
+          "body": "It might sound convenient to always use whatever examples are nearby at prediction time, but that would make one image's output depend on who arrived next to it. Good inference should be stable even when the model sees a single example alone."
+        },
+        {
+          "kind": "visual",
+          "icon": "⚖️",
+          "title": "Training mode vs. inference mode",
+          "body": "Batch norm switches behavior depending on the job:",
+          "compare": {
+            "left": {
+              "emoji": "🏋️",
+              "tag": "Training mode",
+              "text": "Uses current mini-batch statistics.<br>Learns while activations are changing.<br>Updates running averages over time."
+            },
+            "right": {
+              "emoji": "🔍",
+              "tag": "Inference mode",
+              "text": "Uses stored running averages.<br>Works even for one example.<br>Keeps predictions consistent."
+            }
+          }
+        }
+      ]
+    },
+    {
+      "type": "practice",
+      "exercises": [
+        {
+          "id": "p1",
+          "type": "multiple_choice",
+          "xp": 2,
+          "prompt": "During training, what statistics does batch norm usually use?",
+          "options": [
+            {
+              "id": "a",
+              "text": "The statistics of the current mini-batch.",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "Only the final test-set labels.",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "A random guess chosen by the optimizer.",
+              "correct": false
+            },
+            {
+              "id": "d",
+              "text": "The statistics from the very first batch forever.",
+              "correct": false
+            }
+          ],
+          "explain": "Exactly. In training mode, batch norm looks at the current mini-batch."
+        },
+        {
+          "id": "p2",
+          "type": "true_false",
+          "xp": 2,
+          "prompt": "True or false: At inference time, batch norm commonly uses running averages collected during training instead of the current live batch.",
+          "options": [
+            {
+              "id": "t",
+              "text": "True",
+              "correct": true
+            },
+            {
+              "id": "f",
+              "text": "False",
+              "correct": false
+            }
+          ],
+          "explain": "True. That keeps predictions stable even when there is only one example or an unusual batch."
+        },
+        {
+          "id": "p3",
+          "type": "fill_blank",
+          "xp": 2,
+          "prompt": "Complete the sentence:",
+          "sentence": "For prediction time, batch norm usually relies on running ___ gathered during training.",
+          "blank": "averages",
+          "words": [
+            "averages",
+            "labels",
+            "folders"
+          ],
+          "explain": "Right. Running averages give the model a stable reference once training is over."
+        },
+        {
+          "id": "p4",
+          "type": "spot_the_ai",
+          "xp": 2,
+          "prompt": "Which scenario best matches batch norm in inference mode?",
+          "options": [
+            {
+              "id": "a",
+              "text": "A model classifies one medical scan and normalizes its hidden activations using stored running averages from training.",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "A model waits for fifty unrelated live users so it can decide one person's prediction based on them.",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "A model throws away all learned statistics before making a prediction.",
+              "correct": false
+            }
+          ],
+          "explain": "Yes. Inference mode uses the learned running statistics so one prediction does not depend on random neighbors."
+        }
+      ]
+    },
+    {
+      "type": "boss",
+      "exercises": [
+        {
+          "id": "b1",
+          "type": "multiple_choice",
+          "xp": 5,
+          "prompt": "A face-recognition app predicts one image at a time on a phone. Why is it better for batch norm to use running averages here instead of fresh batch statistics from whatever image arrives?",
+          "options": [
+            {
+              "id": "a",
+              "text": "Because prediction should stay consistent even for a single image, without depending on random neighboring examples.",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "Because running averages make the model stop using hidden layers entirely.",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "Because batch statistics only exist for text models, not image models.",
+              "correct": false
+            },
+            {
+              "id": "d",
+              "text": "Because inference must always randomize activations to stay fair.",
+              "correct": false
+            }
+          ],
+          "explain": "Exactly. Batch norm switches to stored running averages so live predictions stay stable and self-contained. Next, we'll connect all of this to the big payoff: why batch norm often makes deep networks train faster and more smoothly."
+        }
+      ]
+    }
+  ]
+}

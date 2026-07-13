@@ -1,0 +1,222 @@
+{
+  "id": "u79-l2",
+  "unit": 79,
+  "day": 397,
+  "tier": "Training Deep Networks",
+  "tierIcon": "🩺",
+  "title": "Diagnosing Dead ReLUs",
+  "icon": "⚡",
+  "concept": "A dead ReLU is a neuron that outputs zero for almost everything, so it stops contributing useful features; you can spot it when activations stay flat at zero and training capacity quietly disappears.",
+  "xp": 15,
+  "hearts": 3,
+  "estMinutes": 7,
+  "segments": [
+    {
+      "type": "warmup",
+      "exercises": [
+        {
+          "id": "w1",
+          "type": "multiple_choice",
+          "xp": 1,
+          "prompt": "Recap: Which curve pattern usually points to a learning rate that is too high?",
+          "options": [
+            {
+              "id": "a",
+              "text": "Loss keeps bouncing sharply up and down instead of settling.",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "Loss falls steadily and then flattens near the bottom.",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "Loss is measured on a validation set.",
+              "correct": false
+            }
+          ],
+          "explain": "Correct. Oversized jumps can matter here too, because a harsh update is one way ReLU neurons can get knocked into a dead state."
+        }
+      ]
+    },
+    {
+      "type": "teach",
+      "cards": [
+        {
+          "kind": "hook",
+          "icon": "💡",
+          "title": "A row of lights, half permanently off",
+          "body": "Imagine a stadium control panel where some light switches still work, but others are stuck in the off position no matter what button you press. A network with dead ReLUs can lose part of its feature-detecting power the same way."
+        },
+        {
+          "kind": "definition",
+          "icon": "⚡",
+          "title": "What a dead ReLU is",
+          "body": "A <strong>dead ReLU</strong> is a neuron using the ReLU activation function that keeps outputting <code>0</code> for nearly all inputs. Because its output stays flat, its gradient can also vanish there, so the neuron may stop learning useful patterns and effectively drop out of the model for good."
+        },
+        {
+          "kind": "analogy",
+          "icon": "🚪",
+          "title": "A door wedged shut",
+          "body": "ReLU is like a door that opens only for positive input. A healthy door swings open when the signal is strong enough. A dead ReLU is a door jammed so far into the negative side that people never push it open again."
+        },
+        {
+          "kind": "example",
+          "icon": "🔍",
+          "title": "How you spot one",
+          "body": "Suppose you inspect a hidden layer and see that one neuron's activation is <code>0</code> for almost every example in the batch after batch after batch. That is very different from a neuron that is zero on some images and active on others. Dead ReLUs often appear after a bad initialization, a big negative bias, or an aggressive learning rate update."
+        },
+        {
+          "kind": "mythbust",
+          "icon": "⚠️",
+          "title": "Zero once is not dead forever",
+          "body": "A common myth is that any ReLU output of zero means trouble. Not true. ReLUs are supposed to output zero on many examples. The warning sign is a neuron that stays at zero <strong>almost all the time</strong> and never seems to wake up across diverse inputs."
+        },
+        {
+          "kind": "visual",
+          "icon": "⚖️",
+          "title": "Healthy sparse activity vs. a dead unit",
+          "body": "Both neurons may produce zeros sometimes, but only one still participates in learning.",
+          "compare": {
+            "left": {
+              "emoji": "🫀",
+              "tag": "Healthy ReLU",
+              "text": "Zero on some examples.<br>Positive on others.<br>Still detects a feature when it appears."
+            },
+            "right": {
+              "emoji": "🪫",
+              "tag": "Dead ReLU",
+              "text": "Almost always outputs zero.<br>Contributes little or nothing.<br>May need a lower learning rate, better init, or a variant like Leaky ReLU."
+            }
+          }
+        }
+      ]
+    },
+    {
+      "type": "practice",
+      "exercises": [
+        {
+          "id": "p1",
+          "type": "multiple_choice",
+          "xp": 2,
+          "prompt": "Which observation is the strongest clue that a ReLU neuron is dead?",
+          "options": [
+            {
+              "id": "a",
+              "text": "Its activation stays at zero for almost every input over and over again.",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "It outputs zero on some examples and positive values on others.",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "It belongs to a hidden layer instead of the output layer.",
+              "correct": false
+            },
+            {
+              "id": "d",
+              "text": "It was trained on image data.",
+              "correct": false
+            }
+          ],
+          "explain": "Right. The problem is persistent zero output, not occasional zero output."
+        },
+        {
+          "id": "p2",
+          "type": "true_false",
+          "xp": 2,
+          "prompt": "True or false: Lowering an overly aggressive learning rate can help prevent more ReLUs from dying.",
+          "options": [
+            {
+              "id": "t",
+              "text": "True",
+              "correct": true
+            },
+            {
+              "id": "f",
+              "text": "False",
+              "correct": false
+            }
+          ],
+          "explain": "True. Big updates can shove a neuron deep into the negative region where it stops activating."
+        },
+        {
+          "id": "p3",
+          "type": "fill_blank",
+          "xp": 2,
+          "prompt": "Complete the sentence:",
+          "sentence": "A dead ReLU is usually stuck outputting ___ for nearly every input.",
+          "blank": "zero",
+          "words": [
+            "zero",
+            "one",
+            "noise"
+          ],
+          "explain": "Zero is correct. That flat output is why the unit stops helping much."
+        },
+        {
+          "id": "p4",
+          "type": "spot_the_ai",
+          "xp": 2,
+          "prompt": "Which debugging note sounds most accurate?",
+          "options": [
+            {
+              "id": "a",
+              "text": "This neuron is zero on cat images but active on dog images, so it may still be a healthy feature detector.",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "This neuron was zero twice, so it is definitely dead forever.",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "Any ReLU with a zero output means the whole network is broken.",
+              "correct": false
+            }
+          ],
+          "explain": "Exactly. ReLUs are allowed to be selective. Death means the selectivity disappears into constant silence."
+        }
+      ]
+    },
+    {
+      "type": "boss",
+      "exercises": [
+        {
+          "id": "b1",
+          "type": "multiple_choice",
+          "xp": 5,
+          "prompt": "A vision model is underperforming. You inspect one hidden layer and find many neurons outputting zero on almost every batch after a recent jump to a much larger learning rate. What is the best diagnosis and first response?",
+          "options": [
+            {
+              "id": "a",
+              "text": "Many ReLUs may have died, so reduce the learning rate and consider better initialization or Leaky ReLU.",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "The zeros prove the model is overfitting, so add more dropout first and ignore the activations.",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "Zero outputs always mean the labels are shuffled, so the activation function is unrelated.",
+              "correct": false
+            },
+            {
+              "id": "d",
+              "text": "This is healthy because ReLUs should all stay at zero most of the time.",
+              "correct": false
+            }
+          ],
+          "explain": "Excellent. The pattern points to dead ReLUs, and the aggressive update is a believable cause. Stabilizing training is the right first move."
+        }
+      ]
+    }
+  ]
+}

@@ -2,11 +2,11 @@
   "id": "u63-l5",
   "unit": 63,
   "day": 320,
-  "tier": "Training Deep Networks",
-  "tierIcon": "🏔️",
-  "title": "Nesterov Accelerated Gradient: Looking Ahead",
-  "icon": "👁️",
-  "concept": "Nesterov Accelerated Gradient improves on momentum by 'peeking ahead' to where the accumulated velocity is about to carry the optimizer, and measuring the gradient there instead of at the current position — correcting course earlier and cutting down on overshoot.",
+  "tier": "Neural Network Basics",
+  "tierIcon": "🌈",
+  "title": "Choosing the Right Activation Function",
+  "icon": "⚖️",
+  "concept": "A decision matrix reviewing every activation function covered so far — Sigmoid, Tanh, ReLU, Leaky ReLU, PReLU, ELU, Swish/GELU, and Softmax — and when to reach for each one.",
   "xp": 15,
   "hearts": 3,
   "estMinutes": 7,
@@ -18,25 +18,25 @@
           "id": "w1",
           "type": "multiple_choice",
           "xp": 1,
-          "prompt": "Recap: What's the risk of momentum's built-up velocity if it gets too strong?",
+          "prompt": "Recap: what does it mean for Swish and GELU to be self-gated?",
           "options": [
             {
               "id": "a",
-              "text": "It can carry the optimizer flying past a good minimum — overshooting it",
+              "text": "Each input is scaled by a gate calculated from that same input's own value",
               "correct": true
             },
             {
               "id": "b",
-              "text": "It makes every step exactly the same size forever",
+              "text": "They gate access to the training data",
               "correct": false
             },
             {
               "id": "c",
-              "text": "It erases the network's weights",
+              "text": "They only run during the warmup phase",
               "correct": false
             }
           ],
-          "explain": "Exactly! So what if the optimizer could catch that overshoot BEFORE fully committing to the step?"
+          "explain": "Right — self-gated functions scale themselves. You've now met eight activation functions total. Time to organize the whole toolbox."
         }
       ]
     },
@@ -45,49 +45,49 @@
       "cards": [
         {
           "kind": "hook",
-          "icon": "👁️",
-          "title": "Driving by only looking at your feet",
-          "body": "Regular momentum decides how hard to hit the gas based only on the slope right under its current position, then commits to a big velocity-powered step. It's like flooring the gas without checking what's just ahead on the road."
+          "icon": "🧰",
+          "title": "Eight tools, one toolbox",
+          "body": "Sigmoid, Tanh, ReLU, Leaky ReLU, PReLU, ELU, Swish, GELU, Softmax — that's a lot of activation functions to keep straight. The good news: they sort into just a few clear groups, each built for a specific job."
         },
         {
           "kind": "definition",
-          "icon": "🔭",
-          "title": "Peek ahead, then correct",
-          "body": "<strong>Nesterov Accelerated Gradient (NAG)</strong> first takes a quick 'lookahead' jump using the current velocity, checks the slope AT that lookahead spot, and uses THAT slope to correct the real step — catching problems, like an upcoming overshoot, before fully committing."
+          "icon": "🗂️",
+          "title": "Four groups, one purpose each",
+          "body": "<strong>Squashing functions</strong> (Sigmoid, Tanh) compress numbers into a fixed range. The <strong>ReLU family</strong> (ReLU, Leaky ReLU, PReLU, ELU) chops or bends negative inputs while leaving positive ones alone. <strong>Smooth modern functions</strong> (Swish, GELU) self-gate for a small edge in large networks. And <strong>Softmax</strong> stands alone as the output-layer specialist for picking one winner among many categories."
         },
         {
           "kind": "analogy",
-          "icon": "🚴",
-          "title": "A cyclist who scouts the bend before leaning in",
-          "body": "A cyclist speeding downhill who glances ahead and spots a sharp curve can start braking or leaning early. A cyclist who only feels the road under their current tire finds out about the curve too late and has to overcorrect hard."
+          "icon": "🧰",
+          "title": "A toolbox, not one favorite wrench",
+          "body": "A carpenter doesn't use one tool for every job — a hammer for nails, a screwdriver for screws, a saw for cutting. Activation functions work the same way: ReLU is the reliable everyday hammer for hidden layers, Sigmoid and Softmax are precision tools reserved for the output layer, and Leaky ReLU, PReLU, ELU, Swish, and GELU are specialty tools you reach for when the everyday hammer isn't quite doing the job."
         },
         {
           "kind": "example",
-          "icon": "🎯",
-          "title": "Correcting before overshoot happens",
-          "body": "If momentum's velocity is about to carry the optimizer past the bottom of a valley and up the far slope, Nesterov's lookahead step lands on that far slope FIRST, feels the uphill pull immediately, and reins in the real step before the full overshoot happens."
+          "icon": "🗺️",
+          "title": "A quick decision guide",
+          "body": "Hidden layers, general default: reach for <strong>ReLU</strong>. Seeing dying neurons? Try <strong>Leaky ReLU</strong>, <strong>PReLU</strong>, or <strong>ELU</strong>. Building a large modern network and chasing every bit of performance? Try <strong>Swish</strong> or <strong>GELU</strong>. Output layer, single yes/no decision: <strong>Sigmoid</strong>. Output layer, one winner among many categories: <strong>Softmax</strong>. Output layer, hidden-layer-style bend needed for a two-direction signal: <strong>Tanh</strong>."
         },
         {
           "kind": "mythbust",
           "icon": "⚠️",
-          "title": "It's not a totally different move, just a smarter measurement",
-          "body": "You might think Nesterov is a completely different strategy from momentum. Really, it uses the exact same velocity-accumulation idea — the only change is WHERE the slope gets measured, at the lookahead point instead of the current point — and that's enough to noticeably cut down on overshoot and wasted steps."
+          "title": "There's no single 'best' activation function",
+          "body": "You might assume one of these eight must be objectively the best, and the rest are outdated. In reality, the right choice depends on where it sits in the network (hidden vs. output layer) and what problem it's solving — a specialist for multi-class output isn't a competitor to a hidden-layer default, they solve different jobs entirely."
         },
         {
           "kind": "visual",
           "icon": "⚖️",
-          "title": "Momentum vs. Nesterov",
-          "body": "Where each one measures the slope:",
+          "title": "Hidden layer vs. output layer",
+          "body": "Where each group typically lives:",
           "compare": {
             "left": {
-              "emoji": "🏒",
-              "tag": "Momentum",
-              "text": "Measures slope at the current spot<br>Then commits to the full velocity step"
+              "emoji": "🔧",
+              "tag": "Hidden layers",
+              "text": "ReLU, Leaky ReLU, PReLU, ELU, Swish, GELU<br>Process signals between layers"
             },
             "right": {
-              "emoji": "👁️",
-              "tag": "Nesterov",
-              "text": "Peeks ahead to where velocity is heading<br>Measures slope THERE, corrects early"
+              "emoji": "🎯",
+              "tag": "Output layer",
+              "text": "Sigmoid (yes/no), Softmax (one of many)<br>Produce the network's final answer"
             }
           }
         }
@@ -100,82 +100,82 @@
           "id": "p1",
           "type": "multiple_choice",
           "xp": 2,
-          "prompt": "What does Nesterov Accelerated Gradient do differently from plain momentum?",
+          "prompt": "A hidden layer keeps producing dead neurons stuck at 0. Which group of activation functions was specifically built to fix this?",
           "options": [
             {
               "id": "a",
-              "text": "It measures the slope at a 'lookahead' point — where the velocity is about to carry it — instead of at the current position",
+              "text": "Leaky ReLU, PReLU, or ELU",
               "correct": true
             },
             {
               "id": "b",
-              "text": "It ignores velocity completely and starts fresh every step",
+              "text": "Softmax",
               "correct": false
             },
             {
               "id": "c",
-              "text": "It always takes twice as many steps as momentum",
+              "text": "Sigmoid",
               "correct": false
             }
           ],
-          "explain": "Right! That lookahead measurement is the entire trick — same velocity idea, smarter timing on where the slope gets checked."
+          "explain": "Right — these three all keep a signal alive for negative inputs instead of hard-zeroing them."
         },
         {
           "id": "p2",
           "type": "true_false",
           "xp": 2,
-          "prompt": "True or false: Nesterov's lookahead step tends to reduce overshoot compared to plain momentum.",
+          "prompt": "True or false: Softmax and Sigmoid can be swapped for each other with no real difference, since both squash numbers into a 0-to-1 range.",
           "options": [
             {
               "id": "t",
               "text": "True",
-              "correct": true
+              "correct": false
             },
             {
               "id": "f",
               "text": "False",
-              "correct": false
+              "correct": true
             }
           ],
-          "explain": "True! By checking the slope ahead of where it's heading, Nesterov can rein in the step before a full overshoot happens."
+          "explain": "False! Sigmoid scores one independent decision; Softmax links a whole set of categories together so they sum to 100%."
         },
         {
           "id": "p3",
           "type": "fill_blank",
           "xp": 2,
           "prompt": "Complete the sentence:",
-          "sentence": "Nesterov Accelerated Gradient 'peeks ___' to where momentum is about to carry it before correcting the real step.",
-          "blank": "ahead",
+          "sentence": "For a network's output layer choosing one winner among many categories, the right activation function is ___.",
+          "blank": "Softmax",
           "words": [
-            "ahead",
-            "backward",
-            "sideways"
+            "Softmax",
+            "ReLU",
+            "ELU"
           ],
-          "explain": "Peeking ahead to the lookahead point is exactly what lets Nesterov correct its course earlier than plain momentum."
+          "explain": "Softmax is the output-layer specialist for multi-class problems."
         },
         {
           "id": "p4",
           "type": "spot_the_ai",
           "xp": 2,
-          "prompt": "Which description matches how Nesterov Accelerated Gradient corrects its course, versus plain momentum?",
+          "prompt": "A large modern network wants a smooth, self-gated hidden-layer activation function for a small performance edge. Which should it use?",
           "options": [
             {
               "id": "a",
-              "text": "It jumps ahead using the current velocity first, checks the slope THERE, then adjusts the real step using that lookahead information",
+              "text": "Swish or GELU",
               "correct": true
             },
             {
               "id": "b",
-              "text": "It measures the slope only at the starting position and never adjusts for velocity",
+              "text": "Softmax",
               "correct": false
             },
             {
               "id": "c",
-              "text": "It removes velocity entirely and behaves exactly like plain SGD",
+              "text": "Sigmoid",
               "correct": false
             }
           ],
-          "explain": "Right — peeking ahead before committing is exactly what separates Nesterov from plain momentum."
+          "explain": "Swish and GELU are the smooth, self-gated choices built for exactly this."
         }
       ]
     },
@@ -186,30 +186,30 @@
           "id": "b1",
           "type": "multiple_choice",
           "xp": 5,
-          "prompt": "A deep network's training run has: (1) a steep ravine early on, (2) a long flat plateau in the middle, and (3) a good minimum near the end that momentum keeps overshooting. Which optimizer best handles ALL three, and why?",
+          "prompt": "You're designing a network with hidden layers that have been suffering from dying neurons, plus an output layer that must pick exactly one winner among 20 categories. Which activation function choices fit both jobs, and why?",
           "options": [
             {
               "id": "a",
-              "text": "Nesterov Accelerated Gradient — it keeps momentum's velocity to power through ravines and plateaus, but its lookahead correction catches the overshoot near the minimum that plain momentum misses",
+              "text": "Leaky ReLU, PReLU, or ELU for the hidden layers (they keep negative-input signals alive instead of hard-zeroing them), and Softmax for the output layer (it converts scores into probabilities across all 20 categories that sum to 100%)",
               "correct": true
             },
             {
               "id": "b",
-              "text": "Plain SGD — its zig-zagging is actually ideal for all three situations",
+              "text": "ReLU everywhere, because the same default always works best no matter the problem",
               "correct": false
             },
             {
               "id": "c",
-              "text": "Full-batch gradient descent — reading the whole dataset each step fixes ravines, plateaus, and overshoot automatically",
+              "text": "Sigmoid for the hidden layers and Tanh for the output layer",
               "correct": false
             },
             {
               "id": "d",
-              "text": "None of these optimizers can handle more than one type of terrain at a time",
+              "text": "Softmax for the hidden layers and ReLU for the output layer",
               "correct": false
             }
           ],
-          "explain": "Exactly! Nesterov keeps everything momentum does well — canceling zig-zag, powering through plateaus — while its lookahead trick catches overshoot earlier than plain momentum can. Next up: optimizers that go a step further, adjusting each individual weight's step size on the fly instead of using one shared step size for everything."
+          "explain": "Exactly right! You now know all eight activation functions and when to reach for each. But knowing how a neuron reacts to a signal is only half the story — next, you'll learn HOW a network actually adjusts its weights to get better over time, starting with the algorithm that powers nearly all of deep learning: gradient descent."
         }
       ]
     }

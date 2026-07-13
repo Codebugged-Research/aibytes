@@ -1,0 +1,222 @@
+{
+  "id": "u87-l5",
+  "unit": 87,
+  "day": 440,
+  "tier": "Practical Deep Learning",
+  "tierIcon": "🪶",
+  "title": "Speed vs. Memory Tradeoffs",
+  "icon": "⚖️",
+  "concept": "Deep learning systems often trade speed for lower memory or trade memory for more speed, so practical engineering means choosing the trick that matches the real bottleneck instead of assuming one best answer.",
+  "xp": 15,
+  "hearts": 3,
+  "estMinutes": 7,
+  "segments": [
+    {
+      "type": "warmup",
+      "exercises": [
+        {
+          "id": "w1",
+          "type": "multiple_choice",
+          "xp": 1,
+          "prompt": "Recap: What is the most direct benefit of parameter sharing or weight tying?",
+          "options": [
+            {
+              "id": "a",
+              "text": "Fewer distinct parameters to store.",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "Guaranteed perfect accuracy.",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "No need for data anymore.",
+              "correct": false
+            }
+          ],
+          "explain": "Exactly. Different tricks save memory in different ways, and now the question is when each tradeoff is worth it."
+        }
+      ]
+    },
+    {
+      "type": "teach",
+      "cards": [
+        {
+          "kind": "hook",
+          "icon": "⚖️",
+          "title": "You usually cannot max out every dial",
+          "body": "In real training systems, teams rarely get unlimited memory, unlimited speed, and unlimited simplicity all at once. Practical deep learning is about knowing which knob to turn when memory is the bottleneck and when a memory-saving trick would slow you down too much."
+        },
+        {
+          "kind": "definition",
+          "icon": "🧭",
+          "title": "A tradeoff is a deliberate exchange",
+          "body": "A <strong>speed-versus-memory tradeoff</strong> means you accept a cost in one area to gain in the other. For example, checkpointing cuts memory but adds recomputation time, while a larger direct batch may run faster per optimizer step if it fits, but needs more VRAM."
+        },
+        {
+          "kind": "analogy",
+          "icon": "🧳",
+          "title": "Travel light or move fast",
+          "body": "If you carry a huge suitcase, you keep everything with you but moving through the airport becomes harder. If you travel light, you move more easily but may need to wash clothes or repack more often. Memory-saving tricks work the same way: smaller load now can mean extra work later."
+        },
+        {
+          "kind": "example",
+          "icon": "🛠️",
+          "title": "Different bottlenecks, different fixes",
+          "body": "If training crashes from lack of VRAM, you might lower batch size, use gradient accumulation, or checkpoint activations. If memory is fine but training is too slow, adding more memory-saving tricks may hurt rather than help. The right decision starts with measuring the actual bottleneck."
+        },
+        {
+          "kind": "mythbust",
+          "icon": "❌",
+          "title": "There is no universal best trick",
+          "body": "A common mistake is asking for the single best optimization for every project. But the best move depends on the goal: fitting a model onto one GPU, finishing training sooner, reducing inference cost, or simplifying deployment. Context decides the winner."
+        },
+        {
+          "kind": "visual",
+          "icon": "🗺️",
+          "title": "A simple decision matrix",
+          "body": "Start from the bottleneck you actually have.",
+          "compare": {
+            "left": {
+              "emoji": "💾",
+              "tag": "If memory is the problem",
+              "text": "Lower batch size.<br>Use accumulation or checkpointing.<br>Consider sharing weights or a smaller model."
+            },
+            "right": {
+              "emoji": "⚡",
+              "tag": "If speed is the problem",
+              "text": "Avoid unnecessary recomputation.<br>Use the largest efficient batch that still fits.<br>Prefer simpler, faster paths when memory headroom exists."
+            }
+          }
+        }
+      ]
+    },
+    {
+      "type": "practice",
+      "exercises": [
+        {
+          "id": "p1",
+          "type": "multiple_choice",
+          "xp": 2,
+          "prompt": "Which statement best captures a speed-versus-memory tradeoff?",
+          "options": [
+            {
+              "id": "a",
+              "text": "A trick can save memory by doing extra work later, or save time by using more memory now.",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "All useful tricks always improve both speed and memory at the same time.",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "Memory and speed never affect each other.",
+              "correct": false
+            },
+            {
+              "id": "d",
+              "text": "The fastest model is always the smallest model.",
+              "correct": false
+            }
+          ],
+          "explain": "Right. Many system choices are deliberate exchanges, not free upgrades."
+        },
+        {
+          "id": "p2",
+          "type": "true_false",
+          "xp": 2,
+          "prompt": "True or false: If memory is already comfortable, a memory-saving trick that adds lots of recomputation may be a poor choice for throughput.",
+          "options": [
+            {
+              "id": "t",
+              "text": "True",
+              "correct": true
+            },
+            {
+              "id": "f",
+              "text": "False",
+              "correct": false
+            }
+          ],
+          "explain": "True. When memory is not the bottleneck, more recomputation can slow training without solving the real problem."
+        },
+        {
+          "id": "p3",
+          "type": "fill_blank",
+          "xp": 2,
+          "prompt": "Complete the sentence:",
+          "sentence": "A good optimization starts by identifying the real ___.",
+          "blank": "bottleneck",
+          "words": [
+            "bottleneck",
+            "wallpaper",
+            "playlist"
+          ],
+          "explain": "Bottleneck is correct. The best choice depends on what is actually limiting the system."
+        },
+        {
+          "id": "p4",
+          "type": "spot_the_ai",
+          "xp": 2,
+          "prompt": "Which team is making the most sensible tradeoff decision?",
+          "options": [
+            {
+              "id": "a",
+              "text": "A team hits VRAM limits, so it accepts some extra compute time from checkpointing to make training fit.",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "A team ignores measurements and picks a trick only because the name sounds advanced.",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "A team with plenty of memory adds every memory-saving trick anyway and is surprised training slows down.",
+              "correct": false
+            }
+          ],
+          "explain": "Exactly. Good system choices match the real constraint rather than chasing every optimization at once."
+        }
+      ]
+    },
+    {
+      "type": "boss",
+      "exercises": [
+        {
+          "id": "b1",
+          "type": "multiple_choice",
+          "xp": 5,
+          "prompt": "A project trains on one GPU and keeps crashing from out-of-memory errors, but the team can tolerate somewhat slower training. Which response best matches the decision matrix?",
+          "options": [
+            {
+              "id": "a",
+              "text": "Choose a memory-saving trick like checkpointing or gradient accumulation, accepting extra time if needed.",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "Ignore the memory limit and keep the exact same setup.",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "Add only speed-focused optimizations that use even more memory.",
+              "correct": false
+            },
+            {
+              "id": "d",
+              "text": "Assume every project should use the same trick no matter the bottleneck.",
+              "correct": false
+            }
+          ],
+          "explain": "Exactly. When memory is the blocker and some extra runtime is acceptable, memory-saving techniques are often the right trade."
+        }
+      ]
+    }
+  ]
+}

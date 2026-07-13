@@ -3,10 +3,10 @@
   "unit": 64,
   "day": 324,
   "tier": "Training Deep Networks",
-  "tierIcon": "🎯",
-  "title": "AdamW: Decoupled Weight Decay",
-  "icon": "⚖️",
-  "concept": "AdamW refines Adam by separating (decoupling) weight decay — a regularization technique — from the main adaptive gradient update, leading to better generalization. It's now a very common default in modern large-model training.",
+  "tierIcon": "🏔️",
+  "title": "Momentum: Rolling Downhill Faster",
+  "icon": "🏒",
+  "concept": "Momentum accumulates a 'velocity' from past gradient steps, smoothing out zig-zagging and helping push through small bumps and plateaus, like a ball rolling downhill.",
   "xp": 15,
   "hearts": 3,
   "estMinutes": 7,
@@ -18,25 +18,25 @@
           "id": "w1",
           "type": "multiple_choice",
           "xp": 1,
-          "prompt": "Recap: what two things does Adam combine into one optimizer?",
+          "prompt": "Recap: What does plain SGD do when it hits a narrow ravine in the loss landscape (steep walls, gentle slope along the bottom)?",
           "options": [
             {
               "id": "a",
-              "text": "Momentum's velocity smoothing and RMSprop's per-parameter adaptive rates",
+              "text": "It zig-zags, bouncing back and forth across the ravine instead of moving smoothly toward the bottom",
               "correct": true
             },
             {
               "id": "b",
-              "text": "AdaGrad's accumulation and a bigger batch size",
+              "text": "It instantly jumps straight to the bottom",
               "correct": false
             },
             {
               "id": "c",
-              "text": "Two different activation functions",
+              "text": "It stops completely and never moves again",
               "correct": false
             }
           ],
-          "explain": "Right — Adam blends Momentum's velocity with RMSprop's adaptive rates. But there's one more common training ingredient we haven't looked at yet: weight decay. How does it interact with Adam?"
+          "explain": "Right! All that bouncing wastes steps. So how do we stop the wasted zig-zag and keep training moving forward?"
         }
       ]
     },
@@ -45,49 +45,49 @@
       "cards": [
         {
           "kind": "hook",
-          "icon": "⚖️",
-          "title": "A regularization trick that got tangled up",
-          "body": "<strong>Weight decay</strong> is a common regularization technique: on every update, it nudges every weight a little bit toward zero, so the network can't lean too heavily on any single weight and overfit the training data. In plain SGD, this works cleanly. But when weight decay gets mixed into Adam's adaptive per-parameter math, something unexpected happens."
+          "icon": "🏒",
+          "title": "A puck vs. a snowflake",
+          "body": "A single snowflake stops the instant a breeze shifts. A hockey puck, once it's moving, keeps gliding in roughly the same direction even if the ice tilts a little. Which one do you want steering your deep network's training?"
         },
         {
           "kind": "definition",
-          "icon": "⚖️",
-          "title": "AdamW: decoupled weight decay",
-          "body": "<strong>AdamW</strong> separates the weight decay step from Adam's main adaptive gradient update, applying it directly to the weights instead of folding it into the adaptive-rate math. \"Decoupled\" simply means learning from gradients and shrinking weights slightly now happen as two SEPARATE, independent steps — not one tangled-together step."
+          "icon": "🏒",
+          "title": "Velocity: a memory of where you've been heading",
+          "body": "<strong>Momentum</strong> keeps a running <strong>velocity</strong> — a blend of the current slope direction and the direction of recent past steps — so every new step gets nudged toward the direction training has consistently been heading."
         },
         {
           "kind": "analogy",
-          "icon": "🧾",
-          "title": "Two separate bills, not one confusing combined charge",
-          "body": "Imagine paying rent and a gym membership as one single combined charge on your account — it becomes unclear how much each one actually cost you, and a change in one silently changes the other. In plain Adam, weight decay and the adaptive gradient update were bundled together like that combined charge. AdamW sends two SEPARATE, clearly itemized charges instead."
+          "icon": "🧊",
+          "title": "Gliding across the rink",
+          "body": "Instead of reacting only to the ice right under your skates (like plain SGD reacting only to the current slope), momentum is like a puck that keeps gliding along its established direction — a small wobble in the ice barely changes its overall path down the rink."
         },
         {
           "kind": "example",
-          "icon": "🤖",
-          "title": "The standard optimizer behind modern language models",
-          "body": "Training a large language model — the kind of transformer model behind modern chatbots — almost always uses AdamW rather than plain Adam, precisely because its decoupled weight decay noticeably improves how well the model generalizes to new, unseen text."
+          "icon": "🌊",
+          "title": "Canceling the zig-zag, keeping the forward push",
+          "body": "In a narrow ravine, the side-to-side parts of each step point opposite directions on alternating steps and tend to cancel out over time, while the along-the-ravine part keeps adding up — so the puck-like velocity ends up pointed straight down the ravine, far faster than plain SGD's bounce."
         },
         {
           "kind": "mythbust",
           "icon": "⚠️",
-          "title": "AdamW isn't a totally different optimizer",
-          "body": "It's easy to assume AdamW is a completely new, redesigned algorithm. It isn't — AdamW keeps ALL of Adam's momentum and adaptive-rate machinery exactly the same. The ONLY change is where and how weight decay gets applied. It's a small, surgical fix, not a redesign."
+          "title": "Momentum doesn't guarantee a straight shot to the best answer",
+          "body": "You might think building up speed always helps. But too much velocity can carry the optimizer flying PAST a good minimum, overshooting it like a puck hit too hard — deep learning teams tune how much past velocity to keep, usually a large chunk, but never all of it."
         },
         {
           "kind": "visual",
           "icon": "⚖️",
-          "title": "Adam vs. AdamW",
-          "body": "How the two compare:",
+          "title": "Plain SGD vs. momentum on a plateau",
+          "body": "How the two handle a long flat stretch:",
           "compare": {
             "left": {
-              "emoji": "🏆",
-              "tag": "Adam",
-              "text": "Weight decay folded INTO the adaptive gradient update<br>Gets tangled with per-parameter scaling"
+              "emoji": "🥶",
+              "tag": "Plain SGD",
+              "text": "Tiny gradient → tiny step<br>Crawls to a near stall"
             },
             "right": {
-              "emoji": "⚖️",
-              "tag": "AdamW",
-              "text": "Weight decay applied as a SEPARATE step<br>Cleaner regularization, better generalization"
+              "emoji": "🏒",
+              "tag": "Momentum",
+              "text": "Carries built-up velocity<br>Glides straight through the flat stretch"
             }
           }
         }
@@ -100,31 +100,31 @@
           "id": "p1",
           "type": "multiple_choice",
           "xp": 2,
-          "prompt": "What does AdamW change compared to plain Adam?",
+          "prompt": "What does momentum add to a plain gradient step to smooth out zig-zagging?",
           "options": [
             {
               "id": "a",
-              "text": "It applies weight decay as a separate, decoupled step instead of folding it into the adaptive gradient update",
+              "text": "A 'velocity' built from the direction of recent past steps, blended with the current slope",
               "correct": true
             },
             {
               "id": "b",
-              "text": "It removes momentum entirely",
+              "text": "A completely random extra step direction",
               "correct": false
             },
             {
               "id": "c",
-              "text": "It uses a much bigger learning rate by default",
+              "text": "A pause that waits for the next epoch to start",
               "correct": false
             }
           ],
-          "explain": "Correct! AdamW's core change is decoupling weight decay from the adaptive update — everything else about Adam stays the same."
+          "explain": "Right! That accumulated velocity keeps pulling the optimizer in the direction it's consistently been heading."
         },
         {
           "id": "p2",
           "type": "true_false",
           "xp": 2,
-          "prompt": "True or false: Weight decay is a regularization technique that gently shrinks weights toward zero on every update, to help prevent overfitting.",
+          "prompt": "True or false: momentum can help an optimizer glide through a flat plateau where plain SGD's steps would shrink to a crawl.",
           "options": [
             {
               "id": "t",
@@ -137,45 +137,45 @@
               "correct": false
             }
           ],
-          "explain": "True! Weight decay nudges every weight slightly smaller each step so the network doesn't lean too heavily on any one weight."
+          "explain": "True! Built-up velocity keeps carrying the optimizer forward even where the current slope is nearly flat."
         },
         {
           "id": "p3",
           "type": "fill_blank",
           "xp": 2,
           "prompt": "Complete the sentence:",
-          "sentence": "AdamW ___ weight decay from Adam's main adaptive gradient update, applying it as a separate step.",
-          "blank": "decouples",
+          "sentence": "Momentum blends the current slope direction with the ___ built up from recent steps.",
+          "blank": "velocity",
           "words": [
-            "decouples",
-            "doubles",
-            "deletes"
+            "velocity",
+            "alphabet",
+            "hearts"
           ],
-          "explain": "\"Decouples\" means separating weight decay into its own clean step, instead of mixing it into the adaptive-rate math."
+          "explain": "Velocity is momentum's running memory of the directions recent steps have been heading."
         },
         {
           "id": "p4",
           "type": "spot_the_ai",
           "xp": 2,
-          "prompt": "You're training a large transformer model and want strong regularization that generalizes well to new data, without weight decay getting tangled up in Adam's per-parameter adaptive rates. Which optimizer is the standard choice?",
+          "prompt": "Two training runs hit the same steep ravine. Run A's loss bounces wildly step after step. Run B's loss decreases smoothly and quickly through the same ravine. Which run is more likely using momentum?",
           "options": [
             {
               "id": "a",
-              "text": "AdamW",
+              "text": "Run B — momentum's velocity cancels out the side-to-side bounce and keeps pushing forward along the ravine",
               "correct": true
             },
             {
               "id": "b",
-              "text": "Plain Adam",
+              "text": "Run A — bouncing wildly is a sign of momentum working correctly",
               "correct": false
             },
             {
               "id": "c",
-              "text": "AdaGrad",
+              "text": "Neither — momentum has no effect on ravines",
               "correct": false
             }
           ],
-          "explain": "AdamW's decoupled weight decay is exactly why it's the standard for training large modern models."
+          "explain": "Right — Run B's smooth, fast descent through the ravine is the signature of momentum canceling the zig-zag."
         }
       ]
     },
@@ -186,30 +186,30 @@
           "id": "b1",
           "type": "multiple_choice",
           "xp": 5,
-          "prompt": "A researcher notices that plain Adam's built-in weight decay interacts unpredictably with its adaptive per-parameter learning rates, sometimes over- or under-shrinking certain weights. Which optimizer directly fixes this by separating weight decay from the adaptive gradient update, and why has it become a standard default for training large modern models?",
+          "prompt": "A teammate cranks up momentum's velocity setting as high as possible, hoping training will now blast straight to the best minimum every time. What actually happens, and why?",
           "options": [
             {
               "id": "a",
-              "text": "AdamW, because it decouples weight decay into its own clean step instead of tangling it with adaptive scaling, which measurably improves generalization",
+              "text": "Too much velocity can carry the optimizer flying past a good minimum, overshooting it — the ball rolls too fast to settle, so the amount of past velocity to keep has to be tuned, not maxed out",
               "correct": true
             },
             {
               "id": "b",
-              "text": "RMSprop, because it has no weight decay at all",
+              "text": "Nothing changes at all — velocity has no effect on the final result",
               "correct": false
             },
             {
               "id": "c",
-              "text": "Plain SGD, because it uses one shared learning rate",
+              "text": "The network becomes instantly perfect with zero error",
               "correct": false
             },
             {
               "id": "d",
-              "text": "AdaGrad, because it accumulates every past gradient",
+              "text": "The loss landscape itself changes shape based on the velocity setting",
               "correct": false
             }
           ],
-          "explain": "Exactly right! You've now met the full optimizer family: SGD, Momentum, Nesterov, AdaGrad, RMSprop, Adam, and AdamW. Next up: the final lesson — a decision matrix for choosing the right one for any given job."
+          "explain": "Exactly! Momentum smooths the ride, but too much speed causes overshoot. Next up: a smarter version that checks the road ahead before committing to that speed."
         }
       ]
     }

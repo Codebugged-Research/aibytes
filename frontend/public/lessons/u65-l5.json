@@ -3,10 +3,10 @@
   "unit": 65,
   "day": 330,
   "tier": "Training Deep Networks",
-  "tierIcon": "➡️",
-  "title": "From Raw Input to Final Output: A Full Trace",
-  "icon": "🏁",
-  "concept": "Tying together layers, weights, biases, and activation functions into a single continuous pipeline is the essence of a neural network's forward pass.",
+  "tierIcon": "🎯",
+  "title": "Choosing an Optimizer: A Decision Matrix",
+  "icon": "🧭",
+  "concept": "A capstone comparison across SGD, Momentum, Nesterov, AdaGrad, RMSprop, Adam, and AdamW — weighing tradeoffs in speed, memory, and stability, and when each one is the sensible default choice.",
   "xp": 15,
   "hearts": 3,
   "estMinutes": 7,
@@ -18,25 +18,25 @@
           "id": "w1",
           "type": "multiple_choice",
           "xp": 1,
-          "prompt": "Recap: What is a key tradeoff when increasing batch size?",
+          "prompt": "Recap: what's the key difference between Adam and AdamW?",
           "options": [
             {
               "id": "a",
-              "text": "Faster training speed via parallel math, but higher active GPU memory usage.",
+              "text": "AdamW decouples weight decay into its own separate step instead of folding it into the adaptive gradient update",
               "correct": true
             },
             {
               "id": "b",
-              "text": "Higher model accuracy, but more training errors.",
+              "text": "AdamW removes momentum from the optimizer entirely",
               "correct": false
             },
             {
               "id": "c",
-              "text": "Smaller model file size on disk.",
+              "text": "AdamW no longer uses per-parameter learning rates",
               "correct": false
             }
           ],
-          "explain": "Correct! Stacking more rows increases parallel speed but demands more active GPU RAM."
+          "explain": "Right — AdamW's decoupled weight decay is its one key refinement over Adam. You've now met seven optimizers across two units. Time to compare all of them side by side."
         }
       ]
     },
@@ -45,49 +45,49 @@
       "cards": [
         {
           "kind": "hook",
-          "icon": "🏁",
-          "title": "The grand connection",
-          "body": "We have explored neurons, layers, matrix multiplication, biases, and activations. Now, let's watch them work together in a single, unified pipeline to solve a real task: predicting whether an image is a cat or a dog. Let's trace the flow!"
+          "icon": "🧭",
+          "title": "Seven optimizers, one big question: which one?",
+          "body": "Across two units you've met: <strong>SGD → Momentum → Nesterov → AdaGrad → RMSprop → Adam → AdamW</strong>. Each one fixed a specific problem with the one before it. But in practice, when you sit down to train a real network, which one should you actually reach for?"
         },
         {
           "kind": "definition",
-          "icon": "🏁",
-          "title": "The Complete Forward Pipeline",
-          "body": "The forward pass links the elements sequentially: 1. **Input Layer** loads features, 2. **Hidden Layer** multiplies inputs by weights, adds bias, and applies a non-linear activation (like ReLU), 3. **Output Layer** combines hidden values, adds output bias, and squashes to a probability (using Sigmoid)."
+          "icon": "🧭",
+          "title": "A decision matrix: speed, memory, stability",
+          "body": "Judge optimizers along three axes. <strong>Speed</strong>: how fast it converges to a good answer. <strong>Memory</strong>: how much extra bookkeeping it needs per parameter — plain SGD needs none, Momentum needs one running average, Adam and AdamW need two. <strong>Stability</strong>: how well it avoids zig-zagging, stalling on plateaus, or blowing up."
         },
         {
           "kind": "analogy",
-          "icon": "🏗️",
-          "title": "Building a custom house",
-          "body": "Think of the forward pass like custom construction. Step 1: unload raw wood and steel (inputs). Step 2: cut and frame them into wall structures (hidden layer + ReLU). Step 3: paint and polish the final house to ready it for sale (output layer + Sigmoid). Every step depends on the structural outputs of the previous one."
+          "icon": "🧰",
+          "title": "A toolbox, not one perfect tool",
+          "body": "An experienced builder doesn't own a single wrench for every job — they carry a full toolbox and reach for whichever tool actually fits. Optimizers work the same way: a simple, well-tuned SGD might be exactly right for a small, well-behaved problem, while a huge modern network reaches for Adam or AdamW instead."
         },
         {
           "kind": "example",
-          "icon": "🐱",
-          "title": "The Cat Predictor",
-          "body": "An image enters. Input: `[1.0, 0.0]` (features like ears, whiskers). 1. Hidden Layer: weights and bias output a weighted sum of `1.5`. Applying ReLU gives `1.5`. 2. Output Layer: multiplies `1.5` by output weight, adding bias, giving `2.0`. Applying Sigmoid squashes `2.0` to `0.88`. Prediction: **88% probability it's a Cat**."
+          "icon": "🗂️",
+          "title": "The lineup, in one line each",
+          "body": "<strong>SGD</strong>: simplest baseline, zero memory overhead, needs careful tuning. <strong>Momentum</strong>: adds velocity to smooth zig-zagging. <strong>Nesterov</strong>: momentum with a look-ahead correction. <strong>AdaGrad</strong>: great for rare/sparse features, but its rate decays toward zero. <strong>RMSprop</strong>: fixes that decay with a moving average. <strong>Adam</strong>: momentum + RMSprop, a strong reliable default. <strong>AdamW</strong>: Adam with cleaner weight decay, the modern default for large models."
         },
         {
           "kind": "mythbust",
           "icon": "⚠️",
-          "title": "A prediction isn't a final decision",
-          "body": "You might assume that if the network outputs `0.88`, it has made a final decision. The forward pass only outputs raw probabilities. The application code around the model (or the loss function during training) must decide what to do with that score, such as applying a threshold (e.g. >0.5 means Cat)."
+          "title": "There's no single \"best\" optimizer for every situation",
+          "body": "A common belief is that Adam or AdamW is always the objectively best choice, since it's the most popular default. In reality, a carefully-tuned SGD with Momentum sometimes generalizes better on certain tasks despite needing more tuning effort. The \"best\" choice always depends on the problem, the dataset, and how much tuning time is available."
         },
         {
           "kind": "visual",
-          "icon": "⚖️",
-          "title": "The Pipeline Flow",
-          "body": "Tracing the math from input to probability:",
+          "icon": "🧭",
+          "title": "Simple & light vs. adaptive & robust",
+          "body": "How the two families compare:",
           "compare": {
             "left": {
-              "emoji": "📥",
-              "tag": "Stage 1: Inputs & Hidden",
-              "text": "Raw features loaded.<br>Weighted sum + bias computed.<br>ReLU clips negatives to 0."
+              "emoji": "🪶",
+              "tag": "SGD family (SGD, Momentum, Nesterov)",
+              "text": "Minimal memory overhead<br>Needs careful learning-rate tuning<br>Can generalize very well when well-tuned"
             },
             "right": {
-              "emoji": "📤",
-              "tag": "Stage 2: Output & Sigmoid",
-              "text": "Hidden values combined.<br>Output sum squashed by Sigmoid.<br>Returns final 0-to-1 probability."
+              "emoji": "🛡️",
+              "tag": "Adaptive family (AdaGrad, RMSprop, Adam, AdamW)",
+              "text": "Per-parameter rates, more memory<br>Converges fast with little tuning<br>AdamW is the modern large-model default"
             }
           }
         }
@@ -100,36 +100,31 @@
           "id": "p1",
           "type": "multiple_choice",
           "xp": 2,
-          "prompt": "What is the final step in a binary classification forward pass?",
+          "prompt": "Which optimizer generally needs the LEAST extra memory per parameter?",
           "options": [
             {
               "id": "a",
-              "text": "Applying a squashing function like Sigmoid at the output layer to return a probability between 0 and 1.",
+              "text": "Plain SGD, because it keeps no extra running averages at all",
               "correct": true
             },
             {
               "id": "b",
-              "text": "Calculating the derivative of the weights.",
+              "text": "Adam",
               "correct": false
             },
             {
               "id": "c",
-              "text": "Applying ReLU to clip all final outputs to 0.",
-              "correct": false
-            },
-            {
-              "id": "d",
-              "text": "Doubling the bias terms.",
+              "text": "AdamW",
               "correct": false
             }
           ],
-          "explain": "Correct! The final step of a classification forward pass squashes the output sum to a 0-to-1 probability range."
+          "explain": "Correct! Plain SGD needs zero extra bookkeeping per parameter, while Adam and AdamW each track two running averages per parameter."
         },
         {
           "id": "p2",
           "type": "true_false",
           "xp": 2,
-          "prompt": "True or false: In a cat-prediction forward pass, the model updates its weights immediately if its final output probability is incorrect.",
+          "prompt": "True or false: Adam and AdamW are always the objectively best optimizer choice for every deep learning problem.",
           "options": [
             {
               "id": "t",
@@ -142,45 +137,45 @@
               "correct": true
             }
           ],
-          "explain": "False! The forward pass only computes the prediction; measuring wrongness (loss) and updating weights (backpropagation) happen in separate later steps."
+          "explain": "False. The best choice depends on the problem, dataset, and tuning budget — a well-tuned SGD with Momentum sometimes generalizes better."
         },
         {
           "id": "p3",
           "type": "fill_blank",
           "xp": 2,
           "prompt": "Complete the sentence:",
-          "sentence": "The complete forward propagation workflow is a sequential ___ where each layer's output becomes the next layer's input.",
-          "blank": "pipeline",
+          "sentence": "When judging optimizers, three key axes to weigh are speed, memory, and ___.",
+          "blank": "stability",
           "words": [
-            "pipeline",
-            "gradient",
-            "correlation"
+            "stability",
+            "color",
+            "size"
           ],
-          "explain": "The forward pass is a pipeline where data flows step-by-step from input to prediction."
+          "explain": "Speed, memory, and stability are the three practical axes for comparing optimizers."
         },
         {
           "id": "p4",
           "type": "spot_the_ai",
           "xp": 2,
-          "prompt": "In our cat predictor trace, if the output layer sum before activation is -2.0, what is the output probability after Sigmoid squashing?",
+          "prompt": "You're training a massive modern transformer model and want fast convergence, per-parameter adaptive rates, AND clean, decoupled regularization for the best generalization. Which optimizer is the standard modern default?",
           "options": [
             {
               "id": "a",
-              "text": "0.12, because Sigmoid(-2.0) is approximately 0.12 (a low probability).",
+              "text": "AdamW",
               "correct": true
             },
             {
               "id": "b",
-              "text": "0.0, because Sigmoid clips all negative values to 0.",
+              "text": "Plain SGD",
               "correct": false
             },
             {
               "id": "c",
-              "text": "1.0, because the absolute value is used.",
+              "text": "AdaGrad",
               "correct": false
             }
           ],
-          "explain": "Correct! Sigmoid squashes negative inputs to values close to 0 (Sigmoid(-2.0) ≈ 0.12), representing a 12% probability."
+          "explain": "AdamW is the standard modern default for exactly this combination of needs."
         }
       ]
     },
@@ -191,30 +186,30 @@
           "id": "b1",
           "type": "multiple_choice",
           "xp": 5,
-          "prompt": "You trace a digit classifier. The input is a handwritten '3'. The model runs its forward pass: hidden layers extract lines, output layer combines them, and the final output node for '3' returns a probability of 0.95. What does this indicate about the forward propagation phase?",
+          "prompt": "You need an optimizer for a huge modern deep network. It must converge reliably with minimal manual tuning, avoid AdaGrad's problem of learning rates decaying toward zero, and use clean regularization for the best generalization. Which optimizer satisfies ALL of these, and what earlier ideas does it combine?",
           "options": [
             {
               "id": "a",
-              "text": "The forward pass ran successfully, producing a 95% confidence prediction that the digit is a 3; no learning or weight adjustment has occurred yet.",
+              "text": "AdamW — it combines Momentum's velocity smoothing and RMSprop's decaying adaptive rates (avoiding AdaGrad's permanent decay), plus decoupled weight decay for cleaner regularization",
               "correct": true
             },
             {
               "id": "b",
-              "text": "The model has learned that the digit is a 3 and permanently locked its weights.",
+              "text": "Plain SGD — because it's the simplest and requires no bookkeeping",
               "correct": false
             },
             {
               "id": "c",
-              "text": "The forward pass was incorrect because it was not 100% accurate.",
+              "text": "AdaGrad — because it adapts a learning rate per parameter",
               "correct": false
             },
             {
               "id": "d",
-              "text": "The activation functions collapsed because the score was high.",
+              "text": "Nesterov — because it looks ahead before computing its gradient",
               "correct": false
             }
           ],
-          "explain": "Exactly! The forward pass completed its pipeline, returning a 95% confidence prediction — learning and updates are completely separate steps. Congratulations on completing the Forward Propagation unit! Next, let's explore how we measure 'how wrong' this prediction actually is using loss functions!"
+          "explain": "Exactly right! You've now built the full optimizer toolkit: SGD's raw gradient steps, Momentum's velocity, Nesterov's look-ahead correction, AdaGrad's per-parameter rates, RMSprop's decay fix, Adam's fusion of momentum and adaptive rates, and AdamW's cleaner regularization. With this toolkit, you can defend a real optimizer choice for any training job — not just recite the names."
         }
       ]
     }

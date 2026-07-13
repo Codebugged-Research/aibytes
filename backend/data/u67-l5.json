@@ -3,10 +3,10 @@
   "unit": 67,
   "day": 340,
   "tier": "Training Deep Networks",
-  "tierIcon": "📐",
-  "title": "Choosing a Loss Function: A Decision Matrix",
-  "icon": "⚖️",
-  "concept": "Choosing the correct loss function depends entirely on the model's task type — classification (cross-entropy), regression (MSE/MAE/Huber), or distribution matching (KL divergence).",
+  "tierIcon": "🎯",
+  "title": "Label Smoothing: Softening Overconfident Targets",
+  "icon": "🫧",
+  "concept": "Label smoothing is a regularization technique that softens hard 0/1 target labels, preventing the model from becoming overconfident and improving generalization.",
   "xp": 15,
   "hearts": 3,
   "estMinutes": 7,
@@ -18,25 +18,25 @@
           "id": "w1",
           "type": "multiple_choice",
           "xp": 1,
-          "prompt": "Recap: What is multi-task learning?",
+          "prompt": "Recap: What is the main issue with combining MSE loss with Sigmoid for classification?",
           "options": [
             {
               "id": "a",
-              "text": "Training a single model to perform multiple distinct prediction tasks from the same input.",
+              "text": "Gradients become extremely flat at the edges, stalling the training updates.",
               "correct": true
             },
             {
               "id": "b",
-              "text": "Running grid search in parallel across multiple machines.",
+              "text": "The loss can go below zero.",
               "correct": false
             },
             {
               "id": "c",
-              "text": "Encoding text columns using bag-of-words.",
+              "text": "It can only be used for regression.",
               "correct": false
             }
           ],
-          "explain": "Correct! Multi-task learning trains one network to predict multiple different outputs."
+          "explain": "Correct! Flattening gradients at the edges stalls model updates under MSE."
         }
       ]
     },
@@ -45,49 +45,49 @@
       "cards": [
         {
           "kind": "hook",
-          "icon": "⚖️",
-          "title": "The right tool for the job",
-          "body": "You wouldn't use a hammer to turn a screw, or a saw to drive a nail. Similarly, matching the wrong loss function to a task can stall your neural network completely. This lesson is a complete lookup guide to ensure you always select the right training engine."
+          "icon": "🫧",
+          "title": "The know-it-all student",
+          "body": "Imagine a student who is so overconfident that they answer every question with 100% certainty, leaving zero room for doubt. If they make even a tiny mistake, they are completely blindsided. In deep learning, models trained on hard targets (100% correct / 0% wrong) can develop this same overconfidence, making them fragile on new data."
         },
         {
           "kind": "definition",
-          "icon": "⚖️",
-          "title": "The Loss Decision Matrix",
-          "body": "To choose a loss function, identify the task: 1. **Binary Classification** -> Binary Cross-Entropy, 2. **Multi-Class Classification** -> Categorical Cross-Entropy, 3. **Regression (No Outliers)** -> MSE, 4. **Regression (Outliers)** -> MAE or Huber, 5. **Distribution Matching** -> KL Divergence."
+          "icon": "🫧",
+          "title": "Label Smoothing",
+          "body": "<strong>Label smoothing</strong> is a regularization technique that replaces 'hard' binary labels (exactly 0 or 1) with 'soft' labels. For example, a target of `1.0` becomes `0.9`, and the remaining `0.1` is distributed among the other classes. This prevents the model from pushing its weights to extremes to reach a perfect 100% confidence."
         },
         {
           "kind": "analogy",
           "icon": "🧭",
-          "title": "A guide for different journeys",
-          "body": "Selecting a loss is like choosing a navigation tool. If you are sailing a boat (classification probability), you need a compass (cross-entropy). If you are measuring distance on foot (regression value), you need a pedometer (MSE). If the terrain is extremely rocky (outliers), you need a specialized off-road tracker (Huber Loss)."
+          "title": "Leaving a little breathing room",
+          "body": "Think of training a model like teaching a student. Instead of saying 'This is 100% a cat, no questions asked,' you say 'This is 95% likely a cat, but there's a 5% chance it could be something else.' This encourages the student to keep their options open and learn general features, rather than memorizing the exact training photo."
         },
         {
           "kind": "example",
-          "icon": "📦",
-          "title": "Real-world pairings",
-          "body": "- **Email Spam Filter**: Output is 0 or 1. Use **Binary Cross-Entropy** (paired with Sigmoid). - **Weather Temperature Forecast**: Output is a number. Use **MSE** or **Huber** (paired with linear output). - **Digit Classifier (0-9)**: Output is one of 10 categories. Use **Categorical Cross-Entropy** (paired with Softmax)."
+          "icon": "📊",
+          "title": "Soften the vector",
+          "body": "In a 3-class system (Cat, Dog, Bird), a Cat's hard label is `[1.0, 0.0, 0.0]`. With a label smoothing factor of 10% (0.1), we adjust the target: the correct class drops to **0.9**, and the remaining 0.1 is split among the other two classes, giving: `[0.9, 0.05, 0.05]`. The model is trained toward this soft target."
         },
         {
           "kind": "mythbust",
           "icon": "⚠️",
-          "title": "The activation function must match the loss",
-          "body": "It's a myth that loss functions work independently of the output layer. For example, Categorical Cross-Entropy math expects probabilities that sum to 100%, meaning it must be paired with a Softmax output. If you pair CCE with a Sigmoid output, the math breaks, leading to bad predictions."
+          "title": "Softer targets don't make the model less accurate",
+          "body": "You might think training a model to be only 90% confident will make it worse on test data. In reality, preventing the model from chasing 100% confidence stops it from driving its weights to extreme, bloated values. This keeps the decision boundaries smooth, improving the model's accuracy on new, unseen data (generalization)."
         },
         {
           "kind": "visual",
           "icon": "⚖️",
-          "title": "Loss Function Decision Matrix",
-          "body": "Choosing the correct training engine:",
+          "title": "Hard Labels vs. Smoothed Labels",
+          "body": "How target distributions are adjusted:",
           "compare": {
             "left": {
               "emoji": "🎯",
-              "tag": "Classification Tasks",
-              "text": "Binary -> Binary Cross-Entropy (with Sigmoid).<br>Multi-Class -> Categorical Cross-Entropy (with Softmax)."
+              "tag": "Hard Label (Default)",
+              "text": "Cat: 1.0, Dog: 0.0, Bird: 0.0.<br>Forces model to chase 100% confidence.<br>Can lead to overfitted, bloated weights."
             },
             "right": {
-              "emoji": "📐",
-              "tag": "Regression Tasks",
-              "text": "Normal -> Mean Squared Error (MSE).<br>Outliers -> MAE or Huber Loss."
+              "emoji": "🫧",
+              "tag": "Smoothed Label",
+              "text": "Cat: 0.9, Dog: 0.05, Bird: 0.05.<br>Encourages reasonable confidence.<br>Improves generalization."
             }
           }
         }
@@ -100,36 +100,36 @@
           "id": "p1",
           "type": "multiple_choice",
           "xp": 2,
-          "prompt": "Which loss function is the standard choice for multi-class classification (e.g. classifying dog, cat, or bird)?",
+          "prompt": "What is the goal of label smoothing?",
           "options": [
             {
               "id": "a",
-              "text": "Categorical Cross-Entropy, paired with Softmax activation.",
+              "text": "To prevent the model from becoming overconfident by training it on slightly softened target labels, improving generalization.",
               "correct": true
             },
             {
               "id": "b",
-              "text": "Binary Cross-Entropy, paired with Sigmoid activation.",
+              "text": "To automatically clean missing values in a database.",
               "correct": false
             },
             {
               "id": "c",
-              "text": "Mean Squared Error (MSE), paired with ReLU activation.",
+              "text": "To compress the model weights file.",
               "correct": false
             },
             {
               "id": "d",
-              "text": "KL Divergence, paired with linear output.",
+              "text": "To change a classification task into a regression task.",
               "correct": false
             }
           ],
-          "explain": "Correct! Multi-class classification uses CCE loss paired with Softmax outputs."
+          "explain": "Correct! Label smoothing softens target labels to prevent overconfidence and overfitting."
         },
         {
           "id": "p2",
           "type": "true_false",
           "xp": 2,
-          "prompt": "True or false: Huber Loss is a hybrid regression loss that behaves like MSE for small errors and MAE for large errors, making it ideal for outlier-heavy datasets.",
+          "prompt": "True or false: Label smoothing works by changing a hard target label of 1.0 into a slightly lower value like 0.9, and distributing the difference to other classes.",
           "options": [
             {
               "id": "t",
@@ -142,45 +142,45 @@
               "correct": false
             }
           ],
-          "explain": "True! Huber combines the precision of MSE with the robustness of MAE."
+          "explain": "True! It takes a small fraction of the target probability and spreads it across the incorrect classes."
         },
         {
           "id": "p3",
           "type": "fill_blank",
           "xp": 2,
           "prompt": "Complete the sentence:",
-          "sentence": "A model predicting continuous housing prices should use ___ loss if the data has no major outliers.",
-          "blank": "MSE",
+          "sentence": "Label smoothing is a ___ technique used to reduce overfitting and improve a model's score on test data.",
+          "blank": "regularization",
           "words": [
-            "MSE",
-            "Binary Cross-Entropy",
-            "Softmax"
+            "regularization",
+            "imputation",
+            "optimization"
           ],
-          "explain": "MSE is the standard loss for normal regression tasks."
+          "explain": "Regularization techniques are designed to prevent overfitting and improve generalization."
         },
         {
           "id": "p4",
           "type": "spot_the_ai",
           "xp": 2,
-          "prompt": "You are building a network to predict if a transaction is fraud (yes/no). What is the correct pairing of activation and loss function?",
+          "prompt": "Given a 2-class dataset (Spam, Inbox), what is the smoothed target vector for a Spam email if we use a 10% smoothing factor?",
           "options": [
             {
               "id": "a",
-              "text": "Sigmoid activation at the output layer, paired with Binary Cross-Entropy loss.",
+              "text": "[Spam: 0.95, Inbox: 0.05]",
               "correct": true
             },
             {
               "id": "b",
-              "text": "Softmax activation at the output layer, paired with MSE loss.",
+              "text": "[Spam: 0.90, Inbox: 0.10]",
               "correct": false
             },
             {
               "id": "c",
-              "text": "ReLU activation at the output layer, paired with Categorical Cross-Entropy loss.",
+              "text": "[Spam: 1.0, Inbox: 0.0]",
               "correct": false
             }
           ],
-          "explain": "Correct! Binary classification requires Sigmoid activation paired with BCE loss."
+          "explain": "Correct! A 10% smoothing factor takes 0.1 from the total and splits it: 0.05 is taken from the 1.0 (leaving 0.95) and 0.05 is added to the 0.0 (giving 0.05)."
         }
       ]
     },
@@ -191,30 +191,30 @@
           "id": "b1",
           "type": "multiple_choice",
           "xp": 5,
-          "prompt": "You build three deep networks: 1. Predicts temperature, 2. Classifies email (spam/not-spam), 3. Sorts customer complaints into 5 departments. Which loss functions fit each network?",
+          "prompt": "You train a classification model on hard labels [1, 0]. The model overfits, predicting with 99.999% confidence on training data but failing on new test data. You apply label smoothing, setting the target to [0.95, 0.05]. What happens to the model?",
           "options": [
             {
               "id": "a",
-              "text": "1: MSE, 2: Binary Cross-Entropy, 3: Categorical Cross-Entropy.",
+              "text": "The model is discouraged from pushing its weights to extremes to reach 100% confidence, resulting in a more robust model that generalizes better to the test data.",
               "correct": true
             },
             {
               "id": "b",
-              "text": "1: Categorical Cross-Entropy, 2: MSE, 3: Binary Cross-Entropy.",
+              "text": "The model's accuracy drops to zero because it is no longer allowed to be correct.",
               "correct": false
             },
             {
               "id": "c",
-              "text": "1: Binary Cross-Entropy, 2: Categorical Cross-Entropy, 3: MSE.",
+              "text": "The model converted itself to a linear regression model.",
               "correct": false
             },
             {
               "id": "d",
-              "text": "All three should use Huber Loss.",
+              "text": "The validation set is automatically deleted.",
               "correct": false
             }
           ],
-          "explain": "Exactly! 1 is regression (MSE), 2 is binary classification (BCE), and 3 is multi-class classification (CCE). Congratulations on completing the Loss Functions unit! Next, let's explore the vocabulary of the training loop: epochs, batches, and iterations!"
+          "explain": "Exactly! By softening the target, we stop the model from chasing absolute certainty, which prevents weight bloating and improves test accuracy. Congratulations on completing the Loss Functions for Classification unit! Next, let's explore loss functions for regression and advanced tasks!"
         }
       ]
     }

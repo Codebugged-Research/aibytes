@@ -1,0 +1,222 @@
+{
+  "id": "u87-l3",
+  "unit": 87,
+  "day": 438,
+  "tier": "Practical Deep Learning",
+  "tierIcon": "🪶",
+  "title": "Checkpointing Activations",
+  "icon": "💾",
+  "concept": "Activation checkpointing saves memory by storing only selected forward-pass activations and recomputing missing ones later during backpropagation, trading extra compute time for lower peak memory.",
+  "xp": 15,
+  "hearts": 3,
+  "estMinutes": 7,
+  "segments": [
+    {
+      "type": "warmup",
+      "exercises": [
+        {
+          "id": "w1",
+          "type": "multiple_choice",
+          "xp": 1,
+          "prompt": "Recap: In gradient accumulation, why do we split work into smaller micro-batches?",
+          "options": [
+            {
+              "id": "a",
+              "text": "To keep peak memory lower while still aiming for a larger effective batch.",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "To make gradients illegal.",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "To avoid ever updating the model.",
+              "correct": false
+            }
+          ],
+          "explain": "Right. The theme continues here too: we are looking for ways to save memory without giving up training altogether."
+        }
+      ]
+    },
+    {
+      "type": "teach",
+      "cards": [
+        {
+          "kind": "hook",
+          "icon": "💾",
+          "title": "Store less now, replay more later",
+          "body": "Deep models often save many intermediate activations during the forward pass so backpropagation can use them later. Checkpointing changes that bargain: keep only some checkpoints, then recompute the missing pieces when they are needed."
+        },
+        {
+          "kind": "definition",
+          "icon": "🗂️",
+          "title": "What a checkpoint means here",
+          "body": "An <strong>activation checkpoint</strong> is a saved intermediate point in the forward pass. Instead of storing every layer output, training stores selected checkpoints and recalculates the skipped parts later during backward computation. That cuts memory use, but it adds extra compute."
+        },
+        {
+          "kind": "analogy",
+          "icon": "🧭",
+          "title": "Remember landmarks, not every footstep",
+          "body": "If you hike a long trail, you might remember the major checkpoints rather than every single step. If someone asks how you got from one checkpoint to the next, you can mentally reconstruct that short section. Activation checkpointing works the same way."
+        },
+        {
+          "kind": "example",
+          "icon": "🏢",
+          "title": "Why deep networks use it",
+          "body": "Imagine a very deep transformer that runs out of VRAM because saving every block output is too expensive. By checkpointing every few blocks instead, the training run stores less intermediate data. During backpropagation, the missing block outputs are recomputed on demand."
+        },
+        {
+          "kind": "mythbust",
+          "icon": "🐢",
+          "title": "Memory drops, but training can slow down",
+          "body": "Checkpointing is not a free lunch. It usually makes training slower because some forward work must be repeated. Its value is that the model may become trainable at all on hardware that otherwise would run out of memory."
+        },
+        {
+          "kind": "visual",
+          "icon": "🔀",
+          "title": "Two ways to handle activations",
+          "body": "Both methods train the same model, but they use memory and time differently.",
+          "compare": {
+            "left": {
+              "emoji": "🧊",
+              "tag": "Store everything",
+              "text": "Faster backward pass.<br>Higher activation memory.<br>May fail on very deep or very large runs."
+            },
+            "right": {
+              "emoji": "♻️",
+              "tag": "Checkpoint activations",
+              "text": "Lower peak memory.<br>Recomputes some forward values later.<br>Usually slower but more memory-friendly."
+            }
+          }
+        }
+      ]
+    },
+    {
+      "type": "practice",
+      "exercises": [
+        {
+          "id": "p1",
+          "type": "multiple_choice",
+          "xp": 2,
+          "prompt": "What does activation checkpointing mainly trade?",
+          "options": [
+            {
+              "id": "a",
+              "text": "Extra compute time in exchange for lower memory use.",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "More labels in exchange for fewer layers.",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "More battery in exchange for no gradients.",
+              "correct": false
+            },
+            {
+              "id": "d",
+              "text": "More memory in exchange for slower loading screens.",
+              "correct": false
+            }
+          ],
+          "explain": "Exactly. The saved memory comes from not keeping every activation around."
+        },
+        {
+          "id": "p2",
+          "type": "true_false",
+          "xp": 2,
+          "prompt": "True or false: Checkpointing saves memory by recomputing some forward-pass values later during backpropagation.",
+          "options": [
+            {
+              "id": "t",
+              "text": "True",
+              "correct": true
+            },
+            {
+              "id": "f",
+              "text": "False",
+              "correct": false
+            }
+          ],
+          "explain": "True. That is the core mechanism behind the technique."
+        },
+        {
+          "id": "p3",
+          "type": "fill_blank",
+          "xp": 2,
+          "prompt": "Complete the sentence:",
+          "sentence": "Checkpointing lowers memory now by choosing to ___ some forward values later.",
+          "blank": "recompute",
+          "words": [
+            "recompute",
+            "erase",
+            "publish"
+          ],
+          "explain": "Recompute is correct. Instead of storing everything, the model recalculates some values when they are needed."
+        },
+        {
+          "id": "p4",
+          "type": "spot_the_ai",
+          "xp": 2,
+          "prompt": "Which scenario best fits activation checkpointing?",
+          "options": [
+            {
+              "id": "a",
+              "text": "A deep model stores only selected intermediate outputs and recalculates skipped ones during backprop.",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "A team shortens a slide deck to save projector battery.",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "A model deletes all weights before training starts.",
+              "correct": false
+            }
+          ],
+          "explain": "Exactly. Checkpointing is specifically about keeping fewer forward-pass activations in memory."
+        }
+      ]
+    },
+    {
+      "type": "boss",
+      "exercises": [
+        {
+          "id": "b1",
+          "type": "multiple_choice",
+          "xp": 5,
+          "prompt": "A giant model almost fits on a GPU, but storing every layer output during training causes out-of-memory errors. Which idea is the best match?",
+          "options": [
+            {
+              "id": "a",
+              "text": "Store only selected activation checkpoints and recompute skipped parts later.",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "Make the GPU forget gradients permanently.",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "Assume inference memory and training memory are always identical.",
+              "correct": false
+            },
+            {
+              "id": "d",
+              "text": "Increase accuracy by renaming the layers.",
+              "correct": false
+            }
+          ],
+          "explain": "Exactly. Checkpointing is a practical way to reduce peak activation memory when the full forward history is too expensive to keep."
+        }
+      ]
+    }
+  ]
+}

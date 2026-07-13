@@ -1,0 +1,222 @@
+{
+  "id": "u87-l4",
+  "unit": 87,
+  "day": 439,
+  "tier": "Practical Deep Learning",
+  "tierIcon": "🪶",
+  "title": "Parameter Sharing & Weight Tying",
+  "icon": "🔁",
+  "concept": "Parameter sharing reuses the same learned weights in multiple places, and weight tying applies that idea to linked parts of a model, reducing parameter count and often encouraging consistent representations.",
+  "xp": 15,
+  "hearts": 3,
+  "estMinutes": 7,
+  "segments": [
+    {
+      "type": "warmup",
+      "exercises": [
+        {
+          "id": "w1",
+          "type": "multiple_choice",
+          "xp": 1,
+          "prompt": "Recap: What does activation checkpointing save?",
+          "options": [
+            {
+              "id": "a",
+              "text": "Memory, by storing fewer forward activations.",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "Memory, by deleting all data labels.",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "Memory, by turning the GPU off.",
+              "correct": false
+            }
+          ],
+          "explain": "Right. Some tricks save memory during training, while this lesson looks at saving parameters in the model itself."
+        }
+      ]
+    },
+    {
+      "type": "teach",
+      "cards": [
+        {
+          "kind": "hook",
+          "icon": "🔁",
+          "title": "Reuse the same tool instead of buying ten copies",
+          "body": "Sometimes a model does not need a brand-new set of weights for every place the same pattern appears. Reusing one learned set can shrink the model and still capture the repeated structure you care about."
+        },
+        {
+          "kind": "definition",
+          "icon": "🪢",
+          "title": "Sharing and tying",
+          "body": "<strong>Parameter sharing</strong> means the same weights are used in more than one place. <strong>Weight tying</strong> is a common special case where two related parts of a model deliberately reuse the same matrix, such as tying input and output word representations in some language models."
+        },
+        {
+          "kind": "analogy",
+          "icon": "🪪",
+          "title": "One rubber stamp, many pages",
+          "body": "If every page in a stack needs the same stamp, you do not buy a separate stamp for each page. You reuse the same tool. Shared weights do something similar: the same learned pattern is applied again and again where it makes sense."
+        },
+        {
+          "kind": "example",
+          "icon": "📚",
+          "title": "Where it appears in real models",
+          "body": "Recurrent neural networks reuse the same weights at each time step, because the same transition rule is applied as the sequence moves forward. In some language models, input and output embeddings are tied so the vocabulary representation does not need two separate full matrices."
+        },
+        {
+          "kind": "mythbust",
+          "icon": "🛠️",
+          "title": "Sharing is not the same as cloning",
+          "body": "Weight tying does not mean making many separate copies that happen to start with the same numbers. It means the model truly reuses one shared set of parameters, so changes learned in one place affect the tied place too."
+        },
+        {
+          "kind": "visual",
+          "icon": "📉",
+          "title": "Separate weights vs. shared weights",
+          "body": "Reusing parameters changes model size and behavior.",
+          "compare": {
+            "left": {
+              "emoji": "🧱",
+              "tag": "Separate everywhere",
+              "text": "More parameters to store.<br>Each location can learn independently.<br>Often costs more memory."
+            },
+            "right": {
+              "emoji": "🔁",
+              "tag": "Shared or tied weights",
+              "text": "Fewer parameters overall.<br>Repeated parts reuse the same learned pattern.<br>Can save memory and encourage consistency."
+            }
+          }
+        }
+      ]
+    },
+    {
+      "type": "practice",
+      "exercises": [
+        {
+          "id": "p1",
+          "type": "multiple_choice",
+          "xp": 2,
+          "prompt": "What is the main memory benefit of parameter sharing?",
+          "options": [
+            {
+              "id": "a",
+              "text": "The model stores fewer distinct parameters.",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "The model never needs activations again.",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "The dataset becomes smaller automatically.",
+              "correct": false
+            },
+            {
+              "id": "d",
+              "text": "The GPU turns into unlimited memory.",
+              "correct": false
+            }
+          ],
+          "explain": "Right. Reusing weights reduces how many separate numbers the model must learn and store."
+        },
+        {
+          "id": "p2",
+          "type": "true_false",
+          "xp": 2,
+          "prompt": "True or false: Weight tying means two linked parts of a model deliberately reuse the same parameters.",
+          "options": [
+            {
+              "id": "t",
+              "text": "True",
+              "correct": true
+            },
+            {
+              "id": "f",
+              "text": "False",
+              "correct": false
+            }
+          ],
+          "explain": "True. The tied parts are connected by shared weights rather than separate copies."
+        },
+        {
+          "id": "p3",
+          "type": "fill_blank",
+          "xp": 2,
+          "prompt": "Complete the sentence:",
+          "sentence": "When one set of weights is reused in many places, the model is using parameter ___.",
+          "blank": "sharing",
+          "words": [
+            "sharing",
+            "painting",
+            "shuffling"
+          ],
+          "explain": "Sharing is correct. That is the core idea behind the technique."
+        },
+        {
+          "id": "p4",
+          "type": "spot_the_ai",
+          "xp": 2,
+          "prompt": "Which example best illustrates weight tying?",
+          "options": [
+            {
+              "id": "a",
+              "text": "A language model reuses one vocabulary matrix for related input and output representations.",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "A team buys two identical keyboards for the office.",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "A model uses a different random matrix for every repeated step.",
+              "correct": false
+            }
+          ],
+          "explain": "Exactly. Weight tying is about true reuse of the same learned parameters in related parts of the network."
+        }
+      ]
+    },
+    {
+      "type": "boss",
+      "exercises": [
+        {
+          "id": "b1",
+          "type": "multiple_choice",
+          "xp": 5,
+          "prompt": "A model handles repeated sequence steps with the same transformation each time. Which design most directly saves parameters while matching that repeated structure?",
+          "options": [
+            {
+              "id": "a",
+              "text": "Reuse the same weights across the repeated steps.",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "Create a brand-new full parameter matrix for every step, even when the rule is the same.",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "Delete the sequence order from the data.",
+              "correct": false
+            },
+            {
+              "id": "d",
+              "text": "Store each weight three times for safety.",
+              "correct": false
+            }
+          ],
+          "explain": "Exactly. Parameter sharing is most natural when the same kind of transformation repeats many times."
+        }
+      ]
+    }
+  ]
+}

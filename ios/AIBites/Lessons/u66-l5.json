@@ -3,10 +3,10 @@
   "unit": 66,
   "day": 335,
   "tier": "Training Deep Networks",
-  "tierIcon": "🎯",
-  "title": "Label Smoothing: Softening Overconfident Targets",
-  "icon": "🫧",
-  "concept": "Label smoothing is a regularization technique that softens hard 0/1 target labels, preventing the model from becoming overconfident and improving generalization.",
+  "tierIcon": "➡️",
+  "title": "From Raw Input to Final Output: A Full Trace",
+  "icon": "🏁",
+  "concept": "Tying together layers, weights, biases, and activation functions into a single continuous pipeline is the essence of a neural network's forward pass.",
   "xp": 15,
   "hearts": 3,
   "estMinutes": 7,
@@ -18,25 +18,25 @@
           "id": "w1",
           "type": "multiple_choice",
           "xp": 1,
-          "prompt": "Recap: What is the main issue with combining MSE loss with Sigmoid for classification?",
+          "prompt": "Recap: What is a key tradeoff when increasing batch size?",
           "options": [
             {
               "id": "a",
-              "text": "Gradients become extremely flat at the edges, stalling the training updates.",
+              "text": "Faster training speed via parallel math, but higher active GPU memory usage.",
               "correct": true
             },
             {
               "id": "b",
-              "text": "The loss can go below zero.",
+              "text": "Higher model accuracy, but more training errors.",
               "correct": false
             },
             {
               "id": "c",
-              "text": "It can only be used for regression.",
+              "text": "Smaller model file size on disk.",
               "correct": false
             }
           ],
-          "explain": "Correct! Flattening gradients at the edges stalls model updates under MSE."
+          "explain": "Correct! Stacking more rows increases parallel speed but demands more active GPU RAM."
         }
       ]
     },
@@ -45,49 +45,49 @@
       "cards": [
         {
           "kind": "hook",
-          "icon": "🫧",
-          "title": "The know-it-all student",
-          "body": "Imagine a student who is so overconfident that they answer every question with 100% certainty, leaving zero room for doubt. If they make even a tiny mistake, they are completely blindsided. In deep learning, models trained on hard targets (100% correct / 0% wrong) can develop this same overconfidence, making them fragile on new data."
+          "icon": "🏁",
+          "title": "The grand connection",
+          "body": "We have explored neurons, layers, matrix multiplication, biases, and activations. Now, let's watch them work together in a single, unified pipeline to solve a real task: predicting whether an image is a cat or a dog. Let's trace the flow!"
         },
         {
           "kind": "definition",
-          "icon": "🫧",
-          "title": "Label Smoothing",
-          "body": "<strong>Label smoothing</strong> is a regularization technique that replaces 'hard' binary labels (exactly 0 or 1) with 'soft' labels. For example, a target of `1.0` becomes `0.9`, and the remaining `0.1` is distributed among the other classes. This prevents the model from pushing its weights to extremes to reach a perfect 100% confidence."
+          "icon": "🏁",
+          "title": "The Complete Forward Pipeline",
+          "body": "The forward pass links the elements sequentially: 1. **Input Layer** loads features, 2. **Hidden Layer** multiplies inputs by weights, adds bias, and applies a non-linear activation (like ReLU), 3. **Output Layer** combines hidden values, adds output bias, and squashes to a probability (using Sigmoid)."
         },
         {
           "kind": "analogy",
-          "icon": "🧭",
-          "title": "Leaving a little breathing room",
-          "body": "Think of training a model like teaching a student. Instead of saying 'This is 100% a cat, no questions asked,' you say 'This is 95% likely a cat, but there's a 5% chance it could be something else.' This encourages the student to keep their options open and learn general features, rather than memorizing the exact training photo."
+          "icon": "🏗️",
+          "title": "Building a custom house",
+          "body": "Think of the forward pass like custom construction. Step 1: unload raw wood and steel (inputs). Step 2: cut and frame them into wall structures (hidden layer + ReLU). Step 3: paint and polish the final house to ready it for sale (output layer + Sigmoid). Every step depends on the structural outputs of the previous one."
         },
         {
           "kind": "example",
-          "icon": "📊",
-          "title": "Soften the vector",
-          "body": "In a 3-class system (Cat, Dog, Bird), a Cat's hard label is `[1.0, 0.0, 0.0]`. With a label smoothing factor of 10% (0.1), we adjust the target: the correct class drops to **0.9**, and the remaining 0.1 is split among the other two classes, giving: `[0.9, 0.05, 0.05]`. The model is trained toward this soft target."
+          "icon": "🐱",
+          "title": "The Cat Predictor",
+          "body": "An image enters. Input: `[1.0, 0.0]` (features like ears, whiskers). 1. Hidden Layer: weights and bias output a weighted sum of `1.5`. Applying ReLU gives `1.5`. 2. Output Layer: multiplies `1.5` by output weight, adding bias, giving `2.0`. Applying Sigmoid squashes `2.0` to `0.88`. Prediction: **88% probability it's a Cat**."
         },
         {
           "kind": "mythbust",
           "icon": "⚠️",
-          "title": "Softer targets don't make the model less accurate",
-          "body": "You might think training a model to be only 90% confident will make it worse on test data. In reality, preventing the model from chasing 100% confidence stops it from driving its weights to extreme, bloated values. This keeps the decision boundaries smooth, improving the model's accuracy on new, unseen data (generalization)."
+          "title": "A prediction isn't a final decision",
+          "body": "You might assume that if the network outputs `0.88`, it has made a final decision. The forward pass only outputs raw probabilities. The application code around the model (or the loss function during training) must decide what to do with that score, such as applying a threshold (e.g. >0.5 means Cat)."
         },
         {
           "kind": "visual",
           "icon": "⚖️",
-          "title": "Hard Labels vs. Smoothed Labels",
-          "body": "How target distributions are adjusted:",
+          "title": "The Pipeline Flow",
+          "body": "Tracing the math from input to probability:",
           "compare": {
             "left": {
-              "emoji": "🎯",
-              "tag": "Hard Label (Default)",
-              "text": "Cat: 1.0, Dog: 0.0, Bird: 0.0.<br>Forces model to chase 100% confidence.<br>Can lead to overfitted, bloated weights."
+              "emoji": "📥",
+              "tag": "Stage 1: Inputs & Hidden",
+              "text": "Raw features loaded.<br>Weighted sum + bias computed.<br>ReLU clips negatives to 0."
             },
             "right": {
-              "emoji": "🫧",
-              "tag": "Smoothed Label",
-              "text": "Cat: 0.9, Dog: 0.05, Bird: 0.05.<br>Encourages reasonable confidence.<br>Improves generalization."
+              "emoji": "📤",
+              "tag": "Stage 2: Output & Sigmoid",
+              "text": "Hidden values combined.<br>Output sum squashed by Sigmoid.<br>Returns final 0-to-1 probability."
             }
           }
         }
@@ -100,87 +100,87 @@
           "id": "p1",
           "type": "multiple_choice",
           "xp": 2,
-          "prompt": "What is the goal of label smoothing?",
+          "prompt": "What is the final step in a binary classification forward pass?",
           "options": [
             {
               "id": "a",
-              "text": "To prevent the model from becoming overconfident by training it on slightly softened target labels, improving generalization.",
+              "text": "Applying a squashing function like Sigmoid at the output layer to return a probability between 0 and 1.",
               "correct": true
             },
             {
               "id": "b",
-              "text": "To automatically clean missing values in a database.",
+              "text": "Calculating the derivative of the weights.",
               "correct": false
             },
             {
               "id": "c",
-              "text": "To compress the model weights file.",
+              "text": "Applying ReLU to clip all final outputs to 0.",
               "correct": false
             },
             {
               "id": "d",
-              "text": "To change a classification task into a regression task.",
+              "text": "Doubling the bias terms.",
               "correct": false
             }
           ],
-          "explain": "Correct! Label smoothing softens target labels to prevent overconfidence and overfitting."
+          "explain": "Correct! The final step of a classification forward pass squashes the output sum to a 0-to-1 probability range."
         },
         {
           "id": "p2",
           "type": "true_false",
           "xp": 2,
-          "prompt": "True or false: Label smoothing works by changing a hard target label of 1.0 into a slightly lower value like 0.9, and distributing the difference to other classes.",
+          "prompt": "True or false: In a cat-prediction forward pass, the model updates its weights immediately if its final output probability is incorrect.",
           "options": [
             {
               "id": "t",
               "text": "True",
-              "correct": true
+              "correct": false
             },
             {
               "id": "f",
               "text": "False",
-              "correct": false
+              "correct": true
             }
           ],
-          "explain": "True! It takes a small fraction of the target probability and spreads it across the incorrect classes."
+          "explain": "False! The forward pass only computes the prediction; measuring wrongness (loss) and updating weights (backpropagation) happen in separate later steps."
         },
         {
           "id": "p3",
           "type": "fill_blank",
           "xp": 2,
           "prompt": "Complete the sentence:",
-          "sentence": "Label smoothing is a ___ technique used to reduce overfitting and improve a model's score on test data.",
-          "blank": "regularization",
+          "sentence": "The complete forward propagation workflow is a sequential ___ where each layer's output becomes the next layer's input.",
+          "blank": "pipeline",
           "words": [
-            "regularization",
-            "imputation",
-            "optimization"
+            "pipeline",
+            "gradient",
+            "correlation"
           ],
-          "explain": "Regularization techniques are designed to prevent overfitting and improve generalization."
+          "explain": "The forward pass is a pipeline where data flows step-by-step from input to prediction."
         },
         {
           "id": "p4",
           "type": "spot_the_ai",
           "xp": 2,
-          "prompt": "Given a 2-class dataset (Spam, Inbox), what is the smoothed target vector for a Spam email if we use a 10% smoothing factor?",
+          "prompt": "In our cat predictor trace, if the output layer sum before activation is -2.0, what is the output probability after Sigmoid squashing?",
           "options": [
             {
               "id": "a",
-              "text": "[Spam: 0.95, Inbox: 0.05]",
+              "text": "0.12, because Sigmoid(-2.0) is approximately 0.12 (a low probability).",
               "correct": true
             },
             {
               "id": "b",
-              "text": "[Spam: 0.90, Inbox: 0.10]",
+              "text": "0.0, because Sigmoid clips all negative values to 0.",
               "correct": false
             },
             {
               "id": "c",
-              "text": "[Spam: 1.0, Inbox: 0.0]",
+              "text": "1.0, because the absolute value is used.",
               "correct": false
             }
           ],
-          "explain": "Correct! A 10% smoothing factor takes 0.1 from the total and splits it: 0.05 is taken from the 1.0 (leaving 0.95) and 0.05 is added to the 0.0 (giving 0.05)."
+          "explain": "Correct! Sigmoid squashes negative inputs to values close to 0 (Sigmoid(-2.0) ≈ 0.12), representing a 12% probability."
         }
       ]
     },
@@ -191,30 +191,30 @@
           "id": "b1",
           "type": "multiple_choice",
           "xp": 5,
-          "prompt": "You train a classification model on hard labels [1, 0]. The model overfits, predicting with 99.999% confidence on training data but failing on new test data. You apply label smoothing, setting the target to [0.95, 0.05]. What happens to the model?",
+          "prompt": "You trace a digit classifier. The input is a handwritten '3'. The model runs its forward pass: hidden layers extract lines, output layer combines them, and the final output node for '3' returns a probability of 0.95. What does this indicate about the forward propagation phase?",
           "options": [
             {
               "id": "a",
-              "text": "The model is discouraged from pushing its weights to extremes to reach 100% confidence, resulting in a more robust model that generalizes better to the test data.",
+              "text": "The forward pass ran successfully, producing a 95% confidence prediction that the digit is a 3; no learning or weight adjustment has occurred yet.",
               "correct": true
             },
             {
               "id": "b",
-              "text": "The model's accuracy drops to zero because it is no longer allowed to be correct.",
+              "text": "The model has learned that the digit is a 3 and permanently locked its weights.",
               "correct": false
             },
             {
               "id": "c",
-              "text": "The model converted itself to a linear regression model.",
+              "text": "The forward pass was incorrect because it was not 100% accurate.",
               "correct": false
             },
             {
               "id": "d",
-              "text": "The validation set is automatically deleted.",
+              "text": "The activation functions collapsed because the score was high.",
               "correct": false
             }
           ],
-          "explain": "Exactly! By softening the target, we stop the model from chasing absolute certainty, which prevents weight bloating and improves test accuracy. Congratulations on completing the Loss Functions for Classification unit! Next, let's explore loss functions for regression and advanced tasks!"
+          "explain": "Exactly! The forward pass completed its pipeline, returning a 95% confidence prediction — learning and updates are completely separate steps. Congratulations on completing the Forward Propagation unit! Next, let's explore how we measure 'how wrong' this prediction actually is using loss functions!"
         }
       ]
     }

@@ -2,11 +2,11 @@
   "id": "u63-l4",
   "unit": 63,
   "day": 319,
-  "tier": "Training Deep Networks",
-  "tierIcon": "🏔️",
-  "title": "Momentum: Rolling Downhill Faster",
-  "icon": "🏒",
-  "concept": "Momentum accumulates a 'velocity' from past gradient steps, smoothing out zig-zagging and helping push through small bumps and plateaus, like a ball rolling downhill.",
+  "tier": "Neural Network Basics",
+  "tierIcon": "🌈",
+  "title": "Swish & GELU: Smooth Modern Activations",
+  "icon": "🌊",
+  "concept": "Newer activation functions that are smooth and self-gated (using the input's own sigmoid to scale itself); used in many modern large-scale networks for slightly better performance than ReLU.",
   "xp": 15,
   "hearts": 3,
   "estMinutes": 7,
@@ -18,25 +18,25 @@
           "id": "w1",
           "type": "multiple_choice",
           "xp": 1,
-          "prompt": "Recap: What does plain SGD do when it hits a narrow ravine in the loss landscape (steep walls, gentle slope along the bottom)?",
+          "prompt": "Recap: what makes ELU's negative-input shape different from a straight sloped line?",
           "options": [
             {
               "id": "a",
-              "text": "It zig-zags, bouncing back and forth across the ravine instead of moving smoothly toward the bottom",
+              "text": "It's a smooth curve that levels off near a small negative value",
               "correct": true
             },
             {
               "id": "b",
-              "text": "It instantly jumps straight to the bottom",
+              "text": "It jumps straight to a big negative number",
               "correct": false
             },
             {
               "id": "c",
-              "text": "It stops completely and never moves again",
+              "text": "It's identical to ReLU's hard cutoff at 0",
               "correct": false
             }
           ],
-          "explain": "Right! All that bouncing wastes steps. So how do we stop the wasted zig-zag and keep training moving forward?"
+          "explain": "Right — ELU curves and levels off. Every function so far picks ONE fixed rule and applies it everywhere. What if a function could decide, input by input, how much of itself to let through?"
         }
       ]
     },
@@ -45,49 +45,49 @@
       "cards": [
         {
           "kind": "hook",
-          "icon": "🏒",
-          "title": "A puck vs. a snowflake",
-          "body": "A single snowflake stops the instant a breeze shifts. A hockey puck, once it's moving, keeps gliding in roughly the same direction even if the ice tilts a little. Which one do you want steering your deep network's training?"
+          "icon": "🌊",
+          "title": "What if the input decided its own fate?",
+          "body": "So far, every activation function follows one fixed rule for every input: chop negatives, add a slope, curve it. But some of the newest activation functions — used inside cutting-edge large-scale networks — let each input help decide how much of itself gets through."
         },
         {
           "kind": "definition",
-          "icon": "🏒",
-          "title": "Velocity: a memory of where you've been heading",
-          "body": "<strong>Momentum</strong> keeps a running <strong>velocity</strong> — a blend of the current slope direction and the direction of recent past steps — so every new step gets nudged toward the direction training has consistently been heading."
+          "icon": "🚪",
+          "title": "Self-gated: the input scales itself",
+          "body": "<strong>Swish</strong> and <strong>GELU</strong> are both smooth, self-gated activation functions. \"Self-gated\" means each input value is multiplied by a Sigmoid-like gate calculated from that <em>same</em> input — so the input itself decides, moment to moment, how much of its own signal to let through, rather than following one fixed rule for every value."
         },
         {
           "kind": "analogy",
-          "icon": "🧊",
-          "title": "Gliding across the rink",
-          "body": "Instead of reacting only to the ice right under your skates (like plain SGD reacting only to the current slope), momentum is like a puck that keeps gliding along its established direction — a small wobble in the ice barely changes its overall path down the rink."
+          "icon": "🚦",
+          "title": "A gate that reads its own traffic",
+          "body": "ReLU is like a gate that only checks one thing: is the car (input) positive or negative? Fully open or fully shut, nothing in between. Swish and GELU are gates that also look at how strong the incoming signal is, smoothly opening wider for confident signals and narrowing — but never slamming fully shut — for weak or negative ones."
         },
         {
           "kind": "example",
-          "icon": "🌊",
-          "title": "Canceling the zig-zag, keeping the forward push",
-          "body": "In a narrow ravine, the side-to-side parts of each step point opposite directions on alternating steps and tend to cancel out over time, while the along-the-ravine part keeps adding up — so the puck-like velocity ends up pointed straight down the ravine, far faster than plain SGD's bounce."
+          "icon": "🔢",
+          "title": "Smooth everywhere, unlike ReLU's sharp bend",
+          "body": "ReLU has one sharp bend right at 0 — a hard corner. Swish and GELU have no sharp corners anywhere: the whole curve bends smoothly, even right around 0, and can even dip slightly negative for small negative inputs before curving back up — instead of hard-clipping straight to zero."
         },
         {
           "kind": "mythbust",
           "icon": "⚠️",
-          "title": "Momentum doesn't guarantee a straight shot to the best answer",
-          "body": "You might think building up speed always helps. But too much velocity can carry the optimizer flying PAST a good minimum, overshooting it like a puck hit too hard — deep learning teams tune how much past velocity to keep, usually a large chunk, but never all of it."
+          "title": "Not just ReLU with extra steps",
+          "body": "You might assume Swish and GELU are just fancier, slower versions of ReLU with no real payoff. In reality, many modern large-scale networks — including several state-of-the-art language and image models — use Swish or GELU specifically because their smoothness tends to squeeze out slightly better performance than ReLU."
         },
         {
           "kind": "visual",
           "icon": "⚖️",
-          "title": "Plain SGD vs. momentum on a plateau",
-          "body": "How the two handle a long flat stretch:",
+          "title": "Sharp gate vs. smooth self-gate",
+          "body": "How the two styles compare:",
           "compare": {
             "left": {
-              "emoji": "🥶",
-              "tag": "Plain SGD",
-              "text": "Tiny gradient → tiny step<br>Crawls to a near stall"
+              "emoji": "⚡",
+              "tag": "ReLU",
+              "text": "Sharp corner at 0<br>Fixed rule: pass through or block"
             },
             "right": {
-              "emoji": "🏒",
-              "tag": "Momentum",
-              "text": "Carries built-up velocity<br>Glides straight through the flat stretch"
+              "emoji": "🌊",
+              "tag": "Swish / GELU",
+              "text": "Smooth curve everywhere<br>Self-gated: input helps scale itself"
             }
           }
         }
@@ -100,82 +100,82 @@
           "id": "p1",
           "type": "multiple_choice",
           "xp": 2,
-          "prompt": "What does momentum add to a plain gradient step to smooth out zig-zagging?",
+          "prompt": "What does it mean for Swish and GELU to be \"self-gated\"?",
           "options": [
             {
               "id": "a",
-              "text": "A 'velocity' built from the direction of recent past steps, blended with the current slope",
+              "text": "Each input is scaled by a gate calculated from that same input",
               "correct": true
             },
             {
               "id": "b",
-              "text": "A completely random extra step direction",
+              "text": "They only activate every other neuron",
               "correct": false
             },
             {
               "id": "c",
-              "text": "A pause that waits for the next epoch to start",
+              "text": "They gate the output layer only",
               "correct": false
             }
           ],
-          "explain": "Right! That accumulated velocity keeps pulling the optimizer in the direction it's consistently been heading."
+          "explain": "Right — self-gated means the input's own value helps determine how much of it passes through."
         },
         {
           "id": "p2",
           "type": "true_false",
           "xp": 2,
-          "prompt": "True or false: momentum can help an optimizer glide through a flat plateau where plain SGD's steps would shrink to a crawl.",
+          "prompt": "True or false: Swish and GELU have a sharp corner at 0, just like ReLU.",
           "options": [
             {
               "id": "t",
               "text": "True",
-              "correct": true
+              "correct": false
             },
             {
               "id": "f",
               "text": "False",
-              "correct": false
+              "correct": true
             }
           ],
-          "explain": "True! Built-up velocity keeps carrying the optimizer forward even where the current slope is nearly flat."
+          "explain": "False! Swish and GELU are smooth everywhere, with no sharp corners."
         },
         {
           "id": "p3",
           "type": "fill_blank",
           "xp": 2,
           "prompt": "Complete the sentence:",
-          "sentence": "Momentum blends the current slope direction with the ___ built up from recent steps.",
-          "blank": "velocity",
+          "sentence": "Swish and GELU are described as smooth and self-___, meaning the input helps scale itself.",
+          "blank": "gated",
           "words": [
-            "velocity",
-            "alphabet",
-            "hearts"
+            "gated",
+            "layered",
+            "weighted"
           ],
-          "explain": "Velocity is momentum's running memory of the directions recent steps have been heading."
+          "explain": "Self-gated: the input's own value determines how much of itself passes through."
         },
         {
           "id": "p4",
           "type": "spot_the_ai",
           "xp": 2,
-          "prompt": "Two training runs hit the same steep ravine. Run A's loss bounces wildly step after step. Run B's loss decreases smoothly and quickly through the same ravine. Which run is more likely using momentum?",
+          "prompt": "Which kind of activation function is used in many modern large-scale networks for its smooth, self-gated shape?",
           "options": [
             {
               "id": "a",
-              "text": "Run B — momentum's velocity cancels out the side-to-side bounce and keeps pushing forward along the ravine",
+              "text": "Swish or GELU",
               "correct": true
             },
             {
               "id": "b",
-              "text": "Run A — bouncing wildly is a sign of momentum working correctly",
+              "text": "Basic step function",
               "correct": false
             },
             {
               "id": "c",
-              "text": "Neither — momentum has no effect on ravines",
+              "text": "Regular Sigmoid alone",
               "correct": false
             }
           ],
-          "explain": "Right — Run B's smooth, fast descent through the ravine is the signature of momentum canceling the zig-zag."
+          "explain": "Swish and GELU's smoothness and self-gating make them common choices in modern large-scale networks."
         }
       ]
     },
@@ -186,30 +186,30 @@
           "id": "b1",
           "type": "multiple_choice",
           "xp": 5,
-          "prompt": "A teammate cranks up momentum's velocity setting as high as possible, hoping training will now blast straight to the best minimum every time. What actually happens, and why?",
+          "prompt": "A research team building a large modern language model wants an activation function that's smooth everywhere (no sharp corners) and lets each input help scale itself, aiming for a small performance edge over plain ReLU. Which activation function(s) fit this description, and why?",
           "options": [
             {
               "id": "a",
-              "text": "Too much velocity can carry the optimizer flying past a good minimum, overshooting it — the ball rolls too fast to settle, so the amount of past velocity to keep has to be tuned, not maxed out",
+              "text": "Swish or GELU, because both are smooth, self-gated functions where the input's own value determines how much of itself passes through",
               "correct": true
             },
             {
               "id": "b",
-              "text": "Nothing changes at all — velocity has no effect on the final result",
+              "text": "Regular ReLU, because sharp corners always train faster",
               "correct": false
             },
             {
               "id": "c",
-              "text": "The network becomes instantly perfect with zero error",
+              "text": "Softmax, because it's used in every layer of modern networks",
               "correct": false
             },
             {
               "id": "d",
-              "text": "The loss landscape itself changes shape based on the velocity setting",
+              "text": "Leaky ReLU, because its fixed slope is inherently self-gated",
               "correct": false
             }
           ],
-          "explain": "Exactly! Momentum smooths the ride, but too much speed causes overshoot. Next up: a smarter version that checks the road ahead before committing to that speed."
+          "explain": "Exactly! Swish and GELU bring smoothness and self-gating to modern large-scale networks. You've now met eight different activation functions across two units. Time to line them all up and figure out when to reach for each one."
         }
       ]
     }

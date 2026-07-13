@@ -1,0 +1,222 @@
+{
+  "id": "u70-l3",
+  "unit": 70,
+  "day": 353,
+  "tier": "The Forward Pass Capstone",
+  "tierIcon": "🏆",
+  "title": "Common Forward-Pass Bugs & Debugging",
+  "icon": "🔍",
+  "concept": "Debugging a forward pass involves checking for shape mismatches in matrix operations and catching NaN (Not a Number) errors caused by mathematical illegal steps like division by zero.",
+  "xp": 15,
+  "hearts": 3,
+  "estMinutes": 7,
+  "segments": [
+    {
+      "type": "warmup",
+      "exercises": [
+        {
+          "id": "w1",
+          "type": "multiple_choice",
+          "xp": 1,
+          "prompt": "Recap: In a computation graph, what do the nodes represent?",
+          "options": [
+            {
+              "id": "a",
+              "text": "Mathematical operations or variables.",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "The epochs of the training loop.",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "The columns of the training dataset.",
+              "correct": false
+            }
+          ],
+          "explain": "Correct! Nodes represent variables or the math operations run on them."
+        }
+      ]
+    },
+    {
+      "type": "teach",
+      "cards": [
+        {
+          "kind": "hook",
+          "icon": "🔍",
+          "title": "When the screen displays 'NaN'",
+          "body": "You run your new neural network code and wait. Instead of predictions, the console prints: `Loss: NaN` (Not a Number). You scroll up and find a shape mismatch error. These two bugs are the most common forward-pass errors in deep learning. Let's learn how to spot and fix them!"
+        },
+        {
+          "kind": "definition",
+          "icon": "🔍",
+          "title": "Shape Mismatches and NaNs",
+          "body": "- **Shape Mismatch** occurs when matrix sizes don't align for multiplication (e.g. trying to multiply a 3-column input by a 4-row weight grid). - **NaN Errors** occur when an illegal mathematical operation runs (e.g. taking the logarithm of 0 in cross-entropy), creating an undefined value that spreads like a virus through the network."
+        },
+        {
+          "kind": "analogy",
+          "icon": "🧩",
+          "title": "Lego bricks that don't fit",
+          "body": "A shape mismatch is like trying to snap a 3-stud Lego brick onto a 4-stud slot — they simply don't fit, and the program crashes. A NaN error is like dropping a drop of black ink into a clean glass of milk: the moment it enters, it mixes and turns the entire glass black (every subsequent calculation becomes NaN)."
+        },
+        {
+          "kind": "example",
+          "icon": "🧮",
+          "title": "The shape alignment rule",
+          "body": "To multiply matrix A by matrix B, the **columns of A must equal the rows of B**. If you pass a batch of 32 images with 10 features (shape 32-by-10) to a layer whose weight matrix has 9 rows (shape 9-by-5), it crashes. You must resize the weight matrix to have exactly 10 rows (10-by-5) to align the shapes."
+        },
+        {
+          "kind": "mythbust",
+          "icon": "⚠️",
+          "title": "Calculators don't warning-alert for NaNs early",
+          "body": "You might expect the computer to stop immediately when a NaN first appears. In reality, modern chips will run millions of calculations with NaN values without crashing, only displaying the error at the very end when printing the final loss. Checking layer outputs early (print debugging) is essential to catch the source."
+        },
+        {
+          "kind": "visual",
+          "icon": "⚖️",
+          "title": "Shape Alignment",
+          "body": "How matrix shapes must align to multiply:",
+          "compare": {
+            "left": {
+              "emoji": "✅",
+              "tag": "Aligned (Works)",
+              "text": "Matrix A: 32 rows × 10 cols.<br>Matrix B: 10 rows × 5 cols.<br>Cols of A (10) == Rows of B (10)."
+            },
+            "right": {
+              "emoji": "❌",
+              "tag": "Mismatched (Crashes)",
+              "text": "Matrix A: 32 rows × 10 cols.<br>Matrix B: 9 rows × 5 cols.<br>Cols of A (10) != Rows of B (9)."
+            }
+          }
+        }
+      ]
+    },
+    {
+      "type": "practice",
+      "exercises": [
+        {
+          "id": "p1",
+          "type": "multiple_choice",
+          "xp": 2,
+          "prompt": "What causes a 'shape mismatch' error during a forward pass?",
+          "options": [
+            {
+              "id": "a",
+              "text": "Trying to multiply matrices whose dimensions do not align (columns of the first does not equal rows of the second).",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "Using the wrong learning rate in the optimizer.",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "Applying a ReLU activation function to negative values.",
+              "correct": false
+            },
+            {
+              "id": "d",
+              "text": "Failing to shuffle the training data.",
+              "correct": false
+            }
+          ],
+          "explain": "Correct! Shape mismatches occur when matrix dimensions do not align for multiplication."
+        },
+        {
+          "id": "p2",
+          "type": "true_false",
+          "xp": 2,
+          "prompt": "True or false: Once a NaN (Not a Number) value is generated inside a layer, it will likely spread through all subsequent calculations, turning the final loss score into NaN.",
+          "options": [
+            {
+              "id": "t",
+              "text": "True",
+              "correct": true
+            },
+            {
+              "id": "f",
+              "text": "False",
+              "correct": false
+            }
+          ],
+          "explain": "True! NaNs propagate through math operations, corrupting the entire forward pass output."
+        },
+        {
+          "id": "p3",
+          "type": "fill_blank",
+          "xp": 2,
+          "prompt": "Complete the sentence:",
+          "sentence": "If your input matrix has 12 columns, the weight matrix of the next layer must have exactly ___ rows to avoid a shape mismatch.",
+          "blank": "12",
+          "words": [
+            "12",
+            "1",
+            "120"
+          ],
+          "explain": "The rows of the weight matrix must match the columns of the input matrix (12)."
+        },
+        {
+          "id": "p4",
+          "type": "spot_the_ai",
+          "xp": 2,
+          "prompt": "Which of these is a potential cause of a NaN error during loss calculation?",
+          "options": [
+            {
+              "id": "a",
+              "text": "The model predicts exactly 0.0 for a true label of 1, causing the Cross-Entropy log(0) calculation (which is undefined).",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "The batch size is set to a power of 2.",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "The data was shuffled before the epoch started.",
+              "correct": false
+            }
+          ],
+          "explain": "Correct! Taking the logarithm of 0 is mathematically undefined, yielding a NaN error in cross-entropy loss."
+        }
+      ]
+    },
+    {
+      "type": "boss",
+      "exercises": [
+        {
+          "id": "b1",
+          "type": "multiple_choice",
+          "xp": 5,
+          "prompt": "You are debugging a deep network. The console prints 'Loss: NaN'. You print the outputs of each layer and find: Layer 1 = normal numbers, Layer 2 = normal numbers, Layer 3 (Softmax output) = [0.0, 0.0, 0.0] due to a numerical underflow, Layer 4 (Loss) = NaN. Where is the bug, and how do you fix it?",
+          "options": [
+            {
+              "id": "a",
+              "text": "The bug is at Layer 3: the Softmax outputs collapsed to all 0s, causing the Loss layer to compute log(0) = NaN. The fix is to add a tiny constant (e.g. 1e-15) inside the log calculation to prevent log(0).",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "The bug is in the input data: some images were missing.",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "The bug is in Layer 1: the weights were not scaled.",
+              "correct": false
+            },
+            {
+              "id": "d",
+              "text": "Delete the model file and run a grid search on batch size.",
+              "correct": false
+            }
+          ],
+          "explain": "Exactly! Layer 3 outputting all 0s caused the subsequent log(0) calculation in the loss layer, generating the NaN. Adding a tiny safety epsilon (constant) prevents log(0) and stabilizes training. Next, let's look at how we bridge this forward pass into the backward learning pass!"
+        }
+      ]
+    }
+  ]
+}

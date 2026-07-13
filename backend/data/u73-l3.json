@@ -1,0 +1,222 @@
+{
+  "id": "u73-l3",
+  "unit": 73,
+  "day": 368,
+  "tier": "Backpropagation",
+  "tierIcon": "🛠️",
+  "title": "Vanishing Gradients",
+  "icon": "🕳️",
+  "concept": "Vanishing gradients happen when backprop signals shrink across many layers, leaving early layers with updates so tiny that learning nearly stops.",
+  "xp": 15,
+  "hearts": 3,
+  "estMinutes": 7,
+  "segments": [
+    {
+      "type": "warmup",
+      "exercises": [
+        {
+          "id": "w1",
+          "type": "multiple_choice",
+          "xp": 1,
+          "prompt": "Recap: What does the gradient vector tell the optimizer?",
+          "options": [
+            {
+              "id": "a",
+              "text": "The overall direction the model should move to reduce loss.",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "Which training example to skip forever.",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "How to rename the layers.",
+              "correct": false
+            }
+          ],
+          "explain": "Right. The gradient vector is the model's combined downhill direction."
+        }
+      ]
+    },
+    {
+      "type": "teach",
+      "cards": [
+        {
+          "kind": "hook",
+          "icon": "🤫",
+          "title": "The whisper chain",
+          "body": "Imagine ten students passing a whispered message down a line. Each student hears a little less than the person before. By the time the message reaches the first student again, it is barely audible. Vanishing gradients are like that: the training signal fades as it travels backward through many layers."
+        },
+        {
+          "kind": "definition",
+          "icon": "🕳️",
+          "title": "What vanishing gradients mean",
+          "body": "During backpropagation, a deep network sends error signals from the output layer back toward earlier layers. Sometimes those signals keep shrinking until they become extremely tiny. Then the early layers get almost no update, even though the model still badly needs them to learn."
+        },
+        {
+          "kind": "analogy",
+          "icon": "🧵",
+          "title": "A thread wearing thin",
+          "body": "Picture pulling a long thread through many tight loops. Each loop steals a little force. By the time the tug reaches the far end, almost nothing is left. In a deep network, each backward step can shrink the gradient until the earliest layers barely feel it."
+        },
+        {
+          "kind": "example",
+          "icon": "📚",
+          "title": "The front of the network freezes",
+          "body": "Suppose a 20-layer image model keeps changing its last few layers, but the first layers hardly change at all. The backward signal may be fading before it reaches the front. Training still runs, but the network's earliest feature detectors stay almost frozen."
+        },
+        {
+          "kind": "mythbust",
+          "icon": "⚠️",
+          "title": "Training can look calm while still being stuck",
+          "body": "Vanishing gradients do not always crash the program or show a bright red error. Often the loss just improves painfully slowly, and some layers receive updates so tiny they may as well be standing still."
+        },
+        {
+          "kind": "visual",
+          "icon": "⚖️",
+          "title": "Healthy vs. faded gradient flow",
+          "body": "The big question is whether useful blame reaches the early layers.",
+          "compare": {
+            "left": {
+              "emoji": "💪",
+              "tag": "Healthy flow",
+              "text": "Backward signal stays strong enough.<br>Early layers keep learning and adjusting."
+            },
+            "right": {
+              "emoji": "🫥",
+              "tag": "Vanishing flow",
+              "text": "Backward signal shrinks too much.<br>Early layers receive almost no useful update."
+            }
+          }
+        }
+      ]
+    },
+    {
+      "type": "practice",
+      "exercises": [
+        {
+          "id": "p1",
+          "type": "multiple_choice",
+          "xp": 2,
+          "prompt": "Which layer group is most likely to suffer first when gradients vanish in a deep network?",
+          "options": [
+            {
+              "id": "a",
+              "text": "The early layers closest to the input.",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "Only the loss function itself.",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "The training labels.",
+              "correct": false
+            },
+            {
+              "id": "d",
+              "text": "The data loader, because it runs before the network.",
+              "correct": false
+            }
+          ],
+          "explain": "Correct. The farther a layer is from the loss, the easier it is for the gradient to fade before reaching it."
+        },
+        {
+          "id": "p2",
+          "type": "true_false",
+          "xp": 2,
+          "prompt": "True or false: A model with vanishing gradients may keep running without crashing, even while learning becomes extremely slow.",
+          "options": [
+            {
+              "id": "t",
+              "text": "True",
+              "correct": true
+            },
+            {
+              "id": "f",
+              "text": "False",
+              "correct": false
+            }
+          ],
+          "explain": "True. Vanishing gradients often look like quiet failure: training runs, but useful updates barely reach the early layers."
+        },
+        {
+          "id": "p3",
+          "type": "fill_blank",
+          "xp": 2,
+          "prompt": "Complete the sentence:",
+          "sentence": "When gradients vanish, the updates reaching early layers become too ___.",
+          "blank": "tiny",
+          "words": [
+            "tiny",
+            "colorful",
+            "noisy"
+          ],
+          "explain": "Yes. The problem is not that the signal disappears instantly, but that it shrinks until it is too tiny to matter."
+        },
+        {
+          "id": "p4",
+          "type": "spot_the_ai",
+          "xp": 2,
+          "prompt": "Which situation sounds most like vanishing gradients?",
+          "options": [
+            {
+              "id": "a",
+              "text": "A deep model's last layer changes each step, but the first layers barely move and the loss stays almost flat.",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "The dataset contains cat photos and dog photos.",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "The model finishes training with a low loss and stable accuracy.",
+              "correct": false
+            }
+          ],
+          "explain": "Exactly. If early layers hardly update while training stalls, the gradient may be fading before it reaches them."
+        }
+      ]
+    },
+    {
+      "type": "boss",
+      "exercises": [
+        {
+          "id": "b1",
+          "type": "multiple_choice",
+          "xp": 5,
+          "prompt": "You inspect a deep network during training. The loss barely improves, the last layer's gradients look normal, and the first several layers have gradients that are almost zero every step. What is the best diagnosis?",
+          "options": [
+            {
+              "id": "a",
+              "text": "Vanishing gradients: the backward signal is shrinking before it reaches the earlier layers.",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "Exploding gradients: the updates are too large in the early layers.",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "The labels are being updated instead of the weights.",
+              "correct": false
+            },
+            {
+              "id": "d",
+              "text": "The model has no loss function at all.",
+              "correct": false
+            }
+          ],
+          "explain": "Right. This pattern is classic vanishing gradients: later layers get useful blame, but the signal fades almost away before reaching the front of the network."
+        }
+      ]
+    }
+  ]
+}

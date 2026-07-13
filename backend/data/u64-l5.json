@@ -3,10 +3,10 @@
   "unit": 64,
   "day": 325,
   "tier": "Training Deep Networks",
-  "tierIcon": "🎯",
-  "title": "Choosing an Optimizer: A Decision Matrix",
-  "icon": "🧭",
-  "concept": "A capstone comparison across SGD, Momentum, Nesterov, AdaGrad, RMSprop, Adam, and AdamW — weighing tradeoffs in speed, memory, and stability, and when each one is the sensible default choice.",
+  "tierIcon": "🏔️",
+  "title": "Nesterov Accelerated Gradient: Looking Ahead",
+  "icon": "👁️",
+  "concept": "Nesterov Accelerated Gradient improves on momentum by 'peeking ahead' to where the accumulated velocity is about to carry the optimizer, and measuring the gradient there instead of at the current position — correcting course earlier and cutting down on overshoot.",
   "xp": 15,
   "hearts": 3,
   "estMinutes": 7,
@@ -18,25 +18,25 @@
           "id": "w1",
           "type": "multiple_choice",
           "xp": 1,
-          "prompt": "Recap: what's the key difference between Adam and AdamW?",
+          "prompt": "Recap: What's the risk of momentum's built-up velocity if it gets too strong?",
           "options": [
             {
               "id": "a",
-              "text": "AdamW decouples weight decay into its own separate step instead of folding it into the adaptive gradient update",
+              "text": "It can carry the optimizer flying past a good minimum — overshooting it",
               "correct": true
             },
             {
               "id": "b",
-              "text": "AdamW removes momentum from the optimizer entirely",
+              "text": "It makes every step exactly the same size forever",
               "correct": false
             },
             {
               "id": "c",
-              "text": "AdamW no longer uses per-parameter learning rates",
+              "text": "It erases the network's weights",
               "correct": false
             }
           ],
-          "explain": "Right — AdamW's decoupled weight decay is its one key refinement over Adam. You've now met seven optimizers across two units. Time to compare all of them side by side."
+          "explain": "Exactly! So what if the optimizer could catch that overshoot BEFORE fully committing to the step?"
         }
       ]
     },
@@ -45,49 +45,49 @@
       "cards": [
         {
           "kind": "hook",
-          "icon": "🧭",
-          "title": "Seven optimizers, one big question: which one?",
-          "body": "Across two units you've met: <strong>SGD → Momentum → Nesterov → AdaGrad → RMSprop → Adam → AdamW</strong>. Each one fixed a specific problem with the one before it. But in practice, when you sit down to train a real network, which one should you actually reach for?"
+          "icon": "👁️",
+          "title": "Driving by only looking at your feet",
+          "body": "Regular momentum decides how hard to hit the gas based only on the slope right under its current position, then commits to a big velocity-powered step. It's like flooring the gas without checking what's just ahead on the road."
         },
         {
           "kind": "definition",
-          "icon": "🧭",
-          "title": "A decision matrix: speed, memory, stability",
-          "body": "Judge optimizers along three axes. <strong>Speed</strong>: how fast it converges to a good answer. <strong>Memory</strong>: how much extra bookkeeping it needs per parameter — plain SGD needs none, Momentum needs one running average, Adam and AdamW need two. <strong>Stability</strong>: how well it avoids zig-zagging, stalling on plateaus, or blowing up."
+          "icon": "🔭",
+          "title": "Peek ahead, then correct",
+          "body": "<strong>Nesterov Accelerated Gradient (NAG)</strong> first takes a quick 'lookahead' jump using the current velocity, checks the slope AT that lookahead spot, and uses THAT slope to correct the real step — catching problems, like an upcoming overshoot, before fully committing."
         },
         {
           "kind": "analogy",
-          "icon": "🧰",
-          "title": "A toolbox, not one perfect tool",
-          "body": "An experienced builder doesn't own a single wrench for every job — they carry a full toolbox and reach for whichever tool actually fits. Optimizers work the same way: a simple, well-tuned SGD might be exactly right for a small, well-behaved problem, while a huge modern network reaches for Adam or AdamW instead."
+          "icon": "🚴",
+          "title": "A cyclist who scouts the bend before leaning in",
+          "body": "A cyclist speeding downhill who glances ahead and spots a sharp curve can start braking or leaning early. A cyclist who only feels the road under their current tire finds out about the curve too late and has to overcorrect hard."
         },
         {
           "kind": "example",
-          "icon": "🗂️",
-          "title": "The lineup, in one line each",
-          "body": "<strong>SGD</strong>: simplest baseline, zero memory overhead, needs careful tuning. <strong>Momentum</strong>: adds velocity to smooth zig-zagging. <strong>Nesterov</strong>: momentum with a look-ahead correction. <strong>AdaGrad</strong>: great for rare/sparse features, but its rate decays toward zero. <strong>RMSprop</strong>: fixes that decay with a moving average. <strong>Adam</strong>: momentum + RMSprop, a strong reliable default. <strong>AdamW</strong>: Adam with cleaner weight decay, the modern default for large models."
+          "icon": "🎯",
+          "title": "Correcting before overshoot happens",
+          "body": "If momentum's velocity is about to carry the optimizer past the bottom of a valley and up the far slope, Nesterov's lookahead step lands on that far slope FIRST, feels the uphill pull immediately, and reins in the real step before the full overshoot happens."
         },
         {
           "kind": "mythbust",
           "icon": "⚠️",
-          "title": "There's no single \"best\" optimizer for every situation",
-          "body": "A common belief is that Adam or AdamW is always the objectively best choice, since it's the most popular default. In reality, a carefully-tuned SGD with Momentum sometimes generalizes better on certain tasks despite needing more tuning effort. The \"best\" choice always depends on the problem, the dataset, and how much tuning time is available."
+          "title": "It's not a totally different move, just a smarter measurement",
+          "body": "You might think Nesterov is a completely different strategy from momentum. Really, it uses the exact same velocity-accumulation idea — the only change is WHERE the slope gets measured, at the lookahead point instead of the current point — and that's enough to noticeably cut down on overshoot and wasted steps."
         },
         {
           "kind": "visual",
-          "icon": "🧭",
-          "title": "Simple & light vs. adaptive & robust",
-          "body": "How the two families compare:",
+          "icon": "⚖️",
+          "title": "Momentum vs. Nesterov",
+          "body": "Where each one measures the slope:",
           "compare": {
             "left": {
-              "emoji": "🪶",
-              "tag": "SGD family (SGD, Momentum, Nesterov)",
-              "text": "Minimal memory overhead<br>Needs careful learning-rate tuning<br>Can generalize very well when well-tuned"
+              "emoji": "🏒",
+              "tag": "Momentum",
+              "text": "Measures slope at the current spot<br>Then commits to the full velocity step"
             },
             "right": {
-              "emoji": "🛡️",
-              "tag": "Adaptive family (AdaGrad, RMSprop, Adam, AdamW)",
-              "text": "Per-parameter rates, more memory<br>Converges fast with little tuning<br>AdamW is the modern large-model default"
+              "emoji": "👁️",
+              "tag": "Nesterov",
+              "text": "Peeks ahead to where velocity is heading<br>Measures slope THERE, corrects early"
             }
           }
         }
@@ -100,82 +100,82 @@
           "id": "p1",
           "type": "multiple_choice",
           "xp": 2,
-          "prompt": "Which optimizer generally needs the LEAST extra memory per parameter?",
+          "prompt": "What does Nesterov Accelerated Gradient do differently from plain momentum?",
           "options": [
             {
               "id": "a",
-              "text": "Plain SGD, because it keeps no extra running averages at all",
+              "text": "It measures the slope at a 'lookahead' point — where the velocity is about to carry it — instead of at the current position",
               "correct": true
             },
             {
               "id": "b",
-              "text": "Adam",
+              "text": "It ignores velocity completely and starts fresh every step",
               "correct": false
             },
             {
               "id": "c",
-              "text": "AdamW",
+              "text": "It always takes twice as many steps as momentum",
               "correct": false
             }
           ],
-          "explain": "Correct! Plain SGD needs zero extra bookkeeping per parameter, while Adam and AdamW each track two running averages per parameter."
+          "explain": "Right! That lookahead measurement is the entire trick — same velocity idea, smarter timing on where the slope gets checked."
         },
         {
           "id": "p2",
           "type": "true_false",
           "xp": 2,
-          "prompt": "True or false: Adam and AdamW are always the objectively best optimizer choice for every deep learning problem.",
+          "prompt": "True or false: Nesterov's lookahead step tends to reduce overshoot compared to plain momentum.",
           "options": [
             {
               "id": "t",
               "text": "True",
-              "correct": false
+              "correct": true
             },
             {
               "id": "f",
               "text": "False",
-              "correct": true
+              "correct": false
             }
           ],
-          "explain": "False. The best choice depends on the problem, dataset, and tuning budget — a well-tuned SGD with Momentum sometimes generalizes better."
+          "explain": "True! By checking the slope ahead of where it's heading, Nesterov can rein in the step before a full overshoot happens."
         },
         {
           "id": "p3",
           "type": "fill_blank",
           "xp": 2,
           "prompt": "Complete the sentence:",
-          "sentence": "When judging optimizers, three key axes to weigh are speed, memory, and ___.",
-          "blank": "stability",
+          "sentence": "Nesterov Accelerated Gradient 'peeks ___' to where momentum is about to carry it before correcting the real step.",
+          "blank": "ahead",
           "words": [
-            "stability",
-            "color",
-            "size"
+            "ahead",
+            "backward",
+            "sideways"
           ],
-          "explain": "Speed, memory, and stability are the three practical axes for comparing optimizers."
+          "explain": "Peeking ahead to the lookahead point is exactly what lets Nesterov correct its course earlier than plain momentum."
         },
         {
           "id": "p4",
           "type": "spot_the_ai",
           "xp": 2,
-          "prompt": "You're training a massive modern transformer model and want fast convergence, per-parameter adaptive rates, AND clean, decoupled regularization for the best generalization. Which optimizer is the standard modern default?",
+          "prompt": "Which description matches how Nesterov Accelerated Gradient corrects its course, versus plain momentum?",
           "options": [
             {
               "id": "a",
-              "text": "AdamW",
+              "text": "It jumps ahead using the current velocity first, checks the slope THERE, then adjusts the real step using that lookahead information",
               "correct": true
             },
             {
               "id": "b",
-              "text": "Plain SGD",
+              "text": "It measures the slope only at the starting position and never adjusts for velocity",
               "correct": false
             },
             {
               "id": "c",
-              "text": "AdaGrad",
+              "text": "It removes velocity entirely and behaves exactly like plain SGD",
               "correct": false
             }
           ],
-          "explain": "AdamW is the standard modern default for exactly this combination of needs."
+          "explain": "Right — peeking ahead before committing is exactly what separates Nesterov from plain momentum."
         }
       ]
     },
@@ -186,30 +186,30 @@
           "id": "b1",
           "type": "multiple_choice",
           "xp": 5,
-          "prompt": "You need an optimizer for a huge modern deep network. It must converge reliably with minimal manual tuning, avoid AdaGrad's problem of learning rates decaying toward zero, and use clean regularization for the best generalization. Which optimizer satisfies ALL of these, and what earlier ideas does it combine?",
+          "prompt": "A deep network's training run has: (1) a steep ravine early on, (2) a long flat plateau in the middle, and (3) a good minimum near the end that momentum keeps overshooting. Which optimizer best handles ALL three, and why?",
           "options": [
             {
               "id": "a",
-              "text": "AdamW — it combines Momentum's velocity smoothing and RMSprop's decaying adaptive rates (avoiding AdaGrad's permanent decay), plus decoupled weight decay for cleaner regularization",
+              "text": "Nesterov Accelerated Gradient — it keeps momentum's velocity to power through ravines and plateaus, but its lookahead correction catches the overshoot near the minimum that plain momentum misses",
               "correct": true
             },
             {
               "id": "b",
-              "text": "Plain SGD — because it's the simplest and requires no bookkeeping",
+              "text": "Plain SGD — its zig-zagging is actually ideal for all three situations",
               "correct": false
             },
             {
               "id": "c",
-              "text": "AdaGrad — because it adapts a learning rate per parameter",
+              "text": "Full-batch gradient descent — reading the whole dataset each step fixes ravines, plateaus, and overshoot automatically",
               "correct": false
             },
             {
               "id": "d",
-              "text": "Nesterov — because it looks ahead before computing its gradient",
+              "text": "None of these optimizers can handle more than one type of terrain at a time",
               "correct": false
             }
           ],
-          "explain": "Exactly right! You've now built the full optimizer toolkit: SGD's raw gradient steps, Momentum's velocity, Nesterov's look-ahead correction, AdaGrad's per-parameter rates, RMSprop's decay fix, Adam's fusion of momentum and adaptive rates, and AdamW's cleaner regularization. With this toolkit, you can defend a real optimizer choice for any training job — not just recite the names."
+          "explain": "Exactly! Nesterov keeps everything momentum does well — canceling zig-zag, powering through plateaus — while its lookahead trick catches overshoot earlier than plain momentum can. Next up: optimizers that go a step further, adjusting each individual weight's step size on the fly instead of using one shared step size for everything."
         }
       ]
     }

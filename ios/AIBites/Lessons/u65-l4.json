@@ -3,10 +3,10 @@
   "unit": 65,
   "day": 329,
   "tier": "Training Deep Networks",
-  "tierIcon": "➡️",
-  "title": "Batch Forward Passes: Processing Many Examples at Once",
-  "icon": "📦",
-  "concept": "A batch forward pass processes multiple training examples simultaneously in parallel using matrix operations, maximizing GPU efficiency.",
+  "tierIcon": "🎯",
+  "title": "AdamW: Decoupled Weight Decay",
+  "icon": "⚖️",
+  "concept": "AdamW refines Adam by separating (decoupling) weight decay — a regularization technique — from the main adaptive gradient update, leading to better generalization. It's now a very common default in modern large-model training.",
   "xp": 15,
   "hearts": 3,
   "estMinutes": 7,
@@ -18,25 +18,25 @@
           "id": "w1",
           "type": "multiple_choice",
           "xp": 1,
-          "prompt": "Recap: What is the correct order of operations inside a single neuron?",
+          "prompt": "Recap: what two things does Adam combine into one optimizer?",
           "options": [
             {
               "id": "a",
-              "text": "Multiply inputs by weights, add bias, then apply activation function.",
+              "text": "Momentum's velocity smoothing and RMSprop's per-parameter adaptive rates",
               "correct": true
             },
             {
               "id": "b",
-              "text": "Apply activation function, multiply by weights, then add bias.",
+              "text": "AdaGrad's accumulation and a bigger batch size",
               "correct": false
             },
             {
               "id": "c",
-              "text": "Add bias, apply activation function, then multiply by weights.",
+              "text": "Two different activation functions",
               "correct": false
             }
           ],
-          "explain": "Correct! We sum the weighted inputs plus bias, then apply the activation function."
+          "explain": "Right — Adam blends Momentum's velocity with RMSprop's adaptive rates. But there's one more common training ingredient we haven't looked at yet: weight decay. How does it interact with Adam?"
         }
       ]
     },
@@ -45,49 +45,49 @@
       "cards": [
         {
           "kind": "hook",
-          "icon": "📦",
-          "title": "The post office sorting bins",
-          "body": "If a post office has 1,000 letters, and the mail carrier delivers them one-by-one to the destination, it takes all day. Instead, they pack 32 letters into a single crate and deliver them to the sorting machine together. Processing data in batches is how neural networks stay fast."
+          "icon": "⚖️",
+          "title": "A regularization trick that got tangled up",
+          "body": "<strong>Weight decay</strong> is a common regularization technique: on every update, it nudges every weight a little bit toward zero, so the network can't lean too heavily on any single weight and overfit the training data. In plain SGD, this works cleanly. But when weight decay gets mixed into Adam's adaptive per-parameter math, something unexpected happens."
         },
         {
           "kind": "definition",
-          "icon": "📦",
-          "title": "Batch Processing",
-          "body": "Instead of running forward propagation for one row of data at a time, we group multiple rows together into a **batch** (e.g. batch size of 32 or 64). The inputs are stacked into a larger matrix, allowing the GPU to compute predictions for the entire batch in parallel."
+          "icon": "⚖️",
+          "title": "AdamW: decoupled weight decay",
+          "body": "<strong>AdamW</strong> separates the weight decay step from Adam's main adaptive gradient update, applying it directly to the weights instead of folding it into the adaptive-rate math. \"Decoupled\" simply means learning from gradients and shrinking weights slightly now happen as two SEPARATE, independent steps — not one tangled-together step."
         },
         {
           "kind": "analogy",
-          "icon": "🚌",
-          "title": "Taking the bus vs. individual cars",
-          "body": "Processing one row at a time is like 32 people driving 32 separate cars to the same office — high traffic, high overhead. Batch processing is like putting all 32 people on a single bus: they travel together, use one vehicle (one GPU calculation step), and arrive at the same time efficiently."
+          "icon": "🧾",
+          "title": "Two separate bills, not one confusing combined charge",
+          "body": "Imagine paying rent and a gym membership as one single combined charge on your account — it becomes unclear how much each one actually cost you, and a change in one silently changes the other. In plain Adam, weight decay and the adaptive gradient update were bundled together like that combined charge. AdamW sends two SEPARATE, clearly itemized charges instead."
         },
         {
           "kind": "example",
-          "icon": "📊",
-          "title": "Stacking the inputs",
-          "body": "If we predict house prices with 3 features, one house is a list: `[size, bedrooms, age]`. A batch of 32 houses is a grid with 32 rows and 3 columns. When we multiply this 32-by-3 input matrix by our 3-by-5 weight matrix, we get a 32-by-5 output matrix containing the hidden values for all 32 houses in one go."
+          "icon": "🤖",
+          "title": "The standard optimizer behind modern language models",
+          "body": "Training a large language model — the kind of transformer model behind modern chatbots — almost always uses AdamW rather than plain Adam, precisely because its decoupled weight decay noticeably improves how well the model generalizes to new, unseen text."
         },
         {
           "kind": "mythbust",
           "icon": "⚠️",
-          "title": "Batches don't mix customer data",
-          "body": "You might worry that stacking rows into a batch means the model mixes up different customers' data. In matrix multiplication, the rows remain completely independent. The math computes each row's prediction separately; they are simply grouped in the same step to maximize hardware speed."
+          "title": "AdamW isn't a totally different optimizer",
+          "body": "It's easy to assume AdamW is a completely new, redesigned algorithm. It isn't — AdamW keeps ALL of Adam's momentum and adaptive-rate machinery exactly the same. The ONLY change is where and how weight decay gets applied. It's a small, surgical fix, not a redesign."
         },
         {
           "kind": "visual",
           "icon": "⚖️",
-          "title": "Single vs. Batch Forward Pass",
-          "body": "How data is fed into the model:",
+          "title": "Adam vs. AdamW",
+          "body": "How the two compare:",
           "compare": {
             "left": {
-              "emoji": "🚗",
-              "tag": "Single Pass (Batch Size = 1)",
-              "text": "One row of data processed.<br>Outputs one prediction.<br>High overhead per row."
+              "emoji": "🏆",
+              "tag": "Adam",
+              "text": "Weight decay folded INTO the adaptive gradient update<br>Gets tangled with per-parameter scaling"
             },
             "right": {
-              "emoji": "🚌",
-              "tag": "Batch Pass (Batch Size = 32)",
-              "text": "32 rows stacked as a matrix.<br>Outputs 32 predictions in parallel.<br>Low hardware overhead."
+              "emoji": "⚖️",
+              "tag": "AdamW",
+              "text": "Weight decay applied as a SEPARATE step<br>Cleaner regularization, better generalization"
             }
           }
         }
@@ -100,87 +100,82 @@
           "id": "p1",
           "type": "multiple_choice",
           "xp": 2,
-          "prompt": "What does a batch size of 32 mean in a forward pass?",
+          "prompt": "What does AdamW change compared to plain Adam?",
           "options": [
             {
               "id": "a",
-              "text": "32 training rows are stacked into a matrix and processed in parallel to compute 32 predictions.",
+              "text": "It applies weight decay as a separate, decoupled step instead of folding it into the adaptive gradient update",
               "correct": true
             },
             {
               "id": "b",
-              "text": "The model has exactly 32 hidden layers.",
+              "text": "It removes momentum entirely",
               "correct": false
             },
             {
               "id": "c",
-              "text": "The model will be retrained 32 times.",
-              "correct": false
-            },
-            {
-              "id": "d",
-              "text": "The weights are multiplied by 32.",
+              "text": "It uses a much bigger learning rate by default",
               "correct": false
             }
           ],
-          "explain": "Correct! Batch size determines how many training examples are processed together in parallel."
+          "explain": "Correct! AdamW's core change is decoupling weight decay from the adaptive update — everything else about Adam stays the same."
         },
         {
           "id": "p2",
           "type": "true_false",
           "xp": 2,
-          "prompt": "True or false: Stacking rows into a batch causes different customers' data features to mix together, corrupting individual predictions.",
+          "prompt": "True or false: Weight decay is a regularization technique that gently shrinks weights toward zero on every update, to help prevent overfitting.",
           "options": [
             {
               "id": "t",
               "text": "True",
-              "correct": false
+              "correct": true
             },
             {
               "id": "f",
               "text": "False",
-              "correct": true
+              "correct": false
             }
           ],
-          "explain": "False! Matrix math keeps rows mathematically independent; they are only grouped for parallel computation speed."
+          "explain": "True! Weight decay nudges every weight slightly smaller each step so the network doesn't lean too heavily on any one weight."
         },
         {
           "id": "p3",
           "type": "fill_blank",
           "xp": 2,
           "prompt": "Complete the sentence:",
-          "sentence": "Batch processing is designed to maximize the parallel efficiency of computer chips like ___.",
-          "blank": "GPUs",
+          "sentence": "AdamW ___ weight decay from Adam's main adaptive gradient update, applying it as a separate step.",
+          "blank": "decouples",
           "words": [
-            "GPUs",
-            "hard drives",
-            "sensors"
+            "decouples",
+            "doubles",
+            "deletes"
           ],
-          "explain": "GPUs are built for parallel matrix math, making batch processing highly efficient."
+          "explain": "\"Decouples\" means separating weight decay into its own clean step, instead of mixing it into the adaptive-rate math."
         },
         {
           "id": "p4",
           "type": "spot_the_ai",
           "xp": 2,
-          "prompt": "A model has a batch size of 64. If we have 640 total training rows, how many batch forward passes are needed to process all the data once?",
+          "prompt": "You're training a large transformer model and want strong regularization that generalizes well to new data, without weight decay getting tangled up in Adam's per-parameter adaptive rates. Which optimizer is the standard choice?",
           "options": [
             {
               "id": "a",
-              "text": "10, because 640 / 64 = 10.",
+              "text": "AdamW",
               "correct": true
             },
             {
               "id": "b",
-              "text": "640, because each row is processed individually.",
+              "text": "Plain Adam",
               "correct": false
             },
             {
               "id": "c",
-              "text": "1, because all data is processed at once.",
+              "text": "AdaGrad",
               "correct": false
             }
           ],
-          "explain": "Correct! 10 separate batches of 64 rows will cover all 640 training rows."
+          "explain": "AdamW's decoupled weight decay is exactly why it's the standard for training large modern models."
         }
       ]
     },
@@ -191,30 +186,30 @@
           "id": "b1",
           "type": "multiple_choice",
           "xp": 5,
-          "prompt": "You are training a deep network on a large image dataset. You change your batch size from 1 to 64. What is the impact on training speed and memory usage on your GPU?",
+          "prompt": "A researcher notices that plain Adam's built-in weight decay interacts unpredictably with its adaptive per-parameter learning rates, sometimes over- or under-shrinking certain weights. Which optimizer directly fixes this by separating weight decay from the adaptive gradient update, and why has it become a standard default for training large modern models?",
           "options": [
             {
               "id": "a",
-              "text": "Training speed increases significantly because the GPU processes 64 images in parallel, but GPU memory usage increases because more data is held in RAM at once.",
+              "text": "AdamW, because it decouples weight decay into its own clean step instead of tangling it with adaptive scaling, which measurably improves generalization",
               "correct": true
             },
             {
               "id": "b",
-              "text": "Training runs slower because 64 images take longer to upload than 1.",
+              "text": "RMSprop, because it has no weight decay at all",
               "correct": false
             },
             {
               "id": "c",
-              "text": "GPU memory usage drops to zero because of the batching structure.",
+              "text": "Plain SGD, because it uses one shared learning rate",
               "correct": false
             },
             {
               "id": "d",
-              "text": "There is no difference in speed or memory usage.",
+              "text": "AdaGrad, because it accumulates every past gradient",
               "correct": false
             }
           ],
-          "explain": "Exactly! Batching leverages the GPU's parallel cores to speed up training, but stacking more rows requires more active memory to hold the intermediate activations. Next, let's trace a full forward pass from start to finish on a real classification task!"
+          "explain": "Exactly right! You've now met the full optimizer family: SGD, Momentum, Nesterov, AdaGrad, RMSprop, Adam, and AdamW. Next up: the final lesson — a decision matrix for choosing the right one for any given job."
         }
       ]
     }

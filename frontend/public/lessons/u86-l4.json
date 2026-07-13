@@ -1,0 +1,222 @@
+{
+  "id": "u86-l4",
+  "unit": 86,
+  "day": 434,
+  "tier": "Practical Deep Learning",
+  "tierIcon": "🖥️",
+  "title": "Data Parallel vs. Model Parallel",
+  "icon": "📦",
+  "concept": "Data parallel training copies the whole model onto multiple devices and splits the data between them, while model parallel training splits one oversized model itself across devices when a single accelerator is not enough.",
+  "xp": 15,
+  "hearts": 3,
+  "estMinutes": 7,
+  "segments": [
+    {
+      "type": "warmup",
+      "exercises": [
+        {
+          "id": "w1",
+          "type": "multiple_choice",
+          "xp": 1,
+          "prompt": "Recap: What is the basic promise of distributed training?",
+          "options": [
+            {
+              "id": "a",
+              "text": "Several workers share the training job and then combine their learning.",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "One worker secretly trains many different models without coordination.",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "Communication between workers is never needed.",
+              "correct": false
+            }
+          ],
+          "explain": "Exactly. The next question is how the work is divided, because not all distributed setups split it in the same way."
+        }
+      ]
+    },
+    {
+      "type": "teach",
+      "cards": [
+        {
+          "kind": "hook",
+          "icon": "🍽️",
+          "title": "Same full kitchen in many rooms, or one long assembly line?",
+          "body": "There are two very different ways to scale a restaurant. You can copy the whole kitchen into several rooms and let each room serve different customers, or you can split one huge meal across stations where each station handles only part of the dish. Deep learning has an analogous choice."
+        },
+        {
+          "kind": "definition",
+          "icon": "📦",
+          "title": "Two common ways to spread the load",
+          "body": "In <strong>data parallelism</strong>, each device gets a full copy of the model but only part of the training batch. In <strong>model parallelism</strong>, the model itself is divided across devices because one accelerator cannot comfortably hold or compute the whole network alone."
+        },
+        {
+          "kind": "analogy",
+          "icon": "🏪",
+          "title": "Chain stores vs. factory stations",
+          "body": "Data parallelism is like opening several identical stores, each serving a different neighborhood with the same playbook. Model parallelism is like one giant factory line where one station cuts, another paints, and another packs because no single station can do the whole product alone."
+        },
+        {
+          "kind": "example",
+          "icon": "🧠",
+          "title": "A normal model vs. a giant model",
+          "body": "If a vision model fits easily on one GPU but training is slow, data parallelism is often the simpler choice: copy the model to several GPUs and split the batches. If a giant language model is too large for one GPU’s memory, model parallelism becomes useful because different layers or pieces must live on different devices."
+        },
+        {
+          "kind": "mythbust",
+          "icon": "⚠️",
+          "title": "Model parallelism is not automatically the “more advanced” winner",
+          "body": "A common myth is that model parallelism is always better because it sounds more powerful. In reality, it is often harder to engineer and coordinate. If the whole model already fits on each device, data parallelism is usually the simpler first option."
+        },
+        {
+          "kind": "visual",
+          "icon": "⚖️",
+          "title": "Copy the model or split the model",
+          "body": "The difference is whether the data is divided or the network itself is divided.",
+          "compare": {
+            "left": {
+              "emoji": "🧍🧍",
+              "tag": "Data parallel",
+              "text": "Full model copy on each device<br>Different batch slice per device<br>Great when one model already fits"
+            },
+            "right": {
+              "emoji": "🧩",
+              "tag": "Model parallel",
+              "text": "Single model spread across devices<br>Useful when one device cannot hold it all<br>Often more coordination-heavy"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "type": "practice",
+      "exercises": [
+        {
+          "id": "p1",
+          "type": "multiple_choice",
+          "xp": 2,
+          "prompt": "Which setup is the clearest example of data parallelism?",
+          "options": [
+            {
+              "id": "a",
+              "text": "Four GPUs each hold the full model and process different mini-batches before syncing updates.",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "One giant layer lives on GPU 1 and the next giant layer lives on GPU 2 because neither fits alone.",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "A team switches from images to text without changing hardware.",
+              "correct": false
+            },
+            {
+              "id": "d",
+              "text": "A model is compressed for a phone app.",
+              "correct": false
+            }
+          ],
+          "explain": "Correct. Data parallelism copies the same model to several devices and splits the data among them."
+        },
+        {
+          "id": "p2",
+          "type": "true_false",
+          "xp": 2,
+          "prompt": "True or false: Model parallelism is especially useful when the full network is too large for one device to hold comfortably.",
+          "options": [
+            {
+              "id": "t",
+              "text": "True",
+              "correct": true
+            },
+            {
+              "id": "f",
+              "text": "False",
+              "correct": false
+            }
+          ],
+          "explain": "True. That is one of the main reasons teams reach for model parallel approaches."
+        },
+        {
+          "id": "p3",
+          "type": "fill_blank",
+          "xp": 2,
+          "prompt": "Complete the sentence:",
+          "sentence": "When the full network already fits on each device, ___ parallelism is often the simpler starting point.",
+          "blank": "data",
+          "words": [
+            "data",
+            "model",
+            "symbolic"
+          ],
+          "explain": "Exactly. If the model fits, copying it across devices is often easier than slicing the model itself apart."
+        },
+        {
+          "id": "p4",
+          "type": "spot_the_ai",
+          "xp": 2,
+          "prompt": "Which scenario best matches model parallelism?",
+          "options": [
+            {
+              "id": "a",
+              "text": "A huge transformer is split across devices because one GPU cannot store all of its layers and activations alone.",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "Each GPU gets the same model and a different shard of the batch.",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "A team uses a smaller student model for deployment on a phone.",
+              "correct": false
+            }
+          ],
+          "explain": "Right. Model parallelism is about splitting the network itself, not just the data."
+        }
+      ]
+    },
+    {
+      "type": "boss",
+      "exercises": [
+        {
+          "id": "b1",
+          "type": "multiple_choice",
+          "xp": 5,
+          "prompt": "A team has two training problems. Model A fits on one GPU but is slow, while Model B is so large that no single GPU can hold it. Which scaling plan best matches those two cases?",
+          "options": [
+            {
+              "id": "a",
+              "text": "Use data parallelism for Model A and model parallelism for Model B.",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "Use model parallelism for Model A and single-CPU training for Model B.",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "Use data parallelism for both cases because model size never matters.",
+              "correct": false
+            },
+            {
+              "id": "d",
+              "text": "Avoid distributed methods because splitting work cannot help training.",
+              "correct": false
+            }
+          ],
+          "explain": "Exactly. If the model fits, data parallelism often solves the speed problem more simply. If the model does not fit, splitting the model itself becomes the key move."
+        }
+      ]
+    }
+  ]
+}
