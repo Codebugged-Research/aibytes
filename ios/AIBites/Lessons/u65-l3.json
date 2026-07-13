@@ -1,0 +1,222 @@
+{
+  "id": "u65-l3",
+  "unit": 65,
+  "day": 328,
+  "tier": "Training Deep Networks",
+  "tierIcon": "➡️",
+  "title": "Layer by Layer: Tracing a Single Prediction",
+  "icon": "🔍",
+  "concept": "To trace a forward pass, we calculate the weighted sum of inputs at a layer, apply the activation function, and pass those outputs as inputs to the next layer.",
+  "xp": 15,
+  "hearts": 3,
+  "estMinutes": 7,
+  "segments": [
+    {
+      "type": "warmup",
+      "exercises": [
+        {
+          "id": "w1",
+          "type": "multiple_choice",
+          "xp": 1,
+          "prompt": "Recap: What is a weight matrix?",
+          "options": [
+            {
+              "id": "a",
+              "text": "A grid of numbers representing all the weight connections in a layer.",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "A list of the network's prediction errors.",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "A special activation function.",
+              "correct": false
+            }
+          ],
+          "explain": "Correct! A weight matrix organizes all the layer's weights into a grid for parallel math."
+        }
+      ]
+    },
+    {
+      "type": "teach",
+      "cards": [
+        {
+          "kind": "hook",
+          "icon": "🔍",
+          "title": "Inside the black box",
+          "body": "If you open a neural network mid-prediction, what actually happens? It looks like a storm of numbers. But if we freeze time and look at just one path, we can trace the exact arithmetic that turns an input into a prediction. Let's do a hand-trace of a tiny network!"
+        },
+        {
+          "kind": "definition",
+          "icon": "🔍",
+          "title": "The Step-by-Step Trace",
+          "body": "A forward trace has 3 steps per layer: 1. **Receive inputs** (from the previous layer), 2. **Multiply and sum** (inputs * weights), 3. **Apply activation** (e.g. ReLU or Sigmoid). The final activation output becomes the input for the next layer."
+        },
+        {
+          "kind": "analogy",
+          "icon": "✉️",
+          "title": "The telephone game",
+          "body": "Tracing forward propagation is like the game of telephone. Person 1 whispers a message (input) to Person 2. Person 2 interprets it, adds their own spin (weights), translates it (activation), and whispers the new message forward to Person 3. The message is modified at each station but only ever moves forward."
+        },
+        {
+          "kind": "example",
+          "icon": "📊",
+          "title": "A numeric walkthrough",
+          "body": "Input is `[2.0]`. It connects to a hidden neuron with weight `[3.0]`. 1. Weighted sum: `2.0 * 3.0 = 6.0`. 2. Apply ReLU activation: since 6.0 is positive, the output is `6.0`. This output `6.0` is now passed forward as the input to the next layer."
+        },
+        {
+          "kind": "mythbust",
+          "icon": "⚠️",
+          "title": "Bias is just a special input",
+          "body": "You might wonder how 'bias' fits into this trace. In every layer, we add a bias term (a constant offset) to the weighted sum before the activation function. Conceptually, bias is like a weight connected to an input that is always exactly `1`, shifting the activation threshold up or down."
+        },
+        {
+          "kind": "visual",
+          "icon": "⚖️",
+          "title": "One Neuron's Math",
+          "body": "The calculations inside a single neuron:",
+          "compare": {
+            "left": {
+              "emoji": "🧮",
+              "tag": "Weighted Sum",
+              "text": "(Input 1 * Weight 1) + (Input 2 * Weight 2) + Bias.<br>e.g. (2 * 0.5) + (4 * 0.5) + 1 = 4.0."
+            },
+            "right": {
+              "emoji": "⚡",
+              "tag": "Activation Output",
+              "text": "Apply function to sum.<br>e.g. ReLU(4.0) = 4.0.<br>This value is sent to the next layer."
+            }
+          }
+        }
+      ]
+    },
+    {
+      "type": "practice",
+      "exercises": [
+        {
+          "id": "p1",
+          "type": "multiple_choice",
+          "xp": 2,
+          "prompt": "An input value of 4 connects to a neuron with a weight of 0.5 and a bias of 1. What is the weighted sum before activation?",
+          "options": [
+            {
+              "id": "a",
+              "text": "3.0, because (4 * 0.5) + 1 = 3.0.",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "2.0, because 4 * 0.5 = 2.0.",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "5.0, because 4 + 0.5 + 1 = 5.0.",
+              "correct": false
+            },
+            {
+              "id": "d",
+              "text": "0.0, due to threshold clipping.",
+              "correct": false
+            }
+          ],
+          "explain": "Correct! Weighted sum = (input * weight) + bias = (4 * 0.5) + 1 = 3.0."
+        },
+        {
+          "id": "p2",
+          "type": "true_false",
+          "xp": 2,
+          "prompt": "True or false: The output of a hidden layer's activation function is passed forward as the direct input to the next layer.",
+          "options": [
+            {
+              "id": "t",
+              "text": "True",
+              "correct": true
+            },
+            {
+              "id": "f",
+              "text": "False",
+              "correct": false
+            }
+          ],
+          "explain": "True! Each layer's activation outputs serve as the inputs for the succeeding layer."
+        },
+        {
+          "id": "p3",
+          "type": "fill_blank",
+          "xp": 2,
+          "prompt": "Complete the sentence:",
+          "sentence": "To calculate a neuron's activation, we apply the activation function to the weighted sum plus the ___ term.",
+          "blank": "bias",
+          "words": [
+            "bias",
+            "matrix",
+            "gradient"
+          ],
+          "explain": "The bias is added to the weighted sum of inputs before applying the activation function."
+        },
+        {
+          "id": "p4",
+          "type": "spot_the_ai",
+          "xp": 2,
+          "prompt": "An input of -2 connects to a neuron with weight 3 and bias 1. If we use a ReLU activation function, what is the final activation output?",
+          "options": [
+            {
+              "id": "a",
+              "text": "0.0, because the weighted sum is -5, and ReLU(-5) = 0.0.",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "-5.0, because ReLU preserves negative values.",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "1.0, because only the bias is returned.",
+              "correct": false
+            }
+          ],
+          "explain": "Correct! Weighted sum = (-2 * 3) + 1 = -5. Since -5 is negative, ReLU clips it to exactly 0.0."
+        }
+      ]
+    },
+    {
+      "type": "boss",
+      "exercises": [
+        {
+          "id": "b1",
+          "type": "multiple_choice",
+          "xp": 5,
+          "prompt": "A hidden neuron receives an input of 2 with weight 1.5, and bias -1. It uses a Sigmoid activation function. What is the activation output of this neuron, and what does it represent?",
+          "options": [
+            {
+              "id": "a",
+              "text": "Sigmoid(2.0) = 0.88; it represents a squashed activation value between 0 and 1 passed to the next layer.",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "Sigmoid(-1.0) = 0.27; it represents a negative loss value.",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "2.0, because Sigmoid has no effect on positive values.",
+              "correct": false
+            },
+            {
+              "id": "d",
+              "text": "0.0, because the bias was negative.",
+              "correct": false
+            }
+          ],
+          "explain": "Exactly! Weighted sum = (2 * 1.5) - 1 = 2.0. Sigmoid(2.0) squashes this to approximately 0.88, which is passed forward. Next, let's look at how we run this trace for many items at once using batches!"
+        }
+      ]
+    }
+  ]
+}

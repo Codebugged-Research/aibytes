@@ -1,0 +1,222 @@
+{
+  "id": "u66-l5",
+  "unit": 66,
+  "day": 335,
+  "tier": "Training Deep Networks",
+  "tierIcon": "🎯",
+  "title": "Label Smoothing: Softening Overconfident Targets",
+  "icon": "🫧",
+  "concept": "Label smoothing is a regularization technique that softens hard 0/1 target labels, preventing the model from becoming overconfident and improving generalization.",
+  "xp": 15,
+  "hearts": 3,
+  "estMinutes": 7,
+  "segments": [
+    {
+      "type": "warmup",
+      "exercises": [
+        {
+          "id": "w1",
+          "type": "multiple_choice",
+          "xp": 1,
+          "prompt": "Recap: What is the main issue with combining MSE loss with Sigmoid for classification?",
+          "options": [
+            {
+              "id": "a",
+              "text": "Gradients become extremely flat at the edges, stalling the training updates.",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "The loss can go below zero.",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "It can only be used for regression.",
+              "correct": false
+            }
+          ],
+          "explain": "Correct! Flattening gradients at the edges stalls model updates under MSE."
+        }
+      ]
+    },
+    {
+      "type": "teach",
+      "cards": [
+        {
+          "kind": "hook",
+          "icon": "🫧",
+          "title": "The know-it-all student",
+          "body": "Imagine a student who is so overconfident that they answer every question with 100% certainty, leaving zero room for doubt. If they make even a tiny mistake, they are completely blindsided. In deep learning, models trained on hard targets (100% correct / 0% wrong) can develop this same overconfidence, making them fragile on new data."
+        },
+        {
+          "kind": "definition",
+          "icon": "🫧",
+          "title": "Label Smoothing",
+          "body": "<strong>Label smoothing</strong> is a regularization technique that replaces 'hard' binary labels (exactly 0 or 1) with 'soft' labels. For example, a target of `1.0` becomes `0.9`, and the remaining `0.1` is distributed among the other classes. This prevents the model from pushing its weights to extremes to reach a perfect 100% confidence."
+        },
+        {
+          "kind": "analogy",
+          "icon": "🧭",
+          "title": "Leaving a little breathing room",
+          "body": "Think of training a model like teaching a student. Instead of saying 'This is 100% a cat, no questions asked,' you say 'This is 95% likely a cat, but there's a 5% chance it could be something else.' This encourages the student to keep their options open and learn general features, rather than memorizing the exact training photo."
+        },
+        {
+          "kind": "example",
+          "icon": "📊",
+          "title": "Soften the vector",
+          "body": "In a 3-class system (Cat, Dog, Bird), a Cat's hard label is `[1.0, 0.0, 0.0]`. With a label smoothing factor of 10% (0.1), we adjust the target: the correct class drops to **0.9**, and the remaining 0.1 is split among the other two classes, giving: `[0.9, 0.05, 0.05]`. The model is trained toward this soft target."
+        },
+        {
+          "kind": "mythbust",
+          "icon": "⚠️",
+          "title": "Softer targets don't make the model less accurate",
+          "body": "You might think training a model to be only 90% confident will make it worse on test data. In reality, preventing the model from chasing 100% confidence stops it from driving its weights to extreme, bloated values. This keeps the decision boundaries smooth, improving the model's accuracy on new, unseen data (generalization)."
+        },
+        {
+          "kind": "visual",
+          "icon": "⚖️",
+          "title": "Hard Labels vs. Smoothed Labels",
+          "body": "How target distributions are adjusted:",
+          "compare": {
+            "left": {
+              "emoji": "🎯",
+              "tag": "Hard Label (Default)",
+              "text": "Cat: 1.0, Dog: 0.0, Bird: 0.0.<br>Forces model to chase 100% confidence.<br>Can lead to overfitted, bloated weights."
+            },
+            "right": {
+              "emoji": "🫧",
+              "tag": "Smoothed Label",
+              "text": "Cat: 0.9, Dog: 0.05, Bird: 0.05.<br>Encourages reasonable confidence.<br>Improves generalization."
+            }
+          }
+        }
+      ]
+    },
+    {
+      "type": "practice",
+      "exercises": [
+        {
+          "id": "p1",
+          "type": "multiple_choice",
+          "xp": 2,
+          "prompt": "What is the goal of label smoothing?",
+          "options": [
+            {
+              "id": "a",
+              "text": "To prevent the model from becoming overconfident by training it on slightly softened target labels, improving generalization.",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "To automatically clean missing values in a database.",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "To compress the model weights file.",
+              "correct": false
+            },
+            {
+              "id": "d",
+              "text": "To change a classification task into a regression task.",
+              "correct": false
+            }
+          ],
+          "explain": "Correct! Label smoothing softens target labels to prevent overconfidence and overfitting."
+        },
+        {
+          "id": "p2",
+          "type": "true_false",
+          "xp": 2,
+          "prompt": "True or false: Label smoothing works by changing a hard target label of 1.0 into a slightly lower value like 0.9, and distributing the difference to other classes.",
+          "options": [
+            {
+              "id": "t",
+              "text": "True",
+              "correct": true
+            },
+            {
+              "id": "f",
+              "text": "False",
+              "correct": false
+            }
+          ],
+          "explain": "True! It takes a small fraction of the target probability and spreads it across the incorrect classes."
+        },
+        {
+          "id": "p3",
+          "type": "fill_blank",
+          "xp": 2,
+          "prompt": "Complete the sentence:",
+          "sentence": "Label smoothing is a ___ technique used to reduce overfitting and improve a model's score on test data.",
+          "blank": "regularization",
+          "words": [
+            "regularization",
+            "imputation",
+            "optimization"
+          ],
+          "explain": "Regularization techniques are designed to prevent overfitting and improve generalization."
+        },
+        {
+          "id": "p4",
+          "type": "spot_the_ai",
+          "xp": 2,
+          "prompt": "Given a 2-class dataset (Spam, Inbox), what is the smoothed target vector for a Spam email if we use a 10% smoothing factor?",
+          "options": [
+            {
+              "id": "a",
+              "text": "[Spam: 0.95, Inbox: 0.05]",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "[Spam: 0.90, Inbox: 0.10]",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "[Spam: 1.0, Inbox: 0.0]",
+              "correct": false
+            }
+          ],
+          "explain": "Correct! A 10% smoothing factor takes 0.1 from the total and splits it: 0.05 is taken from the 1.0 (leaving 0.95) and 0.05 is added to the 0.0 (giving 0.05)."
+        }
+      ]
+    },
+    {
+      "type": "boss",
+      "exercises": [
+        {
+          "id": "b1",
+          "type": "multiple_choice",
+          "xp": 5,
+          "prompt": "You train a classification model on hard labels [1, 0]. The model overfits, predicting with 99.999% confidence on training data but failing on new test data. You apply label smoothing, setting the target to [0.95, 0.05]. What happens to the model?",
+          "options": [
+            {
+              "id": "a",
+              "text": "The model is discouraged from pushing its weights to extremes to reach 100% confidence, resulting in a more robust model that generalizes better to the test data.",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "The model's accuracy drops to zero because it is no longer allowed to be correct.",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "The model converted itself to a linear regression model.",
+              "correct": false
+            },
+            {
+              "id": "d",
+              "text": "The validation set is automatically deleted.",
+              "correct": false
+            }
+          ],
+          "explain": "Exactly! By softening the target, we stop the model from chasing absolute certainty, which prevents weight bloating and improves test accuracy. Congratulations on completing the Loss Functions for Classification unit! Next, let's explore loss functions for regression and advanced tasks!"
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,222 @@
+{
+  "id": "u67-l5",
+  "unit": 67,
+  "day": 340,
+  "tier": "Training Deep Networks",
+  "tierIcon": "📐",
+  "title": "Choosing a Loss Function: A Decision Matrix",
+  "icon": "⚖️",
+  "concept": "Choosing the correct loss function depends entirely on the model's task type — classification (cross-entropy), regression (MSE/MAE/Huber), or distribution matching (KL divergence).",
+  "xp": 15,
+  "hearts": 3,
+  "estMinutes": 7,
+  "segments": [
+    {
+      "type": "warmup",
+      "exercises": [
+        {
+          "id": "w1",
+          "type": "multiple_choice",
+          "xp": 1,
+          "prompt": "Recap: What is multi-task learning?",
+          "options": [
+            {
+              "id": "a",
+              "text": "Training a single model to perform multiple distinct prediction tasks from the same input.",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "Running grid search in parallel across multiple machines.",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "Encoding text columns using bag-of-words.",
+              "correct": false
+            }
+          ],
+          "explain": "Correct! Multi-task learning trains one network to predict multiple different outputs."
+        }
+      ]
+    },
+    {
+      "type": "teach",
+      "cards": [
+        {
+          "kind": "hook",
+          "icon": "⚖️",
+          "title": "The right tool for the job",
+          "body": "You wouldn't use a hammer to turn a screw, or a saw to drive a nail. Similarly, matching the wrong loss function to a task can stall your neural network completely. This lesson is a complete lookup guide to ensure you always select the right training engine."
+        },
+        {
+          "kind": "definition",
+          "icon": "⚖️",
+          "title": "The Loss Decision Matrix",
+          "body": "To choose a loss function, identify the task: 1. **Binary Classification** -> Binary Cross-Entropy, 2. **Multi-Class Classification** -> Categorical Cross-Entropy, 3. **Regression (No Outliers)** -> MSE, 4. **Regression (Outliers)** -> MAE or Huber, 5. **Distribution Matching** -> KL Divergence."
+        },
+        {
+          "kind": "analogy",
+          "icon": "🧭",
+          "title": "A guide for different journeys",
+          "body": "Selecting a loss is like choosing a navigation tool. If you are sailing a boat (classification probability), you need a compass (cross-entropy). If you are measuring distance on foot (regression value), you need a pedometer (MSE). If the terrain is extremely rocky (outliers), you need a specialized off-road tracker (Huber Loss)."
+        },
+        {
+          "kind": "example",
+          "icon": "📦",
+          "title": "Real-world pairings",
+          "body": "- **Email Spam Filter**: Output is 0 or 1. Use **Binary Cross-Entropy** (paired with Sigmoid). - **Weather Temperature Forecast**: Output is a number. Use **MSE** or **Huber** (paired with linear output). - **Digit Classifier (0-9)**: Output is one of 10 categories. Use **Categorical Cross-Entropy** (paired with Softmax)."
+        },
+        {
+          "kind": "mythbust",
+          "icon": "⚠️",
+          "title": "The activation function must match the loss",
+          "body": "It's a myth that loss functions work independently of the output layer. For example, Categorical Cross-Entropy math expects probabilities that sum to 100%, meaning it must be paired with a Softmax output. If you pair CCE with a Sigmoid output, the math breaks, leading to bad predictions."
+        },
+        {
+          "kind": "visual",
+          "icon": "⚖️",
+          "title": "Loss Function Decision Matrix",
+          "body": "Choosing the correct training engine:",
+          "compare": {
+            "left": {
+              "emoji": "🎯",
+              "tag": "Classification Tasks",
+              "text": "Binary -> Binary Cross-Entropy (with Sigmoid).<br>Multi-Class -> Categorical Cross-Entropy (with Softmax)."
+            },
+            "right": {
+              "emoji": "📐",
+              "tag": "Regression Tasks",
+              "text": "Normal -> Mean Squared Error (MSE).<br>Outliers -> MAE or Huber Loss."
+            }
+          }
+        }
+      ]
+    },
+    {
+      "type": "practice",
+      "exercises": [
+        {
+          "id": "p1",
+          "type": "multiple_choice",
+          "xp": 2,
+          "prompt": "Which loss function is the standard choice for multi-class classification (e.g. classifying dog, cat, or bird)?",
+          "options": [
+            {
+              "id": "a",
+              "text": "Categorical Cross-Entropy, paired with Softmax activation.",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "Binary Cross-Entropy, paired with Sigmoid activation.",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "Mean Squared Error (MSE), paired with ReLU activation.",
+              "correct": false
+            },
+            {
+              "id": "d",
+              "text": "KL Divergence, paired with linear output.",
+              "correct": false
+            }
+          ],
+          "explain": "Correct! Multi-class classification uses CCE loss paired with Softmax outputs."
+        },
+        {
+          "id": "p2",
+          "type": "true_false",
+          "xp": 2,
+          "prompt": "True or false: Huber Loss is a hybrid regression loss that behaves like MSE for small errors and MAE for large errors, making it ideal for outlier-heavy datasets.",
+          "options": [
+            {
+              "id": "t",
+              "text": "True",
+              "correct": true
+            },
+            {
+              "id": "f",
+              "text": "False",
+              "correct": false
+            }
+          ],
+          "explain": "True! Huber combines the precision of MSE with the robustness of MAE."
+        },
+        {
+          "id": "p3",
+          "type": "fill_blank",
+          "xp": 2,
+          "prompt": "Complete the sentence:",
+          "sentence": "A model predicting continuous housing prices should use ___ loss if the data has no major outliers.",
+          "blank": "MSE",
+          "words": [
+            "MSE",
+            "Binary Cross-Entropy",
+            "Softmax"
+          ],
+          "explain": "MSE is the standard loss for normal regression tasks."
+        },
+        {
+          "id": "p4",
+          "type": "spot_the_ai",
+          "xp": 2,
+          "prompt": "You are building a network to predict if a transaction is fraud (yes/no). What is the correct pairing of activation and loss function?",
+          "options": [
+            {
+              "id": "a",
+              "text": "Sigmoid activation at the output layer, paired with Binary Cross-Entropy loss.",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "Softmax activation at the output layer, paired with MSE loss.",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "ReLU activation at the output layer, paired with Categorical Cross-Entropy loss.",
+              "correct": false
+            }
+          ],
+          "explain": "Correct! Binary classification requires Sigmoid activation paired with BCE loss."
+        }
+      ]
+    },
+    {
+      "type": "boss",
+      "exercises": [
+        {
+          "id": "b1",
+          "type": "multiple_choice",
+          "xp": 5,
+          "prompt": "You build three deep networks: 1. Predicts temperature, 2. Classifies email (spam/not-spam), 3. Sorts customer complaints into 5 departments. Which loss functions fit each network?",
+          "options": [
+            {
+              "id": "a",
+              "text": "1: MSE, 2: Binary Cross-Entropy, 3: Categorical Cross-Entropy.",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "1: Categorical Cross-Entropy, 2: MSE, 3: Binary Cross-Entropy.",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "1: Binary Cross-Entropy, 2: Categorical Cross-Entropy, 3: MSE.",
+              "correct": false
+            },
+            {
+              "id": "d",
+              "text": "All three should use Huber Loss.",
+              "correct": false
+            }
+          ],
+          "explain": "Exactly! 1 is regression (MSE), 2 is binary classification (BCE), and 3 is multi-class classification (CCE). Congratulations on completing the Loss Functions unit! Next, let's explore the vocabulary of the training loop: epochs, batches, and iterations!"
+        }
+      ]
+    }
+  ]
+}

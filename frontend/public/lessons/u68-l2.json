@@ -1,0 +1,222 @@
+{
+  "id": "u68-l2",
+  "unit": 68,
+  "day": 342,
+  "tier": "The Training Loop",
+  "tierIcon": "🔄",
+  "title": "Batch Size Tradeoffs: Small vs. Large",
+  "icon": "⚖️",
+  "concept": "Choosing a batch size involves a critical tradeoff — large batches are faster and yield stable gradients but use more GPU memory, while small batches introduce noise that can help escape local minima.",
+  "xp": 15,
+  "hearts": 3,
+  "estMinutes": 7,
+  "segments": [
+    {
+      "type": "warmup",
+      "exercises": [
+        {
+          "id": "w1",
+          "type": "multiple_choice",
+          "xp": 1,
+          "prompt": "Recap: What is the difference between an epoch and an iteration?",
+          "options": [
+            {
+              "id": "a",
+              "text": "An epoch is a pass over the entire dataset; an iteration is a pass over a single batch.",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "An epoch only happens during testing.",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "Iterations are only used for regression.",
+              "correct": false
+            }
+          ],
+          "explain": "Correct! Epoch = full dataset; Iteration = one batch."
+        }
+      ]
+    },
+    {
+      "type": "teach",
+      "cards": [
+        {
+          "kind": "hook",
+          "icon": "⚖️",
+          "title": "The team project size",
+          "body": "If you assign a task to a group of 3 people, they coordinate quickly, but their work is noisy and carries individual bias (small batch). If you assign it to a group of 1,000 people, they produce a very stable, averaged result, but coordinating them uses massive room space and resources (large batch). Choosing a batch size is this exact tradeoff."
+        },
+        {
+          "kind": "definition",
+          "icon": "⚖️",
+          "title": "The Batch Tradeoff",
+          "body": "- **Large Batches** (e.g. 256 or 512 rows) produce a very stable average gradient, making learning smooth, and maximize GPU parallel hardware. However, they use more active GPU memory. - **Small Batches** (e.g. 16 or 32 rows) are noisy, but this noise can help the optimizer jump out of shallow local minima. They use very little memory."
+        },
+        {
+          "kind": "analogy",
+          "icon": "🏒",
+          "title": "A smooth slide vs. a bumpy ride",
+          "body": "A large batch is like sliding down a smooth, icy slope: you move in a clean, predictable line directly to the bottom. A small batch is like riding a mountain bike down a bumpy dirt trail: you bounce left and right. While bumpy, those bounces can actually help you hop over small rocks (shallow plateaus) that would stop the smooth slide."
+        },
+        {
+          "kind": "example",
+          "icon": "📊",
+          "title": "Standard batch sizes",
+          "body": "Common batch sizes are powers of 2 (16, 32, 64, 128, 256) because computer memory is structured in binary blocks. A team with a high-end GPU might use 256 to speed up training, while a developer on a laptop might drop to 32 to avoid 'Out of Memory' crashes."
+        },
+        {
+          "kind": "mythbust",
+          "icon": "⚠️",
+          "title": "Larger isn't always better for final accuracy",
+          "body": "You might assume a batch size of 4,096 is the best because it calculates the cleanest average gradient. In practice, models trained on extremely large batch sizes often generalize *worse* on new test data because the smooth updates lack the noise needed to escape poor local minima during training."
+        },
+        {
+          "kind": "visual",
+          "icon": "⚖️",
+          "title": "Small vs. Large Batch Sizes",
+          "body": "Comparing the two training styles:",
+          "compare": {
+            "left": {
+              "emoji": "🚗",
+              "tag": "Small Batch (e.g. 16)",
+              "text": "Noisy gradient updates.<br>Helps escape local minima.<br>Low GPU memory usage."
+            },
+            "right": {
+              "emoji": "🚌",
+              "tag": "Large Batch (e.g. 256)",
+              "text": "Stable gradient updates.<br>Faster parallel hardware speed.<br>High GPU memory usage."
+            }
+          }
+        }
+      ]
+    },
+    {
+      "type": "practice",
+      "exercises": [
+        {
+          "id": "p1",
+          "type": "multiple_choice",
+          "xp": 2,
+          "prompt": "What is a disadvantage of using an extremely large batch size (like 4,096)?",
+          "options": [
+            {
+              "id": "a",
+              "text": "It requires high GPU memory and can lead to worse generalization because updates lack the noise needed to escape poor local minima.",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "It makes training run much slower on parallel hardware.",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "It causes the model weights file to become corrupted.",
+              "correct": false
+            },
+            {
+              "id": "d",
+              "text": "It can only be used on binary classification tasks.",
+              "correct": false
+            }
+          ],
+          "explain": "Correct! Large batches demand high memory and lack helpful noise, which can hurt generalization."
+        },
+        {
+          "id": "p2",
+          "type": "true_false",
+          "xp": 2,
+          "prompt": "True or false: Small batch sizes (like 16 or 32) are generally preferred when you want to minimize GPU active memory usage.",
+          "options": [
+            {
+              "id": "t",
+              "text": "True",
+              "correct": true
+            },
+            {
+              "id": "f",
+              "text": "False",
+              "correct": false
+            }
+          ],
+          "explain": "True! Small batches process fewer rows at once, keeping the memory footprint low."
+        },
+        {
+          "id": "p3",
+          "type": "fill_blank",
+          "xp": 2,
+          "prompt": "Complete the sentence:",
+          "sentence": "Because computer memory is structured in binary blocks, batch sizes are typically set as powers of ___.",
+          "blank": "2",
+          "words": [
+            "2",
+            "10",
+            "5"
+          ],
+          "explain": "Powers of 2 (16, 32, 64, 128, etc.) maximize memory alignment and speed on computer chips."
+        },
+        {
+          "id": "p4",
+          "type": "spot_the_ai",
+          "xp": 2,
+          "prompt": "Which of these is a benefit of the 'noisy' gradients produced by small batch sizes?",
+          "options": [
+            {
+              "id": "a",
+              "text": "The noise can help the optimizer bounce out of shallow, poor local minima in the loss landscape.",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "The noise automatically increases the training accuracy to 100%.",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "The noise makes predictions run faster in production.",
+              "correct": false
+            }
+          ],
+          "explain": "Correct! The random variance in small batches helps models navigate complex loss landscapes."
+        }
+      ]
+    },
+    {
+      "type": "boss",
+      "exercises": [
+        {
+          "id": "b1",
+          "type": "multiple_choice",
+          "xp": 5,
+          "prompt": "A developer training a large image classifier gets an error: 'RuntimeError: CUDA out of memory.' What change should they make to resolve this, and what is the trade-off?",
+          "options": [
+            {
+              "id": "a",
+              "text": "Decrease the batch size (e.g. from 128 to 32); this reduces active GPU memory usage but makes training take more total iterations per epoch.",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "Increase the batch size to 512 to speed up the memory clearing.",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "Switch from Cross-Entropy loss to MSE loss.",
+              "correct": false
+            },
+            {
+              "id": "d",
+              "text": "Double the number of hidden layers to absorb the memory.",
+              "correct": false
+            }
+          ],
+          "explain": "Exactly! Out-of-memory errors mean the GPU RAM is full. Lowering the batch size reduces the size of the stacked matrices in memory, resolving the error at the cost of running more steps per epoch. Next, let's learn why we must shuffle our data between these epochs!"
+        }
+      ]
+    }
+  ]
+}

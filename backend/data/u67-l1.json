@@ -1,0 +1,222 @@
+{
+  "id": "u67-l1",
+  "unit": 67,
+  "day": 336,
+  "tier": "Training Deep Networks",
+  "tierIcon": "📐",
+  "title": "MSE & MAE Revisited for Deep Networks",
+  "icon": "📐",
+  "concept": "Revisiting Mean Squared Error (MSE) and Mean Absolute Error (MAE) as loss functions that drive gradient updates in deep regression networks, where squared errors lead to stronger backpropagated signals.",
+  "xp": 15,
+  "hearts": 3,
+  "estMinutes": 7,
+  "segments": [
+    {
+      "type": "warmup",
+      "exercises": [
+        {
+          "id": "w1",
+          "type": "multiple_choice",
+          "xp": 1,
+          "prompt": "Recap: What is the main goal of label smoothing?",
+          "options": [
+            {
+              "id": "a",
+              "text": "To prevent model overconfidence by training on slightly softened target labels, improving test generalization.",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "To convert text classifications into Z-scores.",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "To prune the weakest branches of a decision tree.",
+              "correct": false
+            }
+          ],
+          "explain": "Correct! Label smoothing prevents overfitting by softening hard 0/1 targets."
+        }
+      ]
+    },
+    {
+      "type": "teach",
+      "cards": [
+        {
+          "kind": "hook",
+          "icon": "📐",
+          "title": "The weight of a mistake",
+          "body": "In classical ML, we used MSE and MAE to evaluate how well a line fit some points. In deep learning, these aren't just report cards — they are the engine. The way MSE squares mistakes vs. how MAE keeps them linear determines how hard the network's weights get pushed during backpropagation."
+        },
+        {
+          "kind": "definition",
+          "icon": "📐",
+          "title": "MSE & MAE as Gradient Engines",
+          "body": "For continuous predictions (regression), deep networks use **Mean Squared Error (MSE)** or **Mean Absolute Error (MAE)**. MSE squares the error ($Error^2$), meaning large mistakes generate exponentially larger gradient correction signals. MAE treats all errors proportionally ($|Error|$), generating a constant gradient signal regardless of mistake size."
+        },
+        {
+          "kind": "analogy",
+          "icon": "⚖️",
+          "title": "The strict boss vs. the steady reviewer",
+          "body": "Think of MSE like a boss who ignores tiny mistakes, but screams if you make a huge error — squaring the penalty to force you to fix it immediately. MAE is like a steady reviewer: they give the same level of correction for a small typo as they do for a large one, keeping feedback constant."
+        },
+        {
+          "kind": "example",
+          "icon": "📈",
+          "title": "Calculating the correction strength",
+          "body": "If the model's prediction is off by 4 units: - Under **MSE**, the squared error is $16$. The gradient correction signal is large, forcing the weights to adjust rapidly. - Under **MAE**, the absolute error is $4$. The gradient signal is constant, adjusting the weights at the same speed as if the error was only 1 unit."
+        },
+        {
+          "kind": "mythbust",
+          "icon": "⚠️",
+          "title": "MSE can be highly sensitive to outliers in DL",
+          "body": "You might assume MSE is always the best choice because it corrects large errors fast. In deep learning, if your training data has extreme outliers (noisy rows), MSE's squaring effect will force the network to warp its weights to fit those outliers, ruining normal predictions. MAE is much more robust here since it doesn't square errors."
+        },
+        {
+          "kind": "visual",
+          "icon": "⚖️",
+          "title": "MSE vs. MAE Gradient Behavior",
+          "body": "How mistake size affects weight correction signals:",
+          "compare": {
+            "left": {
+              "emoji": "💥",
+              "tag": "MSE (Squared)",
+              "text": "Large errors = massive gradients.<br>Small errors = tiny gradients.<br>Highly sensitive to outliers."
+            },
+            "right": {
+              "emoji": "📏",
+              "tag": "MAE (Absolute)",
+              "text": "Constant gradient strength.<br>Updates weights at a steady pace.<br>Robust to noisy outliers."
+            }
+          }
+        }
+      ]
+    },
+    {
+      "type": "practice",
+      "exercises": [
+        {
+          "id": "p1",
+          "type": "multiple_choice",
+          "xp": 2,
+          "prompt": "How does MSE behave differently from MAE when a deep network makes a large prediction error?",
+          "options": [
+            {
+              "id": "a",
+              "text": "MSE squares the error, generating an exponentially larger gradient update signal than MAE.",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "MSE ignores large errors and only corrects small ones.",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "MSE automatically clips the loss to 0.",
+              "correct": false
+            },
+            {
+              "id": "d",
+              "text": "MSE converts the regression task into a classification task.",
+              "correct": false
+            }
+          ],
+          "explain": "Correct! MSE squares the error, meaning large misses generate powerful gradient updates."
+        },
+        {
+          "id": "p2",
+          "type": "true_false",
+          "xp": 2,
+          "prompt": "True or false: MAE is generally preferred over MSE when your deep learning training dataset contains highly noisy outliers.",
+          "options": [
+            {
+              "id": "t",
+              "text": "True",
+              "correct": true
+            },
+            {
+              "id": "f",
+              "text": "False",
+              "correct": false
+            }
+          ],
+          "explain": "True! Since MAE doesn't square errors, it is robust to outliers and prevents them from warping the weights."
+        },
+        {
+          "id": "p3",
+          "type": "fill_blank",
+          "xp": 2,
+          "prompt": "Complete the sentence:",
+          "sentence": "Because MSE ___ the error, a single massive outlier can heavily distort the network's learned weights.",
+          "blank": "squares",
+          "words": [
+            "squares",
+            "standardizes",
+            "prunes"
+          ],
+          "explain": "MSE squares the error term, making it highly sensitive to large outliers."
+        },
+        {
+          "id": "p4",
+          "type": "spot_the_ai",
+          "xp": 2,
+          "prompt": "A model predicts a house price of $300k (true = $200k). What is the absolute error (MAE), and what is the squared error (MSE)?",
+          "options": [
+            {
+              "id": "a",
+              "text": "Absolute error = $100k; Squared error = 10,000,000,000.",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "Absolute error = $100; Squared error = $10,000.",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "Both values are $100k.",
+              "correct": false
+            }
+          ],
+          "explain": "Correct! Absolute error = |300,000 - 200,000| = 100,000. Squared error = 100,000^2 = 10,000,000,000."
+        }
+      ]
+    },
+    {
+      "type": "boss",
+      "exercises": [
+        {
+          "id": "b1",
+          "type": "multiple_choice",
+          "xp": 5,
+          "prompt": "You are training a deep network to estimate taxi trip durations. The dataset has some extreme outliers due to GPS glitches (e.g. 5-minute trips logged as 10 hours). Under MSE loss, the model's accuracy on normal trips is poor. What should you do?",
+          "options": [
+            {
+              "id": "a",
+              "text": "Switch to MAE loss, because its linear penalty is robust to the glitch outliers and prevents them from dominating weight updates.",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "Keep MSE loss but double the learning rate to bypass the outliers.",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "Switch to Binary Cross-Entropy loss.",
+              "correct": false
+            },
+            {
+              "id": "d",
+              "text": "Delete the model since outliers make deep learning impossible.",
+              "correct": false
+            }
+          ],
+          "explain": "Exactly! Outliers heavily distort MSE training due to the squaring effect. Switching to MAE ensures a steady, linear penalty, keeping normal predictions stable. Next, let's look at a loss function that combines the best of both worlds: Huber Loss!"
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,222 @@
+{
+  "id": "u65-l4",
+  "unit": 65,
+  "day": 329,
+  "tier": "Training Deep Networks",
+  "tierIcon": "➡️",
+  "title": "Batch Forward Passes: Processing Many Examples at Once",
+  "icon": "📦",
+  "concept": "A batch forward pass processes multiple training examples simultaneously in parallel using matrix operations, maximizing GPU efficiency.",
+  "xp": 15,
+  "hearts": 3,
+  "estMinutes": 7,
+  "segments": [
+    {
+      "type": "warmup",
+      "exercises": [
+        {
+          "id": "w1",
+          "type": "multiple_choice",
+          "xp": 1,
+          "prompt": "Recap: What is the correct order of operations inside a single neuron?",
+          "options": [
+            {
+              "id": "a",
+              "text": "Multiply inputs by weights, add bias, then apply activation function.",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "Apply activation function, multiply by weights, then add bias.",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "Add bias, apply activation function, then multiply by weights.",
+              "correct": false
+            }
+          ],
+          "explain": "Correct! We sum the weighted inputs plus bias, then apply the activation function."
+        }
+      ]
+    },
+    {
+      "type": "teach",
+      "cards": [
+        {
+          "kind": "hook",
+          "icon": "📦",
+          "title": "The post office sorting bins",
+          "body": "If a post office has 1,000 letters, and the mail carrier delivers them one-by-one to the destination, it takes all day. Instead, they pack 32 letters into a single crate and deliver them to the sorting machine together. Processing data in batches is how neural networks stay fast."
+        },
+        {
+          "kind": "definition",
+          "icon": "📦",
+          "title": "Batch Processing",
+          "body": "Instead of running forward propagation for one row of data at a time, we group multiple rows together into a **batch** (e.g. batch size of 32 or 64). The inputs are stacked into a larger matrix, allowing the GPU to compute predictions for the entire batch in parallel."
+        },
+        {
+          "kind": "analogy",
+          "icon": "🚌",
+          "title": "Taking the bus vs. individual cars",
+          "body": "Processing one row at a time is like 32 people driving 32 separate cars to the same office — high traffic, high overhead. Batch processing is like putting all 32 people on a single bus: they travel together, use one vehicle (one GPU calculation step), and arrive at the same time efficiently."
+        },
+        {
+          "kind": "example",
+          "icon": "📊",
+          "title": "Stacking the inputs",
+          "body": "If we predict house prices with 3 features, one house is a list: `[size, bedrooms, age]`. A batch of 32 houses is a grid with 32 rows and 3 columns. When we multiply this 32-by-3 input matrix by our 3-by-5 weight matrix, we get a 32-by-5 output matrix containing the hidden values for all 32 houses in one go."
+        },
+        {
+          "kind": "mythbust",
+          "icon": "⚠️",
+          "title": "Batches don't mix customer data",
+          "body": "You might worry that stacking rows into a batch means the model mixes up different customers' data. In matrix multiplication, the rows remain completely independent. The math computes each row's prediction separately; they are simply grouped in the same step to maximize hardware speed."
+        },
+        {
+          "kind": "visual",
+          "icon": "⚖️",
+          "title": "Single vs. Batch Forward Pass",
+          "body": "How data is fed into the model:",
+          "compare": {
+            "left": {
+              "emoji": "🚗",
+              "tag": "Single Pass (Batch Size = 1)",
+              "text": "One row of data processed.<br>Outputs one prediction.<br>High overhead per row."
+            },
+            "right": {
+              "emoji": "🚌",
+              "tag": "Batch Pass (Batch Size = 32)",
+              "text": "32 rows stacked as a matrix.<br>Outputs 32 predictions in parallel.<br>Low hardware overhead."
+            }
+          }
+        }
+      ]
+    },
+    {
+      "type": "practice",
+      "exercises": [
+        {
+          "id": "p1",
+          "type": "multiple_choice",
+          "xp": 2,
+          "prompt": "What does a batch size of 32 mean in a forward pass?",
+          "options": [
+            {
+              "id": "a",
+              "text": "32 training rows are stacked into a matrix and processed in parallel to compute 32 predictions.",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "The model has exactly 32 hidden layers.",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "The model will be retrained 32 times.",
+              "correct": false
+            },
+            {
+              "id": "d",
+              "text": "The weights are multiplied by 32.",
+              "correct": false
+            }
+          ],
+          "explain": "Correct! Batch size determines how many training examples are processed together in parallel."
+        },
+        {
+          "id": "p2",
+          "type": "true_false",
+          "xp": 2,
+          "prompt": "True or false: Stacking rows into a batch causes different customers' data features to mix together, corrupting individual predictions.",
+          "options": [
+            {
+              "id": "t",
+              "text": "True",
+              "correct": false
+            },
+            {
+              "id": "f",
+              "text": "False",
+              "correct": true
+            }
+          ],
+          "explain": "False! Matrix math keeps rows mathematically independent; they are only grouped for parallel computation speed."
+        },
+        {
+          "id": "p3",
+          "type": "fill_blank",
+          "xp": 2,
+          "prompt": "Complete the sentence:",
+          "sentence": "Batch processing is designed to maximize the parallel efficiency of computer chips like ___.",
+          "blank": "GPUs",
+          "words": [
+            "GPUs",
+            "hard drives",
+            "sensors"
+          ],
+          "explain": "GPUs are built for parallel matrix math, making batch processing highly efficient."
+        },
+        {
+          "id": "p4",
+          "type": "spot_the_ai",
+          "xp": 2,
+          "prompt": "A model has a batch size of 64. If we have 640 total training rows, how many batch forward passes are needed to process all the data once?",
+          "options": [
+            {
+              "id": "a",
+              "text": "10, because 640 / 64 = 10.",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "640, because each row is processed individually.",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "1, because all data is processed at once.",
+              "correct": false
+            }
+          ],
+          "explain": "Correct! 10 separate batches of 64 rows will cover all 640 training rows."
+        }
+      ]
+    },
+    {
+      "type": "boss",
+      "exercises": [
+        {
+          "id": "b1",
+          "type": "multiple_choice",
+          "xp": 5,
+          "prompt": "You are training a deep network on a large image dataset. You change your batch size from 1 to 64. What is the impact on training speed and memory usage on your GPU?",
+          "options": [
+            {
+              "id": "a",
+              "text": "Training speed increases significantly because the GPU processes 64 images in parallel, but GPU memory usage increases because more data is held in RAM at once.",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "Training runs slower because 64 images take longer to upload than 1.",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "GPU memory usage drops to zero because of the batching structure.",
+              "correct": false
+            },
+            {
+              "id": "d",
+              "text": "There is no difference in speed or memory usage.",
+              "correct": false
+            }
+          ],
+          "explain": "Exactly! Batching leverages the GPU's parallel cores to speed up training, but stacking more rows requires more active memory to hold the intermediate activations. Next, let's trace a full forward pass from start to finish on a real classification task!"
+        }
+      ]
+    }
+  ]
+}

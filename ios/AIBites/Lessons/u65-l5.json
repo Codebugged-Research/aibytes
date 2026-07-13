@@ -1,0 +1,222 @@
+{
+  "id": "u65-l5",
+  "unit": 65,
+  "day": 330,
+  "tier": "Training Deep Networks",
+  "tierIcon": "➡️",
+  "title": "From Raw Input to Final Output: A Full Trace",
+  "icon": "🏁",
+  "concept": "Tying together layers, weights, biases, and activation functions into a single continuous pipeline is the essence of a neural network's forward pass.",
+  "xp": 15,
+  "hearts": 3,
+  "estMinutes": 7,
+  "segments": [
+    {
+      "type": "warmup",
+      "exercises": [
+        {
+          "id": "w1",
+          "type": "multiple_choice",
+          "xp": 1,
+          "prompt": "Recap: What is a key tradeoff when increasing batch size?",
+          "options": [
+            {
+              "id": "a",
+              "text": "Faster training speed via parallel math, but higher active GPU memory usage.",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "Higher model accuracy, but more training errors.",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "Smaller model file size on disk.",
+              "correct": false
+            }
+          ],
+          "explain": "Correct! Stacking more rows increases parallel speed but demands more active GPU RAM."
+        }
+      ]
+    },
+    {
+      "type": "teach",
+      "cards": [
+        {
+          "kind": "hook",
+          "icon": "🏁",
+          "title": "The grand connection",
+          "body": "We have explored neurons, layers, matrix multiplication, biases, and activations. Now, let's watch them work together in a single, unified pipeline to solve a real task: predicting whether an image is a cat or a dog. Let's trace the flow!"
+        },
+        {
+          "kind": "definition",
+          "icon": "🏁",
+          "title": "The Complete Forward Pipeline",
+          "body": "The forward pass links the elements sequentially: 1. **Input Layer** loads features, 2. **Hidden Layer** multiplies inputs by weights, adds bias, and applies a non-linear activation (like ReLU), 3. **Output Layer** combines hidden values, adds output bias, and squashes to a probability (using Sigmoid)."
+        },
+        {
+          "kind": "analogy",
+          "icon": "🏗️",
+          "title": "Building a custom house",
+          "body": "Think of the forward pass like custom construction. Step 1: unload raw wood and steel (inputs). Step 2: cut and frame them into wall structures (hidden layer + ReLU). Step 3: paint and polish the final house to ready it for sale (output layer + Sigmoid). Every step depends on the structural outputs of the previous one."
+        },
+        {
+          "kind": "example",
+          "icon": "🐱",
+          "title": "The Cat Predictor",
+          "body": "An image enters. Input: `[1.0, 0.0]` (features like ears, whiskers). 1. Hidden Layer: weights and bias output a weighted sum of `1.5`. Applying ReLU gives `1.5`. 2. Output Layer: multiplies `1.5` by output weight, adding bias, giving `2.0`. Applying Sigmoid squashes `2.0` to `0.88`. Prediction: **88% probability it's a Cat**."
+        },
+        {
+          "kind": "mythbust",
+          "icon": "⚠️",
+          "title": "A prediction isn't a final decision",
+          "body": "You might assume that if the network outputs `0.88`, it has made a final decision. The forward pass only outputs raw probabilities. The application code around the model (or the loss function during training) must decide what to do with that score, such as applying a threshold (e.g. >0.5 means Cat)."
+        },
+        {
+          "kind": "visual",
+          "icon": "⚖️",
+          "title": "The Pipeline Flow",
+          "body": "Tracing the math from input to probability:",
+          "compare": {
+            "left": {
+              "emoji": "📥",
+              "tag": "Stage 1: Inputs & Hidden",
+              "text": "Raw features loaded.<br>Weighted sum + bias computed.<br>ReLU clips negatives to 0."
+            },
+            "right": {
+              "emoji": "📤",
+              "tag": "Stage 2: Output & Sigmoid",
+              "text": "Hidden values combined.<br>Output sum squashed by Sigmoid.<br>Returns final 0-to-1 probability."
+            }
+          }
+        }
+      ]
+    },
+    {
+      "type": "practice",
+      "exercises": [
+        {
+          "id": "p1",
+          "type": "multiple_choice",
+          "xp": 2,
+          "prompt": "What is the final step in a binary classification forward pass?",
+          "options": [
+            {
+              "id": "a",
+              "text": "Applying a squashing function like Sigmoid at the output layer to return a probability between 0 and 1.",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "Calculating the derivative of the weights.",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "Applying ReLU to clip all final outputs to 0.",
+              "correct": false
+            },
+            {
+              "id": "d",
+              "text": "Doubling the bias terms.",
+              "correct": false
+            }
+          ],
+          "explain": "Correct! The final step of a classification forward pass squashes the output sum to a 0-to-1 probability range."
+        },
+        {
+          "id": "p2",
+          "type": "true_false",
+          "xp": 2,
+          "prompt": "True or false: In a cat-prediction forward pass, the model updates its weights immediately if its final output probability is incorrect.",
+          "options": [
+            {
+              "id": "t",
+              "text": "True",
+              "correct": false
+            },
+            {
+              "id": "f",
+              "text": "False",
+              "correct": true
+            }
+          ],
+          "explain": "False! The forward pass only computes the prediction; measuring wrongness (loss) and updating weights (backpropagation) happen in separate later steps."
+        },
+        {
+          "id": "p3",
+          "type": "fill_blank",
+          "xp": 2,
+          "prompt": "Complete the sentence:",
+          "sentence": "The complete forward propagation workflow is a sequential ___ where each layer's output becomes the next layer's input.",
+          "blank": "pipeline",
+          "words": [
+            "pipeline",
+            "gradient",
+            "correlation"
+          ],
+          "explain": "The forward pass is a pipeline where data flows step-by-step from input to prediction."
+        },
+        {
+          "id": "p4",
+          "type": "spot_the_ai",
+          "xp": 2,
+          "prompt": "In our cat predictor trace, if the output layer sum before activation is -2.0, what is the output probability after Sigmoid squashing?",
+          "options": [
+            {
+              "id": "a",
+              "text": "0.12, because Sigmoid(-2.0) is approximately 0.12 (a low probability).",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "0.0, because Sigmoid clips all negative values to 0.",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "1.0, because the absolute value is used.",
+              "correct": false
+            }
+          ],
+          "explain": "Correct! Sigmoid squashes negative inputs to values close to 0 (Sigmoid(-2.0) ≈ 0.12), representing a 12% probability."
+        }
+      ]
+    },
+    {
+      "type": "boss",
+      "exercises": [
+        {
+          "id": "b1",
+          "type": "multiple_choice",
+          "xp": 5,
+          "prompt": "You trace a digit classifier. The input is a handwritten '3'. The model runs its forward pass: hidden layers extract lines, output layer combines them, and the final output node for '3' returns a probability of 0.95. What does this indicate about the forward propagation phase?",
+          "options": [
+            {
+              "id": "a",
+              "text": "The forward pass ran successfully, producing a 95% confidence prediction that the digit is a 3; no learning or weight adjustment has occurred yet.",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "The model has learned that the digit is a 3 and permanently locked its weights.",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "The forward pass was incorrect because it was not 100% accurate.",
+              "correct": false
+            },
+            {
+              "id": "d",
+              "text": "The activation functions collapsed because the score was high.",
+              "correct": false
+            }
+          ],
+          "explain": "Exactly! The forward pass completed its pipeline, returning a 95% confidence prediction — learning and updates are completely separate steps. Congratulations on completing the Forward Propagation unit! Next, let's explore how we measure 'how wrong' this prediction actually is using loss functions!"
+        }
+      ]
+    }
+  ]
+}

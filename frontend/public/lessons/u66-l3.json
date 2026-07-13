@@ -1,0 +1,222 @@
+{
+  "id": "u66-l3",
+  "unit": 66,
+  "day": 333,
+  "tier": "Training Deep Networks",
+  "tierIcon": "🎯",
+  "title": "Categorical Cross-Entropy: Measuring Multi-Class Wrongness",
+  "icon": "🎨",
+  "concept": "Categorical Cross-Entropy is the standard loss function for multi-class classification, comparing the model's Softmax probability distribution to the true one-hot label.",
+  "xp": 15,
+  "hearts": 3,
+  "estMinutes": 7,
+  "segments": [
+    {
+      "type": "warmup",
+      "exercises": [
+        {
+          "id": "w1",
+          "type": "multiple_choice",
+          "xp": 1,
+          "prompt": "Recap: What is the math scaling used by BCE to penalize confident wrong predictions?",
+          "options": [
+            {
+              "id": "a",
+              "text": "Logarithmic scaling, which makes the penalty grow exponentially as the prediction misses.",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "Linear scaling, which increases the penalty by a flat rate.",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "No scaling; all mistakes carry the same flat penalty.",
+              "correct": false
+            }
+          ],
+          "explain": "Correct! BCE uses log scaling to penalize confident wrong guesses exponentially."
+        }
+      ]
+    },
+    {
+      "type": "teach",
+      "cards": [
+        {
+          "kind": "hook",
+          "icon": "🎨",
+          "title": "Sorting a basket of fruit",
+          "body": "If you are sorting apples, bananas, and cherries, you can't just use a simple yes/no switch. You need a model that outputs three probabilities (e.g. 70% Apple, 20% Banana, 10% Cherry) and compares them to the true category. This is what Categorical Cross-Entropy does."
+        },
+        {
+          "kind": "definition",
+          "icon": "🎨",
+          "title": "Categorical Cross-Entropy (CCE)",
+          "body": "<strong>Categorical Cross-Entropy</strong> is the standard loss function for multi-class classification (predicting one of three or more distinct classes). It measures the difference between two probability distributions: the model's output scores (from Softmax) and the true categories (stored as one-hot vectors)."
+        },
+        {
+          "kind": "analogy",
+          "icon": "📊",
+          "title": "The distribution overlap",
+          "body": "Think of the true label as a perfect distribution: `[1.0, 0.0, 0.0]` (100% Apple). The model outputs: `[0.8, 0.1, 0.1]` (80% Apple). CCE measures how well the model's distribution overlaps with the target. If the model predicted `[0.05, 0.9, 0.05]` (only 5% Apple), the overlap is terrible, yielding a high CCE loss."
+        },
+        {
+          "kind": "example",
+          "icon": "🐶",
+          "title": "Evaluating a pet picture",
+          "body": "A picture is a Dog. True label (one-hot): `[Cat: 0, Dog: 1, Bird: 0]`. The model's Softmax output is: `[Cat: 0.1, Dog: 0.7, Bird: 0.2]`. CCE looks at the model's score for the correct class (Dog = 0.7) and calculates a moderate loss of **0.36**. If the Dog score was 0.01, CCE loss would spike to **4.6**."
+        },
+        {
+          "kind": "mythbust",
+          "icon": "⚠️",
+          "title": "CCE only cares about the correct class score",
+          "body": "You might assume CCE runs complex math on all output classes equally. In standard one-hot classification, because the incorrect classes have true labels of `0`, CCE math simplifies to looking *only* at the correct class's probability. It penalizes the model based on how far that one correct probability is from 1.0."
+        },
+        {
+          "kind": "visual",
+          "icon": "⚖️",
+          "title": "One-Hot vs. Prediction Distribution",
+          "body": "Comparing distributions in CCE:",
+          "compare": {
+            "left": {
+              "emoji": "🏷️",
+              "tag": "True Label (One-Hot)",
+              "text": "Apple: 1.0<br>Banana: 0.0<br>Cherry: 0.0"
+            },
+            "right": {
+              "emoji": "📊",
+              "tag": "Model Prediction",
+              "text": "Apple: 0.8 (loss calculated here)<br>Banana: 0.1<br>Cherry: 0.1"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "type": "practice",
+      "exercises": [
+        {
+          "id": "p1",
+          "type": "multiple_choice",
+          "xp": 2,
+          "prompt": "When is Categorical Cross-Entropy used as the loss function?",
+          "options": [
+            {
+              "id": "a",
+              "text": "In multi-class classification tasks where you want to sort data into one of three or more categories.",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "In simple binary classification with only two categories.",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "In regression tasks predicting house prices.",
+              "correct": false
+            },
+            {
+              "id": "d",
+              "text": "In unsupervised clustering models.",
+              "correct": false
+            }
+          ],
+          "explain": "Correct! CCE is the standard loss function for multi-class classification tasks."
+        },
+        {
+          "id": "p2",
+          "type": "true_false",
+          "xp": 2,
+          "prompt": "True or false: Under standard one-hot encoding, CCE loss evaluates the model based on how close its predicted probability for the *correct* class is to 1.0.",
+          "options": [
+            {
+              "id": "t",
+              "text": "True",
+              "correct": true
+            },
+            {
+              "id": "f",
+              "text": "False",
+              "correct": false
+            }
+          ],
+          "explain": "True! Since incorrect classes are multiplied by 0 in the math, CCE focuses on the correct class's score."
+        },
+        {
+          "id": "p3",
+          "type": "fill_blank",
+          "xp": 2,
+          "prompt": "Complete the sentence:",
+          "sentence": "To prepare a multi-class output layer for CCE loss, we apply the ___ activation function to turn raw scores into probabilities.",
+          "blank": "Softmax",
+          "words": [
+            "Softmax",
+            "Sigmoid",
+            "ReLU"
+          ],
+          "explain": "Softmax squashes a list of raw scores into a probability distribution that sums to 1.0, preparing it for CCE."
+        },
+        {
+          "id": "p4",
+          "type": "spot_the_ai",
+          "xp": 2,
+          "prompt": "A picture is a Cat. True labels: [Cat: 1, Dog: 0]. Model predicts: [Cat: 0.02, Dog: 0.98]. What is the CCE loss score, and why?",
+          "options": [
+            {
+              "id": "a",
+              "text": "Extremely high, because the correct class (Cat) received a very low probability score of 0.02.",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "Near zero, because the Dog score was very high.",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "Zero, because the model was confident in its guess.",
+              "correct": false
+            }
+          ],
+          "explain": "Correct! Since the correct class (Cat) only received a 2% score, the CCE loss is massive, triggering a strong correction signal."
+        }
+      ]
+    },
+    {
+      "type": "boss",
+      "exercises": [
+        {
+          "id": "b1",
+          "type": "multiple_choice",
+          "xp": 5,
+          "prompt": "A model classifies handwritten digits (0-9). For an image of a '3', the Softmax output is: `[score for 3: 0.90, other scores sum to 0.10]`. What is the CCE loss, and what does it tell the optimizer?",
+          "options": [
+            {
+              "id": "a",
+              "text": "The loss is very low (around 0.10) because the model assigned a high 90% probability to the correct digit; only small weight updates are needed.",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "The loss is infinite because the other classes were not 0.",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "The loss is high because 0.90 is not a perfect 1.0.",
+              "correct": false
+            },
+            {
+              "id": "d",
+              "text": "The weights are reset because the prediction was correct.",
+              "correct": false
+            }
+          ],
+          "explain": "Exactly! Since the correct class received a high score of 0.90, the CCE loss is low (approx. 0.10), indicating the model is mostly correct and only needs minor tuning. Next, let's explore why cross-entropy is preferred over MSE for classification tasks!"
+        }
+      ]
+    }
+  ]
+}
