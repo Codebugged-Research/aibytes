@@ -1,0 +1,217 @@
+{
+  "id": "u56-l3",
+  "unit": 56,
+  "day": 283,
+  "tier": "NLP Basics",
+  "tierIcon": "📝",
+  "title": "TF-IDF: Weighing Words by Importance",
+  "icon": "⚖️",
+  "concept": "TF-IDF (Term Frequency-Inverse Document Frequency) improves on plain word counts by downweighting extremely common words like 'the' and 'is' that appear everywhere and carry little meaning, while upweighting rare, distinctive words that actually signal what a document is about.",
+  "xp": 15,
+  "hearts": 3,
+  "estMinutes": 7,
+  "segments": [
+    {
+      "type": "warmup",
+      "exercises": [
+        {
+          "id": "w1",
+          "type": "multiple_choice",
+          "xp": 1,
+          "prompt": "Recap: What's the main weakness of a plain Bag of Words count vector?",
+          "options": [
+            {
+              "id": "a",
+              "text": "It treats every word count the same, even words like \"the\" that appear in almost every document",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "It can only count numbers, never words",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "It requires a photo of the document",
+              "correct": false
+            }
+          ],
+          "explain": "Right! Bag of Words just counts. It has no idea that \"the\" showing up 12 times means a lot less than \"viagra\" showing up once."
+        }
+      ]
+    },
+    {
+      "type": "teach",
+      "cards": [
+        {
+          "kind": "hook",
+          "icon": "🕵️",
+          "title": "\"the\" tells you nothing",
+          "body": "Almost every email you'll ever see — spam or safe — contains the word \"the\" a dozen times. Does counting \"the\" help a spam filter tell the two apart? Not even a little. But a rare word like \"winner\" showing up even once? That's a real clue."
+        },
+        {
+          "kind": "definition",
+          "icon": "⚖️",
+          "title": "What is TF-IDF?",
+          "body": "<strong>TF-IDF</strong> stands for <strong>Term Frequency-Inverse Document Frequency</strong>. It reweights every word count from Bag of Words: <strong>Term Frequency</strong> is how often a word appears in one document, while <strong>Inverse Document Frequency</strong> shrinks that weight down if the word also appears in tons of other documents. The result: common filler words get pushed toward zero, and rare, distinctive words get pushed up."
+        },
+        {
+          "kind": "analogy",
+          "icon": "🧥",
+          "title": "A red jacket in a sea of gray coats",
+          "body": "Picture a crowded platform where nearly everyone wears a gray coat — spotting one gray coat tells you nothing about who's who. But one person in a bright red jacket stands out instantly. Words that appear in almost every document are the gray coats. Rare words are the red jacket — the ones actually worth paying attention to."
+        },
+        {
+          "kind": "example",
+          "icon": "📨",
+          "title": "Reweighting a spam filter's vocabulary",
+          "body": "The word <code>\"the\"</code> shows up in nearly every email, spam or not, so TF-IDF pushes its weight down close to zero. The word <code>\"free\"</code> shows up disproportionately in spam, so TF-IDF pushes its weight up. Feed those reweighted vectors into the same Naive Bayes classifier from Unit 37, and it now leans on the words that actually separate spam from safe mail."
+        },
+        {
+          "kind": "mythbust",
+          "icon": "⚠️",
+          "title": "The most frequent word isn't always the most important one",
+          "body": "It's natural to assume the word that shows up the most in a document must be the key to what it's about. TF-IDF flips that instinct: a word that's frequent in one document but ALSO frequent across every other document — like \"the,\" \"is,\" or \"a\" — is treated as nearly worthless, precisely because it doesn't distinguish anything."
+        },
+        {
+          "kind": "visual",
+          "icon": "📊",
+          "title": "Word Count vs. TF-IDF Weight",
+          "body": "Same words, very different scores:",
+          "compare": {
+            "left": {
+              "emoji": "🔢",
+              "tag": "Plain Count",
+              "text": "\"the\": 12<br>\"free\": 3<br>Both look \"important\""
+            },
+            "right": {
+              "emoji": "⚖️",
+              "tag": "TF-IDF Weight",
+              "text": "\"the\": ~0.01<br>\"free\": high<br>Common word muted, rare word boosted"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "type": "practice",
+      "exercises": [
+        {
+          "id": "p1",
+          "type": "multiple_choice",
+          "xp": 2,
+          "prompt": "Across a huge collection of emails, which word would end up with the lowest TF-IDF weight?",
+          "options": [
+            {
+              "id": "a",
+              "text": "\"is\" — since it appears in nearly every single email",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "\"inheritance\" — since it appears in only a handful of scam emails",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "\"lottery\" — since it appears in only a few spam emails",
+              "correct": false
+            }
+          ],
+          "explain": "Right — \"is\" shows up almost everywhere, so its Inverse Document Frequency is tiny, dragging its overall TF-IDF weight down close to zero."
+        },
+        {
+          "id": "p2",
+          "type": "true_false",
+          "xp": 2,
+          "prompt": "True or false: TF-IDF gives a high weight to words that appear in almost every document in the collection.",
+          "options": [
+            {
+              "id": "t",
+              "text": "True",
+              "correct": false
+            },
+            {
+              "id": "f",
+              "text": "False",
+              "correct": true
+            }
+          ],
+          "explain": "False — that's exactly backwards. Words appearing in almost every document get downweighted, since they don't help distinguish one document from another."
+        },
+        {
+          "id": "p3",
+          "type": "fill_blank",
+          "xp": 2,
+          "prompt": "Complete the sentence:",
+          "sentence": "TF-IDF stands for Term Frequency-___ Document Frequency.",
+          "blank": "Inverse",
+          "words": [
+            "Inverse",
+            "Increased",
+            "Instant"
+          ],
+          "explain": "The Inverse Document Frequency part is what shrinks the weight of words that show up in too many documents to be useful."
+        },
+        {
+          "id": "p4",
+          "type": "spot_the_ai",
+          "xp": 2,
+          "prompt": "Which statement correctly describes what TF-IDF does?",
+          "options": [
+            {
+              "id": "a",
+              "text": "It keeps a word's raw count, but shrinks it if the word also shows up in most other documents, and boosts it if the word is rare and distinctive",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "It deletes every word that appears more than once in a document",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "It only works if every document is exactly the same length",
+              "correct": false
+            }
+          ],
+          "explain": "Exactly — TF-IDF is a reweighting of the raw Bag of Words counts, based on how distinctive each word is across the whole collection."
+        }
+      ]
+    },
+    {
+      "type": "boss",
+      "exercises": [
+        {
+          "id": "b1",
+          "type": "multiple_choice",
+          "xp": 2,
+          "prompt": "You're feeding text features into the Logistic Regression spam classifier from Unit 25. Why would swapping plain Bag of Words counts for TF-IDF weighted vectors likely improve its accuracy?",
+          "options": [
+            {
+              "id": "a",
+              "text": "Because TF-IDF mutes filler words like \"the\" and \"is\" that add noise, while emphasizing rare, distinctive words that actually signal spam — giving the classifier cleaner signal to learn from",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "Because TF-IDF makes every document exactly the same length",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "Because TF-IDF replaces Logistic Regression with a completely different algorithm",
+              "correct": false
+            },
+            {
+              "id": "d",
+              "text": "TF-IDF wouldn't make any difference at all",
+              "correct": false
+            }
+          ],
+          "explain": "Exactly! The classifier itself doesn't change — Logistic Regression is still Logistic Regression. But by handing it better-weighted features, you're making its job dramatically easier. Next up: making the words themselves even more useful before they're ever counted."
+        }
+      ]
+    }
+  ]
+}

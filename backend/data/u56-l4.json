@@ -1,0 +1,217 @@
+{
+  "id": "u56-l4",
+  "unit": 56,
+  "day": 284,
+  "tier": "NLP Basics",
+  "tierIcon": "📝",
+  "title": "N-Grams & Text Preprocessing",
+  "icon": "✂️",
+  "concept": "Preprocessing (lowercasing, removing punctuation, removing stopwords, and stemming or lemmatizing words to their root form) cleans up text before vectorizing, while N-grams group adjacent words like 'not good' into a single feature so a flip in meaning isn't lost the way plain Bag of Words would lose it.",
+  "xp": 15,
+  "hearts": 3,
+  "estMinutes": 7,
+  "segments": [
+    {
+      "type": "warmup",
+      "exercises": [
+        {
+          "id": "w1",
+          "type": "multiple_choice",
+          "xp": 1,
+          "prompt": "Recap: In TF-IDF, what happens to extremely common words like \"the\" and \"is\"?",
+          "options": [
+            {
+              "id": "a",
+              "text": "Their weight gets pushed down close to zero, since they don't distinguish one document from another",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "Their weight gets boosted, since they appear so often",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "They get deleted from the document entirely before any weighting happens",
+              "correct": false
+            }
+          ],
+          "explain": "Right! TF-IDF pushes common filler words toward zero. Today: cleaning up text even before that step, and fixing a sneaky blind spot word counts alone can't catch."
+        }
+      ]
+    },
+    {
+      "type": "teach",
+      "cards": [
+        {
+          "kind": "hook",
+          "icon": "🎬",
+          "title": "\"Not good\" vs. \"good\"",
+          "body": "A review says <code>\"This movie was NOT good.\"</code> A Bag of Words vector just counts \"not\" once and \"good\" once — the same two counts you'd get from a review that only said \"good.\" The single word that flips the entire meaning gets completely lost."
+        },
+        {
+          "kind": "definition",
+          "icon": "🧹",
+          "title": "Preprocessing and N-grams",
+          "body": "<strong>Preprocessing</strong> cleans raw text before it's vectorized: lowercasing (so \"Great\" and \"great\" count as one word), stripping punctuation, removing <strong>stopwords</strong> (common filler like \"the,\" \"is,\" \"and\" that adds little signal), and <strong>stemming</strong> or <strong>lemmatization</strong> (chopping words down to a shared root, so \"running,\" \"runs,\" and \"ran\" all collapse into \"run\"). An <strong>N-gram</strong> then groups N adjacent words into a single feature — a 2-word <strong>bigram</strong> like \"not_good\" is kept together instead of being split apart."
+        },
+        {
+          "kind": "analogy",
+          "icon": "🏙️",
+          "title": "Splitting \"New York\" in half",
+          "body": "If you chopped the phrase \"New York\" into two separate words, \"New\" and \"York,\" you'd lose the city entirely — neither word alone means the same thing. That's exactly the problem with treating \"not\" and \"good\" as two unrelated words. An N-gram keeps tightly linked words glued together as one unit, the same way \"New York\" only makes sense as a pair."
+        },
+        {
+          "kind": "example",
+          "icon": "📝",
+          "title": "Cleaning a review, step by step",
+          "body": "Raw: <code>\"The movie was NOT very good!!!\"</code> Lowercase + strip punctuation: <code>\"the movie was not very good\"</code>. Remove stopwords: <code>\"movie not very good\"</code>. Now add bigrams alongside single words: <code>\"not_very\"</code> and <code>\"very_good\"</code> become their own features, so the classifier can finally see that \"not\" is attached to \"good\" — not floating free."
+        },
+        {
+          "kind": "mythbust",
+          "icon": "⚠️",
+          "title": "Word counts alone don't catch negation",
+          "body": "It's easy to assume that once you're counting words, sentiment is basically solved. In reality, a plain unigram (single-word) Bag of Words or TF-IDF vector treats \"not\" and \"good\" as two completely independent counts — it has no way to know \"not\" is standing right next to \"good\" and flipping it. Only grouping adjacent words together, as an N-gram does, fixes that."
+        },
+        {
+          "kind": "visual",
+          "icon": "🔗",
+          "title": "Unigrams vs. Bigrams",
+          "body": "Two words, kept apart or kept together:",
+          "compare": {
+            "left": {
+              "emoji": "✂️",
+              "tag": "Unigrams (N=1)",
+              "text": "\"not\", \"good\"<br>counted separately<br>meaning-flip is lost"
+            },
+            "right": {
+              "emoji": "🔗",
+              "tag": "Bigrams (N=2)",
+              "text": "\"not_good\"<br>kept as one feature<br>meaning-flip survives"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "type": "practice",
+      "exercises": [
+        {
+          "id": "p1",
+          "type": "multiple_choice",
+          "xp": 2,
+          "prompt": "What does stemming or lemmatization do to a word like \"running\"?",
+          "options": [
+            {
+              "id": "a",
+              "text": "Reduces it to a shared root form, like \"run\", so variants of the same word don't each get their own separate vocabulary entry",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "Translates it into a completely different language",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "Deletes it from the vocabulary entirely",
+              "correct": false
+            }
+          ],
+          "explain": "Right — stemming/lemmatization collapses word variants like \"running,\" \"runs,\" and \"ran\" down to one shared root, keeping the vocabulary from ballooning."
+        },
+        {
+          "id": "p2",
+          "type": "true_false",
+          "xp": 2,
+          "prompt": "True or false: Removing stopwords like \"the\" and \"is\" before vectorizing usually helps a classifier focus on more meaningful words.",
+          "options": [
+            {
+              "id": "t",
+              "text": "True",
+              "correct": true
+            },
+            {
+              "id": "f",
+              "text": "False",
+              "correct": false
+            }
+          ],
+          "explain": "True — stopwords add bulk without much signal, so clearing them out ahead of time gives the model a cleaner set of features to learn from."
+        },
+        {
+          "id": "p3",
+          "type": "fill_blank",
+          "xp": 2,
+          "prompt": "Complete the sentence:",
+          "sentence": "A sequence of two adjacent words treated as a single feature, like \"not_good\", is called a ___.",
+          "blank": "bigram",
+          "words": [
+            "bigram",
+            "vocabulary",
+            "stopword"
+          ],
+          "explain": "A bigram is an N-gram with N=2 — two adjacent words grouped together as one unit instead of being counted apart."
+        },
+        {
+          "id": "p4",
+          "type": "spot_the_ai",
+          "xp": 2,
+          "prompt": "Which choice best explains why a bigram like \"not_amazing\" captures more meaning than treating \"not\" and \"amazing\" as separate unigrams?",
+          "options": [
+            {
+              "id": "a",
+              "text": "Keeping the words glued together preserves the fact that \"not\" is directly flipping \"amazing\", which two separate counts can't show",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "Bigrams are always shorter than unigrams, so they're faster to compute",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "Bigrams remove the need for a vocabulary entirely",
+              "correct": false
+            }
+          ],
+          "explain": "Exactly — the whole value of an N-gram is that it keeps meaningfully linked words stuck together instead of scattering them into independent counts."
+        }
+      ]
+    },
+    {
+      "type": "boss",
+      "exercises": [
+        {
+          "id": "b1",
+          "type": "multiple_choice",
+          "xp": 2,
+          "prompt": "A review reads: \"the food was not amazing.\" Using only single-word (unigram) Bag of Words, a classifier would separately count \"not\" once and \"amazing\" once. Why might it mistakenly lean toward classifying this as a positive review, and how does adding bigrams fix that?",
+          "options": [
+            {
+              "id": "a",
+              "text": "\"Amazing\" alone looks positive to the unigram counts, but a bigram feature like \"not_amazing\" keeps the negation attached to the word it's flipping, letting the classifier see the true negative meaning",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "The classifier would correctly read this as negative even with unigrams alone, since it understands English grammar",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "Bigrams fix this by deleting the word \"amazing\" from the vocabulary entirely",
+              "correct": false
+            },
+            {
+              "id": "d",
+              "text": "This isn't actually a problem, since word order never matters for classification",
+              "correct": false
+            }
+          ],
+          "explain": "Exactly right! Unigrams see \"amazing\" and miss that \"not\" is standing right next to it. Bigrams catch what plain word counts can't. You now have every piece of the puzzle — time to put it all together into a real classifier."
+        }
+      ]
+    }
+  ]
+}
