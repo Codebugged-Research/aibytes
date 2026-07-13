@@ -1,0 +1,217 @@
+{
+  "id": "u64-l1",
+  "unit": 64,
+  "day": 321,
+  "tier": "Training Deep Networks",
+  "tierIcon": "🎯",
+  "title": "AdaGrad: Adapting Per-Parameter Learning Rates",
+  "icon": "📈",
+  "concept": "Instead of one global learning rate for all weights, AdaGrad gives each individual parameter its own learning rate that shrinks based on how much that parameter has already been updated — rarely-updated parameters keep taking bigger steps.",
+  "xp": 15,
+  "hearts": 3,
+  "estMinutes": 7,
+  "segments": [
+    {
+      "type": "warmup",
+      "exercises": [
+        {
+          "id": "w1",
+          "type": "multiple_choice",
+          "xp": 1,
+          "prompt": "Recap: what makes Nesterov Accelerated Gradient different from plain Momentum?",
+          "options": [
+            {
+              "id": "a",
+              "text": "It peeks ahead to where momentum is about to carry it, and corrects course from that lookahead point",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "It removes velocity entirely and uses only the raw gradient",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "It only works on the output layer",
+              "correct": false
+            }
+          ],
+          "explain": "Right — Nesterov looks ahead before computing its gradient. But Momentum and Nesterov both still use ONE shared learning rate for every weight in the network. What if different weights need different speeds?"
+        }
+      ]
+    },
+    {
+      "type": "teach",
+      "cards": [
+        {
+          "kind": "hook",
+          "icon": "🚰",
+          "title": "One learning rate doesn't fit all weights",
+          "body": "Some weights in a network get updated on almost every single training example — like a weight tied to a super common word. Others barely get touched — like a weight tied to a rare feature that shows up once in a thousand examples. Momentum and Nesterov still force ALL of these weights to share one identical learning rate. Is that fair?"
+        },
+        {
+          "kind": "definition",
+          "icon": "📈",
+          "title": "AdaGrad: adapting per-parameter learning rates",
+          "body": "<strong>AdaGrad</strong> (Adaptive Gradient) gives every individual parameter its OWN learning rate. It keeps a running total of how much each parameter has already been updated — the bigger that total, the more AdaGrad shrinks that parameter's learning rate. Parameters updated a lot get smaller steps; parameters rarely touched keep taking bigger steps."
+        },
+        {
+          "kind": "analogy",
+          "icon": "🎚️",
+          "title": "Adjustable faucets, not one master valve",
+          "body": "Plain SGD and Momentum are like a single master valve controlling water flow to every faucet in a building at once — turn it up, and EVERY faucet gets more pressure, whether it needs it or not. AdaGrad replaces that with a separate adjustable faucet for every single room, tuned to how much that room has already used."
+        },
+        {
+          "kind": "example",
+          "icon": "🔤",
+          "title": "Rare words vs. common words",
+          "body": "In a text model, the weight for the word <code>\"the\"</code> gets updated on almost every training example, so AdaGrad keeps shrinking its learning rate. The weight for the rare word <code>\"aardvark\"</code> gets updated only a handful of times, so AdaGrad keeps its learning rate large — giving that rare weight a real chance to learn something useful when it finally does appear."
+        },
+        {
+          "kind": "mythbust",
+          "icon": "⚠️",
+          "title": "It rescales the step size, not the direction",
+          "body": "It's tempting to think AdaGrad is a totally different way of finding which way to go. It isn't — AdaGrad still follows the exact same gradient direction as before. All it changes is how BIG each parameter's step is. And there's a catch: because AdaGrad keeps adding up every squared gradient since training began and never forgets any of it, each parameter's learning rate can only ever shrink — it never grows back."
+        },
+        {
+          "kind": "visual",
+          "icon": "⚖️",
+          "title": "One shared rate vs. many adjusted rates",
+          "body": "How the two approaches compare:",
+          "compare": {
+            "left": {
+              "emoji": "🏒",
+              "tag": "SGD / Momentum",
+              "text": "One shared learning rate<br>Same step size for every weight"
+            },
+            "right": {
+              "emoji": "📈",
+              "tag": "AdaGrad",
+              "text": "Each weight gets its own rate<br>Rare weights: bigger steps; frequent weights: smaller steps"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "type": "practice",
+      "exercises": [
+        {
+          "id": "p1",
+          "type": "multiple_choice",
+          "xp": 2,
+          "prompt": "What does AdaGrad track for each individual parameter in order to adjust its learning rate?",
+          "options": [
+            {
+              "id": "a",
+              "text": "A running total of that parameter's past squared gradients",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "The parameter's raw current value",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "How many total training examples exist",
+              "correct": false
+            }
+          ],
+          "explain": "Correct! AdaGrad accumulates each parameter's squared gradients over time and uses that running total to shrink its learning rate."
+        },
+        {
+          "id": "p2",
+          "type": "true_false",
+          "xp": 2,
+          "prompt": "True or false: AdaGrad uses the exact same learning rate for every parameter in the network, just like plain SGD.",
+          "options": [
+            {
+              "id": "t",
+              "text": "True",
+              "correct": false
+            },
+            {
+              "id": "f",
+              "text": "False",
+              "correct": true
+            }
+          ],
+          "explain": "False. AdaGrad's whole point is giving each individual parameter its own, separately adjusted learning rate."
+        },
+        {
+          "id": "p3",
+          "type": "fill_blank",
+          "xp": 2,
+          "prompt": "Complete the sentence:",
+          "sentence": "AdaGrad shrinks a parameter's learning rate based on how much that parameter has already been ___.",
+          "blank": "updated",
+          "words": [
+            "updated",
+            "initialized",
+            "copied"
+          ],
+          "explain": "AdaGrad accumulates a running total tied to how often (and how strongly) each parameter has been updated so far."
+        },
+        {
+          "id": "p4",
+          "type": "spot_the_ai",
+          "xp": 2,
+          "prompt": "A network has one weight connected to a rare feature seen in only 2% of examples, and another connected to a common feature seen in every example. Which optimizer automatically gives the rare-feature weight bigger updates and the common-feature weight smaller ones?",
+          "options": [
+            {
+              "id": "a",
+              "text": "AdaGrad",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "Plain SGD",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "Plain Momentum",
+              "correct": false
+            }
+          ],
+          "explain": "AdaGrad is built exactly for this: per-parameter learning rates that stay large for rarely-updated weights and shrink for frequently-updated ones."
+        }
+      ]
+    },
+    {
+      "type": "boss",
+      "exercises": [
+        {
+          "id": "b1",
+          "type": "multiple_choice",
+          "xp": 5,
+          "prompt": "In a text classifier, the word \"the\" appears in nearly every training example, while the word \"zeitgeist\" appears in only 3 out of 100,000 examples. Which optimizer property specifically helps make sure \"zeitgeist\" still gets a meaningful update instead of being drowned out by constant updates to \"the\"?",
+          "options": [
+            {
+              "id": "a",
+              "text": "AdaGrad's per-parameter learning rate, which shrinks for frequently-updated weights like \"the\" but stays larger for rarely-updated weights like \"zeitgeist\"",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "Momentum's velocity buildup",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "Simply using a bigger batch size",
+              "correct": false
+            },
+            {
+              "id": "d",
+              "text": "Switching from ReLU to Sigmoid",
+              "correct": false
+            }
+          ],
+          "explain": "Exactly right! AdaGrad's per-parameter rates are great for rare features — but there's a catch: because it accumulates EVERY squared gradient since training began, forever, its learning rates only ever shrink, and can eventually grind training to a near-halt. Next up: how RMSprop fixes that."
+        }
+      ]
+    }
+  ]
+}

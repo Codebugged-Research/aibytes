@@ -1,0 +1,217 @@
+{
+  "id": "u64-l2",
+  "unit": 64,
+  "day": 322,
+  "tier": "Training Deep Networks",
+  "tierIcon": "🎯",
+  "title": "RMSprop: Fixing AdaGrad's Decay Problem",
+  "icon": "🔋",
+  "concept": "AdaGrad's learning rates shrink so much over time that training can grind to a halt; RMSprop fixes this by using a moving average of RECENT gradients instead of accumulating every past gradient forever.",
+  "xp": 15,
+  "hearts": 3,
+  "estMinutes": 7,
+  "segments": [
+    {
+      "type": "warmup",
+      "exercises": [
+        {
+          "id": "w1",
+          "type": "multiple_choice",
+          "xp": 1,
+          "prompt": "Recap: what's the core idea behind AdaGrad's per-parameter learning rates?",
+          "options": [
+            {
+              "id": "a",
+              "text": "It accumulates a running total of each parameter's past squared gradients, and shrinks that parameter's rate the more it's been updated",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "It gives every parameter a completely random learning rate",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "It only adjusts the learning rate for the output layer",
+              "correct": false
+            }
+          ],
+          "explain": "Right — AdaGrad shrinks each parameter's rate based on its own accumulated squared gradients. But that accumulation NEVER stops growing. What happens after a very long training run?"
+        }
+      ]
+    },
+    {
+      "type": "teach",
+      "cards": [
+        {
+          "kind": "hook",
+          "icon": "🐌",
+          "title": "When learning grinds to a halt",
+          "body": "Imagine training a huge network with AdaGrad for a very long time. Early progress is great — rare weights get big, useful steps. But partway through training, weight updates start barely moving at all anymore, even though the model clearly hasn't finished learning. What went wrong?"
+        },
+        {
+          "kind": "definition",
+          "icon": "🔋",
+          "title": "RMSprop: a moving average instead of a running total",
+          "body": "<strong>RMSprop</strong> (Root Mean Square Propagation) tracks each parameter's squared gradients using a <em>moving average</em> that only remembers RECENT gradients, letting old ones gradually fade out — instead of AdaGrad's running total that adds up everything since the very beginning and never forgets."
+        },
+        {
+          "kind": "analogy",
+          "icon": "🌦️",
+          "title": "A 7-day forecast, not a year-to-date total",
+          "body": "AdaGrad is like tracking total rainfall for the entire year — the number only ever climbs, and one soggy January can make every dry summer month look irrelevant. RMSprop is like a 7-day weather average: it reflects RECENT conditions, so it stays useful no matter how long the year has gone on."
+        },
+        {
+          "kind": "example",
+          "icon": "🏋️",
+          "title": "Comparing training curves over time",
+          "body": "Watch step sizes over thousands of training steps: with AdaGrad, step sizes keep shrinking and shrinking until they're practically zero — training stalls. With RMSprop, step sizes level off at a usefully sized value and stay there, because old gradients keep fading out of its moving average instead of piling up forever."
+        },
+        {
+          "kind": "mythbust",
+          "icon": "⚠️",
+          "title": "RMSprop still gives per-parameter rates — it just doesn't freeze",
+          "body": "It's easy to assume RMSprop throws out AdaGrad's whole idea. It doesn't — RMSprop still gives every parameter its own individually scaled learning rate, exactly like AdaGrad. The ONLY change is swapping AdaGrad's ever-growing sum for a decaying moving average, so the learning rate never permanently freezes."
+        },
+        {
+          "kind": "visual",
+          "icon": "⚖️",
+          "title": "AdaGrad vs. RMSprop",
+          "body": "How the two compare:",
+          "compare": {
+            "left": {
+              "emoji": "📈",
+              "tag": "AdaGrad",
+              "text": "Accumulates ALL past squared gradients forever<br>Learning rate can shrink to near-zero"
+            },
+            "right": {
+              "emoji": "🔋",
+              "tag": "RMSprop",
+              "text": "Moving average of RECENT squared gradients<br>Learning rate stays usefully sized"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "type": "practice",
+      "exercises": [
+        {
+          "id": "p1",
+          "type": "multiple_choice",
+          "xp": 2,
+          "prompt": "What is the key difference between how AdaGrad and RMSprop track past gradients?",
+          "options": [
+            {
+              "id": "a",
+              "text": "RMSprop uses a decaying moving average of recent squared gradients instead of accumulating all of them forever",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "RMSprop ignores gradients entirely and uses random steps",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "RMSprop only tracks the very first gradient of training",
+              "correct": false
+            }
+          ],
+          "explain": "Correct! That decaying average is exactly what keeps RMSprop's learning rates from shrinking to nothing."
+        },
+        {
+          "id": "p2",
+          "type": "true_false",
+          "xp": 2,
+          "prompt": "True or false: RMSprop's per-parameter learning rate can eventually grind to a near-halt the same way AdaGrad's can, because it also accumulates every gradient since training began.",
+          "options": [
+            {
+              "id": "t",
+              "text": "True",
+              "correct": false
+            },
+            {
+              "id": "f",
+              "text": "False",
+              "correct": true
+            }
+          ],
+          "explain": "False. RMSprop's moving average lets old gradients fade out, so its learning rates stay usable through long training runs instead of decaying to near-zero."
+        },
+        {
+          "id": "p3",
+          "type": "fill_blank",
+          "xp": 2,
+          "prompt": "Complete the sentence:",
+          "sentence": "RMSprop replaces AdaGrad's ever-growing sum of past gradients with a ___ average that focuses on recent gradients.",
+          "blank": "moving",
+          "words": [
+            "moving",
+            "fixed",
+            "random"
+          ],
+          "explain": "A moving average keeps only recent gradients relevant, letting old ones fade instead of piling up forever."
+        },
+        {
+          "id": "p4",
+          "type": "spot_the_ai",
+          "xp": 2,
+          "prompt": "Your team trains a very deep network for thousands of steps. With AdaGrad, updates nearly stop midway through training. With RMSprop, updates keep making steady progress the whole time. Which property explains the difference?",
+          "options": [
+            {
+              "id": "a",
+              "text": "RMSprop's decaying moving average of recent gradients, instead of an ever-growing accumulation",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "RMSprop uses a completely different loss function",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "RMSprop trains on more data",
+              "correct": false
+            }
+          ],
+          "explain": "Exactly — RMSprop's moving average is the fix for AdaGrad's forever-shrinking learning rate problem."
+        }
+      ]
+    },
+    {
+      "type": "boss",
+      "exercises": [
+        {
+          "id": "b1",
+          "type": "multiple_choice",
+          "xp": 5,
+          "prompt": "Your team trains a large network for 50,000 steps using AdaGrad. Halfway through, weight updates nearly stop entirely, even though validation loss is clearly still improving slowly. Which change addresses the root cause?",
+          "options": [
+            {
+              "id": "a",
+              "text": "Switch to RMSprop, which uses a decaying moving average of recent squared gradients instead of an ever-growing sum, so learning rates don't shrink to near-zero",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "Add more Momentum on top of AdaGrad",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "Reduce the batch size",
+              "correct": false
+            },
+            {
+              "id": "d",
+              "text": "Switch from ReLU to Sigmoid activations",
+              "correct": false
+            }
+          ],
+          "explain": "Exactly right! RMSprop fixed AdaGrad's decay problem — but it still doesn't have Momentum's velocity for smoothing zig-zags. Next up: Adam, which combines BOTH ideas into one optimizer."
+        }
+      ]
+    }
+  ]
+}

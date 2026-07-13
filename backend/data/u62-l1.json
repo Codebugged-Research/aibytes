@@ -1,0 +1,217 @@
+{
+  "id": "u62-l1",
+  "unit": 62,
+  "day": 311,
+  "tier": "Neural Network Basics",
+  "tierIcon": "🌈",
+  "title": "Leaky ReLU: Fixing the 'Dying ReLU' Problem",
+  "icon": "🍂",
+  "concept": "Standard ReLU outputs exactly 0 for every negative input, so some neurons can get permanently stuck outputting 0 and stop learning — a problem called 'dying ReLU.' Leaky ReLU fixes this by allowing a small non-zero slope for negative inputs instead of a hard 0.",
+  "xp": 15,
+  "hearts": 3,
+  "estMinutes": 7,
+  "segments": [
+    {
+      "type": "warmup",
+      "exercises": [
+        {
+          "id": "w1",
+          "type": "multiple_choice",
+          "xp": 1,
+          "prompt": "Recap: what makes Softmax different from Sigmoid when choosing between many categories?",
+          "options": [
+            {
+              "id": "a",
+              "text": "Softmax's probabilities are all linked and sum to 100%, while Sigmoid scores each decision independently",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "Softmax only works with 2 categories",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "Softmax never produces probabilities",
+              "correct": false
+            }
+          ],
+          "explain": "Right — Softmax links every category's probability together. Now let's rewind to ReLU and uncover a flaw nobody mentioned yet."
+        }
+      ]
+    },
+    {
+      "type": "teach",
+      "cards": [
+        {
+          "kind": "hook",
+          "icon": "💀",
+          "title": "When a neuron flatlines forever",
+          "body": "ReLU seemed perfect: fast, simple, the modern default. But it hides a quiet failure mode — a neuron can get stuck outputting 0 forever, no matter what input it receives, and simply stop learning. This is called the <strong>dying ReLU</strong> problem."
+        },
+        {
+          "kind": "definition",
+          "icon": "🍂",
+          "title": "Leaky ReLU: never fully shut off",
+          "body": "<strong>Leaky ReLU</strong> tweaks ReLU's rule: instead of squashing every negative input to a hard <code>0</code>, it lets a small trickle through — multiplying negative inputs by a tiny slope (like <code>0.01</code>) instead of zeroing them out. Positive inputs still pass through unchanged."
+        },
+        {
+          "kind": "analogy",
+          "icon": "🚰",
+          "title": "A faucet that never fully closes",
+          "body": "Remember ReLU's one-way valve? A dying neuron is like a valve slammed shut and rusted stuck — no flow ever gets through again. Leaky ReLU is a valve that never fully closes: even at its tightest, a slow trickle still gets through, keeping the pipe from rusting shut."
+        },
+        {
+          "kind": "example",
+          "icon": "🔢",
+          "title": "Running numbers through Leaky ReLU",
+          "body": "With a slope of 0.01: Input <code>-5</code> → output <code>-0.05</code> (a tiny trickle, not zero). Input <code>0</code> → output <code>0</code>. Input <code>3</code> → output <code>3</code>, same as regular ReLU. Only the negative side changed — from a hard wall to a gentle slope."
+        },
+        {
+          "kind": "mythbust",
+          "icon": "⚠️",
+          "title": "A dead neuron doesn't just 'wake up'",
+          "body": "You might assume a neuron stuck at 0 will eventually recover once other weights shift. In reality, once a ReLU neuron's output stays 0 for every input it sees, no signal — no 'direction of steepest change' — ever flows back through it to update its weights. It's stuck for good, unless the function itself changes."
+        },
+        {
+          "kind": "visual",
+          "icon": "⚖️",
+          "title": "Hard wall vs. small trickle",
+          "body": "How the two handle negative inputs:",
+          "compare": {
+            "left": {
+              "emoji": "🧱",
+              "tag": "ReLU",
+              "text": "Negative inputs → exactly 0<br>Can get stuck and stop learning"
+            },
+            "right": {
+              "emoji": "🍂",
+              "tag": "Leaky ReLU",
+              "text": "Negative inputs → tiny slope, not zero<br>Keeps a trickle of learning alive"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "type": "practice",
+      "exercises": [
+        {
+          "id": "p1",
+          "type": "multiple_choice",
+          "xp": 2,
+          "prompt": "What problem can happen when a ReLU neuron's inputs are always negative?",
+          "options": [
+            {
+              "id": "a",
+              "text": "It gets permanently stuck outputting 0 and stops learning ('dying ReLU')",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "It automatically switches itself to Leaky ReLU",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "It outputs a random number instead",
+              "correct": false
+            }
+          ],
+          "explain": "Right — a ReLU neuron stuck at 0 for every input it ever sees stops learning entirely. That's the dying ReLU problem."
+        },
+        {
+          "id": "p2",
+          "type": "true_false",
+          "xp": 2,
+          "prompt": "True or false: Leaky ReLU outputs exactly 0 for every negative input, just like regular ReLU.",
+          "options": [
+            {
+              "id": "t",
+              "text": "True",
+              "correct": false
+            },
+            {
+              "id": "f",
+              "text": "False",
+              "correct": true
+            }
+          ],
+          "explain": "False! Leaky ReLU allows a small non-zero slope for negative inputs instead of a hard 0."
+        },
+        {
+          "id": "p3",
+          "type": "fill_blank",
+          "xp": 2,
+          "prompt": "Complete the sentence:",
+          "sentence": "Leaky ReLU fixes the 'dying ___' problem by never fully zeroing out negative inputs.",
+          "blank": "ReLU",
+          "words": [
+            "ReLU",
+            "layer",
+            "weight"
+          ],
+          "explain": "Leaky ReLU exists specifically to fix the dying ReLU problem."
+        },
+        {
+          "id": "p4",
+          "type": "spot_the_ai",
+          "xp": 2,
+          "prompt": "A neuron receives an input of -8. Which activation function gives a small negative output instead of exactly 0?",
+          "options": [
+            {
+              "id": "a",
+              "text": "Leaky ReLU",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "Regular ReLU",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "Softmax",
+              "correct": false
+            }
+          ],
+          "explain": "Leaky ReLU multiplies negative inputs by a small slope instead of zeroing them out completely."
+        }
+      ]
+    },
+    {
+      "type": "boss",
+      "exercises": [
+        {
+          "id": "b1",
+          "type": "multiple_choice",
+          "xp": 5,
+          "prompt": "A team notices that after training, a big chunk of their network's neurons always output exactly 0, no matter what input they're given — and their weights never seem to update anymore. What's happening, and which fix directly addresses it?",
+          "options": [
+            {
+              "id": "a",
+              "text": "This is the dying ReLU problem — regular ReLU zeroes out negative inputs completely, and Leaky ReLU fixes it by keeping a small non-zero slope for negative inputs",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "This is normal and means the network has finished training perfectly",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "This means the network needs more layers, not a different activation function",
+              "correct": false
+            },
+            {
+              "id": "d",
+              "text": "This only happens with Softmax, never with ReLU",
+              "correct": false
+            }
+          ],
+          "explain": "Exactly! Leaky ReLU's small slope keeps a trickle of signal flowing even for negative inputs, preventing neurons from getting permanently stuck. But what if, instead of picking that slope by hand, the network could learn the best slope itself?"
+        }
+      ]
+    }
+  ]
+}
