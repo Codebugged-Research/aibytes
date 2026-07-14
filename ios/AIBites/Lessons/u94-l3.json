@@ -1,0 +1,222 @@
+{
+  "id": "u94-l3",
+  "unit": 94,
+  "day": 473,
+  "tier": "Computer Vision Fundamentals",
+  "tierIcon": "🌫️",
+  "title": "Median Filtering for Denoising",
+  "icon": "⚖️",
+  "concept": "Median filtering replaces each pixel with the middle value of its neighborhood instead of the average, which makes it especially good at wiping out salt-and-pepper noise without dragging outlier pixels into the result.",
+  "xp": 15,
+  "hearts": 3,
+  "estMinutes": 7,
+  "segments": [
+    {
+      "type": "warmup",
+      "exercises": [
+        {
+          "id": "w1",
+          "type": "multiple_choice",
+          "xp": 1,
+          "prompt": "Recap: What does salt-and-pepper noise look like?",
+          "options": [
+            {
+              "id": "a",
+              "text": "A scattered handful of pixels flipped to pure black or pure white",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "Every pixel shifting slightly brighter or darker at once",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "The entire image turning grayscale",
+              "correct": false
+            }
+          ],
+          "explain": "Right — scattered black-and-white specks. Today we'll meet a filter built specifically to clean that up."
+        }
+      ]
+    },
+    {
+      "type": "teach",
+      "cards": [
+        {
+          "kind": "hook",
+          "icon": "⚖️",
+          "title": "One rotten pixel ruins the average",
+          "body": "Imagine averaging nine numbers where eight are around 100 but one rogue value is 255. That single outlier drags the average way off. A stray salt-and-pepper pixel does the exact same thing to a normal averaging filter."
+        },
+        {
+          "kind": "definition",
+          "icon": "⚖️",
+          "title": "What is median filtering?",
+          "body": "<strong>Median filtering</strong> slides a small window across the image, but instead of averaging the neighborhood (like a blur), it sorts the neighbor values and picks the <strong>median</strong> — the exact middle value — as the new pixel."
+        },
+        {
+          "kind": "analogy",
+          "icon": "🙋",
+          "title": "Ignoring the one loud outlier",
+          "body": "Picture asking nine neighbors to guess a number, and eight say values close to 100 while one shouts \"255!\" Taking the average lets that shout skew the result. Taking the middle value when everyone is sorted from lowest to highest ignores the shout entirely — the median simply isn't swayed by one wild answer."
+        },
+        {
+          "kind": "example",
+          "icon": "🧂",
+          "title": "Erasing a salt-and-pepper speck",
+          "body": "A pixel corrupted to pure white sits among eight normal neighbors clustered around a mid-gray value. Averaging all nine drags the result noticeably brighter. Taking the median instead picks a value straight from the normal cluster, and the white speck vanishes without a trace."
+        },
+        {
+          "kind": "mythbust",
+          "icon": "⚠️",
+          "title": "It's not just a slower blur",
+          "body": "Median filtering can look similar to blurring at a glance, but it isn't just \"averaging with extra steps.\" Because it picks an actual neighborhood value instead of blending them together, it tends to preserve sharp edges far better than an averaging blur, while still crushing scattered outlier pixels."
+        },
+        {
+          "kind": "visual",
+          "icon": "🆚",
+          "title": "Mean filter vs. median filter on an outlier",
+          "body": "How each filter reacts to one rogue pixel in the neighborhood:",
+          "compare": {
+            "left": {
+              "emoji": "➗",
+              "tag": "Mean (average)",
+              "text": "One extreme outlier skews the result<br>Speck partly bleeds into neighbors"
+            },
+            "right": {
+              "emoji": "⚖️",
+              "tag": "Median",
+              "text": "Outlier gets outvoted and ignored<br>Speck is cleanly replaced"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "type": "practice",
+      "exercises": [
+        {
+          "id": "p1",
+          "type": "multiple_choice",
+          "xp": 2,
+          "prompt": "What does a median filter do to each pixel?",
+          "options": [
+            {
+              "id": "a",
+              "text": "Replaces it with the middle value of its sorted neighborhood",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "Replaces it with the average of its neighborhood",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "Replaces it with the brightest neighboring pixel",
+              "correct": false
+            },
+            {
+              "id": "d",
+              "text": "Deletes it and leaves a blank gap",
+              "correct": false
+            }
+          ],
+          "explain": "Correct — median filtering sorts the neighborhood and picks the exact middle value."
+        },
+        {
+          "id": "p2",
+          "type": "true_false",
+          "xp": 2,
+          "prompt": "True or false: A single extreme outlier pixel (like pure white) has a much smaller effect on a median filter's result than on a simple averaging filter.",
+          "options": [
+            {
+              "id": "t",
+              "text": "True",
+              "correct": true
+            },
+            {
+              "id": "f",
+              "text": "False",
+              "correct": false
+            }
+          ],
+          "explain": "True. Averaging lets one extreme value pull the result toward it, while the median simply outvotes and ignores a lone outlier."
+        },
+        {
+          "id": "p3",
+          "type": "fill_blank",
+          "xp": 2,
+          "prompt": "Complete the sentence:",
+          "sentence": "Median filtering is especially effective against ___ noise, because it isn't dragged off by extreme outlier pixels.",
+          "blank": "salt-and-pepper",
+          "words": [
+            "salt-and-pepper",
+            "Gaussian",
+            "compression"
+          ],
+          "explain": "Salt-and-pepper is correct — those scattered extreme black/white pixels are exactly the outliers the median ignores."
+        },
+        {
+          "id": "p4",
+          "type": "spot_the_ai",
+          "xp": 2,
+          "prompt": "Which result best shows a median filter successfully cleaning an image?",
+          "options": [
+            {
+              "id": "a",
+              "text": "A photo full of scattered black-and-white specks now looks clean, with edges still looking reasonably crisp",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "A photo's colors become more vivid and saturated",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "The image is rotated 90 degrees",
+              "correct": false
+            }
+          ],
+          "explain": "Removing scattered specks while keeping edges relatively crisp is exactly what median filtering is known for."
+        }
+      ]
+    },
+    {
+      "type": "boss",
+      "exercises": [
+        {
+          "id": "b1",
+          "type": "multiple_choice",
+          "xp": 5,
+          "prompt": "A photo has scattered salt-and-pepper specks. You try both a simple averaging blur and a median filter to clean it up. Why does the median filter usually give a cleaner result here?",
+          "options": [
+            {
+              "id": "a",
+              "text": "It picks an actual middle value from the neighborhood instead of blending in the extreme outlier pixels, so the specks are outvoted rather than smeared",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "It works completely differently and doesn't even use a sliding neighborhood window",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "It always produces exactly the same result as averaging, just slower",
+              "correct": false
+            },
+            {
+              "id": "d",
+              "text": "It only works on black-and-white images, never on color photos",
+              "correct": false
+            }
+          ],
+          "explain": "Exactly — the median ignores extreme outliers instead of blending them in. Next: what about noise that isn't scattered specks, but a soft shimmer across every pixel?"
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,146 @@
+{
+  "id": "u96-l2",
+  "unit": 96,
+  "day": 482,
+  "tier": "Computer Vision Fundamentals",
+  "tierIcon": "🌉",
+  "title": "Limits of Hand-Crafted Features",
+  "icon": "⛓️",
+  "concept": "Hand-designing a filter pipeline for one object or scenario doesn't scale to the real world — new objects need new hand-tuned filters, and even a working pipeline breaks under lighting, angle, or occlusion changes it wasn't built for.",
+  "xp": 15,
+  "hearts": 3,
+  "estMinutes": 7,
+  "segments": [
+    {
+      "type": "warmup",
+      "exercises": [
+        {
+          "id": "w1",
+          "type": "multiple_choice",
+          "xp": 1,
+          "prompt": "Recap: In a classical CV pipeline, who decides the exact filters and the order they run in?",
+          "options": [
+            { "id": "a", "text": "A human engineer, by hand", "correct": true },
+            { "id": "b", "text": "The image decides on its own", "correct": false },
+            { "id": "c", "text": "It's randomly generated on every run", "correct": false }
+          ],
+          "explain": "Right — a human designs and orders every filter. Today we look at why that hand-tuning stops scaling."
+        }
+      ]
+    },
+    {
+      "type": "teach",
+      "cards": [
+        {
+          "kind": "hook",
+          "icon": "🚦",
+          "title": "One pipeline, a thousand exceptions",
+          "body": "Say you hand-tune a pipeline that spots stop signs perfectly... in daylight. Now it's dusk, the sign is half-covered by a tree branch, and the camera is tilted 15 degrees. Suddenly your carefully tuned filters miss it entirely."
+        },
+        {
+          "kind": "definition",
+          "icon": "⛓️",
+          "title": "The limits of hand-crafted features",
+          "body": "<strong>Hand-crafted features</strong> are filters and thresholds a human designs and tunes for one specific task. The core limit: they don't generalize well — a pipeline tuned for stop signs in daylight won't reliably work on cats, or on stop signs at night, without a person redesigning it all over again."
+        },
+        {
+          "kind": "analogy",
+          "icon": "🔑",
+          "title": "A key cut for one lock",
+          "body": "A hand-crafted filter pipeline is like a key cut for exactly one lock. It works perfectly on that lock — but a new lock, meaning a new object, new lighting, or a new angle, needs a brand new key cut by hand. That doesn't scale to millions of different locks."
+        },
+        {
+          "kind": "example",
+          "icon": "🌥️",
+          "title": "Same object, different day",
+          "body": "A Sobel-based pipeline tuned to trace a car's edges on a bright day may fail on an overcast day, where gradients are weaker. It may fail again when the car is half-hidden behind a pole, or when the camera angle changes and the edge shapes look completely different."
+        },
+        {
+          "kind": "mythbust",
+          "icon": "⚠️",
+          "title": "More filters isn't the fix",
+          "body": "It's tempting to think 'just add more filters' solves this. But every new lighting condition, angle, or object needs its own hand-tuned rule — the list of special cases grows faster than any engineer could ever maintain by hand."
+        },
+        {
+          "kind": "visual",
+          "icon": "📉",
+          "title": "One task vs. the real world",
+          "body": "A tight fit vs. endless variety:",
+          "compare": {
+            "left": { "emoji": "🎯", "tag": "Hand-tuned pipeline", "text": "Works great<br>on the exact case it was built for" },
+            "right": { "emoji": "🌍", "tag": "The real world", "text": "Endless lighting, angles,<br>objects, and occlusion" }
+          }
+        }
+      ]
+    },
+    {
+      "type": "practice",
+      "exercises": [
+        {
+          "id": "p1",
+          "type": "multiple_choice",
+          "xp": 2,
+          "prompt": "Why don't hand-crafted filter pipelines scale to recognizing thousands of different objects?",
+          "options": [
+            { "id": "a", "text": "Each new object or condition typically needs a human to redesign and re-tune the filters by hand", "correct": true },
+            { "id": "b", "text": "Filters run too slowly to ever process more than one object", "correct": false },
+            { "id": "c", "text": "Filters only work on grayscale images", "correct": false },
+            { "id": "d", "text": "Filters can only be applied to square images", "correct": false }
+          ],
+          "explain": "The bottleneck is human effort — someone has to hand-design new filters for every new object or condition."
+        },
+        {
+          "id": "p2",
+          "type": "true_false",
+          "xp": 2,
+          "prompt": "True or false: A pipeline tuned to detect edges in bright daylight will automatically work just as well at night.",
+          "options": [
+            { "id": "t", "text": "True", "correct": false },
+            { "id": "f", "text": "False", "correct": true }
+          ],
+          "explain": "False. Weaker light means weaker gradients, and a pipeline tuned for daylight thresholds often misses edges entirely at night."
+        },
+        {
+          "id": "p3",
+          "type": "fill_blank",
+          "xp": 2,
+          "prompt": "Complete the sentence:",
+          "sentence": "A pipeline hand-tuned for one specific object or lighting condition often fails to ___ to new, unseen conditions.",
+          "blank": "generalize",
+          "words": ["generalize", "compress", "render"],
+          "explain": "Generalize is correct — hand-crafted filters are brittle outside the exact case they were tuned for."
+        },
+        {
+          "id": "p4",
+          "type": "spot_the_ai",
+          "xp": 2,
+          "prompt": "Which scenario best illustrates the brittleness of a hand-crafted pipeline?",
+          "options": [
+            { "id": "a", "text": "A Sobel-based sign detector that worked perfectly in testing fails once the sign is partly blocked by a tree branch", "correct": true },
+            { "id": "b", "text": "A photo loads a fraction of a second slower on an older phone", "correct": false },
+            { "id": "c", "text": "A JPEG file takes up more storage than a same-size PNG", "correct": false }
+          ],
+          "explain": "Occlusion is a classic brittleness case — the hand-tuned filter never accounted for a partially hidden object."
+        }
+      ]
+    },
+    {
+      "type": "boss",
+      "exercises": [
+        {
+          "id": "b1",
+          "type": "multiple_choice",
+          "xp": 5,
+          "prompt": "An engineer spends 6 months hand-tuning a pipeline to detect pedestrians in daylight. Their boss then asks them to also detect pedestrians at night, in the rain, and from a different camera angle. What's the real problem here?",
+          "options": [
+            { "id": "a", "text": "Every new condition likely needs its own set of hand-tuned filters and thresholds — hand-crafting doesn't scale to real-world variety", "correct": true },
+            { "id": "b", "text": "There's no real problem — the exact same daylight pipeline will work unchanged for every condition", "correct": false },
+            { "id": "c", "text": "The engineer just needs to increase the image resolution and everything will work", "correct": false },
+            { "id": "d", "text": "Rain and night driving are actually easier for a hand-crafted pipeline than daylight", "correct": false }
+          ],
+          "explain": "Exactly — six more months of hand-tuning for each new condition isn't sustainable. What if, instead of a human tuning every filter, the filters could be learned automatically from examples? That's exactly where we're headed next."
+        }
+      ]
+    }
+  ]
+}
