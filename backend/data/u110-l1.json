@@ -1,0 +1,222 @@
+{
+  "id": "u110-l1",
+  "unit": 110,
+  "day": 551,
+  "tier": "Pooling & CNN Building Blocks",
+  "tierIcon": "⚙️",
+  "title": "Why Normalize Activations?",
+  "icon": "⚙️",
+  "concept": "When activations swing too wildly across layers or batches, later parts of a CNN keep seeing unstable inputs; normalization keeps signals in a healthier range so learning is steadier.",
+  "xp": 15,
+  "hearts": 3,
+  "estMinutes": 7,
+  "segments": [
+    {
+      "type": "warmup",
+      "exercises": [
+        {
+          "id": "w1",
+          "type": "multiple_choice",
+          "xp": 1,
+          "prompt": "Recap: In a CNN, what does one layer pass forward to the next layer?",
+          "options": [
+            {
+              "id": "a",
+              "text": "Its activations or feature map responses",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "A brand-new dataset collected during training",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "The final answer with no more processing needed",
+              "correct": false
+            }
+          ],
+          "explain": "Right — each layer's activations become the next layer's input."
+        }
+      ]
+    },
+    {
+      "type": "teach",
+      "cards": [
+        {
+          "kind": "hook",
+          "icon": "🎚️",
+          "title": "When the volume knob keeps jumping",
+          "body": "Imagine editing audio where one clip whispers and the next clip blasts your speakers. Even if the words are useful, the wild volume swings make the rest of the pipeline harder to handle. CNN layers feel the same pain when activations jump around too much."
+        },
+        {
+          "kind": "definition",
+          "icon": "⚙️",
+          "title": "Keep signals in a healthier range",
+          "body": "<strong>Activation normalization</strong> means recentering and rescaling hidden activations so later layers do not keep adapting to extreme or drifting ranges. The goal is not to erase the pattern. The goal is to keep the signal in a range that is easier for the next layer and the optimizer to work with."
+        },
+        {
+          "kind": "analogy",
+          "icon": "🌡️",
+          "title": "Comfortable room, not random weather",
+          "body": "It is easier to work in a room that stays near a comfortable temperature than one that flips between freezing and boiling every ten minutes. Normalization plays that comfort-control role for hidden activations: it keeps the environment more usable while the real work still happens."
+        },
+        {
+          "kind": "example",
+          "icon": "🐱",
+          "title": "Same whisker feature, calmer numbers",
+          "body": "Suppose an early CNN filter detects cat whisker edges. In one batch its activations might hover around <code>0.2</code>, while in another they spike near <code>18</code>. The whisker pattern is still there, but the next layer keeps having to reinterpret the scale. Normalization keeps that signal more consistent so downstream layers can focus on meaning instead of wild amplitude changes."
+        },
+        {
+          "kind": "mythbust",
+          "icon": "⚠️",
+          "title": "Normalization is not feature erasing",
+          "body": "A common myth is that normalized activations become boring or identical. Not true. Good normalization keeps the useful shape of the signal while making its range less chaotic. It is about healthier scaling, not deleting what the layer learned."
+        },
+        {
+          "kind": "visual",
+          "icon": "📊",
+          "title": "Wild swings vs. healthier signals",
+          "body": "What later layers experience:",
+          "compare": {
+            "left": {
+              "emoji": "🌪️",
+              "tag": "Without normalization",
+              "text": "Activations may swing tiny to huge.<br>Later layers keep re-adjusting.<br>Training feels more fragile."
+            },
+            "right": {
+              "emoji": "🩺",
+              "tag": "With normalization",
+              "text": "Activations stay in a saner range.<br>Later layers get steadier inputs.<br>Optimization is easier to stabilize."
+            }
+          }
+        }
+      ]
+    },
+    {
+      "type": "practice",
+      "exercises": [
+        {
+          "id": "p1",
+          "type": "multiple_choice",
+          "xp": 2,
+          "prompt": "Why can wildly shifting activations make a CNN harder to train?",
+          "options": [
+            {
+              "id": "a",
+              "text": "Because later layers keep seeing unstable input scales and must keep readjusting.",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "Because activations automatically delete the labels.",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "Because normalization turns convolutions into pooling.",
+              "correct": false
+            },
+            {
+              "id": "d",
+              "text": "Because feature maps can only exist at one fixed value.",
+              "correct": false
+            }
+          ],
+          "explain": "Exactly — if the signal scale keeps drifting, deeper layers are learning on shaky ground."
+        },
+        {
+          "id": "p2",
+          "type": "true_false",
+          "xp": 2,
+          "prompt": "True or false: One reason to normalize activations is to keep the next layer's inputs in a healthier, steadier range.",
+          "options": [
+            {
+              "id": "t",
+              "text": "True",
+              "correct": true
+            },
+            {
+              "id": "f",
+              "text": "False",
+              "correct": false
+            }
+          ],
+          "explain": "True — normalization helps later layers see less chaotic input ranges."
+        },
+        {
+          "id": "p3",
+          "type": "fill_blank",
+          "xp": 2,
+          "prompt": "Complete the sentence:",
+          "sentence": "Normalization tries to keep activations in a healthier ___.",
+          "blank": "range",
+          "words": [
+            "range",
+            "folder",
+            "keyboard"
+          ],
+          "explain": "Range is right — the core intuition is calmer, more usable activation scales."
+        },
+        {
+          "id": "p4",
+          "type": "spot_the_ai",
+          "xp": 2,
+          "prompt": "Which scenario best shows why normalization helps?",
+          "options": [
+            {
+              "id": "a",
+              "text": "A conv block outputs values near <code>0.1</code> on one batch and near <code>25</code> on the next, so the following block keeps re-learning what 'large' means.",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "A dataset is copied into a new folder before training begins.",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "A CNN predicts a class label after the forward pass ends.",
+              "correct": false
+            }
+          ],
+          "explain": "Yes — the issue is unstable hidden signal scale, not file management or the existence of a prediction."
+        }
+      ]
+    },
+    {
+      "type": "boss",
+      "exercises": [
+        {
+          "id": "b1",
+          "type": "multiple_choice",
+          "xp": 5,
+          "prompt": "A CNN's second block is hard to train because the first block's activations sometimes explode and sometimes shrink close to zero. Why is normalization a good next tool?",
+          "options": [
+            {
+              "id": "a",
+              "text": "Because it can keep those activations in a healthier, more predictable range while preserving the useful pattern they carry.",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "Because it permanently freezes the first block so activations never change again.",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "Because it replaces feature maps with raw image pixels.",
+              "correct": false
+            },
+            {
+              "id": "d",
+              "text": "Because it guarantees perfect accuracy before training starts.",
+              "correct": false
+            }
+          ],
+          "explain": "Exactly. Normalization is a training-stability tool: it keeps hidden signals less erratic so later layers can learn more cleanly. Next, we'll look at the most common version in CNNs: Batch Normalization."
+        }
+      ]
+    }
+  ]
+}

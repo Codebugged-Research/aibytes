@@ -1,0 +1,222 @@
+{
+  "id": "u105-l4",
+  "unit": 105,
+  "day": 529,
+  "tier": "Pooling & CNN Building Blocks",
+  "tierIcon": "🏊",
+  "title": "Global Pooling",
+  "icon": "🌍",
+  "concept": "Global pooling collapses each entire feature map into one value per channel, often right before a classification head.",
+  "xp": 15,
+  "hearts": 3,
+  "estMinutes": 7,
+  "segments": [
+    {
+      "type": "warmup",
+      "exercises": [
+        {
+          "id": "w1",
+          "type": "multiple_choice",
+          "xp": 1,
+          "prompt": "Recap: How are max pooling and average pooling usually applied?",
+          "options": [
+            {
+              "id": "a",
+              "text": "To small local windows such as 2x2 regions",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "To an entire dataset all at once",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "Only to RGB pixels before any convolution happens",
+              "correct": false
+            }
+          ],
+          "explain": "Right — regular pooling usually summarizes local windows. Global pooling stretches that idea across a whole feature map."
+        }
+      ]
+    },
+    {
+      "type": "teach",
+      "cards": [
+        {
+          "kind": "hook",
+          "icon": "🧾",
+          "title": "One final score per detector",
+          "body": "Imagine a tournament scout watching an entire game and writing down one final score for each player: how much that player showed up overall. Global pooling does that for each feature map. Instead of keeping many positions, it writes one final summary number per channel."
+        },
+        {
+          "kind": "definition",
+          "icon": "🌍",
+          "title": "What is global pooling?",
+          "body": "<strong>Global pooling</strong> takes an entire feature map — not just a small window — and reduces it to <strong>one value per channel</strong>. With global average pooling, it averages the whole map. With global max pooling, it keeps the single largest value from the whole map."
+        },
+        {
+          "kind": "analogy",
+          "icon": "📋",
+          "title": "One report card line per subject",
+          "body": "Think of each channel as a school subject. During the semester, you collect lots of assignments across the page. At the end, the report card keeps one final number for math, one for science, one for history. Global pooling gives one final summary number for each channel."
+        },
+        {
+          "kind": "example",
+          "icon": "🔢",
+          "title": "Shrinking a whole map to one number",
+          "body": "Suppose one feature map contains nine values arranged in a <code>3x3</code> grid: <code>[2, 4, 6; 0, 4, 8; 2, 6, 4]</code>. Global <strong>average</strong> pooling turns the entire map into one number: <code>4</code>. If a network has <code>64</code> channels, global average pooling produces <code>64</code> summary numbers — one per channel."
+        },
+        {
+          "kind": "mythbust",
+          "icon": "⚠️",
+          "title": "Not one number for the whole network",
+          "body": "Global pooling does not squash the entire CNN into a single number. It gives <strong>one number per channel</strong>. If you have 32 channels, you get 32 outputs. The spatial grid disappears, but the channel list remains."
+        },
+        {
+          "kind": "visual",
+          "icon": "⚖️",
+          "title": "Flatten Everything vs. Global Pooling",
+          "body": "Two ways to prepare for a classifier:",
+          "compare": {
+            "left": {
+              "emoji": "🧱",
+              "tag": "Flatten",
+              "text": "Keep every location<br>e.g. 7x7x64 → 3136 numbers"
+            },
+            "right": {
+              "emoji": "🌍",
+              "tag": "Global Pooling",
+              "text": "One summary per channel<br>7x7x64 → 64 numbers"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "type": "practice",
+      "exercises": [
+        {
+          "id": "p1",
+          "type": "multiple_choice",
+          "xp": 2,
+          "prompt": "A CNN has 32 feature maps right before the classifier. After global average pooling, how many numbers come out?",
+          "options": [
+            {
+              "id": "a",
+              "text": "32",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "1",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "64",
+              "correct": false
+            },
+            {
+              "id": "d",
+              "text": "1024",
+              "correct": false
+            }
+          ],
+          "explain": "Correct — global pooling gives one summary number per channel."
+        },
+        {
+          "id": "p2",
+          "type": "true_false",
+          "xp": 2,
+          "prompt": "True or false: Global pooling usually summarizes the entire spatial map of each channel.",
+          "options": [
+            {
+              "id": "t",
+              "text": "True",
+              "correct": true
+            },
+            {
+              "id": "f",
+              "text": "False",
+              "correct": false
+            }
+          ],
+          "explain": "True — that is what makes it global rather than local."
+        },
+        {
+          "id": "p3",
+          "type": "fill_blank",
+          "xp": 2,
+          "prompt": "Complete the sentence:",
+          "sentence": "Global pooling outputs one value per ___.",
+          "blank": "channel",
+          "words": [
+            "channel",
+            "camera",
+            "filename"
+          ],
+          "explain": "Channel is right — the spatial grid is collapsed, but each channel keeps one summary number."
+        },
+        {
+          "id": "p4",
+          "type": "spot_the_ai",
+          "xp": 2,
+          "prompt": "Why is global pooling often useful before a classification head?",
+          "options": [
+            {
+              "id": "a",
+              "text": "It turns each feature map into one compact summary number, so the classifier has far fewer inputs",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "It recreates the original image colors before classification",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "It trains a brand new set of convolution filters inside the classifier",
+              "correct": false
+            }
+          ],
+          "explain": "Exactly — it is a compact bridge from spatial feature maps into final class decisions."
+        }
+      ]
+    },
+    {
+      "type": "boss",
+      "exercises": [
+        {
+          "id": "b1",
+          "type": "multiple_choice",
+          "xp": 5,
+          "prompt": "A CNN is about to make a yes/no classification. Right before the final classifier, it has 64 feature maps of size <code>7x7</code>. The designer wants one summary number for each feature map instead of all 3136 spatial positions. Which layer is the best fit?",
+          "options": [
+            {
+              "id": "a",
+              "text": "Global pooling, because it collapses each full feature map into one number per channel",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "Another convolution, because classification always requires a larger spatial map",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "RGB decoding, because the classifier needs to see colors again",
+              "correct": false
+            },
+            {
+              "id": "d",
+              "text": "Padding, because adding borders creates the one-number summary automatically",
+              "correct": false
+            }
+          ],
+          "explain": "Exactly. Global pooling is a clean way to summarize each detector channel before the classification head. Next: why do CNNs use pooling at all, and what do they give up in return?"
+        }
+      ]
+    }
+  ]
+}

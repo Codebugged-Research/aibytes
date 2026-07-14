@@ -1,0 +1,222 @@
+{
+  "id": "u106-l3",
+  "unit": 106,
+  "day": 533,
+  "tier": "Pooling & CNN Building Blocks",
+  "tierIcon": "🏗️",
+  "title": "Spatial Size vs. Channel Depth",
+  "icon": "📦",
+  "concept": "In many CNNs, early layers keep large spatial maps with fewer channels, while deeper layers use smaller maps with more channels to represent richer kinds of features.",
+  "xp": 15,
+  "hearts": 3,
+  "estMinutes": 7,
+  "segments": [
+    {
+      "type": "warmup",
+      "exercises": [
+        {
+          "id": "w1",
+          "type": "multiple_choice",
+          "xp": 1,
+          "prompt": "Recap: After a pooling step inside a CNN block, what often happens to the feature map's width and height?",
+          "options": [
+            {
+              "id": "a",
+              "text": "They get smaller",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "They instantly turn back into the original image size",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "They disappear and leave no data at all",
+              "correct": false
+            }
+          ],
+          "explain": "Correct — pooling usually shrinks the spatial size, which sets up a very common pattern deeper in the network."
+        }
+      ]
+    },
+    {
+      "type": "teach",
+      "cards": [
+        {
+          "kind": "hook",
+          "icon": "📦",
+          "title": "The map gets smaller while the stack gets deeper",
+          "body": "A CNN is not just shrinking everything all the time. It is trading one kind of detail for another. As you go deeper, the width and height of the feature map often shrink, but the number of channels often grows so the model can track more kinds of visual patterns."
+        },
+        {
+          "kind": "definition",
+          "icon": "📏",
+          "title": "Two different dimensions",
+          "body": "<strong>Spatial size</strong> means width and height, like <code>32x32</code>. <strong>Channel depth</strong> means how many feature maps are stacked at each location, like <code>32 channels</code>. In many CNNs, spatial size goes down stage by stage while channel depth goes up."
+        },
+        {
+          "kind": "analogy",
+          "icon": "🗺️",
+          "title": "Fold the map, add more transparent notes",
+          "body": "Imagine a giant paper map of a city. As you fold it smaller, you lose some exact street-by-street room. But you can add more transparent note sheets on top: one marking edges, one corners, one wheels, one eyes, and so on. A deeper CNN often works like that — smaller map, richer stack of notes."
+        },
+        {
+          "kind": "example",
+          "icon": "📈",
+          "title": "A toy size-and-depth progression",
+          "body": "Consider this toy CNN: <code>64x64x3 -> Conv(16) -> 64x64x16 -> Pool -> 32x32x16 -> Conv(32) -> 32x32x32 -> Pool -> 16x16x32 -> Conv(64) -> 16x16x64</code>. Notice the pattern: the spatial map shrinks from 64 to 32 to 16, while the channel stack grows from 16 to 32 to 64. The network keeps fewer positions, but learns more kinds of features at each position."
+        },
+        {
+          "kind": "mythbust",
+          "icon": "⚠️",
+          "title": "Smaller does not mean weaker",
+          "body": "A smaller feature map does not mean the network forgot how to see. It usually means the network has compressed the scene and is now using deeper channels to represent more meaningful patterns. The model is often becoming more abstract, not less capable."
+        },
+        {
+          "kind": "visual",
+          "icon": "⚖️",
+          "title": "Early layer vs. deeper layer",
+          "body": "A common CNN trend is 'less space, more feature types.'",
+          "compare": {
+            "left": {
+              "emoji": "🛰️",
+              "tag": "Early layer",
+              "text": "64x64x16<br>Lots of location detail<br>Fewer feature types"
+            },
+            "right": {
+              "emoji": "🔬",
+              "tag": "Deeper layer",
+              "text": "16x16x64<br>Less exact location detail<br>More feature types"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "type": "practice",
+      "exercises": [
+        {
+          "id": "p1",
+          "type": "multiple_choice",
+          "xp": 2,
+          "prompt": "Which feature map is more likely to appear deeper inside a standard CNN?",
+          "options": [
+            {
+              "id": "a",
+              "text": "16x16x64",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "64x64x8",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "128x128x3",
+              "correct": false
+            },
+            {
+              "id": "d",
+              "text": "The original untouched RGB image",
+              "correct": false
+            }
+          ],
+          "explain": "Right — deeper CNN stages often have smaller spatial maps and more channels, like 16x16x64."
+        },
+        {
+          "id": "p2",
+          "type": "true_false",
+          "xp": 2,
+          "prompt": "True or false: Channel depth tells you how many feature maps are stacked, not how wide the image is.",
+          "options": [
+            {
+              "id": "t",
+              "text": "True",
+              "correct": true
+            },
+            {
+              "id": "f",
+              "text": "False",
+              "correct": false
+            }
+          ],
+          "explain": "True — channel depth is the stack dimension, separate from spatial width and height."
+        },
+        {
+          "id": "p3",
+          "type": "fill_blank",
+          "xp": 2,
+          "prompt": "Complete the sentence:",
+          "sentence": "Early CNN layers often keep bigger spatial maps but fewer ___.",
+          "blank": "channels",
+          "words": [
+            "channels",
+            "classes",
+            "epochs"
+          ],
+          "explain": "Channels — early layers often have more room in space and less depth in the stack."
+        },
+        {
+          "id": "p4",
+          "type": "spot_the_ai",
+          "xp": 2,
+          "prompt": "A toy CNN goes from <code>32x32x16</code> to <code>16x16x32</code>. Which explanation fits best?",
+          "options": [
+            {
+              "id": "a",
+              "text": "The spatial map shrank while the network increased the number of feature channels",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "The model doubled the raw image resolution while deleting all learned features",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "The channel count and spatial size mean exactly the same thing",
+              "correct": false
+            }
+          ],
+          "explain": "Exactly — width and height got smaller, while the number of learned feature maps grew."
+        }
+      ]
+    },
+    {
+      "type": "boss",
+      "exercises": [
+        {
+          "id": "b1",
+          "type": "multiple_choice",
+          "xp": 5,
+          "prompt": "You read a toy CNN as <code>64x64x8 -> 32x32x16 -> 16x16x32</code>. What is the best interpretation of that pattern?",
+          "options": [
+            {
+              "id": "a",
+              "text": "As the network goes deeper, it keeps less exact spatial detail but represents more kinds of features through extra channels",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "The network is broken, because channel count must always stay equal to image width",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "The model is undoing learning by making the feature maps smaller",
+              "correct": false
+            },
+            {
+              "id": "d",
+              "text": "It proves CNNs cannot mix spatial shrinkage with richer feature stacks",
+              "correct": false
+            }
+          ],
+          "explain": "Exactly. Many CNNs trade spatial size for channel depth as they go deeper. Next we'll see what happens after those final deep feature maps are built: the classification head turns them into class logits."
+        }
+      ]
+    }
+  ]
+}

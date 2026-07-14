@@ -1,0 +1,222 @@
+{
+  "id": "u110-l4",
+  "unit": 110,
+  "day": 554,
+  "tier": "Pooling & CNN Building Blocks",
+  "tierIcon": "⚙️",
+  "title": "When Batch Size Is Small",
+  "icon": "👥",
+  "concept": "BatchNorm can struggle when mini-batches are tiny because its batch statistics get noisy, which is why alternatives like GroupNorm and LayerNorm are often preferred in small-batch CNN workloads.",
+  "xp": 15,
+  "hearts": 3,
+  "estMinutes": 7,
+  "segments": [
+    {
+      "type": "warmup",
+      "exercises": [
+        {
+          "id": "w1",
+          "type": "multiple_choice",
+          "xp": 1,
+          "prompt": "Recap: Why does BatchNorm use running averages at inference time?",
+          "options": [
+            {
+              "id": "a",
+              "text": "So predictions do not depend on random neighboring examples",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "So the model can skip hidden layers forever",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "So training data can be shuffled into a new class order",
+              "correct": false
+            }
+          ],
+          "explain": "Correct — inference should stay stable even for one example at a time."
+        }
+      ]
+    },
+    {
+      "type": "teach",
+      "cards": [
+        {
+          "kind": "hook",
+          "icon": "🗳️",
+          "title": "Polling only two people",
+          "body": "If you ask only two people what the whole city thinks, your estimate may bounce around wildly depending on who those two happen to be. BatchNorm has a similar problem when the mini-batch is tiny: its 'what is normal right now?' guess gets noisy."
+        },
+        {
+          "kind": "definition",
+          "icon": "👥",
+          "title": "Tiny batches give shaky estimates",
+          "body": "BatchNorm works best when the current mini-batch gives a decent snapshot of the activations. With batch size <code>1</code> or <code>2</code>, the batch's average and spread can jump around a lot, so the normalization itself becomes noisy. That can make training less stable instead of more stable."
+        },
+        {
+          "kind": "analogy",
+          "icon": "🎯",
+          "title": "Judging a whole season from one game",
+          "body": "Imagine deciding a basketball player's typical skill from just one or two possessions. You might overreact to a lucky shot or a bad bounce. Small-batch BatchNorm can overreact in the same way because the reference is too tiny."
+        },
+        {
+          "kind": "example",
+          "icon": "🛰️",
+          "title": "Huge images force tiny batches",
+          "body": "In medical imaging, detection, or satellite vision, one image can be so large that a GPU only fits one or two at a time. In that setting, BatchNorm may wobble because the batch statistics are weak. <strong>GroupNorm</strong> and <strong>LayerNorm</strong> are popular alternatives because they normalize within each example or within channel groups instead of leaning so hard on the batch dimension."
+        },
+        {
+          "kind": "mythbust",
+          "icon": "⚠️",
+          "title": "BatchNorm is not bad everywhere",
+          "body": "This is not a claim that BatchNorm is obsolete. With moderate or large mini-batches, it is still widely useful. The real lesson is simpler: the right normalization depends on the workload, and tiny-batch CNNs often need a different tool."
+        },
+        {
+          "kind": "visual",
+          "icon": "⚖️",
+          "title": "Tiny-batch BatchNorm vs. batch-free alternatives",
+          "body": "Why alternatives exist:",
+          "compare": {
+            "left": {
+              "emoji": "📉",
+              "tag": "BatchNorm with tiny batches",
+              "text": "Current batch may be unrepresentative.<br>Normalization can wobble from step to step.<br>Training may feel noisy."
+            },
+            "right": {
+              "emoji": "🧩",
+              "tag": "GroupNorm / LayerNorm",
+              "text": "Depend less on the batch dimension.<br>More predictable with batch size 1 or 2.<br>Often a better fit for memory-heavy CNNs."
+            }
+          }
+        }
+      ]
+    },
+    {
+      "type": "practice",
+      "exercises": [
+        {
+          "id": "p1",
+          "type": "multiple_choice",
+          "xp": 2,
+          "prompt": "Why can BatchNorm struggle when batch size is only 1 or 2?",
+          "options": [
+            {
+              "id": "a",
+              "text": "Because the batch statistics can be too noisy or unrepresentative to give a stable normalization reference.",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "Because convolutions only work when batch size is at least 16.",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "Because feature maps disappear when memory is low.",
+              "correct": false
+            },
+            {
+              "id": "d",
+              "text": "Because GroupNorm deletes all channel information.",
+              "correct": false
+            }
+          ],
+          "explain": "Exactly — with tiny batches, the reference BatchNorm depends on can get shaky."
+        },
+        {
+          "id": "p2",
+          "type": "true_false",
+          "xp": 2,
+          "prompt": "True or false: GroupNorm and LayerNorm are useful partly because they rely less on batch-wide statistics than BatchNorm does.",
+          "options": [
+            {
+              "id": "t",
+              "text": "True",
+              "correct": true
+            },
+            {
+              "id": "f",
+              "text": "False",
+              "correct": false
+            }
+          ],
+          "explain": "True — that is a big reason they show up in small-batch workloads."
+        },
+        {
+          "id": "p3",
+          "type": "fill_blank",
+          "xp": 2,
+          "prompt": "Complete the sentence:",
+          "sentence": "When batches are tiny, BatchNorm's statistics can become ___.",
+          "blank": "noisy",
+          "words": [
+            "noisy",
+            "infinite",
+            "wooden"
+          ],
+          "explain": "Noisy is right — the reference itself can wobble when the batch is too small."
+        },
+        {
+          "id": "p4",
+          "type": "spot_the_ai",
+          "xp": 2,
+          "prompt": "Which situation best explains why a team might switch away from BatchNorm?",
+          "options": [
+            {
+              "id": "a",
+              "text": "A segmentation model can only fit one huge image per GPU step, so the team chooses GroupNorm for a steadier normalization signal.",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "A CNN uses three-by-three kernels, so normalization is mathematically forbidden.",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "A model stores its weights on disk between training runs.",
+              "correct": false
+            }
+          ],
+          "explain": "Yes — tiny-batch vision work is exactly where GroupNorm or LayerNorm often make more sense."
+        }
+      ]
+    },
+    {
+      "type": "boss",
+      "exercises": [
+        {
+          "id": "b1",
+          "type": "multiple_choice",
+          "xp": 5,
+          "prompt": "A detection model trains on giant images and can only fit two images per mini-batch. Which normalization choice best fits that constraint?",
+          "options": [
+            {
+              "id": "a",
+              "text": "Consider GroupNorm or LayerNorm, because BatchNorm's tiny-batch statistics may be too noisy to be reliable.",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "Stick with BatchNorm because tiny batches always improve its estimates.",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "Remove normalization entirely because CNNs never benefit from it.",
+              "correct": false
+            },
+            {
+              "id": "d",
+              "text": "Replace every convolution with pooling so batch size no longer matters.",
+              "correct": false
+            }
+          ],
+          "explain": "Exactly. BatchNorm is great in many settings, but tiny batches can make its reference unstable. Next, we'll zoom out and ask a bigger design question: what normalization really gives you — and what it does not."
+        }
+      ]
+    }
+  ]
+}

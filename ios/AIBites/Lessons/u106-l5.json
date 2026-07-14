@@ -1,0 +1,222 @@
+{
+  "id": "u106-l5",
+  "unit": 106,
+  "day": 535,
+  "tier": "Pooling & CNN Building Blocks",
+  "tierIcon": "🏗️",
+  "title": "Reading a CNN Architecture Diagram",
+  "icon": "🗺️",
+  "concept": "A CNN architecture diagram can be read step by step by tracking the input, each block or layer, the changing shapes, and the final head that produces class logits.",
+  "xp": 15,
+  "hearts": 3,
+  "estMinutes": 7,
+  "segments": [
+    {
+      "type": "warmup",
+      "exercises": [
+        {
+          "id": "w1",
+          "type": "multiple_choice",
+          "xp": 1,
+          "prompt": "Recap: What does the classification head output at the very end of a CNN?",
+          "options": [
+            {
+              "id": "a",
+              "text": "Class logits or class scores",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "The untouched original input image",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "A reset network with no learned features",
+              "correct": false
+            }
+          ],
+          "explain": "Correct — the head turns the last feature maps into the final class scores. Now let's read an entire diagram from left to right."
+        }
+      ]
+    },
+    {
+      "type": "teach",
+      "cards": [
+        {
+          "kind": "hook",
+          "icon": "🗺️",
+          "title": "A CNN diagram is a travel map",
+          "body": "A CNN sketch can look like a lot of boxes and arrows. But if you read it like a map, it becomes manageable. Start at the input, follow the route through each operation, watch how the shape changes, and notice where the final classifier head takes over."
+        },
+        {
+          "kind": "definition",
+          "icon": "🧭",
+          "title": "How to read the diagram",
+          "body": "Read a simple CNN diagram from left to right: <strong>input -> feature blocks -> head -> outputs</strong>. At each step, ask two questions: what operation just happened, and what is the new shape? A label like <code>8x8x16</code> means height 8, width 8, and 16 channels stacked at each location."
+        },
+        {
+          "kind": "analogy",
+          "icon": "🚇",
+          "title": "Like following stops on a subway map",
+          "body": "Each box in the diagram is like a station on a route. The data enters at one stop, gets transformed, then moves on. You do not need to memorize the whole map at once. You can follow the path one station at a time and still understand the journey."
+        },
+        {
+          "kind": "example",
+          "icon": "🔍",
+          "title": "Read this toy CNN end to end",
+          "body": "Take this sketch: <code>32x32x3 -> Conv(8) -> ReLU -> MaxPool -> 16x16x8 -> Conv(16) -> ReLU -> MaxPool -> 8x8x16 -> GlobalAvgPool -> 16 -> Dense -> 3 logits</code>. Read it in order: start with a 32x32 RGB image, extract 8 channels of features, halve the map with pooling, build 16 deeper channels, halve again, squeeze each channel to one number with global pooling, then let the dense layer output one score for each of the 3 classes."
+        },
+        {
+          "kind": "mythbust",
+          "icon": "⚠️",
+          "title": "You do not need every detail at once",
+          "body": "Beginners sometimes think they must instantly decode every filter count, every activation, and every shape formula in one glance. You do not. A strong first read is simpler: follow the order, identify the main blocks, and track how space, channels, and the head change the data."
+        },
+        {
+          "kind": "visual",
+          "icon": "🧩",
+          "title": "What to track while reading",
+          "body": "A simple diagram becomes clear when you track both the operations and the shapes.",
+          "compare": {
+            "left": {
+              "emoji": "🛤️",
+              "tag": "Operations",
+              "text": "Conv finds features<br>Pool shrinks space<br>Head outputs class scores"
+            },
+            "right": {
+              "emoji": "📐",
+              "tag": "Shapes",
+              "text": "32x32x3 -> 16x16x8<br>-> 8x8x16 -> 16 numbers<br>-> 3 logits"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "type": "practice",
+      "exercises": [
+        {
+          "id": "p1",
+          "type": "multiple_choice",
+          "xp": 2,
+          "prompt": "In the toy diagram <code>32x32x3 -> Conv(8) -> ReLU -> MaxPool -> 16x16x8</code>, which step most directly halves the spatial size?",
+          "options": [
+            {
+              "id": "a",
+              "text": "MaxPool",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "The class logits",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "The RGB input itself",
+              "correct": false
+            },
+            {
+              "id": "d",
+              "text": "The arrow symbol",
+              "correct": false
+            }
+          ],
+          "explain": "Right — the pooling step is the one that most directly shrinks the map from 32x32 to 16x16 here."
+        },
+        {
+          "id": "p2",
+          "type": "true_false",
+          "xp": 2,
+          "prompt": "True or false: In a CNN diagram, <code>8x8x16</code> usually means height 8, width 8, and 16 channels.",
+          "options": [
+            {
+              "id": "t",
+              "text": "True",
+              "correct": true
+            },
+            {
+              "id": "f",
+              "text": "False",
+              "correct": false
+            }
+          ],
+          "explain": "True — that is the standard way to read a simple feature-map shape label."
+        },
+        {
+          "id": "p3",
+          "type": "fill_blank",
+          "xp": 2,
+          "prompt": "Complete the sentence:",
+          "sentence": "When you read a CNN sketch, the arrows usually show the order data ___ through the model.",
+          "blank": "flows",
+          "words": [
+            "flows",
+            "sleeps",
+            "freezes"
+          ],
+          "explain": "Flows — the arrows tell you where the data goes next."
+        },
+        {
+          "id": "p4",
+          "type": "spot_the_ai",
+          "xp": 2,
+          "prompt": "Which reading of this toy diagram is correct: <code>16x16x8 -> MaxPool -> 8x8x8 -> GlobalAvgPool -> 8 -> Dense -> 4 logits</code>?",
+          "options": [
+            {
+              "id": "a",
+              "text": "Pooling shrinks the spatial map, global average pooling squeezes each channel to one number, and the dense layer outputs 4 class scores",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "Global average pooling increases the image back to 16x16 before classification",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "The 4 logits are four separate images, not class scores",
+              "correct": false
+            }
+          ],
+          "explain": "Exactly — that is the correct end-to-end reading of the sketch."
+        }
+      ]
+    },
+    {
+      "type": "boss",
+      "exercises": [
+        {
+          "id": "b1",
+          "type": "multiple_choice",
+          "xp": 5,
+          "prompt": "You can now read a toy architecture like <code>32x32x3 -> block -> block -> global pool -> dense -> logits</code>. What is the next big question that leads naturally into the next unit?",
+          "options": [
+            {
+              "id": "a",
+              "text": "How much of the original image each deeper feature can actually 'see'",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "How to turn logits back into raw camera pixels",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "How to delete all spatial structure before the first convolution",
+              "correct": false
+            },
+            {
+              "id": "d",
+              "text": "Why CNNs should avoid using features altogether",
+              "correct": false
+            }
+          ],
+          "explain": "Exactly. Once you can read the boxes and arrows, the next deep question is about each feature's view of the original image — its receptive field. That is where we go next."
+        }
+      ]
+    }
+  ]
+}

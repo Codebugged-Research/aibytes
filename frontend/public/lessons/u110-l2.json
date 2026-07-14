@@ -1,0 +1,222 @@
+{
+  "id": "u110-l2",
+  "unit": 110,
+  "day": 552,
+  "tier": "Pooling & CNN Building Blocks",
+  "tierIcon": "⚙️",
+  "title": "Batch Normalization",
+  "icon": "📏",
+  "concept": "Batch Normalization uses the current mini-batch to recenter and rescale activations, then learns how much scale and shift to add back if that range works better for the network.",
+  "xp": 15,
+  "hearts": 3,
+  "estMinutes": 7,
+  "segments": [
+    {
+      "type": "warmup",
+      "exercises": [
+        {
+          "id": "w1",
+          "type": "multiple_choice",
+          "xp": 1,
+          "prompt": "Recap: What problem makes activation normalization useful in the first place?",
+          "options": [
+            {
+              "id": "a",
+              "text": "Later layers can receive wildly shifting activation ranges.",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "Convolutions stop using kernels after one step.",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "Images lose all their pixels during backpropagation.",
+              "correct": false
+            }
+          ],
+          "explain": "Correct — normalization matters because unstable activation scales make learning harder."
+        }
+      ]
+    },
+    {
+      "type": "teach",
+      "cards": [
+        {
+          "kind": "hook",
+          "icon": "📦",
+          "title": "Check today's batch before packing",
+          "body": "Imagine a shipping line where boxes arriving this hour are taller and heavier than the last batch. A worker quickly re-centers the measuring jig so the next station gets boxes in a more expected range. Batch Normalization does a similar 'use this batch as the reference' move inside a neural network."
+        },
+        {
+          "kind": "definition",
+          "icon": "📏",
+          "title": "Normalize with the current mini-batch",
+          "body": "<strong>Batch Normalization</strong> looks at activations from the current mini-batch, recenters and rescales them, then passes the adjusted result forward. In practice, it uses the batch's average and spread as the temporary reference. After that, the layer still keeps <strong>learnable scale and shift</strong> so the network can restore a useful range if needed."
+        },
+        {
+          "kind": "analogy",
+          "icon": "🎛️",
+          "title": "Auto-level first, creative sliders second",
+          "body": "A music app might first auto-level a messy recording so the waveform is easier to handle, then still let you boost the bass or raise the volume. BatchNorm works the same way: normalize first for stability, then keep trainable knobs for what the model actually wants."
+        },
+        {
+          "kind": "example",
+          "icon": "🐕",
+          "title": "One feature channel runs hot",
+          "body": "Suppose one CNN channel detecting fur texture tends to output values around <code>40</code>, while another channel detecting soft shadows sits near <code>-3</code>. BatchNorm uses the current mini-batch to put those channels on a more manageable footing. If the next layer benefits from one feature being a bit stronger or more positive, BatchNorm can still learn that scale or offset back."
+        },
+        {
+          "kind": "mythbust",
+          "icon": "⚠️",
+          "title": "BatchNorm is not a permanent clamp",
+          "body": "People sometimes hear 'normalize' and imagine the network is forced into one rigid activation shape forever. But BatchNorm is more flexible than that. It stabilizes the batch first, then learns how much to stretch or shift the values afterward."
+        },
+        {
+          "kind": "visual",
+          "icon": "⚖️",
+          "title": "Raw batch vs. normalized batch",
+          "body": "What BatchNorm adds:",
+          "compare": {
+            "left": {
+              "emoji": "📈",
+              "tag": "Raw activations",
+              "text": "Batch may arrive off-center.<br>One channel may dominate the scale.<br>Next layer must adapt on the fly."
+            },
+            "right": {
+              "emoji": "📏",
+              "tag": "BatchNorm activations",
+              "text": "Batch is re-centered and re-scaled.<br>Learnable scale/shift remain available.<br>Stability and flexibility both stay in play."
+            }
+          }
+        }
+      ]
+    },
+    {
+      "type": "practice",
+      "exercises": [
+        {
+          "id": "p1",
+          "type": "multiple_choice",
+          "xp": 2,
+          "prompt": "During training, what does BatchNorm use as its main reference for normalization?",
+          "options": [
+            {
+              "id": "a",
+              "text": "The activations in the current mini-batch",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "Only the final labels from the dataset",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "A random kernel chosen every epoch",
+              "correct": false
+            },
+            {
+              "id": "d",
+              "text": "The raw pixels from the very first training image forever",
+              "correct": false
+            }
+          ],
+          "explain": "Right — BatchNorm uses the current mini-batch as its local reference during training."
+        },
+        {
+          "id": "p2",
+          "type": "true_false",
+          "xp": 2,
+          "prompt": "True or false: After normalizing, BatchNorm can still learn a useful scale and shift for the activations.",
+          "options": [
+            {
+              "id": "t",
+              "text": "True",
+              "correct": true
+            },
+            {
+              "id": "f",
+              "text": "False",
+              "correct": false
+            }
+          ],
+          "explain": "True — those learnable knobs are a big reason BatchNorm stays practical instead of rigid."
+        },
+        {
+          "id": "p3",
+          "type": "fill_blank",
+          "xp": 2,
+          "prompt": "Complete the sentence:",
+          "sentence": "BatchNorm first normalizes activations, then learns a ___ and shift.",
+          "blank": "scale",
+          "words": [
+            "scale",
+            "folder",
+            "caption"
+          ],
+          "explain": "Scale is right — BatchNorm learns how much to stretch the normalized values back."
+        },
+        {
+          "id": "p4",
+          "type": "spot_the_ai",
+          "xp": 2,
+          "prompt": "Which situation sounds most like BatchNorm in action?",
+          "options": [
+            {
+              "id": "a",
+              "text": "A mini-batch is used to recenter and rescale a conv block's activations, and the network still learns how strong or shifted those activations should be afterward.",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "A CNN deletes all negative values forever and loses the ability to tune them.",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "A GPU alphabetizes training images before every epoch.",
+              "correct": false
+            }
+          ],
+          "explain": "Exactly — the practical story is normalize with the batch, then keep trainable control over the final range."
+        }
+      ]
+    },
+    {
+      "type": "boss",
+      "exercises": [
+        {
+          "id": "b1",
+          "type": "multiple_choice",
+          "xp": 5,
+          "prompt": "A team worries that normalizing a useful feature channel will ruin it. What is the best response?",
+          "options": [
+            {
+              "id": "a",
+              "text": "BatchNorm stabilizes the channel using the current batch, but it can still learn to scale or shift that feature back into a helpful range.",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "BatchNorm permanently forces every feature channel to stay at exactly zero.",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "BatchNorm removes the need for convolutional filters entirely.",
+              "correct": false
+            },
+            {
+              "id": "d",
+              "text": "BatchNorm works by replacing feature channels with the class labels.",
+              "correct": false
+            }
+          ],
+          "explain": "Exactly. BatchNorm is a stabilizer with adjustable knobs, not a feature eraser. Next, we'll see a practical twist: BatchNorm behaves differently during training and during inference."
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,222 @@
+{
+  "unit": 111,
+  "tier": "Pooling & CNN Building Blocks",
+  "tierIcon": "🛠️",
+  "xp": 15,
+  "hearts": 3,
+  "estMinutes": 7,
+  "id": "u111-l4",
+  "day": 559,
+  "title": "Common Beginner CNN Mistakes",
+  "icon": "🧪",
+  "concept": "Many beginner CNN problems come from architecture choices, not mysterious math: shrinking too fast, keeping too few channels, mismatching shapes, overusing dense layers, or using a head that does not match the task.",
+  "segments": [
+    {
+      "type": "warmup",
+      "exercises": [
+        {
+          "id": "w1",
+          "type": "multiple_choice",
+          "xp": 1,
+          "prompt": "Recap: Which operation most directly shrinks the height and width of a feature map in a simple CNN?",
+          "explain": "Correct — pooling is the classic shrinking step in a basic CNN.",
+          "options": [
+            {
+              "id": "a",
+              "text": "Pooling",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "The image caption",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "The class name text",
+              "correct": false
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "teach",
+      "cards": [
+        {
+          "kind": "hook",
+          "icon": "🧪",
+          "title": "A CNN can go wrong through bad plumbing",
+          "body": "Sometimes a CNN struggles not because the idea of convolutions is wrong, but because the architecture shrank, flattened, or connected things in an awkward way. Good beginner design avoids a few classic traps."
+        },
+        {
+          "kind": "definition",
+          "icon": "🚧",
+          "title": "Five common beginner mistakes",
+          "body": "Common traps include: shrinking the map too fast, keeping too few channels as features get richer, trying to combine tensors with mismatched shapes, flattening giant maps into oversized dense heads, and using the same head for every task whether or not it needs location detail."
+        },
+        {
+          "kind": "analogy",
+          "icon": "🪴",
+          "title": "Pruning a plant too early",
+          "body": "If you cut away most of a young plant before it has grown structure, you do not get a better garden — you just lose information. Heavy early pooling can do the same thing to a CNN before it has learned enough useful features."
+        },
+        {
+          "kind": "example",
+          "icon": "📉",
+          "title": "Too small, too soon",
+          "body": "A design like <code>64x64x3 -> Pool -> Pool -> Pool -> 8x8x3</code> throws away a lot of detail before the network has even built many feature channels. A stronger beginner pattern is to learn some features first with convolution blocks, shrink more gradually, and often increase channels as depth grows."
+        },
+        {
+          "kind": "mythbust",
+          "icon": "⚠️",
+          "title": "A giant dense head is not automatically smarter",
+          "body": "Flattening a huge feature map into several big dense layers can explode the parameter count without adding clear visual structure. Often a smaller head — sometimes with global average pooling — is simpler and easier to reason about."
+        },
+        {
+          "kind": "visual",
+          "icon": "🛠️",
+          "title": "Balanced pattern vs. trouble pattern",
+          "body": "Good CNN design usually looks more deliberate than random.",
+          "compare": {
+            "left": {
+              "emoji": "✅",
+              "tag": "Balanced design",
+              "text": "Learn before heavy shrinking<br>Channels often grow with depth<br>Head matches the task"
+            },
+            "right": {
+              "emoji": "🚫",
+              "tag": "Beginner traps",
+              "text": "Pool away detail too early<br>Mismatched shapes in merges<br>Huge flatten + dense stack"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "type": "practice",
+      "exercises": [
+        {
+          "id": "p1",
+          "type": "multiple_choice",
+          "xp": 2,
+          "prompt": "Which design is most likely shrinking spatial detail too fast?",
+          "explain": "Exactly — that layout keeps throwing pixels away before it learns many features.",
+          "options": [
+            {
+              "id": "a",
+              "text": "64x64x3 -> Pool -> Pool -> Pool -> Conv(8)",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "64x64x3 -> Conv(8) -> ReLU -> Pool -> Conv(16)",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "64x64x3 -> Conv(8) -> ReLU -> Conv(16) -> ReLU",
+              "correct": false
+            },
+            {
+              "id": "d",
+              "text": "64x64x3 -> Conv(8) -> ReLU -> Pool -> GlobalAvgPool",
+              "correct": false
+            }
+          ]
+        },
+        {
+          "id": "p2",
+          "type": "true_false",
+          "xp": 2,
+          "prompt": "True or false: Flattening a large <code>32x32x64</code> map straight into several dense layers can create a very heavy parameter count.",
+          "explain": "True — that is one reason beginners often replace giant flatten+dense stacks with a smaller head.",
+          "options": [
+            {
+              "id": "t",
+              "text": "True",
+              "correct": true
+            },
+            {
+              "id": "f",
+              "text": "False",
+              "correct": false
+            }
+          ]
+        },
+        {
+          "id": "p3",
+          "type": "fill_blank",
+          "xp": 2,
+          "prompt": "Complete the sentence:",
+          "explain": "Match is the key idea — if two paths are added together, their shapes must line up.",
+          "sentence": "If two paths are added together in a skip connection, their shapes must ___.",
+          "blank": "match",
+          "words": [
+            "match",
+            "evaporate",
+            "rotate"
+          ]
+        },
+        {
+          "id": "p4",
+          "type": "spot_the_ai",
+          "xp": 2,
+          "prompt": "Which fix best helps a model that must preserve exact location detail?",
+          "explain": "Right — gentler downsampling is the natural fix when exact location matters.",
+          "options": [
+            {
+              "id": "a",
+              "text": "Reduce aggressive pooling and keep more spatial detail deeper into the network",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "Shrink the image to 1x1 as early as possible",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "Replace all convolutions with one giant dense layer on raw pixels",
+              "correct": false
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "boss",
+      "exercises": [
+        {
+          "id": "b1",
+          "type": "multiple_choice",
+          "xp": 5,
+          "prompt": "A student built <code>64x64x3 -> MaxPool -> MaxPool -> MaxPool -> Flatten -> Dense(512) -> 2 logits</code> and says the design feels clumsy. Which critique is best?",
+          "explain": "Exactly. This network throws away detail before learning enough features and then uses a heavy dense head anyway. A cleaner beginner design would learn with convolution blocks first, shrink more deliberately, and often use a smaller head.",
+          "options": [
+            {
+              "id": "a",
+              "text": "It shrinks too early and then relies on a bulky dense head; better to learn features first and downsample more deliberately",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "The only problem is that it uses too many logits for a 2-class task",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "Pooling should always come before every convolution, so this design is already ideal",
+              "correct": false
+            },
+            {
+              "id": "d",
+              "text": "Dense layers automatically fix any earlier architecture mistake",
+              "correct": false
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

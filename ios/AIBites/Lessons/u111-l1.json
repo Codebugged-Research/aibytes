@@ -1,0 +1,222 @@
+{
+  "unit": 111,
+  "tier": "Pooling & CNN Building Blocks",
+  "tierIcon": "🛠️",
+  "xp": 15,
+  "hearts": 3,
+  "estMinutes": 7,
+  "id": "u111-l1",
+  "day": 556,
+  "title": "Picking the Pieces of a CNN",
+  "icon": "🛠️",
+  "concept": "Designing a beginner CNN means choosing the right building blocks for the image task: convolutions learn patterns, activations add flexibility, pooling or stride trade detail for efficiency, and the head should match whether you need a whole-image label or a location-aware output.",
+  "segments": [
+    {
+      "type": "warmup",
+      "exercises": [
+        {
+          "id": "w1",
+          "type": "multiple_choice",
+          "xp": 1,
+          "prompt": "Recap: What is one helpful role of a normalization layer inside a CNN stack?",
+          "options": [
+            {
+              "id": "a",
+              "text": "It helps keep activations more stable across layers",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "It turns every image into a file name",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "It replaces the need for convolution entirely",
+              "correct": false
+            }
+          ],
+          "explain": "Right — normalization layers help keep activations more controlled and stable as the network gets deeper."
+        }
+      ]
+    },
+    {
+      "type": "teach",
+      "cards": [
+        {
+          "kind": "hook",
+          "icon": "🧰",
+          "title": "A CNN is a toolbox, not one magic layer",
+          "body": "A flower classifier, a face recognizer, and a defect finder all use CNN ideas, but they do not need exactly the same recipe. Good design starts by asking what the task needs the network to keep, shrink, or predict."
+        },
+        {
+          "kind": "definition",
+          "icon": "🛠️",
+          "title": "Pick pieces to match the job",
+          "body": "<strong>Convolutions</strong> learn local visual patterns. <strong>Activations</strong> like <code>ReLU</code> make the network nonlinear instead of one giant linear rule. <strong>Pooling</strong> or stride can shrink maps and widen context, but they also throw away some detail. <strong>Normalization</strong> can steady activations between stages. Finally, the <strong>head</strong> should match the output: a whole-image label, a yes/no score, or a location-aware map."
+        },
+        {
+          "kind": "analogy",
+          "icon": "👨‍🍳",
+          "title": "Different meals, different kitchen tools",
+          "body": "If you are making soup, a blender helps. If you are decorating a cake, you care more about precise piping than blending everything down. CNN design is similar: some tasks benefit from more shrinking and summary, while others need the network to preserve where things are."
+        },
+        {
+          "kind": "example",
+          "icon": "🌼",
+          "title": "Flower label vs. crack map",
+          "body": "For flower classification, a simple design like <code>conv -> ReLU -> pool</code> blocks, maybe with normalization, plus <code>global average pooling -> dense</code> works well because you just want one label for the whole image. For a crack-detection map, you would usually downsample more gently and keep more spatial detail, because the model must say <em>where</em> the crack is, not just whether one exists somewhere."
+        },
+        {
+          "kind": "mythbust",
+          "icon": "⚠️",
+          "title": "More layers is not the same as better design",
+          "body": "Beginners sometimes try to stuff every possible block into one model. But a smaller, task-matched CNN is often clearer and stronger than a random pile of layers. The goal is not maximum complexity — it is the right flow of features for the job."
+        },
+        {
+          "kind": "visual",
+          "icon": "🎯",
+          "title": "Whole-image task vs. location task",
+          "body": "The task changes which CNN pieces matter most.",
+          "compare": {
+            "left": {
+              "emoji": "🏷️",
+              "tag": "Classification",
+              "text": "Can shrink more<br>Global pool + small head<br>Predict one label"
+            },
+            "right": {
+              "emoji": "📍",
+              "tag": "Location-aware task",
+              "text": "Keep more spatial detail<br>Gentler downsampling<br>Predict where, not just what"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "type": "practice",
+      "exercises": [
+        {
+          "id": "p1",
+          "type": "multiple_choice",
+          "xp": 2,
+          "prompt": "You are building a model that gives one label for an entire image: <em>cat</em> or <em>dog</em>. Which head is the most natural fit?",
+          "explain": "Exactly — for whole-image classification, a compact head like global average pooling plus a dense output layer is a clean fit.",
+          "options": [
+            {
+              "id": "a",
+              "text": "Global average pooling followed by a dense layer that outputs class logits",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "A full-resolution output map with one label per pixel",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "Only pooling layers, with no learned convolutions",
+              "correct": false
+            },
+            {
+              "id": "d",
+              "text": "Flatten the raw image immediately and skip feature extraction",
+              "correct": false
+            }
+          ]
+        },
+        {
+          "id": "p2",
+          "type": "true_false",
+          "xp": 2,
+          "prompt": "True or false: If your task needs exact pixel locations, aggressively shrinking the image at every stage is usually the safest choice.",
+          "explain": "False — heavy downsampling can destroy the very spatial detail that location-aware tasks need.",
+          "options": [
+            {
+              "id": "t",
+              "text": "True",
+              "correct": false
+            },
+            {
+              "id": "f",
+              "text": "False",
+              "correct": true
+            }
+          ]
+        },
+        {
+          "id": "p3",
+          "type": "fill_blank",
+          "xp": 2,
+          "prompt": "Complete the sentence:",
+          "explain": "Nonlinear is the key idea — ReLU helps a CNN do more than one giant linear transform.",
+          "sentence": "Activations like ReLU make a CNN more ___, so stacked convolutions are not just one big linear rule.",
+          "blank": "nonlinear",
+          "words": [
+            "nonlinear",
+            "grayscale",
+            "frozen"
+          ]
+        },
+        {
+          "id": "p4",
+          "type": "spot_the_ai",
+          "xp": 2,
+          "prompt": "Which design choice best fits a yes/no image classifier that only needs one answer for the whole image?",
+          "explain": "Right — that design uses the standard CNN building blocks in a way that matches a whole-image prediction task.",
+          "options": [
+            {
+              "id": "a",
+              "text": "Use conv blocks, allow some downsampling, then finish with global average pooling and a small binary head",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "Keep a giant full-resolution map forever because whole-image labels need exact pixel output",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "Remove all activations so every stage stays purely linear",
+              "correct": false
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "boss",
+      "exercises": [
+        {
+          "id": "b1",
+          "type": "multiple_choice",
+          "xp": 5,
+          "prompt": "You must build a CNN that says whether an x-ray contains pneumonia anywhere in the image. You only need one yes/no answer for the whole image, not a pixel-by-pixel outline. Which design choice fits best?",
+          "explain": "Exactly. Because the task is a whole-image yes/no decision, a compact feature extractor with some downsampling and a small classification head is a natural fit. You would save the heavy location-preserving design for a task that needs precise outlines.",
+          "options": [
+            {
+              "id": "a",
+              "text": "Use conv blocks with some downsampling, then a global-pooling or small dense classification head for one binary output",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "Force the model to output a full-resolution label at every pixel, even though no location label is needed",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "Flatten the raw image immediately into a huge dense stack and skip convolutions",
+              "correct": false
+            },
+            {
+              "id": "d",
+              "text": "Use only pooling, because learned filters are unnecessary for image tasks",
+              "correct": false
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

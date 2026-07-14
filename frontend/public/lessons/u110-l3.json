@@ -1,0 +1,222 @@
+{
+  "id": "u110-l3",
+  "unit": 110,
+  "day": 553,
+  "tier": "Pooling & CNN Building Blocks",
+  "tierIcon": "⚙️",
+  "title": "Training vs. Inference in BatchNorm",
+  "icon": "🔄",
+  "concept": "BatchNorm uses the current mini-batch while training, but switches to stored running averages at inference so predictions stay consistent even for one example at a time.",
+  "xp": 15,
+  "hearts": 3,
+  "estMinutes": 7,
+  "segments": [
+    {
+      "type": "warmup",
+      "exercises": [
+        {
+          "id": "w1",
+          "type": "multiple_choice",
+          "xp": 1,
+          "prompt": "Recap: Why does BatchNorm keep learnable scale and shift after normalizing?",
+          "options": [
+            {
+              "id": "a",
+              "text": "So the network can keep useful flexibility after stabilization",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "So the dataset can rename its labels during training",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "So every conv layer can skip the forward pass",
+              "correct": false
+            }
+          ],
+          "explain": "Right — BatchNorm stabilizes activations but still lets the network choose a useful final range."
+        }
+      ]
+    },
+    {
+      "type": "teach",
+      "cards": [
+        {
+          "kind": "hook",
+          "icon": "🎬",
+          "title": "Practice with the group, perform alone",
+          "body": "During rehearsal, a dance team can adjust using feedback from the whole group in the room. On show night, one dancer still needs a stable routine even if nobody else is beside them. BatchNorm also has a 'group practice' mode and an 'individual performance' mode."
+        },
+        {
+          "kind": "definition",
+          "icon": "🔄",
+          "title": "Two modes, two statistic sources",
+          "body": "During <strong>training</strong>, BatchNorm uses the current mini-batch's statistics and keeps updating running averages in the background. During <strong>inference</strong>, it stops depending on the live batch and uses those stored running averages instead. In frameworks, this is the practical reason <code>train()</code> and <code>eval()</code> matter."
+        },
+        {
+          "kind": "analogy",
+          "icon": "📚",
+          "title": "Classroom average vs. answer key",
+          "body": "While students are practicing, a teacher can look around the room and judge how the class is doing right now. During the final exam, grading should not depend on who happened to sit nearby that minute. Running averages are like the stable answer key BatchNorm uses once training is over."
+        },
+        {
+          "kind": "example",
+          "icon": "📱",
+          "title": "One photo on a phone",
+          "body": "Imagine a plant-ID app that classifies one user photo at a time. At prediction time there may be no meaningful 'batch' around that image. If BatchNorm kept using live batch statistics, the result could depend on random neighboring photos or even fail with a single sample. Running averages avoid that problem."
+        },
+        {
+          "kind": "mythbust",
+          "icon": "⚠️",
+          "title": "Inference should not depend on random neighbors",
+          "body": "It may sound harmless to keep using whatever live samples are nearby during inference, but that would make one prediction depend on unrelated examples. Good inference should be self-contained and consistent. That is why BatchNorm switches modes."
+        },
+        {
+          "kind": "visual",
+          "icon": "⚖️",
+          "title": "Training mode vs. inference mode",
+          "body": "Why the switch exists:",
+          "compare": {
+            "left": {
+              "emoji": "🏋️",
+              "tag": "Training mode",
+              "text": "Uses current mini-batch stats.<br>Updates running averages over time.<br>Fits the learning process."
+            },
+            "right": {
+              "emoji": "🔍",
+              "tag": "Inference mode",
+              "text": "Uses stored running averages.<br>Works for one example at a time.<br>Keeps predictions consistent."
+            }
+          }
+        }
+      ]
+    },
+    {
+      "type": "practice",
+      "exercises": [
+        {
+          "id": "p1",
+          "type": "multiple_choice",
+          "xp": 2,
+          "prompt": "During training, what statistics does BatchNorm usually use?",
+          "options": [
+            {
+              "id": "a",
+              "text": "The statistics of the current mini-batch",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "Only the labels of the current mini-batch",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "A fixed guess chosen before training began",
+              "correct": false
+            },
+            {
+              "id": "d",
+              "text": "The statistics from the first batch forever",
+              "correct": false
+            }
+          ],
+          "explain": "Exactly — training mode uses the current mini-batch and updates running averages as it goes."
+        },
+        {
+          "id": "p2",
+          "type": "true_false",
+          "xp": 2,
+          "prompt": "True or false: At inference time, BatchNorm usually switches to running averages collected during training.",
+          "options": [
+            {
+              "id": "t",
+              "text": "True",
+              "correct": true
+            },
+            {
+              "id": "f",
+              "text": "False",
+              "correct": false
+            }
+          ],
+          "explain": "True — that keeps predictions stable even when the model sees one example or an odd mini-batch."
+        },
+        {
+          "id": "p3",
+          "type": "fill_blank",
+          "xp": 2,
+          "prompt": "Complete the sentence:",
+          "sentence": "At prediction time, BatchNorm usually switches to running ___.",
+          "blank": "averages",
+          "words": [
+            "averages",
+            "filters",
+            "folders"
+          ],
+          "explain": "Averages is right — stored running statistics are the stable reference for inference."
+        },
+        {
+          "id": "p4",
+          "type": "spot_the_ai",
+          "xp": 2,
+          "prompt": "Which scenario best matches BatchNorm in inference mode?",
+          "options": [
+            {
+              "id": "a",
+              "text": "A model classifies one MRI scan and normalizes hidden activations using stored running averages learned during training.",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "A model waits for a bunch of unrelated live users so one person's prediction can depend on them.",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "A model throws away all learned normalization statistics before each prediction.",
+              "correct": false
+            }
+          ],
+          "explain": "Yes — inference mode should work cleanly for a single sample without borrowing random neighbors."
+        }
+      ]
+    },
+    {
+      "type": "boss",
+      "exercises": [
+        {
+          "id": "b1",
+          "type": "multiple_choice",
+          "xp": 5,
+          "prompt": "A team evaluates one image at a time but forgets to switch BatchNorm layers out of training mode. What is the main practical risk?",
+          "options": [
+            {
+              "id": "a",
+              "text": "Predictions can become unstable because BatchNorm keeps relying on tiny live-batch statistics instead of stored running averages.",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "The convolution kernels instantly stop existing.",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "The labels get rewritten by the optimizer.",
+              "correct": false
+            },
+            {
+              "id": "d",
+              "text": "The model becomes a pooling-only network.",
+              "correct": false
+            }
+          ],
+          "explain": "Exactly. BatchNorm needs batch statistics for training, but stable stored averages for prediction. Next, we'll see why this matters even more when your batch size is tiny."
+        }
+      ]
+    }
+  ]
+}

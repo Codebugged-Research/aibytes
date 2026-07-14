@@ -1,0 +1,222 @@
+{
+  "id": "u106-l4",
+  "unit": 106,
+  "day": 534,
+  "tier": "Pooling & CNN Building Blocks",
+  "tierIcon": "🏗️",
+  "title": "The Classification Head",
+  "icon": "🎯",
+  "concept": "After the convolutional feature extractor, a CNN uses a classification head — often flattening or global pooling followed by dense layers — to convert final feature maps into class logits.",
+  "xp": 15,
+  "hearts": 3,
+  "estMinutes": 7,
+  "segments": [
+    {
+      "type": "warmup",
+      "exercises": [
+        {
+          "id": "w1",
+          "type": "multiple_choice",
+          "xp": 1,
+          "prompt": "Recap: If a CNN's last feature block outputs an <code>8x8x32</code> feature stack, what job still remains?",
+          "options": [
+            {
+              "id": "a",
+              "text": "Turn those learned features into class scores with a classification head",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "Convert the feature stack back into untouched raw pixels before predicting",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "Add more RGB channels until it matches the input image again",
+              "correct": false
+            }
+          ],
+          "explain": "Exactly — feature maps are useful, but the model still needs a final step that turns them into a class decision."
+        }
+      ]
+    },
+    {
+      "type": "teach",
+      "cards": [
+        {
+          "kind": "hook",
+          "icon": "🎯",
+          "title": "Someone has to make the final call",
+          "body": "Convolutional blocks are excellent at building features, but feature maps are not yet the final answer. A CNN still needs a part that reads those features and says, in effect, 'these scores point most strongly to class A.' That part is the classification head."
+        },
+        {
+          "kind": "definition",
+          "icon": "🏁",
+          "title": "What the classification head does",
+          "body": "The <strong>classification head</strong> is the end of the network that converts the last feature maps into class logits. Common heads either <strong>flatten</strong> the full stack into one long vector or use <strong>global pooling</strong> to squeeze each channel down to one number, then pass that result through a dense layer to produce one score per class."
+        },
+        {
+          "kind": "analogy",
+          "icon": "🧑‍⚖️",
+          "title": "The judge reads the case summary",
+          "body": "Think of the earlier CNN blocks as investigators collecting evidence. The head is like the judge at the end. The judge does not revisit every street corner from scratch — the judge reads the summary built by the investigators and then delivers a verdict. The head reads the final features and turns them into class scores."
+        },
+        {
+          "kind": "example",
+          "icon": "🧮",
+          "title": "Flatten head vs. global-pooling head",
+          "body": "Suppose the last feature stack is <code>4x4x32</code>. A flatten head turns that into <code>512</code> numbers, then a dense layer can output <code>3 logits</code> for three classes. A global-average-pooling head instead turns <code>4x4x32</code> into just <code>32</code> numbers — one summary per channel — then uses a dense layer to output the same <code>3 logits</code>. Different route, same goal: class scores."
+        },
+        {
+          "kind": "mythbust",
+          "icon": "⚠️",
+          "title": "The head does not start vision from zero",
+          "body": "A beginner might think the dense layer at the end somehow does the 'real' recognition work by itself. Not really. The head depends on the feature extractor before it. It is reading the final learned patterns, not rediscovering the image from scratch."
+        },
+        {
+          "kind": "visual",
+          "icon": "⚖️",
+          "title": "Two common ways into the head",
+          "body": "Both paths prepare the final feature stack for dense class outputs.",
+          "compare": {
+            "left": {
+              "emoji": "📏",
+              "tag": "Flatten",
+              "text": "4x4x32 -> 512 numbers<br>Keeps each cell separate<br>Then dense outputs"
+            },
+            "right": {
+              "emoji": "🌍",
+              "tag": "Global average pool",
+              "text": "4x4x32 -> 32 numbers<br>One average per channel<br>Then dense outputs"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "type": "practice",
+      "exercises": [
+        {
+          "id": "p1",
+          "type": "multiple_choice",
+          "xp": 2,
+          "prompt": "Which operation turns a <code>4x4x32</code> feature stack into exactly <code>32</code> numbers before the dense layer?",
+          "options": [
+            {
+              "id": "a",
+              "text": "Global average pooling",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "Another RGB image decoder",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "Label smoothing",
+              "correct": false
+            },
+            {
+              "id": "d",
+              "text": "Increasing the spatial size back to 64x64",
+              "correct": false
+            }
+          ],
+          "explain": "Right — global average pooling squeezes each channel down to one summary number."
+        },
+        {
+          "id": "p2",
+          "type": "true_false",
+          "xp": 2,
+          "prompt": "True or false: Flattening and global pooling are both common ways to prepare CNN feature maps for dense class outputs.",
+          "options": [
+            {
+              "id": "t",
+              "text": "True",
+              "correct": true
+            },
+            {
+              "id": "f",
+              "text": "False",
+              "correct": false
+            }
+          ],
+          "explain": "True — both are standard ways to bridge from feature maps to class scores."
+        },
+        {
+          "id": "p3",
+          "type": "fill_blank",
+          "xp": 2,
+          "prompt": "Complete the sentence:",
+          "sentence": "The dense layer at the end often outputs class ___, which are scores before the final probability step.",
+          "blank": "logits",
+          "words": [
+            "logits",
+            "pixels",
+            "filters"
+          ],
+          "explain": "Logits — they are raw class scores, before converting them into final probabilities."
+        },
+        {
+          "id": "p4",
+          "type": "spot_the_ai",
+          "xp": 2,
+          "prompt": "Which statement best describes a CNN classification head?",
+          "options": [
+            {
+              "id": "a",
+              "text": "It converts the last feature maps into class scores, often using flattening or global pooling before a dense layer",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "It recreates the original image so a human can classify it manually",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "It exists only to increase spatial size and never to output scores",
+              "correct": false
+            }
+          ],
+          "explain": "Exactly — the classification head is the final feature-to-score translator."
+        }
+      ]
+    },
+    {
+      "type": "boss",
+      "exercises": [
+        {
+          "id": "b1",
+          "type": "multiple_choice",
+          "xp": 5,
+          "prompt": "A toy CNN ends with a <code>4x4x16</code> feature stack and needs to classify 5 classes. Which head description makes the most sense?",
+          "options": [
+            {
+              "id": "a",
+              "text": "Use global average pooling to get 16 numbers, then a dense layer to output 5 logits",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "Skip the head entirely and treat the 4x4 grid itself as the final 5 class labels",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "Convert the feature maps back into a 4x4x3 RGB image, then guess the class by eye",
+              "correct": false
+            },
+            {
+              "id": "d",
+              "text": "Add pooling forever and never produce class scores",
+              "correct": false
+            }
+          ],
+          "explain": "Exactly. The head's whole job is to turn the last feature stack into class logits. Next we'll put the whole story together by learning how to read a complete CNN architecture diagram from input to output."
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,222 @@
+{
+  "unit": 111,
+  "tier": "Pooling & CNN Building Blocks",
+  "tierIcon": "🛠️",
+  "xp": 15,
+  "hearts": 3,
+  "estMinutes": 7,
+  "id": "u111-l3",
+  "day": 558,
+  "title": "Watching Shapes Change Through the Network",
+  "icon": "📐",
+  "concept": "Tracking height, width, and channels step by step makes a CNN architecture much easier to understand: convolutions often change channels, pooling shrinks space, ReLU keeps shape, and the head converts the final feature map into logits.",
+  "segments": [
+    {
+      "type": "warmup",
+      "exercises": [
+        {
+          "id": "w1",
+          "type": "multiple_choice",
+          "xp": 1,
+          "prompt": "Recap: In a feature-map label like <code>16x16x8</code>, what does the <code>8</code> usually represent?",
+          "explain": "Right — the last number is the channel count.",
+          "options": [
+            {
+              "id": "a",
+              "text": "The number of channels",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "The battery percentage",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "The image file size in megabytes",
+              "correct": false
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "teach",
+      "cards": [
+        {
+          "kind": "hook",
+          "icon": "📐",
+          "title": "The shape trail tells the story",
+          "body": "When a CNN feels confusing, shape tracking is a great rescue tool. If you know what happened to height, width, and channels at each step, the model becomes much easier to read."
+        },
+        {
+          "kind": "definition",
+          "icon": "📦",
+          "title": "What each dimension is doing",
+          "body": "A label like <code>H x W x C</code> means height, width, and channels. In many beginner examples, a padded convolution keeps <code>H</code> and <code>W</code> the same while changing <code>C</code>. <code>ReLU</code> usually keeps the shape unchanged. Pooling often shrinks height and width. <code>GlobalAvgPool</code> turns an entire <code>H x W x C</code> map into just <code>C</code> numbers."
+        },
+        {
+          "kind": "analogy",
+          "icon": "📬",
+          "title": "Like tracking packages through a warehouse",
+          "body": "Imagine packages moving down a line. Some stations repack them into smaller boxes, some add more labeled bins, and one final station turns the whole shipment into a short report. CNN layers do something similar to shapes."
+        },
+        {
+          "kind": "example",
+          "icon": "🔢",
+          "title": "Track one network end to end",
+          "body": "Using same-padding convolutions, a toy network could go <code>32x32x3 -> Conv(8) -> 32x32x8 -> ReLU -> 32x32x8 -> MaxPool -> 16x16x8 -> Conv(16) -> 16x16x16 -> ReLU -> 16x16x16 -> MaxPool -> 8x8x16 -> GlobalAvgPool -> 16 -> Dense -> 4 logits</code>. Notice the pattern: convolution grows channels, ReLU keeps the shape, pooling shrinks space, and the head converts the last feature stack into class scores."
+        },
+        {
+          "kind": "mythbust",
+          "icon": "⚠️",
+          "title": "More channels does not mean a bigger image",
+          "body": "A common mix-up is thinking that more channels means the image got physically larger. It did not. Channels mean more feature types stacked at each location, not more height or width."
+        },
+        {
+          "kind": "visual",
+          "icon": "🧭",
+          "title": "Spatial size vs. channel depth",
+          "body": "These two kinds of shape changes are different jobs.",
+          "compare": {
+            "left": {
+              "emoji": "📏",
+              "tag": "Spatial size",
+              "text": "32x32 -> 16x16 -> 8x8<br>Pooling or stride shrinks space<br>Less exact location detail"
+            },
+            "right": {
+              "emoji": "🗂️",
+              "tag": "Channels",
+              "text": "3 -> 8 -> 16<br>Convolutions can grow feature types<br>Richer detectors at each spot"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "type": "practice",
+      "exercises": [
+        {
+          "id": "p1",
+          "type": "multiple_choice",
+          "xp": 2,
+          "prompt": "If a <code>16x16x8</code> feature map passes through a pooling layer that halves height and width, what is the new shape?",
+          "explain": "Correct — pooling halves the spatial size here but keeps the same 8 channels.",
+          "options": [
+            {
+              "id": "a",
+              "text": "8x8x8",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "16x16x16",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "8x8x16",
+              "correct": false
+            },
+            {
+              "id": "d",
+              "text": "16x8x8",
+              "correct": false
+            }
+          ]
+        },
+        {
+          "id": "p2",
+          "type": "true_false",
+          "xp": 2,
+          "prompt": "True or false: ReLU usually changes the number of channels in a feature map.",
+          "explain": "False — ReLU changes values, not the usual shape label.",
+          "options": [
+            {
+              "id": "t",
+              "text": "True",
+              "correct": false
+            },
+            {
+              "id": "f",
+              "text": "False",
+              "correct": true
+            }
+          ]
+        },
+        {
+          "id": "p3",
+          "type": "fill_blank",
+          "xp": 2,
+          "prompt": "Complete the sentence:",
+          "explain": "Yes — global average pooling compresses each channel to one number, so <code>8x8x16</code> becomes <code>16</code> numbers.",
+          "sentence": "Global average pooling turns an <code>8x8x16</code> map into ___ numbers.",
+          "blank": "16",
+          "words": [
+            "16",
+            "64",
+            "128"
+          ]
+        },
+        {
+          "id": "p4",
+          "type": "spot_the_ai",
+          "xp": 2,
+          "prompt": "Which step most naturally changes a feature stack from <code>16x16x8</code> to <code>16x16x16</code> while keeping the same spatial size?",
+          "explain": "Exactly — a convolution that outputs 16 channels can do that while keeping the same height and width if padding is used.",
+          "options": [
+            {
+              "id": "a",
+              "text": "A convolution layer that outputs 16 channels with same padding",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "A ReLU layer by itself",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "Deleting half the image with pooling",
+              "correct": false
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "boss",
+      "exercises": [
+        {
+          "id": "b1",
+          "type": "multiple_choice",
+          "xp": 5,
+          "prompt": "Which shape trace is the correct reading of this toy CNN: <code>32x32x3 -> Conv(8) -> ReLU -> Pool -> Conv(16) -> ReLU -> Pool -> GlobalAvgPool -> Dense -> 4 logits</code>, assuming the convolutions keep spatial size the same?",
+          "explain": "Exactly. That trace respects what each layer usually changes: convolution grows channels, ReLU keeps shape, pooling halves space, and global pooling squeezes the final channels to one number each before the dense output.",
+          "options": [
+            {
+              "id": "a",
+              "text": "32x32x3 -> 32x32x8 -> 32x32x8 -> 16x16x8 -> 16x16x16 -> 16x16x16 -> 8x8x16 -> 16 -> 4 logits",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "32x32x3 -> 8x8x8 -> 8x8x8 -> 32x32x16 -> 4 logits",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "32x32x3 -> 32x32x3 -> 32x32x3 -> 32x32x3 -> 4 logits",
+              "correct": false
+            },
+            {
+              "id": "d",
+              "text": "32x32x3 -> 16 -> 8x8x16 -> 4 logits -> ReLU",
+              "correct": false
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
