@@ -1,0 +1,222 @@
+{
+  "id": "u125-l4",
+  "unit": 125,
+  "day": 629,
+  "tier": "Training CNNs in Practice",
+  "tierIcon": "🎨",
+  "title": "Adding Noise as Augmentation",
+  "icon": "📺",
+  "concept": "Noise injection deliberately adds random pixel noise to training images — the opposite goal of the denoising covered in Unit 94 — so the CNN learns features that survive real sensor noise at deployment.",
+  "xp": 15,
+  "hearts": 3,
+  "estMinutes": 7,
+  "segments": [
+    {
+      "type": "warmup",
+      "exercises": [
+        {
+          "id": "w1",
+          "type": "multiple_choice",
+          "xp": 1,
+          "prompt": "Recap: Hue jitter rotates colors around the color wheel, and saturation jitter changes their vividness. What do both leave untouched?",
+          "options": [
+            {
+              "id": "a",
+              "text": "The position and shape of everything in the frame",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "The colors of the image",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "Nothing — hue and saturation jitter already change everything",
+              "correct": false
+            }
+          ],
+          "explain": "Right — color jitter never moves content. Now for a photometric trick that revisits an old friend: noise."
+        }
+      ]
+    },
+    {
+      "type": "teach",
+      "cards": [
+        {
+          "kind": "hook",
+          "icon": "📺",
+          "title": "Old TV static, on purpose this time",
+          "body": "Back in Unit 94, you learned that image noise is random, unwanted speckling that sneaks into photos from a camera sensor, especially in low light. Here's the twist: during training, we can add that exact same kind of static to images <em>on purpose</em>."
+        },
+        {
+          "kind": "definition",
+          "icon": "🎲",
+          "title": "What is noise injection?",
+          "body": "<strong>Noise injection</strong> deliberately adds random noise — like Gaussian noise — to training images. Instead of a network only ever seeing clean, pristine photos, it learns to find real patterns even when random speckle is layered on top."
+        },
+        {
+          "kind": "analogy",
+          "icon": "💉",
+          "title": "Like a vaccine, for pixels",
+          "body": "A vaccine exposes your immune system to a weakened, controlled version of a threat so it learns to handle the real thing later. Noise injection exposes a CNN to a controlled, artificial dose of noise during training so it's ready for the real sensor noise it will meet at deployment."
+        },
+        {
+          "kind": "example",
+          "icon": "📱",
+          "title": "Cheap camera, dim room, real deployment",
+          "body": "A security app trained only on crisp, well-lit studio photos can fall apart on a cheap phone camera's grainy low-light footage at 2am. Adding random Gaussian noise to a fraction of training images teaches the model to rely on real structure, not on pixel-perfect cleanliness."
+        },
+        {
+          "kind": "mythbust",
+          "icon": "⚠️",
+          "title": "This isn't a contradiction of Unit 94",
+          "body": "It's easy to think: \"Unit 94 was about removing noise, so adding it now must be a mistake.\" They're actually solving different problems. Denoising cleans up a specific image for viewing or downstream use. Noise injection during training is a stress test that makes the model itself sturdier — a sturdier model needs less denoising to work well later."
+        },
+        {
+          "kind": "visual",
+          "icon": "⚖️",
+          "title": "Denoising vs. noise injection",
+          "body": "Same concept, opposite direction, different purpose:",
+          "compare": {
+            "left": {
+              "emoji": "🧹",
+              "tag": "Denoising (Unit 94)",
+              "text": "Removes noise from an image<br>Applied to clean up a specific photo<br>Goal: a clearer picture"
+            },
+            "right": {
+              "emoji": "🎲",
+              "tag": "Noise injection (this lesson)",
+              "text": "Adds noise during training only<br>Applied to training images on purpose<br>Goal: a sturdier model"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "type": "practice",
+      "exercises": [
+        {
+          "id": "p1",
+          "type": "multiple_choice",
+          "xp": 2,
+          "prompt": "What is the purpose of adding random noise to training images?",
+          "options": [
+            {
+              "id": "a",
+              "text": "To teach the model to rely on real structure instead of pixel-perfect cleanliness, so it's robust to real sensor noise later",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "To permanently clean up the dataset's photos",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "To reposition objects within each photo",
+              "correct": false
+            },
+            {
+              "id": "d",
+              "text": "To reduce the total number of training images needed",
+              "correct": false
+            }
+          ],
+          "explain": "Right — noise injection is a controlled stress test that builds robustness to real-world sensor noise."
+        },
+        {
+          "id": "p2",
+          "type": "true_false",
+          "xp": 2,
+          "prompt": "True or false: Noise injection during training and denoising from Unit 94 are trying to accomplish the same goal.",
+          "options": [
+            {
+              "id": "t",
+              "text": "True",
+              "correct": false
+            },
+            {
+              "id": "f",
+              "text": "False",
+              "correct": true
+            }
+          ],
+          "explain": "False. Denoising cleans up an image for use; noise injection deliberately adds noise during training to make the model itself sturdier."
+        },
+        {
+          "id": "p3",
+          "type": "fill_blank",
+          "xp": 2,
+          "prompt": "Complete the sentence:",
+          "sentence": "Noise injection adds random pixel noise on ___, unlike Unit 94's denoising, which removes it.",
+          "blank": "purpose",
+          "words": [
+            "purpose",
+            "accident",
+            "position"
+          ],
+          "explain": "Noise injection is intentional — it's added on purpose as a training stress test, not an accidental sensor artifact."
+        },
+        {
+          "id": "p4",
+          "type": "spot_the_ai",
+          "xp": 2,
+          "prompt": "Which of these describes noise injection as a training augmentation?",
+          "options": [
+            {
+              "id": "a",
+              "text": "Randomly scattering small speckles of pixel-value variation across a training image before feeding it to the model",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "Running a median filter over an image to smooth it out",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "Cropping a training image to a smaller square",
+              "correct": false
+            }
+          ],
+          "explain": "Correct — deliberately scattering random speckle onto a training image is noise injection."
+        }
+      ]
+    },
+    {
+      "type": "boss",
+      "exercises": [
+        {
+          "id": "b1",
+          "type": "multiple_choice",
+          "xp": 5,
+          "prompt": "A wildlife-camera model trained only on crisp daytime photos fails badly on real grainy, low-light night footage from the field. A teammate suggests denoising every training image first to make them as clean as possible. What's the better photometric augmentation approach?",
+          "options": [
+            {
+              "id": "a",
+              "text": "Instead, inject random noise into some training images so the model learns robust features that survive noise, matching the grainy conditions it will actually face",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "Denoise every training image, since a model trained on cleaner data always generalizes better to noisier real-world data",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "Only use geometric augmentation, since noise is unrelated to pixel values",
+              "correct": false
+            },
+            {
+              "id": "d",
+              "text": "Remove all low-light examples from the dataset entirely",
+              "correct": false
+            }
+          ],
+          "explain": "Exactly! Training on deliberately noisy images builds the robustness that only-clean training data can't. Next: stacking geometric and photometric augmentation together into one pipeline."
+        }
+      ]
+    }
+  ]
+}

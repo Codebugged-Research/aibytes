@@ -1,0 +1,222 @@
+{
+  "id": "u128-l1",
+  "unit": 128,
+  "day": 641,
+  "tier": "Training CNNs in Practice",
+  "tierIcon": "⚖️",
+  "title": "What is Class Imbalance?",
+  "icon": "⚖️",
+  "concept": "Class imbalance occurs when some categories in your training set have far more images than others. This biases the model toward predicting the majority class, leading to poor performance on rare but important objects.",
+  "xp": 15,
+  "hearts": 3,
+  "estMinutes": 7,
+  "segments": [
+    {
+      "type": "warmup",
+      "exercises": [
+        {
+          "id": "w1",
+          "type": "multiple_choice",
+          "xp": 1,
+          "prompt": "Recap: Where are data augmentation transformations typically applied and stored during training?",
+          "options": [
+            {
+              "id": "a",
+              "text": "In-memory on the fly during batch loading; original files on disk are never altered",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "Permanently saved to disk, replacing the original files",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "Directly inside the convolutional layer weights",
+              "correct": false
+            }
+          ],
+          "explain": "Yes! Augmentation is an in-memory, on-the-fly step."
+        }
+      ]
+    },
+    {
+      "type": "teach",
+      "cards": [
+        {
+          "kind": "hook",
+          "icon": "⚖️",
+          "title": "99% Accurate, but Useless",
+          "body": "Imagine building a medical scanner dataset with 990 healthy patient scans and only 10 tumor scans. A lazy model could simply predict 'healthy' for every single scan. It would achieve a stellar **99% accuracy**, but fail completely at its actual job of finding tumors. This is the danger of class imbalance."
+        },
+        {
+          "kind": "definition",
+          "icon": "⚖️",
+          "title": "Class Imbalance",
+          "body": "<strong>Class imbalance</strong> occurs when the number of training samples varies significantly across categories. The dominant group is the **majority class**, while the rare group is the **minority class**. Without intervention, models optimize for the majority class to minimize loss easily."
+        },
+        {
+          "kind": "analogy",
+          "icon": "🐕",
+          "title": "The dog trainer's biased tricks",
+          "body": "If you reward a dog with a treat 95% of the time for sitting, and only 5% of the time for rolling over, the dog will quickly learn to just sit whenever you ask for a trick. It ignores the rare rollover request because sitting is the easy, high-probability bet. Your model behaves the exact same way."
+        },
+        {
+          "kind": "example",
+          "icon": "🚗",
+          "title": "Autonomous Driving",
+          "body": "In self-driving car datasets, photos of empty roads and standard cars are incredibly common (majority class). Photos of pedestrians stepping into the street or rare wildlife are extremely rare (minority class). If the model ignores the minority class, it creates severe safety hazards."
+        },
+        {
+          "kind": "mythbust",
+          "icon": "⚠️",
+          "title": "High accuracy is not enough",
+          "body": "When classes are imbalanced, raw accuracy is a misleading metric. A model that achieves 99% accuracy by only predicting the majority class has learned nothing useful. We must use balanced evaluation metrics (like precision, recall, or F1-score) to find the truth."
+        },
+        {
+          "kind": "visual",
+          "icon": "⚖️",
+          "title": "Balanced vs. Imbalanced Datasets",
+          "body": "How data distribution impacts learning goals:",
+          "compare": {
+            "left": {
+              "emoji": "⚖️",
+              "tag": "Balanced Dataset",
+              "text": "Equal samples per class (e.g. 500 Cats / 500 Dogs)<br>Model treats classes equally<br>Accuracy is a reliable metric"
+            },
+            "right": {
+              "emoji": "📈",
+              "tag": "Imbalanced Dataset",
+              "text": "Unequal samples (e.g. 990 Healthy / 10 Tumor)<br>Model biases toward majority<br>Accuracy is misleading"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "type": "practice",
+      "exercises": [
+        {
+          "id": "p1",
+          "type": "multiple_choice",
+          "xp": 2,
+          "prompt": "What is the primary danger of training a CNN on an imbalanced dataset?",
+          "options": [
+            {
+              "id": "a",
+              "text": "The model will bias its predictions toward the majority class to minimize loss easily",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "The model will run out of GPU memory during the first batch",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "The convolutional filters will automatically stop learning edges",
+              "correct": false
+            },
+            {
+              "id": "d",
+              "text": "The training images will be permanently compressed",
+              "correct": false
+            }
+          ],
+          "explain": "Correct! Imbalance leads to majority-class bias, as predicting it is the easiest way to lower loss."
+        },
+        {
+          "id": "p2",
+          "type": "true_false",
+          "xp": 2,
+          "prompt": "True or false: Raw accuracy is always a reliable metric for evaluating an imbalanced classification model.",
+          "options": [
+            {
+              "id": "t",
+              "text": "True",
+              "correct": false
+            },
+            {
+              "id": "f",
+              "text": "False",
+              "correct": true
+            }
+          ],
+          "explain": "False. Accuracy is highly misleading when classes are imbalanced; a biased majority-only model can score high."
+        },
+        {
+          "id": "p3",
+          "type": "fill_blank",
+          "xp": 2,
+          "prompt": "Complete the sentence:",
+          "sentence": "In an imbalanced dataset, the rare category is called the ___ class.",
+          "blank": "minority",
+          "words": [
+            "minority",
+            "majority",
+            "bottleneck"
+          ],
+          "explain": "The rare category is the minority class, which requires special handling to train successfully."
+        },
+        {
+          "id": "p4",
+          "type": "spot_the_ai",
+          "xp": 2,
+          "prompt": "Which of these is a classic example of class imbalance in a real-world dataset?",
+          "options": [
+            {
+              "id": "a",
+              "text": "A manufacturing defect dataset with 10,000 photos of normal parts and only 50 photos of cracked parts",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "A cat-dog dataset with exactly 500 photos of cats and 500 photos of dogs",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "An image folder where all photos are resized to exactly 224x224 pixels",
+              "correct": false
+            }
+          ],
+          "explain": "Correct! Defect detection is highly imbalanced because defects are naturally rare."
+        }
+      ]
+    },
+    {
+      "type": "boss",
+      "exercises": [
+        {
+          "id": "b1",
+          "type": "multiple_choice",
+          "xp": 5,
+          "prompt": "You are building a system to flag fraudulent credit cards. 99.9% of transactions are legitimate, and 0.1% are fraud. If a simple model achieves 99.9% accuracy, how should you evaluate it?",
+          "options": [
+            {
+              "id": "a",
+              "text": "Look at precision and recall for the fraud class, since raw accuracy ignores whether the model caught any actual fraud",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "Accept the model immediately because 99.9% accuracy is practically perfect",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "Assume the model is broken because accuracy can never exceed 90%",
+              "correct": false
+            },
+            {
+              "id": "d",
+              "text": "Delete the fraud data to make the set 100% legitimate",
+              "correct": false
+            }
+          ],
+          "explain": "Exactly! Accuracy hides minority-class failure. Precision and recall are key. Next, let's look at balancing techniques like oversampling and undersampling!"
+        }
+      ]
+    }
+  ]
+}

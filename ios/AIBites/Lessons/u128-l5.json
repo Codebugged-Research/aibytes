@@ -1,0 +1,222 @@
+{
+  "id": "u128-l5",
+  "unit": 128,
+  "day": 645,
+  "tier": "Training CNNs in Practice",
+  "tierIcon": "⚖️",
+  "title": "Evaluating Imbalanced Models",
+  "icon": "⚖️",
+  "concept": "To measure an imbalanced model's true performance, you must look beyond raw accuracy. Evaluation metrics like Precision, Recall, and the F1-Score reveal whether the model is actually learning or just guessing the majority class.",
+  "xp": 15,
+  "hearts": 3,
+  "estMinutes": 7,
+  "segments": [
+    {
+      "type": "warmup",
+      "exercises": [
+        {
+          "id": "w1",
+          "type": "multiple_choice",
+          "xp": 1,
+          "prompt": "Recap: What is a key advantage of augmented oversampling over plain oversampling?",
+          "options": [
+            {
+              "id": "a",
+              "text": "It adds variations to duplicates, preventing the model from memorizing identical pixels",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "It automatically labels unlabeled data",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "It runs much faster on the CPU",
+              "correct": false
+            }
+          ],
+          "explain": "Yes! Augmentation introduces variety, reducing overfitting on duplicates."
+        }
+      ]
+    },
+    {
+      "type": "teach",
+      "cards": [
+        {
+          "kind": "hook",
+          "icon": "⚖️",
+          "title": "The False Positive Tradeoff",
+          "body": "If you adjust a model to be highly sensitive to a rare class (like tumors), it will naturally flag more healthy cases as suspicious. This is a False Positive. We need metrics that measure this exact balance between finding everything and being correct."
+        },
+        {
+          "kind": "definition",
+          "icon": "📊",
+          "title": "Precision, Recall, & F1",
+          "body": "- <strong>Precision</strong>: Out of all positive predictions, how many were actually correct? (Fewer False Positives).<br>- <strong>Recall</strong>: Out of all actual positive cases, how many did the model find? (Fewer False Negatives).<br>- <strong>F1-Score</strong>: The harmonic mean of Precision and Recall, providing a single balanced metric."
+        },
+        {
+          "kind": "analogy",
+          "icon": "🎣",
+          "title": "Fishing with a net vs. a spear",
+          "body": "Recall is like fishing with a massive net: you catch every fish in the lake (high recall), but you also scoop up trash, seaweed, and rocks (low precision). Precision is like fishing with a spear: every strike lands a fish (high precision), but you miss many fish swimming nearby (low recall). F1-Score measures how good a fisherman you are overall."
+        },
+        {
+          "kind": "example",
+          "icon": "🔍",
+          "title": "Defect Detection Metrics",
+          "body": "A factory model flags 10 parts as defective. 8 are actually cracked, 2 are normal (Precision = 80%). However, there were actually 10 cracked parts on the belt, meaning 2 defects slipped past undetected (Recall = 80%). The F1-score combines these into 80%."
+        },
+        {
+          "kind": "mythbust",
+          "icon": "⚠️",
+          "title": "There is no 'perfect' metric",
+          "body": "It's a myth that you should always optimize for the highest F1-score. Depending on the task, you might prefer one over the other. In medical screening, you want high **Recall** (don't miss any tumors, even if it means more false alarms). In spam filtering, you want high **Precision** (don't send clean emails to junk, even if a few spam messages get through)."
+        },
+        {
+          "kind": "visual",
+          "icon": "⚖️",
+          "title": "Precision vs. Recall",
+          "body": "Understanding the target tradeoffs:",
+          "compare": {
+            "left": {
+              "emoji": "🎯",
+              "tag": "High Precision Focus",
+              "text": "Minimize False Positives<br>When false alarms are costly<br>Example: Spam filters, lockouts"
+            },
+            "right": {
+              "emoji": "🕸️",
+              "tag": "High Recall Focus",
+              "text": "Minimize False Negatives<br>When missing a case is dangerous<br>Example: Cancer screening, fire alarms"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "type": "practice",
+      "exercises": [
+        {
+          "id": "p1",
+          "type": "multiple_choice",
+          "xp": 2,
+          "prompt": "Which metric measures the fraction of actual positive cases that the model successfully detected?",
+          "options": [
+            {
+              "id": "a",
+              "text": "Recall",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "Precision",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "Raw Accuracy",
+              "correct": false
+            },
+            {
+              "id": "d",
+              "text": "Dilation Rate",
+              "correct": false
+            }
+          ],
+          "explain": "Correct! Recall (also called sensitivity) measures what fraction of actual positive cases were caught."
+        },
+        {
+          "id": "p2",
+          "type": "true_false",
+          "xp": 2,
+          "prompt": "True or false: F1-Score is the harmonic mean of Precision and Recall, making it a robust metric for imbalanced evaluation.",
+          "options": [
+            {
+              "id": "t",
+              "text": "True",
+              "correct": true
+            },
+            {
+              "id": "f",
+              "text": "False",
+              "correct": false
+            }
+          ],
+          "explain": "True. The F1-score balances precision and recall into a single metric."
+        },
+        {
+          "id": "p3",
+          "type": "fill_blank",
+          "xp": 2,
+          "prompt": "Complete the sentence:",
+          "sentence": "Spam filters prioritize high ___ to avoid sending important personal emails to the junk folder.",
+          "blank": "precision",
+          "words": [
+            "precision",
+            "recall",
+            "resolution"
+          ],
+          "explain": "High precision ensures that predicted spam is actually spam, preventing false alarms on valid emails."
+        },
+        {
+          "id": "p4",
+          "type": "spot_the_ai",
+          "xp": 2,
+          "prompt": "If a cancer-detection model has a recall of 99% but a precision of 10%, what does this mean in practice?",
+          "options": [
+            {
+              "id": "a",
+              "text": "It finds almost all tumors, but flags many healthy patients as suspicious, requiring follow-ups",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "It is highly accurate and makes zero false alarms on healthy patients",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "It fails to detect 90% of the tumors present in the dataset",
+              "correct": false
+            }
+          ],
+          "explain": "Correct! High recall / low precision means it catches almost everything but triggers many false alarms."
+        }
+      ]
+    },
+    {
+      "type": "boss",
+      "exercises": [
+        {
+          "id": "b1",
+          "type": "multiple_choice",
+          "xp": 5,
+          "prompt": "We have completed our study of imbalanced datasets and evaluation metrics. What is the next logical step in training CNNs?",
+          "options": [
+            {
+              "id": "a",
+              "text": "Debugging CNN training, to identify and fix common training issues like exploding gradients or overfitting",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "Replacing the optimizer with raw manual weight editing",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "Deleting the validation set entirely to speed up epochs",
+              "correct": false
+            },
+            {
+              "id": "d",
+              "text": "Deploying the model to users without evaluating it",
+              "correct": false
+            }
+          ],
+          "explain": "Exactly! Now that we can evaluate fairly, we must learn how to debug training when things go wrong. Next up: Debugging CNN Training!"
+        }
+      ]
+    }
+  ]
+}

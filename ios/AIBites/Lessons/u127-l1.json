@@ -1,0 +1,222 @@
+{
+  "id": "u127-l1",
+  "unit": 127,
+  "day": 636,
+  "tier": "Training CNNs in Practice",
+  "tierIcon": "🏭",
+  "title": "What is a Preprocessing Pipeline?",
+  "icon": "🏭",
+  "concept": "A preprocessing pipeline is the sequence of fixed operations every image must go through before entering the CNN. Unlike data augmentation (which is random and only used during training), preprocessing is applied consistently to all training and test images.",
+  "xp": 15,
+  "hearts": 3,
+  "estMinutes": 7,
+  "segments": [
+    {
+      "type": "warmup",
+      "exercises": [
+        {
+          "id": "w1",
+          "type": "multiple_choice",
+          "xp": 1,
+          "prompt": "Recap: In what scenario is adding Mixup or CutMix to your training loop LEAST recommended?",
+          "options": [
+            {
+              "id": "a",
+              "text": "When training an object detection model that needs precise bounding box boundaries",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "When training a simple image classifier on a tiny dataset prone to overfitting",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "When training a model to distinguish fine-grained bird species",
+              "correct": false
+            }
+          ],
+          "explain": "Yes! Precise box boundaries are easily confused by blended pixel edges."
+        }
+      ]
+    },
+    {
+      "type": "teach",
+      "cards": [
+        {
+          "kind": "hook",
+          "icon": "🏭",
+          "title": "Raw Data Chaos",
+          "body": "In the wild, images come in all shapes, sizes, and formats. Some are 4000x3000 JPEGs, others are 200x200 PNGs. A CNN's first layer, however, expects a fixed tensor shape (like 224x224x3). We need a consistent, assembly-line process to clean and shape our raw data before it hits the model."
+        },
+        {
+          "kind": "definition",
+          "icon": "🏭",
+          "title": "The Preprocessing Pipeline",
+          "body": "A <strong>preprocessing pipeline</strong> is a fixed sequence of operations applied to images before they enter the network. Crucially, it is <strong>deterministic</strong> (always does the exact same thing) and is applied to <strong>all data</strong> (train, validation, and test sets) to ensure consistency."
+        },
+        {
+          "kind": "analogy",
+          "icon": "🧼",
+          "title": "Washing fruit before eating",
+          "body": "Augmentation is like seasoning or cooking the food in different ways (optional variety). Preprocessing is like washing and peeling the fruit (mandatory cleanup). No matter how you plan to cook the fruit, you always wash it first. Preprocessing is the mandatory first step."
+        },
+        {
+          "kind": "example",
+          "icon": "📏",
+          "title": "Standard steps",
+          "body": "A typical pipeline consists of: <br>1. <strong>Resizing</strong> all images to a target dimension (e.g. 224x224).<br>2. <strong>Converting</strong> pixels from 0-255 integers to float numbers.<br>3. <strong>Normalizing</strong> values (subtracting mean, dividing by standard deviation) so the numbers are small and centered."
+        },
+        {
+          "kind": "mythbust",
+          "icon": "⚠️",
+          "title": "Augmentation is NOT preprocessing",
+          "body": "It's common to lump all image transformations together. However, they serve completely different purposes. Preprocessing is <strong>mandatory and identical</strong> for every image to make it compatible with the network. Augmentation is <strong>random and training-only</strong> to prevent overfitting."
+        },
+        {
+          "kind": "visual",
+          "icon": "⚖️",
+          "title": "Preprocessing vs. Augmentation",
+          "body": "Comparing the two image-processing paths:",
+          "compare": {
+            "left": {
+              "emoji": "🧼",
+              "tag": "Preprocessing",
+              "text": "Mandatory and identical<br>Applied to Train + Val + Test<br>Ensures compatibility & stability"
+            },
+            "right": {
+              "emoji": "🎨",
+              "tag": "Augmentation",
+              "text": "Random and optional<br>Applied ONLY to Train data<br>Prevents overfitting"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "type": "practice",
+      "exercises": [
+        {
+          "id": "p1",
+          "type": "multiple_choice",
+          "xp": 2,
+          "prompt": "Which statement best describes a preprocessing pipeline?",
+          "options": [
+            {
+              "id": "a",
+              "text": "A fixed, deterministic sequence of steps applied to all images (train and test) to ensure network compatibility",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "A set of random color shifts applied only to the training set",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "An algorithm that automatically generates new image labels",
+              "correct": false
+            },
+            {
+              "id": "d",
+              "text": "A step that is only applied during model evaluation in production",
+              "correct": false
+            }
+          ],
+          "explain": "Correct! Preprocessing is a fixed, mandatory sequence for all input images."
+        },
+        {
+          "id": "p2",
+          "type": "true_false",
+          "xp": 2,
+          "prompt": "True or false: Data augmentation transformations are applied to test images during model evaluation.",
+          "options": [
+            {
+              "id": "t",
+              "text": "True",
+              "correct": false
+            },
+            {
+              "id": "f",
+              "text": "False",
+              "correct": true
+            }
+          ],
+          "explain": "False. Augmentation is training-only; test images must not be randomly modified."
+        },
+        {
+          "id": "p3",
+          "type": "fill_blank",
+          "xp": 2,
+          "prompt": "Complete the sentence:",
+          "sentence": "Preprocessing is mandatory and deterministic, whereas augmentation is optional and ___.",
+          "blank": "random",
+          "words": [
+            "random",
+            "constant",
+            "static"
+          ],
+          "explain": "Augmentation introduces random variations to boost dataset diversity."
+        },
+        {
+          "id": "p4",
+          "type": "spot_the_ai",
+          "xp": 2,
+          "prompt": "Which of these is a standard preprocessing step that must be applied to every validation image?",
+          "options": [
+            {
+              "id": "a",
+              "text": "Resizing the image to match the fixed input dimensions of the CNN's first layer",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "Randomly rotating the image by 45 degrees to test robustness",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "Applying Mixup with a random background image",
+              "correct": false
+            }
+          ],
+          "explain": "Correct! Resizing is mandatory so the network's first layer receives the correct tensor shape."
+        }
+      ]
+    },
+    {
+      "type": "boss",
+      "exercises": [
+        {
+          "id": "b1",
+          "type": "multiple_choice",
+          "xp": 5,
+          "prompt": "If you accidentally apply random cropping to your validation dataset, what is the consequence?",
+          "options": [
+            {
+              "id": "a",
+              "text": "Your evaluation results will become unstable and inconsistent, making it hard to track real model progress",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "The model will automatically stop training and raise a syntax error",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "Your validation accuracy will immediately rise to 100%",
+              "correct": false
+            },
+            {
+              "id": "d",
+              "text": "It has no impact; validation and training data should be treated identically",
+              "correct": false
+            }
+          ],
+          "explain": "Exactly! Random validation inputs make evaluation metrics noisy and unreliable. Next, let's explore resizing and normalization!"
+        }
+      ]
+    }
+  ]
+}

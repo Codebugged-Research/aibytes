@@ -1,0 +1,222 @@
+{
+  "id": "u126-l4",
+  "unit": 126,
+  "day": 634,
+  "tier": "Training CNNs in Practice",
+  "tierIcon": "🪩",
+  "title": "Why Mixing Images Helps",
+  "icon": "🧭",
+  "concept": "Blending and mixing images acts as a powerful regularizer. It prevents the network from memorizing training photos, forces it to learn robust local features, and smooths out its predictions on ambiguous real-world data.",
+  "xp": 15,
+  "hearts": 3,
+  "estMinutes": 7,
+  "segments": [
+    {
+      "type": "warmup",
+      "exercises": [
+        {
+          "id": "w1",
+          "type": "multiple_choice",
+          "xp": 1,
+          "prompt": "Recap: What is the main difference in visual appearance between Mixup and CutMix?",
+          "options": [
+            {
+              "id": "a",
+              "text": "Mixup creates transparent overlays; CutMix pastes solid rectangular patches",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "Mixup is in color; CutMix is in grayscale",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "Mixup resizes the image; CutMix does not",
+              "correct": false
+            }
+          ],
+          "explain": "Yes! Mixup is a transparent blend; CutMix is a solid patch collage."
+        }
+      ]
+    },
+    {
+      "type": "teach",
+      "cards": [
+        {
+          "kind": "hook",
+          "icon": "🧭",
+          "title": "Avoiding Memorization",
+          "body": "Deep neural networks are incredibly good at memorizing. If you train a large CNN on a small dataset, it will easily memorize the background pixels or exact shape of every single image, achieving 100% training accuracy but failing completely on new data."
+        },
+        {
+          "kind": "definition",
+          "icon": "🧠",
+          "title": "Smoothing Decision Boundaries",
+          "body": "Mixing images acts as a <strong>regularizer</strong>. Instead of teaching the model that an image must contain 100% cat features to be labeled a cat, it teaches the model to make <strong>gradual, smooth predictions</strong> based on the amount of evidence present in the pixels."
+        },
+        {
+          "kind": "analogy",
+          "icon": "🎢",
+          "title": "Gradual slope vs. a cliff",
+          "body": "Normal training is like building a cliff: the model thinks, 'If it's slightly to the left, it's 100% Cat. If it crosses this line, it's 100% Dog.' Mixing images turns this cliff into a gradual slope. As features blend, the model's confidence slopes down smoothly, preventing sudden, massive mistakes on borderline images."
+        },
+        {
+          "kind": "example",
+          "icon": "🏷️",
+          "title": "Focusing on local features",
+          "body": "In CutMix, a dog patch is pasted onto a cat body. If the model only looks at the cat body and ignores the dog patch, it gets the label wrong (since it must predict 0.25 Dog). This forces the model to look at <strong>every part</strong> of the image, rather than relying on one single shortcut feature."
+        },
+        {
+          "kind": "mythbust",
+          "icon": "⚠️",
+          "title": "It's not just \"more data\"",
+          "body": "It's a myth that Mixup and CutMix work just because they give the model more images to look at. The real value is in the <strong>label smoothing</strong>. By training on soft probabilities, the model's internal representations are pushed closer together, reducing overconfidence."
+        },
+        {
+          "kind": "visual",
+          "icon": "⚖️",
+          "title": "Sharp vs. Smooth Boundaries",
+          "body": "How decision boundaries change with mixed training:",
+          "compare": {
+            "left": {
+              "emoji": "🪨",
+              "tag": "Sharp Boundaries",
+              "text": "Absolute 0 or 1 predictions<br>Highly sensitive to noise<br>Overconfident on wrong guesses"
+            },
+            "right": {
+              "emoji": "🌊",
+              "tag": "Smooth Boundaries",
+              "text": "Proportional predictions<br>Robust to noise and ambiguity<br>Realistic confidence levels"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "type": "practice",
+      "exercises": [
+        {
+          "id": "p1",
+          "type": "multiple_choice",
+          "xp": 2,
+          "prompt": "How does mixing images prevent a CNN from memorizing specific training photos?",
+          "options": [
+            {
+              "id": "a",
+              "text": "It regularizes the model by forcing it to learn from smooth, blended transitions rather than absolute labels",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "It reduces the size of the convolutional kernels to 1x1",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "It forces all weights in the network to remain zero",
+              "correct": false
+            },
+            {
+              "id": "d",
+              "text": "It deletes the original images from the training set entirely",
+              "correct": false
+            }
+          ],
+          "explain": "Correct! It smooths decision boundaries, preventing memorization of absolute label boundaries."
+        },
+        {
+          "id": "p2",
+          "type": "true_false",
+          "xp": 2,
+          "prompt": "True or false: CutMix forces the model to distribute its attention across the whole image rather than relying on a single shortcut feature.",
+          "options": [
+            {
+              "id": "t",
+              "text": "True",
+              "correct": true
+            },
+            {
+              "id": "f",
+              "text": "False",
+              "correct": false
+            }
+          ],
+          "explain": "True. Because different parts of the image belong to different classes, the model must pay attention to all regions to get the blended label right."
+        },
+        {
+          "id": "p3",
+          "type": "fill_blank",
+          "xp": 2,
+          "prompt": "Complete the sentence:",
+          "sentence": "By smoothing decision boundaries, image mixing prevents the model from becoming ___ on ambiguous test data.",
+          "blank": "overconfident",
+          "words": [
+            "overconfident",
+            "undertrained",
+            "inaccurate"
+          ],
+          "explain": "Mixed training teaches the model to predict soft probabilities, reducing overconfident errors."
+        },
+        {
+          "id": "p4",
+          "type": "spot_the_ai",
+          "xp": 2,
+          "prompt": "Which of these is a direct mathematical result of using soft labels (like 0.7 Cat / 0.3 Dog) in training?",
+          "options": [
+            {
+              "id": "a",
+              "text": "The model learns to output smooth confidence scores instead of making sharp, binary jumps",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "The activation function automatically changes from ReLU to Sigmoid",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "The network splits into two separate independent models",
+              "correct": false
+            }
+          ],
+          "explain": "Correct! Soft labels force the model to output smooth confidences instead of absolute binary classifications."
+        }
+      ]
+    },
+    {
+      "type": "boss",
+      "exercises": [
+        {
+          "id": "b1",
+          "type": "multiple_choice",
+          "xp": 5,
+          "prompt": "If a CNN trained without image mixing achieves 100% accuracy on training data but only 65% on test data, how will adding Mixup help?",
+          "options": [
+            {
+              "id": "a",
+              "text": "By regularizing the network and smoothing boundaries, it reduces overfitting, bringing training and test performance closer together",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "It will automatically double the size of the validation set to boost scores",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "It will compress the model size so it fits on edge devices",
+              "correct": false
+            },
+            {
+              "id": "d",
+              "text": "It will replace all validation images with blended ones to make testing easier",
+              "correct": false
+            }
+          ],
+          "explain": "Exactly! Regularization closes the gap between training and testing. Next, let's look at when to use (and when to avoid) these mixing tricks!"
+        }
+      ]
+    }
+  ]
+}

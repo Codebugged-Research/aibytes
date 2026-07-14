@@ -1,0 +1,222 @@
+{
+  "id": "u130-l5",
+  "unit": 130,
+  "day": 655,
+  "tier": "Training CNNs in Practice",
+  "tierIcon": "🎛️",
+  "title": "Choosing a Scheduler",
+  "icon": "⚖️",
+  "concept": "Choosing the right learning rate scheduler depends on your architecture and training budget. Cosine Annealing with Warmup is the modern default, while Step Decay remains a simple, reliable benchmark.",
+  "xp": 15,
+  "hearts": 3,
+  "estMinutes": 7,
+  "segments": [
+    {
+      "type": "warmup",
+      "exercises": [
+        {
+          "id": "w1",
+          "type": "multiple_choice",
+          "xp": 1,
+          "prompt": "Recap: What shape does the learning rate curve follow in Cosine Annealing?",
+          "options": [
+            {
+              "id": "a",
+              "text": "A smooth, wave-like cosine decay from the peak rate down to near zero",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "A series of sharp, flat steps dropping 10x at a time",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "A straight vertical line that spikes instantly",
+              "correct": false
+            }
+          ],
+          "explain": "Yes! A smooth cosine wave shape."
+        }
+      ]
+    },
+    {
+      "type": "teach",
+      "cards": [
+        {
+          "kind": "hook",
+          "icon": "⚖️",
+          "title": "Selecting Your Strategy",
+          "body": "We've covered static rates, step decay, cosine annealing, and warmup. When building a new vision pipeline, how do you choose? Should you build a complex cosine curve or keep it simple with steps? Let's map out the decision."
+        },
+        {
+          "kind": "definition",
+          "icon": "⚖️",
+          "title": "Scheduler Selection Matrix",
+          "body": "- <strong>Step Decay</strong>: Best for simple models and quick prototyping. Easy to set up and debug.<br>- <strong>Cosine Annealing + Warmup</strong>: Modern standard. Best for state-of-the-art accuracy, large CNNs, and Transformers.<br>- <strong>Reduce on Plateau</strong>: Decays only when validation loss stops dropping. Great for custom datasets."
+        },
+        {
+          "kind": "analogy",
+          "icon": "🎛️",
+          "title": "Manual vs. Automatic transmission",
+          "body": "Step decay is like a manual car: you decide exactly when to shift gears (epochs 30, 60, 90). Cosine annealing is like a smooth automatic transmission: it shifts gears continuously and imperceptibly, keeping the engine running at optimal efficiency without your input."
+        },
+        {
+          "kind": "example",
+          "icon": "📱",
+          "title": "MobileNet Training",
+          "body": "When training MobileNet, a smooth cosine schedule ensures the compact model converges tightly, squeezing out every fraction of accuracy without needing manual step adjustments."
+        },
+        {
+          "kind": "mythbust",
+          "icon": "⚠️",
+          "title": "Plateau decay needs patience",
+          "body": "Reduce on Plateau is very popular because it adapts to validation progress. However, you must configure a 'patience' parameter (how many epochs to wait before decaying). If patience is too short, the scheduler will decay the rate on a temporary flat spot, freezing learning too early."
+        },
+        {
+          "kind": "visual",
+          "icon": "⚖️",
+          "title": "Deciding on your Scheduler",
+          "body": "Matching schedulers to project needs:",
+          "compare": {
+            "left": {
+              "emoji": "🛠️",
+              "tag": "Step Decay / Plateau",
+              "text": "Simple CNN prototypes<br>Custom datasets with unknown epochs<br>Easy to debug stepped drops"
+            },
+            "right": {
+              "emoji": "🌊",
+              "tag": "Cosine + Warmup",
+              "text": "State-of-the-art target accuracy<br>Deep backbones (ResNet, EfficientNet)<br>Standard in modern publications"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "type": "practice",
+      "exercises": [
+        {
+          "id": "p1",
+          "type": "multiple_choice",
+          "xp": 2,
+          "prompt": "Which scheduler decays the learning rate only when the validation loss stops improving for a set number of epochs?",
+          "options": [
+            {
+              "id": "a",
+              "text": "Reduce on Plateau",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "Cosine Annealing",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "Linear Warmup",
+              "correct": false
+            },
+            {
+              "id": "d",
+              "text": "Constant Static Rate",
+              "correct": false
+            }
+          ],
+          "explain": "Correct! Reduce on Plateau monitors validation loss, decaying when learning stalls."
+        },
+        {
+          "id": "p2",
+          "type": "true_false",
+          "xp": 2,
+          "prompt": "True or false: Cosine Annealing with Warmup is considered the modern industry default for training deep CNN architectures.",
+          "options": [
+            {
+              "id": "t",
+              "text": "True",
+              "correct": true
+            },
+            {
+              "id": "f",
+              "text": "False",
+              "correct": false
+            }
+          ],
+          "explain": "True. It is the modern default for training deep backbones and transformers successfully."
+        },
+        {
+          "id": "p3",
+          "type": "fill_blank",
+          "xp": 2,
+          "prompt": "Complete the sentence:",
+          "sentence": "The 'patience' setting in Reduce on Plateau determines how many epochs to wait before ___ the learning rate.",
+          "blank": "decaying",
+          "words": [
+            "decaying",
+            "increasing",
+            "compiling"
+          ],
+          "explain": "Patience is the cooldown epoch count before decaying the rate."
+        },
+        {
+          "id": "p4",
+          "type": "spot_the_ai",
+          "xp": 2,
+          "prompt": "What is a main advantage of using Step Decay for a quick CNN prototype?",
+          "options": [
+            {
+              "id": "a",
+              "text": "It is simple to implement and the stepped drops are highly visible and easy to debug",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "It completely removes the need for validation data",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "It automatically generates synthetic training images",
+              "correct": false
+            }
+          ],
+          "explain": "Correct! Step decay is simple and provides clear stepped drops for easy debugging."
+        }
+      ]
+    },
+    {
+      "type": "boss",
+      "exercises": [
+        {
+          "id": "b1",
+          "type": "multiple_choice",
+          "xp": 5,
+          "prompt": "We have completed our study of learning rate finders, loss plots, and scheduling strategies. What is the next and final unit in Phase 5?",
+          "options": [
+            {
+              "id": "a",
+              "text": "Test-Time Augmentation (TTA), where we use augmentation during inference to boost final prediction accuracy",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "Deleting all convolutional kernels and training a dense classifier",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "Skip evaluation and deploy the model immediately",
+              "correct": false
+            },
+            {
+              "id": "d",
+              "text": "Converting all weights back to random numbers",
+              "correct": false
+            }
+          ],
+          "explain": "Exactly! Now that we have optimized training, we can explore Test-Time Augmentation (TTA) to boost evaluation accuracy. Next up: Test-Time Augmentation!"
+        }
+      ]
+    }
+  ]
+}

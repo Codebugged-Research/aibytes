@@ -1,0 +1,222 @@
+{
+  "id": "u128-l3",
+  "unit": 128,
+  "day": 643,
+  "tier": "Training CNNs in Practice",
+  "tierIcon": "⚖️",
+  "title": "Weighted Loss Functions",
+  "icon": "⚖️",
+  "concept": "Weighted loss assigns a higher mathematical penalty to errors made on the minority class during training. This forces the optimizer to treat minority errors seriously, without needing to copy or delete any image files.",
+  "xp": 15,
+  "hearts": 3,
+  "estMinutes": 7,
+  "segments": [
+    {
+      "type": "warmup",
+      "exercises": [
+        {
+          "id": "w1",
+          "type": "multiple_choice",
+          "xp": 1,
+          "prompt": "Recap: What is the main disadvantage of undersampling a massive majority class?",
+          "options": [
+            {
+              "id": "a",
+              "text": "Information loss: you discard valuable training data that could help the model learn",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "It causes severe overfitting on minority duplicates",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "It increases the spatial size of the feature maps",
+              "correct": false
+            }
+          ],
+          "explain": "Yes! Undersampling discards useful information."
+        }
+      ]
+    },
+    {
+      "type": "teach",
+      "cards": [
+        {
+          "kind": "hook",
+          "icon": "⚖️",
+          "title": "Severe Penalties",
+          "body": "Instead of duplicating or deleting images to balance the dataset, what if we changed the rules of the game? What if getting a rare object wrong cost the model far more points than getting a common object wrong? This is the core idea of class weights."
+        },
+        {
+          "kind": "definition",
+          "icon": "⚖️",
+          "title": "Class Weighted Loss",
+          "body": "<strong>Weighted loss</strong> multiplies the loss calculation by a class weight factor. If a dataset has 90% Class A and 10% Class B, we can assign a weight of **1.0** to Class A and **9.0** to Class B. A mistake on Class B now triggers 9 times the gradient update penalty."
+        },
+        {
+          "kind": "analogy",
+          "icon": "⚽",
+          "title": "The high-stakes penalty kick",
+          "body": "Imagine playing soccer. Scoring a regular goal is worth 1 point (majority class). Scoring a goal from the halfway line is worth 10 points (minority class). Because the halfway shot is worth so much, the player will practice and focus on it intensely, despite its rarity."
+        },
+        {
+          "kind": "example",
+          "icon": "🩺",
+          "title": "Cancer Detection Weights",
+          "body": "In cancer screening, missing a tumor (False Negative) is far worse than flagging a healthy scan for a follow-up (False Positive). We set the loss weight for tumors high so the model is heavily penalized for missing them, making it highly sensitive."
+        },
+        {
+          "kind": "mythbust",
+          "icon": "⚠️",
+          "title": "It doesn't create new features",
+          "body": "Weighted loss is incredibly elegant because it changes zero files on disk. However, it cannot invent new features. If your minority class only has 5 images, weighting them by 1000x will just force the model to memorize those 5 images, leading to extreme overfitting."
+        },
+        {
+          "kind": "visual",
+          "icon": "⚖️",
+          "title": "Standard vs. Weighted Loss",
+          "body": "How error penalties are calculated in backpropagation:",
+          "compare": {
+            "left": {
+              "emoji": "🪨",
+              "tag": "Standard Loss",
+              "text": "Every class error costs 1.0<br>Model focuses on majority to win<br>Neglects rare classes"
+            },
+            "right": {
+              "emoji": "⚖️",
+              "tag": "Weighted Loss",
+              "text": "Minority error costs e.g. 10.0<br>Model highly penalized for rare mistakes<br>Forces balanced learning"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "type": "practice",
+      "exercises": [
+        {
+          "id": "p1",
+          "type": "multiple_choice",
+          "xp": 2,
+          "prompt": "How does weighted loss help handle class imbalance?",
+          "options": [
+            {
+              "id": "a",
+              "text": "It assigns a higher penalty to errors made on the minority class, forcing larger gradient updates",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "It deletes images from the majority class automatically",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "It increases the number of filters in the first convolutional layer",
+              "correct": false
+            },
+            {
+              "id": "d",
+              "text": "It resizes all images to be twice as large during training",
+              "correct": false
+            }
+          ],
+          "explain": "Correct! Weighted loss increases the penalty on minority errors, driving larger updates for those classes."
+        },
+        {
+          "id": "p2",
+          "type": "true_false",
+          "xp": 2,
+          "prompt": "True or false: Weighted loss requires duplicating minority images on your hard drive before training begins.",
+          "options": [
+            {
+              "id": "t",
+              "text": "True",
+              "correct": false
+            },
+            {
+              "id": "f",
+              "text": "False",
+              "correct": true
+            }
+          ],
+          "explain": "False. Weighted loss is purely mathematical, altering the loss function calculation in memory without changing any files."
+        },
+        {
+          "id": "p3",
+          "type": "fill_blank",
+          "xp": 2,
+          "prompt": "Complete the sentence:",
+          "sentence": "Weighted loss adjusts gradient update penalties during backpropagation, acting on the ___ level instead of the data level.",
+          "blank": "loss",
+          "words": [
+            "loss",
+            "pixel",
+            "convolution"
+          ],
+          "explain": "Weighted loss changes the loss function calculation, balancing training mathematically."
+        },
+        {
+          "id": "p4",
+          "type": "spot_the_ai",
+          "xp": 2,
+          "prompt": "In what scenario is assigning a massive weight (e.g. 1000x) to a minority class dangerous?",
+          "options": [
+            {
+              "id": "a",
+              "text": "If the minority class has very few samples, the model will severely overfit to those specific images",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "It will cause the model to automatically delete the classification head",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "It will convert all weights to zero instantly",
+              "correct": false
+            }
+          ],
+          "explain": "Correct! Extreme weights on tiny classes lead to intense overfitting on those specific samples."
+        }
+      ]
+    },
+    {
+      "type": "boss",
+      "exercises": [
+        {
+          "id": "b1",
+          "type": "multiple_choice",
+          "xp": 5,
+          "prompt": "You are training a self-driving car model to detect pedestrians (rare) and empty roads (common). If you assign a weight of 100x to pedestrian detection loss, what is the expected side effect?",
+          "options": [
+            {
+              "id": "a",
+              "text": "The model will become highly sensitive to pedestrians, but may increase False Positives (flagging shadows or mailboxes as pedestrians)",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "The model will completely stop detecting roads",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "The training loop will run 100 times slower",
+              "correct": false
+            },
+            {
+              "id": "d",
+              "text": "Pedestrian bounding boxes will automatically become 100 times larger",
+              "correct": false
+            }
+          ],
+          "explain": "Exactly! High sensitivity often increases False Positives. Next: using data augmentation strategically to balance classes!"
+        }
+      ]
+    }
+  ]
+}

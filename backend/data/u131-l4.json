@@ -1,0 +1,222 @@
+{
+  "id": "u131-l4",
+  "unit": 131,
+  "day": 659,
+  "tier": "Training CNNs in Practice",
+  "tierIcon": "🌉",
+  "title": "TTA in Production Pipelines",
+  "icon": "📊",
+  "concept": "Deploying TTA in production requires managing the latency-accuracy tradeoff. While TTA is ideal for offline, high-stakes analysis (like medical imaging), real-time systems (like robotics) usually skip it to maintain speed.",
+  "xp": 15,
+  "hearts": 3,
+  "estMinutes": 7,
+  "segments": [
+    {
+      "type": "warmup",
+      "exercises": [
+        {
+          "id": "w1",
+          "type": "multiple_choice",
+          "xp": 1,
+          "prompt": "Recap: What is the difference between hard and soft voting in TTA?",
+          "options": [
+            {
+              "id": "a",
+              "text": "Hard voting averages predicted class names; soft voting averages raw probability vectors",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "Hard voting is for training; soft voting is for validation",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "Hard voting uses integers; soft voting uses complex numbers",
+              "correct": false
+            }
+          ],
+          "explain": "Yes! Soft voting averages raw probability vectors, preserving confidence."
+        }
+      ]
+    },
+    {
+      "type": "teach",
+      "cards": [
+        {
+          "kind": "hook",
+          "icon": "📊",
+          "title": "The Deployment Dilemma",
+          "body": "TTA consistently adds 1-2% accuracy to a trained model. In Kaggle competitions, everyone turns TTA on to win. But in a real factory running a conveyor belt at 60 frames per second, running a model 5 times per frame is impossible. We must decide if the extra accuracy is worth the slowdown."
+        },
+        {
+          "kind": "definition",
+          "icon": "📊",
+          "title": "The Latency Tradeoff",
+          "body": "TTA multiplies the computational cost of inference by the number of passes ($N$). If your base model takes 20ms to predict, a 5-pass TTA pipeline takes **100ms** (plus the overhead of generating augmentations). TTA is gated by your **latency budget**."
+        },
+        {
+          "kind": "analogy",
+          "icon": "🏎️",
+          "title": "The pit stop check",
+          "body": "In a high-speed Formula 1 race, checking every bolt on the car during a pit stop is too slow (real-time robotics). In a routine annual safety inspection, checking every bolt is essential and time is not a factor (medical diagnostics). TTA is the safety inspection."
+        },
+        {
+          "kind": "example",
+          "icon": "🩺",
+          "title": "High-Stakes, Offline Tasks",
+          "body": "In medical imaging (like skin lesion classification), a patient waits days for results. Latency doesn't matter, but accuracy is life-or-death. We run aggressive, 10-pass TTA pipelines to ensure the safest possible classification."
+        },
+        {
+          "kind": "mythbust",
+          "icon": "⚠️",
+          "title": "TTA is not a training fix",
+          "body": "Don't use TTA as a band-aid for a poorly trained model. If your CNN has low capacity or was trained on bad labels, TTA will just average multiple incorrect predictions, doing nothing to solve the root cause. Build a strong base model first."
+        },
+        {
+          "kind": "visual",
+          "icon": "⚖️",
+          "title": "When to Use TTA in Production",
+          "body": "Evaluating TTA suitability:",
+          "compare": {
+            "left": {
+              "emoji": "🩺",
+              "tag": "Good for TTA",
+              "text": "Medical diagnosis (accuracy first)<br>Satellite photo analysis<br>Offline batch sorting"
+            },
+            "right": {
+              "emoji": "🏎️",
+              "tag": "Bad for TTA",
+              "text": "Robotics & autonomous driving<br>Real-time video feeds (60 FPS)<br>Low-power mobile chips"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "type": "practice",
+      "exercises": [
+        {
+          "id": "p1",
+          "type": "multiple_choice",
+          "xp": 2,
+          "prompt": "For which production scenario is TTA LEAST appropriate?",
+          "options": [
+            {
+              "id": "a",
+              "text": "Real-time obstacle detection in a fast-moving autonomous drone",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "Dermatologist screening tool for skin cancer scans",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "Analyzing satellite images offline to estimate crop yields",
+              "correct": false
+            },
+            {
+              "id": "d",
+              "text": "Classifying uploaded product photos on a slow retail website",
+              "correct": false
+            }
+          ],
+          "explain": "Correct! Fast drones have extremely tight latency budgets, making TTA's Nx slowdown dangerous."
+        },
+        {
+          "id": "p2",
+          "type": "true_false",
+          "xp": 2,
+          "prompt": "True or false: TTA is a great substitute for a poorly trained model with corrupted training weights.",
+          "options": [
+            {
+              "id": "t",
+              "text": "True",
+              "correct": false
+            },
+            {
+              "id": "f",
+              "text": "False",
+              "correct": true
+            }
+          ],
+          "explain": "False. TTA only helps a well-trained model find edge cases; it cannot correct fundamentally broken weights."
+        },
+        {
+          "id": "p3",
+          "type": "fill_blank",
+          "xp": 2,
+          "prompt": "Complete the sentence:",
+          "sentence": "TTA is highly suited for high-stakes, ___ tasks where accuracy matters far more than prediction speed.",
+          "blank": "offline",
+          "words": [
+            "offline",
+            "real-time",
+            "simple"
+          ],
+          "explain": "Offline classification (like medical scans) values accuracy over instant latency, making it perfect for TTA."
+        },
+        {
+          "id": "p4",
+          "type": "spot_the_ai",
+          "xp": 2,
+          "prompt": "If a base CNN takes 15ms to make a prediction, how long will a 6-pass TTA pipeline approximately take to run?",
+          "options": [
+            {
+              "id": "a",
+              "text": "Around 90ms (plus minor image transformation overhead)",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "Exactly 15ms, because passes run in parallel on CPU registers",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "Over 5 seconds, due to file storage read constraints",
+              "correct": false
+            }
+          ],
+          "explain": "Correct! Latency scales linearly with the number of passes: 15ms * 6 = 90ms."
+        }
+      ]
+    },
+    {
+      "type": "boss",
+      "exercises": [
+        {
+          "id": "b1",
+          "type": "multiple_choice",
+          "xp": 5,
+          "prompt": "Your company is deploying a security camera system that must identify license plates. The camera feeds run at 5 FPS. If base model latency is 30ms, can you afford a 5-pass TTA pipeline?",
+          "options": [
+            {
+              "id": "a",
+              "text": "Yes — 5 passes take ~150ms, which easily fits within the 200ms budget per frame at 5 FPS, boosting reading accuracy",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "No — because any latency above 10ms causes the camera to disconnect",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "No — because license plates are letters and cannot be processed by convolutional networks",
+              "correct": false
+            },
+            {
+              "id": "d",
+              "text": "Yes — because TTA will reduce the latency to exactly 5ms",
+              "correct": false
+            }
+          ],
+          "explain": "Exactly! 150ms fits within the 200ms frame time at 5 FPS. Next: the complete Phase 5 capstone recap!"
+        }
+      ]
+    }
+  ]
+}

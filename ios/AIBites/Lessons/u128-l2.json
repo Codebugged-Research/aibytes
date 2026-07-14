@@ -1,0 +1,222 @@
+{
+  "id": "u128-l2",
+  "unit": 128,
+  "day": 642,
+  "tier": "Training CNNs in Practice",
+  "tierIcon": "⚖️",
+  "title": "Oversampling and Undersampling",
+  "icon": "⚖️",
+  "concept": "Oversampling duplicates minority-class images, while undersampling discards majority-class images. Both attempt to balance the dataset before training, though each has distinct tradeoffs regarding memory and information loss.",
+  "xp": 15,
+  "hearts": 3,
+  "estMinutes": 7,
+  "segments": [
+    {
+      "type": "warmup",
+      "exercises": [
+        {
+          "id": "w1",
+          "type": "multiple_choice",
+          "xp": 1,
+          "prompt": "Recap: What is the main problem with using raw accuracy to evaluate a highly imbalanced model?",
+          "options": [
+            {
+              "id": "a",
+              "text": "A model can score high accuracy simply by always predicting the majority class, even if it fails on all rare cases",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "Accuracy is too slow to calculate on large validation sets",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "Accuracy causes gradients to explode in convolutional layers",
+              "correct": false
+            }
+          ],
+          "explain": "Yes! Majority-biased models hide their failure behind high raw accuracy scores."
+        }
+      ]
+    },
+    {
+      "type": "teach",
+      "cards": [
+        {
+          "kind": "hook",
+          "icon": "⚖️",
+          "title": "Balancing the Scales",
+          "body": "If we have 900 cats and only 100 dogs, the scales of learning are tilted. To fix this, we can either artificially increase the number of dog images (oversampling) or reduce the number of cat images (undersampling) to balance the inputs."
+        },
+        {
+          "kind": "definition",
+          "icon": "⚖️",
+          "title": "Oversampling & Undersampling",
+          "body": "<strong>Oversampling</strong> duplicates samples from the minority class so the model sees them more frequently. <strong>Undersampling</strong> randomly discards samples from the majority class to match the minority size. Both aim to create a 50/50 balance."
+        },
+        {
+          "kind": "analogy",
+          "icon": "📚",
+          "title": "Studying for a history quiz",
+          "body": "If a quiz covers WWII (90 questions) and the Roman Empire (10 questions), you might only study WWII. Oversampling is like copying the Roman Empire notes 9 times so you read them as much as WWII. Undersampling is like tearing out 80 pages of WWII notes so you study equal small amounts of both."
+        },
+        {
+          "kind": "example",
+          "icon": "🐕",
+          "title": "Cats vs. Dogs Balanced",
+          "body": "For our 900/100 split:<br>- **Oversampling**: Duplicate the 100 dogs 9 times to get 900 cats and 900 dogs.<br>- **Undersampling**: Randomly pick 100 cats out of 900, getting 100 cats and 100 dogs."
+        },
+        {
+          "kind": "mythbust",
+          "icon": "⚠️",
+          "title": "Tradeoffs of both moves",
+          "body": "Undersampling throws away clean, valid data (information loss), which can hurt the model's ability to learn majority patterns. Oversampling duplicate images makes training epochs longer and can lead to overfitting on the specific duplicated minority photos."
+        },
+        {
+          "kind": "visual",
+          "icon": "⚖️",
+          "title": "Oversampling vs. Undersampling",
+          "body": "Comparing the two dataset-balancing methods:",
+          "compare": {
+            "left": {
+              "emoji": "📈",
+              "tag": "Oversampling",
+              "text": "Duplicates minority samples<br>Keeps all majority data<br>Risk: Overfitting on duplicates"
+            },
+            "right": {
+              "emoji": "📉",
+              "tag": "Undersampling",
+              "text": "Discards majority samples<br>Shrinks dataset size<br>Risk: Information loss"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "type": "practice",
+      "exercises": [
+        {
+          "id": "p1",
+          "type": "multiple_choice",
+          "xp": 2,
+          "prompt": "What is a major risk of oversampling minority data by simply duplicating files?",
+          "options": [
+            {
+              "id": "a",
+              "text": "The model may overfit to the specific features of the duplicated minority images",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "It will cause the convolutional layers to shrink their kernel sizes",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "It discards valuable majority class information",
+              "correct": false
+            },
+            {
+              "id": "d",
+              "text": "It requires changing the activation functions in the backbone",
+              "correct": false
+            }
+          ],
+          "explain": "Correct! Duplication increases overfitting risk on those specific minority samples."
+        },
+        {
+          "id": "p2",
+          "type": "true_false",
+          "xp": 2,
+          "prompt": "True or false: Undersampling balances the dataset by discarding samples from the majority class.",
+          "options": [
+            {
+              "id": "t",
+              "text": "True",
+              "correct": true
+            },
+            {
+              "id": "f",
+              "text": "False",
+              "correct": false
+            }
+          ],
+          "explain": "True. Undersampling discards majority samples to match the size of the minority class."
+        },
+        {
+          "id": "p3",
+          "type": "fill_blank",
+          "xp": 2,
+          "prompt": "Complete the sentence:",
+          "sentence": "Undersampling runs the risk of ___ loss because valid majority images are discarded.",
+          "blank": "information",
+          "words": [
+            "information",
+            "parameter",
+            "gradient"
+          ],
+          "explain": "Discarding data leads to information loss, meaning the model might miss important majority variations."
+        },
+        {
+          "id": "p4",
+          "type": "spot_the_ai",
+          "xp": 2,
+          "prompt": "Which balancing approach is best if you have a massive majority class (e.g. 10 million images) and limited training time?",
+          "options": [
+            {
+              "id": "a",
+              "text": "Undersampling, to reduce the dataset size and training time while maintaining balance",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "Oversampling, to duplicate the minority class up to 10 million images",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "Converting the entire dataset to HSV color space",
+              "correct": false
+            }
+          ],
+          "explain": "Correct! Undersampling is highly practical when the majority class is too large to train on affordably."
+        }
+      ]
+    },
+    {
+      "type": "boss",
+      "exercises": [
+        {
+          "id": "b1",
+          "type": "multiple_choice",
+          "xp": 5,
+          "prompt": "You have a dataset of 1,000 normal parts and 10 defective parts. Why is undersampling the normal class to 10 samples a BAD idea?",
+          "options": [
+            {
+              "id": "a",
+              "text": "It leaves only 20 total images, which is far too little data for a deep CNN to learn general features of normal parts",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "It will cause class leakage, turning normal parts into defective ones",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "It will double the parameter count of the classification head",
+              "correct": false
+            },
+            {
+              "id": "d",
+              "text": "Undersampling is mathematically impossible when the minority size is under 100",
+              "correct": false
+            }
+          ],
+          "explain": "Exactly! 20 images is too small for a network. Next: let's explore weighted loss functions, a smart alternative to changing data sizes!"
+        }
+      ]
+    }
+  ]
+}

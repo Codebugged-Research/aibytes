@@ -1,0 +1,222 @@
+{
+  "id": "u130-l1",
+  "unit": 130,
+  "day": 651,
+  "tier": "Training CNNs in Practice",
+  "tierIcon": "🎛️",
+  "title": "What is a Learning Rate Finder?",
+  "icon": "🎛️",
+  "concept": "A learning rate finder is a diagnostic tool that automates the process of selecting a learning rate. By running a single mock epoch while gradually increasing the learning rate, it plots how loss responds, showing you the optimal value.",
+  "xp": 15,
+  "hearts": 3,
+  "estMinutes": 7,
+  "segments": [
+    {
+      "type": "warmup",
+      "exercises": [
+        {
+          "id": "w1",
+          "type": "multiple_choice",
+          "xp": 1,
+          "prompt": "Recap: What is the first check in the CNN debugging checklist?",
+          "options": [
+            {
+              "id": "a",
+              "text": "Try to overfit a single batch of 4 images with zero regularization to check code logic",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "Collect more training images immediately",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "Double the learning rate and train for 100 epochs",
+              "correct": false
+            }
+          ],
+          "explain": "Yes! The single-batch overfitting test isolates code bugs first."
+        }
+      ]
+    },
+    {
+      "type": "teach",
+      "cards": [
+        {
+          "kind": "hook",
+          "icon": "🎛️",
+          "title": "The Trial and Error Problem",
+          "body": "Finding the perfect learning rate is usually a chore. If you pick `0.1`, training might explode. If you pick `0.00001`, training takes weeks. Instead of running dozens of long training runs to guess the right number, we can use a diagnostic sweep to find it in minutes."
+        },
+        {
+          "kind": "definition",
+          "icon": "🎛️",
+          "title": "The Learning Rate Finder",
+          "body": "A <strong>Learning Rate Finder</strong> (LR Finder) runs a short mock training epoch. It starts with an extremely small learning rate (e.g. `1e-7`) and exponentially increases it batch-by-batch up to a high value (e.g. `10.0`). It plots the loss against the learning rate."
+        },
+        {
+          "kind": "analogy",
+          "icon": "🔊",
+          "title": "Turning up the volume dial",
+          "body": "Imagine testing a speaker system. You start with the volume dial at zero (no sound) and slowly turn it up. First, it's too quiet (flat loss). Then, you hit a sweet spot where music is clear (ideal learning rate). If you keep turning it, the sound distorts and deafens you (NaN explosion). The LR Finder finds that sweet spot."
+        },
+        {
+          "kind": "example",
+          "icon": "📈",
+          "title": "The Loss Curve Sweep",
+          "body": "During the sweep, we plot the results: <br>- At first, loss remains flat (LR too small).<br>- Then, the loss drops rapidly (learning occurs).<br>- Finally, the loss spikes up (LR is too large, training explodes)."
+        },
+        {
+          "kind": "mythbust",
+          "icon": "⚠️",
+          "title": "Don't pick the lowest point",
+          "body": "It's a common mistake to look at the plotted curve and pick the learning rate where the loss is lowest. At that exact point, the model has already begun to explode! The optimal learning rate is actually in the middle of the **steepest downward slope**, where learning is fastest."
+        },
+        {
+          "kind": "visual",
+          "icon": "⚖️",
+          "title": "The LR Finder Plot",
+          "body": "How loss responds to exponentially increasing learning rate:",
+          "compare": {
+            "left": {
+              "emoji": "📉",
+              "tag": "Steepest Downward Slope",
+              "text": "Loss is dropping rapidly<br>Optimal learning rate region<br>Pick a value in this middle slope"
+            },
+            "right": {
+              "emoji": "📈",
+              "tag": "The Bottom and Spike",
+              "text": "Lowest loss point reached<br>Curve spikes upward next (explodes)<br>Avoid this region completely"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "type": "practice",
+      "exercises": [
+        {
+          "id": "p1",
+          "type": "multiple_choice",
+          "xp": 2,
+          "prompt": "How does a Learning Rate Finder work during its diagnostic run?",
+          "options": [
+            {
+              "id": "a",
+              "text": "It increases the learning rate exponentially batch-by-batch over a short run and plots how the loss responds",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "It automatically rewrites the network's convolutional layers to fit the GPU",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "It deletes images from the majority class to balance the loss",
+              "correct": false
+            },
+            {
+              "id": "d",
+              "text": "It runs the entire training loop 100 times to choose the best weights",
+              "correct": false
+            }
+          ],
+          "explain": "Correct! It sweeps the learning rate exponentially, mapping the loss response curve."
+        },
+        {
+          "id": "p2",
+          "type": "true_false",
+          "xp": 2,
+          "prompt": "True or false: You should select the learning rate corresponding to the absolute lowest point on the LR Finder loss curve.",
+          "options": [
+            {
+              "id": "t",
+              "text": "True",
+              "correct": false
+            },
+            {
+              "id": "f",
+              "text": "False",
+              "correct": true
+            }
+          ],
+          "explain": "False. At the absolute lowest point, the model is starting to explode. The optimal rate is in the middle of the steepest downward slope."
+        },
+        {
+          "id": "p3",
+          "type": "fill_blank",
+          "xp": 2,
+          "prompt": "Complete the sentence:",
+          "sentence": "The optimal learning rate is found in the middle of the steepest ___ slope of the loss curve.",
+          "blank": "downward",
+          "words": [
+            "downward",
+            "upward",
+            "flat"
+          ],
+          "explain": "The steepest downward slope is where the model is updating weights most effectively."
+        },
+        {
+          "id": "p4",
+          "type": "spot_the_ai",
+          "xp": 2,
+          "prompt": "What happens to the loss curve when the learning rate exceeds the stable training boundary during the sweep?",
+          "options": [
+            {
+              "id": "a",
+              "text": "The loss curve bottoms out and spikes upward rapidly, indicating training collapse",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "The loss drops instantly to exactly zero and stays there",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "The curve becomes a perfectly straight horizontal line",
+              "correct": false
+            }
+          ],
+          "explain": "Correct! Exceeding the stable boundary causes the loss to spike up as updates explode."
+        }
+      ]
+    },
+    {
+      "type": "boss",
+      "exercises": [
+        {
+          "id": "b1",
+          "type": "multiple_choice",
+          "xp": 5,
+          "prompt": "If your LR Finder plot shows a steep downward slope between 0.0001 and 0.01, with the lowest point at 0.05, what is the safest learning rate to pick?",
+          "options": [
+            {
+              "id": "a",
+              "text": "Pick a value in the middle of the slope, like 0.001, to ensure fast learning with a safety margin before explosion",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "Pick 0.05 because it corresponds to the absolute lowest loss point",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "Pick 0.1 because it is larger and will train faster",
+              "correct": false
+            },
+            {
+              "id": "d",
+              "text": "Pick 10.0 to force maximum gradient updates",
+              "correct": false
+            }
+          ],
+          "explain": "Exactly! Picking a value in the middle of the downward slope (like 0.001) gives a safety margin. Next: how to read and analyze this plot in detail!"
+        }
+      ]
+    }
+  ]
+}

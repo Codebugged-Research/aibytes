@@ -1,0 +1,222 @@
+{
+  "id": "u124-l3",
+  "unit": 124,
+  "day": 623,
+  "tier": "Training CNNs in Practice",
+  "tierIcon": "🔄",
+  "title": "Crops and Random Resizing",
+  "icon": "✂️",
+  "concept": "Random cropping cuts out a sub-region of an image, while random resizing changes its scale. Together, they teach a CNN that an object can be located anywhere in the frame and appear at any distance from the camera.",
+  "xp": 15,
+  "hearts": 3,
+  "estMinutes": 7,
+  "segments": [
+    {
+      "type": "warmup",
+      "exercises": [
+        {
+          "id": "w1",
+          "type": "multiple_choice",
+          "xp": 1,
+          "prompt": "Recap: Why is horizontal flipping unsafe for handwritten digit datasets?",
+          "options": [
+            {
+              "id": "a",
+              "text": "It turns numbers like 3 into invalid backwards symbols",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "It makes the background black and white",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "It resizes the numbers so they are too small to see",
+              "correct": false
+            }
+          ],
+          "explain": "Yes! Flipping digits or letters ruins their meaning."
+        }
+      ]
+    },
+    {
+      "type": "teach",
+      "cards": [
+        {
+          "kind": "hook",
+          "icon": "🔍",
+          "title": "Always in the Center?",
+          "body": "If every training photo features a dog perfectly centered and filling the frame, the model might fail when a user uploads a photo where the dog is small and off to the left. We need to teach the model that position and size don't change what an object is."
+        },
+        {
+          "kind": "definition",
+          "icon": "✂️",
+          "title": "Random Crops & Resizing",
+          "body": "<strong>Random cropping</strong> cuts out a rectangular portion of the image, discarding the rest. <strong>Random resizing</strong> scales the image up or down. Often combined as 'Random Resized Crop', where we take a crop of random size/ratio and resize it back to the target model input size."
+        },
+        {
+          "kind": "analogy",
+          "icon": "🔭",
+          "title": "Looking through a cardboard tube",
+          "body": "Imagine looking at a room through a cardboard tube. As you move the tube around, you only see patches of the room (crops). You still recognize the couch whether you see a close-up of a cushion or a distant view of the whole frame. That is what random cropping teaches a CNN."
+        },
+        {
+          "kind": "example",
+          "icon": "🚘",
+          "title": "Detecting Cars",
+          "body": "For a self-driving car model, random cropping simulates a car being partially cut off by the edge of the camera frame, while resizing simulates cars being near (large) or far away (small). Both are critical for real safety."
+        },
+        {
+          "kind": "mythbust",
+          "icon": "⚠️",
+          "title": "Don't crop out the subject entirely",
+          "body": "If your crop is too aggressive (e.g. taking a tiny 10% patch of a 1000x1000 image), you might crop out the dog completely and leave only a patch of grass. The label is still 'dog', but the model only sees grass! Most pipelines keep crops above 50-80% of the original image area."
+        },
+        {
+          "kind": "visual",
+          "icon": "⚖️",
+          "title": "Safe vs. Aggressive Cropping",
+          "body": "Varying the crop bounding box size:",
+          "compare": {
+            "left": {
+              "emoji": "✅",
+              "tag": "Safe Crop (e.g. 70%)",
+              "text": "Keeps the main object in view<br>Simulates offset positioning<br>Teases the model with context"
+            },
+            "right": {
+              "emoji": "❌",
+              "tag": "Aggressive Crop (e.g. 10%)",
+              "text": "Risks losing the object entirely<br>Model sees blank background<br>Confuses the model with wrong labels"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "type": "practice",
+      "exercises": [
+        {
+          "id": "p1",
+          "type": "multiple_choice",
+          "xp": 2,
+          "prompt": "What does random cropping teach a CNN model?",
+          "options": [
+            {
+              "id": "a",
+              "text": "That the object of interest can appear anywhere in the frame, even partially cut off",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "How to convert color images to grayscale",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "To ignore the foreground and focus only on the background",
+              "correct": false
+            },
+            {
+              "id": "d",
+              "text": "How to compress the dataset into a ZIP file",
+              "correct": false
+            }
+          ],
+          "explain": "Correct! Cropping teaches position invariance and robustness to partial occlusion."
+        },
+        {
+          "id": "p2",
+          "type": "true_false",
+          "xp": 2,
+          "prompt": "True or false: An extremely aggressive crop (like 5% of the image) is always better because it forces the model to look closer.",
+          "options": [
+            {
+              "id": "t",
+              "text": "True",
+              "correct": false
+            },
+            {
+              "id": "f",
+              "text": "False",
+              "correct": true
+            }
+          ],
+          "explain": "False. Extreme crops risk removing the labeled object entirely, training the model on background noise with a misleading label."
+        },
+        {
+          "id": "p3",
+          "type": "fill_blank",
+          "xp": 2,
+          "prompt": "Complete the sentence:",
+          "sentence": "Random ___ simulates objects being closer or farther from the camera during training.",
+          "blank": "resizing",
+          "words": [
+            "resizing",
+            "flipping",
+            "cropping"
+          ],
+          "explain": "Resizing changes the scale, helping the model learn scale invariance (recognizing near vs. far objects)."
+        },
+        {
+          "id": "p4",
+          "type": "spot_the_ai",
+          "xp": 2,
+          "prompt": "Which combination is a standard industry preprocessing technique for training CNNs on varying image sizes?",
+          "options": [
+            {
+              "id": "a",
+              "text": "Random Resized Crop, which takes a random crop and resizes it to a fixed size",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "Permanently deleting the borders of all images on disk before training",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "Converting every image to a vector shape mathematically",
+              "correct": false
+            }
+          ],
+          "explain": "Correct! Random Resized Crop is widely used to handle shape/scale variations during training."
+        }
+      ]
+    },
+    {
+      "type": "boss",
+      "exercises": [
+        {
+          "id": "b1",
+          "type": "multiple_choice",
+          "xp": 5,
+          "prompt": "You are training a model to identify bird species. If your training dataset only contains photos of birds sitting exactly centered on branches, how will random cropping help?",
+          "options": [
+            {
+              "id": "a",
+              "text": "By shifting the birds to the corners/edges of the crop, it prepares the model to recognize birds that appear off-center in real-world deployment",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "It will speed up training by 50% because the cropped images are smaller",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "It will change the color of the birds' feathers to create new synthetic species",
+              "correct": false
+            },
+            {
+              "id": "d",
+              "text": "It will not help at all because models can only recognize centered objects",
+              "correct": false
+            }
+          ],
+          "explain": "Perfect. Cropping simulates off-center objects, breaking the 'always centered' bias. Next, let's look at translations and shearing!"
+        }
+      ]
+    }
+  ]
+}

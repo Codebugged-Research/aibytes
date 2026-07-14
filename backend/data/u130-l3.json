@@ -1,0 +1,222 @@
+{
+  "id": "u130-l3",
+  "unit": 130,
+  "day": 653,
+  "tier": "Training CNNs in Practice",
+  "tierIcon": "🎛️",
+  "title": "Learning Rate Schedulers",
+  "icon": "🎛️",
+  "concept": "A learning rate scheduler changes the learning rate during training. By starting high for fast initial learning and decaying low for fine-tuning, schedules optimize the final model accuracy.",
+  "xp": 15,
+  "hearts": 3,
+  "estMinutes": 7,
+  "segments": [
+    {
+      "type": "warmup",
+      "exercises": [
+        {
+          "id": "w1",
+          "type": "multiple_choice",
+          "xp": 1,
+          "prompt": "Recap: What are the three zones on an LR Finder plot?",
+          "options": [
+            {
+              "id": "a",
+              "text": "No-Learning zone (flat), Steep Descent zone (ideal), and Explosion zone (spike)",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "Convolution zone, Pooling zone, and Activation zone",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "Train zone, Validation zone, and Test zone",
+              "correct": false
+            }
+          ],
+          "explain": "Yes! No-learning, steep descent, and explosion are the three zones."
+        }
+      ]
+    },
+    {
+      "type": "teach",
+      "cards": [
+        {
+          "kind": "hook",
+          "icon": "🎛️",
+          "title": "The Static Rate Limit",
+          "body": "If you keep the learning rate completely constant during a 50-epoch training run, you hit a limit. Early on, a small rate makes learning painfully slow. Late in training, a large rate makes the model bounce around the optimal point without ever settling in. We need a dynamic schedule."
+        },
+        {
+          "kind": "definition",
+          "icon": "📅",
+          "title": "Learning Rate Schedulers",
+          "body": "A <strong>learning rate scheduler</strong> adjusts the learning rate automatically as training progresses. The goal is to start with a higher rate for rapid initial progress and gradually **decay** (decrease) the rate over time for fine-tuning."
+        },
+        {
+          "kind": "analogy",
+          "icon": "🚗",
+          "title": "Parking a car",
+          "body": "When driving home, you speed down the highway to cover distance quickly (high initial learning rate). When you pull into your driveway, you slow down to a crawl to align the car perfectly in the garage without hitting the wall (low final learning rate). Static rates are like trying to park at 60 mph."
+        },
+        {
+          "kind": "example",
+          "icon": "📉",
+          "title": "Step Decay Schedule",
+          "body": "A classic schedule is <strong>Step Decay</strong>: start at `0.01`, train for 10 epochs, then drop to `0.001` for the next 10 epochs, and finally `0.0001`. The loss curve often shows clean, stepped drops in loss right after each decay step."
+        },
+        {
+          "kind": "mythbust",
+          "icon": "⚠️",
+          "title": "Don't decay too fast",
+          "body": "It's tempting to drop the learning rate quickly to make the loss curve look smooth. However, decaying too early freezes the weights before they can learn complex features. Keep the rate high as long as the validation loss is dropping, decaying only when progress stalls."
+        },
+        {
+          "kind": "visual",
+          "icon": "⚖️",
+          "title": "Constant vs. Scheduled Learning",
+          "body": "How learning rate schedules improve convergence:",
+          "compare": {
+            "left": {
+              "emoji": "🛑",
+              "tag": "Constant Learning Rate",
+              "text": "Rate remains fixed throughout<br>Bounces around target late in training<br>Suboptimal final accuracy"
+            },
+            "right": {
+              "emoji": "✅",
+              "tag": "Scheduled Learning Rate",
+              "text": "Starts high, decays over epochs<br>Settles smoothly into the optimal minimum<br>Higher final accuracy"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "type": "practice",
+      "exercises": [
+        {
+          "id": "p1",
+          "type": "multiple_choice",
+          "xp": 2,
+          "prompt": "What is the primary purpose of a learning rate scheduler?",
+          "options": [
+            {
+              "id": "a",
+              "text": "To adjust the learning rate dynamically over training epochs to optimize convergence",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "To change the size of the input images during training",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "To automatically add new skip connections to the network",
+              "correct": false
+            },
+            {
+              "id": "d",
+              "text": "To compress the model weights into a smaller file format",
+              "correct": false
+            }
+          ],
+          "explain": "Correct! Schedulers vary the learning rate dynamically to balance speed and precision."
+        },
+        {
+          "id": "p2",
+          "type": "true_false",
+          "xp": 2,
+          "prompt": "True or false: Decaying the learning rate too early in training can freeze the weights, preventing the model from learning complex features.",
+          "options": [
+            {
+              "id": "t",
+              "text": "True",
+              "correct": true
+            },
+            {
+              "id": "f",
+              "text": "False",
+              "correct": false
+            }
+          ],
+          "explain": "True. Early decay freezes weights prematurely, locking the model into a suboptimal state."
+        },
+        {
+          "id": "p3",
+          "type": "fill_blank",
+          "xp": 2,
+          "prompt": "Complete the sentence:",
+          "sentence": "Learning rate schedules typically start with a ___ rate and decay to a lower rate.",
+          "blank": "higher",
+          "words": [
+            "higher",
+            "lower",
+            "constant"
+          ],
+          "explain": "Starting higher speeds up early training, while lower rates late in training allow precise convergence."
+        },
+        {
+          "id": "p4",
+          "type": "spot_the_ai",
+          "xp": 2,
+          "prompt": "Which of these is a classic learning rate scheduling pattern?",
+          "options": [
+            {
+              "id": "a",
+              "text": "Step Decay, where the learning rate is multiplied by a factor (e.g. 0.1) every N epochs",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "Random Jitter, where the learning rate changes randomly every batch",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "Linear Increase, where the learning rate climbs steadily to infinity",
+              "correct": false
+            }
+          ],
+          "explain": "Correct! Step Decay is a standard scheduling pattern used across many vision pipelines."
+        }
+      ]
+    },
+    {
+      "type": "boss",
+      "exercises": [
+        {
+          "id": "b1",
+          "type": "multiple_choice",
+          "xp": 5,
+          "prompt": "You are training a model. At epoch 20, validation loss stalls. What scheduler move is most appropriate?",
+          "options": [
+            {
+              "id": "a",
+              "text": "Decay the learning rate by a factor of 10 to let the optimizer fine-tune the weights",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "Multiply the learning rate by 10 to force the model to jump out of the local minimum",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "Disable the scheduler and use a constant rate of 1.0",
+              "correct": false
+            },
+            {
+              "id": "d",
+              "text": "Stop training and delete all validation logs",
+              "correct": false
+            }
+          ],
+          "explain": "Exactly! Decaying the rate when learning stalls allows the model to settle in. Next: the modern cosine annealing schedule!"
+        }
+      ]
+    }
+  ]
+}

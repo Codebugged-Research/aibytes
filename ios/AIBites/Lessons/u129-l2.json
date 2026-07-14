@@ -1,0 +1,222 @@
+{
+  "id": "u129-l2",
+  "unit": 129,
+  "day": 647,
+  "tier": "Training CNNs in Practice",
+  "tierIcon": "🐛",
+  "title": "Validating the Data Pipeline",
+  "icon": "🐛",
+  "concept": "Many training failures are actually data bugs in disguise. Before adjusting network architecture, you must validate that labels are correct, pixel ranges are normalized properly, and batches are loaded cleanly.",
+  "xp": 15,
+  "hearts": 3,
+  "estMinutes": 7,
+  "segments": [
+    {
+      "type": "warmup",
+      "exercises": [
+        {
+          "id": "w1",
+          "type": "multiple_choice",
+          "xp": 1,
+          "prompt": "Recap: What is a common cause of NaN loss during CNN training?",
+          "options": [
+            {
+              "id": "a",
+              "text": "A learning rate that is too high, causing weight updates to explode mathematically",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "Using a convolutional kernel of size 3x3",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "Training on a CPU instead of a GPU",
+              "correct": false
+            }
+          ],
+          "explain": "Yes! High learning rates blow up weight updates, causing NaN values."
+        }
+      ]
+    },
+    {
+      "type": "teach",
+      "cards": [
+        {
+          "kind": "hook",
+          "icon": "📦",
+          "title": "Garbage In, Garbage Out",
+          "body": "If you feed a model mislabeled images, or accidentally scramble the channel order (passing Blue-Green-Red instead of Red-Green-Blue to a model expecting RGB), the model will train without crashing, but its performance will cap at a terrible level. The bug is in the data flow, not the code."
+        },
+        {
+          "kind": "definition",
+          "icon": "🐛",
+          "title": "Data Pipeline Validation",
+          "body": "<strong>Pipeline validation</strong> means visually inspecting your data at the very entry point of the neural network. This ensures: <br>1. Images and labels match correctly.<br>2. Color channels are in the expected order.<br>3. Pixel values are centered and normalized correctly."
+        },
+        {
+          "kind": "analogy",
+          "icon": "🏭",
+          "title": "The sorting line at the fruit factory",
+          "body": "If a factory labels apples as oranges, the canning machine will still package them perfectly (no code crash), but customers will receive labeled cans containing the wrong fruit. Pipeline validation is like inspecting the conveyor belt before canning starts to make sure the fruit matches the label."
+        },
+        {
+          "kind": "example",
+          "icon": "🐈",
+          "title": "Visualizing a Batch",
+          "body": "Before starting a 10-hour training run, write a small script to save one training batch as PNG files. Look at the images: are they rotated upside down? Are the colors garbled? Are the cat photos labeled 'car'? Visual inspection catches 80% of data bugs."
+        },
+        {
+          "kind": "mythbust",
+          "icon": "⚠️",
+          "title": "Debugging the network first is a trap",
+          "body": "It's a myth that low accuracy is always a problem with network design (like needing more layers or a different backbone). In industry, the vast majority of performance issues are caused by dirty datasets, corrupted labels, or broken pre-processing code."
+        },
+        {
+          "kind": "visual",
+          "icon": "⚖️",
+          "title": "Data Pipeline Sanity Checks",
+          "body": "What to inspect before training begins:",
+          "compare": {
+            "left": {
+              "emoji": "📁",
+              "tag": "Disk Check",
+              "text": "Verify image paths exist<br>Check folder naming conventions<br>Scan for corrupted file formats"
+            },
+            "right": {
+              "emoji": "🧠",
+              "tag": "Network Entry Check",
+              "text": "Print batch tensor shape<br>Check min/max pixel values<br>Plot images alongside labels"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "type": "practice",
+      "exercises": [
+        {
+          "id": "p1",
+          "type": "multiple_choice",
+          "xp": 2,
+          "prompt": "What is the primary benefit of saving and visually inspecting a training batch before starting a long training run?",
+          "options": [
+            {
+              "id": "a",
+              "text": "It helps catch silent data bugs like scrambled channels, wrong labels, or corrupt crops",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "It automatically adjusts the learning rate to the optimal value",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "It reduces the parameter count of the convolutional layers",
+              "correct": false
+            },
+            {
+              "id": "d",
+              "text": "It deletes duplicate images from the hard drive",
+              "correct": false
+            }
+          ],
+          "explain": "Correct! Visual inspection catches silent data alignment issues that don't trigger code crashes."
+        },
+        {
+          "id": "p2",
+          "type": "true_false",
+          "xp": 2,
+          "prompt": "True or false: A model will always crash with an error message if you accidentally shuffle the order of your training labels.",
+          "options": [
+            {
+              "id": "t",
+              "text": "True",
+              "correct": false
+            },
+            {
+              "id": "f",
+              "text": "False",
+              "correct": true
+            }
+          ],
+          "explain": "False. The model will run and train normally, but it will fail to learn because the labels are random noise."
+        },
+        {
+          "id": "p3",
+          "type": "fill_blank",
+          "xp": 2,
+          "prompt": "Complete the sentence:",
+          "sentence": "Passing garbled or mismatched data to a model that trains without crashing is a ___ data bug.",
+          "blank": "silent",
+          "words": [
+            "silent",
+            "syntax",
+            "compilation"
+          ],
+          "explain": "Silent data bugs are the hardest to debug because they don't trigger code errors."
+        },
+        {
+          "id": "p4",
+          "type": "spot_the_ai",
+          "xp": 2,
+          "prompt": "If a pretrained backbone expects RGB color order, what happens if you pass BGR (Blue-Green-Red) images instead?",
+          "options": [
+            {
+              "id": "a",
+              "text": "The model will train without crashing, but accuracy will be poor because the model's color features are misaligned",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "The model will immediately raise a channel mismatch exception",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "The model will automatically convert the images back to RGB",
+              "correct": false
+            }
+          ],
+          "explain": "Correct! Color mismatch is a silent data bug that severely degrades performance without crashing."
+        }
+      ]
+    },
+    {
+      "type": "boss",
+      "exercises": [
+        {
+          "id": "b1",
+          "type": "multiple_choice",
+          "xp": 5,
+          "prompt": "You are building a dataset of traffic signs. You suspect some labels are corrupted. What is the most rigorous first step?",
+          "options": [
+            {
+              "id": "a",
+              "text": "Write a script to display random samples from each folder along with their assigned labels to verify alignment manually",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "Double the depth of the ResNet backbone to help the model figure out the correct labels",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "Train the model for 100 extra epochs to overcome the noise",
+              "correct": false
+            },
+            {
+              "id": "d",
+              "text": "Apply 10x Mixup to blend the signs together",
+              "correct": false
+            }
+          ],
+          "explain": "Exactly! Inspect the inputs directly. Next: how to diagnose overfitting vs underfitting using loss curves!"
+        }
+      ]
+    }
+  ]
+}

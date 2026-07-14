@@ -1,0 +1,222 @@
+{
+  "id": "u124-l5",
+  "unit": 124,
+  "day": 625,
+  "tier": "Training CNNs in Practice",
+  "tierIcon": "🔄",
+  "title": "How Much Augmentation Is Too Much?",
+  "icon": "⚖️",
+  "concept": "While data augmentation makes models robust, adding too many aggressive transformations can distort images beyond recognition or change their class. Finding the right balance is key to successful training.",
+  "xp": 15,
+  "hearts": 3,
+  "estMinutes": 7,
+  "segments": [
+    {
+      "type": "warmup",
+      "exercises": [
+        {
+          "id": "w1",
+          "type": "multiple_choice",
+          "xp": 1,
+          "prompt": "Recap: What is the main difference between translation and shearing?",
+          "options": [
+            {
+              "id": "a",
+              "text": "Translation shifts the image upright; shearing slants the image along an axis",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "Translation changes colors; shearing only moves pixel positions",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "Translation is applied to validation data; shearing to training data",
+              "correct": false
+            }
+          ],
+          "explain": "Right! Translation slides upright; shearing slants."
+        }
+      ]
+    },
+    {
+      "type": "teach",
+      "cards": [
+        {
+          "kind": "hook",
+          "icon": "⚖️",
+          "title": "A Blurry, Tilted Mess",
+          "body": "If you stack random flips, rotations, crops, shifts, and shears all at once with maximum settings, you might turn a clear photo of a dog into a tiny, tilted, half-cutoff smudge. If a human can no longer recognize the object, the model definitely won't learn from it."
+        },
+        {
+          "kind": "definition",
+          "icon": "📊",
+          "title": "Augmentation Limits",
+          "body": "<strong>Extreme augmentation</strong> occurs when transformations are so strong that they distort the image beyond recognition, change its semantic class, or make it look completely unrealistic. The goal is to match the variety the model will actually see at deployment."
+        },
+        {
+          "kind": "analogy",
+          "icon": "🌶️",
+          "title": "Adding spice to food",
+          "body": "Adding a pinch of pepper makes a dish taste better. Dumping the entire jar of pepper on a plate makes it completely inedible. Augmentation is the spice of machine learning: a little bit adds great flavor and robustness, but too much ruins the whole meal."
+        },
+        {
+          "kind": "example",
+          "icon": "6️⃣",
+          "title": "Flipping a 6",
+          "body": "Rotating a handwritten <strong>'6'</strong> by 180 degrees turns it into a <strong>'9'</strong>. If the label remains '6', you are teaching the model that a 9 is a 6! This is a class leakage error, where geometric changes change the ground truth meaning."
+        },
+        {
+          "kind": "mythbust",
+          "icon": "⚠️",
+          "title": "More transforms aren't always better",
+          "body": "It's tempting to think that applying every single transformation you know at max intensity will make the model invincible. In reality, over-distorted training data makes learning too difficult, causing the model underperform on clean, normal images."
+        },
+        {
+          "kind": "visual",
+          "icon": "⚖️",
+          "title": "Balanced vs. Over-Augmented",
+          "body": "Finding the sweet spot in transformation intensity:",
+          "compare": {
+            "left": {
+              "emoji": "✅",
+              "tag": "Balanced Augmentation",
+              "text": "Slight shifts, tilts, and crops<br>Images remain realistic<br>Model learns robust patterns"
+            },
+            "right": {
+              "emoji": "❌",
+              "tag": "Over-Augmented",
+              "text": "Severe distortion and extreme crops<br>Images look like abstract noise<br>Model fails to converge or learn"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "type": "practice",
+      "exercises": [
+        {
+          "id": "p1",
+          "type": "multiple_choice",
+          "xp": 2,
+          "prompt": "What is 'class leakage' in geometric data augmentation?",
+          "options": [
+            {
+              "id": "a",
+              "text": "When a transformation changes the actual meaning or class of the image (like rotating a '6' into a '9')",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "When the training loop runs out of memory",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "When an image is converted from RGB to grayscale",
+              "correct": false
+            },
+            {
+              "id": "d",
+              "text": "When validation data leaks into the training pipeline",
+              "correct": false
+            }
+          ],
+          "explain": "Correct! Class leakage occurs when a transformation alters the class identity of the image content."
+        },
+        {
+          "id": "p2",
+          "type": "true_false",
+          "xp": 2,
+          "prompt": "True or false: You should increase augmentation strength until the training images look completely unrealistic to challenge the model.",
+          "options": [
+            {
+              "id": "t",
+              "text": "True",
+              "correct": false
+            },
+            {
+              "id": "f",
+              "text": "False",
+              "correct": true
+            }
+          ],
+          "explain": "False. Training images should stay within realistic bounds; highly unrealistic inputs make learning ineffective."
+        },
+        {
+          "id": "p3",
+          "type": "fill_blank",
+          "xp": 2,
+          "prompt": "Complete the sentence:",
+          "sentence": "If augmentation is too aggressive, it can change the ___ of the image, leading to label confusion.",
+          "blank": "meaning",
+          "words": [
+            "meaning",
+            "file size",
+            "resolution"
+          ],
+          "explain": "Aggressive changes can alter the meaning (like turning a letter 'M' into a 'W' by flipping it vertically)."
+        },
+        {
+          "id": "p4",
+          "type": "spot_the_ai",
+          "xp": 2,
+          "prompt": "Which of these is the best guideline for deciding if an augmentation setting is too strong?",
+          "options": [
+            {
+              "id": "a",
+              "text": "If a human expert can no longer recognize the object or determine its class",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "If the training epoch takes longer than five minutes to complete",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "If the image has more than three color channels",
+              "correct": false
+            }
+          ],
+          "explain": "Correct! Human recognizability is the golden baseline for safe augmentation."
+        }
+      ]
+    },
+    {
+      "type": "boss",
+      "exercises": [
+        {
+          "id": "b1",
+          "type": "multiple_choice",
+          "xp": 5,
+          "prompt": "You are training a digit classifier (0-9). What is the safest way to configure rotations?",
+          "options": [
+            {
+              "id": "a",
+              "text": "Limit random rotations to a small range (e.g. ±15 degrees) so numbers tilt slightly but never flip upside down",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "Use full 360-degree rotation so the model learns digits from any orientation",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "Disable rotations completely and only use horizontal flips",
+              "correct": false
+            },
+            {
+              "id": "d",
+              "text": "Rotations are always unsafe and should never be used",
+              "correct": false
+            }
+          ],
+          "explain": "Exactly! Small tilts are safe; massive rotations turn digits like 6 into 9 or create invalid characters. Next, let's explore photometric augmentation — editing color and light!"
+        }
+      ]
+    }
+  ]
+}

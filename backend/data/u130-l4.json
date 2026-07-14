@@ -1,0 +1,222 @@
+{
+  "id": "u130-l4",
+  "unit": 130,
+  "day": 654,
+  "tier": "Training CNNs in Practice",
+  "tierIcon": "🎛️",
+  "title": "Cosine Annealing and Warmup",
+  "icon": "🎛️",
+  "concept": "Cosine Annealing decays the learning rate along a smooth cosine curve, while learning rate Warmup starts with a small rate that climbs to the peak. Together, they stabilize early training and optimize final accuracy.",
+  "xp": 15,
+  "hearts": 3,
+  "estMinutes": 7,
+  "segments": [
+    {
+      "type": "warmup",
+      "exercises": [
+        {
+          "id": "w1",
+          "type": "multiple_choice",
+          "xp": 1,
+          "prompt": "Recap: Why does starting with a high learning rate and decaying it later work better than a constant rate?",
+          "options": [
+            {
+              "id": "a",
+              "text": "It covers distance quickly early on, then slows down for precise fine-tuning late in training",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "It automatically reduces the number of channels in the image",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "It prevents the GPU from overheating",
+              "correct": false
+            }
+          ],
+          "explain": "Yes! High rates speed up early learning; low rates allow precise fine-tuning."
+        }
+      ]
+    },
+    {
+      "type": "teach",
+      "cards": [
+        {
+          "kind": "hook",
+          "icon": "🎛️",
+          "title": "Gradual Transitions",
+          "body": "Step decay schedules (sudden 10x drops) are effective, but the sudden changes can shock the optimizer, causing temporary instability. Modern architectures (like ResNets and ViTs) prefer smooth, continuous schedules that guide the learning rate along a gentle curve."
+        },
+        {
+          "kind": "definition",
+          "icon": "📈",
+          "title": "Cosine Annealing & Warmup",
+          "body": "- <strong>Cosine Annealing</strong>: Decays the learning rate following a cosine wave shape, dropping slowly at first, rapidly in the middle, and very slowly at the end.<br>- <strong>Warmup</strong>: Starts training with an extremely small learning rate for the first few epochs, gradually climbing to the peak target rate to stabilize early weight updates."
+        },
+        {
+          "kind": "analogy",
+          "icon": "🎢",
+          "title": "The roller coaster launch",
+          "body": "If a roller coaster launched at full speed instantly, it would break the track (exploding gradients on random weights). Warmup is the slow initial roll out of the station. Cosine annealing is the long, smooth descent that gradually glides to a gentle stop at the end. It's safe and elegant."
+        },
+        {
+          "kind": "example",
+          "icon": "📊",
+          "title": "A standard ResNet schedule",
+          "body": "For a 90-epoch ResNet training run: <br>- <strong>Warmup</strong>: Linear climb from `1e-6` to `0.1` during epochs 1-5.<br>- <strong>Cosine Annealing</strong>: Smooth cosine descent from `0.1` down to `1e-5` during epochs 6-90."
+        },
+        {
+          "kind": "mythbust",
+          "icon": "⚠️",
+          "title": "Warmup isn't wasted time",
+          "body": "It feels strange to start training slowly. If you discovered your ideal learning rate is `0.1`, why not just start there on epoch 1? At the start, the model's weights are completely random. A large learning rate immediately distorts these weights based on early random noise. Warmup allows the model to find its footing first."
+        },
+        {
+          "kind": "visual",
+          "icon": "⚖️",
+          "title": "Step vs. Cosine Annealing",
+          "body": "Comparing the two scheduling shapes:",
+          "compare": {
+            "left": {
+              "emoji": "📈",
+              "tag": "Step Decay",
+              "text": "Sudden, abrupt drops<br>Stepped loss curve drops<br>Can shock optimizer updates"
+            },
+            "right": {
+              "emoji": "🌊",
+              "tag": "Cosine Annealing",
+              "text": "Smooth, continuous curve<br>Gradual, stable convergence<br>Standard in modern pipelines"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "type": "practice",
+      "exercises": [
+        {
+          "id": "p1",
+          "type": "multiple_choice",
+          "xp": 2,
+          "prompt": "What is the purpose of learning rate Warmup at the start of training?",
+          "options": [
+            {
+              "id": "a",
+              "text": "To gradually increase the learning rate from near zero to the target rate, stabilizing early training on random weights",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "To heat up the GPU hardware before intensive calculations begin",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "To run the model on a validation set before training starts",
+              "correct": false
+            },
+            {
+              "id": "d",
+              "text": "To double the size of the convolutional kernels",
+              "correct": false
+            }
+          ],
+          "explain": "Correct! Warmup starts slowly, preventing early gradient explosions on random weights."
+        },
+        {
+          "id": "p2",
+          "type": "true_false",
+          "xp": 2,
+          "prompt": "True or false: Cosine Annealing decays the learning rate along a smooth, wave-like curve instead of making sudden, abrupt steps.",
+          "options": [
+            {
+              "id": "t",
+              "text": "True",
+              "correct": true
+            },
+            {
+              "id": "f",
+              "text": "False",
+              "correct": false
+            }
+          ],
+          "explain": "True. Cosine annealing provides a smooth, continuous decay path."
+        },
+        {
+          "id": "p3",
+          "type": "fill_blank",
+          "xp": 2,
+          "prompt": "Complete the sentence:",
+          "sentence": "Learning rate ___ is a technique that starts with a tiny rate and climbs to the peak during the first few epochs.",
+          "blank": "warmup",
+          "words": [
+            "warmup",
+            "annealing",
+            "decay"
+          ],
+          "explain": "Warmup stabilizes early training by ramping up the learning rate gradually."
+        },
+        {
+          "id": "p4",
+          "type": "spot_the_ai",
+          "xp": 2,
+          "prompt": "Which of these is a benefit of Cosine Annealing over standard Step Decay?",
+          "options": [
+            {
+              "id": "a",
+              "text": "It provides a smooth, continuous transition, avoiding abrupt shocks to the optimizer",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "It completely removes the need for backpropagation",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "It automatically crops validation images to 224x224",
+              "correct": false
+            }
+          ],
+          "explain": "Correct! The smooth transition avoids optimizer shocks, leading to more stable training."
+        }
+      ]
+    },
+    {
+      "type": "boss",
+      "exercises": [
+        {
+          "id": "b1",
+          "type": "multiple_choice",
+          "xp": 5,
+          "prompt": "You are training a large Vision Transformer. If you skip warmup and start immediately with a high learning rate, what is the most likely failure?",
+          "options": [
+            {
+              "id": "a",
+              "text": "Early gradient explosion: the random weights will be updated too aggressively, causing training to destabilize or diverge immediately",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "The model will train normally but will output predictions twice as slow",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "The model will automatically convert itself into a CNN backbone",
+              "correct": false
+            },
+            {
+              "id": "d",
+              "text": "The training loss will stay flat at exactly zero",
+              "correct": false
+            }
+          ],
+          "explain": "Exactly! Random weights are highly sensitive; they need warmup. Next: a decision matrix on choosing schedules!"
+        }
+      ]
+    }
+  ]
+}

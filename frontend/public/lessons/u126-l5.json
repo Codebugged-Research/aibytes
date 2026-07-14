@@ -1,0 +1,222 @@
+{
+  "id": "u126-l5",
+  "unit": 126,
+  "day": 635,
+  "tier": "Training CNNs in Practice",
+  "tierIcon": "🪩",
+  "title": "When to Use Mixup/CutMix",
+  "icon": "⚖️",
+  "concept": "Mixup and CutMix are highly effective for image classification tasks. However, they are less suited for tasks requiring precise pixel coordinates, like object detection and segmentation, where blended boundaries can confuse localization.",
+  "xp": 15,
+  "hearts": 3,
+  "estMinutes": 7,
+  "segments": [
+    {
+      "type": "warmup",
+      "exercises": [
+        {
+          "id": "w1",
+          "type": "multiple_choice",
+          "xp": 1,
+          "prompt": "Recap: Why does CutMix force a model to distribute its attention across the entire image?",
+          "options": [
+            {
+              "id": "a",
+              "text": "Because the pasted patch and background belong to different classes, so every region matters for the soft label",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "Because it doubles the resolution of the image",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "Because it removes the loss function entirely",
+              "correct": false
+            }
+          ],
+          "explain": "Yes! Every region contributes to the soft label, forcing distributed attention."
+        }
+      ]
+    },
+    {
+      "type": "teach",
+      "cards": [
+        {
+          "kind": "hook",
+          "icon": "🎯",
+          "title": "Great for Classification",
+          "body": "Mixup and CutMix are standard defaults in modern image classification pipelines (like training ResNets on ImageNet). They consistently boost accuracy by 1-2%. But if your model needs to draw a precise bounding box around an object, blending images presents a serious challenge."
+        },
+        {
+          "kind": "definition",
+          "icon": "⚖️",
+          "title": "Localization Limitations",
+          "body": "While excellent for global classification, standard Mixup and CutMix are less suited for <strong>localization tasks</strong> like object detection or semantic segmentation. Blending pixel boundaries or cutting out parts of boxes makes it difficult for the network to learn precise edges."
+        },
+        {
+          "kind": "analogy",
+          "icon": "🎯",
+          "title": "The archer's target",
+          "body": "If you are training to hit a bullseye, you need a clear, solid target. Mixup is like making the target semi-transparent and shifting it around — you can't tell where the exact center is anymore. For precise targeting, you need clear boundaries, not blends."
+        },
+        {
+          "kind": "example",
+          "icon": "🚗",
+          "title": "Object Detection",
+          "body": "In object detection, a model must predict a bounding box <code>[X, Y, Width, Height]</code>. If we apply Mixup, the car is blended with a kitchen background. Drawing a box around a semi-transparent car is mathematically messy and degrades box accuracy."
+        },
+        {
+          "kind": "mythbust",
+          "icon": "⚠️",
+          "title": "Not a universal cure",
+          "body": "Don't assume image mixing should be turned on for every computer vision model you build. It is a specialized tool for regularization. If your dataset is huge and overfitting isn't an issue, mixing might actually slow down training convergence without adding value."
+        },
+        {
+          "kind": "visual",
+          "icon": "⚖️",
+          "title": "When to Mix vs. Not",
+          "body": "Choosing when to apply Mixup or CutMix:",
+          "compare": {
+            "left": {
+              "emoji": "✅",
+              "tag": "Good Fit",
+              "text": "Image Classification<br>Small datasets prone to overfitting<br>Fine-grained classification tasks"
+            },
+            "right": {
+              "emoji": "❌",
+              "tag": "Poor Fit",
+              "text": "Object Detection (bounding boxes)<br>Semantic Segmentation (pixel masks)<br>Huge datasets with low overfitting risk"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "type": "practice",
+      "exercises": [
+        {
+          "id": "p1",
+          "type": "multiple_choice",
+          "xp": 2,
+          "prompt": "For which of these tasks is standard Mixup/CutMix MOST suitable?",
+          "options": [
+            {
+              "id": "a",
+              "text": "Classifying whether an image contains a cat, dog, or bird",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "Drawing bounding boxes around pedestrians in self-driving cars",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "Coloring in every individual pixel of a road in a satellite image",
+              "correct": false
+            },
+            {
+              "id": "d",
+              "text": "Measuring the exact height of a container box in a warehouse",
+              "correct": false
+            }
+          ],
+          "explain": "Correct! Image classification is the primary target for these mixing augmentations."
+        },
+        {
+          "id": "p2",
+          "type": "true_false",
+          "xp": 2,
+          "prompt": "True or false: If you have a massive dataset and your model is already underfitting, adding aggressive Mixup will help speed up training.",
+          "options": [
+            {
+              "id": "t",
+              "text": "True",
+              "correct": false
+            },
+            {
+              "id": "f",
+              "text": "False",
+              "correct": true
+            }
+          ],
+          "explain": "False. Mixup acts as a regularizer, which can make training harder. If the model is underfitting, adding regularization will make it worse."
+        },
+        {
+          "id": "p3",
+          "type": "fill_blank",
+          "xp": 2,
+          "prompt": "Complete the sentence:",
+          "sentence": "Standard Mixup is rarely used in object detection because blending boundaries confuses target ___ coordinates.",
+          "blank": "bounding box",
+          "words": [
+            "bounding box",
+            "activation",
+            "resolution"
+          ],
+          "explain": "Blended pixel edges confuse the precise coordinates needed for bounding box prediction."
+        },
+        {
+          "id": "p4",
+          "type": "spot_the_ai",
+          "xp": 2,
+          "prompt": "Why do Mixup and CutMix act as regularizers?",
+          "options": [
+            {
+              "id": "a",
+              "text": "They smooth the decision boundary by preventing the model from predicting extreme confidences",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "They reduce the number of channels in the convolutional layer",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "They force the weights of the classification head to remain constant",
+              "correct": false
+            }
+          ],
+          "explain": "Correct! Soft targets smooth decision boundaries, regularizing the training."
+        }
+      ]
+    },
+    {
+      "type": "boss",
+      "exercises": [
+        {
+          "id": "b1",
+          "type": "multiple_choice",
+          "xp": 5,
+          "prompt": "A teammate suggests using CutMix for a medical segmentation model that labels tumor pixels. What is the main risk?",
+          "options": [
+            {
+              "id": "a",
+              "text": "Pasting a sharp rectangular patch of tumor onto a healthy organ creates unrealistic, artificial boundary edges that don't match how tumors grow in real tissues",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "CutMix will automatically change the tumor cells to healthy cells, causing severe label corruption",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "There is no risk; CutMix is the default standard for all medical imaging models",
+              "correct": false
+            },
+            {
+              "id": "d",
+              "text": "CutMix is unsafe because medical images cannot be loaded into a computer pipeline",
+              "correct": false
+            }
+          ],
+          "explain": "Exactly! The artificial collage edges can confuse segmentation models. Next, let's explore preprocessing pipelines and how to structure all these steps!"
+        }
+      ]
+    }
+  ]
+}

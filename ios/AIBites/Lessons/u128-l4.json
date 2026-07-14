@@ -1,0 +1,222 @@
+{
+  "id": "u128-l4",
+  "unit": 128,
+  "day": 644,
+  "tier": "Training CNNs in Practice",
+  "tierIcon": "⚖️",
+  "title": "Augmentation as a Balancing Tool",
+  "icon": "🔄",
+  "concept": "Instead of copying identical minority-class images, we can balance our dataset by applying random data augmentations ONLY to the minority class. This increases the count and variety of the rare class simultaneously.",
+  "xp": 15,
+  "hearts": 3,
+  "estMinutes": 7,
+  "segments": [
+    {
+      "type": "warmup",
+      "exercises": [
+        {
+          "id": "w1",
+          "type": "multiple_choice",
+          "xp": 1,
+          "prompt": "Recap: If Class A represents 95% of your data and Class B is 5%, what weights should you assign to balance their loss contributions?",
+          "options": [
+            {
+              "id": "a",
+              "text": "Weight Class A at 1.0, and Class B at 19.0 (to balance the 19:1 ratio)",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "Weight Class A at 19.0, and Class B at 1.0",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "Weight both at 0.5 to keep things equal",
+              "correct": false
+            }
+          ],
+          "explain": "Yes! Weighting inversely proportional to class frequency balances their impact."
+        }
+      ]
+    },
+    {
+      "type": "teach",
+      "cards": [
+        {
+          "kind": "hook",
+          "icon": "🔄",
+          "title": "Varied Duplicates",
+          "body": "Oversampling (duplicating minority images) helps balance data, but repeating the exact same photos leads to overfitting. What if we combined oversampling with data augmentation? We duplicate the rare images, but apply random flips, crops, and colors so every copy is slightly different."
+        },
+        {
+          "kind": "definition",
+          "icon": "🔄",
+          "title": "Augmented Oversampling",
+          "body": "<strong>Augmented oversampling</strong> balances a dataset by generating augmented variations of minority-class images until their count matches the majority class. This provides the volume needed for balance while introducing the feature variety needed for generalization."
+        },
+        {
+          "kind": "analogy",
+          "icon": "🎨",
+          "title": "The portrait painter's sketches",
+          "body": "If you want to practice painting a rare bird, looking at the same single photo 100 times is boring and repetitive. Instead, you sketch the bird from slightly different angles, under different lights, and in different settings. You still study the same bird, but you learn its true form."
+        },
+        {
+          "kind": "example",
+          "icon": "🚗",
+          "title": "Defective Parts Augmentation",
+          "body": "If you only have 20 photos of cracked metal parts, you can apply aggressive rotations, shearing, and brightness jitter specifically to those 20 images. You generate 1,000 unique variations, balancing the defect class against 1,000 normal parts."
+        },
+        {
+          "kind": "mythbust",
+          "icon": "⚠️",
+          "title": "It's still based on the same source",
+          "body": "Augmentation adds excellent variety, but it still depends entirely on the original minority photos. If your 20 defect photos only show cracks on flat surfaces, augmenting them will not help the model recognize cracks on curved edges. You still need diverse source images."
+        },
+        {
+          "kind": "visual",
+          "icon": "⚖️",
+          "title": "Plain vs. Augmented Oversampling",
+          "body": "Why augmenting duplicates improves generalization:",
+          "compare": {
+            "left": {
+              "emoji": "🛑",
+              "tag": "Plain Oversampling",
+              "text": "Copies exact same files<br>Model memorizes specific backgrounds<br>High overfitting risk"
+            },
+            "right": {
+              "emoji": "✅",
+              "tag": "Augmented Oversampling",
+              "text": "Applies random crops/rotations/colors<br>Every duplicate looks unique<br>Low overfitting risk"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "type": "practice",
+      "exercises": [
+        {
+          "id": "p1",
+          "type": "multiple_choice",
+          "xp": 2,
+          "prompt": "How does augmented oversampling solve a key limitation of plain oversampling?",
+          "options": [
+            {
+              "id": "a",
+              "text": "It introduces variations to the duplicated images, reducing the risk of overfitting to identical photos",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "It automatically gathers new real-world images from the web",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "It cuts training time in half by compressing files",
+              "correct": false
+            },
+            {
+              "id": "d",
+              "text": "It shifts all target labels back to 100% majority class",
+              "correct": false
+            }
+          ],
+          "explain": "Correct! Random variations stop the model from memorizing duplicate pixel patterns."
+        },
+        {
+          "id": "p2",
+          "type": "true_false",
+          "xp": 2,
+          "prompt": "True or false: Augmenting a minority class can completely make up for a dataset that completely lacks important minority-class features.",
+          "options": [
+            {
+              "id": "t",
+              "text": "True",
+              "correct": false
+            },
+            {
+              "id": "f",
+              "text": "False",
+              "correct": true
+            }
+          ],
+          "explain": "False. Augmentation can only stretch existing features; it cannot invent entirely new features or classes."
+        },
+        {
+          "id": "p3",
+          "type": "fill_blank",
+          "xp": 2,
+          "prompt": "Complete the sentence:",
+          "sentence": "By applying flips, crops, and color shifts to duplicates, we balance class sizes while introducing feature ___.",
+          "blank": "variety",
+          "words": [
+            "variety",
+            "parameters",
+            "redundancy"
+          ],
+          "explain": "Augmenting duplicates adds variety, helping the model generalize instead of memorizing."
+        },
+        {
+          "id": "p4",
+          "type": "spot_the_ai",
+          "xp": 2,
+          "prompt": "Which of these is the most effective setup for balancing a 95% majority / 5% minority dataset using augmentation?",
+          "options": [
+            {
+              "id": "a",
+              "text": "Apply random augmentations to minority samples during loading to create unique variations",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "Apply the exact same rotation to both classes permanently on disk",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "Convert all images in both classes to black and white",
+              "correct": false
+            }
+          ],
+          "explain": "Correct! On-the-fly random augmentation of minority samples is the standard balance technique."
+        }
+      ]
+    },
+    {
+      "type": "boss",
+      "exercises": [
+        {
+          "id": "b1",
+          "type": "multiple_choice",
+          "xp": 5,
+          "prompt": "You are building a dataset to identify rare bird species. You have only 5 photos of a rare eagle. What is the best strategy?",
+          "options": [
+            {
+              "id": "a",
+              "text": "Gather more real eagle photos if possible, using augmented oversampling as a temporary bridge to prevent immediate overfitting",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "Apply 1000x weighted loss and skip gathering more photos entirely",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "Delete the eagle class entirely to make the dataset perfectly balanced",
+              "correct": false
+            },
+            {
+              "id": "d",
+              "text": "Undersample all other birds to exactly 5 images to keep counts matching",
+              "correct": false
+            }
+          ],
+          "explain": "Exactly! Augmentation bridges the gap, but real data is always king. Next: how to evaluate balanced performance fairly!"
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,222 @@
+{
+  "id": "u131-l1",
+  "unit": 131,
+  "day": 656,
+  "tier": "Training CNNs in Practice",
+  "tierIcon": "🌉",
+  "title": "What is Test-Time Augmentation?",
+  "icon": "🌉",
+  "concept": "Test-Time Augmentation (TTA) applies data augmentation during inference (testing). By generating multiple augmented variations of a test image, running them through the model, and averaging the predictions, TTA boosts accuracy and confidence reliability.",
+  "xp": 15,
+  "hearts": 3,
+  "estMinutes": 7,
+  "segments": [
+    {
+      "type": "warmup",
+      "exercises": [
+        {
+          "id": "w1",
+          "type": "multiple_choice",
+          "xp": 1,
+          "prompt": "Recap: What is a key parameter in the 'Reduce on Plateau' scheduler?",
+          "options": [
+            {
+              "id": "a",
+              "text": "Patience (how many epochs to wait for improvement before decaying)",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "Kernel size of the convolutional layers",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "The resolution of the input images",
+              "correct": false
+            }
+          ],
+          "explain": "Yes! Patience determines the cooldown before a rate decay is triggered."
+        }
+      ]
+    },
+    {
+      "type": "teach",
+      "cards": [
+        {
+          "kind": "hook",
+          "icon": "🌉",
+          "title": "Second Opinions",
+          "body": "When a doctor looks at a tricky X-ray, they might tilt the scan, zoom in, or adjust the lighting to be absolutely sure of their diagnosis. In deep learning, we usually pass a test image through the model once. If the crop is slightly off, the model might fail. Why not let the model get a 'second opinion'?"
+        },
+        {
+          "kind": "definition",
+          "icon": "🌉",
+          "title": "Test-Time Augmentation",
+          "body": "<strong>Test-Time Augmentation</strong> (TTA) is an inference-time technique. Instead of predicting on a single raw test image, we generate multiple augmented versions of it (e.g. flipped, cropped, tilted), run them all through the model, and **average** the output probabilities."
+        },
+        {
+          "kind": "analogy",
+          "icon": "🗳️",
+          "title": "A panel of judges",
+          "body": "Averaging one model prediction is like asking a single judge. Test-Time Augmentation is like forming a panel of judges, but they are all the same person viewing the object from different angles. One judge sees it flipped, another tilted, another zoomed. By voting, they reach a far safer consensus."
+        },
+        {
+          "kind": "example",
+          "icon": "🐈",
+          "title": "Cat Inference TTA",
+          "body": "A user uploads a cat photo. Under TTA, we generate 4 variations: <br>1. Original image.<br>2. Horizontally flipped image.<br>3. Slightly zoomed-in image.<br>4. Slightly tilted image.<br>The model predicts on all 4, and we average their confidence scores for the final answer."
+        },
+        {
+          "kind": "mythbust",
+          "icon": "⚠️",
+          "title": "It's only for inference",
+          "body": "Don't confuse TTA with regular data augmentation. Regular augmentation happens **during training** to update weights. TTA happens **during deployment/testing** on frozen weights. It does not update weights; it simply helps the frozen model make a smarter final decision."
+        },
+        {
+          "kind": "visual",
+          "icon": "⚖️",
+          "title": "Single-Pass vs. TTA Inference",
+          "body": "Comparing the two prediction paths at deployment:",
+          "compare": {
+            "left": {
+              "emoji": "🪨",
+              "tag": "Single-Pass Inference",
+              "text": "1 input -> 1 model pass<br>Fastest execution (1x)<br>Vulnerable to bad crops/angles"
+            },
+            "right": {
+              "emoji": "🌉",
+              "tag": "Test-Time Augmentation (TTA)",
+              "text": "N inputs -> N model passes<br>Slower execution (Nx)<br>Higher accuracy & stable confidence"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "type": "practice",
+      "exercises": [
+        {
+          "id": "p1",
+          "type": "multiple_choice",
+          "xp": 2,
+          "prompt": "What is the core mechanism of Test-Time Augmentation (TTA)?",
+          "options": [
+            {
+              "id": "a",
+              "text": "Predicting on multiple augmented variations of a test image at inference, then averaging the output probabilities",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "Updating the weights of the convolutional filters using test labels",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "Randomly deleting validation folders on disk to save space",
+              "correct": false
+            },
+            {
+              "id": "d",
+              "text": "Converting the test image to a vector shape",
+              "correct": false
+            }
+          ],
+          "explain": "Correct! TTA averages predictions over multiple augmented versions of the test image."
+        },
+        {
+          "id": "p2",
+          "type": "true_false",
+          "xp": 2,
+          "prompt": "True or false: Test-Time Augmentation updates the model's weights during inference.",
+          "options": [
+            {
+              "id": "t",
+              "text": "True",
+              "correct": false
+            },
+            {
+              "id": "f",
+              "text": "False",
+              "correct": true
+            }
+          ],
+          "explain": "False. TTA runs on a frozen, already-trained model; it does not change any weights."
+        },
+        {
+          "id": "p3",
+          "type": "fill_blank",
+          "xp": 2,
+          "prompt": "Complete the sentence:",
+          "sentence": "TTA increases final accuracy but requires ___ computation because the model must perform multiple forward passes.",
+          "blank": "more",
+          "words": [
+            "more",
+            "less",
+            "constant"
+          ],
+          "explain": "Since the model runs once per augmented version, TTA multiplies the computational cost at inference."
+        },
+        {
+          "id": "p4",
+          "type": "spot_the_ai",
+          "xp": 2,
+          "prompt": "Which of these is a major tradeoff when deciding to enable TTA in production?",
+          "options": [
+            {
+              "id": "a",
+              "text": "Higher prediction accuracy vs. increased latency and computational cost",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "Smaller model size vs. longer training times",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "Fewer channels vs. more activation layers",
+              "correct": false
+            }
+          ],
+          "explain": "Correct! TTA boosts accuracy but multiplies latency, which can be a bottleneck for real-time systems."
+        }
+      ]
+    },
+    {
+      "type": "boss",
+      "exercises": [
+        {
+          "id": "b1",
+          "type": "multiple_choice",
+          "xp": 5,
+          "prompt": "You are deploying a model on a low-power smartwatch that needs to predict in under 10 milliseconds. Should you use TTA?",
+          "options": [
+            {
+              "id": "a",
+              "text": "No — TTA requires multiple forward passes, which will increase latency and drain battery, making it unsuitable for real-time edge devices",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "Yes — TTA is mandatory for all watch models to keep the screens on",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "Yes — because TTA actually speeds up model execution on watch processors",
+              "correct": false
+            },
+            {
+              "id": "d",
+              "text": "No — because watch screens cannot render augmented color spaces",
+              "correct": false
+            }
+          ],
+          "explain": "Exactly! Latency makes TTA bad for real-time edge devices. Next: how to choose safe TTA transforms!"
+        }
+      ]
+    }
+  ]
+}

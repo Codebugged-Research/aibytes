@@ -1,0 +1,222 @@
+{
+  "id": "u129-l1",
+  "unit": 129,
+  "day": 646,
+  "tier": "Training CNNs in Practice",
+  "tierIcon": "🐛",
+  "title": "Common CNN Training Failures",
+  "icon": "🐛",
+  "concept": "CNN training can fail in several ways, from gradients vanishing to code bugs. Recognizing the visual symptoms — like a flat loss curve or NaN values — is the first step toward fixing the root cause.",
+  "xp": 15,
+  "hearts": 3,
+  "estMinutes": 7,
+  "segments": [
+    {
+      "type": "warmup",
+      "exercises": [
+        {
+          "id": "w1",
+          "type": "multiple_choice",
+          "xp": 1,
+          "prompt": "Recap: What is the F1-Score in model evaluation?",
+          "options": [
+            {
+              "id": "a",
+              "text": "The harmonic mean of Precision and Recall, balancing both into a single metric",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "The raw percentage of correct predictions in the majority class",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "The ratio of training time to validation time",
+              "correct": false
+            }
+          ],
+          "explain": "Yes! The F1-score balances precision and recall."
+        }
+      ]
+    },
+    {
+      "type": "teach",
+      "cards": [
+        {
+          "kind": "hook",
+          "icon": "🐛",
+          "title": "The Broken Curve",
+          "body": "You hit 'Run' on your training script, grab a coffee, and return. The validation loss is a completely flat horizontal line, or even worse, the console prints `Loss: NaN` (Not a Number). Your training has collapsed. To fix it, you need to understand the clues."
+        },
+        {
+          "kind": "definition",
+          "icon": "🐛",
+          "title": "Training Failure Symptoms",
+          "body": "- <strong>Flat Loss</strong>: The model isn't learning at all (learning rate too low or gradients blocked).<br>- <strong>NaN Loss</strong>: Math exploded (learning rate too high, dividing by zero, or bad normalization).<br>- <strong>Spiking Loss</strong>: Training is highly unstable (learning rate too high or bad batch size)."
+        },
+        {
+          "kind": "analogy",
+          "icon": "🚗",
+          "title": "Dashboard warning lights",
+          "body": "If your car engine makes a knocking sound, you check the oil. If the temperature gauge spikes, you check the coolant. Flat loss, spiking curves, and NaN values are the dashboard warning lights of deep learning. Each light points to a specific mechanical failure under the hood."
+        },
+        {
+          "kind": "example",
+          "icon": "🔢",
+          "title": "The NaN Explosion",
+          "body": "If your learning rate is set to a massive value (like 10.0), weight updates will overshoot. The network's numbers double every layer: 2, 4, 16, 256... within milliseconds, they exceed the computer's float limit and turn into `NaN` (Not a Number)."
+        },
+        {
+          "kind": "mythbust",
+          "icon": "⚠️",
+          "title": "It's usually not a code syntax error",
+          "body": "When a model fails to train, beginners often look for typos or syntax bugs in their code. In deep learning, the code is usually syntactically perfect and runs without crashing. The failure is **mathematical**: the learning rate, weights, or data flow are misaligned."
+        },
+        {
+          "kind": "visual",
+          "icon": "⚖️",
+          "title": "Healthy vs. Exploding Loss Curves",
+          "body": "Comparing typical training loss curves:",
+          "compare": {
+            "left": {
+              "emoji": "📈",
+              "tag": "Exploding Loss (NaN)",
+              "text": "Loss spikes vertically<br>Outputs quickly turn to NaN<br>Cause: Learning rate too high"
+            },
+            "right": {
+              "emoji": "📉",
+              "tag": "Healthy Loss",
+              "text": "Smooth, gradual decay<br>Stabilizes near low value<br>Cause: Balanced hyperparameters"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "type": "practice",
+      "exercises": [
+        {
+          "id": "p1",
+          "type": "multiple_choice",
+          "xp": 2,
+          "prompt": "What is the most common cause of the console printing 'Loss: NaN' during training?",
+          "options": [
+            {
+              "id": "a",
+              "text": "The learning rate is set too high, causing activations to explode beyond computer limits",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "The image file format is PNG instead of JPEG",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "The validation set is larger than the training set",
+              "correct": false
+            },
+            {
+              "id": "d",
+              "text": "The model has too many skip connections",
+              "correct": false
+            }
+          ],
+          "explain": "Correct! Excessive learning rates explode activations and gradients, resulting in NaN values."
+        },
+        {
+          "id": "p2",
+          "type": "true_false",
+          "xp": 2,
+          "prompt": "True or false: If your training loss curve is a completely flat horizontal line, the learning rate might be set too low.",
+          "options": [
+            {
+              "id": "t",
+              "text": "True",
+              "correct": true
+            },
+            {
+              "id": "f",
+              "text": "False",
+              "correct": false
+            }
+          ],
+          "explain": "True. If the learning rate is near 0, the updates are too small to change the weights, resulting in a flat loss."
+        },
+        {
+          "id": "p3",
+          "type": "fill_blank",
+          "xp": 2,
+          "prompt": "Complete the sentence:",
+          "sentence": "Unstable loss curves that spike up and down wildly usually point to a learning rate that is too ___.",
+          "blank": "high",
+          "words": [
+            "high",
+            "low",
+            "constant"
+          ],
+          "explain": "High learning rates cause the optimizer to overshoot, creating unstable spikes in the loss curve."
+        },
+        {
+          "id": "p4",
+          "type": "spot_the_ai",
+          "xp": 2,
+          "prompt": "Which of these is a mathematical symptom of gradient collapse during training?",
+          "options": [
+            {
+              "id": "a",
+              "text": "The training loss remains completely flat and never decreases across multiple epochs",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "The model's parameter count automatically doubles",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "The input image dimensions automatically resize to 1x1",
+              "correct": false
+            }
+          ],
+          "explain": "Correct! A flat loss curve across epochs indicates that the model is not updating its weights (collapsing gradients)."
+        }
+      ]
+    },
+    {
+      "type": "boss",
+      "exercises": [
+        {
+          "id": "b1",
+          "type": "multiple_choice",
+          "xp": 5,
+          "prompt": "During training, your loss curve drops nicely for 2 epochs, then instantly spikes to NaN. What is the first thing you should adjust?",
+          "options": [
+            {
+              "id": "a",
+              "text": "Lower the learning rate by a factor of 10 and verify if training stabilizes",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "Double the learning rate to push past the NaN values",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "Delete all convolutional layers and train a dense network instead",
+              "correct": false
+            },
+            {
+              "id": "d",
+              "text": "Assume the GPU is broken and restart the hardware",
+              "correct": false
+            }
+          ],
+          "explain": "Exactly! Lowering the learning rate is the first defense against NaN explosions. Next, let's explore how to validate your data pipeline!"
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,222 @@
+{
+  "id": "u127-l3",
+  "unit": 127,
+  "day": 638,
+  "tier": "Training CNNs in Practice",
+  "tierIcon": "🏭",
+  "title": "Order of Operations: Augment Then Normalize",
+  "icon": "🔢",
+  "concept": "In a preprocessing pipeline, order of operations is critical. You must apply random augmentations first on raw pixel values, and apply normalization as the very last step right before the image enters the neural network.",
+  "xp": 15,
+  "hearts": 3,
+  "estMinutes": 7,
+  "segments": [
+    {
+      "type": "warmup",
+      "exercises": [
+        {
+          "id": "w1",
+          "type": "multiple_choice",
+          "xp": 1,
+          "prompt": "Recap: What values are subtracted and divided during standard image normalization?",
+          "options": [
+            {
+              "id": "a",
+              "text": "Subtract the mean, divide by the standard deviation",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "Subtract the standard deviation, divide by the mean",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "Subtract 255, divide by 2",
+              "correct": false
+            }
+          ],
+          "explain": "Yes! Subtract mean, divide by standard deviation."
+        }
+      ]
+    },
+    {
+      "type": "teach",
+      "cards": [
+        {
+          "kind": "hook",
+          "icon": "🔢",
+          "title": "Mathematical Order",
+          "body": "In algebra, doing operations in the wrong order (like multiplying before adding) changes the result. In an image pipeline, the same rule applies. If you normalize your pixels first and then try to apply color augmentation on top of it, the math gets distorted."
+        },
+        {
+          "kind": "definition",
+          "icon": "🔢",
+          "title": "Augment, Then Normalize",
+          "body": "The standard order of operations is: <br>1. <strong>Geometric transforms</strong> (crop/resize/rotate)<br>2. <strong>Photometric transforms</strong> (color/brightness jitter)<br>3. <strong>Normalization</strong> (mean subtraction/division) as the <strong>final step</strong> right before the network."
+        },
+        {
+          "kind": "analogy",
+          "icon": "👔",
+          "title": "Dressing up for a rainy day",
+          "body": "Putting on your clothes and then your raincoat is correct. Putting on your raincoat and then trying to pull your pants over it is a disaster. Normalization is the raincoat — it's the final protective layer that prepares the clean data for the network. Put it on last."
+        },
+        {
+          "kind": "example",
+          "icon": "📊",
+          "title": "Jittering normalized pixels",
+          "body": "Normalization shifts pixels to small float values (e.g. -2.0 to +2.0). Photometric tools like brightness jitter expect standard 0-1 values. If you try to jitter normalized values, the math shifts colors unpredictably, creating distorted, garbled images."
+        },
+        {
+          "kind": "mythbust",
+          "icon": "⚠️",
+          "title": "Don't normalize twice",
+          "body": "It's easy to accidentally include normalization in both your data-loading step and your augmentation step. Normalizing twice ruins the data distribution, shifting your inputs far away from what the model expects. Always map your pipeline to ensure it only happens once."
+        },
+        {
+          "kind": "visual",
+          "icon": "⚖️",
+          "title": "Correct vs. Incorrect Order",
+          "body": "Why pipeline sequence matters:",
+          "compare": {
+            "left": {
+              "emoji": "✅",
+              "tag": "Correct: Augment -> Normalize",
+              "text": "1. Crop, flip, resize (0-255)<br>2. Color/brightness jitter (0-255)<br>3. Normalize to zero-mean floats<br>Stable, correct inputs"
+            },
+            "right": {
+              "emoji": "❌",
+              "tag": "Incorrect: Normalize -> Augment",
+              "text": "1. Normalize to zero-mean floats<br>2. Apply color jitter on float values<br>3. Math breaks; colors distort<br>Garbled, unstable inputs"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "type": "practice",
+      "exercises": [
+        {
+          "id": "p1",
+          "type": "multiple_choice",
+          "xp": 2,
+          "prompt": "What is the correct order of operations in an image training pipeline?",
+          "options": [
+            {
+              "id": "a",
+              "text": "Apply geometric/color augmentations first, then normalize as the final step before the network",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "Normalize first, then apply color augmentations and resizing",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "Normalize both at the very start and the very end of the pipeline",
+              "correct": false
+            },
+            {
+              "id": "d",
+              "text": "The order has no mathematical impact on the values",
+              "correct": false
+            }
+          ],
+          "explain": "Correct! Augmentations happen on raw or scaled (0-1) pixels, and normalization is the final step."
+        },
+        {
+          "id": "p2",
+          "type": "true_false",
+          "xp": 2,
+          "prompt": "True or false: Applying color jitter to normalized pixels (which contain negative numbers) can result in mathematically broken, garbled images.",
+          "options": [
+            {
+              "id": "t",
+              "text": "True",
+              "correct": true
+            },
+            {
+              "id": "f",
+              "text": "False",
+              "correct": false
+            }
+          ],
+          "explain": "True. Color jitter algorithms assume positive pixel ranges; negative numbers break their math."
+        },
+        {
+          "id": "p3",
+          "type": "fill_blank",
+          "xp": 2,
+          "prompt": "Complete the sentence:",
+          "sentence": "Normalization should always be the ___ step in the image processing pipeline before inputting to the network.",
+          "blank": "last",
+          "words": [
+            "last",
+            "first",
+            "optional"
+          ],
+          "explain": "Normalization is the final step, preparing clean scaled tensors for the network."
+        },
+        {
+          "id": "p4",
+          "type": "spot_the_ai",
+          "xp": 2,
+          "prompt": "What is a danger of normalizing your image data twice in the same pipeline?",
+          "options": [
+            {
+              "id": "a",
+              "text": "It shifts the mean and standard deviation away from the expected target, corrupting the input distribution",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "It automatically deletes all red color channels from the images",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "It makes the model train twice as fast but cuts accuracy in half",
+              "correct": false
+            }
+          ],
+          "explain": "Correct! Double normalization corrupts the data distribution, confusing the model's weights."
+        }
+      ]
+    },
+    {
+      "type": "boss",
+      "exercises": [
+        {
+          "id": "b1",
+          "type": "multiple_choice",
+          "xp": 5,
+          "prompt": "A developer writes: 'Normalizing last is just a suggestion — our PyTorch code will run either way.' What is the best warning?",
+          "options": [
+            {
+              "id": "a",
+              "text": "The code will execute without crashing, but the math behind color jitter will distort your inputs, leading to poor learning and silent bugs",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "The code will crash instantly with a compilation error in the convolutional layers",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "Normalizing first will double the memory size of the dataset",
+              "correct": false
+            },
+            {
+              "id": "d",
+              "text": "Normalizing first turns all images into completely black frames",
+              "correct": false
+            }
+          ],
+          "explain": "Exactly! It runs, but with silent, mathematically garbled inputs. Next, let's explore train vs. test preprocessing differences!"
+        }
+      ]
+    }
+  ]
+}

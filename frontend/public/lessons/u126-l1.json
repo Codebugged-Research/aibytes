@@ -1,0 +1,222 @@
+{
+  "id": "u126-l1",
+  "unit": 126,
+  "day": 631,
+  "tier": "Training CNNs in Practice",
+  "tierIcon": "🪩",
+  "title": "Beyond Single-Image Augmentation",
+  "icon": "🪩",
+  "concept": "Traditional augmentations like flips, crops, and color shifts only modify one image at a time. Multi-image augmentation techniques blend or combine multiple images together, forcing the model to learn more robust decision boundaries.",
+  "xp": 15,
+  "hearts": 3,
+  "estMinutes": 7,
+  "segments": [
+    {
+      "type": "warmup",
+      "exercises": [
+        {
+          "id": "w1",
+          "type": "multiple_choice",
+          "xp": 1,
+          "prompt": "Recap: What is the primary difference between geometric and photometric augmentation?",
+          "options": [
+            {
+              "id": "a",
+              "text": "Geometric moves pixel positions (rotation, crop); photometric changes pixel values (brightness, color)",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "Geometric is only for validation data; photometric is for training data",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "Geometric changes the label; photometric does not",
+              "correct": false
+            }
+          ],
+          "explain": "Yes! Geometric edits where pixels sit; photometric edits color and brightness values."
+        }
+      ]
+    },
+    {
+      "type": "teach",
+      "cards": [
+        {
+          "kind": "hook",
+          "icon": "🖼️",
+          "title": "The One-at-a-Time Limit",
+          "body": "Traditional data augmentation (flips, crops, color jitter) is applied to individual images in isolation. A cat photo stays a cat photo. But what if we could combine features of two completely different images? This might sound strange, but it teaches the network to generalize in ways single-image tricks never can."
+        },
+        {
+          "kind": "definition",
+          "icon": "🪩",
+          "title": "Multi-Image Augmentation",
+          "body": "<strong>Multi-image augmentation</strong> combines two or more different training images (like a cat and a dog) to create a synthetic training sample. Critically, we also blend their labels proportionally, teaching the model to output a partial confidence instead of forcing a 100% decision."
+        },
+        {
+          "kind": "analogy",
+          "icon": "🍹",
+          "title": "Mixing a fruit smoothie",
+          "body": "Single-image augmentation is like slicing an apple or peeling an orange — you change its shape, but it's still just an apple or an orange. Multi-image augmentation is like blending them into a smoothie. It's now 70% apple and 30% orange, forcing you to recognize both flavors in the same cup."
+        },
+        {
+          "kind": "example",
+          "icon": "🧬",
+          "title": "Synthetic training pairs",
+          "body": "By blending a cat and a dog image, we create a composite image. We also blend their target labels: the model is taught that this new blended image is <strong>0.6 Cat and 0.4 Dog</strong>. This prevents the model from becoming overconfident."
+        },
+        {
+          "kind": "mythbust",
+          "icon": "⚠️",
+          "title": "It's not just a visual trick",
+          "body": "It's easy to assume this is just about making weird images. The real magic is in the <strong>labels</strong>. By forcing the model to predict soft target probabilities (like 60% cat, 40% dog) rather than absolute 1s and 0s, we prevent it from overfitting and make it much more robust to real-world uncertainty."
+        },
+        {
+          "kind": "visual",
+          "icon": "⚖️",
+          "title": "Single-Image vs. Multi-Image",
+          "body": "How the two augmentation philosophies differ:",
+          "compare": {
+            "left": {
+              "emoji": "🐈",
+              "tag": "Single-Image Aug",
+              "text": "Modifies 1 image in isolation<br>Label remains 100% Cat<br>Teaches spatial/light invariance"
+            },
+            "right": {
+              "emoji": "🧬",
+              "tag": "Multi-Image Aug",
+              "text": "Combines Cat + Dog images<br>Label becomes 60% Cat / 40% Dog<br>Smooths decision boundaries"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "type": "practice",
+      "exercises": [
+        {
+          "id": "p1",
+          "type": "multiple_choice",
+          "xp": 2,
+          "prompt": "What is the key difference between single-image augmentation and multi-image augmentation?",
+          "options": [
+            {
+              "id": "a",
+              "text": "Multi-image blends multiple training samples and their labels proportionally",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "Multi-image only works on grayscale images",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "Multi-image is applied only during testing and evaluation",
+              "correct": false
+            },
+            {
+              "id": "d",
+              "text": "Single-image augmentation completely replaces the network's layers",
+              "correct": false
+            }
+          ],
+          "explain": "Correct! Multi-image techniques combine multiple inputs and blend their corresponding labels."
+        },
+        {
+          "id": "p2",
+          "type": "true_false",
+          "xp": 2,
+          "prompt": "True or false: When combining a cat and a dog image, the final target label remains 100% cat.",
+          "options": [
+            {
+              "id": "t",
+              "text": "True",
+              "correct": false
+            },
+            {
+              "id": "f",
+              "text": "False",
+              "correct": true
+            }
+          ],
+          "explain": "False. The label must be blended proportionally to match the ratio of the combined images."
+        },
+        {
+          "id": "p3",
+          "type": "fill_blank",
+          "xp": 2,
+          "prompt": "Complete the sentence:",
+          "sentence": "Multi-image augmentation teaches the model to predict soft, ___ labels instead of absolute 100% confidences.",
+          "blank": "proportional",
+          "words": [
+            "proportional",
+            "binary",
+            "constant"
+          ],
+          "explain": "Proportional labels match the input blend ratio, preventing overconfident predictions."
+        },
+        {
+          "id": "p4",
+          "type": "spot_the_ai",
+          "xp": 2,
+          "prompt": "Which of these is a benefit of forcing a CNN to learn from blended images with soft labels?",
+          "options": [
+            {
+              "id": "a",
+              "text": "It helps the model generalize better by smoothing out its decision boundaries",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "It decreases the number of parameters in the convolutional layers",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "It guarantees that the model will train in under one epoch",
+              "correct": false
+            }
+          ],
+          "explain": "Correct! Soft labels smooth out the model's decision boundaries, preventing overfitting and boosting generalization."
+        }
+      ]
+    },
+    {
+      "type": "boss",
+      "exercises": [
+        {
+          "id": "b1",
+          "type": "multiple_choice",
+          "xp": 5,
+          "prompt": "Why does training a CNN on absolute labels (always 1.0 or 0.0) sometimes lead to poor real-world generalization?",
+          "options": [
+            {
+              "id": "a",
+              "text": "It encourages the model to become highly overconfident, making extreme mistakes on ambiguous or noisy real-world images",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "It makes the gradients vanish entirely during the first epoch",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "It forces the model to ignore all convolutional filter weights",
+              "correct": false
+            },
+            {
+              "id": "d",
+              "text": "There is no difference; models generalize identically with absolute or soft labels",
+              "correct": false
+            }
+          ],
+          "explain": "Exactly! Absolute labels encourage overconfidence. Next, let's look at the first famous multi-image method: Mixup!"
+        }
+      ]
+    }
+  ]
+}

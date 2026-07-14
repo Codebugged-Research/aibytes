@@ -1,0 +1,222 @@
+{
+  "id": "u129-l5",
+  "unit": 129,
+  "day": 650,
+  "tier": "Training CNNs in Practice",
+  "tierIcon": "🐛",
+  "title": "The CNN Debugging Checklist",
+  "icon": "🐛",
+  "concept": "A systematic debugging checklist helps you isolate and fix training failures. By checking learning rates, data pipelines, network capacity, and batch sizes in order, you solve problems efficiently.",
+  "xp": 15,
+  "hearts": 3,
+  "estMinutes": 7,
+  "segments": [
+    {
+      "type": "warmup",
+      "exercises": [
+        {
+          "id": "w1",
+          "type": "multiple_choice",
+          "xp": 1,
+          "prompt": "Recap: What is the main purpose of the single-batch overfitting diagnostic test?",
+          "options": [
+            {
+              "id": "a",
+              "text": "To verify that the model code and optimizer are mathematically correct by checking if they can memorize 4 images",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "To speed up the network's inference time",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "To train a final model on very limited data",
+              "correct": false
+            }
+          ],
+          "explain": "Yes! It proves the code logic works before scaling up."
+        }
+      ]
+    },
+    {
+      "type": "teach",
+      "cards": [
+        {
+          "kind": "hook",
+          "icon": "📋",
+          "title": "A Systematic Plan",
+          "body": "When a CNN refuses to learn, tweaking random settings (like changing batch size, then layers, then learning rates all at once) is a recipe for frustration. You need a systematic, step-by-step checklist to isolate and eliminate variables one by one."
+        },
+        {
+          "kind": "definition",
+          "icon": "🐛",
+          "title": "The CNN Debugging Checklist",
+          "body": "A standard debugging flow:<br>1. <strong>Overfit single batch</strong> (checks code logic).<br>2. <strong>Inspect data pipeline</strong> (checks label/channel alignment).<br>3. <strong>Scan hyperparameters</strong> (checks learning rate boundaries).<br>4. <strong>Evaluate capacity</strong> (checks model size vs task complexity)."
+        },
+        {
+          "kind": "analogy",
+          "icon": "🩺",
+          "title": "The doctor's triage",
+          "body": "A doctor doesn't perform surgery immediately when a patient has a headache. They check vitals first: temperature (data pipeline), blood pressure (learning rate), and reflexes (code logic). By triaging from simple to complex, they find the root cause safely."
+        },
+        {
+          "kind": "example",
+          "icon": "🎛️",
+          "title": "Hyperparameter Sweep",
+          "body": "If your code is correct (passed single-batch test), sweep the learning rate. Try three values: `0.1` (too high?), `0.001` (default), and `0.00001` (too low?). Check which loss curve drops best. This locates the sweet spot quickly."
+        },
+        {
+          "kind": "mythbust",
+          "icon": "⚠️",
+          "title": "Don't change multiple dials at once",
+          "body": "It's a myth that changing three settings at once will save time. If you lower the learning rate, increase batch size, and add dropout simultaneously, and training suddenly works, you don't know which dial solved it. Change one setting at a time."
+        },
+        {
+          "kind": "visual",
+          "icon": "🌉",
+          "title": "The CNN Debugging Triage Flow",
+          "body": "Step-by-step troubleshooting order:",
+          "compare": {
+            "left": {
+              "emoji": "1️⃣",
+              "tag": "Data & Code Verification",
+              "text": "Overfit 4 images (zero loss target)<br>Save batch as images (check colors/labels)<br>Print tensor shapes"
+            },
+            "right": {
+              "emoji": "2️⃣",
+              "tag": "Hyperparameter Tuning",
+              "text": "Sweep learning rate by 10x steps<br>Adjust batch size<br>Enable early stopping"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "type": "practice",
+      "exercises": [
+        {
+          "id": "p1",
+          "type": "multiple_choice",
+          "xp": 2,
+          "prompt": "What is the first step in the CNN debugging checklist?",
+          "options": [
+            {
+              "id": "a",
+              "text": "Attempt to overfit a single batch of 4 images with zero regularization",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "Gather 50,000 new images to expand the dataset",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "Replace the ResNet backbone with a custom MobileNet",
+              "correct": false
+            },
+            {
+              "id": "d",
+              "text": "Change all activation functions to Sigmoids",
+              "correct": false
+            }
+          ],
+          "explain": "Correct! Overfitting a single batch is the standard first step to isolate code bugs."
+        },
+        {
+          "id": "p2",
+          "type": "true_false",
+          "xp": 2,
+          "prompt": "True or false: You should change multiple hyperparameters at the same time to speed up the debugging process.",
+          "options": [
+            {
+              "id": "t",
+              "text": "True",
+              "correct": false
+            },
+            {
+              "id": "f",
+              "text": "False",
+              "correct": true
+            }
+          ],
+          "explain": "False. Changing multiple variables at once makes it impossible to isolate which setting solved the issue."
+        },
+        {
+          "id": "p3",
+          "type": "fill_blank",
+          "xp": 2,
+          "prompt": "Complete the sentence:",
+          "sentence": "A flat training loss curve usually indicates that the learning rate is too low or gradients have ___.",
+          "blank": "collapsed",
+          "words": [
+            "collapsed",
+            "exploded",
+            "doubled"
+          ],
+          "explain": "Collapsed or vanishing gradients prevent weight updates, keeping loss completely flat."
+        },
+        {
+          "id": "p4",
+          "type": "spot_the_ai",
+          "xp": 2,
+          "prompt": "Why should you sweep the learning rate by factors of 10 (e.g. 0.1, 0.01, 0.001) during debugging?",
+          "options": [
+            {
+              "id": "a",
+              "text": "To quickly locate the mathematical boundaries of learning stability and convergence",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "To double the parameter count of the network automatically",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "To permanently crop the background of training images",
+              "correct": false
+            }
+          ],
+          "explain": "Correct! Decadal steps locate the sweet spot between exploding and flat loss regions quickly."
+        }
+      ]
+    },
+    {
+      "type": "boss",
+      "exercises": [
+        {
+          "id": "b1",
+          "type": "multiple_choice",
+          "xp": 5,
+          "prompt": "We have completed our study of common CNN training failures, pipeline checks, overfitting/underfitting curves, and debugging checklists. What is the next logical step in training CNNs?",
+          "options": [
+            {
+              "id": "a",
+              "text": "Using a Learning Rate Finder to systematically discover the optimal learning rate before training begins",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "Replacing all loss functions with raw classification accuracy",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "Deleting the validation pipeline to save GPU memory",
+              "correct": false
+            },
+            {
+              "id": "d",
+              "text": "Training a model with random weights and disabling optimizer updates",
+              "correct": false
+            }
+          ],
+          "explain": "Exactly! Instead of guessing learning rates during debugging, we can use a Learning Rate Finder to discover the best setting. Next up: The Learning Rate Finder!"
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,222 @@
+{
+  "id": "u131-l2",
+  "unit": 131,
+  "day": 657,
+  "tier": "Training CNNs in Practice",
+  "tierIcon": "🌉",
+  "title": "Safe Transforms for TTA",
+  "icon": "🌉",
+  "concept": "Selecting transformations for TTA requires caution. You must only apply transforms that preserve the class meaning (like horizontal flips or center crops) and avoid aggressive changes that distort features beyond recognition.",
+  "xp": 15,
+  "hearts": 3,
+  "estMinutes": 7,
+  "segments": [
+    {
+      "type": "warmup",
+      "exercises": [
+        {
+          "id": "w1",
+          "type": "multiple_choice",
+          "xp": 1,
+          "prompt": "Recap: What is the main cost of using Test-Time Augmentation (TTA) in production?",
+          "options": [
+            {
+              "id": "a",
+              "text": "Increased latency and compute, because the model must run a forward pass for every augmented image",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "It permanently corrupts the model's weights",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "It makes training epochs take twice as long",
+              "correct": false
+            }
+          ],
+          "explain": "Yes! Running multiple forward passes increases latency and compute costs."
+        }
+      ]
+    },
+    {
+      "type": "teach",
+      "cards": [
+        {
+          "kind": "hook",
+          "icon": "🔏",
+          "title": "Preserving the Class",
+          "body": "When applying TTA, you are modifying a test image that you don't know the label for. If you apply a transform that alters the class (like flipping a digit '3' horizontally), the model will predict 'backwards 3' and your average score will degrade. TTA transforms must be absolutely safe."
+        },
+        {
+          "kind": "definition",
+          "icon": "🌉",
+          "title": "Safe TTA Transforms",
+          "body": "<strong>Safe TTA transforms</strong> are modifications that are guaranteed not to change the class meaning of any input image. Common defaults: <br>1. <strong>Horizontal Flipping</strong> (mirroring).<br>2. <strong>Multi-scale Crops</strong> (zooming in slightly).<br>3. <strong>Slight Brightness shifts</strong> (simulating lighting changes)."
+        },
+        {
+          "kind": "analogy",
+          "icon": "👓",
+          "title": "Squinting to see clearly",
+          "body": "If you are trying to read a sign in the distance, squinting (cropping/zooming) or shading your eyes (brightness shift) are safe moves that help you read. Spinning around in circles 360 degrees or looking through colored glass (extreme rotation/hue jitter) makes it harder, not easier. Stick to safe moves."
+        },
+        {
+          "kind": "example",
+          "icon": "🩺",
+          "title": "X-Ray TTA",
+          "body": "For chest X-rays, horizontal flips are <strong>unsafe</strong> because organs have specific left-right positions (e.g. the heart is on the left). Mirroring the image makes the organs look reversed, which breaks medical diagnostics. Safe X-ray TTA only uses tiny zooms/brightness shifts."
+        },
+        {
+          "kind": "mythbust",
+          "icon": "⚠️",
+          "title": "No Mixup or CutMix in TTA",
+          "body": "It's a myth that you should use all your training augmentations in TTA. You must never use Mixup or CutMix during TTA. Blending a test image with a random training image defeats the purpose of inference, as you are trying to classify the single test image cleanly."
+        },
+        {
+          "kind": "visual",
+          "icon": "⚖️",
+          "title": "TTA Transform Guidelines",
+          "body": "Selecting transforms for test-time voting:",
+          "compare": {
+            "left": {
+              "emoji": "✅",
+              "tag": "Safe TTA Transforms",
+              "text": "Horizontal mirror (if class-safe)<br>Slight scale/crops (e.g. 90% zoom)<br>Subtle brightness adjustments"
+            },
+            "right": {
+              "emoji": "❌",
+              "tag": "Unsafe TTA Transforms",
+              "text": "Vertical mirroring (upside down)<br>Mixup / CutMix (blending)<br>Aggressive shearing or color shifts"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "type": "practice",
+      "exercises": [
+        {
+          "id": "p1",
+          "type": "multiple_choice",
+          "xp": 2,
+          "prompt": "Which transformation is generally UNSAFE to include in a TTA pipeline for chest X-ray scans?",
+          "options": [
+            {
+              "id": "a",
+              "text": "Horizontal mirroring, since organ asymmetry (heart on the left) is a key diagnostic feature",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "Slight brightness adjustment",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "Slight scale adjustment (zooming in 5%)",
+              "correct": false
+            },
+            {
+              "id": "d",
+              "text": "Resizing to a square frame",
+              "correct": false
+            }
+          ],
+          "explain": "Correct! Mirroring medical scans reverses left-right asymmetry, creating physically impossible medical states."
+        },
+        {
+          "id": "p2",
+          "type": "true_false",
+          "xp": 2,
+          "prompt": "True or false: You should use Mixup during TTA to blend the test image with random training images.",
+          "options": [
+            {
+              "id": "t",
+              "text": "True",
+              "correct": false
+            },
+            {
+              "id": "f",
+              "text": "False",
+              "correct": true
+            }
+          ],
+          "explain": "False. Mixup is a training-only regularizer; blending test images with random training data ruins inference accuracy."
+        },
+        {
+          "id": "p3",
+          "type": "fill_blank",
+          "xp": 2,
+          "prompt": "Complete the sentence:",
+          "sentence": "TTA transforms must preserve the ___ meaning of the image so the model predicts the correct label.",
+          "blank": "class",
+          "words": [
+            "class",
+            "file",
+            "resolution"
+          ],
+          "explain": "The transform must keep the class meaning intact (e.g. a car must still look like a car)."
+        },
+        {
+          "id": "p4",
+          "type": "spot_the_ai",
+          "xp": 2,
+          "prompt": "Why are aggressive rotations (like 90 degrees) usually avoided in TTA for natural scenes?",
+          "options": [
+            {
+              "id": "a",
+              "text": "Because they create unrealistic, sideways orientations that the model rarely saw during training",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "Because they double the channel depth of the input",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "Because they bypass the convolutional layers entirely",
+              "correct": false
+            }
+          ],
+          "explain": "Correct! Sideways natural images are unrealistic and confuse models trained on upright data."
+        }
+      ]
+    },
+    {
+      "type": "boss",
+      "exercises": [
+        {
+          "id": "b1",
+          "type": "multiple_choice",
+          "xp": 5,
+          "prompt": "You are building a TTA pipeline for a car model classifier. What is the most robust set of transforms to use?",
+          "options": [
+            {
+              "id": "a",
+              "text": "Original image, horizontal flip, and a 90% center crop resized back to target size",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "Original image, vertical flip, and Mixup with a random dog photo",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "Horizontal flip, 180-degree rotation, and HSV color space conversion",
+              "correct": false
+            },
+            {
+              "id": "d",
+              "text": "Disable all crops and only use random shearing up to 45 degrees",
+              "correct": false
+            }
+          ],
+          "explain": "Exactly! Flips and subtle crops are robust and class-preserving. Next: how to calculate the average prediction in TTA!"
+        }
+      ]
+    }
+  ]
+}

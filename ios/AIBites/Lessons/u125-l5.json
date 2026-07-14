@@ -1,0 +1,222 @@
+{
+  "id": "u125-l5",
+  "unit": 125,
+  "day": 630,
+  "tier": "Training CNNs in Practice",
+  "tierIcon": "🎨",
+  "title": "Combining Geometric + Photometric Augmentation",
+  "icon": "🧬",
+  "concept": "Chaining geometric augmentation (repositioning) with photometric augmentation (recoloring) into one stacked pipeline generates far more realistic training variety from a single photo than either kind alone.",
+  "xp": 15,
+  "hearts": 3,
+  "estMinutes": 7,
+  "segments": [
+    {
+      "type": "warmup",
+      "exercises": [
+        {
+          "id": "w1",
+          "type": "multiple_choice",
+          "xp": 1,
+          "prompt": "Recap: Noise injection deliberately adds random speckle to training images. What is that meant to build robustness against?",
+          "options": [
+            {
+              "id": "a",
+              "text": "Real sensor noise the model will meet in low-light or cheap-camera conditions at deployment",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "Objects appearing in different positions within the frame",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "Images being saved in different file formats",
+              "correct": false
+            }
+          ],
+          "explain": "Right — noise injection is one of several photometric tricks. Now let's combine all of them with geometric augmentation."
+        }
+      ]
+    },
+    {
+      "type": "teach",
+      "cards": [
+        {
+          "kind": "hook",
+          "icon": "🧬",
+          "title": "One dog photo, a hundred training examples",
+          "body": "Take a single photo of a dog. Flip it, rotate it slightly, and crop in tighter — three geometric changes. Now also brighten it, shift its hue, and add a touch of noise — three photometric changes. Combine them and one photo becomes dozens of meaningfully different training examples."
+        },
+        {
+          "kind": "definition",
+          "icon": "🔗",
+          "title": "What is augmentation stacking?",
+          "body": "<strong>Augmentation stacking</strong> means chaining multiple augmentations — geometric ones that change pixel <em>positions</em> and photometric ones that change pixel <em>values</em> — into a single pipeline applied to the same image, one after another."
+        },
+        {
+          "kind": "analogy",
+          "icon": "🎬",
+          "title": "Posing the actor and adjusting the studio lights",
+          "body": "On a movie set, geometric augmentation is like repositioning and posing the actor — where they stand, which way they face. Photometric augmentation is like adjusting the studio lights and camera filters. A realistic scene needs both varied together, not just one or the other."
+        },
+        {
+          "kind": "example",
+          "icon": "🐕",
+          "title": "A real augmentation pipeline, step by step",
+          "body": "One training photo of a dog passes through: flip horizontally → rotate a few degrees → random crop (all geometric) → then brightness/contrast jitter → hue/saturation jitter → a touch of noise (all photometric). The output is one dog photo that looks like it came from a completely different day, camera, and moment."
+        },
+        {
+          "kind": "mythbust",
+          "icon": "⚠️",
+          "title": "More stacked augmentation isn't automatically better",
+          "body": "It's tempting to think piling on every trick at maximum strength gives the most robust model. Push too many strong geometric and photometric changes onto one image at once, though, and the result can become an unrecognizable blob that no longer matches its label. Stacking helps only when each augmentation stays within a realistic, moderate range."
+        },
+        {
+          "kind": "visual",
+          "icon": "⚖️",
+          "title": "Geometric alone vs. a full stacked pipeline",
+          "body": "Why combining both matters:",
+          "compare": {
+            "left": {
+              "emoji": "📍",
+              "tag": "Geometric only",
+              "text": "Repositions content<br>Flip, rotate, crop, shift<br>Same colors and lighting every time"
+            },
+            "right": {
+              "emoji": "🧬",
+              "tag": "Geometric + photometric",
+              "text": "Repositions AND recolors<br>Full pipeline stacked together<br>Realistic real-world variety"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "type": "practice",
+      "exercises": [
+        {
+          "id": "p1",
+          "type": "multiple_choice",
+          "xp": 2,
+          "prompt": "What does it mean to \"stack\" augmentations in a training pipeline?",
+          "options": [
+            {
+              "id": "a",
+              "text": "Applying several augmentations, geometric and photometric, to the same image one after another",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "Using only geometric augmentation and skipping photometric augmentation entirely",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "Applying the same single augmentation many times in a row",
+              "correct": false
+            },
+            {
+              "id": "d",
+              "text": "Storing multiple copies of the raw dataset on disk",
+              "correct": false
+            }
+          ],
+          "explain": "Right — stacking chains different augmentation types together into one pipeline."
+        },
+        {
+          "id": "p2",
+          "type": "true_false",
+          "xp": 2,
+          "prompt": "True or false: Stacking as many strong augmentations as possible onto one image always produces the most useful training example.",
+          "options": [
+            {
+              "id": "t",
+              "text": "True",
+              "correct": false
+            },
+            {
+              "id": "f",
+              "text": "False",
+              "correct": true
+            }
+          ],
+          "explain": "False. Pushed too far, stacked strong augmentations can distort an image so much its label no longer makes sense."
+        },
+        {
+          "id": "p3",
+          "type": "fill_blank",
+          "xp": 2,
+          "prompt": "Complete the sentence:",
+          "sentence": "A stacked pipeline combines geometric changes to pixel positions with photometric changes to pixel ___.",
+          "blank": "values",
+          "words": [
+            "values",
+            "labels",
+            "filenames"
+          ],
+          "explain": "Geometric augmentation moves pixels; photometric augmentation changes their values — a stacked pipeline does both."
+        },
+        {
+          "id": "p4",
+          "type": "spot_the_ai",
+          "xp": 2,
+          "prompt": "Which of these best describes a properly stacked augmentation pipeline applied to one photo?",
+          "options": [
+            {
+              "id": "a",
+              "text": "A moderate rotation and crop, followed by moderate brightness and hue jitter, all applied to the same photo in sequence",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "Rotating the same photo ten times in a row by 180 degrees each time",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "Applying maximum brightness, maximum saturation, and maximum noise all at once until the subject is unrecognizable",
+              "correct": false
+            }
+          ],
+          "explain": "Correct — moderate geometric and photometric changes, combined, is what a realistic stacked pipeline looks like."
+        }
+      ]
+    },
+    {
+      "type": "boss",
+      "exercises": [
+        {
+          "id": "b1",
+          "type": "multiple_choice",
+          "xp": 5,
+          "prompt": "Your model's augmentation pipeline already stacks moderate flips, rotations, crops, brightness, contrast, hue, and noise on every training image. It still struggles when two different objects appear together or overlap in one photo. What kind of augmentation would help with that, going beyond transforming a single image?",
+          "options": [
+            {
+              "id": "a",
+              "text": "Techniques like Mixup and CutMix, which blend two different training images (and their labels) together rather than just transforming one image at a time",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "Even stronger geometric augmentation on each individual image",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "Even stronger photometric augmentation on each individual image",
+              "correct": false
+            },
+            {
+              "id": "d",
+              "text": "Removing augmentation entirely and training on raw images only",
+              "correct": false
+            }
+          ],
+          "explain": "Exactly! Geometric and photometric augmentation both transform one image at a time. Next up: Mixup and CutMix, where we blend whole images and labels together for a new kind of variety."
+        }
+      ]
+    }
+  ]
+}

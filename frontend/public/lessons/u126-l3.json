@@ -1,0 +1,222 @@
+{
+  "id": "u126-l3",
+  "unit": 126,
+  "day": 633,
+  "tier": "Training CNNs in Practice",
+  "tierIcon": "🪩",
+  "title": "CutMix: Pasting Patches Between Images",
+  "icon": "🧩",
+  "concept": "CutMix is a multi-image augmentation technique that cuts a random rectangular patch from one training image and pastes it over another. The labels are then blended based on the area ratio of the pasted patch.",
+  "xp": 15,
+  "hearts": 3,
+  "estMinutes": 7,
+  "segments": [
+    {
+      "type": "warmup",
+      "exercises": [
+        {
+          "id": "w1",
+          "type": "multiple_choice",
+          "xp": 1,
+          "prompt": "Recap: If we blend Image A (Cat) and Image B (Dog) using Mixup with a 0.6 weight on A, what is the output formula for the pixels?",
+          "options": [
+            {
+              "id": "a",
+              "text": "0.6 * Image A + 0.4 * Image B",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "Image A + Image B",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "0.6 * Image A + 0.6 * Image B",
+              "correct": false
+            }
+          ],
+          "explain": "Yes! The weights must sum to 1.0 (0.6 and 0.4)."
+        }
+      ]
+    },
+    {
+      "type": "teach",
+      "cards": [
+        {
+          "kind": "hook",
+          "icon": "🧩",
+          "title": "The Patchwork Quilt",
+          "body": "Instead of blending two images transparently like Mixup, what if we cut a piece out of one photo and pasted it directly onto another? For example, cutting a square of dog fur and pasting it onto a cat's body. This is the core mechanism of CutMix."
+        },
+        {
+          "kind": "definition",
+          "icon": "🧩",
+          "title": "What is CutMix?",
+          "body": "<strong>CutMix</strong> cuts a random rectangular patch from a source image (Image B) and pastes it over a target image (Image A). The labels are blended according to the area proportion of the pasted patch: if the patch covers 30% of Image A, the new label is <strong>0.7 Label A + 0.3 Label B</strong>."
+        },
+        {
+          "kind": "analogy",
+          "icon": "✂️",
+          "title": "A magazine collage",
+          "body": "Mixup is like mixing paint (blending). CutMix is like making a collage by cutting a picture of a car wheel from one magazine page and pasting it onto a picture of a bicycle in another. You see a clear, solid chunk of one image sitting inside the other."
+        },
+        {
+          "kind": "example",
+          "icon": "🔢",
+          "title": "Pasting dog ears",
+          "body": "If we paste a patch covering 25% of a dog's head onto a cat photo, the model sees a cat with a dog-ear patch. The label becomes: <strong>'This image is 75% Cat and 25% Dog.'</strong> The model learns to detect features locally."
+        },
+        {
+          "kind": "mythbust",
+          "icon": "⚠️",
+          "title": "No ghosting, just boundaries",
+          "body": "Unlike Mixup, CutMix images do not look like transparent ghosts. The pasted patch is solid. This preserves the local structure of the pixels (edges, textures), forcing the CNN to learn to identify objects from partial parts, rather than relying on a global shape."
+        },
+        {
+          "kind": "visual",
+          "icon": "⚖️",
+          "title": "Mixup vs. CutMix",
+          "body": "Two ways to combine training images:",
+          "compare": {
+            "left": {
+              "emoji": "🎨",
+              "tag": "Mixup",
+              "text": "Weighted pixel average<br>Semi-transparent double exposure<br>Destroys local edge structures"
+            },
+            "right": {
+              "emoji": "🧩",
+              "tag": "CutMix",
+              "text": "Solid rectangular patch paste<br>Collage style<br>Preserves local edge structures"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "type": "practice",
+      "exercises": [
+        {
+          "id": "p1",
+          "type": "multiple_choice",
+          "xp": 2,
+          "prompt": "How are labels blended in CutMix?",
+          "options": [
+            {
+              "id": "a",
+              "text": "Based on the area proportion of the pasted patch relative to the whole image",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "They are not blended; the target always keeps its original 100% label",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "Based on the brightness difference between the two images",
+              "correct": false
+            },
+            {
+              "id": "d",
+              "text": "By randomly assigning one label or the other with 50% probability",
+              "correct": false
+            }
+          ],
+          "explain": "Correct! CutMix blends labels based on the area ratio of the pasted patch."
+        },
+        {
+          "id": "p2",
+          "type": "true_false",
+          "xp": 2,
+          "prompt": "True or false: CutMix creates semi-transparent overlays where you can see both images at every pixel.",
+          "options": [
+            {
+              "id": "t",
+              "text": "True",
+              "correct": false
+            },
+            {
+              "id": "f",
+              "text": "False",
+              "correct": true
+            }
+          ],
+          "explain": "False. That describes Mixup. CutMix pastes a solid patch, so each pixel belongs entirely to one image or the other."
+        },
+        {
+          "id": "p3",
+          "type": "fill_blank",
+          "xp": 2,
+          "prompt": "Complete the sentence:",
+          "sentence": "CutMix pastes a solid ___ from one image onto another, preserving local edge structures.",
+          "blank": "patch",
+          "words": [
+            "patch",
+            "gradient",
+            "channel"
+          ],
+          "explain": "CutMix cuts and pastes a rectangular patch from one image onto another."
+        },
+        {
+          "id": "p4",
+          "type": "spot_the_ai",
+          "xp": 2,
+          "prompt": "Which of these is a key advantage of CutMix over Mixup?",
+          "options": [
+            {
+              "id": "a",
+              "text": "It preserves local pixel structures like edges, making it more useful for localization tasks",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "It runs ten times faster on the GPU",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "It completely removes the need for labels during training",
+              "correct": false
+            }
+          ],
+          "explain": "Correct! Because CutMix preserves solid edges and shapes, it keeps local pixel relationships intact."
+        }
+      ]
+    },
+    {
+      "type": "boss",
+      "exercises": [
+        {
+          "id": "b1",
+          "type": "multiple_choice",
+          "xp": 5,
+          "prompt": "If a CutMix patch covers 40% of a target image, what is the mathematical label target for the combined image if A is Cat and B is Dog?",
+          "options": [
+            {
+              "id": "a",
+              "text": "0.60 Cat, 0.40 Dog",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "0.40 Cat, 0.60 Dog",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "1.00 Cat, 0.00 Dog",
+              "correct": false
+            },
+            {
+              "id": "d",
+              "text": "0.50 Cat, 0.50 Dog",
+              "correct": false
+            }
+          ],
+          "explain": "Perfect! Since the dog patch covers 40%, the target is 0.40 Dog and 0.60 Cat. Next, let's explore why mixing images works so well!"
+        }
+      ]
+    }
+  ]
+}

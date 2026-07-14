@@ -1,0 +1,222 @@
+{
+  "id": "u130-l2",
+  "unit": 130,
+  "day": 652,
+  "tier": "Training CNNs in Practice",
+  "tierIcon": "🎛️",
+  "title": "Reading the Loss vs. LR Plot",
+  "icon": "🎛️",
+  "concept": "Analyzing the LR Finder plot requires identifying three distinct regions: the flat learning zone, the steep descent zone (optimal range), and the upward explosion zone. Mastering this curve avoids training failures.",
+  "xp": 15,
+  "hearts": 3,
+  "estMinutes": 7,
+  "segments": [
+    {
+      "type": "warmup",
+      "exercises": [
+        {
+          "id": "w1",
+          "type": "multiple_choice",
+          "xp": 1,
+          "prompt": "Recap: Why is the absolute lowest point on the LR Finder curve NOT the best learning rate to select?",
+          "options": [
+            {
+              "id": "a",
+              "text": "Because at that point, the learning rate is already too high and the training is about to explode",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "Because it makes the convolutional kernels larger",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "Because it only works on CPU training runs",
+              "correct": false
+            }
+          ],
+          "explain": "Yes! The lowest point sits on the edge of the explosion zone; picking it is too risky."
+        }
+      ]
+    },
+    {
+      "type": "teach",
+      "cards": [
+        {
+          "kind": "hook",
+          "icon": "🎛️",
+          "title": "Three Regions of Learning",
+          "body": "When you look at a complete LR Finder plot, it resembles a wide, smooth valley. To read it like an expert, you must identify three distinct zones. Placing your learning rate in the wrong zone guarantees training failure."
+        },
+        {
+          "kind": "definition",
+          "icon": "📈",
+          "title": "The Three Zones",
+          "body": "1. <strong>No-Learning Zone</strong>: Flat line at the start. LR is too small to make meaningful updates.<br>2. <strong>Steep Descent Zone</strong>: The downward slope. Weights are updating efficiently.<br>3. <strong>Explosion Zone</strong>: The upward spike. Learning rate is too high, causing updates to overshoot."
+        },
+        {
+          "kind": "analogy",
+          "icon": "🚲",
+          "title": "Riding a bicycle up a valley",
+          "body": "Riding on flat sand at the bottom is like the no-learning zone (hard to move). Climbing a smooth, manageable slope is like the steep descent zone (ideal work). Encountering a vertical cliff that flips you backward is like the explosion zone. Stay on the slope."
+        },
+        {
+          "kind": "example",
+          "icon": "📊",
+          "title": "A Real Plot Analysis",
+          "body": "Imagine your plot:<br>- Flat at loss 2.3 from `1e-7` to `1e-5` (No learning).<br>- Slopes down to loss 0.8 at `1e-3` (Steep descent).<br>- Bottoms out at `1e-2` and spikes to NaN at `1e-1` (Explosion). The ideal rate is `1e-3`."
+        },
+        {
+          "kind": "mythbust",
+          "icon": "⚠️",
+          "title": "The plot isn't a normal training run",
+          "body": "It's a myth that this plot shows your model's final performance. The model is trained on changing learning rates batch-by-batch, so it is mathematically unstable by design. The final weights from this run are discarded; we only keep the **learning rate number** we discovered."
+        },
+        {
+          "kind": "visual",
+          "icon": "⚖️",
+          "title": "Analyzing the Valley",
+          "body": "Mapping the regions of the valley curve:",
+          "compare": {
+            "left": {
+              "emoji": "🐢",
+              "tag": "Left (Flat)",
+              "text": "Very small learning rate<br>Updates are too small<br>No change in loss"
+            },
+            "right": {
+              "emoji": "💥",
+              "tag": "Right (Spike)",
+              "text": "Very large learning rate<br>Updates overshoot<br>Loss explodes to NaN"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "type": "practice",
+      "exercises": [
+        {
+          "id": "p1",
+          "type": "multiple_choice",
+          "xp": 2,
+          "prompt": "What does the flat region at the very start of the LR Finder plot represent?",
+          "options": [
+            {
+              "id": "a",
+              "text": "The learning rate is too small to cause any meaningful updates to the model's weights",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "The model has already converged to 100% accuracy",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "The validation set is corrupted",
+              "correct": false
+            },
+            {
+              "id": "d",
+              "text": "The gradients are exploding rapidly",
+              "correct": false
+            }
+          ],
+          "explain": "Correct! Extremely small learning rates make negligible changes, leaving loss flat."
+        },
+        {
+          "id": "p2",
+          "type": "true_false",
+          "xp": 2,
+          "prompt": "True or false: You should save and use the weights of the model generated at the end of the LR Finder run for your final training.",
+          "options": [
+            {
+              "id": "t",
+              "text": "True",
+              "correct": false
+            },
+            {
+              "id": "f",
+              "text": "False",
+              "correct": true
+            }
+          ],
+          "explain": "False. The LR Finder run is purely diagnostic; the weights are discarded, and we start final training with fresh weights."
+        },
+        {
+          "id": "p3",
+          "type": "fill_blank",
+          "xp": 2,
+          "prompt": "Complete the sentence:",
+          "sentence": "The region where the loss curve spikes upward is called the ___ zone.",
+          "blank": "explosion",
+          "words": [
+            "explosion",
+            "learning",
+            "descent"
+          ],
+          "explain": "The explosion zone is where excessive learning rates cause weights and loss to overshoot stable boundaries."
+        },
+        {
+          "id": "p4",
+          "type": "spot_the_ai",
+          "xp": 2,
+          "prompt": "If the steep descent zone is between 1e-5 and 1e-3, which value is the safest and most effective choice?",
+          "options": [
+            {
+              "id": "a",
+              "text": "1e-4, because it sits safely in the middle of the downward slope",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "1e-6, because it is in the flat no-learning region",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "1e-2, because it sits in the upward explosion region",
+              "correct": false
+            }
+          ],
+          "explain": "Correct! The middle value (1e-4) offers the best balance of speed and safety."
+        }
+      ]
+    },
+    {
+      "type": "boss",
+      "exercises": [
+        {
+          "id": "b1",
+          "type": "multiple_choice",
+          "xp": 5,
+          "prompt": "Why do we sweep the learning rate exponentially (e.g. multiplying by 10) instead of linearly (e.g. adding 0.001) during the finder run?",
+          "options": [
+            {
+              "id": "a",
+              "text": "Learning rate effects span multiple orders of magnitude; a linear search would take too long or miss the tiny stable region entirely",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "Exponential sweeps make the GPU run twice as cool",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "Linear searches are mathematically impossible in PyTorch",
+              "correct": false
+            },
+            {
+              "id": "d",
+              "text": "To ensure the image resolution remains constant",
+              "correct": false
+            }
+          ],
+          "explain": "Exactly! Decadal scaling covers vast search spaces efficiently. Next: learning rate scheduling during training!"
+        }
+      ]
+    }
+  ]
+}

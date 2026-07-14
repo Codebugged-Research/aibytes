@@ -1,0 +1,222 @@
+{
+  "id": "u127-l5",
+  "unit": 127,
+  "day": 640,
+  "tier": "Training CNNs in Practice",
+  "tierIcon": "🏭",
+  "title": "Building a Clean Preprocessing Pipeline",
+  "icon": "🌉",
+  "concept": "A clean preprocessing pipeline coordinates all transformations in the correct order: random changes for training, clean shaping for validation, and standard normalization for both. This sets the foundation for stable CNN training.",
+  "xp": 15,
+  "hearts": 3,
+  "estMinutes": 7,
+  "segments": [
+    {
+      "type": "warmup",
+      "exercises": [
+        {
+          "id": "w1",
+          "type": "multiple_choice",
+          "xp": 1,
+          "prompt": "Recap: What is the correct way to handle crops in train vs validation pipelines?",
+          "options": [
+            {
+              "id": "a",
+              "text": "Train uses random resized crops; validation uses deterministic center crops",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "Train uses center crops; validation uses random crops",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "Both must use identical random crops to be fair",
+              "correct": false
+            }
+          ],
+          "explain": "Yes! Random crops for train; center crops for validation."
+        }
+      ]
+    },
+    {
+      "type": "teach",
+      "cards": [
+        {
+          "kind": "hook",
+          "icon": "🌉",
+          "title": "Tying It All Together",
+          "body": "We've covered geometric transforms, photometric color shifts, multi-image blends like Mixup, and mandatory resizing and normalization. Now, it's time to assemble these individual steps into a single, clean pipeline that feeds our CNN."
+        },
+        {
+          "kind": "definition",
+          "icon": "🏭",
+          "title": "The Complete Pipeline",
+          "body": "A clean pipeline maps data loading to network execution. During training, raw images are loaded, augmented (geometric + photometric), resized, normalized, and batched. During testing, raw images are simply resized, normalized, and batched."
+        },
+        {
+          "kind": "analogy",
+          "icon": "🧴",
+          "title": "The water purification plant",
+          "body": "A clean pipeline is like a water purification plant. Muddy water goes through distinct filters in a specific order: large debris removal first (resizing), chemical treatment next (augmentation), and final purification (normalization). If you change the order or skip a filter, the output isn't clean."
+        },
+        {
+          "kind": "example",
+          "icon": "📦",
+          "title": "The PyTorch / TensorFlow Standard",
+          "body": "In PyTorch (torchvision) or TensorFlow, you chain transforms together: <br><code>transforms.Compose([</code><br><code>    transforms.RandomResizedCrop(224),</code><br><code>    transforms.RandomHorizontalFlip(),</code><br><code>    transforms.ColorJitter(0.2, 0.2),</code><br><code>    transforms.ToTensor(),</code><br><code>    transforms.Normalize(mean, std)</code><br><code>])</code>."
+        },
+        {
+          "kind": "mythbust",
+          "icon": "⚠️",
+          "title": "Augmentation happens in memory, not on disk",
+          "body": "It's a common myth that data augmentation overwrites your image files on disk or permanently saves thousands of new files. Augmentations are applied in **RAM / GPU memory** on the fly as each batch is loaded. Your original image files on disk remain completely untouched."
+        },
+        {
+          "kind": "visual",
+          "icon": "🌉",
+          "title": "The Complete Preprocessing Pipeline",
+          "body": "Reviewing the complete end-to-end data flow:",
+          "compare": {
+            "left": {
+              "emoji": "📁",
+              "tag": "Raw Image on Disk",
+              "text": "Unchanged source files<br>Various sizes & formats<br>Persistent storage"
+            },
+            "right": {
+              "emoji": "🧠",
+              "tag": "Clean Batch in Memory",
+              "text": "Randomly augmented (train)<br>Standardized size (224x224)<br>Normalized to zero-mean floats"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "type": "practice",
+      "exercises": [
+        {
+          "id": "p1",
+          "type": "multiple_choice",
+          "xp": 2,
+          "prompt": "Where are data augmentation transformations typically applied and stored?",
+          "options": [
+            {
+              "id": "a",
+              "text": "In-memory on the fly during batch loading; the original files on disk remain untouched",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "Permanently saved to disk, replacing the original image files",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "Inside the weights of the convolutional layers",
+              "correct": false
+            },
+            {
+              "id": "d",
+              "text": "Only in the cloud database before downloading",
+              "correct": false
+            }
+          ],
+          "explain": "Correct! Augmentation happens dynamically in memory as batches load."
+        },
+        {
+          "id": "p2",
+          "type": "true_false",
+          "xp": 2,
+          "prompt": "True or false: A clean preprocessing pipeline applies normalization as the final step right before the image tensor is passed into the CNN.",
+          "options": [
+            {
+              "id": "t",
+              "text": "True",
+              "correct": true
+            },
+            {
+              "id": "f",
+              "text": "False",
+              "correct": false
+            }
+          ],
+          "explain": "True. Normalization must be the final step to avoid breaking prior transformation math."
+        },
+        {
+          "id": "p3",
+          "type": "fill_blank",
+          "xp": 2,
+          "prompt": "Complete the sentence:",
+          "sentence": "In PyTorch or TensorFlow, transformations are chained together using a ___ function to process batches in memory.",
+          "blank": "Compose",
+          "words": [
+            "Compose",
+            "Flatten",
+            "Compile"
+          ],
+          "explain": "Compose (or pipeline) functions chain multiple steps into a single reusable transform pipeline."
+        },
+        {
+          "id": "p4",
+          "type": "spot_the_ai",
+          "xp": 2,
+          "prompt": "What is the primary benefit of applying augmentations on the fly in memory rather than saving them to disk?",
+          "options": [
+            {
+              "id": "a",
+              "text": "It saves disk space and allows infinite random variations without duplicate files",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "It completely removes the need for a GPU during training",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "It automatically corrects any labeling errors in the dataset",
+              "correct": false
+            }
+          ],
+          "explain": "Correct! On-the-fly augmentation avoids disk bloat while generating fresh random variations every epoch."
+        }
+      ]
+    },
+    {
+      "type": "boss",
+      "exercises": [
+        {
+          "id": "b1",
+          "type": "multiple_choice",
+          "xp": 5,
+          "prompt": "We have completed our study of geometric transforms, photometric jitter, image mixing, and preprocessing pipelines. What is the next logical step in training CNNs?",
+          "options": [
+            {
+              "id": "a",
+              "text": "Handling imbalanced datasets, where some classes have far more images than others",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "Replacing all convolutional layers with fully connected ones",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "Converting all images back to JPEG files on disk",
+              "correct": false
+            },
+            {
+              "id": "d",
+              "text": "Skip training and deploy the model immediately",
+              "correct": false
+            }
+          ],
+          "explain": "Exactly! Now that we have a clean pipeline, we must handle real-world dataset challenges like class imbalance. Next up: Training CNNs in Practice - Wave 2!"
+        }
+      ]
+    }
+  ]
+}

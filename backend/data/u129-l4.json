@@ -1,0 +1,222 @@
+{
+  "id": "u129-l4",
+  "unit": 129,
+  "day": 649,
+  "tier": "Training CNNs in Practice",
+  "tierIcon": "🐛",
+  "title": "Overfitting a Single Batch",
+  "icon": "🧪",
+  "concept": "Overfitting a single batch of data is a diagnostic test. If a CNN cannot achieve 100% accuracy on a tiny batch of 4 images, it has a core bug in its architecture, loss, or optimization code.",
+  "xp": 15,
+  "hearts": 3,
+  "estMinutes": 7,
+  "segments": [
+    {
+      "type": "warmup",
+      "exercises": [
+        {
+          "id": "w1",
+          "type": "multiple_choice",
+          "xp": 1,
+          "prompt": "Recap: What should you do if both training and validation loss remain high and flat?",
+          "options": [
+            {
+              "id": "a",
+              "text": "Increase model capacity (more layers/filters) or train for more epochs, as the model is underfitting",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "Add aggressive dropout and data augmentation to make training harder",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "Stop training immediately because the model has converged",
+              "correct": false
+            }
+          ],
+          "explain": "Yes! High, flat loss indicates underfitting, which requires more capacity or time."
+        }
+      ]
+    },
+    {
+      "type": "teach",
+      "cards": [
+        {
+          "kind": "hook",
+          "icon": "🧪",
+          "title": "Finding Hidden Bugs",
+          "body": "When a network fails to learn, it is hard to isolate the cause. Is it the dataset? The optimizer? A broken gradient update? To find out, we run a diagnostic test: we shrink our entire dataset down to just **four images** and check if the model can memorize them perfectly."
+        },
+        {
+          "kind": "definition",
+          "icon": "🧪",
+          "title": "Overfitting a Single Batch",
+          "body": "<strong>Overfitting a single batch</strong> is a sanity check where you train your model on a tiny subset of data (e.g. 2-8 images) with **zero regularization** (no augmentation, no dropout). If the network is coded correctly, it should easily achieve 100% accuracy (near-zero loss) within a few epochs."
+        },
+        {
+          "kind": "analogy",
+          "icon": "📝",
+          "title": "The open-book pop quiz",
+          "body": "If a student is failing open-book quizzes where the questions and answers are right in front of them (overfitting 4 images), they probably can't read the language or have a broken pencil. If your model can't memorize 4 images, it has a fundamental structural flaw."
+        },
+        {
+          "kind": "example",
+          "icon": "🔢",
+          "title": "The broken sign change",
+          "body": "If you accidentally put a plus instead of a minus in your loss gradient calculation, weights will move in the wrong direction. By trying to overfit 4 images, you will notice immediately: the loss will climb or stay flat. This isolates the bug to code logic."
+        },
+        {
+          "kind": "mythbust",
+          "icon": "⚠️",
+          "title": "It's not a waste of time",
+          "body": "It feels counterintuitive to intentionally overfit your model. We are taught that overfitting is bad! But in this specific diagnostic test, **failure to overfit** is a critical clue. If the model can't learn a tiny batch, it is mathematically incapable of learning a large dataset."
+        },
+        {
+          "kind": "visual",
+          "icon": "⚖️",
+          "title": "Batch Overfitting Results",
+          "body": "What the single-batch diagnostic check reveals:",
+          "compare": {
+            "left": {
+              "emoji": "✅",
+              "tag": "Loss Drops to ~0",
+              "text": "Model code is mathematically correct<br>Optimizer is updating weights<br>Problem is likely dataset size/quality"
+            },
+            "right": {
+              "emoji": "❌",
+              "tag": "Loss Stays High/NaN",
+              "text": "Core bug in model code<br>Check loss function, gradients, or learning rate<br>Do not train on full data yet"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "type": "practice",
+      "exercises": [
+        {
+          "id": "p1",
+          "type": "multiple_choice",
+          "xp": 2,
+          "prompt": "What does a model failing to overfit a single batch of 4 images indicate?",
+          "options": [
+            {
+              "id": "a",
+              "text": "A fundamental bug in the model code, loss function, or optimization steps",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "The dataset is too small to train on",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "The model has achieved optimal generalization",
+              "correct": false
+            },
+            {
+              "id": "d",
+              "text": "The GPU is overheating",
+              "correct": false
+            }
+          ],
+          "explain": "Correct! If a model can't learn a tiny subset, there is a core mathematical or logical bug in the code."
+        },
+        {
+          "id": "p2",
+          "type": "true_false",
+          "xp": 2,
+          "prompt": "True or false: You should keep data augmentation and dropout turned ON when running the single-batch overfitting test.",
+          "options": [
+            {
+              "id": "t",
+              "text": "True",
+              "correct": false
+            },
+            {
+              "id": "f",
+              "text": "False",
+              "correct": true
+            }
+          ],
+          "explain": "False. We remove all regularization (dropout, augmentation) during this test so the model can memorize the inputs easily."
+        },
+        {
+          "id": "p3",
+          "type": "fill_blank",
+          "xp": 2,
+          "prompt": "Complete the sentence:",
+          "sentence": "If your model successfully overfits a single batch, it proves the code logic is correct, and any training issues lie in the full ___.",
+          "blank": "dataset",
+          "words": [
+            "dataset",
+            "optimizer",
+            "activation"
+          ],
+          "explain": "If the code works on 4 images, the bug is likely in the full dataset's distribution, size, or quality."
+        },
+        {
+          "id": "p4",
+          "type": "spot_the_ai",
+          "xp": 2,
+          "prompt": "What is the expected loss value when successfully overfitting a single batch of 4 images?",
+          "options": [
+            {
+              "id": "a",
+              "text": "A value close to zero (e.g. < 0.01), representing perfect memorization",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "A flat value of exactly 1.0",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "A value that spikes to infinity",
+              "correct": false
+            }
+          ],
+          "explain": "Correct! Perfect memorization results in near-zero loss."
+        }
+      ]
+    },
+    {
+      "type": "boss",
+      "exercises": [
+        {
+          "id": "b1",
+          "type": "multiple_choice",
+          "xp": 5,
+          "prompt": "You run the single-batch overfitting test with 4 images. After 100 epochs, the loss stays flat at 1.4. What should you check first?",
+          "options": [
+            {
+              "id": "a",
+              "text": "Verify if the optimizer is actually updating weights, check if gradients are zero, and check for bugs in the custom loss function",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "Collect 10,000 more images to solve the learning issue",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "Add more layers to the CNN backbone",
+              "correct": false
+            },
+            {
+              "id": "d",
+              "text": "Assume training is complete and deploy the model",
+              "correct": false
+            }
+          ],
+          "explain": "Exactly! Flat loss on a tiny batch points to code bugs. Next: a systematic debugging checklist to solve CNN training issues!"
+        }
+      ]
+    }
+  ]
+}

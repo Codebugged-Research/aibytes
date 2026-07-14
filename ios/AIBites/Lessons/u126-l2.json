@@ -1,0 +1,220 @@
+{
+  "id": "u126-l2",
+  "unit": 126,
+  "day": 632,
+  "tier": "Training CNNs in Practice",
+  "tierIcon": "🪩",
+  "title": "Mixup: Blending Two Images",
+  "icon": "🎨",
+  "concept": "Mixup is a simple multi-image augmentation technique. It takes two random images and blends their pixel values using a weighted average, while blending their labels in the exact same proportion.",
+  "xp": 15,
+  "hearts": 3,
+  "estMinutes": 7,
+  "segments": [
+    {
+      "type": "warmup",
+      "exercises": [
+        {
+          "id": "w1",
+          "type": "multiple_choice",
+          "xp": 1,
+          "prompt": "Recap: What do we do to the target labels when applying multi-image augmentation?",
+          "options": [
+            {
+              "id": "a",
+              "text": "We blend them proportionally to match the mix ratio of the input images",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "We keep the label of the first image at 100% and discard the second",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "We change the labels to random numbers",
+              "correct": false
+            }
+          ],
+          "explain": "Yes! Blending labels proportionally is key to making the technique work."
+        }
+      ]
+    },
+    {
+      "type": "teach",
+      "cards": [
+        {
+          "kind": "hook",
+          "icon": "🎨",
+          "title": "Double Exposure",
+          "body": "Imagine taking a photo on old film, but forgetting to wind the roll. You snap a photo of a cat, then a photo of a dog on top of it. You get a transparent, ghost-like overlay of both animals. This is the exact idea behind Mixup."
+        },
+        {
+          "kind": "definition",
+          "icon": "🪩",
+          "title": "What is Mixup?",
+          "body": "<strong>Mixup</strong> is a technique that blends two images by calculating a weighted average of their pixel values. If we select a mixing factor (lambda) of <strong>0.7</strong>, the new image is: <br><code>Mixup Image = (0.7 × Image A) + (0.3 × Image B)</code>."
+        },
+        {
+          "kind": "analogy",
+          "icon": "🧪",
+          "title": "Mixing paint",
+          "body": "Mixup is like mixing paint. If you stir 70% blue paint and 30% yellow paint together, you get a new shade of green. You don't get distinct blue and yellow spots — the colors blend completely at every point on the canvas."
+        },
+        {
+          "kind": "example",
+          "icon": "🔢",
+          "title": "A Cat-Dog Blend",
+          "body": "If Image A is a Cat and Image B is a Dog, and we use a 70% blend factor, the model is shown the overlaid image and taught: <strong>'This image is 70% Cat and 30% Dog.'</strong> The model's loss function evaluates how close its predictions are to this exact 0.7/0.3 split."
+        },
+        {
+          "kind": "mythbust",
+          "icon": "⚠️",
+          "title": "It looks weird, but it works",
+          "body": "To a human, Mixup images look like confusing, transparent ghosts. You might think this would ruin a model's ability to see clear shapes. However, mathematically, it acts as a regularizer, preventing the network from drawing sharp, oversensitive boundary lines in its feature space."
+        },
+        {
+          "kind": "visual",
+          "icon": "⚖️",
+          "title": "Mixup Pixel & Label Math",
+          "body": "How Mixup applies a weighted average to both inputs:",
+          "compare": {
+            "left": {
+              "emoji": "🐈",
+              "text": "Image A: Cat<br>Label A: [1.0 Cat, 0.0 Dog]<br>Weight: 0.7"
+            },
+            "right": {
+              "emoji": "🐶",
+              "text": "Image B: Dog<br>Label B: [0.0 Cat, 1.0 Dog]<br>Weight: 0.3"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "type": "practice",
+      "exercises": [
+        {
+          "id": "p1",
+          "type": "multiple_choice",
+          "xp": 2,
+          "prompt": "If Mixup combines a plane image (A) and a bird image (B) with a weight of 0.8 on image A, what is the target label?",
+          "options": [
+            {
+              "id": "a",
+              "text": "0.8 Plane, 0.2 Bird",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "1.0 Plane, 0.0 Bird",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "0.5 Plane, 0.5 Bird",
+              "correct": false
+            },
+            {
+              "id": "d",
+              "text": "0.2 Plane, 0.8 Bird",
+              "correct": false
+            }
+          ],
+          "explain": "Correct! The label blend matches the input pixel blend ratio (0.8 and 0.2)."
+        },
+        {
+          "id": "p2",
+          "type": "true_false",
+          "xp": 2,
+          "prompt": "True or false: Mixup modifies only the images, leaving the target labels at 100% for the dominant class.",
+          "options": [
+            {
+              "id": "t",
+              "text": "True",
+              "correct": false
+            },
+            {
+              "id": "f",
+              "text": "False",
+              "correct": true
+            }
+          ],
+          "explain": "False. Mixup blends both the image pixels AND the labels in the exact same proportion."
+        },
+        {
+          "id": "p3",
+          "type": "fill_blank",
+          "xp": 2,
+          "prompt": "Complete the sentence:",
+          "sentence": "Mixup blends images by calculating a weighted ___ of their pixel values.",
+          "blank": "average",
+          "words": [
+            "average",
+            "difference",
+            "product"
+          ],
+          "explain": "Mixup uses a weighted average (linear combination) of the pixel values."
+        },
+        {
+          "id": "p4",
+          "type": "spot_the_ai",
+          "xp": 2,
+          "prompt": "What does a Mixup image look like to a human?",
+          "options": [
+            {
+              "id": "a",
+              "text": "A semi-transparent overlay of two different images on top of each other",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "A sharp collage where one image is cropped and pasted into the center of another",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "A perfectly normal image with no visible modifications",
+              "correct": false
+            }
+          ],
+          "explain": "Correct! It looks like a semi-transparent double exposure."
+        }
+      ]
+    },
+    {
+      "type": "boss",
+      "exercises": [
+        {
+          "id": "b1",
+          "type": "multiple_choice",
+          "xp": 5,
+          "prompt": "If we apply Mixup to a batch of images, what mathematical effect does it have on the model's decision boundary?",
+          "options": [
+            {
+              "id": "a",
+              "text": "It linearizes the transitions between classes, forcing the model to change its predictions smoothly rather than making sharp jumps",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "It forces the model's filters to only detect horizontal lines",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "It completely removes all negative values from the weights",
+              "correct": false
+            },
+            {
+              "id": "d",
+              "text": "It has no mathematical effect; it is purely a visual compression technique",
+              "correct": false
+            }
+          ],
+          "explain": "Excellent! Mixup linearizes class transitions, preventing overfitting. Next, let's explore CutMix, a patch-based approach!"
+        }
+      ]
+    }
+  ]
+}

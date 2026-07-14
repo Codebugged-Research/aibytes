@@ -1,0 +1,222 @@
+{
+  "id": "u131-l3",
+  "unit": 131,
+  "day": 658,
+  "tier": "Training CNNs in Practice",
+  "tierIcon": "🌉",
+  "title": "TTA Voting and Aggregation",
+  "icon": "🗳️",
+  "concept": "Once the model predicts on all augmented test images, we must aggregate their confidence scores. Calculating the average probability distribution (mean ensemble) is the standard way to determine the final, robust prediction.",
+  "xp": 15,
+  "hearts": 3,
+  "estMinutes": 7,
+  "segments": [
+    {
+      "type": "warmup",
+      "exercises": [
+        {
+          "id": "w1",
+          "type": "multiple_choice",
+          "xp": 1,
+          "prompt": "Recap: What is the main danger of using class-altering transforms (like vertical flips on traffic lights) during TTA?",
+          "options": [
+            {
+              "id": "a",
+              "text": "They create unrealistic or incorrect inputs, degrading the final averaged prediction accuracy",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "They make the model parameters twice as large",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "They cause a compilation error in the GPU code",
+              "correct": false
+            }
+          ],
+          "explain": "Yes! Class-altering transforms degrade the averaged accuracy by feeding incorrect inputs."
+        }
+      ]
+    },
+    {
+      "type": "teach",
+      "cards": [
+        {
+          "kind": "hook",
+          "icon": "🗳️",
+          "title": "Averaging the Votes",
+          "body": "You've generated 4 augmented versions of your test image and run them through the CNN. The model outputs a probability distribution for each: one says 90% cat, another says 80% cat, one says 40% cat (due to a bad crop), and the last says 70%. How do we combine these votes?"
+        },
+        {
+          "kind": "definition",
+          "icon": "🗳️",
+          "title": "TTA Aggregation (Mean Ensemble)",
+          "body": "<strong>TTA aggregation</strong> calculates the mean probability distribution across all augmented passes. If we run $N$ passes, we sum the probability vectors for each class and divide by $N$. The class with the highest average score wins."
+        },
+        {
+          "kind": "analogy",
+          "icon": "📊",
+          "title": "The student test average",
+          "body": "If you take a test 4 times under slightly different conditions, your final grade isn't just your worst score (40%) or your best score (90%). It's the average of all 4 attempts. Averaging smooths out the impact of one unlucky crop or bad angle."
+        },
+        {
+          "kind": "example",
+          "icon": "🔢",
+          "title": "A Worked Voting Example",
+          "body": "Imagine 3 TTA passes predicting [Cat, Dog] probabilities:<br>- Pass 1: `[0.9, 0.1]` (original)<br>- Pass 2: `[0.8, 0.2]` (flipped)<br>- Pass 3: `[0.4, 0.6]` (bad crop)<br>- **Average**: `[(0.9+0.8+0.4)/3, (0.1+0.2+0.6)/3]` = `[0.7, 0.3]`. The final winner is **Cat** (70%)."
+        },
+        {
+          "kind": "mythbust",
+          "icon": "⚠️",
+          "title": "Don't just average the hard labels",
+          "body": "It's a myth that you should average the final predicted names (hard votes like 'Cat', 'Cat', 'Dog' -> 'Cat'). You must average the **raw probabilities (soft votes)**. Soft voting preserves the model's uncertainty, giving much more weight to high-confidence correct guesses."
+        },
+        {
+          "kind": "visual",
+          "icon": "⚖️",
+          "title": "Hard vs. Soft Voting in TTA",
+          "body": "How the two voting aggregation methods compare:",
+          "compare": {
+            "left": {
+              "emoji": "🗳️",
+              "tag": "Hard Voting",
+              "text": "Averages final class labels<br>Ignores confidence values<br>Less sensitive to model nuance"
+            },
+            "right": {
+              "emoji": "🌊",
+              "tag": "Soft Voting (Mean Probability)",
+              "text": "Averages raw probability vectors<br>Preserves confidence values<br>Standard, robust default"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "type": "practice",
+      "exercises": [
+        {
+          "id": "p1",
+          "type": "multiple_choice",
+          "xp": 2,
+          "prompt": "How are predictions combined in standard Test-Time Augmentation?",
+          "options": [
+            {
+              "id": "a",
+              "text": "By calculating the average (mean) probability distribution across all augmented passes",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "By picking only the pass with the lowest confidence score",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "By multiplying the probability vectors together",
+              "correct": false
+            },
+            {
+              "id": "d",
+              "text": "By letting the GPU pick a random pass to keep",
+              "correct": false
+            }
+          ],
+          "explain": "Correct! Soft voting (averaging probability distributions) is the standard aggregation method."
+        },
+        {
+          "id": "p2",
+          "type": "true_false",
+          "xp": 2,
+          "prompt": "True or false: Soft voting in TTA is generally preferred over hard voting because it preserves the model's confidence nuance.",
+          "options": [
+            {
+              "id": "t",
+              "text": "True",
+              "correct": true
+            },
+            {
+              "id": "f",
+              "text": "False",
+              "correct": false
+            }
+          ],
+          "explain": "True. Soft voting keeps confidence metrics intact, resulting in more reliable ensembles."
+        },
+        {
+          "id": "p3",
+          "type": "fill_blank",
+          "xp": 2,
+          "prompt": "Complete the sentence:",
+          "sentence": "Instead of hard labels, TTA aggregates raw ___ vectors to preserve confidence values.",
+          "blank": "probability",
+          "words": [
+            "probability",
+            "weight",
+            "kernel"
+          ],
+          "explain": "Averaging probability vectors (soft voting) makes the final prediction more robust."
+        },
+        {
+          "id": "p4",
+          "type": "spot_the_ai",
+          "xp": 2,
+          "prompt": "If TTA Pass A predicts [0.9 Cat, 0.1 Dog] and Pass B predicts [0.7 Cat, 0.3 Dog], what is the aggregated TTA probability?",
+          "options": [
+            {
+              "id": "a",
+              "text": "[0.8 Cat, 0.2 Dog]",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "[1.0 Cat, 0.0 Dog]",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "[0.16 Cat, 0.03 Dog]",
+              "correct": false
+            }
+          ],
+          "explain": "Correct! The mean is (0.9+0.7)/2 = 0.8 Cat and (0.1+0.3)/2 = 0.2 Dog."
+        }
+      ]
+    },
+    {
+      "type": "boss",
+      "exercises": [
+        {
+          "id": "b1",
+          "type": "multiple_choice",
+          "xp": 5,
+          "prompt": "Why is soft voting mathematically superior to hard voting when aggregating TTA passes?",
+          "options": [
+            {
+              "id": "a",
+              "text": "It allows a high-confidence correct guess (e.g. 99% Cat) to override a low-confidence wrong guess (e.g. 51% Dog), preserving true signal",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "It cuts the latency of the forward pass in half",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "It guarantees that the average is always exactly 1.0",
+              "correct": false
+            },
+            {
+              "id": "d",
+              "text": "It is simpler to write in basic HTML code",
+              "correct": false
+            }
+          ],
+          "explain": "Exactly! Soft voting lets high-confidence signal dominate noise. Next: when (and when not) to use TTA in production!"
+        }
+      ]
+    }
+  ]
+}

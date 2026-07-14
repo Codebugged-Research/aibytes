@@ -1,0 +1,222 @@
+{
+  "id": "u127-l2",
+  "unit": 127,
+  "day": 637,
+  "tier": "Training CNNs in Practice",
+  "tierIcon": "🏭",
+  "title": "Resizing and Normalization",
+  "icon": "📏",
+  "concept": "Resizing shapes all images into a uniform grid, while normalization scales pixel values to small, centered numbers. These two preprocessing steps are essential for training stability and mathematical consistency.",
+  "xp": 15,
+  "hearts": 3,
+  "estMinutes": 7,
+  "segments": [
+    {
+      "type": "warmup",
+      "exercises": [
+        {
+          "id": "w1",
+          "type": "multiple_choice",
+          "xp": 1,
+          "prompt": "Recap: Why is preprocessing applied to validation and test data, but augmentation is not?",
+          "options": [
+            {
+              "id": "a",
+              "text": "Preprocessing makes images compatible; validation/testing needs consistent, unmodified images to measure performance fairly",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "Augmentation is too slow to run during validation",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "Preprocessing automatically labels the validation data",
+              "correct": false
+            }
+          ],
+          "explain": "Yes! Validation needs clean, consistent inputs to provide a fair score."
+        }
+      ]
+    },
+    {
+      "type": "teach",
+      "cards": [
+        {
+          "kind": "hook",
+          "icon": "⚖️",
+          "title": "Large Numbers, Slow Learning",
+          "body": "Image pixels are stored as integers from 0 to 255. If you pass these raw values directly into a deep network, the large numbers will cause activations to explode, leading to unstable training and vanishing/exploding gradients. We need to scale these values down."
+        },
+        {
+          "kind": "definition",
+          "icon": "📏",
+          "title": "Resizing & Normalization",
+          "body": "<strong>Resizing</strong> scales the width and height of all images to match the network's input grid (e.g., 224x224). <strong>Normalization</strong> scales pixel values. Typically, we first rescale pixels to <strong>0.0-1.0</strong>, then subtract the mean and divide by the standard deviation: <br><code>Normalized = (Pixel - Mean) / StdDev</code>."
+        },
+        {
+          "kind": "analogy",
+          "icon": "⚖️",
+          "title": "Grading on a curve",
+          "body": "If one teacher grades tests out of 100 and another out of 10, comparing raw scores is confusing. Normalization is like converting all grades to a standard Z-score (centered at 0, with a spread of 1). It puts all pixel features on a level playing field."
+        },
+        {
+          "kind": "example",
+          "icon": "📊",
+          "title": "ImageNet Statistics",
+          "body": "Most CNN backbones use standard pre-calculated statistics from the ImageNet dataset:<br>Mean: <code>[0.485, 0.456, 0.406]</code><br>StdDev: <code>[0.229, 0.224, 0.225]</code> for RGB channels. Normalizing with these numbers aligns your data with what pretrained models expect."
+        },
+        {
+          "kind": "mythbust",
+          "icon": "⚠️",
+          "title": "Don't just divide by 255",
+          "body": "While scaling pixels to 0-1 (by dividing by 255) is a good start, full normalization (subtracting mean, dividing by standard deviation) is better. Centering the data around 0 helps the optimizer converge much faster by stabilizing gradient updates."
+        },
+        {
+          "kind": "visual",
+          "icon": "⚖️",
+          "title": "Raw vs. Normalized Pixels",
+          "body": "How pixel distributions change during normalization:",
+          "compare": {
+            "left": {
+              "emoji": "🛑",
+              "tag": "Raw Pixels",
+              "text": "Range: [0, 255] integers<br>Positives only<br>Uncentered; causes gradient instability"
+            },
+            "right": {
+              "emoji": "✅",
+              "tag": "Normalized Pixels",
+              "text": "Range: centered around 0.0 floats<br>Positive and negative values<br>Stable, balanced inputs for learning"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "type": "practice",
+      "exercises": [
+        {
+          "id": "p1",
+          "type": "multiple_choice",
+          "xp": 2,
+          "prompt": "What is the standard formula for pixel-level normalization?",
+          "options": [
+            {
+              "id": "a",
+              "text": "(Pixel - Mean) / Standard Deviation",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "Pixel * 255",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "(Pixel + Mean) * Standard Deviation",
+              "correct": false
+            },
+            {
+              "id": "d",
+              "text": "Pixel / 100",
+              "correct": false
+            }
+          ],
+          "explain": "Correct! Normalization subtracts the mean and divides by the standard deviation."
+        },
+        {
+          "id": "p2",
+          "type": "true_false",
+          "xp": 2,
+          "prompt": "True or false: Normalizing pixel values to have a mean of 0 helps the training optimization process converge faster.",
+          "options": [
+            {
+              "id": "t",
+              "text": "True",
+              "correct": true
+            },
+            {
+              "id": "f",
+              "text": "False",
+              "correct": false
+            }
+          ],
+          "explain": "True. Centering activations stabilizes gradient updates, leading to faster training convergence."
+        },
+        {
+          "id": "p3",
+          "type": "fill_blank",
+          "xp": 2,
+          "prompt": "Complete the sentence:",
+          "sentence": "Resizing ensures all images match the exact first-layer input ___ expected by the CNN.",
+          "blank": "dimensions",
+          "words": [
+            "dimensions",
+            "activation",
+            "weights"
+          ],
+          "explain": "Resizing reshapes width and height to match input layer dimensions (like 224x224)."
+        },
+        {
+          "id": "p4",
+          "type": "spot_the_ai",
+          "xp": 2,
+          "prompt": "Why should you use the ImageNet mean and standard deviation when using a pretrained backbone like ResNet?",
+          "options": [
+            {
+              "id": "a",
+              "text": "To align your images with the exact numerical distribution the model was originally trained on",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "To automatically remove the background from your images",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "To speed up the network's forward pass by skipping activation layers",
+              "correct": false
+            }
+          ],
+          "explain": "Correct! Pretrained weights expect the same color and brightness distribution they learned from during pretraining."
+        }
+      ]
+    },
+    {
+      "type": "boss",
+      "exercises": [
+        {
+          "id": "b1",
+          "type": "multiple_choice",
+          "xp": 5,
+          "prompt": "You decide to skip normalization and pass raw [0, 255] pixels into a deep CNN. What is the most likely consequence?",
+          "options": [
+            {
+              "id": "a",
+              "text": "Activations will explode in early layers, causing gradients to destabilize and preventing the model from training effectively",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "The model will train normally but will only be able to detect black and white shapes",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "The model will automatically compress itself to 1% of its original size",
+              "correct": false
+            },
+            {
+              "id": "d",
+              "text": "Nothing; normalization is optional and has no mathematical effect on training",
+              "correct": false
+            }
+          ],
+          "explain": "Exactly! Exploding activations wreck gradient updates. Next: why order of operations in the pipeline matters!"
+        }
+      ]
+    }
+  ]
+}

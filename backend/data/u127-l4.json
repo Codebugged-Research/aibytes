@@ -1,0 +1,222 @@
+{
+  "id": "u127-l4",
+  "unit": 127,
+  "day": 639,
+  "tier": "Training CNNs in Practice",
+  "tierIcon": "🏭",
+  "title": "Train vs. Validation/Test Preprocessing",
+  "icon": "🔒",
+  "concept": "An image pipeline must handle training data and evaluation data differently. While training data receives random augmentations, validation and test data must only be resized and normalized with zero randomness.",
+  "xp": 15,
+  "hearts": 3,
+  "estMinutes": 7,
+  "segments": [
+    {
+      "type": "warmup",
+      "exercises": [
+        {
+          "id": "w1",
+          "type": "multiple_choice",
+          "xp": 1,
+          "prompt": "Recap: Why is normalization applied as the final step in the pipeline?",
+          "options": [
+            {
+              "id": "a",
+              "text": "Because color/brightness jitter algorithms expect positive pixel ranges (0-255 or 0-1) and break on normalized negative values",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "Because it makes the images smaller for faster disk writes",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "Because it automatically labels the dataset",
+              "correct": false
+            }
+          ],
+          "explain": "Yes! Normalizing last avoids breaking color transformation math."
+        }
+      ]
+    },
+    {
+      "type": "teach",
+      "cards": [
+        {
+          "kind": "hook",
+          "icon": "🔒",
+          "title": "A Moving Target",
+          "body": "If you evaluate your model's progress on a validation set that randomly changes every time you look at it, you can't tell if an accuracy change is due to model progress or just lucky random cropping. Validation must remain a stable, consistent benchmark."
+        },
+        {
+          "kind": "definition",
+          "icon": "🔒",
+          "title": "Pipeline Separation",
+          "body": "We split our pipeline into two branches:<br>1. <strong>Train Pipeline</strong>: Random Augmentation -> Resize -> Normalize.<br>2. <strong>Val/Test Pipeline</strong>: Resize -> Normalize (no randomness, no flips, no jitter)."
+        },
+        {
+          "kind": "analogy",
+          "icon": "📐",
+          "title": "The standard exam",
+          "body": "Training is like studying in different environments — with music, in a quiet library, or with friends (augmentation adds variety). Validation is the official exam. During the exam, everyone gets the same desk, same paper, and same quiet room (zero randomness) so scores are fair and comparable."
+        },
+        {
+          "kind": "example",
+          "icon": "🩺",
+          "title": "Medical Imaging",
+          "body": "When evaluating a lung X-ray model, you must not randomly crop the validation images (which could crop out the disease area) or jitter colors (which could obscure subtle tissue density differences). Test data must match clean, real-world inputs."
+        },
+        {
+          "kind": "mythbust",
+          "icon": "⚠️",
+          "title": "Same resize rules, different tools",
+          "body": "Both pipelines resize images, but they do it differently. Training uses <strong>random crop + resize</strong> (selects random areas). Validation uses a <strong>deterministic center crop + resize</strong> (always crops the exact center). This ensures consistency while matching the scale of training images."
+        },
+        {
+          "kind": "visual",
+          "icon": "⚖️",
+          "title": "Train vs. Val Pipelines",
+          "body": "Comparing the two processing pathways:",
+          "compare": {
+            "left": {
+              "emoji": "🔄",
+              "tag": "Train Pipeline",
+              "text": "Random Flips & Rotations<br>Random Resized Crop<br>Color & Hue Jitter<br>Normalize last"
+            },
+            "right": {
+              "emoji": "🔒",
+              "tag": "Val/Test Pipeline",
+              "text": "NO flips or rotations<br>Deterministic Center Crop<br>NO color/hue jitter<br>Normalize last"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "type": "practice",
+      "exercises": [
+        {
+          "id": "p1",
+          "type": "multiple_choice",
+          "xp": 2,
+          "prompt": "Which transformation is allowed in the validation/test pipeline?",
+          "options": [
+            {
+              "id": "a",
+              "text": "Deterministic Center Crop and Normalization",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "Random Horizontal Flipping",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "Color and Hue Jitter",
+              "correct": false
+            },
+            {
+              "id": "d",
+              "text": "Mixup blending with validation targets",
+              "correct": false
+            }
+          ],
+          "explain": "Correct! Center cropping and normalization are deterministic, ensuring consistency."
+        },
+        {
+          "id": "p2",
+          "type": "true_false",
+          "xp": 2,
+          "prompt": "True or false: You should use the exact same mean and standard deviation values for normalization in both train and validation pipelines.",
+          "options": [
+            {
+              "id": "t",
+              "text": "True",
+              "correct": true
+            },
+            {
+              "id": "f",
+              "text": "False",
+              "correct": false
+            }
+          ],
+          "explain": "True. Normalization statistics must remain identical across splits to keep the data distributions aligned."
+        },
+        {
+          "id": "p3",
+          "type": "fill_blank",
+          "xp": 2,
+          "prompt": "Complete the sentence:",
+          "sentence": "Validation preprocessing must be ___ to ensure evaluation metrics are stable and comparable.",
+          "blank": "deterministic",
+          "words": [
+            "deterministic",
+            "random",
+            "optional"
+          ],
+          "explain": "Validation preprocessing must be deterministic (constant and reproducible)."
+        },
+        {
+          "id": "p4",
+          "type": "spot_the_ai",
+          "xp": 2,
+          "prompt": "What is the danger of applying random horizontal flips to your validation set?",
+          "options": [
+            {
+              "id": "a",
+              "text": "It introduces noise into your validation score, making it hard to tell if accuracy improvements are real",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "It permanently corrupts the files stored on your hard drive",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "It forces the network to only output negative prediction logits",
+              "correct": false
+            }
+          ],
+          "explain": "Correct! Randomness makes metrics noisy and inconsistent."
+        }
+      ]
+    },
+    {
+      "type": "boss",
+      "exercises": [
+        {
+          "id": "b1",
+          "type": "multiple_choice",
+          "xp": 5,
+          "prompt": "You are building a dog breed classifier. What is the correct setup for train and validation datasets?",
+          "options": [
+            {
+              "id": "a",
+              "text": "Train gets random crops/flips/color jitter + normalization; Validation gets deterministic center crops + normalization using the exact same mean/std values",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "Both get identical random augmentations to make evaluation challenging",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "Train gets normalization; Validation gets no preprocessing at all",
+              "correct": false
+            },
+            {
+              "id": "d",
+              "text": "Train gets center crops; Validation gets random crops to test robustness",
+              "correct": false
+            }
+          ],
+          "explain": "Exactly! Train is augmented; validation is deterministic and matching. Next: a complete capstone recap of the preprocessing pipeline!"
+        }
+      ]
+    }
+  ]
+}
