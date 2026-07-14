@@ -1,0 +1,222 @@
+{
+  "unit": 115,
+  "tier": "Classic & Efficient CNN Architectures",
+  "tierIcon": "🌐",
+  "xp": 15,
+  "hearts": 3,
+  "estMinutes": 7,
+  "id": "u115-l2",
+  "day": 577,
+  "title": "The Inception Module",
+  "icon": "🛣️",
+  "concept": "An Inception module splits one input feature map into parallel 1x1, 3x3, 5x5, and pooling branches, then concatenates all branch outputs together along the channel dimension.",
+  "segments": [
+    {
+      "type": "warmup",
+      "exercises": [
+        {
+          "id": "w1",
+          "type": "multiple_choice",
+          "xp": 1,
+          "prompt": "Recap: In GoogLeNet's basic idea, what do the parallel branches mostly differ in?",
+          "options": [
+            {
+              "id": "a",
+              "text": "The scale of patterns they can emphasize",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "The language spoken by the image",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "Whether the image still has pixels",
+              "correct": false
+            }
+          ],
+          "explain": "Correct — each branch is a different scale-sensitive path through the same input."
+        }
+      ]
+    },
+    {
+      "type": "teach",
+      "cards": [
+        {
+          "kind": "hook",
+          "icon": "🛣️",
+          "title": "One road splits into four lanes",
+          "body": "An Inception module is easier to understand if you picture a road split. One incoming feature map enters the block, the traffic separates into several lanes that do different work, and then everything merges back into one outgoing feature stack."
+        },
+        {
+          "kind": "definition",
+          "icon": "🧱",
+          "title": "What is inside the module?",
+          "body": "A classic <strong>Inception module</strong> has several side-by-side branches, commonly a <code>1x1</code> branch, a <code>3x3</code> branch, a <code>5x5</code> branch, and a <strong>pooling</strong> branch. All branches process the same input feature map. Their outputs are then <strong>concatenated</strong>, meaning stacked together along channel depth."
+        },
+        {
+          "kind": "analogy",
+          "icon": "🚦",
+          "title": "Several checkout lanes, one shared store",
+          "body": "Imagine one line at a store splitting into four checkout lanes. Each lane handles customers in a slightly different way, but nobody throws away a lane's result. When the lanes finish, all processed customers rejoin the same store flow. Concatenation is that rejoining step for channel stacks."
+        },
+        {
+          "kind": "example",
+          "icon": "🔢",
+          "title": "How concatenation changes depth",
+          "body": "Suppose all four branches keep the same height and width, but output different channel counts: <code>1x1 -> 16</code> channels, <code>3x3 -> 24</code>, <code>5x5 -> 8</code>, and <code>pool -> 8</code>. After concatenation, the output is still the same spatial size, but now it has <code>16 + 24 + 8 + 8 = 56</code> channels."
+        },
+        {
+          "kind": "mythbust",
+          "icon": "⚠️",
+          "title": "Concatenate does not mean average",
+          "body": "The branch outputs are not averaged into one blurry result, and the network does not pick a single winning branch. Concatenation keeps <em>all</em> branch outputs by stacking them deeper, so later layers can use whichever branch responses help most."
+        },
+        {
+          "kind": "visual",
+          "icon": "🧵",
+          "title": "Split, process, stack",
+          "body": "The key shape idea is simple: same height and width, deeper channel stack after the merge.",
+          "compare": {
+            "left": {
+              "emoji": "↔️",
+              "tag": "Parallel branches",
+              "text": "1x1 branch<br>3x3 branch<br>5x5 branch + pool branch"
+            },
+            "right": {
+              "emoji": "📚",
+              "tag": "Concatenated output",
+              "text": "All branch channels kept<br>Stacked along depth<br>One richer feature map out"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "type": "practice",
+      "exercises": [
+        {
+          "id": "p1",
+          "type": "multiple_choice",
+          "xp": 2,
+          "prompt": "After the 1x1, 3x3, 5x5, and pooling branches finish, what usually happens next in an Inception module?",
+          "options": [
+            {
+              "id": "a",
+              "text": "Their outputs are concatenated into one deeper feature map",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "The largest branch deletes the others",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "The image is converted into text tokens",
+              "correct": false
+            },
+            {
+              "id": "d",
+              "text": "The spatial height and width of each branch are added together",
+              "correct": false
+            }
+          ],
+          "explain": "Right — the branch outputs are stacked in channel depth to form one outgoing feature map."
+        },
+        {
+          "id": "p2",
+          "type": "true_false",
+          "xp": 2,
+          "prompt": "True or false: concatenation in an Inception module usually means stacking branch outputs along the channel dimension, not placing them side-by-side across the image.",
+          "options": [
+            {
+              "id": "t",
+              "text": "True",
+              "correct": true
+            },
+            {
+              "id": "f",
+              "text": "False",
+              "correct": false
+            }
+          ],
+          "explain": "True — the spatial grid stays aligned while depth grows."
+        },
+        {
+          "id": "p3",
+          "type": "fill_blank",
+          "xp": 2,
+          "prompt": "Complete the sentence:",
+          "sentence": "At the end of an Inception module, the branch outputs are ___ together along channel depth.",
+          "blank": "concatenated",
+          "words": [
+            "concatenated",
+            "shredded",
+            "rotated"
+          ],
+          "explain": "Exactly — concatenation is the merge step that keeps all branch outputs."
+        },
+        {
+          "id": "p4",
+          "type": "spot_the_ai",
+          "xp": 2,
+          "prompt": "Which statement correctly describes the pooling branch inside an Inception module?",
+          "options": [
+            {
+              "id": "a",
+              "text": "It is one more parallel path that contributes its own output channels before the final concatenation",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "It cancels the other branches and replaces them completely",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "It exists only outside the module and never as a branch",
+              "correct": false
+            }
+          ],
+          "explain": "Yes — pooling is part of the side-by-side module story, not a separate afterthought."
+        }
+      ]
+    },
+    {
+      "type": "boss",
+      "exercises": [
+        {
+          "id": "b1",
+          "type": "multiple_choice",
+          "xp": 5,
+          "prompt": "An Inception module's four branches output 8, 16, 16, and 8 channels, all with the same height and width. After concatenation, how many channels does the module output?",
+          "options": [
+            {
+              "id": "a",
+              "text": "48 channels",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "16 channels",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "32 channels",
+              "correct": false
+            },
+            {
+              "id": "d",
+              "text": "64 channels",
+              "correct": false
+            }
+          ],
+          "explain": "Correct — concatenation keeps every branch output, so the depths add: 8 + 16 + 16 + 8 = 48. Next: why 1x1 convolutions are the quiet heroes inside those branches."
+        }
+      ]
+    }
+  ]
+}

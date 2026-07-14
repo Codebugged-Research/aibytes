@@ -1,0 +1,222 @@
+{
+  "unit": 118,
+  "tier": "Classic & Efficient CNN Architectures",
+  "tierIcon": "🔗",
+  "xp": 15,
+  "hearts": 3,
+  "estMinutes": 7,
+  "id": "u118-l1",
+  "day": 591,
+  "title": "DenseNet: Reusing Every Earlier Feature",
+  "icon": "🔗",
+  "concept": "A DenseNet block feeds each layer the feature maps from all earlier layers in that block, so new layers build on the full history instead of only the immediately previous output.",
+  "segments": [
+    {
+      "type": "warmup",
+      "exercises": [
+        {
+          "id": "w1",
+          "type": "multiple_choice",
+          "xp": 1,
+          "prompt": "Recap: What was the key idea behind residual connections in ResNet?",
+          "options": [
+            {
+              "id": "a",
+              "text": "They let information skip over layers so useful signals are easier to preserve and train",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "They force every layer to use only 1×1 convolutions",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "They remove the need for nonlinear activations",
+              "correct": false
+            }
+          ],
+          "explain": "Exactly — ResNet focused on keeping information flowing through deep networks. DenseNet pushes that idea even further."
+        }
+      ]
+    },
+    {
+      "type": "teach",
+      "cards": [
+        {
+          "kind": "hook",
+          "icon": "🔗",
+          "title": "A block where nobody forgets earlier work",
+          "body": "In an ordinary CNN, layer 8 usually sees only layer 7's output. In a DenseNet block, layer 8 can still directly see the features made by layers 1 through 7. Earlier discoveries stay available instead of disappearing into the stack."
+        },
+        {
+          "kind": "definition",
+          "icon": "🧩",
+          "title": "What dense connectivity means",
+          "body": "In a <strong>dense block</strong>, each layer receives the outputs of <strong>all earlier layers</strong> in that block. The layer then produces a small set of new feature maps, and those new maps are passed forward too. Information is accumulated, not repeatedly overwritten."
+        },
+        {
+          "kind": "analogy",
+          "icon": "📒",
+          "title": "Everyone shares the same notebook",
+          "body": "Imagine a team solving a puzzle with one shared notebook. Each person can read every earlier note before adding one new clue. DenseNet works like that: each layer reads the full notebook of earlier features, then contributes a few more."
+        },
+        {
+          "kind": "example",
+          "icon": "🖼️",
+          "title": "Edges, corners, textures, all still visible",
+          "body": "Suppose an early layer detects edges and a later one detects tiny textures. In a dense block, a still later layer can use <em>both</em> directly when deciding how to build a more complex pattern like fur, brick, or leaf veins. It does not need those early cues to be recreated from scratch."
+        },
+        {
+          "kind": "mythbust",
+          "icon": "⚠️",
+          "title": "Dense does not mean every layer does the same job",
+          "body": "DenseNet is not about copying identical features again and again. The point is that each new layer can add a <strong>small, fresh contribution</strong> because old useful features are already available. Reuse reduces relearning."
+        },
+        {
+          "kind": "visual",
+          "icon": "🪜",
+          "title": "Standard stack vs. dense block",
+          "body": "The main difference is how much past information stays directly reachable.",
+          "compare": {
+            "left": {
+              "emoji": "➡️",
+              "tag": "Standard CNN stack",
+              "text": "Layer 3 mainly sees layer 2<br>Layer 4 mainly sees layer 3<br>Older features become indirect"
+            },
+            "right": {
+              "emoji": "🔗",
+              "tag": "DenseNet block",
+              "text": "Layer 3 sees layers 1 + 2<br>Layer 4 sees layers 1 + 2 + 3<br>Older features stay directly available"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "type": "practice",
+      "exercises": [
+        {
+          "id": "p1",
+          "type": "multiple_choice",
+          "xp": 2,
+          "prompt": "What makes a DenseNet block different from a plain stacked CNN block?",
+          "options": [
+            {
+              "id": "a",
+              "text": "Each layer receives outputs from all earlier layers in the block",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "Each layer ignores everything except the raw input image",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "Each layer removes all earlier feature maps before computing",
+              "correct": false
+            },
+            {
+              "id": "d",
+              "text": "Each layer must have the exact same weights as earlier layers",
+              "correct": false
+            }
+          ],
+          "explain": "Right — dense connectivity gives each layer direct access to the whole earlier feature history."
+        },
+        {
+          "id": "p2",
+          "type": "true_false",
+          "xp": 2,
+          "prompt": "True or false: In DenseNet, a later layer can directly use an early edge detector without that edge needing to be reconstructed by every intermediate layer.",
+          "options": [
+            {
+              "id": "t",
+              "text": "True",
+              "correct": true
+            },
+            {
+              "id": "f",
+              "text": "False",
+              "correct": false
+            }
+          ],
+          "explain": "True — that direct reuse is one of DenseNet's main ideas."
+        },
+        {
+          "id": "p3",
+          "type": "fill_blank",
+          "xp": 2,
+          "prompt": "Complete the sentence:",
+          "sentence": "In a dense block, each new layer receives feature maps from ___ earlier layers in the block.",
+          "blank": "all",
+          "words": [
+            "all",
+            "zero",
+            "random"
+          ],
+          "explain": "Exactly — dense connectivity means all earlier layers contribute their outputs forward."
+        },
+        {
+          "id": "p4",
+          "type": "spot_the_ai",
+          "xp": 2,
+          "prompt": "Which description sounds most like DenseNet?",
+          "options": [
+            {
+              "id": "a",
+              "text": "A later layer can inspect early edges, middle textures, and recent patterns together before adding a few new features",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "Every layer is forced to throw away earlier features so the network stays forgetful",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "Only the final layer in the network is allowed to see the earlier layers",
+              "correct": false
+            }
+          ],
+          "explain": "Yes — DenseNet is about collecting and reusing the whole earlier feature history inside the block."
+        }
+      ]
+    },
+    {
+      "type": "boss",
+      "exercises": [
+        {
+          "id": "b1",
+          "type": "multiple_choice",
+          "xp": 5,
+          "prompt": "A student says, 'DenseNet is just a deeper CNN with a fancy name.' Which reply is best?",
+          "options": [
+            {
+              "id": "a",
+              "text": "Not quite — its defining idea is that each layer receives feature maps from all earlier layers in the block, so useful patterns can be reused directly",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "Yes — the only change is that DenseNet uses larger images",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "Yes — DenseNet works by removing skip-like information flow entirely",
+              "correct": false
+            },
+            {
+              "id": "d",
+              "text": "Not quite — it is called DenseNet only because its weights are harder to compress",
+              "correct": false
+            }
+          ],
+          "explain": "Exactly. DenseNet's core innovation is dense connectivity: every layer can read the whole earlier feature history and add just a bit more. Next up: how DenseNet combines features differently from ResNet."
+        }
+      ]
+    }
+  ]
+}

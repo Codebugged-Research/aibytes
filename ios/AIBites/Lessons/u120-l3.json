@@ -1,0 +1,222 @@
+{
+  "unit": 120,
+  "tier": "Classic & Efficient CNN Architectures",
+  "tierIcon": "⚖️",
+  "xp": 15,
+  "hearts": 3,
+  "estMinutes": 7,
+  "id": "u120-l3",
+  "day": 603,
+  "title": "Why Balanced Scaling Helps",
+  "icon": "🎛️",
+  "concept": "Balanced scaling helps because when only one axis grows, another part of the CNN can become the bottleneck, limiting how much value the larger model gets from the extra compute.",
+  "segments": [
+    {
+      "type": "warmup",
+      "exercises": [
+        {
+          "id": "w1",
+          "type": "multiple_choice",
+          "xp": 1,
+          "prompt": "Recap: if a CNN sees detailed images but has too few channels to describe many feature types, which axis is most obviously limited?",
+          "options": [
+            {
+              "id": "a",
+              "text": "Width",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "Color palette",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "Random seed",
+              "correct": false
+            }
+          ],
+          "explain": "Right — and that is the broader lesson: whichever weak axis stays small can become the bottleneck."
+        }
+      ]
+    },
+    {
+      "type": "teach",
+      "cards": [
+        {
+          "kind": "hook",
+          "icon": "🪣",
+          "title": "A bigger bucket does not fix a narrow pipe",
+          "body": "Suppose water flows through a narrow pipe into a huge storage tank. Making the tank bigger does not solve the real limit: the pipe. CNNs behave similarly. If one scaling axis stays too small, extra growth somewhere else can be underused."
+        },
+        {
+          "kind": "definition",
+          "icon": "🎛️",
+          "title": "What does 'bottleneck' mean here?",
+          "body": "In scaling, a <strong>bottleneck</strong> is the part of the model that limits how useful the rest can be. A very deep network with tiny channels may lack enough feature capacity. A wide network on blurry tiny inputs may have lots of channels but too little detail to analyze. Balanced scaling tries to reduce these mismatches."
+        },
+        {
+          "kind": "analogy",
+          "icon": "🚗",
+          "title": "Race car with one weak part",
+          "body": "A race car with a stronger engine still loses if the tires cannot grip the road. Upgrading only one component can leave the overall system constrained by another. EfficientNet applies that systems-thinking mindset to CNN growth."
+        },
+        {
+          "kind": "example",
+          "icon": "🔬",
+          "title": "Small defect detection",
+          "body": "Imagine a factory-inspection CNN looking for hairline cracks. If you only add depth but keep low-resolution inputs, the deeper network still may not see enough crack detail. If you only raise resolution but keep the network narrow, the model may receive more detail than it can represent well."
+        },
+        {
+          "kind": "mythbust",
+          "icon": "⚠️",
+          "title": "More compute is not automatically well-spent",
+          "body": "It is tempting to think any increase in model size helps equally. In reality, added compute can be wasted if it is poured into the wrong axis while another axis remains the true limit. EfficientNet's insight is about <strong>spending budget where growth supports growth</strong>."
+        },
+        {
+          "kind": "visual",
+          "icon": "🧪",
+          "title": "Where the bottleneck shows up",
+          "body": "Single-axis growth can leave the rest of the system lagging behind.",
+          "compare": {
+            "left": {
+              "emoji": "🧱",
+              "tag": "Unbalanced scaling",
+              "text": "One axis grows a lot<br>Another axis stays cramped<br>Extra capacity gets underused"
+            },
+            "right": {
+              "emoji": "⚙️",
+              "tag": "Balanced scaling",
+              "text": "Multiple axes grow together<br>Fewer obvious choke points<br>Compute supports the full pipeline"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "type": "practice",
+      "exercises": [
+        {
+          "id": "p1",
+          "type": "multiple_choice",
+          "xp": 2,
+          "prompt": "Why might making a CNN much wider not help as much as expected if input resolution stays very low?",
+          "options": [
+            {
+              "id": "a",
+              "text": "Because the model may have more channels than the coarse input detail can justify",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "Because width automatically deletes the convolution filters",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "Because low resolution prevents all backpropagation",
+              "correct": false
+            },
+            {
+              "id": "d",
+              "text": "Because channels only matter in language models",
+              "correct": false
+            }
+          ],
+          "explain": "Exactly — if the input remains too coarse, extra channels may not unlock much value."
+        },
+        {
+          "id": "p2",
+          "type": "true_false",
+          "xp": 2,
+          "prompt": "True or false: Balanced scaling tries to reduce situations where one part of the network outgrows what another part can support.",
+          "options": [
+            {
+              "id": "t",
+              "text": "True",
+              "correct": true
+            },
+            {
+              "id": "f",
+              "text": "False",
+              "correct": false
+            }
+          ],
+          "explain": "True — that is the heart of the bottleneck idea."
+        },
+        {
+          "id": "p3",
+          "type": "fill_blank",
+          "xp": 2,
+          "prompt": "Complete the sentence:",
+          "sentence": "If one scaling axis grows while another stays weak, the weak one can become the ___.",
+          "blank": "bottleneck",
+          "words": [
+            "bottleneck",
+            "optimizer",
+            "dataset split"
+          ],
+          "explain": "Right — the bottleneck is the limiting part of the system."
+        },
+        {
+          "id": "p4",
+          "type": "spot_the_ai",
+          "xp": 2,
+          "prompt": "Which statement shows the logic of balanced scaling?",
+          "options": [
+            {
+              "id": "a",
+              "text": "When several useful parts of the pipeline grow together, extra compute is less likely to get trapped behind one weak link",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "As long as one axis grows dramatically, the others no longer matter",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "Balanced scaling means every layer must have identical weights",
+              "correct": false
+            }
+          ],
+          "explain": "Yes — EfficientNet is about reducing weak-link waste, not about making everything identical."
+        }
+      ]
+    },
+    {
+      "type": "boss",
+      "exercises": [
+        {
+          "id": "b1",
+          "type": "multiple_choice",
+          "xp": 5,
+          "prompt": "A team doubles image resolution for a defect-detection model but keeps the network tiny and narrow. The new images contain more detail, yet gains are small. What is the best explanation?",
+          "options": [
+            {
+              "id": "a",
+              "text": "Resolution grew, but model capacity did not grow enough to use the extra detail well, so another bottleneck remained",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "Higher resolution always lowers vision accuracy, no matter the architecture",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "Once resolution increases, depth and width become irrelevant",
+              "correct": false
+            },
+            {
+              "id": "d",
+              "text": "The problem proves CNNs cannot use high-resolution images at all",
+              "correct": false
+            }
+          ],
+          "explain": "Exactly. One stronger axis cannot guarantee big gains if another axis stays limiting. Next, we will look at the EfficientNet family, where B0, B1, B2, and beyond are scaled versions of the same base idea."
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,222 @@
+{
+  "unit": 117,
+  "tier": "Classic & Efficient CNN Architectures",
+  "tierIcon": "🧬",
+  "xp": 15,
+  "hearts": 3,
+  "estMinutes": 7,
+  "id": "u117-l2",
+  "day": 587,
+  "title": "Bottleneck ResNets",
+  "icon": "1️⃣",
+  "concept": "Bottleneck ResNets reuse Unit 100's <code>1x1</code> shrink -> <code>3x3</code> work -> <code>1x1</code> expand pattern inside residual blocks, letting very deep networks stay computationally reasonable.",
+  "segments": [
+    {
+      "type": "warmup",
+      "exercises": [
+        {
+          "id": "w1",
+          "type": "multiple_choice",
+          "xp": 1,
+          "prompt": "Callback to Unit 100: Why does a 1x1 squeeze before a 3x3 convolution save computation?",
+          "options": [
+            {
+              "id": "a",
+              "text": "Because the expensive 3x3 runs on fewer channels",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "Because 1x1 automatically doubles the image size",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "Because squeezing deletes the need for all later layers",
+              "correct": false
+            }
+          ],
+          "explain": "Right — bottleneck ResNets borrow that exact trick and place it inside residual blocks."
+        }
+      ]
+    },
+    {
+      "type": "teach",
+      "cards": [
+        {
+          "kind": "hook",
+          "icon": "🔁",
+          "title": "You already learned the key trick",
+          "body": "Bottleneck ResNets can sound like a brand-new invention, but the core move should feel familiar. Unit 100 already taught the pattern: shrink channels, do the expensive spatial work, then expand again. ResNet simply turned that idea into a deep residual building block."
+        },
+        {
+          "kind": "definition",
+          "icon": "1️⃣",
+          "title": "A bottleneck residual block",
+          "body": "In a <strong>bottleneck ResNet block</strong>, the shortcut path carries the input forward while the main path typically goes <code>1x1 reduce -> 3x3 process -> 1x1 expand</code>. The middle <code>3x3</code> is where the local spatial mixing happens, but it operates on a compressed channel width instead of the full width."
+        },
+        {
+          "kind": "analogy",
+          "icon": "🧳",
+          "title": "Pack, travel, unpack",
+          "body": "Imagine sending equipment to another city. Shipping the full warehouse is expensive, so you pack only the essential gear into a smaller box, move it through the costly transport step, then unpack into a full workstation on arrival. Bottleneck blocks do the same with channels."
+        },
+        {
+          "kind": "example",
+          "icon": "🔢",
+          "title": "A typical channel story",
+          "body": "A bottleneck block might take <code>256</code> channels in, squeeze to <code>64</code> with a <code>1x1</code>, run the spatial <code>3x3</code> at <code>64</code> channels, then expand back to <code>256</code>. The skip path can still meet that output shape, so the residual addition remains clean."
+        },
+        {
+          "kind": "mythbust",
+          "icon": "⚠️",
+          "title": "The 1x1 layers are not cosmetic",
+          "body": "It is easy to think the middle <code>3x3</code> is the 'real' block and the surrounding <code>1x1</code> layers are just paperwork. In practice, those <code>1x1</code> layers are exactly what make deep bottleneck ResNets feasible: they control width, compute cost, and shape compatibility."
+        },
+        {
+          "kind": "visual",
+          "icon": "💸",
+          "title": "Where the savings happen",
+          "body": "The expensive part stays, but it runs in a narrower channel space.",
+          "compare": {
+            "left": {
+              "emoji": "🐘",
+              "tag": "Full-width idea",
+              "text": "Run every 3x3 at the full channel count<br>Depth gets expensive quickly"
+            },
+            "right": {
+              "emoji": "🎯",
+              "tag": "Bottleneck ResNet",
+              "text": "Use <code>1x1 -> 3x3 -> 1x1</code><br>Keep the costly 3x3 in a narrower space"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "type": "practice",
+      "exercises": [
+        {
+          "id": "p1",
+          "type": "multiple_choice",
+          "xp": 2,
+          "prompt": "What is the main architectural reason bottleneck blocks help very deep ResNets?",
+          "options": [
+            {
+              "id": "a",
+              "text": "They keep the expensive spatial convolution in a reduced channel space",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "They remove residual shortcuts so the network is simpler",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "They replace every 3x3 convolution with a pooling layer",
+              "correct": false
+            },
+            {
+              "id": "d",
+              "text": "They force all feature maps to stay at 3 channels",
+              "correct": false
+            }
+          ],
+          "explain": "Exactly — the bottleneck pattern is really a compute-management trick inside a residual block."
+        },
+        {
+          "id": "p2",
+          "type": "true_false",
+          "xp": 2,
+          "prompt": "True or false: the middle 3x3 convolution in a bottleneck block usually runs after channels have been squeezed down.",
+          "options": [
+            {
+              "id": "t",
+              "text": "True",
+              "correct": true
+            },
+            {
+              "id": "f",
+              "text": "False",
+              "correct": false
+            }
+          ],
+          "explain": "True — that squeezed middle is the whole reason the pattern saves cost."
+        },
+        {
+          "id": "p3",
+          "type": "fill_blank",
+          "xp": 2,
+          "prompt": "Complete the sentence:",
+          "sentence": "Inside a bottleneck ResNet block, the usual order is shrink -> ___ -> expand.",
+          "blank": "3x3",
+          "words": [
+            "3x3",
+            "pool",
+            "softmax"
+          ],
+          "explain": "Right — the 3x3 is still the spatial workhorse, just surrounded by channel-control layers."
+        },
+        {
+          "id": "p4",
+          "type": "multiple_choice",
+          "xp": 2,
+          "prompt": "Which statement correctly connects Unit 100 to bottleneck ResNets?",
+          "options": [
+            {
+              "id": "a",
+              "text": "The same squeeze-work-expand pattern from 1x1 bottlenecks becomes the internal recipe of deeper residual blocks",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "Unit 100's 1x1 convolutions were unrelated and never appear in later named CNNs",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "Bottleneck ResNets use 1x1 only for the skip path and never on the main path",
+              "correct": false
+            }
+          ],
+          "explain": "Yes — this is a direct callback, not a coincidence."
+        }
+      ]
+    },
+    {
+      "type": "boss",
+      "exercises": [
+        {
+          "id": "b1",
+          "type": "multiple_choice",
+          "xp": 5,
+          "prompt": "Why is the phrase 'bottleneck ResNet' meaningful instead of just being another name for any deep ResNet?",
+          "options": [
+            {
+              "id": "a",
+              "text": "Because it tells you the residual block itself uses the squeeze -> 3x3 -> expand pattern to make deep stacking efficient",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "Because it means the network has no 3x3 convolutions anywhere",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "Because it means the shortcut path is deleted to save memory",
+              "correct": false
+            },
+            {
+              "id": "d",
+              "text": "Because it refers only to the dataset size, not the architecture",
+              "correct": false
+            }
+          ],
+          "explain": "Exactly. 'Bottleneck' is architectural shorthand for how the residual block manages compute. That is why models like ResNet-50 and ResNet-101 can go much deeper without naively paying full-width cost at every stage. Next, we'll read the family names themselves more clearly: 18, 34, 50, 101."
+        }
+      ]
+    }
+  ]
+}

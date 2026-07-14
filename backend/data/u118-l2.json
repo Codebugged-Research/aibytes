@@ -1,0 +1,222 @@
+{
+  "unit": 118,
+  "tier": "Classic & Efficient CNN Architectures",
+  "tierIcon": "🔗",
+  "xp": 15,
+  "hearts": 3,
+  "estMinutes": 7,
+  "id": "u118-l2",
+  "day": 592,
+  "title": "Concatenation vs Addition",
+  "icon": "📦",
+  "concept": "DenseNet preserves old and new features by concatenating them channel-wise, while ResNet blends paths by adding matching feature maps elementwise.",
+  "segments": [
+    {
+      "type": "warmup",
+      "exercises": [
+        {
+          "id": "w1",
+          "type": "multiple_choice",
+          "xp": 1,
+          "prompt": "Recap: In a dense block, what does a new layer receive as input?",
+          "options": [
+            {
+              "id": "a",
+              "text": "The outputs of all earlier layers in that block",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "Only the single most recent layer output",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "Only a copy of the original RGB image",
+              "correct": false
+            }
+          ],
+          "explain": "Right — now the big question is how those earlier features are combined."
+        }
+      ]
+    },
+    {
+      "type": "teach",
+      "cards": [
+        {
+          "kind": "hook",
+          "icon": "📦",
+          "title": "Do we blend features or keep them side by side?",
+          "body": "ResNet and DenseNet both create shortcut-like information flow, but they do not merge information the same way. ResNet usually <strong>adds</strong> two paths together. DenseNet <strong>concatenates</strong> them, keeping the old and new feature maps as separate channel groups."
+        },
+        {
+          "kind": "definition",
+          "icon": "➕",
+          "title": "Addition and concatenation are not the same",
+          "body": "<strong>Addition</strong> means matching feature values are summed element by element, so two paths become one combined map of the same shape. <strong>Concatenation</strong> means feature maps are stacked along the channel dimension, so the output keeps both sets side by side and usually has <strong>more channels</strong>."
+        },
+        {
+          "kind": "analogy",
+          "icon": "🥣",
+          "title": "Mixing soup vs. stacking containers",
+          "body": "Addition is like pouring two soups into one bowl: once mixed, you have one blend. Concatenation is like putting two labeled containers next to each other in a box: both are still present separately, and you can inspect either one later."
+        },
+        {
+          "kind": "example",
+          "icon": "🔢",
+          "title": "What happens to channel count",
+          "body": "If one tensor has 64 channels and a new DenseNet layer creates 32 more, concatenation produces 96 channels total. With residual addition, the shortcut path and main path must line up so they can be added, and the result typically stays at the same channel count instead of growing."
+        },
+        {
+          "kind": "mythbust",
+          "icon": "⚠️",
+          "title": "Concatenation does not average anything",
+          "body": "A common confusion is thinking concatenation somehow blends values together. It does not. The old feature maps are still there, unchanged, and the new feature maps are appended beside them. That is why later layers can inspect specific earlier features directly."
+        },
+        {
+          "kind": "visual",
+          "icon": "🧱",
+          "title": "ResNet addition vs. DenseNet concatenation",
+          "body": "The critical difference is whether the two paths collapse into one map or stay as separate channel groups.",
+          "compare": {
+            "left": {
+              "emoji": "➕",
+              "tag": "ResNet addition",
+              "text": "Elementwise sum<br>Requires aligned shapes<br>Output usually keeps same channel count"
+            },
+            "right": {
+              "emoji": "📚",
+              "tag": "DenseNet concatenation",
+              "text": "Stack channels side by side<br>Preserves old + new maps separately<br>Output channel count grows"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "type": "practice",
+      "exercises": [
+        {
+          "id": "p1",
+          "type": "multiple_choice",
+          "xp": 2,
+          "prompt": "Which statement correctly describes DenseNet's merge style?",
+          "options": [
+            {
+              "id": "a",
+              "text": "It concatenates feature maps, so earlier and newer channels remain side by side",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "It adds all feature maps into one average intensity image",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "It deletes the earlier feature maps before using the new ones",
+              "correct": false
+            },
+            {
+              "id": "d",
+              "text": "It sorts feature maps alphabetically before training",
+              "correct": false
+            }
+          ],
+          "explain": "Correct — concatenation preserves the old and new channel groups instead of blending them together."
+        },
+        {
+          "id": "p2",
+          "type": "true_false",
+          "xp": 2,
+          "prompt": "True or false: If two paths are added elementwise, the output usually keeps the same spatial size and channel count as the matched inputs.",
+          "options": [
+            {
+              "id": "t",
+              "text": "True",
+              "correct": true
+            },
+            {
+              "id": "f",
+              "text": "False",
+              "correct": false
+            }
+          ],
+          "explain": "True — addition combines matching positions, so the result keeps the same tensor shape."
+        },
+        {
+          "id": "p3",
+          "type": "fill_blank",
+          "xp": 2,
+          "prompt": "Complete the sentence:",
+          "sentence": "DenseNet keeps earlier feature maps available by ___ them along the channel dimension.",
+          "blank": "concatenating",
+          "words": [
+            "concatenating",
+            "deleting",
+            "transposing"
+          ],
+          "explain": "Exactly — DenseNet appends channels side by side instead of summing them."
+        },
+        {
+          "id": "p4",
+          "type": "spot_the_ai",
+          "xp": 2,
+          "prompt": "Which explanation makes the addition-vs-concatenation difference crystal clear?",
+          "options": [
+            {
+              "id": "a",
+              "text": "Addition fuses matching values into one map, while concatenation keeps the old and new maps as separate channel groups",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "Addition and concatenation are identical as long as the network is deep enough",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "Concatenation means adding channels until they numerically cancel out",
+              "correct": false
+            }
+          ],
+          "explain": "Yes — that is the key difference to remember. ResNet blends; DenseNet preserves side by side."
+        }
+      ]
+    },
+    {
+      "type": "boss",
+      "exercises": [
+        {
+          "id": "b1",
+          "type": "multiple_choice",
+          "xp": 5,
+          "prompt": "A model already has 64 channels, and a new layer produces 32 fresh channels. Which option best matches DenseNet rather than ResNet-style addition?",
+          "options": [
+            {
+              "id": "a",
+              "text": "Keep the original 64 and append the 32 new ones, giving later layers access to 96 channels total",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "Elementwise-add the 32 channels into the existing 64 without caring about shape alignment",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "Average all 96 channel values into a single grayscale channel",
+              "correct": false
+            },
+            {
+              "id": "d",
+              "text": "Throw away the 64 old channels because new features should replace them",
+              "correct": false
+            }
+          ],
+          "explain": "Exactly. DenseNet keeps old and new features side by side through concatenation. ResNet-style addition would blend aligned paths into one result instead. Next: why preserving those old features can be so useful."
+        }
+      ]
+    }
+  ]
+}

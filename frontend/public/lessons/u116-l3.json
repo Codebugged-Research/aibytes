@@ -1,0 +1,222 @@
+{
+  "unit": 116,
+  "tier": "Classic & Efficient CNN Architectures",
+  "tierIcon": "🛣️",
+  "xp": 15,
+  "hearts": 3,
+  "estMinutes": 7,
+  "id": "u116-l3",
+  "day": 583,
+  "title": "Residual Blocks in Practice",
+  "icon": "🧱",
+  "concept": "A residual block has a main learned path and a shortcut path that meet by addition; when shapes already match the shortcut can be an identity copy, and when they do not a simple projection can align them.",
+  "segments": [
+    {
+      "type": "warmup",
+      "exercises": [
+        {
+          "id": "w1",
+          "type": "multiple_choice",
+          "xp": 1,
+          "prompt": "Recap: In the expression <code>x + F(x)</code>, what does <code>F(x)</code> represent?",
+          "options": [
+            {
+              "id": "a",
+              "text": "The learned change or refinement produced by the main path",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "The original JPEG file for the image",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "A rule that deletes the shortcut input",
+              "correct": false
+            }
+          ],
+          "explain": "Right — now we can look at how a real block builds that refinement and merges it back."
+        }
+      ]
+    },
+    {
+      "type": "teach",
+      "cards": [
+        {
+          "kind": "hook",
+          "icon": "🧩",
+          "title": "Two paths, one meeting point",
+          "body": "A residual block is easier to understand if you picture a fork in the road. One branch goes through the learned convolutions. The other branch carries the input forward more directly. At the end, the branches meet and are added together."
+        },
+        {
+          "kind": "definition",
+          "icon": "🧱",
+          "title": "Main path plus shortcut path",
+          "body": "In practice, a residual block usually contains a short stack of learned layers on the <strong>main path</strong> and a <strong>shortcut path</strong> beside it. If the input and output shapes already match, the shortcut can be an identity path. If size or channel count changes, the shortcut may use a simple projection, often with a <code>1×1</code> convolution, so the addition still makes sense."
+        },
+        {
+          "kind": "analogy",
+          "icon": "📋",
+          "title": "Original form plus margin notes",
+          "body": "Imagine an office form moving forward unchanged while a reviewer writes margin notes on a copy. At the end, the notes are attached back to the original form. The shortcut keeps the form itself alive; the main path contributes the edits."
+        },
+        {
+          "kind": "example",
+          "icon": "🐶",
+          "title": "Preserve the head outline, refine the fur",
+          "body": "A block may receive feature maps that already mark a dog's head outline clearly. The main path can spend its effort refining fur texture or ear detail. The shortcut ensures the good outline is still present when the refinement arrives and both are added together."
+        },
+        {
+          "kind": "mythbust",
+          "icon": "⚠️",
+          "title": "The shortcut is not always a mysterious special case",
+          "body": "People sometimes imagine the shortcut as magic. Usually it is simple. If tensor shapes match, it can just pass the input through. If shapes differ because the block changes resolution or channels, the shortcut only needs a straightforward alignment step before addition."
+        },
+        {
+          "kind": "visual",
+          "icon": "⚖️",
+          "title": "What each path does",
+          "body": "A residual block works because the two branches play different roles.",
+          "compare": {
+            "left": {
+              "emoji": "🔧",
+              "tag": "Main path",
+              "text": "Applies learned convolutions<br>Builds the residual refinement <code>F(x)</code><br>Can emphasize or transform features"
+            },
+            "right": {
+              "emoji": "🪜",
+              "tag": "Shortcut path",
+              "text": "Carries input <code>x</code> forward<br>Often identity when shapes match<br>May project to align shape before addition"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "type": "practice",
+      "exercises": [
+        {
+          "id": "p1",
+          "type": "multiple_choice",
+          "xp": 2,
+          "prompt": "What happens at the end of a residual block?",
+          "options": [
+            {
+              "id": "a",
+              "text": "The shortcut output and the main-path output are added together",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "The shortcut deletes the main path before the classifier sees it",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "Both paths are converted into raw RGB pixels again",
+              "correct": false
+            },
+            {
+              "id": "d",
+              "text": "The network chooses one path randomly and discards the other",
+              "correct": false
+            }
+          ],
+          "explain": "Correct — the combination step is what turns a learned refinement into a residual output."
+        },
+        {
+          "id": "p2",
+          "type": "true_false",
+          "xp": 2,
+          "prompt": "True or false: If a residual block changes channel count or spatial size, the shortcut may need a simple projection so its tensor can still be added to the main path output.",
+          "options": [
+            {
+              "id": "t",
+              "text": "True",
+              "correct": true
+            },
+            {
+              "id": "f",
+              "text": "False",
+              "correct": false
+            }
+          ],
+          "explain": "True — addition only works cleanly when the shapes line up."
+        },
+        {
+          "id": "p3",
+          "type": "fill_blank",
+          "xp": 2,
+          "prompt": "Complete the sentence:",
+          "sentence": "When a residual block's input and output shapes already match, the shortcut can often be the ___ path.",
+          "blank": "identity",
+          "words": [
+            "identity",
+            "dropout",
+            "filesystem"
+          ],
+          "explain": "Exactly — the cleanest shortcut is often just the identity path."
+        },
+        {
+          "id": "p4",
+          "type": "spot_the_ai",
+          "xp": 2,
+          "prompt": "Which description sounds like a practical residual block?",
+          "options": [
+            {
+              "id": "a",
+              "text": "An input splits into a learned convolutional branch and a shortcut branch, then the two outputs are aligned if needed and added",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "A block stores its activations in a text file and reloads them later",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "A block refuses to reuse the input because shortcuts are only for inference time",
+              "correct": false
+            }
+          ],
+          "explain": "Yes — that branch-and-add structure is the practical template."
+        }
+      ]
+    },
+    {
+      "type": "boss",
+      "exercises": [
+        {
+          "id": "b1",
+          "type": "multiple_choice",
+          "xp": 5,
+          "prompt": "A designer builds a residual block whose main path downsamples the feature map and changes the number of channels. What should happen on the shortcut path if the block still wants to add the two branches at the end?",
+          "options": [
+            {
+              "id": "a",
+              "text": "Use a simple projection or other alignment step so the shortcut tensor matches the main-path output shape before addition",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "Do nothing, because tensors of any shape can be added without matching",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "Delete the shortcut entirely, since residual blocks only work when every shape in the network stays constant forever",
+              "correct": false
+            },
+            {
+              "id": "d",
+              "text": "Convert the shortcut into class probabilities before merging",
+              "correct": false
+            }
+          ],
+          "explain": "Exactly. The shortcut's job is simple but strict: it must arrive in a form that can be added to the learned branch. When shapes match, identity is enough. When they do not, a lightweight projection keeps the residual design intact. Next we'll zoom out again and ask why this seemingly simple pattern changed the whole story of CNN depth."
+        }
+      ]
+    }
+  ]
+}

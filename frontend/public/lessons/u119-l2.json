@@ -1,0 +1,222 @@
+{
+  "unit": 119,
+  "tier": "Classic & Efficient CNN Architectures",
+  "tierIcon": "📱",
+  "xp": 15,
+  "hearts": 3,
+  "estMinutes": 7,
+  "id": "u119-l2",
+  "day": 597,
+  "title": "SqueezeNet",
+  "icon": "🧃",
+  "concept": "SqueezeNet showed that a CNN can stay competitive while using far fewer parameters by squeezing channels with 1x1 convolutions before expanding them, proving that careful module design can do more with fewer weights.",
+  "segments": [
+    {
+      "type": "warmup",
+      "exercises": [
+        {
+          "id": "w1",
+          "type": "multiple_choice",
+          "xp": 1,
+          "prompt": "Recap: in edge settings, why do smaller models matter so much?",
+          "options": [
+            {
+              "id": "a",
+              "text": "They can reduce latency, memory use, and battery drain on limited hardware",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "They make image labels unnecessary",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "They force every convolution to become 7x7",
+              "correct": false
+            }
+          ],
+          "explain": "Right — efficient deployment is the reason architectures like SqueezeNet were exciting."
+        }
+      ]
+    },
+    {
+      "type": "teach",
+      "cards": [
+        {
+          "kind": "hook",
+          "icon": "🧳",
+          "title": "Travel-size CNN",
+          "body": "Imagine packing for a weekend trip and discovering you can bring almost everything you need with a much smaller bag. SqueezeNet tried that with CNNs: keep strong image-recognition ability while dramatically shrinking the parameter count."
+        },
+        {
+          "kind": "definition",
+          "icon": "🧃",
+          "title": "What is SqueezeNet's main idea?",
+          "body": "<strong>SqueezeNet</strong> is an efficient CNN family built around the <strong>fire module</strong>. A fire module first uses a <strong>squeeze</strong> step with 1x1 convolutions to reduce channel count, then an <strong>expand</strong> step that mixes 1x1 and 3x3 filters to build richer features back up. The goal is simple: spend fewer weights before the expensive spatial work."
+        },
+        {
+          "kind": "analogy",
+          "icon": "🚰",
+          "title": "Narrow pipe, then shower head",
+          "body": "Think of water flowing through a narrow pipe before reaching a shower head. The narrow section limits how much water enters the expensive wide spray. In SqueezeNet, the squeeze layer narrows the channel flow before the expand layer spends cost on feature extraction."
+        },
+        {
+          "kind": "example",
+          "icon": "🔢",
+          "title": "Why the squeeze saves parameters",
+          "body": "A 3x3 convolution gets expensive when it reads many input channels, because its weight count scales with <code>3×3×C_in×C_out</code>. If a fire module first uses 1x1 filters to shrink <code>C_in</code>, then the later 3x3 filters read fewer channels. That means fewer weights to store and fewer multiplications to run."
+        },
+        {
+          "kind": "mythbust",
+          "icon": "⚠️",
+          "title": "Small does not mean primitive",
+          "body": "SqueezeNet is not 'just a tiny weak CNN.' Its lesson is that a lot of parameter cost in older models was avoidable. With smart bottlenecks and more 1x1 work, you can preserve useful representational power while cutting model size dramatically."
+        },
+        {
+          "kind": "visual",
+          "icon": "🔥",
+          "title": "Inside a fire module",
+          "body": "The module deliberately compresses first, then spends compute more selectively.",
+          "compare": {
+            "left": {
+              "emoji": "📥",
+              "tag": "Squeeze",
+              "text": "1x1 convolutions<br>shrink channel count<br>cheap bottleneck step"
+            },
+            "right": {
+              "emoji": "📤",
+              "tag": "Expand",
+              "text": "1x1 + 3x3 filters<br>build richer features<br>after the bottleneck"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "type": "practice",
+      "exercises": [
+        {
+          "id": "p1",
+          "type": "multiple_choice",
+          "xp": 2,
+          "prompt": "Why does SqueezeNet place a squeeze step before part of its expensive 3x3 work?",
+          "options": [
+            {
+              "id": "a",
+              "text": "To reduce the number of input channels before the heavier filters, lowering parameter cost",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "To make the image physically smaller on disk",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "To prevent the network from using any nonlinearity",
+              "correct": false
+            },
+            {
+              "id": "d",
+              "text": "To guarantee perfect accuracy on all datasets",
+              "correct": false
+            }
+          ],
+          "explain": "Correct — the squeeze layer is a bottleneck that makes later operations cheaper."
+        },
+        {
+          "id": "p2",
+          "type": "true_false",
+          "xp": 2,
+          "prompt": "True or false: the fire module's expand step can include both 1x1 and 3x3 filters.",
+          "options": [
+            {
+              "id": "t",
+              "text": "True",
+              "correct": true
+            },
+            {
+              "id": "f",
+              "text": "False",
+              "correct": false
+            }
+          ],
+          "explain": "True — that mix is part of how SqueezeNet stays expressive while staying compact."
+        },
+        {
+          "id": "p3",
+          "type": "fill_blank",
+          "xp": 2,
+          "prompt": "Complete the sentence:",
+          "sentence": "SqueezeNet's fire module first reduces channels, then ___ them into richer features.",
+          "blank": "expands",
+          "words": [
+            "expands",
+            "erases",
+            "freezes"
+          ],
+          "explain": "Exactly — squeeze first, expand second."
+        },
+        {
+          "id": "p4",
+          "type": "spot_the_ai",
+          "xp": 2,
+          "prompt": "Which description best matches SqueezeNet's design philosophy?",
+          "options": [
+            {
+              "id": "a",
+              "text": "Do more with fewer weights by bottlenecking channels before expensive convolutions",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "Use the largest possible filters everywhere regardless of cost",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "Avoid all reuse of 1x1 convolutions in CNNs",
+              "correct": false
+            }
+          ],
+          "explain": "Yes — SqueezeNet is a classic lesson in parameter efficiency."
+        }
+      ]
+    },
+    {
+      "type": "boss",
+      "exercises": [
+        {
+          "id": "b1",
+          "type": "multiple_choice",
+          "xp": 5,
+          "prompt": "A fire module receives many channels from an earlier layer. Which redesign most directly follows SqueezeNet's logic for reducing parameter count while keeping useful feature extraction?",
+          "options": [
+            {
+              "id": "a",
+              "text": "Use 1x1 convolutions to squeeze channels first, then apply the expand step with 1x1 and 3x3 filters",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "Replace the whole block with a much wider 7x7 convolution",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "Duplicate all channels so later layers have even more to process",
+              "correct": false
+            },
+            {
+              "id": "d",
+              "text": "Remove all bottlenecks because bottlenecks can never help CNNs",
+              "correct": false
+            }
+          ],
+          "explain": "Exactly. SqueezeNet cuts cost by shrinking channel width before the more expensive part of the block. Next: MobileNet pushes efficiency even further by replacing many standard convolutions with depthwise-separable ones."
+        }
+      ]
+    }
+  ]
+}

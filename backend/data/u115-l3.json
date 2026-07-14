@@ -1,0 +1,222 @@
+{
+  "unit": 115,
+  "tier": "Classic & Efficient CNN Architectures",
+  "tierIcon": "🌐",
+  "xp": 15,
+  "hearts": 3,
+  "estMinutes": 7,
+  "id": "u115-l3",
+  "day": 578,
+  "title": "Why 1x1 Convs Matter Here",
+  "icon": "1️⃣",
+  "concept": "Inside Inception modules, 1x1 convolutions are used as cheap learned squeeze layers that reduce channel depth before expensive 3x3 and 5x5 branches run.",
+  "segments": [
+    {
+      "type": "warmup",
+      "exercises": [
+        {
+          "id": "w1",
+          "type": "multiple_choice",
+          "xp": 1,
+          "prompt": "Recap from Unit 100: Why can a 1x1 convolution be useful before a larger convolution?",
+          "options": [
+            {
+              "id": "a",
+              "text": "It can reduce channel depth cheaply before the expensive spatial work happens",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "It increases image resolution by adding new pixels",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "It removes the need for learned weights",
+              "correct": false
+            }
+          ],
+          "explain": "Exactly — Inception reuses that same squeeze trick inside its branches."
+        }
+      ]
+    },
+    {
+      "type": "teach",
+      "cards": [
+        {
+          "kind": "hook",
+          "icon": "💸",
+          "title": "A raw 5x5 branch gets expensive fast",
+          "body": "Parallel branches sound great until you remember that a <code>5x5</code> convolution on a deep feature map can cost a lot. GoogLeNet's team needed a way to keep those branches informative without letting computation explode."
+        },
+        {
+          "kind": "definition",
+          "icon": "1️⃣",
+          "title": "The squeeze before the expensive branch",
+          "body": "In an Inception module, a <strong>1x1 convolution</strong> often runs <em>before</em> a <code>3x3</code> or <code>5x5</code> branch. Its job is to <strong>reduce the number of channels</strong> first. Then the larger spatial filter works on that smaller channel stack, which saves a lot of computation."
+        },
+        {
+          "kind": "analogy",
+          "icon": "🚪",
+          "title": "A narrow doorway before a costly room",
+          "body": "Imagine a giant workshop where every person inside increases the cost of running the machines. Before sending people into the expensive room, you guide them through a smart doorway that reduces the group to the most useful team. The 1x1 squeeze is that doorway for channels."
+        },
+        {
+          "kind": "example",
+          "icon": "🧮",
+          "title": "Why the math changes so much",
+          "body": "Suppose a branch receives <code>128</code> channels and wants a <code>5x5</code> conv producing <code>32</code> output channels. Direct cost per pixel is about <code>5×5×128×32 = 102,400</code>. If a <code>1x1</code> squeeze first reduces <code>128 -> 16</code>, that costs <code>1×1×128×16 = 2,048</code>, and the following <code>5x5</code> costs <code>5×5×16×32 = 12,800</code>. Total: <code>14,848</code> — far cheaper than the direct branch."
+        },
+        {
+          "kind": "mythbust",
+          "icon": "⚠️",
+          "title": "The squeeze is learned, not random",
+          "body": "A 1x1 squeeze does not randomly throw away channels. It is a learned weighted mix across channels, so the network can compress the input into a smaller, still-useful representation before paying for bigger spatial filters."
+        },
+        {
+          "kind": "visual",
+          "icon": "📉",
+          "title": "Direct branch vs. squeezed branch",
+          "body": "Same branch goal, much smaller bill once channels are squeezed first.",
+          "compare": {
+            "left": {
+              "emoji": "🧱",
+              "tag": "Direct 5x5 branch",
+              "text": "128 channels go straight in<br>Large spatial filter sees full depth<br>High compute cost"
+            },
+            "right": {
+              "emoji": "1️⃣",
+              "tag": "1x1 squeeze first",
+              "text": "128 → 16 channels first<br>Then 5x5 runs cheaper<br>Learned compression saves cost"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "type": "practice",
+      "exercises": [
+        {
+          "id": "p1",
+          "type": "multiple_choice",
+          "xp": 2,
+          "prompt": "Why does GoogLeNet place 1x1 convolutions before some 3x3 and 5x5 branches?",
+          "options": [
+            {
+              "id": "a",
+              "text": "To reduce channel depth before the expensive larger kernels run",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "To make the image file smaller on disk",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "To increase height and width before pooling",
+              "correct": false
+            },
+            {
+              "id": "d",
+              "text": "To guarantee every branch sees only one channel forever",
+              "correct": false
+            }
+          ],
+          "explain": "Correct — the 1x1 layer is a cheap learned squeeze that makes the next branch affordable."
+        },
+        {
+          "id": "p2",
+          "type": "true_false",
+          "xp": 2,
+          "prompt": "True or false: a 1x1 squeeze usually changes channel depth much more than it changes spatial height and width.",
+          "options": [
+            {
+              "id": "t",
+              "text": "True",
+              "correct": true
+            },
+            {
+              "id": "f",
+              "text": "False",
+              "correct": false
+            }
+          ],
+          "explain": "True — in this role it mainly compresses channels while leaving the spatial grid aligned for the next branch layer."
+        },
+        {
+          "id": "p3",
+          "type": "fill_blank",
+          "xp": 2,
+          "prompt": "Complete the sentence:",
+          "sentence": "Before an expensive branch runs, a 1x1 conv can reduce channel ___.",
+          "blank": "depth",
+          "words": [
+            "depth",
+            "weather",
+            "cables"
+          ],
+          "explain": "Right — squeezing channel depth is the key savings trick."
+        },
+        {
+          "id": "p4",
+          "type": "spot_the_ai",
+          "xp": 2,
+          "prompt": "Which statement best describes the role of 1x1 convolutions inside Inception?",
+          "options": [
+            {
+              "id": "a",
+              "text": "They often act as learned bottlenecks that squeeze channels before larger spatial branches run",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "They replace every 3x3 and 5x5 branch so the module no longer processes space",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "They are included only for visual symmetry and do not affect computation",
+              "correct": false
+            }
+          ],
+          "explain": "Exactly — cheap channel control is what makes the wider module practical."
+        }
+      ]
+    },
+    {
+      "type": "boss",
+      "exercises": [
+        {
+          "id": "b1",
+          "type": "multiple_choice",
+          "xp": 5,
+          "prompt": "An Inception branch receives a feature map with 128 channels. A 1x1 conv with 24 filters is applied before a 3x3 conv. How many channels enter the 3x3 conv?",
+          "options": [
+            {
+              "id": "a",
+              "text": "24 channels",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "3 channels",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "104 channels",
+              "correct": false
+            },
+            {
+              "id": "d",
+              "text": "128 channels",
+              "correct": false
+            }
+          ],
+          "explain": "Correct — the 1x1 layer's number of filters sets the new channel depth, so the expensive 3x3 branch only processes 24 channels instead of all 128. Next: how this design gives richer features without paying the naive full cost."
+        }
+      ]
+    }
+  ]
+}
