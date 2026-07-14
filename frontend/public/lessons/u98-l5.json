@@ -1,0 +1,222 @@
+{
+  "id": "u98-l5",
+  "unit": 98,
+  "day": 495,
+  "tier": "Convolutions Deep Dive",
+  "tierIcon": "👣",
+  "title": "Choosing Stride & Padding for a Task",
+  "icon": "🎯",
+  "concept": "Stride and padding aren't one-size-fits-all: stride 1 with same padding suits careful feature extraction, larger strides suit downsampling for efficiency, and valid padding suits tasks where exact, uncontaminated cropping matters.",
+  "xp": 15,
+  "hearts": 3,
+  "estMinutes": 7,
+  "segments": [
+    {
+      "type": "warmup",
+      "exercises": [
+        {
+          "id": "w1",
+          "type": "multiple_choice",
+          "xp": 1,
+          "prompt": "Recap: On a 5x5 image with a 3x3 filter and 1-pixel padding, why does switching from stride 1 to stride 2 shrink the output even though the padding didn't change?",
+          "options": [
+            {
+              "id": "a",
+              "text": "Padding only controls how much room the filter has to move in — stride still controls how many of those spots get used",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "Because padding gets removed automatically at stride 2",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "Because stride 2 is incompatible with padding",
+              "correct": false
+            }
+          ],
+          "explain": "Right — padding and stride are independent dials that combine, not substitutes for each other."
+        }
+      ]
+    },
+    {
+      "type": "teach",
+      "cards": [
+        {
+          "kind": "hook",
+          "icon": "🎯",
+          "title": "So which settings do you actually pick?",
+          "body": "You now know what stride and padding each do. The real question every CNN designer faces next: given a specific task, which settings should you actually reach for?"
+        },
+        {
+          "kind": "definition",
+          "icon": "🧭",
+          "title": "Three common goals, three common choices",
+          "body": "<strong>Feature extraction</strong> (learning rich detail): stride 1 with same padding. <strong>Downsampling</strong> (shrinking for speed, like a pooling layer): a larger stride, like 2. <strong>Exact cropping</strong> (no zero-padding artifacts allowed): valid padding."
+        },
+        {
+          "kind": "analogy",
+          "icon": "🧰",
+          "title": "Picking the right tool, not the 'best' one",
+          "body": "Stride and padding are like a wrench and a screwdriver — neither is universally 'better.' You reach for stride 1 and same padding when a job needs careful, detailed work, and a bigger stride when the job just needs a fast, rough pass."
+        },
+        {
+          "kind": "example",
+          "icon": "🔢",
+          "title": "Three tasks, three setups",
+          "body": "A face-detail network's early layers use <strong>stride 1 + same padding</strong> to keep every pixel of detail through many stacked layers. A network trying to shrink a huge 1000x1000 satellite image down efficiently uses <strong>stride 2</strong> to cut the output roughly in half each layer, saving computation. A network cropping a document scan to exactly its printed content, with zero tolerance for fake zero-padding edges leaking in, uses <strong>valid padding</strong>."
+        },
+        {
+          "kind": "mythbust",
+          "icon": "⚠️",
+          "title": "There's no single 'default' setting",
+          "body": "It's tempting to assume one combination is simply the industry standard for everything. Real networks mix and match: some layers use stride 1 with same padding to build up detail, then a later layer switches to stride 2 to downsample — all within the same model."
+        },
+        {
+          "kind": "visual",
+          "icon": "🎯",
+          "title": "Decision matrix",
+          "body": "Match the goal to the setting:",
+          "compare": {
+            "left": {
+              "emoji": "🔬",
+              "tag": "Stride 1 + same padding",
+              "text": "Goal: feature extraction<br>Keeps full resolution<br>Maximizes detail per layer"
+            },
+            "right": {
+              "emoji": "⚡",
+              "tag": "Larger stride (e.g. 2)",
+              "text": "Goal: downsampling<br>Shrinks output on purpose<br>Saves computation"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "type": "practice",
+      "exercises": [
+        {
+          "id": "p1",
+          "type": "multiple_choice",
+          "xp": 2,
+          "prompt": "A CNN layer needs to extract fine detail from an image while keeping the spatial size constant across many stacked layers. Which stride and padding combination fits best?",
+          "options": [
+            {
+              "id": "a",
+              "text": "Stride 1 with same padding",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "Stride 2 with valid padding",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "Stride 4 with no padding",
+              "correct": false
+            },
+            {
+              "id": "d",
+              "text": "Stride 1 with no padding at all",
+              "correct": false
+            }
+          ],
+          "explain": "Right — stride 1 keeps every position, and same padding keeps the output size from shrinking as it stacks through many layers."
+        },
+        {
+          "id": "p2",
+          "type": "true_false",
+          "xp": 2,
+          "prompt": "True or false: A larger stride, like stride 2, is a reasonable choice specifically when the goal is downsampling an image for speed, not preserving every fine detail.",
+          "options": [
+            {
+              "id": "t",
+              "text": "True",
+              "correct": true
+            },
+            {
+              "id": "f",
+              "text": "False",
+              "correct": false
+            }
+          ],
+          "explain": "True — a larger stride intentionally skips positions, producing a smaller output faster, which is exactly what downsampling wants."
+        },
+        {
+          "id": "p3",
+          "type": "fill_blank",
+          "xp": 2,
+          "prompt": "Complete the sentence:",
+          "sentence": "When exact cropping matters and no zero-padding artifacts should leak into the output, ___ padding is the right choice.",
+          "blank": "valid",
+          "words": [
+            "valid",
+            "same",
+            "double"
+          ],
+          "explain": "Valid padding adds no zero border at all, so the output only ever reflects real, original pixels — ideal when exact cropping matters."
+        },
+        {
+          "id": "p4",
+          "type": "spot_the_ai",
+          "xp": 2,
+          "prompt": "A team is building a fast mobile app that needs to shrink a large camera image down quickly before running heavier processing. Which choice best fits their goal?",
+          "options": [
+            {
+              "id": "a",
+              "text": "A larger stride, like 2, to reduce the output size and computation in fewer steps",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "Stride 1 with same padding, to keep the image at full size throughout",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "Valid padding with stride 1, since padding style doesn't affect speed at all",
+              "correct": false
+            }
+          ],
+          "explain": "A larger stride directly cuts down the number of filter positions computed, which is exactly the speedup a mobile app downsampling step needs."
+        }
+      ]
+    },
+    {
+      "type": "boss",
+      "exercises": [
+        {
+          "id": "b1",
+          "type": "multiple_choice",
+          "xp": 5,
+          "prompt": "You're designing a CNN with three goals across different parts of the network: (1) early layers that preserve every detail of a medical scan, (2) a middle section that needs to shrink the image efficiently to save computation, and (3) a final layer that crops out an exact region with zero tolerance for fake padded edges. Match each goal to its best stride/padding choice.",
+          "options": [
+            {
+              "id": "a",
+              "text": "(1) Stride 1 + same padding, (2) larger stride like 2, (3) valid padding",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "All three goals should use stride 1 with same padding, since that's always the safest choice",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "All three goals should use valid padding, since 'valid' is simply the correct default",
+              "correct": false
+            },
+            {
+              "id": "d",
+              "text": "(1) larger stride, (2) valid padding, (3) stride 1 with same padding",
+              "correct": false
+            }
+          ],
+          "explain": "Exactly right — stride 1 with same padding for detail-preserving layers, a larger stride for efficient downsampling, and valid padding when exact, artifact-free cropping matters. That's the real skill: matching the dial to the job. Next up: what these convolution outputs actually are — feature maps."
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,222 @@
+{
+  "id": "u99-l5",
+  "unit": 99,
+  "day": 500,
+  "tier": "Convolutions Deep Dive",
+  "tierIcon": "🗺️",
+  "title": "Feature Map Depth vs. Spatial Size Tradeoff",
+  "icon": "⚖️",
+  "concept": "As a CNN goes deeper, feature maps typically shrink spatially (via stride or pooling) while growing in channel depth (more filters), trading precise positional detail for a richer set of learned pattern types — the funnel shape behind every classic CNN architecture.",
+  "xp": 15,
+  "hearts": 3,
+  "estMinutes": 7,
+  "segments": [
+    {
+      "type": "warmup",
+      "exercises": [
+        {
+          "id": "w1",
+          "type": "multiple_choice",
+          "xp": 1,
+          "prompt": "Recap: What do deep-layer filters in a trained CNN typically end up detecting, compared to early-layer filters?",
+          "options": [
+            {
+              "id": "a",
+              "text": "More complex things, like object parts or whole objects, built from the simple patterns earlier layers found",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "The exact same simple edges as the very first layer",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "Nothing — deep filters don't detect anything meaningful",
+              "correct": false
+            }
+          ],
+          "explain": "Right — complexity grows with depth. Now: what happens to the SIZE and COUNT of those feature maps as you go deeper?"
+        }
+      ]
+    },
+    {
+      "type": "teach",
+      "cards": [
+        {
+          "kind": "hook",
+          "icon": "🔭",
+          "title": "Zooming out while adding experts",
+          "body": "Picture a photo editing pipeline where every step shrinks the picture a little... but also hands it to twice as many specialists, each looking for something different. You're trading a big, simple view for a small, richly-analyzed one."
+        },
+        {
+          "kind": "definition",
+          "icon": "⚖️",
+          "title": "Smaller and smaller, but deeper and deeper",
+          "body": "Going deeper into a CNN, feature maps typically get <strong>spatially smaller</strong> — fewer rows and columns — because of stride or pooling. At the very same time, they typically get <strong>channel-wise deeper</strong> — more feature maps stacked together — because later layers usually use more filters. You trade fine positional detail for a richer set of pattern types."
+        },
+        {
+          "kind": "analogy",
+          "icon": "🗺️",
+          "title": "A shrinking map with more layers of detail",
+          "body": "Think of a road atlas: a page showing a whole country is spatially huge but has almost no detail. A page zoomed into one city block is spatially tiny — but you can add a dozen extra detail layers on it: traffic, terrain, buildings, zoning. CNNs make that same trade as they go deeper: less spatial area, more layers of 'what kind of pattern is here.'"
+        },
+        {
+          "kind": "example",
+          "icon": "🔢",
+          "title": "Watching the numbers shrink and grow",
+          "body": "A toy CNN might process a 64x64 image with 3 channels like this: layer 1 outputs <code>64x64</code> with <code>16</code> feature maps. Layer 2 uses a stride that halves the size: <code>32x32</code> with <code>32</code> feature maps. Layer 3: <code>16x16</code> with <code>64</code> feature maps. Layer 4: <code>8x8</code> with <code>128</code> feature maps. Notice the spatial size keeps halving while the channel count keeps doubling."
+        },
+        {
+          "kind": "mythbust",
+          "icon": "⚠️",
+          "title": "Shrinking isn't losing — it's trading",
+          "body": "It's easy to assume that shrinking a feature map means throwing information away for no reason. It's really a deliberate trade: you give up precise WHERE information in exchange for a much richer set of WHAT-kind-of-pattern information. That funnel shape — wide and shallow at the start, narrow and deep at the end — is the exact blueprint every classic CNN architecture is built on."
+        },
+        {
+          "kind": "visual",
+          "icon": "⚖️",
+          "title": "Shallow Layer vs. Deep Layer",
+          "body": "The size/depth tradeoff in one glance:",
+          "compare": {
+            "left": {
+              "emoji": "🌐",
+              "tag": "Shallow Layer",
+              "text": "64x64 spatial size<br>16 feature maps"
+            },
+            "right": {
+              "emoji": "🔬",
+              "tag": "Deep Layer",
+              "text": "8x8 spatial size<br>128 feature maps"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "type": "practice",
+      "exercises": [
+        {
+          "id": "p1",
+          "type": "multiple_choice",
+          "xp": 2,
+          "prompt": "As you go deeper into a typical CNN, what usually happens to feature maps?",
+          "options": [
+            {
+              "id": "a",
+              "text": "They get spatially smaller but channel-wise deeper (more feature maps)",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "They get spatially bigger but channel-wise shallower",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "Both spatial size and channel count shrink together",
+              "correct": false
+            },
+            {
+              "id": "d",
+              "text": "Nothing changes at any depth",
+              "correct": false
+            }
+          ],
+          "explain": "Right — smaller spatially, deeper channel-wise. That's the classic CNN funnel shape."
+        },
+        {
+          "id": "p2",
+          "type": "true_false",
+          "xp": 2,
+          "prompt": "True or false: A feature map shrinking in spatial size as you go deeper means the network is losing useful information for no reason.",
+          "options": [
+            {
+              "id": "t",
+              "text": "True",
+              "correct": false
+            },
+            {
+              "id": "f",
+              "text": "False",
+              "correct": true
+            }
+          ],
+          "explain": "False — it's a deliberate tradeoff: less precise spatial detail in exchange for many more learned pattern types (channels)."
+        },
+        {
+          "id": "p3",
+          "type": "fill_blank",
+          "xp": 2,
+          "prompt": "Complete the sentence:",
+          "sentence": "Going deeper into a CNN typically trades spatial ___ for channel-wise depth.",
+          "blank": "size",
+          "words": [
+            "size",
+            "color",
+            "noise"
+          ],
+          "explain": "Size — spatial size shrinks while channel depth grows, as you move deeper into the network."
+        },
+        {
+          "id": "p4",
+          "type": "spot_the_ai",
+          "xp": 2,
+          "prompt": "Which best describes the overall shape most classic CNN architectures follow, from input to output?",
+          "options": [
+            {
+              "id": "a",
+              "text": "Wide and spatially large but channel-shallow at the start, narrowing spatially while growing channel-deep toward the end",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "Constant spatial size and constant channel count all the way through",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "Spatially growing bigger and bigger while channels shrink to 1",
+              "correct": false
+            }
+          ],
+          "explain": "Exactly — that funnel shape is the backbone behind classic architectures like LeNet, AlexNet, and VGG."
+        }
+      ]
+    },
+    {
+      "type": "boss",
+      "exercises": [
+        {
+          "id": "b1",
+          "type": "multiple_choice",
+          "xp": 5,
+          "prompt": "A CNN's feature maps go from 128x128 with 8 channels (layer 1) down to 8x8 with 256 channels (layer 6). What tradeoff does this pattern demonstrate, and is it a sign of a healthy design?",
+          "options": [
+            {
+              "id": "a",
+              "text": "It trades spatial detail for channel-wise richness as depth increases — this shrinking-but-deepening funnel is exactly the pattern classic CNN architectures are built on, so yes, it's healthy",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "It's a bug, because feature maps should always stay the same size and channel count at every layer",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "It shows the network is failing, since spatial size should always grow, never shrink",
+              "correct": false
+            },
+            {
+              "id": "d",
+              "text": "It shows the network only cares about channels and has abandoned spatial information completely",
+              "correct": false
+            }
+          ],
+          "explain": "Exactly right! That shrink-spatially / grow-channels funnel is deliberate and is the exact backbone every classic CNN — LeNet, AlexNet, VGG, and beyond — is built on. That wraps up Feature Maps! Next up: 1x1 convolutions — the strange-looking filter that's all about reshaping channels."
+        }
+      ]
+    }
+  ]
+}

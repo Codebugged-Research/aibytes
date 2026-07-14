@@ -1,0 +1,217 @@
+{
+  "id": "u100-l1",
+  "unit": 100,
+  "day": 501,
+  "tier": "Convolutions Deep Dive",
+  "tierIcon": "1️⃣",
+  "title": "What is a 1x1 Convolution?",
+  "icon": "1️⃣",
+  "concept": "A 1x1 convolution is a filter with no spatial extent — it looks at a single pixel position but reaches across every input channel there, producing a weighted blend of those channels at that spot.",
+  "xp": 15,
+  "hearts": 3,
+  "estMinutes": 7,
+  "segments": [
+    {
+      "type": "warmup",
+      "exercises": [
+        {
+          "id": "w1",
+          "type": "multiple_choice",
+          "xp": 1,
+          "prompt": "Recap: In a CNN's feature maps, what does each channel typically represent?",
+          "options": [
+            {
+              "id": "a",
+              "text": "The response of one specific learned filter, repeated at every position in the image",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "A completely random slice of the original image with no meaning",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "A different color of the original photo, like red, green, or blue",
+              "correct": false
+            }
+          ],
+          "explain": "Right — each channel in a feature map is one learned filter's response map. Now let's meet a very strange-looking filter."
+        }
+      ]
+    },
+    {
+      "type": "teach",
+      "cards": [
+        {
+          "kind": "hook",
+          "icon": "🤔",
+          "title": "Why would you ever use a 1x1 filter?",
+          "body": "Every filter you've studied so far — 3x3, 5x5 — works by comparing a pixel to its neighbors: this pixel vs. the one to its left, above, diagonally across. But a <strong>1x1</strong> filter has no neighbors at all. It's a single square. So what could it possibly compute? A filter with nothing next to it looks completely pointless."
+        },
+        {
+          "kind": "definition",
+          "icon": "🎯",
+          "title": "What a 1x1 convolution actually is",
+          "body": "A <strong>1x1 convolution</strong> is a kernel that is only <code>1x1</code> in spatial size — but it still reaches across <strong>every input channel</strong> at that single pixel position. If the input has 64 channels, the 1x1 filter has 64 weights, one per channel, all sitting at that one spot."
+        },
+        {
+          "kind": "analogy",
+          "icon": "🥤",
+          "title": "A straw, not a net",
+          "body": "A 3x3 filter is like a wide net you drag across a pond, scooping up a neighborhood of water at once. A 1x1 filter is like a straw dropped straight down at one point — it doesn't scoop sideways at all, but it can still reach <em>deep</em>, pulling from every layer stacked at that single spot."
+        },
+        {
+          "kind": "example",
+          "icon": "🔢",
+          "title": "One pixel, three channels, one number out",
+          "body": "Say one pixel has 3 channel values: <code>[4, 9, 2]</code>. A 1x1 filter's learned weights are <code>[0.5, 1.0, -0.5]</code>. The output at that same pixel is <code>(4×0.5) + (9×1.0) + (2×-0.5) = 2 + 9 - 1 = 10</code>. One number, computed purely from blending channels — no neighboring pixels involved."
+        },
+        {
+          "kind": "mythbust",
+          "icon": "⚠️",
+          "title": "It's not a no-op",
+          "body": "It's tempting to think a 1x1 kernel does basically nothing, since it can't compare pixels to their surroundings. But it still has learned weights and still computes a real weighted sum across every channel at that position — it's a genuine transformation, just one that ignores space entirely."
+        },
+        {
+          "kind": "visual",
+          "icon": "📐",
+          "title": "Reach: 3x3 vs. 1x1",
+          "body": "Both look at every input channel — the difference is spatial reach:",
+          "compare": {
+            "left": {
+              "emoji": "🕸️",
+              "tag": "3x3 kernel",
+              "text": "Blends a 3x3 pixel<br>neighborhood × all channels<br>→ one output number"
+            },
+            "right": {
+              "emoji": "📍",
+              "tag": "1x1 kernel",
+              "text": "Blends just 1 pixel<br>(itself) × all channels<br>→ one output number"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "type": "practice",
+      "exercises": [
+        {
+          "id": "p1",
+          "type": "multiple_choice",
+          "xp": 2,
+          "prompt": "At a single pixel position, what does a 1x1 convolution filter look at?",
+          "options": [
+            {
+              "id": "a",
+              "text": "Every input channel at that one pixel position, and nothing else",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "A 3x3 neighborhood of pixels in just one channel",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "The whole image at once, across all pixels",
+              "correct": false
+            }
+          ],
+          "explain": "Correct — a 1x1 filter's weights span the full channel depth, but only ever one pixel position."
+        },
+        {
+          "id": "p2",
+          "type": "true_false",
+          "xp": 2,
+          "prompt": "True or false: because a 1x1 kernel covers only one pixel, it cannot mix information from different channels.",
+          "options": [
+            {
+              "id": "t",
+              "text": "True",
+              "correct": false
+            },
+            {
+              "id": "f",
+              "text": "False",
+              "correct": true
+            }
+          ],
+          "explain": "False — a 1x1 kernel has one weight per input channel and combines all of them, it just never looks at neighboring pixels."
+        },
+        {
+          "id": "p3",
+          "type": "fill_blank",
+          "xp": 2,
+          "prompt": "Complete the sentence:",
+          "sentence": "A 1x1 convolution has no spatial ___, but it still spans the full depth of input channels.",
+          "blank": "neighbors",
+          "words": [
+            "neighbors",
+            "channels",
+            "padding"
+          ],
+          "explain": "Right — the 1x1 kernel drops neighbor comparisons entirely while keeping full channel reach."
+        },
+        {
+          "id": "p4",
+          "type": "spot_the_ai",
+          "xp": 2,
+          "prompt": "Which statement correctly describes what a 1x1 convolution computes?",
+          "options": [
+            {
+              "id": "a",
+              "text": "A weighted sum of all channel values at one fixed pixel position",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "The average brightness of a 3x3 block of pixels",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "A rotation of the image by a small angle",
+              "correct": false
+            }
+          ],
+          "explain": "That's it — a weighted combination of channels at a single spot, with zero spatial neighborhood involved."
+        }
+      ]
+    },
+    {
+      "type": "boss",
+      "exercises": [
+        {
+          "id": "b1",
+          "type": "multiple_choice",
+          "xp": 5,
+          "prompt": "At one pixel, an input feature map has 4 channels with values [2, 5, -1, 3]. A 1x1 conv filter has learned weights [1, 0, 2, -1]. What is the output value at that pixel?",
+          "options": [
+            {
+              "id": "a",
+              "text": "-3",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "9",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "3",
+              "correct": false
+            },
+            {
+              "id": "d",
+              "text": "0",
+              "correct": false
+            }
+          ],
+          "explain": "Correct: (2×1) + (5×0) + (-1×2) + (3×-1) = 2 + 0 - 2 - 3 = -3. Next: what happens when you stack many of these 1x1 filters together."
+        }
+      ]
+    }
+  ]
+}

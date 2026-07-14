@@ -1,0 +1,222 @@
+{
+  "id": "u101-l3",
+  "unit": 101,
+  "day": 508,
+  "tier": "Convolutions Deep Dive",
+  "tierIcon": "🕳️",
+  "title": "Depthwise Convolutions: One Filter Per Channel",
+  "icon": "🔀",
+  "concept": "A depthwise convolution gives every input channel its own private spatial filter instead of one filter reading across all channels at once — the channels stay separate, and the weight count drops dramatically.",
+  "xp": 15,
+  "hearts": 3,
+  "estMinutes": 7,
+  "segments": [
+    {
+      "type": "warmup",
+      "exercises": [
+        {
+          "id": "w1",
+          "type": "multiple_choice",
+          "xp": 1,
+          "prompt": "Recap: dilated convolutions grow a network's receptive field without doing what?",
+          "options": [
+            {
+              "id": "a",
+              "text": "Shrinking the feature map's spatial resolution",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "Adding any new weights",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "Changing the filter's sample point spacing",
+              "correct": false
+            }
+          ],
+          "explain": "Right — dilation trades weight count for resolution safety, growing reach without shrinking the map. Now let's meet a totally different way to cut cost: give each channel its own filter."
+        }
+      ]
+    },
+    {
+      "type": "teach",
+      "cards": [
+        {
+          "kind": "hook",
+          "icon": "👨‍🍳",
+          "title": "One head chef vs. one cook per ingredient",
+          "body": "A standard convolution filter is like a head chef who tastes every single ingredient on the counter together to decide what to cook next. A depthwise convolution instead hires one dedicated cook per ingredient — each cook only ever touches their one ingredient, never tasting the others."
+        },
+        {
+          "kind": "definition",
+          "icon": "🔀",
+          "title": "What is a depthwise convolution?",
+          "body": "A <strong>depthwise convolution</strong> applies one small spatial filter (say, 3x3) to each input channel completely independently. With <code>C</code> input channels, you get <code>C</code> separate 3x3 filters — one per channel — and the output also has exactly <code>C</code> channels. No summing or blending across channels ever happens, unlike a standard convolution, where each output value is a sum across <em>every</em> input channel."
+        },
+        {
+          "kind": "analogy",
+          "icon": "🎚️",
+          "title": "Separate lanes, never merging",
+          "body": "Think of it as channels running down separate highway lanes. A standard convolution has on-ramps merging every lane into one before producing an output. A depthwise convolution keeps every lane running in its own dedicated lane, filtered on its own, with zero merging."
+        },
+        {
+          "kind": "example",
+          "icon": "🧮",
+          "title": "8 channels, two very different weight counts",
+          "body": "A standard 3x3 convolution over 8 input channels producing 8 output channels needs 8 filters, each reading all 8 channels: <code>3×3×8×8 = 576</code> weights. A depthwise version instead gives each of the 8 channels its own private 3x3 filter: <code>8 × (3×3) = 72</code> weights total. Same 8 channels in, same 8 channels out — but <strong>8x fewer weights</strong>, because no filter ever reads more than its one assigned channel."
+        },
+        {
+          "kind": "mythbust",
+          "icon": "⚠️",
+          "title": "Depthwise doesn't change channel count",
+          "body": "It's tempting to think a \"simpler\" filter must also shrink the number of channels, the way Unit 100's 1x1 convs are often used to squeeze channel depth. It doesn't — depthwise convolution always outputs exactly as many channels as it takes in, since it's strictly one filter per channel. It filters spatially; it never fattens or slims channel depth."
+        },
+        {
+          "kind": "visual",
+          "icon": "🔲",
+          "title": "Standard conv vs. depthwise conv",
+          "body": "Same channels in, very different wiring:",
+          "compare": {
+            "left": {
+              "emoji": "🌀",
+              "tag": "Standard conv",
+              "text": "One filter reads<br>ALL channels at once<br>mixes them into 1 output"
+            },
+            "right": {
+              "emoji": "🔀",
+              "tag": "Depthwise conv",
+              "text": "One filter per channel<br>channels stay separate<br>no mixing at all"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "type": "practice",
+      "exercises": [
+        {
+          "id": "p1",
+          "type": "multiple_choice",
+          "xp": 2,
+          "prompt": "A depthwise convolution processes an 8-channel input. How many separate 3x3 filters does it use, and how many output channels result?",
+          "options": [
+            {
+              "id": "a",
+              "text": "8 filters (one per channel), producing 8 output channels",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "1 combined filter reading all 8 channels, producing 1 output channel",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "8 filters, but only 1 output channel because they're summed together",
+              "correct": false
+            },
+            {
+              "id": "d",
+              "text": "64 filters, covering every possible input-output channel pair",
+              "correct": false
+            }
+          ],
+          "explain": "Correct — depthwise means exactly one filter per channel, and every channel stays separate all the way through to the output."
+        },
+        {
+          "id": "p2",
+          "type": "true_false",
+          "xp": 2,
+          "prompt": "True or false: a depthwise convolution mixes information across channels, just like a standard convolution does.",
+          "options": [
+            {
+              "id": "t",
+              "text": "True",
+              "correct": false
+            },
+            {
+              "id": "f",
+              "text": "False",
+              "correct": true
+            }
+          ],
+          "explain": "False — depthwise convolutions keep every channel completely separate. No cross-channel mixing happens at this step."
+        },
+        {
+          "id": "p3",
+          "type": "fill_blank",
+          "xp": 2,
+          "prompt": "Complete the sentence:",
+          "sentence": "Each channel gets its own small filter, so a depthwise convolution's output channel count always equals its ___ channel count.",
+          "blank": "input",
+          "words": [
+            "input",
+            "output",
+            "hidden"
+          ],
+          "explain": "One filter per input channel means the output always matches the input channel count exactly — depthwise never changes channel depth."
+        },
+        {
+          "id": "p4",
+          "type": "spot_the_ai",
+          "xp": 2,
+          "prompt": "Which statement correctly describes a depthwise convolution applied to a 16-channel feature map with 3x3 filters?",
+          "options": [
+            {
+              "id": "a",
+              "text": "16 separate 3x3 filters, one per channel, producing 16 output channels with no cross-channel mixing",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "One 3x3x16 filter that reads all 16 channels at once to build a single output channel",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "A single 1x1 filter that blends the 16 channels down to 4",
+              "correct": false
+            }
+          ],
+          "explain": "Right — depthwise convolution assigns one filter per channel and keeps all 16 channels separate throughout."
+        }
+      ]
+    },
+    {
+      "type": "boss",
+      "exercises": [
+        {
+          "id": "b1",
+          "type": "multiple_choice",
+          "xp": 5,
+          "prompt": "A standard 3x3 convolution over 16 input channels producing 16 output channels needs 3×3×16×16 = 2,304 weights. Replace it with a depthwise 3x3 convolution instead (one filter per input channel, no mixing). How many weights does it need?",
+          "options": [
+            {
+              "id": "a",
+              "text": "3×3×16 = 144 weights, since each of the 16 channels only needs its own small filter",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "1,152 weights — half the standard count",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "2,304 weights — the same as the standard convolution",
+              "correct": false
+            },
+            {
+              "id": "d",
+              "text": "3×3 = 9 weights total, shared across all 16 channels",
+              "correct": false
+            }
+          ],
+          "explain": "Correct — 144 weights, because each filter only ever reads its own channel instead of all 16. Depthwise convs cut weight count roughly by a factor of the channel count. Next: how those 16 separate, un-mixed channels get combined back together."
+        }
+      ]
+    }
+  ]
+}

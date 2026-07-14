@@ -1,0 +1,217 @@
+{
+  "id": "u100-l4",
+  "unit": 100,
+  "day": 504,
+  "tier": "Convolutions Deep Dive",
+  "tierIcon": "1️⃣",
+  "title": "1x1 Convs as a Cheap Bottleneck",
+  "icon": "💚",
+  "concept": "The bottleneck pattern — squeeze channels with a 1x1 conv, do the expensive spatial work with a 3x3 conv, then expand channels back with another 1x1 conv — lets networks go deep while keeping compute affordable.",
+  "xp": 15,
+  "hearts": 3,
+  "estMinutes": 7,
+  "segments": [
+    {
+      "type": "warmup",
+      "exercises": [
+        {
+          "id": "w1",
+          "type": "multiple_choice",
+          "xp": 1,
+          "prompt": "Recap: Why does a 1x1 conv that squeezes 256 channels down to 64 save computation on the 3x3 conv that follows?",
+          "options": [
+            {
+              "id": "a",
+              "text": "Because the 3x3 conv now only has to process the smaller, squeezed number of channels",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "Because it makes the image smaller in height and width",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "It doesn't actually save anything",
+              "correct": false
+            }
+          ],
+          "explain": "Right — squeezing first means the expensive spatial work runs on fewer channels. Now let's turn that trick into a repeatable pattern."
+        }
+      ]
+    },
+    {
+      "type": "teach",
+      "cards": [
+        {
+          "kind": "hook",
+          "icon": "🧳",
+          "title": "One squeeze isn't enough",
+          "body": "A really deep network needs this squeeze trick over and over, hundreds of times, layer after layer. And each time, the network still needs its full channel depth waiting for the NEXT layer. Squeeze once and never come back? That would starve every later layer of information."
+        },
+        {
+          "kind": "definition",
+          "icon": "💚",
+          "title": "The bottleneck: squeeze → work → expand",
+          "body": "The <strong>bottleneck pattern</strong> is a 3-step block: (1) <strong>squeeze</strong> channels down with a 1x1 conv (256→64), (2) do the <strong>expensive spatial work</strong> with a 3x3 conv on that smaller channel count (64→64), (3) <strong>expand</strong> channels back up with another 1x1 conv (64→256). The block takes 256 channels in and hands 256 channels out — but the costly 3x3 step only ever touched 64."
+        },
+        {
+          "kind": "analogy",
+          "icon": "🧳",
+          "title": "Pack light, fly, unpack",
+          "body": "Squeezing is packing a suitcase before an expensive flight — you're charged by the weight you carry (the 3x3 conv's cost scales with channels). You unpack (expand) back to a full wardrobe once you land. You paid the expensive 'flight fee' based on the small packed size, not the full unpacked one."
+        },
+        {
+          "kind": "example",
+          "icon": "🔢",
+          "title": "The full block's cost",
+          "body": "Continuing the numbers: squeeze 256→64 (1x1) costs <code>16,384</code> multiply-adds/pixel. The 3x3 at 64→64 costs <code>3×3×64×64 = 36,864</code>. Expand 64→256 (1x1) costs <code>64×256 = 16,384</code>. Total for the whole block: <code>16,384 + 36,864 + 16,384 = 69,632</code> — versus <code>589,824</code> for a plain 3x3 straight on 256 channels. That's over <strong>8x cheaper</strong>, same 256-in, 256-out shape."
+        },
+        {
+          "kind": "mythbust",
+          "icon": "⚠️",
+          "title": "Squeeze-then-expand isn't a round trip to nowhere",
+          "body": "It's tempting to think ending back at 256 channels means the block accomplished nothing. It didn't just restore the original numbers — real 3x3 spatial work happened in between, on the compressed 64-channel representation, learning new features. The final expand produces a fresh 256-channel map, not a copy of the input."
+        },
+        {
+          "kind": "visual",
+          "icon": "📐",
+          "title": "Plain block vs. bottleneck block",
+          "body": "Same channel shape in and out, very different cost:",
+          "compare": {
+            "left": {
+              "emoji": "🐢",
+              "tag": "Plain 3x3 block (256→256)",
+              "text": "~590K multiply-adds<br>per pixel"
+            },
+            "right": {
+              "emoji": "💚",
+              "tag": "Bottleneck (256→64→64→256)",
+              "text": "~70K multiply-adds<br>per pixel — 8x+ cheaper"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "type": "practice",
+      "exercises": [
+        {
+          "id": "p1",
+          "type": "multiple_choice",
+          "xp": 2,
+          "prompt": "What is the correct order of operations inside a bottleneck block?",
+          "options": [
+            {
+              "id": "a",
+              "text": "Squeeze channels (1x1) → expensive spatial work (3x3) → expand channels (1x1)",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "Expand channels (1x1) → squeeze channels (1x1) → expensive spatial work (3x3)",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "Expensive spatial work (3x3) → squeeze channels (1x1) → expand channels (1x1)",
+              "correct": false
+            }
+          ],
+          "explain": "Correct — squeeze first so the costly 3x3 step runs on fewer channels, then expand back afterward."
+        },
+        {
+          "id": "p2",
+          "type": "true_false",
+          "xp": 2,
+          "prompt": "True or false: in a bottleneck block, the 3x3 convolution runs on the original full channel count, and only the 1x1 convs use fewer channels.",
+          "options": [
+            {
+              "id": "t",
+              "text": "True",
+              "correct": false
+            },
+            {
+              "id": "f",
+              "text": "False",
+              "correct": true
+            }
+          ],
+          "explain": "False — the 3x3 conv is exactly the part that runs on the squeezed, smaller channel count. That's the entire point of the pattern."
+        },
+        {
+          "id": "p3",
+          "type": "fill_blank",
+          "xp": 2,
+          "prompt": "Complete the sentence:",
+          "sentence": "The bottleneck pattern is squeeze → expensive spatial work → ___.",
+          "blank": "expand",
+          "words": [
+            "expand",
+            "delete",
+            "duplicate"
+          ],
+          "explain": "Right — the final 1x1 conv expands channels back up so the block's output shape matches what the next layer expects."
+        },
+        {
+          "id": "p4",
+          "type": "spot_the_ai",
+          "xp": 2,
+          "prompt": "Which of these is a genuine bottleneck-style block?",
+          "options": [
+            {
+              "id": "a",
+              "text": "1x1 (256→64) → 3x3 (64→64) → 1x1 (64→256)",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "3x3 (256→256) → 3x3 (256→256) → 3x3 (256→256)",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "1x1 (256→64) → 1x1 (64→16) → 1x1 (16→256), with no spatial convolution at all",
+              "correct": false
+            }
+          ],
+          "explain": "Exactly — squeeze with 1x1, do the real spatial work with 3x3 on the smaller depth, then expand back with 1x1."
+        }
+      ]
+    },
+    {
+      "type": "boss",
+      "exercises": [
+        {
+          "id": "b1",
+          "type": "multiple_choice",
+          "xp": 5,
+          "prompt": "A block takes 512 channels in. A 1x1 conv squeezes it to 128 channels, a 3x3 conv processes those 128 channels, and a final 1x1 conv expands back up. How many channels does the feature map have immediately after that final 1x1 conv?",
+          "options": [
+            {
+              "id": "a",
+              "text": "512",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "128",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "256",
+              "correct": false
+            },
+            {
+              "id": "d",
+              "text": "640",
+              "correct": false
+            }
+          ],
+          "explain": "Correct — the expand step restores the original 512-channel shape, so this bottleneck block can be stacked repeatedly without breaking the channel count the rest of the network expects. Next: seeing this exact pattern inside real, famous architectures."
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,217 @@
+{
+  "id": "u103-l5",
+  "unit": 103,
+  "day": 520,
+  "tier": "Convolutions Deep Dive",
+  "tierIcon": "⬆️",
+  "title": "Where Transposed Convs Are Used",
+  "icon": "🎨",
+  "concept": "Transposed convolutions power two major applications you'll meet later: segmentation decoders that turn a small feature map back into a full-size pixel mask, and generative models that turn a compact code into a full image.",
+  "xp": 15,
+  "hearts": 3,
+  "estMinutes": 7,
+  "segments": [
+    {
+      "type": "warmup",
+      "exercises": [
+        {
+          "id": "w1",
+          "type": "multiple_choice",
+          "xp": 1,
+          "prompt": "Recap: What's a proven fix for checkerboard artifacts caused by transposed convolutions?",
+          "options": [
+            {
+              "id": "a",
+              "text": "Upsampling with a simple rule first, then smoothing with a regular convolution",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "Removing all convolutions from the network entirely",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "Converting every image to grayscale before training",
+              "correct": false
+            }
+          ],
+          "explain": "Right — upsample-then-regular-conv sidesteps the uneven overlap. Now let's zoom out: where does this whole operation actually get used?"
+        }
+      ]
+    },
+    {
+      "type": "teach",
+      "cards": [
+        {
+          "kind": "hook",
+          "icon": "🗺️",
+          "title": "Zooming out on the whole deep dive",
+          "body": "You've now learned how transposed convolutions spread values out, why they can checkerboard, and how to avoid it. Time to zoom out: where do real systems actually put this operation to work?"
+        },
+        {
+          "kind": "definition",
+          "icon": "🩺",
+          "title": "Application 1: segmentation decoders",
+          "body": "In semantic segmentation — labeling every pixel of an image as 'road,' 'person,' 'sky,' and so on — an encoder shrinks the image down through convolutions to find patterns, then a decoder built from transposed convolutions grows it back up to the original resolution, producing a full-size pixel mask. You'll build this in the upcoming Segmentation phase."
+        },
+        {
+          "kind": "example",
+          "icon": "🖌️",
+          "title": "Application 2: generative models",
+          "body": "Generative models start from a small, compact 'code' — sometimes just a short list of random numbers — and need to turn it into a full, detailed image. Transposed convolutions are exactly the tool for that expansion: taking something tiny and growing it, layer by layer, into a realistic picture. You'll meet this in the Generative AI phase, much further down the road."
+        },
+        {
+          "kind": "analogy",
+          "icon": "🌱",
+          "title": "One growth operation, two gardens",
+          "body": "Think of the transposed convolution as one specific gardening technique — spreading a seed's growth outward. A segmentation decoder plants that seed in a garden shaped like 'grow this compressed understanding back into a pixel-accurate map.' A generative model plants the same seed in a garden shaped like 'grow this random code into a believable photo.' Same technique, very different gardens."
+        },
+        {
+          "kind": "mythbust",
+          "icon": "⚠️",
+          "title": "Not just a generative-AI trick",
+          "body": "It's easy to assume transposed convolutions only matter for flashy image-generating AI. In reality, they're just as essential — arguably more so — in the very practical world of segmentation, where self-driving cars, medical scanners, and satellite imagery all depend on growing feature maps back to full pixel resolution."
+        },
+        {
+          "kind": "visual",
+          "icon": "⚖️",
+          "title": "Two destinations for the same operation",
+          "body": "Same operation, different goals:",
+          "compare": {
+            "left": {
+              "emoji": "🩺",
+              "tag": "Segmentation decoder",
+              "text": "Small feature map →<br>full-size pixel mask<br>(labels every pixel)"
+            },
+            "right": {
+              "emoji": "🎨",
+              "tag": "Generative model",
+              "text": "Small random code →<br>full-size generated image<br>(creates new pixels)"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "type": "practice",
+      "exercises": [
+        {
+          "id": "p1",
+          "type": "multiple_choice",
+          "xp": 2,
+          "prompt": "In a segmentation model, what does the transposed-convolution decoder turn a small feature map into?",
+          "options": [
+            {
+              "id": "a",
+              "text": "A full-size, per-pixel label mask matching the original image resolution",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "A single classification label for the whole image",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "An even smaller, more compact feature map",
+              "correct": false
+            }
+          ],
+          "explain": "Right — the decoder grows the feature map back into a full-size pixel mask."
+        },
+        {
+          "id": "p2",
+          "type": "true_false",
+          "xp": 2,
+          "prompt": "True or false: transposed convolutions are useful only in generative image models and have no role in segmentation.",
+          "options": [
+            {
+              "id": "t",
+              "text": "True",
+              "correct": false
+            },
+            {
+              "id": "f",
+              "text": "False",
+              "correct": true
+            }
+          ],
+          "explain": "False — they're a core piece of segmentation decoders too, not just generative models."
+        },
+        {
+          "id": "p3",
+          "type": "fill_blank",
+          "xp": 2,
+          "prompt": "Complete the sentence:",
+          "sentence": "A generative model starts from a small, compact ___ and uses transposed convolutions to grow it into a full image.",
+          "blank": "code",
+          "words": [
+            "code",
+            "label",
+            "gradient"
+          ],
+          "explain": "Right — a compact code gets grown, layer by layer, into a full image."
+        },
+        {
+          "id": "p4",
+          "type": "spot_the_ai",
+          "xp": 2,
+          "prompt": "Which pairing correctly matches an application to what it grows via transposed convolutions?",
+          "options": [
+            {
+              "id": "a",
+              "text": "Segmentation grows a feature map into a full-size pixel mask; a generative model grows a small code into a full image",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "Segmentation grows an image into a single number; a generative model grows a number into a smaller number",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "Both applications only ever shrink their inputs, never grow them",
+              "correct": false
+            }
+          ],
+          "explain": "Exactly — both applications rely on transposed convolutions to grow something small into something large and detailed."
+        }
+      ]
+    },
+    {
+      "type": "boss",
+      "exercises": [
+        {
+          "id": "b1",
+          "type": "multiple_choice",
+          "xp": 5,
+          "prompt": "Looking back across this whole Transposed Convolutions unit — spreading instead of sliding, learned weights, checkerboard artifacts and their fix — which single idea ties both segmentation and generative models together?",
+          "options": [
+            {
+              "id": "a",
+              "text": "Both need to grow something small and compact back into something large and detailed, and a trained transposed convolution learns how to do that expansion well",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "Both need to shrink a large image down into a single class label",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "Both avoid convolutions entirely in favor of hand-crafted upsampling rules",
+              "correct": false
+            },
+            {
+              "id": "d",
+              "text": "Both only work on grayscale, low-resolution images",
+              "correct": false
+            }
+          ],
+          "explain": "Exactly — growing something small and compact into something large and detailed is the throughline. Up next: Output-Size Arithmetic, where you'll nail down exactly how big that grown output turns out to be, with a real formula."
+        }
+      ]
+    }
+  ]
+}

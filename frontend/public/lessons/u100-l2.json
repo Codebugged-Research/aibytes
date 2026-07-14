@@ -1,0 +1,217 @@
+{
+  "id": "u100-l2",
+  "unit": 100,
+  "day": 502,
+  "tier": "Convolutions Deep Dive",
+  "tierIcon": "1️⃣",
+  "title": "Channel-Wise Mixing Without Spatial Mixing",
+  "icon": "🌀",
+  "concept": "A 1x1 convolution mixes information across channels at each pixel independently, without ever looking at neighboring pixels — spatial layout is left completely untouched.",
+  "xp": 15,
+  "hearts": 3,
+  "estMinutes": 7,
+  "segments": [
+    {
+      "type": "warmup",
+      "exercises": [
+        {
+          "id": "w1",
+          "type": "multiple_choice",
+          "xp": 1,
+          "prompt": "Recap: A 1x1 convolution filter at one pixel position looks at...",
+          "options": [
+            {
+              "id": "a",
+              "text": "Every input channel at that pixel, blended into one number",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "A 3x3 patch of neighboring pixels in a single channel",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "Nothing — it always outputs zero",
+              "correct": false
+            }
+          ],
+          "explain": "Right — full channel depth, zero neighbors. Now let's see exactly what that blending is really doing."
+        }
+      ]
+    },
+    {
+      "type": "teach",
+      "cards": [
+        {
+          "kind": "hook",
+          "icon": "🌀",
+          "title": "64 measurements, stacked on one point",
+          "body": "Imagine a single pixel carrying 64 different measurements about itself — one channel screaming 'edge!', another whispering 'redness', another tracking 'furriness'. What if you could blend all 64 into a smarter combined signal, without ever glancing at the pixel next door?"
+        },
+        {
+          "kind": "definition",
+          "icon": "🧩",
+          "title": "Channel-wise mixing, pixel by pixel",
+          "body": "A 1x1 convolution performs <strong>channel-wise mixing</strong>: at each pixel position, independently, it takes the stack of channel values right there and computes a weighted combination of them. It repeats the exact same recipe at every position — mixing <em>across channels</em>, never <em>across space</em>."
+        },
+        {
+          "kind": "analogy",
+          "icon": "🥤",
+          "title": "A blender that never leaves its cup",
+          "body": "Think of each pixel position as its own smoothie cup holding several ingredients (channels). A 1x1 conv is a blender that mixes the ingredients inside ONE cup using a fixed recipe — but it never pours anything into the cup next to it. Every cup gets blended on its own, with the same recipe."
+        },
+        {
+          "kind": "example",
+          "icon": "🔢",
+          "title": "Two recipes, two new channels",
+          "body": "One pixel has 3 channels: <code>Edge=8, Color=3, Texture=6</code>. Filter A has weights <code>[1, 0, 1]</code> → <code>8 + 0 + 6 = 14</code> (combines edge + texture, ignores color). Filter B has weights <code>[0, 1, 0]</code> → <code>3</code> (isolates color only). Stack both outputs and that same pixel now has 2 new channels: <code>[14, 3]</code> — same position, brand-new channel stack."
+        },
+        {
+          "kind": "mythbust",
+          "icon": "⚠️",
+          "title": "Not the same as blurring or resizing",
+          "body": "It's easy to lump 1x1 convs in with other filters that shrink an image. But a 1x1 conv never touches height or width — the spatial grid is preserved pixel-for-pixel. Only the channel <em>depth</em> at each position can change, not the size of the grid itself."
+        },
+        {
+          "kind": "visual",
+          "icon": "📐",
+          "title": "Spatial mixing vs. channel mixing",
+          "body": "Two very different kinds of 'blending' inside a CNN:",
+          "compare": {
+            "left": {
+              "emoji": "🕸️",
+              "tag": "Spatial mixing (3x3)",
+              "text": "Blends neighboring<br>pixels together<br>within one channel"
+            },
+            "right": {
+              "emoji": "🌀",
+              "tag": "Channel mixing (1x1)",
+              "text": "Blends channels together<br>at the same pixel,<br>grid untouched"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "type": "practice",
+      "exercises": [
+        {
+          "id": "p1",
+          "type": "multiple_choice",
+          "xp": 2,
+          "prompt": "A 1x1 conv layer with 10 output filters is applied to a 64-channel feature map. How many channels does the output have?",
+          "options": [
+            {
+              "id": "a",
+              "text": "10",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "64",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "74",
+              "correct": false
+            }
+          ],
+          "explain": "Correct — each of the 10 filters produces one output channel, regardless of how many input channels it read from."
+        },
+        {
+          "id": "p2",
+          "type": "true_false",
+          "xp": 2,
+          "prompt": "True or false: a 1x1 convolution changes the height and width of a feature map.",
+          "options": [
+            {
+              "id": "t",
+              "text": "True",
+              "correct": false
+            },
+            {
+              "id": "f",
+              "text": "False",
+              "correct": true
+            }
+          ],
+          "explain": "False — a 1x1 conv (stride 1, no padding needed) leaves height and width exactly as they were. Only channel depth can change."
+        },
+        {
+          "id": "p3",
+          "type": "fill_blank",
+          "xp": 2,
+          "prompt": "Complete the sentence:",
+          "sentence": "A 1x1 convolution mixes information across ___, while leaving the spatial grid exactly as it was.",
+          "blank": "channels",
+          "words": [
+            "channels",
+            "pixels",
+            "rows"
+          ],
+          "explain": "Right — channels get blended, but the width and height grid never moves."
+        },
+        {
+          "id": "p4",
+          "type": "spot_the_ai",
+          "xp": 2,
+          "prompt": "Which of these correctly describes what a 1x1 convolution's 'mixing' actually does?",
+          "options": [
+            {
+              "id": "a",
+              "text": "Combines the channel values at one pixel into new channel values, at that same pixel",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "Averages a pixel with its 8 surrounding neighbors",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "Shrinks the image down to half its width and height",
+              "correct": false
+            }
+          ],
+          "explain": "Exactly — mixing happens across the channel stack, position by position, never across neighboring pixels."
+        }
+      ]
+    },
+    {
+      "type": "boss",
+      "exercises": [
+        {
+          "id": "b1",
+          "type": "multiple_choice",
+          "xp": 5,
+          "prompt": "One pixel has 5 channel values: [10, 0, 5, 20, -5]. You want a single 1x1 filter that passes through ONLY channel 4 (value 20) and ignores every other channel completely. Which weight vector does that?",
+          "options": [
+            {
+              "id": "a",
+              "text": "[0, 0, 0, 1, 0]",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "[1, 1, 1, 1, 1]",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "[1, 0, 0, 0, 0]",
+              "correct": false
+            },
+            {
+              "id": "d",
+              "text": "[0, 0, 0, 0, 1]",
+              "correct": false
+            }
+          ],
+          "explain": "Correct: weights [0,0,0,1,0] zero out every channel except the 4th, which passes through unchanged: (10×0)+(0×0)+(5×0)+(20×1)+(-5×0) = 20. Channel mixing can isolate a channel, blend several, or anything in between. Next: using this to shrink channel depth on purpose."
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,217 @@
+{
+  "id": "u102-l4",
+  "unit": 102,
+  "day": 514,
+  "tier": "Convolutions Deep Dive",
+  "tierIcon": "🧩",
+  "title": "Grouped Convs as a Middle Ground",
+  "icon": "🎰",
+  "concept": "The number of groups G is a single dial: G=1 gives you a standard convolution where every channel mixes, G equal to the channel count gives you a depthwise convolution where no channel mixes, and every value in between is a grouped convolution.",
+  "xp": 15,
+  "hearts": 3,
+  "estMinutes": 7,
+  "segments": [
+    {
+      "type": "warmup",
+      "exercises": [
+        {
+          "id": "w1",
+          "type": "multiple_choice",
+          "xp": 1,
+          "prompt": "Recap: What's the main cost of using more groups in a grouped convolution?",
+          "options": [
+            {
+              "id": "a",
+              "text": "Cross-channel mixing shrinks, since each group can only combine its own slice of channels",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "The weight count always increases",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "The image resolution shrinks",
+              "correct": false
+            }
+          ],
+          "explain": "Right — more groups means less mixing between channels. Today: let's see just how far that dial can turn."
+        }
+      ]
+    },
+    {
+      "type": "teach",
+      "cards": [
+        {
+          "kind": "hook",
+          "icon": "🎚️",
+          "title": "One number, G, controls everything",
+          "body": "You've been treating G as just 'the number of groups.' But G is really a single dial. Turn it one way and you land on something very familiar. Turn it the other way and you land on something else you've already met."
+        },
+        {
+          "kind": "definition",
+          "icon": "🎯",
+          "title": "The two extremes of G",
+          "body": "Set <code>G = 1</code>: there's only one 'group,' containing every input channel — that's exactly a <strong>standard convolution</strong>, full mixing. Set <code>G = (number of input channels)</code>: every group holds exactly 1 channel — that's exactly a <strong>depthwise convolution</strong> from Unit 101, zero mixing. Any <code>G</code> strictly between those two extremes is what this unit calls a grouped convolution."
+        },
+        {
+          "kind": "analogy",
+          "icon": "🎚️",
+          "title": "A single mixing-board slider",
+          "body": "Picture a mixing-board slider with as many channels as your CNN layer. Push the slider all the way to one end and every channel gets blended into one mix — that's standard conv. Push it all the way to the other end and every channel stays on its own separate, untouched track — that's depthwise conv. Every stop in between groups a few channels together while keeping other channels apart."
+        },
+        {
+          "kind": "example",
+          "icon": "🔢",
+          "title": "8 channels, four settings of G",
+          "body": "Take a layer with 8 input channels. <code>G=1</code>: 1 group of 8 channels — standard conv, everything mixes. <code>G=2</code>: 2 groups of 4 — grouped conv. <code>G=4</code>: 4 groups of 2 — still grouped conv, tighter groups. <code>G=8</code>: 8 groups of 1 channel each — depthwise conv, nothing mixes at all. Same 8 channels, four completely different amounts of mixing."
+        },
+        {
+          "kind": "mythbust",
+          "icon": "⚠️",
+          "title": "Depthwise isn't a separate invention",
+          "body": "It's easy to think of depthwise convolution as a totally different mechanism from grouped convolution. It isn't — it's the exact same grouped-convolution mechanism, just pushed to its most extreme setting, where every group happens to contain only one channel."
+        },
+        {
+          "kind": "visual",
+          "icon": "🎰",
+          "title": "The full spectrum, G=1 to G=channels",
+          "body": "One dial, two landmarks at its ends — everything in between is exactly what this unit calls a 'grouped convolution':",
+          "compare": {
+            "left": {
+              "emoji": "🌐",
+              "tag": "G=1 — Standard conv",
+              "text": "One group, all channels<br>Full cross-channel mixing<br>Most weights"
+            },
+            "right": {
+              "emoji": "🪡",
+              "tag": "G=channels — Depthwise conv",
+              "text": "One channel per group<br>Zero cross-channel mixing<br>Fewest weights"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "type": "practice",
+      "exercises": [
+        {
+          "id": "p1",
+          "type": "multiple_choice",
+          "xp": 2,
+          "prompt": "A convolution layer has 16 input channels. If G=1, what kind of convolution is this?",
+          "options": [
+            {
+              "id": "a",
+              "text": "A standard convolution — every filter mixes all 16 channels",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "A depthwise convolution",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "It's not a valid setting",
+              "correct": false
+            }
+          ],
+          "explain": "Right — G=1 means a single group containing all 16 channels, which is exactly a standard convolution."
+        },
+        {
+          "id": "p2",
+          "type": "true_false",
+          "xp": 2,
+          "prompt": "True or false: a depthwise convolution is a completely different operation from a grouped convolution, unrelated in mechanism.",
+          "options": [
+            {
+              "id": "t",
+              "text": "True",
+              "correct": false
+            },
+            {
+              "id": "f",
+              "text": "False",
+              "correct": true
+            }
+          ],
+          "explain": "False — depthwise convolution is simply the extreme case of grouped convolution where G equals the number of input channels."
+        },
+        {
+          "id": "p3",
+          "type": "fill_blank",
+          "xp": 2,
+          "prompt": "Complete the sentence:",
+          "sentence": "Setting G equal to the number of input channels turns a grouped convolution into a ___ convolution.",
+          "blank": "depthwise",
+          "words": [
+            "depthwise",
+            "standard",
+            "dilated"
+          ],
+          "explain": "Correct — one channel per group is the definition of a depthwise convolution."
+        },
+        {
+          "id": "p4",
+          "type": "spot_the_ai",
+          "xp": 2,
+          "prompt": "Which statement correctly places grouped convolutions on the spectrum between standard and depthwise convolutions?",
+          "options": [
+            {
+              "id": "a",
+              "text": "G=1 is standard (full mixing), G=channels is depthwise (no mixing), and every G in between is a grouped convolution",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "Grouped, standard, and depthwise convolutions are three unrelated operations with no shared structure",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "Depthwise convolution always uses more weights than a standard convolution",
+              "correct": false
+            }
+          ],
+          "explain": "Exactly — one mechanism, one dial (G), sliding between two extremes you already know."
+        }
+      ]
+    },
+    {
+      "type": "boss",
+      "exercises": [
+        {
+          "id": "b1",
+          "type": "multiple_choice",
+          "xp": 5,
+          "prompt": "A layer has 32 input channels. An engineer sets G=32 for its convolution. Another engineer, on a different layer with the same 32 channels, sets G=1. What kind of convolution does each engineer end up with?",
+          "options": [
+            {
+              "id": "a",
+              "text": "G=32 gives a depthwise convolution (1 channel per group); G=1 gives a standard convolution (all channels mixed)",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "Both settings produce the exact same standard convolution, since G doesn't affect the mechanism",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "G=32 gives a standard convolution and G=1 gives a depthwise convolution — the reverse",
+              "correct": false
+            },
+            {
+              "id": "d",
+              "text": "Neither setting is valid; G must always be strictly between 1 and the channel count",
+              "correct": false
+            }
+          ],
+          "explain": "Correct: G=32 puts every channel in its own group — depthwise. G=1 puts every channel in one shared group — standard. Next: a look at grouped convs' surprising history."
+        }
+      ]
+    }
+  ]
+}

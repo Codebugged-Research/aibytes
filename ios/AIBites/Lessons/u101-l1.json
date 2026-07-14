@@ -1,0 +1,222 @@
+{
+  "id": "u101-l1",
+  "unit": 101,
+  "day": 506,
+  "tier": "Convolutions Deep Dive",
+  "tierIcon": "🕳️",
+  "title": "Dilated Convolutions: Expanding the Receptive Field",
+  "icon": "🕳️",
+  "concept": "A dilated convolution spreads a filter's sample points apart, letting it 'see' a much wider area of the input while still using the exact same small number of weights.",
+  "xp": 15,
+  "hearts": 3,
+  "estMinutes": 7,
+  "segments": [
+    {
+      "type": "warmup",
+      "exercises": [
+        {
+          "id": "w1",
+          "type": "multiple_choice",
+          "xp": 1,
+          "prompt": "Recap: In GoogLeNet's Inception modules and ResNet's bottleneck blocks, why are 1x1 convolutions used?",
+          "options": [
+            {
+              "id": "a",
+              "text": "To cheaply control channel depth around expensive spatial convolutions",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "To blur the image before classification",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "To increase the image's height and width",
+              "correct": false
+            }
+          ],
+          "explain": "Right — cheap channel control is the shared trick behind both designs. Now let's meet a filter that changes how far it reaches, not how many channels it touches."
+        }
+      ]
+    },
+    {
+      "type": "teach",
+      "cards": [
+        {
+          "kind": "hook",
+          "icon": "🔭",
+          "title": "A lookout who spaces out their glances",
+          "body": "Imagine a rooftop lookout who can only check 9 specific spots at a time. Checking 9 spots crammed right next to each other covers a tiny patch of street. Checking the same 9 spots but spread further apart covers a much wider stretch of the block — without hiring any extra lookouts."
+        },
+        {
+          "kind": "definition",
+          "icon": "🕳️",
+          "title": "What is a dilated convolution?",
+          "body": "A <strong>dilated convolution</strong> (also called <strong>atrous</strong>) inserts gaps between a filter's sample points. A standard 3x3 filter samples 9 pixels that are right next to each other. A 3x3 filter with a <strong>dilation rate</strong> of 2 still samples exactly 9 pixels and still has exactly 9 weights — but those 9 taps are now spaced 2 pixels apart, skipping every other pixel in between."
+        },
+        {
+          "kind": "analogy",
+          "icon": "🃏",
+          "title": "Connect-the-dots, stretched out",
+          "body": "Picture a connect-the-dots puzzle with 9 dots. Drawing it with the dots packed tightly gives a small picture. Drawing the exact same 9 dots spaced further apart gives a bigger picture — same number of dots, same lines to draw, just spread wider."
+        },
+        {
+          "kind": "example",
+          "icon": "📐",
+          "title": "From a 3x3 footprint to a 5x5 footprint",
+          "body": "A standard 3x3 filter (dilation rate 1) covers a tight <code>3×3 = 9</code> pixel footprint. Bump the dilation rate to 2, and that same 3x3 filter (still just 9 weights) now spans a <code>5×5</code> pixel footprint, sampling only every other pixel inside it. Push the dilation rate to 3, and it spans a <code>7×7</code> footprint. Each step up in dilation stretches the footprint by 2 more pixels per side — with zero new weights."
+        },
+        {
+          "kind": "mythbust",
+          "icon": "⚠️",
+          "title": "Dilation doesn't add weights",
+          "body": "It's tempting to think a filter covering more pixels must have more weights to learn. It doesn't — dilation only changes <em>where</em> the same fixed number of sample points land. The skipped pixels in between aren't weighted zero and learned; they're simply never touched. Same weight count, same compute per application, wider reach."
+        },
+        {
+          "kind": "visual",
+          "icon": "🔲",
+          "title": "Dilation rate 1 vs. dilation rate 2",
+          "body": "Same 9 weights, very different reach:",
+          "compare": {
+            "left": {
+              "emoji": "🎯",
+              "tag": "Dilation 1 (standard)",
+              "text": "9 weights<br>3×3 tight footprint<br>every pixel sampled"
+            },
+            "right": {
+              "emoji": "🕳️",
+              "tag": "Dilation 2",
+              "text": "9 weights<br>5×5 footprint<br>every other pixel sampled"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "type": "practice",
+      "exercises": [
+        {
+          "id": "p1",
+          "type": "multiple_choice",
+          "xp": 2,
+          "prompt": "What does raising a 3x3 filter's dilation rate from 1 to 2 actually change?",
+          "options": [
+            {
+              "id": "a",
+              "text": "It spreads the same 9 sample points 2 pixels apart instead of 1, so they span a 5x5 area",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "It doubles the filter's weight count to 18",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "It shrinks the filter down to a 2x2 grid of sample points",
+              "correct": false
+            },
+            {
+              "id": "d",
+              "text": "It makes the filter slide 2 pixels at a time as it moves across the image",
+              "correct": false
+            }
+          ],
+          "explain": "Correct — dilation changes the spacing between a filter's sample points, not how far it slides (that's stride) or how many weights it has."
+        },
+        {
+          "id": "p2",
+          "type": "true_false",
+          "xp": 2,
+          "prompt": "True or false: a 3x3 filter with dilation rate 2 has more learnable weights than a standard 3x3 filter with dilation rate 1.",
+          "options": [
+            {
+              "id": "t",
+              "text": "True",
+              "correct": false
+            },
+            {
+              "id": "f",
+              "text": "False",
+              "correct": true
+            }
+          ],
+          "explain": "False — both have exactly 9 weights. Dilation only changes the spacing between sample points, never the weight count."
+        },
+        {
+          "id": "p3",
+          "type": "fill_blank",
+          "xp": 2,
+          "prompt": "Complete the sentence:",
+          "sentence": "A dilated convolution inserts ___ between a filter's sample points to expand its reach without adding weights.",
+          "blank": "gaps",
+          "words": [
+            "gaps",
+            "channels",
+            "filters"
+          ],
+          "explain": "Dilation spaces the existing sample points further apart, opening gaps between them — it never changes the weight or channel count."
+        },
+        {
+          "id": "p4",
+          "type": "spot_the_ai",
+          "xp": 2,
+          "prompt": "Which statement correctly compares growing receptive field via dilation vs. simply using a bigger kernel?",
+          "options": [
+            {
+              "id": "a",
+              "text": "Dilation grows the receptive field while keeping the same small weight count; a bigger kernel grows it too, but adds far more weights",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "Dilation and a bigger kernel both add the same number of extra weights to reach further",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "A bigger kernel is always the cheaper way to grow receptive field",
+              "correct": false
+            }
+          ],
+          "explain": "Right — a 5x5 kernel would need 25 weights to cover that footprint. A dilated 3x3 covers the same footprint with only 9."
+        }
+      ]
+    },
+    {
+      "type": "boss",
+      "exercises": [
+        {
+          "id": "b1",
+          "type": "multiple_choice",
+          "xp": 5,
+          "prompt": "A standard 3x3 filter (dilation rate 1) has a 3x3 pixel footprint using 9 weights. If you switch that same filter to dilation rate 3, what is its new footprint, and how many weights does it use?",
+          "options": [
+            {
+              "id": "a",
+              "text": "A 7x7 footprint, still 9 weights",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "A 9x9 footprint, 27 weights",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "A 5x5 footprint, still 9 weights",
+              "correct": false
+            },
+            {
+              "id": "d",
+              "text": "A 3x3 footprint, unchanged",
+              "correct": false
+            }
+          ],
+          "explain": "Correct — dilation 2 gives a 5x5 footprint, dilation 3 stretches it further to 7x7, and the weight count never moves off 9. Dilation stretches reach without stretching weight count. Next: what real tasks actually want that wider reach without losing resolution."
+        }
+      ]
+    }
+  ]
+}

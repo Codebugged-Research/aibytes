@@ -1,0 +1,222 @@
+{
+  "id": "u98-l2",
+  "unit": 98,
+  "day": 492,
+  "tier": "Convolutions Deep Dive",
+  "tierIcon": "👣",
+  "title": "Padding: Preserving Spatial Dimensions",
+  "icon": "🗜️",
+  "concept": "Padding adds a border of zero-valued pixels around an image so the filter can center properly on edge and corner pixels, and so the output doesn't shrink every time a convolution is applied.",
+  "xp": 15,
+  "hearts": 3,
+  "estMinutes": 7,
+  "segments": [
+    {
+      "type": "warmup",
+      "exercises": [
+        {
+          "id": "w1",
+          "type": "multiple_choice",
+          "xp": 1,
+          "prompt": "Recap: A 3x3 filter on a 5x5 image with stride 1 stops at a 3x3 grid of positions. What happens to that grid of stops if you switch to stride 2?",
+          "options": [
+            {
+              "id": "a",
+              "text": "It shrinks to a 2x2 grid of stops, since the filter skips positions",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "It grows to a 4x4 grid",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "It stays a 3x3 grid",
+              "correct": false
+            }
+          ],
+          "explain": "Right — stride 2 skips positions, shrinking the grid of stops from 3x3 down to 2x2."
+        }
+      ]
+    },
+    {
+      "type": "teach",
+      "cards": [
+        {
+          "kind": "hook",
+          "icon": "🖼️",
+          "title": "The problem at the edges",
+          "body": "Picture a 3x3 filter sliding over a 5x5 image. The very corner pixel only ever sits under the filter once — while a pixel near the middle gets covered by the filter nine separate times. The edges of the image are getting shortchanged."
+        },
+        {
+          "kind": "definition",
+          "icon": "🗜️",
+          "title": "What is padding?",
+          "body": "<strong>Padding</strong> means adding a border of extra pixels — usually filled with zeros — around the outside of an image before the filter slides over it. This gives the filter room to properly center on pixels that used to be stuck on the edge."
+        },
+        {
+          "kind": "analogy",
+          "icon": "🖼️",
+          "title": "A picture frame's matting",
+          "body": "Think of the blank cardboard matting around a photo in a picture frame. It doesn't add anything to the photo itself, but it gives the frame's edge room to sit without cutting off the corners of the picture."
+        },
+        {
+          "kind": "example",
+          "icon": "🔢",
+          "title": "Padding a 5x5 image",
+          "body": "Start with a 5x5 image. Add a 1-pixel border of zeros on every side, and it becomes a 7x7 image (5 + 1 + 1). Now a 3x3 filter with stride 1 has room to center directly on top of every original pixel — including the ones that used to be stuck on the edge."
+        },
+        {
+          "kind": "mythbust",
+          "icon": "⚠️",
+          "title": "Padding doesn't add real information",
+          "body": "It's easy to assume the zero border adds new data for the network to learn from. It doesn't — the zeros carry no signal. Padding is purely structural: it's scaffolding that gives the filter room to work, not new pixels to analyze."
+        },
+        {
+          "kind": "visual",
+          "icon": "⚖️",
+          "title": "No padding vs. padding",
+          "body": "Same 5x5 image, same 3x3 filter, one extra step:",
+          "compare": {
+            "left": {
+              "emoji": "✂️",
+              "tag": "No padding",
+              "text": "Corners covered once<br>Output shrinks: 5x5 → 3x3<br>Edge info gets thin coverage"
+            },
+            "right": {
+              "emoji": "🖼️",
+              "tag": "With padding",
+              "text": "Border of zeros added: 5x5 → 7x7<br>Every pixel gets centered coverage<br>Output can match input size"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "type": "practice",
+      "exercises": [
+        {
+          "id": "p1",
+          "type": "multiple_choice",
+          "xp": 2,
+          "prompt": "Why does padding help a convolution filter treat edge pixels fairly?",
+          "options": [
+            {
+              "id": "a",
+              "text": "It adds a zero border so the filter can center directly on edge and corner pixels, not just pass over them once",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "It deletes the edge pixels so they don't need extra coverage",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "It changes the color of edge pixels to match the center",
+              "correct": false
+            },
+            {
+              "id": "d",
+              "text": "It duplicates the filter to run twice as fast",
+              "correct": false
+            }
+          ],
+          "explain": "Right — the zero border gives the filter room to center on pixels that used to sit right at the boundary."
+        },
+        {
+          "id": "p2",
+          "type": "true_false",
+          "xp": 2,
+          "prompt": "True or false: The zero-valued pixels added by padding carry meaningful image information that the network learns from.",
+          "options": [
+            {
+              "id": "t",
+              "text": "True",
+              "correct": false
+            },
+            {
+              "id": "f",
+              "text": "False",
+              "correct": true
+            }
+          ],
+          "explain": "False — padding zeros carry no real signal. They're structural filler that gives the filter room to work, not new data."
+        },
+        {
+          "id": "p3",
+          "type": "fill_blank",
+          "xp": 2,
+          "prompt": "Complete the sentence:",
+          "sentence": "Adding a 1-pixel border of ___ around a 5x5 image turns it into a 7x7 image before the filter slides over it.",
+          "blank": "zeros",
+          "words": [
+            "zeros",
+            "noise",
+            "duplicates"
+          ],
+          "explain": "Padding almost always uses zeros — a neutral value that adds no real signal, just extra room around the edges."
+        },
+        {
+          "id": "p4",
+          "type": "spot_the_ai",
+          "xp": 2,
+          "prompt": "Which of these is the real reason padding exists in a convolutional layer?",
+          "options": [
+            {
+              "id": "a",
+              "text": "To let the filter center on edge pixels fairly and to control how much the output shrinks each layer",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "To make the image files smaller on disk",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "To automatically remove noise from the picture",
+              "correct": false
+            }
+          ],
+          "explain": "Padding solves two problems at once: fair treatment of edge pixels, and control over how much the spatial size shrinks."
+        }
+      ]
+    },
+    {
+      "type": "boss",
+      "exercises": [
+        {
+          "id": "b1",
+          "type": "multiple_choice",
+          "xp": 5,
+          "prompt": "A researcher notices that after 10 convolution layers with no padding, their 200x200 input image has shrunk down to almost nothing, and important details near the original edges seem to have been lost early on. What's the most direct fix?",
+          "options": [
+            {
+              "id": "a",
+              "text": "Add padding (a border of zeros) before each convolution, so the output size is preserved and edge pixels get proper filter coverage",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "Increase the stride, so the filter moves faster",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "Convert the image to grayscale to reduce its size",
+              "correct": false
+            },
+            {
+              "id": "d",
+              "text": "Apply a blur filter before each convolution",
+              "correct": false
+            }
+          ],
+          "explain": "Exactly — padding directly fixes both problems: it stops the spatial dimensions from shrinking every layer, and it gives edge pixels the same centered coverage as pixels in the middle. Next up: the two standard padding styles CNNs actually use."
+        }
+      ]
+    }
+  ]
+}

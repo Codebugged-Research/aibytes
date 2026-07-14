@@ -1,0 +1,222 @@
+{
+  "id": "u101-l5",
+  "unit": 101,
+  "day": 510,
+  "tier": "Convolutions Deep Dive",
+  "tierIcon": "🕳️",
+  "title": "Depthwise-Separable Convs: Why They're Cheaper",
+  "icon": "💰",
+  "concept": "Chaining a depthwise convolution with a pointwise convolution — a depthwise-separable convolution — approximates a standard convolution's spatial filtering and channel mixing for a small fraction of the compute.",
+  "xp": 15,
+  "hearts": 3,
+  "estMinutes": 7,
+  "segments": [
+    {
+      "type": "warmup",
+      "exercises": [
+        {
+          "id": "w1",
+          "type": "multiple_choice",
+          "xp": 1,
+          "prompt": "Recap: a depthwise convolution followed by a pointwise convolution — what job does each one handle?",
+          "options": [
+            {
+              "id": "a",
+              "text": "Depthwise filters each channel spatially and separately; pointwise mixes the channels together",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "Depthwise mixes channels together; pointwise filters each channel spatially and separately",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "Both steps do the exact same job, run twice for safety",
+              "correct": false
+            }
+          ],
+          "explain": "Right — depthwise filters, pointwise mixes. Now let's put a price tag on that pairing versus doing both jobs in one standard convolution."
+        }
+      ]
+    },
+    {
+      "type": "teach",
+      "cards": [
+        {
+          "kind": "hook",
+          "icon": "🏭",
+          "title": "One mega-machine vs. two focused robots",
+          "body": "Imagine assembling a car with one giant all-in-one machine that welds every panel AND fastens every bolt in a single complex motion — versus two focused, specialized robots: one welds each panel in place, then a second one bolts everything together. The two-robot line gets nearly the same result for a lot less machinery."
+        },
+        {
+          "kind": "definition",
+          "icon": "💡",
+          "title": "What is a depthwise-separable convolution?",
+          "body": "A <strong>depthwise-separable convolution</strong> is exactly the pair from the last two lessons: a depthwise convolution (spatial filtering, per channel) immediately followed by a pointwise convolution (1x1 channel mixing). Together, this two-step pair approximates what one standard convolution does in a single fused step — spatial filtering AND channel mixing at once — but computes it far more cheaply."
+        },
+        {
+          "kind": "example",
+          "icon": "🧮",
+          "title": "The full cost comparison, 32→64 channels",
+          "body": "A standard 3x3 convolution, 32 input channels to 64 output channels, costs <code>3×3×32×64 = 18,432</code> weights. The depthwise-separable equivalent: depthwise 3x3 over 32 channels costs <code>3×3×32 = 288</code> weights, then pointwise 1x1 from 32→64 costs <code>1×1×32×64 = 2,048</code> weights. Total: <code>288 + 2,048 = 2,336</code> weights — <strong>about 7.9x fewer</strong> than the standard convolution, for nearly the same shape of output."
+        },
+        {
+          "kind": "mythbust",
+          "icon": "⚠️",
+          "title": "Cheaper doesn't mean broken",
+          "body": "It's fair to assume something ~8x cheaper must be a lossy shortcut. It is an approximation — a depthwise-separable pair genuinely can't express every possible spatial-and-cross-channel combination a single fused standard convolution could. But in practice that gap costs very little accuracy while saving enormous compute and memory, which is exactly why it became the default choice for efficient, mobile-friendly networks."
+        },
+        {
+          "kind": "example",
+          "icon": "📱",
+          "title": "This is the trick behind MobileNet",
+          "body": "Swapping standard convolutions for depthwise-separable ones throughout a network is the core idea behind <strong>MobileNet</strong>, a family of architectures built to run CNNs on phones and small devices. You'll meet MobileNet properly in the upcoming Classic Architectures phase — but now you already understand exactly why it's fast."
+        },
+        {
+          "kind": "visual",
+          "icon": "💰",
+          "title": "18,432 weights vs. 2,336 weights",
+          "body": "Same 32→64 channel job, very different price tag:",
+          "compare": {
+            "left": {
+              "emoji": "🌀",
+              "tag": "Standard 3x3, 32→64",
+              "text": "18,432 weights<br>one fused step<br>filters + mixes at once"
+            },
+            "right": {
+              "emoji": "💰",
+              "tag": "Depthwise-separable",
+              "text": "288 + 2,048 = 2,336<br>two cheap steps<br>~7.9x fewer weights"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "type": "practice",
+      "exercises": [
+        {
+          "id": "p1",
+          "type": "multiple_choice",
+          "xp": 2,
+          "prompt": "A standard 3x3 conv over 16→32 channels costs 3×3×16×32 = 4,608 weights. The depthwise-separable version costs (3×3×16) + (1×1×16×32). What's that total?",
+          "options": [
+            {
+              "id": "a",
+              "text": "144 + 512 = 656 weights — roughly 7x fewer than standard",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "4,608 weights — no savings at all",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "2,304 weights — exactly half of standard",
+              "correct": false
+            },
+            {
+              "id": "d",
+              "text": "144 weights — forgetting the pointwise step entirely",
+              "correct": false
+            }
+          ],
+          "explain": "Correct — 144 (depthwise) + 512 (pointwise) = 656, about 7x cheaper than the standard convolution's 4,608 weights."
+        },
+        {
+          "id": "p2",
+          "type": "true_false",
+          "xp": 2,
+          "prompt": "True or false: a depthwise-separable convolution can express every possible standard convolution exactly, with zero loss of representational power.",
+          "options": [
+            {
+              "id": "t",
+              "text": "True",
+              "correct": false
+            },
+            {
+              "id": "f",
+              "text": "False",
+              "correct": true
+            }
+          ],
+          "explain": "False — it's a cheaper approximation, not a perfect equivalent. It trades a small amount of representational power for a large compute savings."
+        },
+        {
+          "id": "p3",
+          "type": "fill_blank",
+          "xp": 2,
+          "prompt": "Complete the sentence:",
+          "sentence": "A depthwise-separable convolution splits one expensive standard convolution into two cheap steps: a depthwise conv for spatial filtering, and a ___ conv for channel mixing.",
+          "blank": "pointwise",
+          "words": [
+            "pointwise",
+            "dilated",
+            "grouped"
+          ],
+          "explain": "The pointwise (1x1) step is what handles the channel-mixing half of the job, right after depthwise handles the spatial-filtering half."
+        },
+        {
+          "id": "p4",
+          "type": "spot_the_ai",
+          "xp": 2,
+          "prompt": "Which architecture family is famous for using depthwise-separable convolutions to run efficiently on phones and embedded devices?",
+          "options": [
+            {
+              "id": "a",
+              "text": "MobileNet",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "ResNet",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "GoogLeNet",
+              "correct": false
+            }
+          ],
+          "explain": "Correct — MobileNet built its entire architecture around depthwise-separable convolutions to stay small and fast on limited hardware."
+        }
+      ]
+    },
+    {
+      "type": "boss",
+      "exercises": [
+        {
+          "id": "b1",
+          "type": "multiple_choice",
+          "xp": 5,
+          "prompt": "A layer needs to go from 64 input channels to 128 output channels using 3x3 filters. Compare a standard convolution's weight cost to a depthwise-separable convolution's (depthwise 3x3 over 64 channels, then pointwise 1x1 from 64→128).",
+          "options": [
+            {
+              "id": "a",
+              "text": "Standard: 73,728 weights. Depthwise-separable: 576 + 8,192 = 8,768 weights — roughly 8x cheaper",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "Standard: 73,728 weights. Depthwise-separable: 73,728 weights — no savings once channel counts get large",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "Standard: 8,768 weights. Depthwise-separable: 73,728 weights — standard is actually cheaper here",
+              "correct": false
+            },
+            {
+              "id": "d",
+              "text": "Standard: 73,728 weights. Depthwise-separable: 576 weights — forgetting the pointwise step entirely",
+              "correct": false
+            }
+          ],
+          "explain": "Correct — 3×3×64×128 = 73,728 for standard; (3×3×64) + (1×1×64×128) = 576 + 8,192 = 8,768 for depthwise-separable, about 8.4x cheaper. Depthwise-separable convs are one end of a spectrum. Next: grouped convolutions, a tunable middle ground between fully separate channels and one filter reading everything."
+        }
+      ]
+    }
+  ]
+}

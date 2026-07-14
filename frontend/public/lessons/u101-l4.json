@@ -1,0 +1,222 @@
+{
+  "id": "u101-l4",
+  "unit": 101,
+  "day": 509,
+  "tier": "Convolutions Deep Dive",
+  "tierIcon": "🕳️",
+  "title": "Pointwise Convolutions: Combining Depthwise with 1x1",
+  "icon": "🔗",
+  "concept": "A pointwise convolution is simply Unit 100's 1x1 convolution, used right after a depthwise convolution to remix the channels that depthwise deliberately kept separate.",
+  "xp": 15,
+  "hearts": 3,
+  "estMinutes": 7,
+  "segments": [
+    {
+      "type": "warmup",
+      "exercises": [
+        {
+          "id": "w1",
+          "type": "multiple_choice",
+          "xp": 1,
+          "prompt": "Recap: after a depthwise convolution processes a 16-channel feature map, have those 16 output channels been mixed with each other yet?",
+          "options": [
+            {
+              "id": "a",
+              "text": "No — depthwise keeps every channel completely separate",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "Yes — depthwise sums all channels into one blended output",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "Only the even-numbered channels are mixed",
+              "correct": false
+            }
+          ],
+          "explain": "Right — depthwise leaves 16 channels sitting untouched by each other. Now let's meet the step that finally mixes them."
+        }
+      ]
+    },
+    {
+      "type": "teach",
+      "cards": [
+        {
+          "kind": "hook",
+          "icon": "🎚️",
+          "title": "16 tracks recorded, never mixed",
+          "body": "Depthwise convolution leaves you with 16 independently-filtered channels sitting side by side, like 16 isolated audio tracks recorded separately in a studio. None of them have been combined into a final song yet — you need a mixing board for that."
+        },
+        {
+          "kind": "definition",
+          "icon": "🔗",
+          "title": "Pointwise conv is just a 1x1 conv, in a specific role",
+          "body": "A <strong>pointwise convolution</strong> is exactly the 1x1 convolution from Unit 100 — a filter with no spatial extent that reads across every channel at one pixel position and blends them into new channels. Its \"new\" role here is specific: it's the 1x1 conv placed right after a depthwise convolution, whose whole job is undoing the channel separation depthwise created."
+        },
+        {
+          "kind": "analogy",
+          "icon": "🎛️",
+          "title": "The mixing board after the isolated tracks",
+          "body": "Depthwise recorded 16 isolated tracks. Pointwise is the mixing board — its sliders (weights) blend those 16 tracks down (or up) into a final set of output channels, exactly the way a 1x1 conv blends channels at any other point in a network."
+        },
+        {
+          "kind": "example",
+          "icon": "🧮",
+          "title": "Mixing 16 depthwise channels into 32",
+          "body": "Say depthwise output 16 channels (still unmixed). A pointwise conv with 32 filters reads all 16 channels at each pixel and combines them into 32 new channels. Its weight count follows the same 1x1 formula from Unit 100: <code>1×1×16×32 = 512</code> weights — cheap, since it has zero spatial extent, only channel mixing."
+        },
+        {
+          "kind": "mythbust",
+          "icon": "⚠️",
+          "title": "Pointwise isn't a new operation to learn",
+          "body": "It's easy to assume \"pointwise convolution\" is some brand-new mechanism. It isn't — it's the exact same 1x1 convolution from Unit 100, math and all. The only thing new is the name: when a 1x1 conv's specific job is remixing channels right after a depthwise conv, that pairing gets the name \"pointwise.\""
+        },
+        {
+          "kind": "visual",
+          "icon": "🔲",
+          "title": "Before and after the pointwise step",
+          "body": "Same information, finally combined:",
+          "compare": {
+            "left": {
+              "emoji": "🎚️",
+              "tag": "After depthwise",
+              "text": "16 channels<br>side by side<br>completely unmixed"
+            },
+            "right": {
+              "emoji": "🔗",
+              "tag": "After pointwise (1x1)",
+              "text": "32 new channels<br>each a blend<br>of all 16 inputs"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "type": "practice",
+      "exercises": [
+        {
+          "id": "p1",
+          "type": "multiple_choice",
+          "xp": 2,
+          "prompt": "What operation is a \"pointwise convolution\" actually performing under the hood?",
+          "options": [
+            {
+              "id": "a",
+              "text": "A 1x1 convolution — mixing channel values at each pixel position, no spatial neighbors involved",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "A 3x3 convolution applied one pixel at a time",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "The same depthwise operation, run twice in a row",
+              "correct": false
+            },
+            {
+              "id": "d",
+              "text": "A pooling operation that shrinks the feature map's resolution",
+              "correct": false
+            }
+          ],
+          "explain": "Correct — pointwise is just the 1x1 convolution from Unit 100, applied at this particular spot in the network."
+        },
+        {
+          "id": "p2",
+          "type": "true_false",
+          "xp": 2,
+          "prompt": "True or false: a pointwise convolution looks at neighboring pixels to build its output, the same way a 3x3 filter does.",
+          "options": [
+            {
+              "id": "t",
+              "text": "True",
+              "correct": false
+            },
+            {
+              "id": "f",
+              "text": "False",
+              "correct": true
+            }
+          ],
+          "explain": "False — like any 1x1 conv, it only ever looks at a single pixel position, mixing that position's channels together."
+        },
+        {
+          "id": "p3",
+          "type": "fill_blank",
+          "xp": 2,
+          "prompt": "Complete the sentence:",
+          "sentence": "A pointwise convolution is simply a ___ convolution used right after a depthwise convolution to remix its separated channels.",
+          "blank": "1x1",
+          "words": [
+            "1x1",
+            "3x3",
+            "5x5"
+          ],
+          "explain": "\"Pointwise\" is just a name for a 1x1 convolution used in this specific spot, right after a depthwise convolution."
+        },
+        {
+          "id": "p4",
+          "type": "spot_the_ai",
+          "xp": 2,
+          "prompt": "Which statement correctly explains why depthwise convolutions need a pointwise convolution right after them?",
+          "options": [
+            {
+              "id": "a",
+              "text": "Depthwise convs leave channels completely unmixed, so a pointwise (1x1) conv is needed to combine information across channels",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "Depthwise convs already mix channels, and pointwise just adds more spatial context",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "Pointwise convs are required to restore the image's original height and width",
+              "correct": false
+            }
+          ],
+          "explain": "Right — depthwise deliberately keeps channels separate, so pointwise is the step that finally lets information flow between them."
+        }
+      ]
+    },
+    {
+      "type": "boss",
+      "exercises": [
+        {
+          "id": "b1",
+          "type": "multiple_choice",
+          "xp": 5,
+          "prompt": "A depthwise convolution outputs a 32-channel feature map (still unmixed). A pointwise convolution with 64 filters follows it to combine those channels. How many weights does just this pointwise step use, and what does it do to the 32 depthwise channels?",
+          "options": [
+            {
+              "id": "a",
+              "text": "1×1×32×64 = 2,048 weights; it blends all 32 unmixed channels into 64 new mixed channels",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "3×3×32×64 = 18,432 weights; it applies a 3x3 spatial filter to each channel",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "32 + 64 = 96 weights; it simply appends the channels together",
+              "correct": false
+            },
+            {
+              "id": "d",
+              "text": "32×64/2 = 1,024 weights; it mixes half the channels and leaves the rest untouched",
+              "correct": false
+            }
+          ],
+          "explain": "Correct — 2,048 weights, and every one of the 32 depthwise channels gets blended into each of the 64 new outputs. Pointwise convs are cheap because they have no spatial footprint, just channel mixing. Next: why pairing a depthwise conv with a pointwise conv is dramatically cheaper than one standard convolution doing both jobs at once."
+        }
+      ]
+    }
+  ]
+}

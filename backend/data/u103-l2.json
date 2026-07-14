@@ -1,0 +1,217 @@
+{
+  "id": "u103-l2",
+  "unit": 103,
+  "day": 517,
+  "tier": "Convolutions Deep Dive",
+  "tierIcon": "⬆️",
+  "title": "Transposed Convolutions: Learnable Upsampling",
+  "icon": "🔄",
+  "concept": "Unlike simple upsampling, which duplicates or interpolates pixels using a fixed rule, a transposed convolution learns how to expand a feature map using trainable weights, just like a regular convolution learns how to shrink one.",
+  "xp": 15,
+  "hearts": 3,
+  "estMinutes": 7,
+  "segments": [
+    {
+      "type": "warmup",
+      "exercises": [
+        {
+          "id": "w1",
+          "type": "multiple_choice",
+          "xp": 1,
+          "prompt": "Recap: Why does a segmentation model need to upsample its small feature map before producing its final output?",
+          "options": [
+            {
+              "id": "a",
+              "text": "So the output resolution matches every pixel of the original input image",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "So the model uses less memory during training",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "So the image can be converted to grayscale",
+              "correct": false
+            }
+          ],
+          "explain": "Right — the output has to line up pixel-for-pixel with the input. But the upsampling from last lesson followed one fixed rule. What if the network could learn a better way to expand instead?"
+        }
+      ]
+    },
+    {
+      "type": "teach",
+      "cards": [
+        {
+          "kind": "hook",
+          "icon": "🎯",
+          "title": "A fixed rule isn't always the best rule",
+          "body": "Simple upsampling — like duplicating each pixel into a 2x2 block, or blending neighbors together — follows the same fixed rule every time, on every image, for every task. It never adapts. What if the network could learn a better way to expand instead?"
+        },
+        {
+          "kind": "definition",
+          "icon": "🔄",
+          "title": "What is a transposed convolution?",
+          "body": "A <strong>transposed convolution</strong> is an upsampling operation with its own trainable filter, just like a regular convolution has trainable filters for shrinking. During training, backpropagation adjusts its weights so the network learns the best way to expand a feature map for the task at hand, instead of following one fixed, hand-picked rule."
+        },
+        {
+          "kind": "analogy",
+          "icon": "🎨",
+          "title": "Tracing vs. painting from memory",
+          "body": "Simple upsampling is like photocopying a small sketch and stretching the paper — the same mechanical stretch every time. A transposed convolution is like an artist who's studied thousands of examples and learned how to redraw a rough sketch into a bigger, more detailed painting, guided by what they've learned works best."
+        },
+        {
+          "kind": "example",
+          "icon": "🩻",
+          "title": "Learning to expand for the task",
+          "body": "In a segmentation network, a transposed convolution's weights are trained on real examples of small feature maps paired with correct full-size masks. Over time, backpropagation nudges its weights toward whatever expansion pattern produces the sharpest, most accurate mask boundaries — something a fixed nearest-neighbor rule could never adapt to do."
+        },
+        {
+          "kind": "mythbust",
+          "icon": "⚠️",
+          "title": "It doesn't mathematically undo a convolution",
+          "body": "The name 'transposed convolution' (sometimes even called 'deconvolution') makes it sound like it reverses a specific earlier convolution step-by-step. It doesn't. It's a separate operation with its own freshly learned weights — it just happens to grow the feature map back to a larger shape, the way you'd want an 'undo' to look, without literally being one."
+        },
+        {
+          "kind": "visual",
+          "icon": "⚖️",
+          "title": "Simple upsampling vs. transposed convolution",
+          "body": "Two ways to grow a feature map:",
+          "compare": {
+            "left": {
+              "emoji": "📐",
+              "tag": "Simple upsampling",
+              "text": "Fixed rule (duplicate/blend)<br>no trainable weights<br>same behavior every time"
+            },
+            "right": {
+              "emoji": "🔄",
+              "tag": "Transposed convolution",
+              "text": "Trainable filter weights<br>learned via backprop<br>adapts to the task"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "type": "practice",
+      "exercises": [
+        {
+          "id": "p1",
+          "type": "multiple_choice",
+          "xp": 2,
+          "prompt": "What makes a transposed convolution different from simple upsampling like nearest-neighbor duplication?",
+          "options": [
+            {
+              "id": "a",
+              "text": "It has trainable filter weights that are learned during training",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "It only works on grayscale images",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "It shrinks the feature map instead of growing it",
+              "correct": false
+            }
+          ],
+          "explain": "Right — its filter weights are learned, unlike simple upsampling's fixed rule."
+        },
+        {
+          "id": "p2",
+          "type": "true_false",
+          "xp": 2,
+          "prompt": "True or false: a transposed convolution mathematically reverses a specific earlier convolution, undoing it exactly.",
+          "options": [
+            {
+              "id": "t",
+              "text": "True",
+              "correct": false
+            },
+            {
+              "id": "f",
+              "text": "False",
+              "correct": true
+            }
+          ],
+          "explain": "False — despite the name, it's a separate operation with its own learned weights, not a literal mathematical inverse of some earlier conv."
+        },
+        {
+          "id": "p3",
+          "type": "fill_blank",
+          "xp": 2,
+          "prompt": "Complete the sentence:",
+          "sentence": "Just like a regular convolution's filter numbers are learned by backpropagation, a transposed convolution's filter numbers are also ___ during training.",
+          "blank": "learned",
+          "words": [
+            "learned",
+            "fixed",
+            "deleted"
+          ],
+          "explain": "Right — both types of filters get their numbers from training, not from a hand-picked rule."
+        },
+        {
+          "id": "p4",
+          "type": "spot_the_ai",
+          "xp": 2,
+          "prompt": "Which statement correctly distinguishes a transposed convolution from simple upsampling?",
+          "options": [
+            {
+              "id": "a",
+              "text": "Simple upsampling follows one fixed rule for every image; a transposed convolution's weights adapt through training to whatever expansion pattern works best",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "Simple upsampling uses more trainable weights than a transposed convolution",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "A transposed convolution can only be used at the very first layer of a network",
+              "correct": false
+            }
+          ],
+          "explain": "Exactly — 'fixed rule' vs. 'learned weights' is the core distinction."
+        }
+      ]
+    },
+    {
+      "type": "boss",
+      "exercises": [
+        {
+          "id": "b1",
+          "type": "multiple_choice",
+          "xp": 5,
+          "prompt": "A team is building a segmentation decoder. Version A upsamples using fixed nearest-neighbor duplication. Version B upsamples using transposed convolutions trained end-to-end with the rest of the network. Which version can adapt its expansion behavior to produce sharper mask boundaries for this specific task, and why?",
+          "options": [
+            {
+              "id": "a",
+              "text": "Version B, because its filter weights are learned by backpropagation and can adapt to what produces the most accurate result for this exact task",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "Version A, because fixed rules are always more reliable than learned ones",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "Neither — both approaches behave identically once training finishes",
+              "correct": false
+            },
+            {
+              "id": "d",
+              "text": "Version B, because transposed convolutions always run faster than fixed upsampling",
+              "correct": false
+            }
+          ],
+          "explain": "Exactly — learned weights let Version B adapt to the task; a fixed rule can never do that. Coming up next: exactly how a transposed convolution's math works, spreading values out instead of sliding a window in."
+        }
+      ]
+    }
+  ]
+}

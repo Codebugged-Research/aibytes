@@ -1,0 +1,222 @@
+{
+  "id": "u104-l2",
+  "unit": 104,
+  "day": 522,
+  "tier": "Convolutions Deep Dive",
+  "tierIcon": "🧮",
+  "title": "Putting It All Together: Stride, Padding, Dilation",
+  "icon": "🧩",
+  "concept": "Dilation doesn't need a new formula — it changes the effective_filter_size term inside the same output-size formula, since a dilated filter reaches further than its raw weight count suggests.",
+  "xp": 15,
+  "hearts": 3,
+  "estMinutes": 7,
+  "segments": [
+    {
+      "type": "warmup",
+      "exercises": [
+        {
+          "id": "w1",
+          "type": "multiple_choice",
+          "xp": 1,
+          "prompt": "Recap: In the output size formula, what does the 'floor' step do?",
+          "options": [
+            {
+              "id": "a",
+              "text": "Rounds the division result down to the nearest whole number, since a filter can't sit on a fractional position",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "Rounds the division result up to the nearest whole number",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "Removes the stride from the equation entirely",
+              "correct": false
+            }
+          ],
+          "explain": "Right — floor rounds down. Now let's fold dilation, from a few lessons back, into this very formula."
+        }
+      ]
+    },
+    {
+      "type": "teach",
+      "cards": [
+        {
+          "kind": "hook",
+          "icon": "🧩",
+          "title": "One dial you haven't plugged in yet",
+          "body": "You've got the formula solid for stride and padding. But a few lessons back you met dilation — filters with gaps punched into them. Does the formula still work? Yes, once you know what number to plug in for the filter size."
+        },
+        {
+          "kind": "definition",
+          "icon": "📏",
+          "title": "Effective filter size",
+          "body": "A dilated filter doesn't use its raw size in the formula — it uses its <strong>effective filter size</strong>: <code>effective_size = filter_size + (filter_size − 1) × (dilation − 1)</code>. In plain words: take the filter size, and for every gap the dilation adds between weights, stretch the footprint out that much further. Then plug <code>effective_size</code> into the output formula wherever <code>filter_size</code> used to go."
+        },
+        {
+          "kind": "analogy",
+          "icon": "🖐️",
+          "title": "Spread fingers cover more table",
+          "body": "Hold your hand flat on a table — five fingers, one tight cluster. Now spread your fingers apart as far as they'll go. Still five fingers (five weights), but your hand now spans way more table space. A dilated filter is the spread-fingers version: same weight count, bigger reach — and it's that reach, not the weight count, that decides how much room it needs."
+        },
+        {
+          "kind": "example",
+          "icon": "🔢",
+          "title": "A 3x3 filter with dilation 2",
+          "body": "A 3x3 filter (<code>filter_size = 3</code>) with <code>dilation = 2</code> has effective size <code>3 + (3−1)×(2−1) = 3 + 2 = 5</code>. It behaves like a 5x5 filter for sizing purposes, even though it only has 9 real weights. Plug that into the formula: on a 9x9 input, padding 0, stride 1: <code>(9 + 0 − 5) / 1 = 4</code>, <code>floor(4) + 1 = 5</code>. Output: <strong>5x5</strong> — exactly what a plain 5x5 filter would produce."
+        },
+        {
+          "kind": "mythbust",
+          "icon": "⚠️",
+          "title": "Same weight count doesn't mean same footprint",
+          "body": "It's easy to assume a 3x3 dilated filter must produce the same output size as a regular 3x3 filter, since it's 'still just 3x3.' It doesn't — the gaps between weights count toward the footprint. A dilated 3x3 filter with dilation 2 shrinks the output exactly like a 5x5 filter would, not a 3x3 one."
+        },
+        {
+          "kind": "visual",
+          "icon": "🧩",
+          "title": "Regular 3x3 vs. Dilated 3x3 (d=2)",
+          "body": "Same weight count, very different footprint:",
+          "compare": {
+            "left": {
+              "emoji": "🔬",
+              "tag": "Regular 3x3, dilation 1",
+              "text": "9 weights<br>Effective size: 3x3<br>Tight, compact reach"
+            },
+            "right": {
+              "emoji": "📡",
+              "tag": "Dilated 3x3, dilation 2",
+              "text": "9 weights<br>Effective size: 5x5<br>Spread-out reach"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "type": "practice",
+      "exercises": [
+        {
+          "id": "p1",
+          "type": "multiple_choice",
+          "xp": 2,
+          "prompt": "A 5x5 filter has dilation 3. What's its effective filter size?",
+          "options": [
+            {
+              "id": "a",
+              "text": "13x13",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "15x15",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "8x8",
+              "correct": false
+            },
+            {
+              "id": "d",
+              "text": "5x5, dilation doesn't change size",
+              "correct": false
+            }
+          ],
+          "explain": "5 + (5−1)×(3−1) = 5 + 8 = 13. Effective size: 13x13."
+        },
+        {
+          "id": "p2",
+          "type": "true_false",
+          "xp": 2,
+          "prompt": "True or false: A dilated filter uses more learnable weights than the same filter with dilation 1.",
+          "options": [
+            {
+              "id": "t",
+              "text": "True",
+              "correct": false
+            },
+            {
+              "id": "f",
+              "text": "False",
+              "correct": true
+            }
+          ],
+          "explain": "False — dilation only spreads the SAME weights further apart; it adds zero new weights, only a bigger footprint."
+        },
+        {
+          "id": "p3",
+          "type": "fill_blank",
+          "xp": 2,
+          "prompt": "Complete the sentence:",
+          "sentence": "A dilated filter's effective size is bigger than its raw filter size because dilation adds ___ between the weights.",
+          "blank": "gaps",
+          "words": [
+            "gaps",
+            "padding",
+            "channels"
+          ],
+          "explain": "Gaps — those gaps between weights are exactly what stretches a dilated filter's real footprint beyond its raw size."
+        },
+        {
+          "id": "p4",
+          "type": "spot_the_ai",
+          "xp": 2,
+          "prompt": "Which statement correctly applies dilation inside the output-size formula?",
+          "options": [
+            {
+              "id": "a",
+              "text": "Compute the effective filter size first (filter_size + (filter_size−1)×(dilation−1)), then use THAT in place of filter_size in the normal output formula",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "Dilation multiplies the final output size directly, after the whole formula is already computed",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "Dilation is ignored by the output size formula entirely, since it doesn't add real weights",
+              "correct": false
+            }
+          ],
+          "explain": "Right — effective filter size replaces the raw filter size inside the same formula; nothing else about the formula changes."
+        }
+      ]
+    },
+    {
+      "type": "boss",
+      "exercises": [
+        {
+          "id": "b1",
+          "type": "multiple_choice",
+          "xp": 5,
+          "prompt": "A CNN layer uses a 3x3 filter with dilation 2 on a 15x15 input, padding 0, stride 1. What's the output size?",
+          "options": [
+            {
+              "id": "a",
+              "text": "11x11 — first find the effective filter size (5x5), then run the normal formula: (15 − 5)/1 = 10, floor(10) + 1 = 11",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "13x13 — since dilation only adds 2 to the final output, not the filter size",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "15x15 — dilation doesn't affect output size at all",
+              "correct": false
+            },
+            {
+              "id": "d",
+              "text": "7x7, using the raw 3x3 filter size directly in the formula and ignoring dilation",
+              "correct": false
+            }
+          ],
+          "explain": "Right — effective size is 5x5, then (15 + 0 − 5)/1 = 10, floor(10) + 1 = 11. Output: 11x11. Now that stride, padding, AND dilation all plug cleanly into one formula, let's get faster at doing this math by hand."
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,222 @@
+{
+  "id": "u104-l3",
+  "unit": 104,
+  "day": 523,
+  "tier": "Convolutions Deep Dive",
+  "tierIcon": "🧮",
+  "title": "Calculating Output Size by Hand",
+  "icon": "✏️",
+  "concept": "Fluency with the output-size formula comes from repetition — working through several examples of varying difficulty until the arithmetic becomes second nature, including the tricky case where the division doesn't come out even.",
+  "xp": 15,
+  "hearts": 3,
+  "estMinutes": 7,
+  "segments": [
+    {
+      "type": "warmup",
+      "exercises": [
+        {
+          "id": "w1",
+          "type": "multiple_choice",
+          "xp": 1,
+          "prompt": "Recap: What number do you plug into the output-size formula for a dilated filter — the raw filter size or something else?",
+          "options": [
+            {
+              "id": "a",
+              "text": "The effective filter size, which accounts for the gaps dilation adds between weights",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "The raw filter size, always, regardless of dilation",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "The stride, in place of the filter size",
+              "correct": false
+            }
+          ],
+          "explain": "Right — effective filter size, not raw filter size. Time to get fast and confident running this formula by hand."
+        }
+      ]
+    },
+    {
+      "type": "teach",
+      "cards": [
+        {
+          "kind": "hook",
+          "icon": "✏️",
+          "title": "Formula memorized — now build speed",
+          "body": "You know the formula and you know how dilation feeds into it. The only thing left is reps: working through enough examples that the arithmetic stops feeling like a puzzle and starts feeling automatic."
+        },
+        {
+          "kind": "definition",
+          "icon": "🧠",
+          "title": "A four-step checklist",
+          "body": "Every calculation is the same four steps: 1) Add the padding on both sides to the input. 2) Subtract the filter size (or effective filter size, if dilated). 3) Divide by the stride. 4) Floor the result, then add 1. Run through those four steps in order, every time, and you'll never get lost."
+        },
+        {
+          "kind": "analogy",
+          "icon": "🎯",
+          "title": "Like long division practice",
+          "body": "The first few times you did long division by hand, it felt slow and effortful. After a dozen problems, it became automatic. The output-size formula is the same — a fixed procedure that gets faster with repetition, not a different puzzle to solve each time."
+        },
+        {
+          "kind": "example",
+          "icon": "🔢",
+          "title": "Two worked examples, easy to medium",
+          "body": "<strong>Example A (same-padding, exact):</strong> input 10, padding 1, filter 3, stride 1 → <code>(10 + 2 − 3) / 1 = 9</code>, <code>floor(9) + 1 = 10</code>. Output stays 10x10 — exactly what 'same' padding is designed to do. <strong>Example B (downsampling, exact):</strong> input 32, padding 0, filter 5, stride 3 → <code>(32 + 0 − 5) / 3 = 9</code>, <code>floor(9) + 1 = 10</code>. Output: 10x10."
+        },
+        {
+          "kind": "mythbust",
+          "icon": "⚠️",
+          "title": "When the division doesn't come out even",
+          "body": "It's easy to assume the numbers always divide cleanly. They often don't. Take input 13, padding 1, filter 4, stride 3: <code>(13 + 2 − 4) / 3 = 11 / 3 = 3.667</code>. Floor gives <code>3</code>, plus 1 = <strong>4x4</strong> output. The leftover 0.667 of a stride simply means the filter runs out of room before it can take one more full step — that's normal, not an error."
+        },
+        {
+          "kind": "visual",
+          "icon": "⚖️",
+          "title": "Exact Division vs. Leftover Remainder",
+          "body": "Both are completely normal outcomes:",
+          "compare": {
+            "left": {
+              "emoji": "✅",
+              "tag": "Exact Division",
+              "text": "(32 − 5) / 3 = 9<br>No remainder<br>Every stride fits perfectly"
+            },
+            "right": {
+              "emoji": "➗",
+              "tag": "Leftover Remainder",
+              "text": "(13 + 2 − 4) / 3 = 3.667<br>Floor drops the 0.667<br>Last partial step unused"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "type": "practice",
+      "exercises": [
+        {
+          "id": "p1",
+          "type": "multiple_choice",
+          "xp": 2,
+          "prompt": "Input 16, padding 0, filter 4, stride 4. What's the output size?",
+          "options": [
+            {
+              "id": "a",
+              "text": "4x4",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "3x3",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "16x16",
+              "correct": false
+            },
+            {
+              "id": "d",
+              "text": "12x12",
+              "correct": false
+            }
+          ],
+          "explain": "(16 + 0 − 4) / 4 = 3, floor(3) + 1 = 4. Output: 4x4."
+        },
+        {
+          "id": "p2",
+          "type": "true_false",
+          "xp": 2,
+          "prompt": "True or false: For input 15, padding 0, filter 3, stride 2, the division (input + 2×padding − filter_size) / stride comes out even with zero remainder.",
+          "options": [
+            {
+              "id": "t",
+              "text": "True",
+              "correct": true
+            },
+            {
+              "id": "f",
+              "text": "False",
+              "correct": false
+            }
+          ],
+          "explain": "True — (15 − 3) / 2 = 6 exactly, no remainder, so the floor step doesn't change anything here."
+        },
+        {
+          "id": "p3",
+          "type": "fill_blank",
+          "xp": 2,
+          "prompt": "Complete the sentence:",
+          "sentence": "When (input + 2×padding − filter_size) doesn't divide evenly by the stride, the ___ step simply drops the leftover fraction.",
+          "blank": "floor",
+          "words": [
+            "floor",
+            "padding",
+            "stride"
+          ],
+          "explain": "Floor — it rounds the division result down, discarding any leftover fraction of a step."
+        },
+        {
+          "id": "p4",
+          "type": "spot_the_ai",
+          "xp": 2,
+          "prompt": "Which calculation correctly finds the output size for input 20, padding 2, filter 5, stride 2?",
+          "options": [
+            {
+              "id": "a",
+              "text": "(20 + 4 − 5) / 2 = 9.5, floor(9.5) = 9, plus 1 = 10, so a 10x10 output",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "(20 + 2 − 5) / 2 = 8.5, floor(8.5) = 8, plus 1 = 9, so a 9x9 output",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "(20 − 5 − 2) / 2 = 6.5, so a 6x6 output",
+              "correct": false
+            }
+          ],
+          "explain": "Right — padding counts on BOTH sides, so it's 2×2 = 4, not 2. (20 + 4 − 5) / 2 = 9.5, floor gives 9, plus 1 = 10."
+        }
+      ]
+    },
+    {
+      "type": "boss",
+      "exercises": [
+        {
+          "id": "b1",
+          "type": "multiple_choice",
+          "xp": 5,
+          "prompt": "Calculate the output size for input 27, padding 1, filter 6, stride 4 — and identify which step of the checklist the remainder shows up in.",
+          "options": [
+            {
+              "id": "a",
+              "text": "6x6 — (27 + 2 − 6) / 4 = 5.75; the remainder shows up at the division step, and floor simply drops the 0.75 before adding 1",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "5x5 — you should floor the input size before doing anything else",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "7x7 — round 5.75 up to 6, then add 1",
+              "correct": false
+            },
+            {
+              "id": "d",
+              "text": "23x23, since padding and filter size aren't actually subtracted from anything",
+              "correct": false
+            }
+          ],
+          "explain": "Right — 27 + 2 − 6 = 23, 23 / 4 = 5.75, floor gives 5, plus 1 = 6. Output: 6x6. That remainder always shows up right at the division step. You can now run this formula on any combination of numbers thrown at you. Next up: why getting this number right actually matters when you're designing a real network."
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,222 @@
+{
+  "id": "u99-l2",
+  "unit": 99,
+  "day": 497,
+  "tier": "Convolutions Deep Dive",
+  "tierIcon": "🗺️",
+  "title": "Channels In, Channels Out",
+  "icon": "📥",
+  "concept": "A convolutional layer takes an input with N channels and applies M different filters; each filter examines all N input channels at once and produces one output feature map, so M filters yield M output feature maps.",
+  "xp": 15,
+  "hearts": 3,
+  "estMinutes": 7,
+  "segments": [
+    {
+      "type": "warmup",
+      "exercises": [
+        {
+          "id": "w1",
+          "type": "multiple_choice",
+          "xp": 1,
+          "prompt": "Recap: What does one cell of a feature map tell you?",
+          "options": [
+            {
+              "id": "a",
+              "text": "How strongly that filter's pattern was detected at that location",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "The exact color of the original pixel",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "How many filters the network has in total",
+              "correct": false
+            }
+          ],
+          "explain": "Right — one feature map, produced by one filter, is a map of match strength. Now: what happens when the input itself has more than one channel?"
+        }
+      ]
+    },
+    {
+      "type": "teach",
+      "cards": [
+        {
+          "kind": "hook",
+          "icon": "📥",
+          "title": "More than one color to search",
+          "body": "A grayscale photo has 1 channel. A color photo has 3 — red, green, and blue. So when a filter searches for a pattern, does it check red, then green, then blue separately? Not quite — it checks all three at the exact same time."
+        },
+        {
+          "kind": "definition",
+          "icon": "📊",
+          "title": "N channels in, M feature maps out",
+          "body": "A convolutional layer takes an input with <strong>N channels</strong> (3 for RGB, or however many feature maps the previous layer produced) and applies <strong>M different filters</strong>. Every filter looks at <strong>all N channels at once</strong> and combines them into <strong>one</strong> output feature map. Apply M filters, and you get <strong>M output feature maps</strong> stacked together."
+        },
+        {
+          "kind": "analogy",
+          "icon": "🎻",
+          "title": "A panel of judges, not solo critics",
+          "body": "Think of each filter as a judge who watches a dance performance using every camera angle — front, side, and overhead — at the same time, then writes down ONE overall score. A panel of 32 judges (32 filters) gives you 32 separate scorecards (32 feature maps), and each judge already blended all the camera angles into their one score."
+        },
+        {
+          "kind": "example",
+          "icon": "🔢",
+          "title": "Combining three channels into one map",
+          "body": "At one spot, say the red-channel patch gives a raw match score of <code>50</code>, the green-channel patch gives <code>30</code>, and the blue-channel patch gives <code>20</code>. The filter has its own weight for each channel — it adds them together (something like <code>50 + 30 + 20 = 100</code>) into a single number for that spot. That one combined number lands in the output feature map. Do this at every position, and you get one full feature map from all three input channels."
+        },
+        {
+          "kind": "mythbust",
+          "icon": "⚠️",
+          "title": "One filter isn't one channel",
+          "body": "It's easy to assume you'd need 3 separate filters to handle 3 input channels — one per color. That's not how it works: a single filter reaches across ALL input channels simultaneously and folds them into one combined feature map. The channel COUNT changes because of how many filters you use, not because each filter is limited to one channel."
+        },
+        {
+          "kind": "visual",
+          "icon": "⚖️",
+          "title": "3 Channels In vs. M Feature Maps Out",
+          "body": "Channel count going in and out of one layer:",
+          "compare": {
+            "left": {
+              "emoji": "🎨",
+              "tag": "Input",
+              "text": "3 channels (R, G, B)<br>same width & height"
+            },
+            "right": {
+              "emoji": "📥",
+              "tag": "Output",
+              "text": "M feature maps<br>one per filter"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "type": "practice",
+      "exercises": [
+        {
+          "id": "p1",
+          "type": "multiple_choice",
+          "xp": 2,
+          "prompt": "A conv layer has 3 input channels and uses 16 filters. How many output feature maps does it produce?",
+          "options": [
+            {
+              "id": "a",
+              "text": "16",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "3",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "19",
+              "correct": false
+            },
+            {
+              "id": "d",
+              "text": "48",
+              "correct": false
+            }
+          ],
+          "explain": "16 — one output feature map per filter, regardless of how many input channels there were."
+        },
+        {
+          "id": "p2",
+          "type": "true_false",
+          "xp": 2,
+          "prompt": "True or false: Each filter in a conv layer only looks at one input channel at a time.",
+          "options": [
+            {
+              "id": "t",
+              "text": "True",
+              "correct": false
+            },
+            {
+              "id": "f",
+              "text": "False",
+              "correct": true
+            }
+          ],
+          "explain": "False — every filter looks at ALL input channels at once and combines them into a single output feature map."
+        },
+        {
+          "id": "p3",
+          "type": "fill_blank",
+          "xp": 2,
+          "prompt": "Complete the sentence:",
+          "sentence": "The number of output feature maps a conv layer produces equals the number of ___ it uses.",
+          "blank": "filters",
+          "words": [
+            "filters",
+            "channels",
+            "pixels"
+          ],
+          "explain": "Filters — one filter always makes one output feature map, no matter how many input channels it read."
+        },
+        {
+          "id": "p4",
+          "type": "spot_the_ai",
+          "xp": 2,
+          "prompt": "Which statement correctly describes how a filter handles a 3-channel RGB input?",
+          "options": [
+            {
+              "id": "a",
+              "text": "It reads red, green, and blue together and blends them into one combined output value per location",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "It ignores blue and green and only reads the red channel",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "It creates 3 separate output feature maps, one per color",
+              "correct": false
+            }
+          ],
+          "explain": "Right — one filter blends all channels into one number per location, producing one feature map."
+        }
+      ]
+    },
+    {
+      "type": "boss",
+      "exercises": [
+        {
+          "id": "b1",
+          "type": "multiple_choice",
+          "xp": 5,
+          "prompt": "A layer receives an input with 64 channels (from the previous layer's feature maps) and has 128 filters. How many output feature maps come out, and does each individual filter examine only some of those 64 channels or all of them?",
+          "options": [
+            {
+              "id": "a",
+              "text": "128 output feature maps; each filter examines all 64 input channels at once",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "64 output feature maps; each filter examines only 1 input channel",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "128 output feature maps; each filter examines only its matching channel number",
+              "correct": false
+            },
+            {
+              "id": "d",
+              "text": "192 output feature maps; filters and channels get added together",
+              "correct": false
+            }
+          ],
+          "explain": "Correct! Output feature map count = number of filters (128), and every single filter reads across all 64 input channels before writing its one combined answer. Next: what those 128 feature maps become when they feed into yet another layer."
+        }
+      ]
+    }
+  ]
+}

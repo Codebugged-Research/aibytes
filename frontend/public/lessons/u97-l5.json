@@ -1,0 +1,222 @@
+{
+  "id": "u97-l5",
+  "unit": 97,
+  "day": 490,
+  "tier": "Convolutions Deep Dive",
+  "tierIcon": "🎯",
+  "title": "Convolution vs. Fully-Connected Layers",
+  "icon": "⚖️",
+  "concept": "Convolutions are far more efficient than fully-connected layers for images because of parameter sharing — the same small filter is reused across the entire image — and local connectivity — each output only looks at a small neighborhood of pixels, instead of every pixel connecting to every neuron.",
+  "xp": 15,
+  "hearts": 3,
+  "estMinutes": 7,
+  "segments": [
+    {
+      "type": "warmup",
+      "exercises": [
+        {
+          "id": "w1",
+          "type": "multiple_choice",
+          "xp": 1,
+          "prompt": "Recap: If a convolution layer has 16 filters, what does its output look like?",
+          "options": [
+            {
+              "id": "a",
+              "text": "A stack of 16 separate feature maps, one per filter",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "One single blended feature map",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "16 unrelated copies of the raw input image",
+              "correct": false
+            }
+          ],
+          "explain": "Right. Now let's see why this setup is so much cheaper than the alternative."
+        }
+      ]
+    },
+    {
+      "type": "teach",
+      "cards": [
+        {
+          "kind": "hook",
+          "icon": "💸",
+          "title": "Why not just connect every pixel to every neuron?",
+          "body": "You've learned about neurons that connect to every input — that's a fully-connected layer. So why do CNNs bother with sliding filters instead of just connecting every pixel straight to a neuron? The answer is about to save millions of numbers."
+        },
+        {
+          "kind": "definition",
+          "icon": "⚖️",
+          "title": "Two very different ways to connect",
+          "body": "A <strong>fully-connected layer</strong> gives every single pixel its own connection to every neuron, each with its own learned weight. A <strong>convolution layer</strong> instead reuses one small filter, sliding it across the whole image — this is called <strong>parameter sharing</strong>, an idea you first met back in Unit 87."
+        },
+        {
+          "kind": "analogy",
+          "icon": "🖨️",
+          "title": "One stencil vs. a custom brush for every inch",
+          "body": "A fully-connected layer is like hand-painting a giant mural with a totally custom brushstroke for every single square inch — exhausting, and each inch never benefits from what you learned painting the last one. A convolution is like using one stencil and stamping it across the entire mural — learn the stencil once, reuse it everywhere."
+        },
+        {
+          "kind": "example",
+          "icon": "🧮",
+          "title": "The numbers get big, fast",
+          "body": "A small 100x100 pixel image fully connected to just 100 neurons needs about a million separate weights, one for every pixel-to-neuron pair. A convolution layer solving a similar problem might use a handful of tiny filters, as few as 9 numbers each, reused at every single position in the image."
+        },
+        {
+          "kind": "mythbust",
+          "icon": "⚠️",
+          "title": "Fewer parameters doesn't mean weaker",
+          "body": "It's tempting to think fewer numbers means a worse model. It's the opposite for images — <strong>local connectivity</strong>, where each output only looks at a small nearby patch instead of the whole image, actually matches how real-world patterns work: an edge or a corner is a local feature with no need to connect to distant pixels."
+        },
+        {
+          "kind": "visual",
+          "icon": "⚖️",
+          "title": "Fully-connected vs. convolution",
+          "body": "Two very different tradeoffs for the same image:",
+          "compare": {
+            "left": {
+              "emoji": "🕸️",
+              "tag": "Fully-connected",
+              "text": "Every pixel wired to<br>every neuron, huge parameter count"
+            },
+            "right": {
+              "emoji": "🎯",
+              "tag": "Convolution",
+              "text": "One small filter reused<br>everywhere, few parameters, local view"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "type": "practice",
+      "exercises": [
+        {
+          "id": "p1",
+          "type": "multiple_choice",
+          "xp": 2,
+          "prompt": "What is 'parameter sharing' in a convolution layer?",
+          "options": [
+            {
+              "id": "a",
+              "text": "The same small filter's numbers are reused at every position as it slides across the image",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "Every neuron gets a completely unique, independent set of weights",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "Parameters are copied between unrelated neural networks",
+              "correct": false
+            },
+            {
+              "id": "d",
+              "text": "The filter's numbers change every time it slides to a new position",
+              "correct": false
+            }
+          ],
+          "explain": "Right — one learned filter, reused everywhere it slides."
+        },
+        {
+          "id": "p2",
+          "type": "true_false",
+          "xp": 2,
+          "prompt": "True or false: a fully-connected layer typically needs far more weights to process an image than a convolution layer does.",
+          "options": [
+            {
+              "id": "t",
+              "text": "True",
+              "correct": true
+            },
+            {
+              "id": "f",
+              "text": "False",
+              "correct": false
+            }
+          ],
+          "explain": "True. Wiring every pixel to every neuron adds up fast, while a shared filter stays small no matter how big the image is."
+        },
+        {
+          "id": "p3",
+          "type": "fill_blank",
+          "xp": 2,
+          "prompt": "Complete the sentence:",
+          "sentence": "Because a convolution filter only looks at a small nearby patch of pixels instead of the entire image at once, this property is called ___ connectivity.",
+          "blank": "local",
+          "words": [
+            "local",
+            "global",
+            "random"
+          ],
+          "explain": "Local is right — each output only depends on a small neighborhood of pixels."
+        },
+        {
+          "id": "p4",
+          "type": "spot_the_ai",
+          "xp": 2,
+          "prompt": "Which setup is more parameter-efficient for finding edges across a large photo?",
+          "options": [
+            {
+              "id": "a",
+              "text": "A small filter reused at every position across the image",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "A fully-connected layer with a unique weight for every pixel-to-neuron pair",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "Storing a separate copy of the entire image for every neuron",
+              "correct": false
+            }
+          ],
+          "explain": "Right — reusing one small filter beats wiring up a brand-new weight for every pixel."
+        }
+      ]
+    },
+    {
+      "type": "boss",
+      "exercises": [
+        {
+          "id": "b1",
+          "type": "multiple_choice",
+          "xp": 5,
+          "prompt": "A team is choosing between a fully-connected layer and a convolution layer to process 1-megapixel photos. Which choice makes more sense, and why?",
+          "options": [
+            {
+              "id": "a",
+              "text": "Convolution — parameter sharing and local connectivity mean far fewer weights are needed, and the same learned filter can still detect a pattern no matter where it appears in the image",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "Fully-connected — more individual weights always means a smarter model",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "Convolution — because it deletes most of the pixels before processing them",
+              "correct": false
+            },
+            {
+              "id": "d",
+              "text": "Fully-connected — because convolutions can only work on grayscale images",
+              "correct": false
+            }
+          ],
+          "explain": "Exactly right — that efficiency is why every image-processing CNN is built from convolutions, not fully-connected layers. Unit complete! Next up: stride and padding — how far the filter jumps each step, and what happens at the edges of the image."
+        }
+      ]
+    }
+  ]
+}

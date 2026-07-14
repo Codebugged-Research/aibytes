@@ -1,0 +1,222 @@
+{
+  "id": "u99-l3",
+  "unit": 99,
+  "day": 498,
+  "tier": "Convolutions Deep Dive",
+  "tierIcon": "🗺️",
+  "title": "Stacking Feature Maps Across Layers",
+  "icon": "📚",
+  "concept": "Each layer's stack of output feature maps becomes the input to the next layer, so layer 2's filters never see the raw image — only the patterns layer 1 already found — letting the network build increasingly complex representations.",
+  "xp": 15,
+  "hearts": 3,
+  "estMinutes": 7,
+  "segments": [
+    {
+      "type": "warmup",
+      "exercises": [
+        {
+          "id": "w1",
+          "type": "multiple_choice",
+          "xp": 1,
+          "prompt": "Recap: If a conv layer uses 32 filters, how many output feature maps does it produce, and what does each filter examine?",
+          "options": [
+            {
+              "id": "a",
+              "text": "32 output feature maps; each filter examines all input channels at once",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "1 output feature map; each filter examines only its own channel",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "32 output feature maps; each filter only looks at a single input channel",
+              "correct": false
+            }
+          ],
+          "explain": "Right — 32 filters means 32 output feature maps, and every filter reads all input channels at once. Now: where do those 32 feature maps go next?"
+        }
+      ]
+    },
+    {
+      "type": "teach",
+      "cards": [
+        {
+          "kind": "hook",
+          "icon": "🏭",
+          "title": "An assembly line, not a single glance",
+          "body": "Nobody builds a car by staring at raw steel and instantly seeing a finished vehicle. Each station adds one piece of structure on top of what the last station built. A CNN works the exact same way, layer after layer."
+        },
+        {
+          "kind": "definition",
+          "icon": "📚",
+          "title": "Feature maps feed the next layer",
+          "body": "The stack of feature maps a layer outputs becomes the <strong>input</strong> to the next layer. That means layer 2's filters never look at the original pixels at all — they slide across layer 1's feature maps (e.g. 'edge detected here' maps) and combine those patterns into new, more complex ones."
+        },
+        {
+          "kind": "analogy",
+          "icon": "🚉",
+          "title": "A relay of specialists",
+          "body": "Layer 1's filters are like scouts who only report 'edge here' or 'edge there.' Layer 2's filters never talk to the original scene — they only ever read the scouts' edge reports, and combine nearby edge reports into something new, like 'corner here.' Layer 3's filters then read the corner reports and combine those into 'wheel-shaped chunk here.'"
+        },
+        {
+          "kind": "example",
+          "icon": "🔢",
+          "title": "From edges to corners to parts",
+          "body": "Say layer 1 outputs 16 feature maps (various edge and color detectors). Layer 2 has 32 filters, each one scanning across all 16 of those edge maps at once and combining them — producing 32 new feature maps that now respond to things like corners or simple textures. Layer 3's 64 filters then scan those 32 corner/texture maps, producing feature maps that respond to bigger parts, like an eye or a wheel."
+        },
+        {
+          "kind": "mythbust",
+          "icon": "⚠️",
+          "title": "Deeper layers aren't just 'zoomed in'",
+          "body": "It's tempting to picture a deep layer as simply staring harder at the same photo. It isn't — a deep layer has never once touched a raw pixel. It only ever sees numeric summaries of summaries, several layers removed from the original image."
+        },
+        {
+          "kind": "visual",
+          "icon": "⚖️",
+          "title": "Layer 1 Input vs. Layer 2 Input",
+          "body": "What each layer actually looks at:",
+          "compare": {
+            "left": {
+              "emoji": "🖼️",
+              "tag": "Layer 1 sees",
+              "text": "The raw image<br>(pixels)"
+            },
+            "right": {
+              "emoji": "📚",
+              "tag": "Layer 2 sees",
+              "text": "Layer 1's feature maps<br>(edges, colors)"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "type": "practice",
+      "exercises": [
+        {
+          "id": "p1",
+          "type": "multiple_choice",
+          "xp": 2,
+          "prompt": "What does layer 2 of a CNN actually take as its input?",
+          "options": [
+            {
+              "id": "a",
+              "text": "The stack of feature maps produced by layer 1",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "The original raw image pixels",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "A text description of the image",
+              "correct": false
+            },
+            {
+              "id": "d",
+              "text": "Nothing — layer 2 re-scans the same input as layer 1",
+              "correct": false
+            }
+          ],
+          "explain": "Right — every layer after the first works entirely on the previous layer's feature maps."
+        },
+        {
+          "id": "p2",
+          "type": "true_false",
+          "xp": 2,
+          "prompt": "True or false: Layer 3 of a CNN can directly see the original image's raw pixel values.",
+          "options": [
+            {
+              "id": "t",
+              "text": "True",
+              "correct": false
+            },
+            {
+              "id": "f",
+              "text": "False",
+              "correct": true
+            }
+          ],
+          "explain": "False — only layer 1 ever touches raw pixels. Every later layer only sees processed feature maps from the layer before it."
+        },
+        {
+          "id": "p3",
+          "type": "fill_blank",
+          "xp": 2,
+          "prompt": "Complete the sentence:",
+          "sentence": "Each layer's output feature maps become the ___ for the very next layer.",
+          "blank": "input",
+          "words": [
+            "input",
+            "filter",
+            "pixel"
+          ],
+          "explain": "Input — that's literally how depth builds up: each layer's output feeds the next layer's input."
+        },
+        {
+          "id": "p4",
+          "type": "spot_the_ai",
+          "xp": 2,
+          "prompt": "Which best describes why deeper CNN layers can detect complex things like 'wheel' or 'eye'?",
+          "options": [
+            {
+              "id": "a",
+              "text": "They combine the simpler patterns already found by earlier layers into bigger, more complex ones",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "They zoom into a higher-resolution copy of the original photo",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "They re-run the exact same filters as layer 1, just more times",
+              "correct": false
+            }
+          ],
+          "explain": "Exactly — complexity builds up because each layer combines what the previous layer already detected."
+        }
+      ]
+    },
+    {
+      "type": "boss",
+      "exercises": [
+        {
+          "id": "b1",
+          "type": "multiple_choice",
+          "xp": 5,
+          "prompt": "A 4-layer CNN's layer 1 outputs 8 feature maps (edges). Layer 2 has 16 filters. Layer 3 has 32 filters. If you wanted to know what layer 3's filters are directly scanning across, what would you say?",
+          "options": [
+            {
+              "id": "a",
+              "text": "Layer 2's 16 output feature maps — which themselves were already built from layer 1's 8 edge maps",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "The original raw image, same as every other layer",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "Layer 1's 8 edge maps directly, skipping layer 2 entirely",
+              "correct": false
+            },
+            {
+              "id": "d",
+              "text": "Nothing — layer 3 doesn't take any input, it generates patterns from scratch",
+              "correct": false
+            }
+          ],
+          "explain": "Correct! Layer 3 only ever sees layer 2's output — which is already two steps removed from the raw pixels. That's how a CNN builds edges → corners/textures → parts, layer by layer. Next: what these deeper filters actually end up learning to detect."
+        }
+      ]
+    }
+  ]
+}

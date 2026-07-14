@@ -1,0 +1,222 @@
+{
+  "id": "u97-l3",
+  "unit": 97,
+  "day": 488,
+  "tier": "Convolutions Deep Dive",
+  "tierIcon": "🎯",
+  "title": "The Convolution Operation, Step by Step",
+  "icon": "🔢",
+  "concept": "Computing a convolution at one position means multiplying each filter number by the pixel beneath it and adding all the products into a single output number — repeating that multiply-and-sum at every position builds the full feature map.",
+  "xp": 15,
+  "hearts": 3,
+  "estMinutes": 7,
+  "segments": [
+    {
+      "type": "warmup",
+      "exercises": [
+        {
+          "id": "w1",
+          "type": "multiple_choice",
+          "xp": 1,
+          "prompt": "Recap: What do a CNN filter's numbers start out as, before training?",
+          "options": [
+            {
+              "id": "a",
+              "text": "Small random numbers",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "The exact numbers from a Sobel filter",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "Numbers hand-picked by an engineer",
+              "correct": false
+            }
+          ],
+          "explain": "Right. Now let's actually do the arithmetic a filter performs at one position."
+        }
+      ]
+    },
+    {
+      "type": "teach",
+      "cards": [
+        {
+          "kind": "hook",
+          "icon": "🔢",
+          "title": "Let's do the actual math",
+          "body": "Enough theory — let's slide a real filter over real pixel values and watch the multiply-and-sum happen, one position at a time."
+        },
+        {
+          "kind": "definition",
+          "icon": "✖️",
+          "title": "Multiply, then add",
+          "body": "At each position, a convolution multiplies every filter number by the pixel value directly underneath it, then adds all of those products together into one number. That single number becomes one pixel in the output."
+        },
+        {
+          "kind": "analogy",
+          "icon": "🧾",
+          "title": "Like a receipt total",
+          "body": "Think of a grocery receipt: you multiply each item's price by its quantity, then add up every line to get the total. A convolution does the same thing — multiply each filter number by its matching pixel, then sum every one of those line items into a single total."
+        },
+        {
+          "kind": "example",
+          "icon": "📐",
+          "title": "Walking through one position",
+          "body": "Picture a small patch where three pixels in a row are each valued 10, sitting right next to a patch where three pixels are each valued 100. Line up a filter whose numbers for that row are -1, 0, and 1. That one row contributes (10 × -1) + (10 × 0) + (100 × 1) = 90. Add up the contribution from all three rows the same way, and the filter outputs <strong>270</strong> at that position — a strong signal that says 'there's an edge right here.'"
+        },
+        {
+          "kind": "mythbust",
+          "icon": "⚠️",
+          "title": "It's not one big calculation for the whole image",
+          "body": "It's easy to assume a convolution processes the entire image in one shot. It doesn't — this exact multiply-and-sum happens over and over, once at every position as the filter slides, one small patch at a time."
+        },
+        {
+          "kind": "visual",
+          "icon": "⚖️",
+          "title": "Flat patch vs. edge patch",
+          "body": "Same filter, two different patches, two very different outputs:",
+          "compare": {
+            "left": {
+              "emoji": "⬜",
+              "tag": "Flat patch (values 10, 10, 10)",
+              "text": "Output = 0<br>no edge detected"
+            },
+            "right": {
+              "emoji": "🔀",
+              "tag": "Edge patch (values 10, 10, 100)",
+              "text": "Output = 90 per row<br>strong edge detected"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "type": "practice",
+      "exercises": [
+        {
+          "id": "p1",
+          "type": "multiple_choice",
+          "xp": 2,
+          "prompt": "A 3x3 filter sits over a 3x3 patch of pixels. What's the correct order of operations to get one output number?",
+          "options": [
+            {
+              "id": "a",
+              "text": "Multiply each filter number by the pixel beneath it, then add all nine products together",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "Add all the pixels first, then multiply by the filter's average",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "Pick the largest pixel value and ignore the rest",
+              "correct": false
+            },
+            {
+              "id": "d",
+              "text": "Divide each pixel by the corresponding filter number",
+              "correct": false
+            }
+          ],
+          "explain": "Right — multiply matching pairs, then sum everything into one output number."
+        },
+        {
+          "id": "p2",
+          "type": "true_false",
+          "xp": 2,
+          "prompt": "True or false: the multiply-and-sum shown for one position must be repeated separately at every position the filter slides to.",
+          "options": [
+            {
+              "id": "t",
+              "text": "True",
+              "correct": true
+            },
+            {
+              "id": "f",
+              "text": "False",
+              "correct": false
+            }
+          ],
+          "explain": "True. Each position gets its own fresh multiply-and-sum — that's how the full feature map gets built."
+        },
+        {
+          "id": "p3",
+          "type": "fill_blank",
+          "xp": 2,
+          "prompt": "Complete the sentence:",
+          "sentence": "A patch of three pixels valued 2, 2, and 2 is multiplied by three filter numbers 3, 0, and 1. The products are 6, 0, and 2, which sum to ___.",
+          "blank": "8",
+          "words": [
+            "8",
+            "5",
+            "12"
+          ],
+          "explain": "8 is correct: 6 + 0 + 2 = 8. That single number is the convolution's output for that position."
+        },
+        {
+          "id": "p4",
+          "type": "spot_the_ai",
+          "xp": 2,
+          "prompt": "Which output correctly reflects a flat, unchanging patch of pixels being convolved with an edge-detecting filter like the one in this lesson?",
+          "options": [
+            {
+              "id": "a",
+              "text": "A result at or near 0, since there's no change for the filter to detect",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "A large positive number, since flat regions always produce the strongest response",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "The pixel values are simply copied through unchanged",
+              "correct": false
+            }
+          ],
+          "explain": "Right — an edge filter stays quiet on flat patches and only fires where values actually change."
+        }
+      ]
+    },
+    {
+      "type": "boss",
+      "exercises": [
+        {
+          "id": "b1",
+          "type": "multiple_choice",
+          "xp": 5,
+          "prompt": "A 3x3 patch of pixels are all valued 5, and every number in the filter is 1. That means all nine multiply operations give 5 x 1 = 5. What does the convolution output for this position?",
+          "options": [
+            {
+              "id": "a",
+              "text": "45 — nine positions, each contributing 5, summed together",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "5",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "9",
+              "correct": false
+            },
+            {
+              "id": "d",
+              "text": "0",
+              "correct": false
+            }
+          ],
+          "explain": "45 is right: nine products of 5, added together. Next: real convolution layers don't stop at one filter — they run many at once."
+        }
+      ]
+    }
+  ]
+}

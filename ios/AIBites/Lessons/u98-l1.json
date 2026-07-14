@@ -1,0 +1,222 @@
+{
+  "id": "u98-l1",
+  "unit": 98,
+  "day": 491,
+  "tier": "Convolutions Deep Dive",
+  "tierIcon": "👣",
+  "title": "Stride: Controlling How Far the Filter Moves",
+  "icon": "👣",
+  "concept": "Stride sets how many pixels a convolution filter jumps between positions — stride 1 slides one pixel at a time for maximum overlap, while stride 2 skips every other position for a smaller, coarser output.",
+  "xp": 15,
+  "hearts": 3,
+  "estMinutes": 7,
+  "segments": [
+    {
+      "type": "warmup",
+      "exercises": [
+        {
+          "id": "w1",
+          "type": "multiple_choice",
+          "xp": 1,
+          "prompt": "Recap: When a convolution filter slides over an image, what happens at each position it stops?",
+          "options": [
+            {
+              "id": "a",
+              "text": "The filter's numbers are multiplied with the overlapping pixels and the results are summed into a single output value",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "The filter replaces the pixels underneath it with random noise",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "The filter deletes the pixels it overlaps",
+              "correct": false
+            }
+          ],
+          "explain": "Right — multiply and sum at every position. Today we ask: how far does the filter jump between those positions?"
+        }
+      ]
+    },
+    {
+      "type": "teach",
+      "cards": [
+        {
+          "kind": "hook",
+          "icon": "👣",
+          "title": "Footsteps across the image",
+          "body": "Imagine walking across a room. You could take small, careful steps — or big, ground-covering strides. A convolution filter has the exact same choice as it crosses an image."
+        },
+        {
+          "kind": "definition",
+          "icon": "👣",
+          "title": "What is stride?",
+          "body": "<strong>Stride</strong> is the number of pixels the filter shifts each time it moves to its next position. A <strong>stride of 1</strong> moves the filter one pixel at a time. A <strong>stride of 2</strong> skips a pixel between each stop."
+        },
+        {
+          "kind": "analogy",
+          "icon": "🚶",
+          "title": "Baby steps vs. giant leaps",
+          "body": "Stride 1 is like tip-toeing across a room, checking every single tile. Stride 2 is like taking big leaps — you cover the same room, but you skip tiles and get there in half the steps."
+        },
+        {
+          "kind": "example",
+          "icon": "🔢",
+          "title": "Counting stops on a 5x5 image",
+          "body": "Take a 5x5 image and a 3x3 filter. With <strong>stride 1</strong>, the filter can stop at 3 positions across and 3 down — a 3x3 grid of stops (9 total). With <strong>stride 2</strong>, it can only stop at 2 positions across and 2 down — a 2x2 grid of stops (4 total). Same filter, same image, half the stops."
+        },
+        {
+          "kind": "mythbust",
+          "icon": "⚠️",
+          "title": "Stride isn't just 'faster'",
+          "body": "It's tempting to think stride only changes speed. It also changes what the filter <em>sees</em>: stride 1 lets neighboring filter positions overlap heavily, catching fine detail; stride 2 skips positions entirely, so some pixel combinations never get examined together."
+        },
+        {
+          "kind": "visual",
+          "icon": "⚖️",
+          "title": "Stride 1 vs. Stride 2",
+          "body": "Same filter, same image, two very different journeys:",
+          "compare": {
+            "left": {
+              "emoji": "🐢",
+              "tag": "Stride 1",
+              "text": "Moves 1 pixel at a time<br>Dense overlap, big output<br>Catches fine detail"
+            },
+            "right": {
+              "emoji": "🐇",
+              "tag": "Stride 2",
+              "text": "Skips every other spot<br>Smaller, coarser output<br>Faster, less detail"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "type": "practice",
+      "exercises": [
+        {
+          "id": "p1",
+          "type": "multiple_choice",
+          "xp": 2,
+          "prompt": "A 3x3 filter slides over a 5x5 image with stride 2. Compared to stride 1, what happens to the output?",
+          "options": [
+            {
+              "id": "a",
+              "text": "It becomes smaller, since the filter stops at fewer positions",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "It becomes larger, since the filter takes bigger jumps",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "It stays exactly the same size",
+              "correct": false
+            },
+            {
+              "id": "d",
+              "text": "The filter stops working entirely",
+              "correct": false
+            }
+          ],
+          "explain": "Right — bigger jumps mean fewer stopping points, so stride 2 produces a smaller output grid than stride 1."
+        },
+        {
+          "id": "p2",
+          "type": "true_false",
+          "xp": 2,
+          "prompt": "True or false: A stride of 1 means the filter moves two pixels between each position.",
+          "options": [
+            {
+              "id": "t",
+              "text": "True",
+              "correct": false
+            },
+            {
+              "id": "f",
+              "text": "False",
+              "correct": true
+            }
+          ],
+          "explain": "False — stride 1 means the filter moves exactly one pixel between positions, the smallest possible jump."
+        },
+        {
+          "id": "p3",
+          "type": "fill_blank",
+          "xp": 2,
+          "prompt": "Complete the sentence:",
+          "sentence": "A stride of ___ makes the filter skip every other position, shrinking the output compared to stride 1.",
+          "blank": "2",
+          "words": [
+            "2",
+            "0",
+            "10"
+          ],
+          "explain": "Stride 2 skips a pixel between each stop, so the filter visits fewer positions and produces a smaller output."
+        },
+        {
+          "id": "p4",
+          "type": "spot_the_ai",
+          "xp": 2,
+          "prompt": "Which statement correctly describes what stride controls in a convolution?",
+          "options": [
+            {
+              "id": "a",
+              "text": "How many pixels the filter moves between each position it's applied",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "How many color channels the image has",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "How the filter's numbers are chosen during training",
+              "correct": false
+            }
+          ],
+          "explain": "Stride is purely about movement — how far the filter jumps from one stop to the next."
+        }
+      ]
+    },
+    {
+      "type": "boss",
+      "exercises": [
+        {
+          "id": "b1",
+          "type": "multiple_choice",
+          "xp": 5,
+          "prompt": "You're building the first layer of a CNN for a security camera that needs to run fast on a tiny doorbell chip. You care more about speed than catching every fine detail. Should you lean toward stride 1 or stride 2, and why?",
+          "options": [
+            {
+              "id": "a",
+              "text": "Stride 2 — bigger jumps mean fewer filter positions to compute, producing a smaller output faster, even though it captures less fine detail",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "Stride 1 — because stride never affects computation speed",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "Stride 2 — because it makes the output larger, which is always better",
+              "correct": false
+            },
+            {
+              "id": "d",
+              "text": "Stride 1 — because larger strides always improve accuracy",
+              "correct": false
+            }
+          ],
+          "explain": "Exactly. Stride 2 means fewer filter positions to compute, so it's faster and produces a smaller output — a real tradeoff between speed and detail. Next up: what happens at the edges of the image, and how padding fixes it."
+        }
+      ]
+    }
+  ]
+}

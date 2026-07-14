@@ -1,0 +1,217 @@
+{
+  "id": "u102-l3",
+  "unit": 102,
+  "day": 513,
+  "tier": "Convolutions Deep Dive",
+  "tierIcon": "🧩",
+  "title": "Grouped Convs vs. Standard Convs: The Efficiency Tradeoff",
+  "icon": "⚖️",
+  "concept": "Grouped convolutions cut the number of weights roughly by the number of groups, because each filter only connects to a fraction of the input channels — but that same cut is what blocks information from flowing freely between groups.",
+  "xp": 15,
+  "hearts": 3,
+  "estMinutes": 7,
+  "segments": [
+    {
+      "type": "warmup",
+      "exercises": [
+        {
+          "id": "w1",
+          "type": "multiple_choice",
+          "xp": 1,
+          "prompt": "Recap: If a layer's 128 input channels are split into 8 groups, how many channels deep is each filter?",
+          "options": [
+            {
+              "id": "a",
+              "text": "16",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "128",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "8",
+              "correct": false
+            }
+          ],
+          "explain": "Right — 128 ÷ 8 = 16. Today: what that shrinking channel-depth actually saves you."
+        }
+      ]
+    },
+    {
+      "type": "teach",
+      "cards": [
+        {
+          "kind": "hook",
+          "icon": "💸",
+          "title": "Fewer wires, fewer weights",
+          "body": "Every one of those channel connections you just split apart is a set of learnable weights. Cut the connections, and you cut the weight count — but nothing in engineering is ever a free lunch."
+        },
+        {
+          "kind": "definition",
+          "icon": "📉",
+          "title": "Fewer connections, fewer weights",
+          "body": "A standard convolution connects every output channel to every input channel, so its weight count is <code>(input channels) × (output channels) × (filter height) × (filter width)</code>. A grouped convolution only connects each output channel to its own group's slice of input channels — so the total weight count drops to roughly <code>1/G</code> of the standard convolution's weight count."
+        },
+        {
+          "kind": "analogy",
+          "icon": "🗣️",
+          "title": "One giant meeting vs. several small ones",
+          "body": "A standard conv is like one giant meeting where every single person talks to every other person — thorough, but expensive in time. A grouped conv is like splitting into several smaller breakout rooms: each room gets through its own discussion faster and cheaper, but ideas from Room 1 never reach Room 2 during that meeting."
+        },
+        {
+          "kind": "example",
+          "icon": "🔢",
+          "title": "64→64 channels, 3x3 filter: the weight count",
+          "body": "Take a layer with 64 input channels, 64 output channels, and a 3x3 filter. <strong>Standard conv (G=1):</strong> <code>64 × 64 × 3 × 3 = 36,864</code> weights. <strong>Grouped, G=2:</strong> each of the 2 groups connects 32 input channels to 32 output channels: <code>2 × (32 × 32 × 3 × 3) = 18,432</code> weights — exactly half. <strong>Grouped, G=4:</strong> <code>4 × (16 × 16 × 3 × 3) = 9,216</code> weights — exactly a quarter."
+        },
+        {
+          "kind": "mythbust",
+          "icon": "⚠️",
+          "title": "Fewer weights isn't automatically 'better'",
+          "body": "It's tempting to read 'a quarter of the weights' as a pure win. It also means every output channel only ever gets to combine information from 1/G of the input channels — cross-channel mixing inside that layer is reduced by the same factor. The network trades some representational flexibility for the speed and memory savings."
+        },
+        {
+          "kind": "visual",
+          "icon": "⚖️",
+          "title": "Weight count vs. mixing, side by side",
+          "body": "Same 64→64, 3x3 layer, three settings:",
+          "compare": {
+            "left": {
+              "emoji": "🌐",
+              "tag": "Standard (G=1)",
+              "text": "36,864 weights<br>Every output sees<br>all 64 input channels"
+            },
+            "right": {
+              "emoji": "🧩",
+              "tag": "Grouped (G=4)",
+              "text": "9,216 weights (1/4)<br>Every output sees only<br>16 input channels"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "type": "practice",
+      "exercises": [
+        {
+          "id": "p1",
+          "type": "multiple_choice",
+          "xp": 2,
+          "prompt": "A standard 3x3 conv with 32 input and 32 output channels has 9,216 weights. If you switch to a grouped conv with G=4 (same channel counts), roughly how many weights does it have?",
+          "options": [
+            {
+              "id": "a",
+              "text": "About 2,304 — a quarter of the original",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "About 9,216 — grouping never changes weight count",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "About 36,864 — four times as many",
+              "correct": false
+            }
+          ],
+          "explain": "Right — grouping into G=4 groups roughly divides the weight count by 4: 9,216 ÷ 4 = 2,304."
+        },
+        {
+          "id": "p2",
+          "type": "true_false",
+          "xp": 2,
+          "prompt": "True or false: grouped convolutions reduce weight count without any tradeoff in how channels can mix information.",
+          "options": [
+            {
+              "id": "t",
+              "text": "True",
+              "correct": false
+            },
+            {
+              "id": "f",
+              "text": "False",
+              "correct": true
+            }
+          ],
+          "explain": "False — fewer weights means each output channel can only draw from its own group's channels, which reduces cross-channel mixing within that layer."
+        },
+        {
+          "id": "p3",
+          "type": "fill_blank",
+          "xp": 2,
+          "prompt": "Complete the sentence:",
+          "sentence": "Splitting a convolution into G groups cuts the weight count to roughly 1/___ of the standard convolution.",
+          "blank": "G",
+          "words": [
+            "G",
+            "2",
+            "0"
+          ],
+          "explain": "Correct — the weight count scales down by a factor of G, the number of groups."
+        },
+        {
+          "id": "p4",
+          "type": "spot_the_ai",
+          "xp": 2,
+          "prompt": "Which statement correctly describes the grouped-vs-standard convolution tradeoff?",
+          "options": [
+            {
+              "id": "a",
+              "text": "Grouped convs use fewer weights and are cheaper to compute, but restrict cross-channel mixing to within each group",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "Grouped convs always produce identical results to standard convs, just computed faster",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "Grouped convs increase weight count in exchange for better accuracy",
+              "correct": false
+            }
+          ],
+          "explain": "Exactly — cheaper compute in exchange for less cross-channel mixing, which is the core efficiency tradeoff."
+        }
+      ]
+    },
+    {
+      "type": "boss",
+      "exercises": [
+        {
+          "id": "b1",
+          "type": "multiple_choice",
+          "xp": 5,
+          "prompt": "You're designing a mobile app's CNN layer that currently uses a standard 3x3 convolution with 128 input and 128 output channels (147,456 weights). Memory is tight, and you need to cut the weight count roughly in half without changing the channel counts. What should you do, and why?",
+          "options": [
+            {
+              "id": "a",
+              "text": "Switch to a grouped convolution with G=2 — splitting into 2 groups roughly halves the weight count, since each output channel now only connects to half the input channels",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "Switch to G=2 and expect the weight count to double, since grouping adds more filters",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "Increase the filter size to 5x5, which always reduces weight count regardless of grouping",
+              "correct": false
+            },
+            {
+              "id": "d",
+              "text": "Grouping never changes weight count, so there's no way to reduce it without changing channel counts",
+              "correct": false
+            }
+          ],
+          "explain": "Correct: G=2 splits the layer into two independent halves, roughly halving the weight count to about 73,728 — the classic cheaper-but-less-mixing tradeoff. Next: where exactly grouped convs sit between two extremes you already know."
+        }
+      ]
+    }
+  ]
+}

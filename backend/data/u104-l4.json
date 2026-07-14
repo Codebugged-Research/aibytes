@@ -1,0 +1,222 @@
+{
+  "id": "u104-l4",
+  "unit": 104,
+  "day": 524,
+  "tier": "Convolutions Deep Dive",
+  "tierIcon": "🧮",
+  "title": "Why Output Size Matters for Architecture Design",
+  "icon": "🏗️",
+  "concept": "Output size isn't just arithmetic trivia — layers with mismatched sizes break the network, and unchecked shrinking can run a feature map down to nothing before you've stacked enough layers to learn anything useful.",
+  "xp": 15,
+  "hearts": 3,
+  "estMinutes": 7,
+  "segments": [
+    {
+      "type": "warmup",
+      "exercises": [
+        {
+          "id": "w1",
+          "type": "multiple_choice",
+          "xp": 1,
+          "prompt": "Recap: What does it mean when the output-size formula's division doesn't come out even?",
+          "options": [
+            {
+              "id": "a",
+              "text": "The floor step drops the leftover fraction — a normal outcome, not an error",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "The network crashes immediately and the architecture must be redesigned",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "You must always add extra padding to force an exact fit",
+              "correct": false
+            }
+          ],
+          "explain": "Right — a leftover fraction is normal; floor handles it cleanly. Now let's see why getting this number right actually matters when you're designing a real network."
+        }
+      ]
+    },
+    {
+      "type": "teach",
+      "cards": [
+        {
+          "kind": "hook",
+          "icon": "🏗️",
+          "title": "The math has real stakes",
+          "body": "So far this has felt like pure arithmetic. Here's why it actually matters: get the output size wrong, or ignore it while stacking layers, and your network simply won't run — or worse, it'll quietly shrink itself into nothing."
+        },
+        {
+          "kind": "definition",
+          "icon": "🚧",
+          "title": "Mismatched sizes break the network",
+          "body": "Every layer's output becomes the next layer's input. If a layer expects, say, a 32x32 input but the previous layer actually output 31x31 because of an unaccounted stride or missing padding, the shapes don't line up — the network throws an error before it can even run, let alone train."
+        },
+        {
+          "kind": "analogy",
+          "icon": "🧱",
+          "title": "Stacking bricks that don't line up",
+          "body": "Building layers is like stacking bricks: each brick has to be sized to sit cleanly on the one below it. Stack a brick that's the wrong width and the whole wall doesn't just look worse — it doesn't stand. A CNN with mismatched layer sizes doesn't 'run a bit worse'; it fails to build at all."
+        },
+        {
+          "kind": "example",
+          "icon": "📉",
+          "title": "Shrinking to nothing",
+          "body": "Say you stack layers, each using a 5x5 filter with stride 1 and no padding, starting from a 28x28 input. Each layer loses 4 pixels of size: 28 → 24 → 20 → 16 → 12 → 8 → 4. One more layer like that and you'd hit 0 — an empty feature map, with nothing left for any further layer to work on. Output-size math is exactly what tells you, in advance, how many layers you can stack before that happens."
+        },
+        {
+          "kind": "mythbust",
+          "icon": "⚠️",
+          "title": "It's not just a training-time slowdown",
+          "body": "You might assume a badly-sized network just trains a little slower or a little less accurately. It's often worse than that: shape mismatches typically crash the program immediately with a dimension error, and a feature map that shrinks to zero size makes the network literally impossible to build, no training involved."
+        },
+        {
+          "kind": "visual",
+          "icon": "📉",
+          "title": "No-Padding Stack vs. Same-Padding Stack",
+          "body": "Same six layers, very different fates:",
+          "compare": {
+            "left": {
+              "emoji": "📉",
+              "tag": "No padding, 5x5 filters",
+              "text": "28→24→20→16→12→8→4<br>Shrinks every layer<br>Runs out of room fast"
+            },
+            "right": {
+              "emoji": "➡️",
+              "tag": "Same padding, 5x5 filters",
+              "text": "28→28→28→28→28→28<br>Size held constant<br>Can stack indefinitely"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "type": "practice",
+      "exercises": [
+        {
+          "id": "p1",
+          "type": "multiple_choice",
+          "xp": 2,
+          "prompt": "A network stacks a layer expecting a 16x16 input, but the previous layer actually output 15x15. What happens?",
+          "options": [
+            {
+              "id": "a",
+              "text": "The shapes don't match, and the network fails to run — this is a real, common architecture bug",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "The network automatically resizes the mismatched layer to fit",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "Nothing — CNNs silently ignore small size mismatches",
+              "correct": false
+            },
+            {
+              "id": "d",
+              "text": "The extra pixel is silently duplicated to make up the difference",
+              "correct": false
+            }
+          ],
+          "explain": "Right — a shape mismatch like this raises a dimension error; nothing about it resolves itself automatically."
+        },
+        {
+          "id": "p2",
+          "type": "true_false",
+          "xp": 2,
+          "prompt": "True or false: Stacking enough no-padding, stride-1 layers with filters bigger than 1x1 will eventually shrink a feature map down to nothing.",
+          "options": [
+            {
+              "id": "t",
+              "text": "True",
+              "correct": true
+            },
+            {
+              "id": "f",
+              "text": "False",
+              "correct": false
+            }
+          ],
+          "explain": "True — every such layer loses a little size, and without padding to counteract it, that loss compounds until the feature map disappears."
+        },
+        {
+          "id": "p3",
+          "type": "fill_blank",
+          "xp": 2,
+          "prompt": "Complete the sentence:",
+          "sentence": "Using 'same' padding keeps a layer's output size ___ to its input size, which is exactly what lets you stack many layers without running out of room.",
+          "blank": "equal",
+          "words": [
+            "equal",
+            "smaller",
+            "random"
+          ],
+          "explain": "Equal — that's the entire point of same padding: hold the spatial size steady, layer after layer."
+        },
+        {
+          "id": "p4",
+          "type": "spot_the_ai",
+          "xp": 2,
+          "prompt": "Which best explains why architects calculate output size in advance rather than just trying a network and seeing what happens?",
+          "options": [
+            {
+              "id": "a",
+              "text": "So they know exactly how many layers they can stack, and with what padding, before a feature map shrinks to zero or shapes stop lining up",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "Because output size only matters after training already finishes",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "Because the formula is just a formality with no real effect on whether the network runs",
+              "correct": false
+            }
+          ],
+          "explain": "Exactly — computing output size ahead of time catches broken architectures before any code is even run."
+        }
+      ]
+    },
+    {
+      "type": "boss",
+      "exercises": [
+        {
+          "id": "b1",
+          "type": "multiple_choice",
+          "xp": 5,
+          "prompt": "You're designing an 8-layer CNN starting from a 16x16 input. Every layer uses a 3x3 filter, stride 1, and NO padding. Using the output-size formula, what happens by the time you reach the later layers — and why does this matter for architecture design?",
+          "options": [
+            {
+              "id": "a",
+              "text": "By layer 7 the feature map has shrunk to 2x2; layer 8's 3x3 filter no longer even fits inside it, so the formula breaks down — this is exactly why architects run the size formula ahead of time, to know when to add padding or stop stacking",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "The network keeps shrinking forever without limit but always keeps working fine, layer after layer",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "The feature map size doesn't change no matter how many layers you stack, since 3x3 filters always preserve size",
+              "correct": false
+            },
+            {
+              "id": "d",
+              "text": "This is purely a cosmetic issue and has no effect on whether the network can actually be built or trained",
+              "correct": false
+            }
+          ],
+          "explain": "Right — every layer loses 2 pixels of size (3x3, stride 1, no padding): 16→14→12→10→8→6→4→2 after 7 layers. By layer 8 the 3x3 filter is bigger than the 2x2 feature map — it literally doesn't fit. That's exactly why output-size math isn't optional trivia: it tells you, before you ever run the code, how many layers you can stack and when you need padding to keep going. Next up: the capstone that ties this whole convolutions arc together."
+        }
+      ]
+    }
+  ]
+}

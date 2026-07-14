@@ -1,0 +1,217 @@
+{
+  "id": "u102-l2",
+  "unit": 102,
+  "day": 512,
+  "tier": "Convolutions Deep Dive",
+  "tierIcon": "🧩",
+  "title": "Splitting Channels Into Groups",
+  "icon": "✂️",
+  "concept": "Splitting 64 input channels into 2 groups of 32 means each group's filters only have 32 input channels to work with — never touching the other group's 32.",
+  "xp": 15,
+  "hearts": 3,
+  "estMinutes": 7,
+  "segments": [
+    {
+      "type": "warmup",
+      "exercises": [
+        {
+          "id": "w1",
+          "type": "multiple_choice",
+          "xp": 1,
+          "prompt": "Recap: In a grouped convolution, what happens to the input channels before any filtering starts?",
+          "options": [
+            {
+              "id": "a",
+              "text": "They're split into separate, non-overlapping groups",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "They're all merged into a single channel first",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "Half of them are deleted at random",
+              "correct": false
+            }
+          ],
+          "explain": "Right — channels are partitioned into groups first, and each group stays walled off from the others. Let's put real numbers on that."
+        }
+      ]
+    },
+    {
+      "type": "teach",
+      "cards": [
+        {
+          "kind": "hook",
+          "icon": "🔢",
+          "title": "Time for real numbers",
+          "body": "You've seen the idea in the abstract — groups, walls, independent filters. Now let's run it with numbers you'd actually see in a real CNN layer."
+        },
+        {
+          "kind": "definition",
+          "icon": "➗",
+          "title": "Channels per group = total ÷ groups",
+          "body": "If a layer has <code>64</code> input channels and you choose <code>G = 2</code> groups, each group gets <code>64 ÷ 2 = 32</code> channels. Group 1 owns channels 1-32. Group 2 owns channels 33-64. The channel count must divide evenly by the number of groups."
+        },
+        {
+          "kind": "analogy",
+          "icon": "🚪",
+          "title": "Two mailrooms, one building",
+          "body": "Picture an office building with 64 mailboxes, split into two separate, walled-off mailrooms of 32 boxes each. Mailroom 1's staff sorts only its own 32 boxes — they physically cannot reach into Mailroom 2's boxes, and vice versa."
+        },
+        {
+          "kind": "example",
+          "icon": "📦",
+          "title": "32 in, filters out",
+          "body": "With 64 channels split into 2 groups of 32, say you want 128 total output channels — 64 from each group. Every filter in Group 1 has a depth of exactly <strong>32</strong> (matching Group 1's channel count), not 64. Group 1 produces 64 output channels, Group 2 produces another 64, and stacking them gives the full 128-channel output."
+        },
+        {
+          "kind": "mythbust",
+          "icon": "⚠️",
+          "title": "Filters don't secretly stay 64 deep",
+          "body": "It's easy to assume each filter still has the same depth as the original 64-channel input, just applied to a subset. It doesn't — a Group 1 filter's weight tensor is only 32 channels deep. It's physically incapable of reading Group 2's data, because it has no weights allocated for those channels at all."
+        },
+        {
+          "kind": "visual",
+          "icon": "✂️",
+          "title": "64 channels, split down the middle",
+          "body": "Two groups, two walled-off filter sets:",
+          "compare": {
+            "left": {
+              "emoji": "📥",
+              "tag": "Group 1 (channels 1-32)",
+              "text": "Own filters, 32 channels deep<br>Never sees channels 33-64<br>Produces its own outputs"
+            },
+            "right": {
+              "emoji": "📥",
+              "tag": "Group 2 (channels 33-64)",
+              "text": "Own filters, 32 channels deep<br>Never sees channels 1-32<br>Produces its own outputs"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "type": "practice",
+      "exercises": [
+        {
+          "id": "p1",
+          "type": "multiple_choice",
+          "xp": 2,
+          "prompt": "A layer with 96 input channels uses 3 groups. How many channels does each group get?",
+          "options": [
+            {
+              "id": "a",
+              "text": "32 (96 ÷ 3)",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "3 (96 ÷ 32)",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "96 — every group still gets all channels",
+              "correct": false
+            }
+          ],
+          "explain": "Right — 96 channels split evenly across 3 groups gives 32 channels per group."
+        },
+        {
+          "id": "p2",
+          "type": "true_false",
+          "xp": 2,
+          "prompt": "True or false: a filter in one group of a grouped convolution has the same channel-depth as the original, ungrouped input.",
+          "options": [
+            {
+              "id": "t",
+              "text": "True",
+              "correct": false
+            },
+            {
+              "id": "f",
+              "text": "False",
+              "correct": true
+            }
+          ],
+          "explain": "False — each filter's depth shrinks to match only its own group's channel count, not the full original input."
+        },
+        {
+          "id": "p3",
+          "type": "fill_blank",
+          "xp": 2,
+          "prompt": "Complete the sentence:",
+          "sentence": "64 input channels split into 2 groups gives each group ___ channels to work with.",
+          "blank": "32",
+          "words": [
+            "32",
+            "64",
+            "2"
+          ],
+          "explain": "Correct — 64 ÷ 2 = 32 channels per group."
+        },
+        {
+          "id": "p4",
+          "type": "spot_the_ai",
+          "xp": 2,
+          "prompt": "Which statement correctly describes splitting 64 channels into 4 groups?",
+          "options": [
+            {
+              "id": "a",
+              "text": "Each group gets 16 channels, and its filters are only 16 channels deep",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "Each group still gets all 64 channels, just processed on a separate GPU",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "The 64 channels are randomly reshuffled between groups on every forward pass",
+              "correct": false
+            }
+          ],
+          "explain": "64 ÷ 4 = 16 channels per group — and filter depth shrinks to match."
+        }
+      ]
+    },
+    {
+      "type": "boss",
+      "exercises": [
+        {
+          "id": "b1",
+          "type": "multiple_choice",
+          "xp": 5,
+          "prompt": "A CNN layer has 128 input channels. You split it into 8 groups for a grouped convolution. How many input channels does a single filter in any one group actually 'see'?",
+          "options": [
+            {
+              "id": "a",
+              "text": "16 (128 ÷ 8)",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "128 — filters always see the whole input",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "8 — one channel per group index",
+              "correct": false
+            },
+            {
+              "id": "d",
+              "text": "1 — grouped convs always reduce to single channels",
+              "correct": false
+            }
+          ],
+          "explain": "Correct: 128 ÷ 8 = 16 channels per group, and that's exactly the depth of every filter inside that group. Next: what splitting channels like this actually saves you in compute."
+        }
+      ]
+    }
+  ]
+}

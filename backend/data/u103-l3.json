@@ -1,0 +1,217 @@
+{
+  "id": "u103-l3",
+  "unit": 103,
+  "day": 518,
+  "tier": "Convolutions Deep Dive",
+  "tierIcon": "⬆️",
+  "title": "How Transposed Convs Work",
+  "icon": "💫",
+  "concept": "Instead of sliding a filter over the input to shrink it, a transposed convolution spreads each input value OUT, multiplying it across a filter-sized region of the output, and sums up wherever those regions overlap.",
+  "xp": 15,
+  "hearts": 3,
+  "estMinutes": 7,
+  "segments": [
+    {
+      "type": "warmup",
+      "exercises": [
+        {
+          "id": "w1",
+          "type": "multiple_choice",
+          "xp": 1,
+          "prompt": "Recap: What makes a transposed convolution's weights different from simple upsampling's fixed rule?",
+          "options": [
+            {
+              "id": "a",
+              "text": "They're learned during training via backpropagation",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "They're randomly reset before every single image",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "They're copied directly from a regular convolution's filter",
+              "correct": false
+            }
+          ],
+          "explain": "Right — learned weights, adapted through training. Now let's see exactly how those weights turn a small input into a bigger output."
+        }
+      ]
+    },
+    {
+      "type": "teach",
+      "cards": [
+        {
+          "kind": "hook",
+          "icon": "🔀",
+          "title": "Sliding in, spreading out",
+          "body": "A regular convolution slides a filter OVER the input, shrinking a whole neighborhood of numbers down into one output number at each stop. A transposed convolution runs that motion in reverse: each single input number gets spread OUT into a whole neighborhood of output numbers."
+        },
+        {
+          "kind": "definition",
+          "icon": "💫",
+          "title": "Multiply-and-place, not slide-and-shrink",
+          "body": "For every value in the input, a transposed convolution multiplies it by the entire filter, producing a small filter-sized patch of numbers. That patch gets placed into the (larger) output at a shifting position. Where two placed patches land on the same output spot, their values are simply <strong>added together</strong>."
+        },
+        {
+          "kind": "example",
+          "icon": "🔢",
+          "title": "A tiny worked example",
+          "body": "Take a 2-number input: <code>[3, 5]</code>, and a learned 2-number filter: <code>[1, 2]</code>. Spread the first input value: <code>3 × [1, 2] = [3, 6]</code>, placed at output positions 0 and 1. Spread the second value one step over: <code>5 × [1, 2] = [5, 10]</code>, placed at output positions 1 and 2. Position 1 now has two contributions overlapping, so they add: <code>6 + 5 = 11</code>. The final output is <code>[3, 11, 10]</code> — three numbers grown from just two."
+        },
+        {
+          "kind": "analogy",
+          "icon": "🖨️",
+          "title": "Overlapping rubber stamps",
+          "body": "Picture each input number as ink loaded onto a rubber stamp shaped like the filter. You press the stamp onto a long strip of paper once per input value, sliding it over a little between presses. Wherever two stamped patches land on the same spot of paper, the ink adds up — that's exactly how overlapping regions sum in a transposed convolution."
+        },
+        {
+          "kind": "mythbust",
+          "icon": "⚠️",
+          "title": "It's not the input filling in gaps",
+          "body": "It's easy to picture a transposed convolution as the input numbers just sitting still while empty gaps around them get filled in. That's not it — every single input value is actively multiplied across a whole filter-sized patch and added into the output. Nothing sits still; everything spreads."
+        },
+        {
+          "kind": "visual",
+          "icon": "⚖️",
+          "title": "Sliding-in vs. spreading-out",
+          "body": "The two operations run in opposite directions:",
+          "compare": {
+            "left": {
+              "emoji": "🪟",
+              "tag": "Regular convolution",
+              "text": "Filter slides OVER input<br>multiply + sum → ONE output number<br>per window"
+            },
+            "right": {
+              "emoji": "💫",
+              "tag": "Transposed convolution",
+              "text": "Each input value spreads OUT<br>multiply across filter → a patch<br>overlaps get ADDED together"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "type": "practice",
+      "exercises": [
+        {
+          "id": "p1",
+          "type": "multiple_choice",
+          "xp": 2,
+          "prompt": "In a transposed convolution, what happens to each single input value?",
+          "options": [
+            {
+              "id": "a",
+              "text": "It gets multiplied across the entire filter, producing a patch of output numbers",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "It gets deleted and replaced with zero",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "It gets averaged with its neighbors before placement",
+              "correct": false
+            }
+          ],
+          "explain": "Right — every input value is multiplied by the whole filter to create a placed patch."
+        },
+        {
+          "id": "p2",
+          "type": "true_false",
+          "xp": 2,
+          "prompt": "True or false: when two spread-out patches land on the same output position in a transposed convolution, only the larger of the two values is kept.",
+          "options": [
+            {
+              "id": "t",
+              "text": "True",
+              "correct": false
+            },
+            {
+              "id": "f",
+              "text": "False",
+              "correct": true
+            }
+          ],
+          "explain": "False — overlapping contributions are added together, not compared and picked."
+        },
+        {
+          "id": "p3",
+          "type": "fill_blank",
+          "xp": 2,
+          "prompt": "Complete the sentence:",
+          "sentence": "Input value <code>4</code> multiplied by filter <code>[1, 3]</code> produces the patch <code>[4, ___]</code>.",
+          "blank": "12",
+          "words": [
+            "12",
+            "7",
+            "3"
+          ],
+          "explain": "Right — 4 × 3 = 12, so the patch is [4, 12]."
+        },
+        {
+          "id": "p4",
+          "type": "spot_the_ai",
+          "xp": 2,
+          "prompt": "Which statement correctly describes how a transposed convolution builds its output?",
+          "options": [
+            {
+              "id": "a",
+              "text": "Each input value is multiplied across the whole filter to form a patch, and overlapping patches are summed together in the output",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "The filter slides over the input and picks the single highest-valued pixel in each window",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "The output is simply the input values copied side by side with no math involved",
+              "correct": false
+            }
+          ],
+          "explain": "Exactly — multiply-to-patch, then sum-on-overlap is the whole operation."
+        }
+      ]
+    },
+    {
+      "type": "boss",
+      "exercises": [
+        {
+          "id": "b1",
+          "type": "multiple_choice",
+          "xp": 5,
+          "prompt": "A transposed convolution has a 2-number input [2, 4] and a learned filter [1, 2], spreading with a 1-step shift like in the lesson example. Spreading the first value gives 2 × [1, 2] = [2, 4] at positions 0-1. Spreading the second value gives 4 × [1, 2] = [4, 8] at positions 1-2. What is the final 3-number output after summing the overlap at position 1?",
+          "options": [
+            {
+              "id": "a",
+              "text": "[2, 8, 8]",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "[2, 4, 8]",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "[6, 6, 6]",
+              "correct": false
+            },
+            {
+              "id": "d",
+              "text": "[2, 4, 4, 8]",
+              "correct": false
+            }
+          ],
+          "explain": "Right — position 1 receives contributions from both spread patches (4 from the first, 4 from the second), which add to 8. That overlap-and-sum behavior is exactly what causes an artifact you'll meet next: checkerboard patterns."
+        }
+      ]
+    }
+  ]
+}

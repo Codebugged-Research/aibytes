@@ -1,0 +1,222 @@
+{
+  "id": "u104-l1",
+  "unit": 104,
+  "day": 521,
+  "tier": "Convolutions Deep Dive",
+  "tierIcon": "🧮",
+  "title": "The Output Size Formula",
+  "icon": "🧮",
+  "concept": "The output size of a convolution layer follows one precise formula — output = floor((input + 2×padding − filter_size) / stride) + 1 — turning what looked like guesswork into simple arithmetic.",
+  "xp": 15,
+  "hearts": 3,
+  "estMinutes": 7,
+  "segments": [
+    {
+      "type": "warmup",
+      "exercises": [
+        {
+          "id": "w1",
+          "type": "multiple_choice",
+          "xp": 1,
+          "prompt": "Recap: What makes a transposed convolution different from a regular convolution?",
+          "options": [
+            {
+              "id": "a",
+              "text": "It's built to increase spatial size (upsample) rather than shrink it, often used to go from a small feature map back to a larger one",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "It removes the need for filters entirely",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "It only works on grayscale images",
+              "correct": false
+            }
+          ],
+          "explain": "Right — transposed convolutions upsample, expanding a feature map's size. Now let's nail down the exact math behind ANY convolution's output size — including a transposed one."
+        }
+      ]
+    },
+    {
+      "type": "teach",
+      "cards": [
+        {
+          "kind": "hook",
+          "icon": "🧮",
+          "title": "Stop eyeballing, start calculating",
+          "body": "Across the last several lessons you've watched feature maps grow and shrink — a bigger stride here, some padding there, a dilated filter reaching further. Every single time, there's one exact formula deciding the output size. No more guessing from a picture — just arithmetic."
+        },
+        {
+          "kind": "definition",
+          "icon": "📐",
+          "title": "The formula, in plain words first",
+          "body": "Here's the recipe: take the input size, add the padding on both sides, subtract the filter size, divide by how far you're stepping (the stride), then add 1. Written with symbols, that's <code>output = floor((input + 2 × padding − filter_size) / stride) + 1</code>. The word <strong>floor</strong> just means: round down to the nearest whole number, since a filter can't land on a fractional position."
+        },
+        {
+          "kind": "analogy",
+          "icon": "🚶",
+          "title": "Counting strides across a hallway",
+          "body": "Imagine pacing across a hallway with a fixed stride length, starting flush against one wall. You count how many full strides fit before you'd step off the far edge. Padding is like adding extra floor space at each end before you start; the filter size is like needing room in front of your foot to plant it. The formula is just careful counting of how many spots you can stand in."
+        },
+        {
+          "kind": "example",
+          "icon": "🔢",
+          "title": "One fully worked example",
+          "body": "Take a 7x7 input, no padding (<code>padding = 0</code>), a 3x3 filter (<code>filter_size = 3</code>), and <code>stride = 1</code>. Step by step: <code>7 + 2×0 = 7</code>. Then <code>7 − 3 = 4</code>. Then <code>4 / 1 = 4</code>. Then <code>floor(4) + 1 = 5</code>. The output is a <strong>5x5</strong> feature map."
+        },
+        {
+          "kind": "mythbust",
+          "icon": "⚠️",
+          "title": "You don't need to simulate anything",
+          "body": "It's tempting to think you have to actually slide the filter across a grid and count positions by hand every time. You don't — the formula gives the exact answer instantly, for any input size, padding, filter size, and stride, without ever touching a single pixel value."
+        },
+        {
+          "kind": "visual",
+          "icon": "🧮",
+          "title": "Words vs. Symbols",
+          "body": "Same formula, two ways to read it:",
+          "compare": {
+            "left": {
+              "emoji": "📝",
+              "tag": "In Plain Words",
+              "text": "Input, plus padding<br>minus filter size,<br>÷ stride, then +1"
+            },
+            "right": {
+              "emoji": "🔣",
+              "tag": "In Symbols",
+              "text": "floor((input + 2P<br>− filter_size) / stride)<br>+ 1"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "type": "practice",
+      "exercises": [
+        {
+          "id": "p1",
+          "type": "multiple_choice",
+          "xp": 2,
+          "prompt": "An 8x8 input goes through a 3x3 filter with padding 0 and stride 1. What's the output size?",
+          "options": [
+            {
+              "id": "a",
+              "text": "6x6",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "5x5",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "8x8",
+              "correct": false
+            },
+            {
+              "id": "d",
+              "text": "3x3",
+              "correct": false
+            }
+          ],
+          "explain": "8 + 2×0 = 8, then 8 − 3 = 5, then 5 ÷ 1 = 5, floor gives 5, plus 1 = 6. Output: 6x6."
+        },
+        {
+          "id": "p2",
+          "type": "true_false",
+          "xp": 2,
+          "prompt": "True or false: In the formula, 'floor' means you round the division result UP to the nearest whole number.",
+          "options": [
+            {
+              "id": "t",
+              "text": "True",
+              "correct": false
+            },
+            {
+              "id": "f",
+              "text": "False",
+              "correct": true
+            }
+          ],
+          "explain": "False — floor means round DOWN to the nearest whole number, since a filter can't land on a fractional position."
+        },
+        {
+          "id": "p3",
+          "type": "fill_blank",
+          "xp": 2,
+          "prompt": "Complete the sentence:",
+          "sentence": "The output size formula divides by the stride, then rounds down using the ___ function before adding 1.",
+          "blank": "floor",
+          "words": [
+            "floor",
+            "ceiling",
+            "round"
+          ],
+          "explain": "Floor — rounding down guarantees the filter only ever counts positions where it fully fits."
+        },
+        {
+          "id": "p4",
+          "type": "spot_the_ai",
+          "xp": 2,
+          "prompt": "Which calculation correctly applies the output size formula to a 6x6 input, 3x3 filter, stride 1, padding 0?",
+          "options": [
+            {
+              "id": "a",
+              "text": "(6 + 0 − 3) / 1 = 3, floor(3) + 1 = 4, so a 4x4 output",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "(6 + 3) / 1 + 0 = 9, so a 9x9 output",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "6 − 3 − 1 = 2, so a 2x2 output",
+              "correct": false
+            }
+          ],
+          "explain": "Right — 6 + 0 − 3 = 3, 3 ÷ 1 = 3, floor(3) + 1 = 4. Output: 4x4."
+        }
+      ]
+    },
+    {
+      "type": "boss",
+      "exercises": [
+        {
+          "id": "b1",
+          "type": "multiple_choice",
+          "xp": 5,
+          "prompt": "A 10x10 input runs through a 3x3 filter with padding 0 and stride 2. Using the formula, what's the output size — and what does the 'floor' step actually protect against here?",
+          "options": [
+            {
+              "id": "a",
+              "text": "4x4 — after floor rounds 3.5 down to 3, add 1; the leftover half-step means one edge column of pixels never gets used by the filter",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "4.5x4.5, since the formula allows fractional output sizes",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "3x3, because you always round the input down first before doing any math",
+              "correct": false
+            },
+            {
+              "id": "d",
+              "text": "8x8, because the filter simply divides the input in half",
+              "correct": false
+            }
+          ],
+          "explain": "(10 + 0 − 3) / 2 = 3.5, floor gives 3, plus 1 = 4. Output: 4x4 — and that leftover 0.5 means the last possible stride position falls off the edge of the input, so one strip of pixels never gets touched by the filter. Next up: how dilation changes this very formula."
+        }
+      ]
+    }
+  ]
+}

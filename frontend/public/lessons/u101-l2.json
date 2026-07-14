@@ -1,0 +1,222 @@
+{
+  "id": "u101-l2",
+  "unit": 101,
+  "day": 507,
+  "tier": "Convolutions Deep Dive",
+  "tierIcon": "🕳️",
+  "title": "When Dilation Helps",
+  "icon": "🌐",
+  "concept": "Dilated convolutions grow a network's receptive field without shrinking the feature map's resolution — exactly what tasks like pixel-level segmentation need: fine detail and big-picture context at once.",
+  "xp": 15,
+  "hearts": 3,
+  "estMinutes": 7,
+  "segments": [
+    {
+      "type": "warmup",
+      "exercises": [
+        {
+          "id": "w1",
+          "type": "multiple_choice",
+          "xp": 1,
+          "prompt": "Recap: a 3x3 filter with dilation rate 2 spans a 5x5 footprint. How many weights does it use to do that?",
+          "options": [
+            {
+              "id": "a",
+              "text": "9 — the same as a standard 3x3 filter",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "25 — one weight per pixel in the footprint",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "18 — double the standard count",
+              "correct": false
+            }
+          ],
+          "explain": "Right — still just 9 weights, spread wider. Now let's see exactly which tasks actually want that wider reach."
+        }
+      ]
+    },
+    {
+      "type": "teach",
+      "cards": [
+        {
+          "kind": "hook",
+          "icon": "🚗",
+          "title": "Labeling every pixel of a street scene",
+          "body": "A self-driving car needs to know which exact pixels are \"road\" vs. \"sidewalk\" vs. \"car\" — a label for every single pixel, at full resolution. But to label one pixel correctly, the model also needs big-picture context: is that gray blob part of the road, or part of a parked car? It needs fine detail AND wide context, at the same time."
+        },
+        {
+          "kind": "definition",
+          "icon": "🌐",
+          "title": "The usual trick shrinks resolution",
+          "body": "The normal way to grow a receptive field is stacking more conv layers with stride or pooling in between — but stride and pooling shrink the feature map's height and width as they go. That's fine when you only need one final label for the whole image. It's a problem when you need a full-resolution label for every pixel. Dilated convolutions grow the receptive field <strong>without</strong> any stride or shrinking, so resolution stays exactly where you need it."
+        },
+        {
+          "kind": "analogy",
+          "icon": "🔎",
+          "title": "A wide-angle lens, not a zoom lens",
+          "body": "Stacking stride/pooling layers to see more of the scene is like a zoom lens that also crops the photo down as it zooms in — you see wider content, but each shot is smaller. Dilation is like a wide-angle lens: you see a wider area while the photo stays exactly the same size."
+        },
+        {
+          "kind": "example",
+          "icon": "🗺️",
+          "title": "Segmentation networks (a teaser for Phase 9)",
+          "body": "Semantic segmentation networks — which you'll meet properly in a later phase — often swap their later stride-2 layers for dilated convolutions instead. That keeps the feature map at a high resolution (say, 1/8 the input size instead of shrinking all the way to 1/32) while the receptive field still grows large enough to understand the whole scene. Every output pixel gets both a precise location and broad context for its label."
+        },
+        {
+          "kind": "mythbust",
+          "icon": "⚠️",
+          "title": "Wide context isn't just for whole-image labels",
+          "body": "It's easy to assume a big receptive field only matters for a single \"cat vs. dog\" style classification at the end of a network. But dense, per-pixel tasks need it just as badly — every one of the thousands of output positions needs enough context to make its own correct call, and none of them can afford to lose resolution to get it."
+        },
+        {
+          "kind": "visual",
+          "icon": "📉",
+          "title": "Two ways to grow a receptive field",
+          "body": "Same goal, very different effect on resolution:",
+          "compare": {
+            "left": {
+              "emoji": "📉",
+              "tag": "Stride / pooling path",
+              "text": "Receptive field grows<br>Resolution shrinks fast<br>Good for one final label"
+            },
+            "right": {
+              "emoji": "🌐",
+              "tag": "Dilated path",
+              "text": "Receptive field grows<br>Resolution stays fixed<br>Good for per-pixel labels"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "type": "practice",
+      "exercises": [
+        {
+          "id": "p1",
+          "type": "multiple_choice",
+          "xp": 2,
+          "prompt": "Which task benefits most from dilation's ability to grow receptive field without shrinking resolution?",
+          "options": [
+            {
+              "id": "a",
+              "text": "Semantic segmentation — labeling every pixel of an image",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "Whole-image classification — assigning one \"cat\" or \"dog\" label to the entire photo",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "Reading a single number out of a fully-connected output layer",
+              "correct": false
+            },
+            {
+              "id": "d",
+              "text": "Averaging every pixel in an image down to one value",
+              "correct": false
+            }
+          ],
+          "explain": "Right — segmentation needs a label at every position, so it can't afford to lose resolution the way a single whole-image label can."
+        },
+        {
+          "id": "p2",
+          "type": "true_false",
+          "xp": 2,
+          "prompt": "True or false: stacking stride or pooling layers to grow a receptive field also shrinks the feature map's spatial resolution.",
+          "options": [
+            {
+              "id": "t",
+              "text": "True",
+              "correct": true
+            },
+            {
+              "id": "f",
+              "text": "False",
+              "correct": false
+            }
+          ],
+          "explain": "True — that shrinkage is exactly what dilated convolutions let you avoid."
+        },
+        {
+          "id": "p3",
+          "type": "fill_blank",
+          "xp": 2,
+          "prompt": "Complete the sentence:",
+          "sentence": "Dilated convolutions grow the receptive field without shrinking the feature map's ___, which matters for tasks like pixel-level segmentation.",
+          "blank": "resolution",
+          "words": [
+            "resolution",
+            "weights",
+            "channels"
+          ],
+          "explain": "Resolution is the key thing dilation protects — the height and width of the feature map stay put while the receptive field still expands."
+        },
+        {
+          "id": "p4",
+          "type": "spot_the_ai",
+          "xp": 2,
+          "prompt": "A network needs to label which pixels are \"road\" vs. \"sidewalk\" in every frame, at full resolution. Which building block helps most?",
+          "options": [
+            {
+              "id": "a",
+              "text": "Dilated convolutions — wide context, no resolution loss",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "Aggressive stride-2 pooling at every layer",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "A single 1x1 convolution with no spatial filters at all",
+              "correct": false
+            }
+          ],
+          "explain": "Correct — this exact resolution-vs-context tension is why dilated convolutions matter for dense, per-pixel prediction tasks."
+        }
+      ]
+    },
+    {
+      "type": "boss",
+      "exercises": [
+        {
+          "id": "b1",
+          "type": "multiple_choice",
+          "xp": 5,
+          "prompt": "A network stacks three dilated 3x3 convolutions with no stride anywhere (dilation rates 1, then 2, then 4), so every layer's output stays the exact same height and width as its input. Each layer's receptive field footprint still grows as dilation rises. What's the key benefit of this pattern for a segmentation task?",
+          "options": [
+            {
+              "id": "a",
+              "text": "It builds a wide receptive field for every output pixel while keeping the feature map at full resolution the whole way through",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "It shrinks resolution by half at each layer, exactly like stride-2 pooling would",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "It quadruples the channel count without touching receptive field at all",
+              "correct": false
+            },
+            {
+              "id": "d",
+              "text": "It only works for a single whole-image label, not per-pixel tasks",
+              "correct": false
+            }
+          ],
+          "explain": "Correct — no stride means no resolution loss, while the rising dilation rates still expand how much context each output pixel sees. Next: giving each channel its own tiny filter instead of reading every channel at once."
+        }
+      ]
+    }
+  ]
+}

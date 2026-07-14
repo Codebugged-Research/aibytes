@@ -1,0 +1,222 @@
+{
+  "id": "u98-l4",
+  "unit": 98,
+  "day": 494,
+  "tier": "Convolutions Deep Dive",
+  "tierIcon": "👣",
+  "title": "How Stride and Padding Affect Output Size",
+  "icon": "📐",
+  "concept": "Stride and padding are the two dials that control a convolution's output size: bigger stride shrinks the output, and more padding grows (or preserves) it. This lesson walks through small numeric examples — the exact formula comes later.",
+  "xp": 15,
+  "hearts": 3,
+  "estMinutes": 7,
+  "segments": [
+    {
+      "type": "warmup",
+      "exercises": [
+        {
+          "id": "w1",
+          "type": "multiple_choice",
+          "xp": 1,
+          "prompt": "Recap: A 5x5 image runs through a 3x3 filter with 'same' padding and stride 1. What size is the output?",
+          "options": [
+            {
+              "id": "a",
+              "text": "5x5 — same padding is built to preserve input size",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "3x3 — same as valid padding",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "7x7 — larger than the input",
+              "correct": false
+            }
+          ],
+          "explain": "Right — same padding adds just enough border so the output matches the input size."
+        }
+      ]
+    },
+    {
+      "type": "teach",
+      "cards": [
+        {
+          "kind": "hook",
+          "icon": "📐",
+          "title": "Two dials, one output size",
+          "body": "You've now met stride and padding separately. Put them on the same control panel, and you get two dials that together decide exactly how big your output grid turns out to be."
+        },
+        {
+          "kind": "definition",
+          "icon": "📐",
+          "title": "The two dials",
+          "body": "<strong>Stride</strong> controls how many positions the filter skips — bigger stride means fewer stops, so a <em>smaller</em> output. <strong>Padding</strong> controls how much extra border is added — more padding means more room for the filter to move, so a <em>bigger</em> (or preserved) output."
+        },
+        {
+          "kind": "analogy",
+          "icon": "🎛️",
+          "title": "A zoom dial and a border dial",
+          "body": "Think of stride as a zoom-out dial — turn it up, and you see fewer, coarser details. Think of padding as a border-width dial — turn it up, and you give the picture more room to keep its full size."
+        },
+        {
+          "kind": "example",
+          "icon": "🔢",
+          "title": "Four combinations on a 5x5 image",
+          "body": "Same 5x5 input, same 3x3 filter, four setups: <strong>stride 1, no padding</strong> → filter fits at 3x3 = 9 spots → 3x3 output. <strong>stride 2, no padding</strong> → filter fits at only 2x2 = 4 spots → 2x2 output. <strong>stride 1, 1-pixel padding</strong> → padded to 7x7, filter fits at 5x5 = 25 spots → 5x5 output. <strong>stride 2, 1-pixel padding</strong> → padded to 7x7, filter fits at 3x3 = 9 spots → 3x3 output. Same image, same filter, four very different output sizes."
+        },
+        {
+          "kind": "mythbust",
+          "icon": "⚠️",
+          "title": "Padding doesn't cancel out stride",
+          "body": "It's tempting to think padding and stride just fight each other to a draw. They don't cancel out — they combine. In the last example, padding alone would have grown the output all the way to 5x5, but stride 2 still shrank it back down to 3x3. Both dials act at once."
+        },
+        {
+          "kind": "visual",
+          "icon": "📐",
+          "title": "Smaller stride/more padding vs. bigger stride/less padding",
+          "body": "The two extremes on a 5x5 image with a 3x3 filter:",
+          "compare": {
+            "left": {
+              "emoji": "🔍",
+              "tag": "Stride 1 + padding",
+              "text": "Dense stops, extra border<br>Output: 5x5 (preserved)<br>Maximum detail kept"
+            },
+            "right": {
+              "emoji": "🚀",
+              "tag": "Stride 2 + no padding",
+              "text": "Sparse stops, no border<br>Output: 2x2 (shrunk)<br>Fast, coarse summary"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "type": "practice",
+      "exercises": [
+        {
+          "id": "p1",
+          "type": "multiple_choice",
+          "xp": 2,
+          "prompt": "A 5x5 image and a 3x3 filter use stride 2 with no padding. Based on counting filter stops, what's the output size?",
+          "options": [
+            {
+              "id": "a",
+              "text": "2x2 — the filter only fits at 2 positions across and 2 down",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "3x3 — same as stride 1",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "5x5 — same as the input",
+              "correct": false
+            },
+            {
+              "id": "d",
+              "text": "1x1 — a single value",
+              "correct": false
+            }
+          ],
+          "explain": "Right — stride 2 skips positions, so the filter only fits at a 2x2 grid of stops on a 5x5 image with a 3x3 filter."
+        },
+        {
+          "id": "p2",
+          "type": "true_false",
+          "xp": 2,
+          "prompt": "True or false: Adding padding can grow the output size, but a large enough stride can still shrink it back down, even with padding in place.",
+          "options": [
+            {
+              "id": "t",
+              "text": "True",
+              "correct": true
+            },
+            {
+              "id": "f",
+              "text": "False",
+              "correct": false
+            }
+          ],
+          "explain": "True — stride and padding both act on the output size at once; a big stride can still shrink an output that padding tried to preserve."
+        },
+        {
+          "id": "p3",
+          "type": "fill_blank",
+          "xp": 2,
+          "prompt": "Complete the sentence:",
+          "sentence": "Increasing the ___ makes the filter skip more positions, which shrinks the output size.",
+          "blank": "stride",
+          "words": [
+            "stride",
+            "padding",
+            "channel count"
+          ],
+          "explain": "A bigger stride means fewer filter stops, so the output grid gets smaller."
+        },
+        {
+          "id": "p4",
+          "type": "spot_the_ai",
+          "xp": 2,
+          "prompt": "Which statement about stride and padding's effect on output size is correct?",
+          "options": [
+            {
+              "id": "a",
+              "text": "Bigger stride shrinks the output; more padding grows or preserves it — and both effects combine together",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "Stride and padding always cancel each other out exactly, so output size never changes",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "Only padding affects output size; stride only affects speed",
+              "correct": false
+            }
+          ],
+          "explain": "Both dials genuinely change the output size, and they combine rather than cancel — as the stride-2-plus-padding example showed."
+        }
+      ]
+    },
+    {
+      "type": "boss",
+      "exercises": [
+        {
+          "id": "b1",
+          "type": "multiple_choice",
+          "xp": 5,
+          "prompt": "On a 5x5 image with a 3x3 filter, one engineer uses stride 1 with 1-pixel padding (output stays 5x5), and a second engineer uses stride 2 with that same 1-pixel padding (output shrinks to 3x3). Both used the exact same padding — why is the second engineer's output smaller?",
+          "options": [
+            {
+              "id": "a",
+              "text": "Because stride 2 makes the filter skip positions even inside the padded, larger image — padding grew the space to move in, but stride still controls how many of those positions actually get used",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "Because padding only works when stride is 1",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "Because the second engineer's image was smaller to begin with",
+              "correct": false
+            },
+            {
+              "id": "d",
+              "text": "Because stride 2 removes the padding automatically",
+              "correct": false
+            }
+          ],
+          "explain": "Exactly — padding and stride act independently. Padding gave both engineers a bigger 7x7 space to slide across, but stride 2 still only lets the filter land on every other spot in that space. Next up: how to actually choose stride and padding settings for a real task."
+        }
+      ]
+    }
+  ]
+}

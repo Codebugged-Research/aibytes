@@ -1,0 +1,217 @@
+{
+  "id": "u102-l5",
+  "unit": 102,
+  "day": 515,
+  "tier": "Convolutions Deep Dive",
+  "tierIcon": "🧩",
+  "title": "Where Grouped Convolutions Are Used",
+  "icon": "📜",
+  "concept": "Grouped convolutions aren't a recent invention — they debuted in 2012's AlexNet as a way to split the model across two memory-limited GPUs, and the same mechanism now anchors deliberately-designed architectures like ResNeXt.",
+  "xp": 15,
+  "hearts": 3,
+  "estMinutes": 7,
+  "segments": [
+    {
+      "type": "warmup",
+      "exercises": [
+        {
+          "id": "w1",
+          "type": "multiple_choice",
+          "xp": 1,
+          "prompt": "Recap: Where does a grouped convolution sit relative to standard and depthwise convolutions?",
+          "options": [
+            {
+              "id": "a",
+              "text": "It's the middle ground — more groups than standard (G=1), fewer groups than depthwise (G=channels)",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "It's a totally separate operation, unrelated to either",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "It's just another name for a standard convolution",
+              "correct": false
+            }
+          ],
+          "explain": "Right — same dial, different setting. Now let's see where that dial first got turned, decades ago."
+        }
+      ]
+    },
+    {
+      "type": "teach",
+      "cards": [
+        {
+          "kind": "hook",
+          "icon": "📜",
+          "title": "Not a new idea",
+          "body": "Grouped convolutions might feel like a clever modern efficiency trick. In reality, the idea is over a decade old — and it wasn't even invented for efficiency in the first place."
+        },
+        {
+          "kind": "definition",
+          "icon": "🖥️",
+          "title": "AlexNet, 2012: born from a hardware limit",
+          "body": "The 2012 <strong>AlexNet</strong> paper — the network that kicked off the deep learning boom — was too big to fit in the memory of a single GPU at the time (just 3GB). So the authors split the network's channels across <strong>two GPUs</strong>, with each GPU handling its own separate group of channels for most layers. That split-by-channel design is, mechanically, a grouped convolution."
+        },
+        {
+          "kind": "analogy",
+          "icon": "🏗️",
+          "title": "Two workshops, one shared blueprint",
+          "body": "It's like a build too big for one workshop's storage, so the crew splits it across two separate workshops. Each workshop keeps its own half of the parts and mostly works independently, only sharing finished sections with the other workshop at a few key points — not because splitting the work was the best design, but because neither workshop alone had room for the whole thing."
+        },
+        {
+          "kind": "example",
+          "icon": "🔢",
+          "title": "AlexNet's conv2 layer, in numbers",
+          "body": "AlexNet's first layer output 96 channels — 48 on each GPU. Its second layer (conv2) has 256 filters total, split into 2 groups of 128 filters, one group per GPU. Each of those 128 filters is only <strong>48</strong> channels deep — the size of its own GPU's channel group — not the full 96. That's a grouped convolution with G=2, driven purely by a 3GB memory ceiling."
+        },
+        {
+          "kind": "mythbust",
+          "icon": "⚠️",
+          "title": "Not designed for efficiency — but it stuck",
+          "body": "It's easy to assume AlexNet's authors set out to invent a clever efficiency technique. They didn't — grouped convs were a workaround for running out of GPU memory. But researchers later noticed the side effects (fewer weights, sometimes even better accuracy) and turned the same trick into a deliberate design choice."
+        },
+        {
+          "kind": "visual",
+          "icon": "📜",
+          "title": "From hardware hack to design tool",
+          "body": "The same mechanism, two very different motivations:",
+          "compare": {
+            "left": {
+              "emoji": "🖥️",
+              "tag": "AlexNet (2012)",
+              "text": "Grouped convs as a fix<br>for 3GB GPU memory<br>Not chosen for efficiency"
+            },
+            "right": {
+              "emoji": "🧬",
+              "tag": "ResNeXt (coming up)",
+              "text": "Grouped convs as a<br>deliberate design dial<br>called 'cardinality'"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "type": "practice",
+      "exercises": [
+        {
+          "id": "p1",
+          "type": "multiple_choice",
+          "xp": 2,
+          "prompt": "Why did the original 2012 AlexNet paper use what is, mechanically, a grouped convolution?",
+          "options": [
+            {
+              "id": "a",
+              "text": "To split the model's channels across two GPUs, since neither GPU had enough memory to hold the whole network",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "To deliberately improve accuracy through better cross-channel mixing",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "Because grouped convolutions were already a well-known efficiency trick at the time",
+              "correct": false
+            }
+          ],
+          "explain": "Right — it was purely a memory workaround for the era's 3GB GPUs, not a designed efficiency choice."
+        },
+        {
+          "id": "p2",
+          "type": "true_false",
+          "xp": 2,
+          "prompt": "True or false: grouped convolutions were originally introduced as a deliberate efficiency optimization, not a hardware workaround.",
+          "options": [
+            {
+              "id": "t",
+              "text": "True",
+              "correct": false
+            },
+            {
+              "id": "f",
+              "text": "False",
+              "correct": true
+            }
+          ],
+          "explain": "False — they emerged out of necessity, splitting AlexNet across two memory-limited GPUs, not as a planned efficiency trick."
+        },
+        {
+          "id": "p3",
+          "type": "fill_blank",
+          "xp": 2,
+          "prompt": "Complete the sentence:",
+          "sentence": "In AlexNet's conv2 layer, each of the 256 filters was split into 2 groups of 128, and each filter was only ___ channels deep instead of the full 96.",
+          "blank": "48",
+          "words": [
+            "48",
+            "96",
+            "256"
+          ],
+          "explain": "Correct — 48 is half of AlexNet's 96 first-layer output channels, matching each GPU's own channel group."
+        },
+        {
+          "id": "p4",
+          "type": "spot_the_ai",
+          "xp": 2,
+          "prompt": "Which statement correctly summarizes the historical role of grouped convolutions?",
+          "options": [
+            {
+              "id": "a",
+              "text": "They began as a 2012 hardware workaround in AlexNet and later became a deliberate design tool in later architectures",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "They were invented specifically for mobile phone deployment in the 2020s",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "They have never been used in any published, well-known architecture",
+              "correct": false
+            }
+          ],
+          "explain": "Exactly — a hardware necessity first, a deliberate design choice later."
+        }
+      ]
+    },
+    {
+      "type": "boss",
+      "exercises": [
+        {
+          "id": "b1",
+          "type": "multiple_choice",
+          "xp": 5,
+          "prompt": "You're reading a paper that describes a network using grouped convolutions as a core design choice, deliberately tuning the number of groups to trade off weight count against accuracy — very different from AlexNet's original motivation. What changed between AlexNet's use and this later use?",
+          "options": [
+            {
+              "id": "a",
+              "text": "AlexNet used grouping as a forced workaround for limited GPU memory, while later architectures like ResNeXt treat the number of groups as a deliberate, tunable design dial for efficiency and accuracy",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "Nothing changed — every use of grouped convolutions has always been for the exact same memory-saving reason",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "Later architectures stopped using grouped convolutions entirely once GPU memory improved",
+              "correct": false
+            },
+            {
+              "id": "d",
+              "text": "AlexNet's grouping was for accuracy, while later architectures use it only to save memory",
+              "correct": false
+            }
+          ],
+          "explain": "Correct — AlexNet's grouping was a forced hardware workaround; ResNeXt later turned the same mechanism into a deliberate design dial called cardinality. Next up: Transposed Convolutions — how CNNs learn to make feature maps bigger instead of smaller."
+        }
+      ]
+    }
+  ]
+}

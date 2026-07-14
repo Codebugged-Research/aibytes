@@ -1,0 +1,217 @@
+{
+  "id": "u102-l1",
+  "unit": 102,
+  "day": 511,
+  "tier": "Convolutions Deep Dive",
+  "tierIcon": "🧩",
+  "title": "What is a Grouped Convolution?",
+  "icon": "🧩",
+  "concept": "A grouped convolution splits the input channels into separate groups, then convolves each group independently with its own set of filters — no group ever sees or mixes with another group's channels.",
+  "xp": 15,
+  "hearts": 3,
+  "estMinutes": 7,
+  "segments": [
+    {
+      "type": "warmup",
+      "exercises": [
+        {
+          "id": "w1",
+          "type": "multiple_choice",
+          "xp": 1,
+          "prompt": "Recap: In a depthwise separable convolution, what does the depthwise step do to each input channel?",
+          "options": [
+            {
+              "id": "a",
+              "text": "Applies one filter to that channel alone, with zero mixing across channels",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "Blends every channel together into a single output map",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "Deletes half of the input channels before the pointwise step runs",
+              "correct": false
+            }
+          ],
+          "explain": "Right — the depthwise step handles each channel in total isolation. Today: a middle ground between total isolation and total mixing."
+        }
+      ]
+    },
+    {
+      "type": "teach",
+      "cards": [
+        {
+          "kind": "hook",
+          "icon": "🤔",
+          "title": "All or nothing?",
+          "body": "So far, convolution has been all-or-nothing on channels. A standard filter reaches across every input channel at once, mixing all of them into one output. What if you only wanted <em>some</em> of that mixing — not all of it, and not none of it either?"
+        },
+        {
+          "kind": "definition",
+          "icon": "🧩",
+          "title": "What is a grouped convolution?",
+          "body": "A <strong>grouped convolution</strong> splits the input channels into <code>G</code> equal-sized groups. Each group gets its own separate set of filters, and those filters only ever look at their own group's channels — never any other group's. The outputs from all groups are stacked back together at the end."
+        },
+        {
+          "kind": "analogy",
+          "icon": "🏭",
+          "title": "Separate production lines, one shipping dock",
+          "body": "Imagine a factory floor split into a few independent assembly lines, each with its own parts bin and its own workers. Line 1 never touches Line 2's parts, and vice versa. At the very end, every line's finished boxes get stacked onto the same shipping dock — that's the grouped conv's output."
+        },
+        {
+          "kind": "example",
+          "icon": "🔢",
+          "title": "4 channels, 2 groups",
+          "body": "Say an input has 4 channels: <code>[A, B, C, D]</code>. Split into 2 groups: Group 1 gets channels <code>[A, B]</code>, Group 2 gets channels <code>[C, D]</code>. Group 1's filters only ever compute from A and B — they never see C or D. Group 2's filters only ever compute from C and D — they never see A or B."
+        },
+        {
+          "kind": "mythbust",
+          "icon": "⚠️",
+          "title": "It's not two copies of the same filter",
+          "body": "It's tempting to picture grouped convs as just running the same filter twice on different data. In reality, each group learns its <em>own</em> independent filters — Group 1's filters can learn completely different patterns than Group 2's, because they never see the other group's channels to compare against."
+        },
+        {
+          "kind": "visual",
+          "icon": "🧩",
+          "title": "Standard vs. grouped: who sees what",
+          "body": "Same total channels, very different wiring:",
+          "compare": {
+            "left": {
+              "emoji": "🌐",
+              "tag": "Standard conv (1 group)",
+              "text": "Every filter reaches<br>across all channels<br>Everything mixes"
+            },
+            "right": {
+              "emoji": "🧩",
+              "tag": "Grouped conv (G groups)",
+              "text": "Each filter reaches only<br>its own group's channels<br>Groups stay separate"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "type": "practice",
+      "exercises": [
+        {
+          "id": "p1",
+          "type": "multiple_choice",
+          "xp": 2,
+          "prompt": "In a grouped convolution with 2 groups, can a filter in Group 1 use information from Group 2's channels?",
+          "options": [
+            {
+              "id": "a",
+              "text": "No — Group 1's filters only ever compute from Group 1's own channels",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "Yes, every filter always sees every channel regardless of grouping",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "Only during the very first training step",
+              "correct": false
+            }
+          ],
+          "explain": "Correct — that's the entire point of grouping: each group's filters are walled off from every other group's channels."
+        },
+        {
+          "id": "p2",
+          "type": "true_false",
+          "xp": 2,
+          "prompt": "True or false: In a grouped convolution, the outputs from every group are eventually combined back into one stacked output.",
+          "options": [
+            {
+              "id": "t",
+              "text": "True",
+              "correct": true
+            },
+            {
+              "id": "f",
+              "text": "False",
+              "correct": false
+            }
+          ],
+          "explain": "True — while the groups compute independently, their output channels are stacked together at the end to form the layer's full output."
+        },
+        {
+          "id": "p3",
+          "type": "fill_blank",
+          "xp": 2,
+          "prompt": "Complete the sentence:",
+          "sentence": "A grouped convolution splits input channels into separate ___, each with its own independent filters.",
+          "blank": "groups",
+          "words": [
+            "groups",
+            "layers",
+            "pixels"
+          ],
+          "explain": "Right — \"groups\" is the key word; each group is handled by its own filter set, isolated from the rest."
+        },
+        {
+          "id": "p4",
+          "type": "spot_the_ai",
+          "xp": 2,
+          "prompt": "Which statement correctly describes a grouped convolution?",
+          "options": [
+            {
+              "id": "a",
+              "text": "Input channels are split into groups, and each group is convolved independently by its own filters",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "Every filter always convolves across the entire set of input channels, with no exceptions",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "Groups are created by splitting the image spatially into left and right halves",
+              "correct": false
+            }
+          ],
+          "explain": "Exactly — the split is by channel, not by spatial position, and each group's filters stay independent."
+        }
+      ]
+    },
+    {
+      "type": "boss",
+      "exercises": [
+        {
+          "id": "b1",
+          "type": "multiple_choice",
+          "xp": 5,
+          "prompt": "An input has 8 channels, split into 4 groups for a grouped convolution. How many of the 8 channels can a single filter in Group 1 ever compute from?",
+          "options": [
+            {
+              "id": "a",
+              "text": "2 — only Group 1's own channels (8 channels / 4 groups)",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "8 — every filter always sees the full channel depth",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "4 — half of the input channels",
+              "correct": false
+            },
+            {
+              "id": "d",
+              "text": "1 — a single, random channel",
+              "correct": false
+            }
+          ],
+          "explain": "Correct: 8 channels split evenly across 4 groups gives 2 channels per group, and a filter in Group 1 only ever reaches those 2. Next: an even bigger example — 64 channels split into groups."
+        }
+      ]
+    }
+  ]
+}

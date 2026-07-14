@@ -1,0 +1,222 @@
+{
+  "id": "u98-l3",
+  "unit": 98,
+  "day": 493,
+  "tier": "Convolutions Deep Dive",
+  "tierIcon": "👣",
+  "title": "Valid vs. Same Padding",
+  "icon": "⚖️",
+  "concept": "\"Valid\" padding means no padding at all — the output shrinks. \"Same\" padding adds just enough border to keep the output the same size as the input.",
+  "xp": 15,
+  "hearts": 3,
+  "estMinutes": 7,
+  "segments": [
+    {
+      "type": "warmup",
+      "exercises": [
+        {
+          "id": "w1",
+          "type": "multiple_choice",
+          "xp": 1,
+          "prompt": "Recap: What does adding a 1-pixel zero border to a 5x5 image turn it into, before the filter slides over it?",
+          "options": [
+            {
+              "id": "a",
+              "text": "A 7x7 image",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "A 4x4 image",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "A 5x5 image, unchanged",
+              "correct": false
+            }
+          ],
+          "explain": "Right — a 1-pixel border on every side adds 2 total to each dimension: 5 + 1 + 1 = 7."
+        }
+      ]
+    },
+    {
+      "type": "teach",
+      "cards": [
+        {
+          "kind": "hook",
+          "icon": "🤔",
+          "title": "Two padding philosophies",
+          "body": "So far you've seen padding exists — but how much padding should you actually add? CNNs mostly settle on one of two standard answers, and they have very different personalities."
+        },
+        {
+          "kind": "definition",
+          "icon": "⚖️",
+          "title": "Valid vs. same padding",
+          "body": "<strong>Valid padding</strong> means adding zero padding — the filter only ever slides within the image's real pixels, so the output shrinks. <strong>Same padding</strong> means adding just enough zero border so the output ends up the exact same width and height as the input."
+        },
+        {
+          "kind": "analogy",
+          "icon": "✂️",
+          "title": "Cropping a photo vs. keeping the full frame",
+          "body": "Valid padding is like cropping a photo to only the fully-in-focus center — you lose some border, but everything left is untouched original data. Same padding is like taping extra blank cardboard around the photo first, so the final printed frame keeps the exact same size as the original."
+        },
+        {
+          "kind": "example",
+          "icon": "🔢",
+          "title": "Same numbers, two outcomes",
+          "body": "A 5x5 image, 3x3 filter, stride 1. With <strong>valid</strong> padding (no border added), the filter only fits at 3x3 = 9 positions, so the output is 3x3 — smaller than the input. With <strong>same</strong> padding, a 1-pixel zero border is added first (5x5 becomes 7x7), and now the filter fits at 5x5 = 25 positions — an output that's 5x5, matching the original input exactly."
+        },
+        {
+          "kind": "mythbust",
+          "icon": "⚠️",
+          "title": "\"Valid\" doesn't mean \"correct\"",
+          "body": "The name \"valid\" makes it sound like the better or more correct choice. It just means the filter is only considered valid when it's fully inside the real pixels — no padding trickery. \"Same\" isn't a hack either; it's simply padded enough to preserve size."
+        },
+        {
+          "kind": "visual",
+          "icon": "⚖️",
+          "title": "Valid vs. Same, side by side",
+          "body": "Same 5x5 input, same 3x3 filter, two padding choices:",
+          "compare": {
+            "left": {
+              "emoji": "✂️",
+              "tag": "Valid padding",
+              "text": "No border added<br>5x5 input → 3x3 output<br>Shrinks every layer"
+            },
+            "right": {
+              "emoji": "🖼️",
+              "tag": "Same padding",
+              "text": "Just enough border added<br>5x5 input → 5x5 output<br>Size preserved"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "type": "practice",
+      "exercises": [
+        {
+          "id": "p1",
+          "type": "multiple_choice",
+          "xp": 2,
+          "prompt": "A 5x5 image runs through a 3x3 filter with 'valid' padding and stride 1. What size is the output?",
+          "options": [
+            {
+              "id": "a",
+              "text": "3x3 — smaller than the input, since no border was added",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "5x5 — the same as the input",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "7x7 — larger than the input",
+              "correct": false
+            },
+            {
+              "id": "d",
+              "text": "1x1 — a single value",
+              "correct": false
+            }
+          ],
+          "explain": "Right — with no padding at all, the filter only fits at 3x3 = 9 positions, giving a 3x3 output."
+        },
+        {
+          "id": "p2",
+          "type": "true_false",
+          "xp": 2,
+          "prompt": "True or false: 'Same' padding means the output is always exactly the same width and height as the input.",
+          "options": [
+            {
+              "id": "t",
+              "text": "True",
+              "correct": true
+            },
+            {
+              "id": "f",
+              "text": "False",
+              "correct": false
+            }
+          ],
+          "explain": "True — that's the entire point of same padding: add just enough border so the output size matches the input size."
+        },
+        {
+          "id": "p3",
+          "type": "fill_blank",
+          "xp": 2,
+          "prompt": "Complete the sentence:",
+          "sentence": "___ padding adds zero pixels around the border, so the output size stays equal to the input size.",
+          "blank": "Same",
+          "words": [
+            "Same",
+            "Valid",
+            "Random"
+          ],
+          "explain": "Same padding is named for exactly this outcome — it keeps the output the same size as the input."
+        },
+        {
+          "id": "p4",
+          "type": "spot_the_ai",
+          "xp": 2,
+          "prompt": "Which description correctly matches 'valid' padding?",
+          "options": [
+            {
+              "id": "a",
+              "text": "No padding is added, so the filter only ever sits fully inside the original pixels and the output shrinks",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "Extra zero padding is added so the output always grows larger than the input",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "The image is resized to a fixed square before the filter runs",
+              "correct": false
+            }
+          ],
+          "explain": "Valid padding is the 'no shortcuts' option: zero extra border, filter only considered valid where it's entirely inside the real image."
+        }
+      ]
+    },
+    {
+      "type": "boss",
+      "exercises": [
+        {
+          "id": "b1",
+          "type": "multiple_choice",
+          "xp": 5,
+          "prompt": "You're stacking 8 convolution layers to build a deep feature extractor, and you want the spatial size to stay constant so you can keep stacking layers without the image shrinking away to nothing. Which padding choice fits, and why?",
+          "options": [
+            {
+              "id": "a",
+              "text": "Same padding — it adds just enough border at each layer to keep the output size equal to the input size, layer after layer",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "Valid padding — because it always keeps the output the same size",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "Same padding — because it always makes the output larger than the input",
+              "correct": false
+            },
+            {
+              "id": "d",
+              "text": "Valid padding — because it's simply the 'correct' choice by name",
+              "correct": false
+            }
+          ],
+          "explain": "Exactly. Same padding is built for exactly this situation — stacking many layers while keeping the spatial size constant. Next up: seeing stride and padding's effects on output size side by side."
+        }
+      ]
+    }
+  ]
+}

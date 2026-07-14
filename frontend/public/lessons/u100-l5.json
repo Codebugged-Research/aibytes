@@ -1,0 +1,217 @@
+{
+  "id": "u100-l5",
+  "unit": 100,
+  "day": 505,
+  "tier": "Convolutions Deep Dive",
+  "tierIcon": "1️⃣",
+  "title": "Where 1x1 Convs Show Up in Real Architectures",
+  "icon": "🏰",
+  "concept": "1x1 convolutions aren't a footnote — they're a core building block inside GoogLeNet's Inception modules and ResNet's bottleneck blocks, two of the most influential CNN architectures ever designed.",
+  "xp": 15,
+  "hearts": 3,
+  "estMinutes": 7,
+  "segments": [
+    {
+      "type": "warmup",
+      "exercises": [
+        {
+          "id": "w1",
+          "type": "multiple_choice",
+          "xp": 1,
+          "prompt": "Recap: In a bottleneck block, why does expanding channels back up at the end matter?",
+          "options": [
+            {
+              "id": "a",
+              "text": "So the block's output shape matches what the rest of the network expects, letting it stack repeatedly",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "It doesn't matter — the expand step is optional and rarely used",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "Because 3x3 convs cannot output more than 64 channels",
+              "correct": false
+            }
+          ],
+          "explain": "Right — expand-back keeps the shape consistent so bottleneck blocks can stack, layer after layer. Now let's see this pattern in the wild."
+        }
+      ]
+    },
+    {
+      "type": "teach",
+      "cards": [
+        {
+          "kind": "hook",
+          "icon": "🏰",
+          "title": "Not a footnote — a foundation",
+          "body": "Everything you just learned — channel mixing, cheap dimensionality reduction, the squeeze-work-expand bottleneck — isn't a niche trick tucked in some obscure paper. It's the literal load-bearing idea inside two of the most famous, era-defining CNN architectures ever built."
+        },
+        {
+          "kind": "definition",
+          "icon": "🏛️",
+          "title": "GoogLeNet's Inception module",
+          "body": "<strong>GoogLeNet</strong> (2014) runs several different filter sizes — 1x1, 3x3, 5x5 — <em>in parallel</em> inside each 'Inception module.' Before the pricier 3x3 and 5x5 branches run, 1x1 convs squeeze the channel count down first, exactly like you learned in this unit. There's even a branch that's a 1x1 conv alone — pure channel mixing, no spatial work at all."
+        },
+        {
+          "kind": "analogy",
+          "icon": "🔧",
+          "title": "The same tool, reused by different builders",
+          "body": "The 1x1 conv is like a specific wrench that shows up in totally different toolboxes built by different engineering teams. GoogLeNet's team used it to keep a wide, multi-branch design affordable. A different team, building ResNet, used the very same wrench for a different job: going deeper instead of wider."
+        },
+        {
+          "kind": "example",
+          "icon": "🏗️",
+          "title": "ResNet's bottleneck blocks",
+          "body": "<strong>ResNet</strong> (2015) stacks the exact squeeze → 3x3 → expand bottleneck block from this unit, over and over, to build networks 50, 101, even 152 layers deep. Without the 1x1 squeeze keeping each block cheap, stacking that many layers would be computationally out of reach."
+        },
+        {
+          "kind": "mythbust",
+          "icon": "⚠️",
+          "title": "Not a minor implementation detail",
+          "body": "It's easy to assume 1x1 convs are some small optimization buried deep in the code, barely worth learning. In reality, they're why GoogLeNet could go wide without exploding in cost, and why ResNet could go from a few dozen layers to 50-152 layers deep. Two landmark architectures, one shared trick."
+        },
+        {
+          "kind": "visual",
+          "icon": "🏰",
+          "title": "Two architectures, one shared trick",
+          "body": "Different goals, same 1x1 foundation:",
+          "compare": {
+            "left": {
+              "emoji": "🌐",
+              "tag": "GoogLeNet / Inception (2014)",
+              "text": "1x1 squeezes channels<br>before parallel 3x3/5x5<br>branches — go wide"
+            },
+            "right": {
+              "emoji": "🏗️",
+              "tag": "ResNet bottleneck (2015)",
+              "text": "1x1 squeeze → 3x3 → 1x1<br>expand, repeated —<br>go 50-152 layers deep"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "type": "practice",
+      "exercises": [
+        {
+          "id": "p1",
+          "type": "multiple_choice",
+          "xp": 2,
+          "prompt": "Which two landmark CNN architectures both rely heavily on 1x1 convolutions?",
+          "options": [
+            {
+              "id": "a",
+              "text": "GoogLeNet (Inception modules) and ResNet (bottleneck blocks)",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "Only a single obscure research prototype that never saw wide use",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "Neither — 1x1 convs are a purely theoretical idea with no real-world use",
+              "correct": false
+            }
+          ],
+          "explain": "Correct — both architectures build entire design philosophies around the 1x1 tricks from this unit."
+        },
+        {
+          "id": "p2",
+          "type": "true_false",
+          "xp": 2,
+          "prompt": "True or false: 1x1 convolutions are a rarely-used trick found in only one obscure architecture.",
+          "options": [
+            {
+              "id": "t",
+              "text": "True",
+              "correct": false
+            },
+            {
+              "id": "f",
+              "text": "False",
+              "correct": true
+            }
+          ],
+          "explain": "False — they're a core building block in multiple landmark architectures, including GoogLeNet and ResNet."
+        },
+        {
+          "id": "p3",
+          "type": "fill_blank",
+          "xp": 2,
+          "prompt": "Complete the sentence:",
+          "sentence": "In GoogLeNet's Inception module, 1x1 convolutions squeeze channels before the more expensive ___ and 5x5 branches run.",
+          "blank": "3x3",
+          "words": [
+            "3x3",
+            "1x1",
+            "7x7"
+          ],
+          "explain": "Right — the 1x1 squeeze happens before the pricier 3x3 and 5x5 branches, keeping the whole wide module affordable."
+        },
+        {
+          "id": "p4",
+          "type": "spot_the_ai",
+          "xp": 2,
+          "prompt": "Which statement correctly describes where 1x1 convolutions show up in real architectures?",
+          "options": [
+            {
+              "id": "a",
+              "text": "They squeeze channels before expensive branches in Inception modules, and form the squeeze/expand steps in ResNet bottleneck blocks",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "They are used exclusively to convert images between file formats like JPEG and PNG",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "They replace all 3x3 and 5x5 convolutions entirely in every modern architecture",
+              "correct": false
+            }
+          ],
+          "explain": "Exactly — both roles come straight from what you learned this unit: cheap channel control around expensive spatial work."
+        }
+      ]
+    },
+    {
+      "type": "boss",
+      "exercises": [
+        {
+          "id": "b1",
+          "type": "multiple_choice",
+          "xp": 5,
+          "prompt": "GoogLeNet's Inception modules and ResNet's bottleneck blocks look very different at a glance, but both lean on 1x1 convolutions for the same underlying reason. What is it?",
+          "options": [
+            {
+              "id": "a",
+              "text": "To cheaply control channel depth around expensive spatial convolutions, keeping wide or deep networks computationally affordable",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "To convert the input image into grayscale before any other processing happens",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "To increase the image's height and width resolution before classification",
+              "correct": false
+            },
+            {
+              "id": "d",
+              "text": "To replace the need for any spatial convolution anywhere in the network",
+              "correct": false
+            }
+          ],
+          "explain": "Correct — cheap, learned channel control is the shared trick underneath both designs. You now know exactly why 1x1 convs matter. Coming up next: Classic CNN Architectures, where you'll meet GoogLeNet, ResNet, and more in full."
+        }
+      ]
+    }
+  ]
+}

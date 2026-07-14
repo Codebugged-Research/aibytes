@@ -1,0 +1,217 @@
+{
+  "id": "u103-l1",
+  "unit": 103,
+  "day": 516,
+  "tier": "Convolutions Deep Dive",
+  "tierIcon": "⬆️",
+  "title": "What is Upsampling?",
+  "icon": "⬆️",
+  "concept": "Upsampling takes a small feature map and makes it bigger again — the opposite of what convolutions and pooling do — which matters for tasks like segmentation where the output must match the input's resolution.",
+  "xp": 15,
+  "hearts": 3,
+  "estMinutes": 7,
+  "segments": [
+    {
+      "type": "warmup",
+      "exercises": [
+        {
+          "id": "w1",
+          "type": "multiple_choice",
+          "xp": 1,
+          "prompt": "Recap: What does a grouped convolution do to an input's channels before applying separate filters?",
+          "options": [
+            {
+              "id": "a",
+              "text": "Splits them into separate groups, each processed independently by its own filters",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "Merges all channels into a single value before any filtering",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "Discards half of the channels at random",
+              "correct": false
+            }
+          ],
+          "explain": "Exactly — grouped convolutions split channels into independent groups, each with its own filters and no cross-group mixing. Now let's flip convolutions on their head: what if you needed to make a feature map BIGGER instead of smaller?"
+        }
+      ]
+    },
+    {
+      "type": "teach",
+      "cards": [
+        {
+          "kind": "hook",
+          "icon": "📉",
+          "title": "Everything so far has been shrinking",
+          "body": "Every convolution trick you've learned this whole deep dive — dilation, grouping, striding — still moves in one direction: a big feature map comes in, a smaller (or same-size) one comes out. But what happens when a task needs the exact opposite?"
+        },
+        {
+          "kind": "definition",
+          "icon": "⬆️",
+          "title": "What is upsampling?",
+          "body": "<strong>Upsampling</strong> means increasing the spatial size of a feature map — turning something like a 4x4 grid of numbers into an 8x8 grid, or bigger. It's the mirror image of what strided convolutions and pooling do: instead of shrinking height and width, upsampling grows them back."
+        },
+        {
+          "kind": "analogy",
+          "icon": "🖼️",
+          "title": "Blowing up a thumbnail",
+          "body": "Think of stretching a small thumbnail image out to fill a big screen. The thumbnail didn't gain new information — it got spread across more pixels. Upsampling does the same thing to a feature map: more grid cells, filled in from the smaller original."
+        },
+        {
+          "kind": "example",
+          "icon": "🩺",
+          "title": "Why segmentation needs it",
+          "body": "A medical scan segmentation model needs to label every single pixel of a 256x256 image as 'tumor' or 'not tumor.' But its convolution layers shrink that image down to a compact 8x8 feature map to find patterns efficiently. Something has to blow that 8x8 map back up to 256x256 before the model can output a full-size mask — that's upsampling's job."
+        },
+        {
+          "kind": "mythbust",
+          "icon": "⚠️",
+          "title": "Upsampling doesn't recover lost detail",
+          "body": "It's tempting to think upsampling 'undoes' the shrinking and restores the original image perfectly. It can't — once pooling or a strided conv throws detail away, that detail is gone. Upsampling only makes the grid bigger; it can't magically reconstruct information that was never kept."
+        },
+        {
+          "kind": "visual",
+          "icon": "⚖️",
+          "title": "Downsampling vs. upsampling",
+          "body": "Two opposite moves in a CNN:",
+          "compare": {
+            "left": {
+              "emoji": "📉",
+              "tag": "Downsampling (stride, pooling)",
+              "text": "Shrinks height & width<br>discards detail<br>e.g. 8x8 → 4x4"
+            },
+            "right": {
+              "emoji": "📈",
+              "tag": "Upsampling",
+              "text": "Grows height & width<br>fills in new grid cells<br>e.g. 4x4 → 8x8"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "type": "practice",
+      "exercises": [
+        {
+          "id": "p1",
+          "type": "multiple_choice",
+          "xp": 2,
+          "prompt": "What does upsampling do to a feature map's spatial size?",
+          "options": [
+            {
+              "id": "a",
+              "text": "Increases its height and width",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "Increases its channel depth only",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "Shrinks it further",
+              "correct": false
+            }
+          ],
+          "explain": "Right — upsampling grows the spatial grid (height and width), the opposite of pooling or a strided convolution."
+        },
+        {
+          "id": "p2",
+          "type": "true_false",
+          "xp": 2,
+          "prompt": "True or false: upsampling can perfectly recover the exact detail that pooling or a strided convolution discarded earlier in the network.",
+          "options": [
+            {
+              "id": "t",
+              "text": "True",
+              "correct": false
+            },
+            {
+              "id": "f",
+              "text": "False",
+              "correct": true
+            }
+          ],
+          "explain": "False — upsampling only makes the grid bigger. Detail thrown away during downsampling is gone for good; it can't be magically reconstructed."
+        },
+        {
+          "id": "p3",
+          "type": "fill_blank",
+          "xp": 2,
+          "prompt": "Complete the sentence:",
+          "sentence": "Upsampling is the opposite of pooling and strided convolutions — instead of shrinking a feature map, it makes it ___.",
+          "blank": "bigger",
+          "words": [
+            "bigger",
+            "deeper",
+            "random"
+          ],
+          "explain": "Right — upsampling grows a feature map's spatial size instead of shrinking it."
+        },
+        {
+          "id": "p4",
+          "type": "spot_the_ai",
+          "xp": 2,
+          "prompt": "Which scenario correctly describes a use for upsampling?",
+          "options": [
+            {
+              "id": "a",
+              "text": "A segmentation model needs its final output mask to match the original 256x256 input resolution, so a small 8x8 feature map is grown back up",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "A classifier needs to shrink a 224x224 image down to a single label",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "A 1x1 conv mixes channel information without changing spatial size",
+              "correct": false
+            }
+          ],
+          "explain": "Exactly — matching a small feature map back up to the input's resolution is exactly what upsampling is for."
+        }
+      ]
+    },
+    {
+      "type": "boss",
+      "exercises": [
+        {
+          "id": "b1",
+          "type": "multiple_choice",
+          "xp": 5,
+          "prompt": "A network's convolution and pooling layers shrink a 128x128 input image down to a 16x16 feature map by the time it reaches the last conv layer. The task is semantic segmentation, which requires a per-pixel output the same size as the input. What must happen to the 16x16 feature map, and why?",
+          "options": [
+            {
+              "id": "a",
+              "text": "It must be upsampled back up to 128x128, because the output mask needs to align with every original input pixel",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "Nothing — segmentation models output a single label per image, not a full mask",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "It must be shrunk further, since segmentation only needs a compact summary",
+              "correct": false
+            },
+            {
+              "id": "d",
+              "text": "It must be duplicated 16 times side by side without resizing",
+              "correct": false
+            }
+          ],
+          "explain": "Exactly — the 16x16 map must grow back to 128x128 so every original pixel gets a label. Coming up next: simple upsampling follows one fixed rule — what if the network could learn the best way to expand instead?"
+        }
+      ]
+    }
+  ]
+}

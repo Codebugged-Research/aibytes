@@ -1,0 +1,222 @@
+{
+  "id": "u97-l2",
+  "unit": 97,
+  "day": 487,
+  "tier": "Convolutions Deep Dive",
+  "tierIcon": "🎯",
+  "title": "From Classical Filters to Learned Kernels",
+  "icon": "🔄",
+  "concept": "Sobel's filter numbers were fixed once by an engineer, but a CNN's filter starts as random numbers; backpropagation then nudges each one after every training example until the filter learns to detect something useful.",
+  "xp": 15,
+  "hearts": 3,
+  "estMinutes": 7,
+  "segments": [
+    {
+      "type": "warmup",
+      "exercises": [
+        {
+          "id": "w1",
+          "type": "multiple_choice",
+          "xp": 1,
+          "prompt": "Recap: What does a convolution compute at each position as a filter slides over an image?",
+          "options": [
+            {
+              "id": "a",
+              "text": "A weighted sum — multiply the filter numbers by the pixels underneath, then add the results",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "The brightest pixel in that position",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "A count of how many pixels are pure white",
+              "correct": false
+            }
+          ],
+          "explain": "Right. Now let's trace where that filter's numbers actually come from."
+        }
+      ]
+    },
+    {
+      "type": "teach",
+      "cards": [
+        {
+          "kind": "hook",
+          "icon": "🎲",
+          "title": "Where do the filter's numbers come from?",
+          "body": "Last lesson you saw that a convolution filter is just a small grid of numbers, learned instead of hand-picked. But how does a filter actually learn? The answer is something you've already met: backpropagation."
+        },
+        {
+          "kind": "definition",
+          "icon": "🔄",
+          "title": "Fixed numbers vs. learned numbers",
+          "body": "A classical Sobel filter's numbers, like -1, 0, and 1, were chosen once by an engineer and never change. A CNN's filter starts as small <strong>random</strong> numbers and updates them during training — the final values are learned, not designed."
+        },
+        {
+          "kind": "analogy",
+          "icon": "🎯",
+          "title": "Learning to aim, one nudge at a time",
+          "body": "Imagine throwing darts blindfolded. Your first random throws mostly miss. But after each throw, you nudge your aim slightly based on how far off you were. A CNN filter starts random and gets nudged the same way, one training example at a time."
+        },
+        {
+          "kind": "example",
+          "icon": "🧮",
+          "title": "Backprop nudges the filter",
+          "body": "Recall backpropagation from Units 71-72: the network makes a prediction, measures the error against the loss, and sends a correction signal backward through every weight. A convolution filter's numbers ARE weights — so backprop nudges them too, slightly adjusting each one to reduce the error a little."
+        },
+        {
+          "kind": "mythbust",
+          "icon": "⚠️",
+          "title": "It isn't random guessing",
+          "body": "You might picture a computer randomly trying number combinations until one works. That's not it — gradient descent, guided by backprop, calculates exactly which direction to nudge each filter number to reduce error, and repeats this systematically across thousands of images."
+        },
+        {
+          "kind": "visual",
+          "icon": "⚖️",
+          "title": "Sobel vs. CNN filter: where the numbers come from",
+          "body": "Same 3x3 grid shape, a completely different origin story:",
+          "compare": {
+            "left": {
+              "emoji": "👷",
+              "tag": "Sobel filter",
+              "text": "Numbers picked once<br>by a human engineer"
+            },
+            "right": {
+              "emoji": "🎯",
+              "tag": "CNN filter",
+              "text": "Starts random, nudged<br>by backprop every training step"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "type": "practice",
+      "exercises": [
+        {
+          "id": "p1",
+          "type": "multiple_choice",
+          "xp": 2,
+          "prompt": "What does a CNN's filter start out as, before any training happens?",
+          "options": [
+            {
+              "id": "a",
+              "text": "Small random numbers",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "The exact same numbers as a Sobel filter",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "Zeroes that never change",
+              "correct": false
+            },
+            {
+              "id": "d",
+              "text": "Numbers copied from a finished network",
+              "correct": false
+            }
+          ],
+          "explain": "Right — every filter starts as noise and training shapes it into something useful."
+        },
+        {
+          "id": "p2",
+          "type": "true_false",
+          "xp": 2,
+          "prompt": "True or false: backpropagation, the process you learned in Units 71-72, is the same mechanism that updates a CNN filter's numbers during training.",
+          "options": [
+            {
+              "id": "t",
+              "text": "True",
+              "correct": true
+            },
+            {
+              "id": "f",
+              "text": "False",
+              "correct": false
+            }
+          ],
+          "explain": "True. A filter's numbers are just weights, and backprop updates weights of every kind, including these."
+        },
+        {
+          "id": "p3",
+          "type": "fill_blank",
+          "xp": 2,
+          "prompt": "Complete the sentence:",
+          "sentence": "A Sobel filter's numbers are chosen once by an engineer and stay fixed; a CNN filter's numbers start random and are ___ by backpropagation during training.",
+          "blank": "nudged",
+          "words": [
+            "nudged",
+            "frozen",
+            "randomized"
+          ],
+          "explain": "Nudged is right — each training example shifts the numbers a little closer to something useful."
+        },
+        {
+          "id": "p4",
+          "type": "spot_the_ai",
+          "xp": 2,
+          "prompt": "Which statement correctly explains how a CNN filter's numbers become useful?",
+          "options": [
+            {
+              "id": "a",
+              "text": "They start random and backpropagation gradually adjusts them based on prediction error until they detect something useful",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "An engineer manually tunes each number by hand, like Sobel",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "The numbers are copied from a lookup table of premade filters and never change",
+              "correct": false
+            }
+          ],
+          "explain": "Exactly — no hand-tuning involved, just repeated small corrections from backprop."
+        }
+      ]
+    },
+    {
+      "type": "boss",
+      "exercises": [
+        {
+          "id": "b1",
+          "type": "multiple_choice",
+          "xp": 5,
+          "prompt": "A brand-new CNN filter starts as random noise. After training on 10,000 images, that same filter reliably lights up on diagonal edges. What made that change happen?",
+          "options": [
+            {
+              "id": "a",
+              "text": "Backpropagation repeatedly nudged the filter's numbers based on prediction error until they converged on a useful pattern",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "A human engineer manually replaced the random numbers with Sobel's numbers",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "The filter was randomly reshuffled until one arrangement happened to work",
+              "correct": false
+            },
+            {
+              "id": "d",
+              "text": "The image file format was converted, which reset the filter",
+              "correct": false
+            }
+          ],
+          "explain": "That's the mechanism! Next up: let's actually crunch the numbers for one position of a convolution, step by step."
+        }
+      ]
+    }
+  ]
+}

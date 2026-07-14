@@ -1,0 +1,217 @@
+{
+  "id": "u100-l3",
+  "unit": 100,
+  "day": 503,
+  "tier": "Convolutions Deep Dive",
+  "tierIcon": "1️⃣",
+  "title": "Using 1x1 Convs to Reduce Dimensionality",
+  "icon": "📉",
+  "concept": "Because a 1x1 convolution can output fewer channels than it takes in, it's a cheap way to shrink channel depth before a more expensive larger-kernel convolution runs.",
+  "xp": 15,
+  "hearts": 3,
+  "estMinutes": 7,
+  "segments": [
+    {
+      "type": "warmup",
+      "exercises": [
+        {
+          "id": "w1",
+          "type": "multiple_choice",
+          "xp": 1,
+          "prompt": "Recap: A 1x1 convolution mixes information across...",
+          "options": [
+            {
+              "id": "a",
+              "text": "Channels, at a single fixed pixel position",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "Neighboring pixels, within a single channel",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "Nothing — it passes data through completely unchanged",
+              "correct": false
+            }
+          ],
+          "explain": "Right — channel mixing, spatial grid untouched. Now let's use that mixing to solve a real cost problem."
+        }
+      ]
+    },
+    {
+      "type": "teach",
+      "cards": [
+        {
+          "kind": "hook",
+          "icon": "💸",
+          "title": "Deep networks get expensive fast",
+          "body": "As a CNN goes deeper, channel counts balloon — 64, then 128, then 256, then 512. Running a 3x3 convolution over 256 input channels means every single output value needs a weighted sum over 3×3×256 numbers. That cost multiplies with every filter. What if you could shrink the channel count <em>first</em>, before paying that price?"
+        },
+        {
+          "kind": "definition",
+          "icon": "📉",
+          "title": "Dimensionality reduction with a 1x1 conv",
+          "body": "A 1x1 convolution can output <strong>fewer channels than it takes in</strong>. Feed in 256 channels, use just 64 1x1 filters, and the output has only 64 channels — same height and width, compressed depth. This is called <strong>dimensionality reduction</strong>, and it's cheap because a 1x1 conv's cost scales with channels, not with a 3x3 spatial footprint."
+        },
+        {
+          "kind": "analogy",
+          "icon": "📚",
+          "title": "A cheat-sheet before the deep dive",
+          "body": "Imagine a 256-recipe cookbook. Before painstakingly cooking (the expensive 3x3 work), you distill it down to a 64-recipe cheat-sheet that captures the essentials. Cooking from the smaller cheat-sheet is faster — you're doing the expensive work on a smaller set, not the full binder."
+        },
+        {
+          "kind": "example",
+          "icon": "🔢",
+          "title": "Counting the savings",
+          "body": "A direct 3x3 conv on 256 channels → 256 channels costs about <code>3×3×256×256 = 589,824</code> multiply-adds per pixel. Squeeze first with a 1x1 conv (256→64): <code>1×1×256×64 = 16,384</code>. Then run the 3x3 on the smaller 64 channels (64→256): <code>3×3×64×256 = 147,456</code>. Total: <code>16,384 + 147,456 = 163,840</code> — barely a third of the direct cost."
+        },
+        {
+          "kind": "mythbust",
+          "icon": "⚠️",
+          "title": "Reduction isn't random deletion",
+          "body": "Shrinking 256 channels down to 64 can sound like throwing away 192 channels' worth of information at random. It isn't — the 64 output channels are <em>learned weighted combinations</em> of all 256 inputs, trained to keep whatever the network finds most useful, not an arbitrary chop."
+        },
+        {
+          "kind": "visual",
+          "icon": "📐",
+          "title": "Direct vs. squeeze-first",
+          "body": "Same job, very different cost:",
+          "compare": {
+            "left": {
+              "emoji": "🐢",
+              "tag": "Direct 3x3 (256→256)",
+              "text": "~590K multiply-adds<br>per pixel"
+            },
+            "right": {
+              "emoji": "🐇",
+              "tag": "1x1 squeeze (256→64) + 3x3",
+              "text": "~164K multiply-adds<br>per pixel — under a third"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "type": "practice",
+      "exercises": [
+        {
+          "id": "p1",
+          "type": "multiple_choice",
+          "xp": 2,
+          "prompt": "Why does squeezing channels with a 1x1 conv before a 3x3 conv save computation?",
+          "options": [
+            {
+              "id": "a",
+              "text": "Because the expensive 3x3 conv now runs on far fewer channels than the original input",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "Because 1x1 convs are always run on a faster chip than 3x3 convs",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "Because squeezing shrinks the image's height and width, so there are fewer pixels",
+              "correct": false
+            }
+          ],
+          "explain": "Correct — the costly 3x3 spatial work only has to process the smaller, squeezed channel count."
+        },
+        {
+          "id": "p2",
+          "type": "true_false",
+          "xp": 2,
+          "prompt": "True or false: a 1x1 conv that reduces 256 channels down to 64 discards the extra 192 channels completely at random.",
+          "options": [
+            {
+              "id": "t",
+              "text": "True",
+              "correct": false
+            },
+            {
+              "id": "f",
+              "text": "False",
+              "correct": true
+            }
+          ],
+          "explain": "False — the 64 output channels are learned weighted combinations of all 256 input channels, not a random discard."
+        },
+        {
+          "id": "p3",
+          "type": "fill_blank",
+          "xp": 2,
+          "prompt": "Complete the sentence:",
+          "sentence": "Shrinking channel depth with a 1x1 convolution before an expensive 3x3 convolution is called dimensionality ___.",
+          "blank": "reduction",
+          "words": [
+            "reduction",
+            "duplication",
+            "padding"
+          ],
+          "explain": "Right — this is dimensionality reduction, and it's why 1x1 convs are so useful for cutting compute cost."
+        },
+        {
+          "id": "p4",
+          "type": "spot_the_ai",
+          "xp": 2,
+          "prompt": "Which statement correctly describes 1x1-conv dimensionality reduction?",
+          "options": [
+            {
+              "id": "a",
+              "text": "A 1x1 conv with fewer output filters than input channels compresses channel depth cheaply before costlier layers run",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "A pooling layer that halves the image's height and width",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "A technique for converting a color image into grayscale",
+              "correct": false
+            }
+          ],
+          "explain": "Exactly — fewer output filters than input channels means a cheap, learned channel-depth squeeze."
+        }
+      ]
+    },
+    {
+      "type": "boss",
+      "exercises": [
+        {
+          "id": "b1",
+          "type": "multiple_choice",
+          "xp": 5,
+          "prompt": "A layer receives a feature map with 512 channels. It applies a 1x1 conv with 128 filters to reduce channel depth before a 3x3 conv runs. How many channels does the feature map have immediately after that 1x1 conv?",
+          "options": [
+            {
+              "id": "a",
+              "text": "128",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "512",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "384",
+              "correct": false
+            },
+            {
+              "id": "d",
+              "text": "640",
+              "correct": false
+            }
+          ],
+          "explain": "Correct — a 1x1 conv's output channel count equals its number of filters, so 128 filters means 128 channels, ready for a cheaper 3x3 pass. Next: what happens after that 3x3 work is done."
+        }
+      ]
+    }
+  ]
+}
