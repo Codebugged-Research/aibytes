@@ -1,0 +1,223 @@
+{
+  "id": "u272-l2",
+  "unit": 272,
+  "day": 1362,
+  "tier": "NLP Advanced",
+  "tierIcon": "🧠",
+  "title": "The Causal Attention Mask",
+  "icon": "🚫",
+  "concept": "The causal mask is a triangular matrix of negative infinity values added to attention scores before softmax, zeroing out attention to future tokens.",
+  "xp": 15,
+  "hearts": 3,
+  "estMinutes": 7,
+  "segments": [
+    {
+      "type": "warmup",
+      "exercises": [
+        {
+          "id": "w1",
+          "type": "multiple_choice",
+          "xp": 1,
+          "prompt": "To generate text naturally, what should a model be blocked from seeing?",
+          "options": [
+            {
+              "text": "Future words",
+              "correct": true,
+              "id": "1"
+            },
+            {
+              "text": "Past words",
+              "id": "2",
+              "correct": false
+            },
+            {
+              "correct": false,
+              "id": "3",
+              "text": "The current word"
+            }
+          ],
+          "explain": "Causal means relating to cause and effect, where the past causes the future. In AI, it means we can only look at past words, never the future."
+        }
+      ]
+    },
+    {
+      "type": "teach",
+      "cards": [
+        {
+          "kind": "hook",
+          "icon": "🔮",
+          "title": "No Peeking into the Future!",
+          "body": "When AI predicts the next word in a sentence, it shouldn't cheat by looking ahead. How do we force a neural network to 'forget' the future? We use a clever mathematical shield called a causal mask!"
+        },
+        {
+          "kind": "definition",
+          "icon": "🚫",
+          "title": "What is a Causal Mask?",
+          "body": "A causal attention mask is a grid of numbers containing 0s and negative infinities. Added to attention scores before the softmax step, it ensures the model calculates zero attention (no focus) for any words that appear later in the sentence."
+        },
+        {
+          "kind": "analogy",
+          "icon": "📖",
+          "title": "The Mystery Novel Mask",
+          "body": "Imagine you are reading a mystery novel. If you could see future pages, the ending would be spoiled! A causal mask acts like a special folder that only lets you read up to your current page, blocking all future pages from view so you can guess the next word naturally."
+        },
+        {
+          "kind": "example",
+          "icon": "📝",
+          "title": "Masking in Action",
+          "body": "When predicting the word after 'The cat sat', the mask blocks the words 'on the mat'. The attention score grid changes from:\n[ 2.1,  1.5, -inf ] (after mask is added)\nApplying softmax turns that '-inf' into a clean 0% attention weight for the future word."
+        },
+        {
+          "kind": "mythbust",
+          "icon": "👾",
+          "title": "Myth: Deleting the Future",
+          "body": "You might think the mask physically deletes future words from the computer's memory. In reality, it just adds a massive negative number (negative infinity) to their scores, causing the mathematical filter (softmax) to naturally ignore them."
+        },
+        {
+          "kind": "visual",
+          "icon": "👁️‍🗨️",
+          "title": "Masked vs. Unmasked Attention",
+          "body": "Look at how the causal mask changes what a word is allowed to 'see' during attention calculations.",
+          "compare": {
+            "right": {
+              "tag": "With Causal Mask",
+              "text": "The word 'sat' can look backward to 'The', but its path to 'mat' is blocked by negative infinity.",
+              "emoji": "🔒"
+            },
+            "left": {
+              "emoji": "🔓",
+              "text": "The word 'sat' can look backward to 'The', and forward to 'mat'. This is bi-directional attention.",
+              "tag": "Without Causal Mask"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "type": "practice",
+      "exercises": [
+        {
+          "id": "p1",
+          "type": "multiple_choice",
+          "xp": 2,
+          "prompt": "What value is added to future token scores in the causal mask to make their attention weights zero?",
+          "options": [
+            {
+              "id": "a",
+              "correct": false,
+              "text": "Positive infinity"
+            },
+            {
+              "correct": true,
+              "text": "Negative infinity",
+              "id": "b"
+            },
+            {
+              "text": "Exactly one",
+              "id": "c",
+              "correct": false
+            },
+            {
+              "id": "d",
+              "correct": false,
+              "text": "A random decimal number"
+            }
+          ],
+          "explain": "Negative infinity is used because passing it through the softmax function mathematically converts the attention weight to exactly zero."
+        },
+        {
+          "id": "p2",
+          "type": "true_false",
+          "xp": 2,
+          "prompt": "True or False: The causal mask blocks a word from looking at its own past words.",
+          "options": [
+            {
+              "correct": false,
+              "id": "true",
+              "text": "True"
+            },
+            {
+              "correct": true,
+              "id": "false",
+              "text": "False"
+            }
+          ],
+          "explain": "A causal mask only blocks future tokens. It allows the model to look at the current token and all previous tokens."
+        },
+        {
+          "id": "p3",
+          "type": "fill_blank",
+          "xp": 2,
+          "prompt": "Fill in the missing step of the causal masking process.",
+          "sentence": "The causal mask adds negative infinity to future scores before the [blank] step turns them to zero.",
+          "blank": "softmax",
+          "words": [
+            "softmax",
+            "multiplication",
+            "addition",
+            "dropout"
+          ],
+          "explain": "Adding negative infinity to future scores ensures that when the softmax function is applied, those future scores turn into 0% probability."
+        },
+        {
+          "id": "p4",
+          "type": "spot_the_ai",
+          "xp": 2,
+          "prompt": "Which AI correctly describes the visual shape of a causal mask matrix?",
+          "options": [
+            {
+              "text": "A triangular matrix where the upper half is filled with negative infinity.",
+              "id": "ai_1",
+              "correct": true
+            },
+            {
+              "text": "A diagonal line of ones that multiplies everything else by zero.",
+              "correct": false,
+              "id": "ai_2"
+            },
+            {
+              "text": "A random grid of numbers that changes every time a word is read.",
+              "correct": false,
+              "id": "ai_3"
+            }
+          ],
+          "explain": "AI 1 is correct. The causal mask is shaped like a triangle because as you move down the rows (representing later words in a sentence), you are allowed to look at more past words, creating a stepped triangle pattern."
+        }
+      ]
+    },
+    {
+      "type": "boss",
+      "exercises": [
+        {
+          "id": "b1",
+          "type": "multiple_choice",
+          "xp": 5,
+          "prompt": "Why is a causal attention mask absolutely necessary when training a language model like GPT to generate text?",
+          "options": [
+            {
+              "text": "It prevents the model from looking at future words during training.",
+              "correct": true,
+              "id": "a"
+            },
+            {
+              "text": "It speeds up calculation by removing the need for a Softmax function.",
+              "id": "b",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "correct": false,
+              "text": "It automatically translates the text into different languages."
+            },
+            {
+              "text": "It randomly hides past words to test the model's memory.",
+              "correct": false,
+              "id": "d"
+            }
+          ],
+          "explain": "The causal attention mask prevents the model from looking ahead. Without it, the model would cheat during training by copying future tokens, making it useless for generating new text one word at a time."
+        }
+      ]
+    }
+  ]
+}

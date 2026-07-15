@@ -1,0 +1,222 @@
+{
+  "id": "u206-l4",
+  "unit": 206,
+  "day": 1034,
+  "tier": "Generative Adversarial Networks",
+  "tierIcon": "🎪",
+  "title": "Spotting Mode Collapse",
+  "icon": "🔍",
+  "concept": "The practical way to detect mode collapse is to generate a large batch of samples and visually inspect them for suspicious repetition or lack of variety — a visual diagnostic, not a purely numeric one, since loss curves can look healthy even during collapse.",
+  "xp": 15,
+  "hearts": 3,
+  "estMinutes": 7,
+  "segments": [
+    {
+      "type": "warmup",
+      "exercises": [
+        {
+          "id": "w1",
+          "type": "multiple_choice",
+          "xp": 1,
+          "prompt": "Recap: Why does the generator have no built-in pull toward covering the full diversity of real data?",
+          "options": [
+            {
+              "id": "a",
+              "text": "Because it's only ever rewarded for fooling the discriminator on the current batch — not for variety",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "Because the discriminator explicitly forbids variety",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "Because diversity is mathematically impossible for generators",
+              "correct": false
+            }
+          ],
+          "explain": "Right — no reward, no penalty for narrowness, so it can quietly settle on one winning output. Today: how to actually catch that happening."
+        }
+      ]
+    },
+    {
+      "type": "teach",
+      "cards": [
+        {
+          "kind": "hook",
+          "icon": "🔍",
+          "title": "So... how would you even notice?",
+          "body": "If mode collapse doesn't show up as an obvious crash or an error message, how would you catch it while training your own GAN? The answer is refreshingly low-tech: look at the pictures."
+        },
+        {
+          "kind": "definition",
+          "icon": "🖼️",
+          "title": "The batch-and-inspect method",
+          "body": "The standard way to spot mode collapse: generate a <strong>large batch</strong> of samples (say, 64 or 100) all at once, and lay them out in a grid. Then look — is there real variety, or does the same handful of outputs keep showing up?"
+        },
+        {
+          "kind": "analogy",
+          "icon": "🕵️",
+          "title": "A detective's lineup",
+          "body": "It's the same trick a detective uses with a police lineup: looking at one photo at a time, a repeated face is easy to miss. Line up dozens of photos side by side, and a suspiciously repeated face jumps out immediately — same jaw, same eyes, same everything, just wearing a different hat."
+        },
+        {
+          "kind": "example",
+          "icon": "🔢",
+          "title": "The 8x8 grid test",
+          "body": "Generate 64 samples and arrange them in an 8x8 grid. If a healthy generator trained on 10 digit styles is working, you'd expect to see a rough mix of digits scattered across the grid. If you instead spot the same 2-3 digit shapes repeating dozens of times, that's your visual red flag for mode collapse."
+        },
+        {
+          "kind": "mythbust",
+          "icon": "⚠️",
+          "title": "\"If the loss numbers look fine, training must be fine\"",
+          "body": "This is the trap: a collapsed generator's loss can look perfectly healthy, even LOW — because it's very good at fooling the discriminator with its one winning trick. A clean-looking loss curve does NOT rule out mode collapse. That's exactly why this is a visual check, not a purely numeric one."
+        },
+        {
+          "kind": "visual",
+          "icon": "🔀",
+          "title": "Numeric check vs. visual check",
+          "body": "Two ways to monitor training — and why only one catches this:",
+          "compare": {
+            "left": {
+              "emoji": "📉",
+              "tag": "Loss Numbers Alone",
+              "text": "Can look healthy<br>Even during collapse<br>Misses the pattern"
+            },
+            "right": {
+              "emoji": "🖼️",
+              "tag": "Sample Grid, By Eye",
+              "text": "Shows real variety (or not)<br>Repeats jump out visually<br>Catches what numbers miss"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "type": "practice",
+      "exercises": [
+        {
+          "id": "p1",
+          "type": "multiple_choice",
+          "xp": 2,
+          "prompt": "What's the standard practical method for spotting mode collapse?",
+          "options": [
+            {
+              "id": "a",
+              "text": "Generate a large batch of samples, lay them out in a grid, and visually check for repetition",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "Check only whether the final training loss number is below some threshold",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "Count how many total training steps have completed",
+              "correct": false
+            },
+            {
+              "id": "d",
+              "text": "Check the size of the model file on disk",
+              "correct": false
+            }
+          ],
+          "explain": "Generating a big batch and eyeballing it for repeated patterns is the go-to way to catch mode collapse."
+        },
+        {
+          "id": "p2",
+          "type": "true_false",
+          "xp": 2,
+          "prompt": "True or false: A generator can have a low, healthy-looking loss value and still be severely mode-collapsed.",
+          "options": [
+            {
+              "id": "t",
+              "text": "True",
+              "correct": true
+            },
+            {
+              "id": "f",
+              "text": "False",
+              "correct": false
+            }
+          ],
+          "explain": "True — that's the trap. A collapsed generator can be VERY good at fooling the discriminator with its one narrow trick, which keeps the loss looking fine while diversity is missing."
+        },
+        {
+          "id": "p3",
+          "type": "fill_blank",
+          "xp": 2,
+          "prompt": "Complete the sentence:",
+          "sentence": "Because loss numbers alone can look fine during collapse, detecting it usually relies on a ___ check of a large batch of samples, not just the numbers.",
+          "blank": "visual",
+          "words": [
+            "visual",
+            "numeric",
+            "random"
+          ],
+          "explain": "You have to actually look at a batch of samples laid out together — repetition is something you SEE, not something a single loss number reveals."
+        },
+        {
+          "id": "p4",
+          "type": "spot_the_ai",
+          "xp": 2,
+          "prompt": "You generate a 64-sample grid from your GAN to check for mode collapse. Which observation would be the clearest red flag?",
+          "options": [
+            {
+              "id": "a",
+              "text": "Roughly 50 of the 64 samples look like near-identical variations of the same output",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "The 64 samples show a wide, roughly even mix of different outputs",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "The training loss curve is smooth and steadily decreasing",
+              "correct": false
+            }
+          ],
+          "explain": "50-of-64 near-identical samples is exactly the repetition pattern a visual grid check is designed to catch — a smooth loss curve alone wouldn't reveal it."
+        }
+      ]
+    },
+    {
+      "type": "boss",
+      "exercises": [
+        {
+          "id": "b1",
+          "type": "multiple_choice",
+          "xp": 5,
+          "prompt": "You've confirmed mode collapse is happening by eyeballing a sample grid full of repeats. What's the natural next question?",
+          "options": [
+            {
+              "id": "a",
+              "text": "Are there any known techniques that help reduce the chances of mode collapse happening in the first place?",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "How do you make the images higher resolution?",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "How do you speed up the discriminator's training?",
+              "correct": false
+            },
+            {
+              "id": "d",
+              "text": "How do you convert the images to grayscale?",
+              "correct": false
+            }
+          ],
+          "explain": "Exactly! Next: a quick tour of some of the partial fixes researchers have developed for mode collapse."
+        }
+      ]
+    }
+  ]
+}

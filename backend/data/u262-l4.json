@@ -1,0 +1,223 @@
+{
+  "id": "u262-l4",
+  "unit": 262,
+  "day": 1314,
+  "tier": "NLP Advanced",
+  "tierIcon": "🧠",
+  "title": "Scheduled Sampling",
+  "icon": "🎲",
+  "concept": "Scheduled sampling bridges this gap by gradually shifting from feeding ground-truth to model predictions as training epochs progress.",
+  "xp": 15,
+  "hearts": 3,
+  "estMinutes": 7,
+  "segments": [
+    {
+      "type": "warmup",
+      "exercises": [
+        {
+          "id": "w1",
+          "type": "multiple_choice",
+          "xp": 1,
+          "prompt": "What does 'exposure bias' mean in language generation?",
+          "options": [
+            {
+              "text": "Using too many photos in datasets",
+              "correct": false,
+              "id": "a"
+            },
+            {
+              "correct": true,
+              "text": "The mismatch between training with perfect data and generating solo",
+              "id": "b"
+            },
+            {
+              "id": "c",
+              "correct": false,
+              "text": "Protecting private user data from leaking"
+            }
+          ],
+          "explain": "Exposure bias occurs because the model is exposed to perfect data during training, but must generate text step-by-step on its own during testing."
+        }
+      ]
+    },
+    {
+      "type": "teach",
+      "cards": [
+        {
+          "kind": "hook",
+          "icon": "🧠",
+          "title": "The Reality Gap",
+          "body": "During training, text-generating AI models are constantly spoon-fed the correct answers. But when they generate text on their own, a single early mistake can ruin the entire sentence. How do we prepare them for the real world?"
+        },
+        {
+          "kind": "definition",
+          "icon": "🎲",
+          "title": "What is Scheduled Sampling?",
+          "body": "Scheduled sampling is a training strategy for sequence generators. It starts by training the model with perfect teacher feedback, but gradually forces the model to use its own previous predictions as input. This prepares the model for the real world, where no teacher is there to correct it."
+        },
+        {
+          "kind": "analogy",
+          "icon": "🚲",
+          "title": "The Training Wheels Effect",
+          "body": "Imagine learning to ride a bicycle. At first, your training wheels (ground-truth data) keep you perfectly upright. But to ride on your own, you must practice adjusting to your own wobbles. Scheduled sampling is like training wheels that slowly lift off the ground over time, letting you practice recovering from your own mistakes."
+        },
+        {
+          "kind": "example",
+          "icon": "📝",
+          "title": "Scheduled Sampling in Action",
+          "body": "In a translation model:\n• Early in training: We feed the correct French words \"Le chat...\" to predict the next word.\n• Late in training: If the model predicts \"Le chien...\" by mistake, we feed \"Le chien...\" back into it anyway, forcing it to try to finish the sentence logically despite the slip-up."
+        },
+        {
+          "kind": "mythbust",
+          "icon": "⚡",
+          "title": "Is Perfection Always Best?",
+          "body": "Myth: AI models should only ever be trained on 100% correct, human-labeled data.\nFact: If a model never sees errors during training, it won't know how to recover from its own small mistakes when generating text on its own. A little bit of imperfect data helps it build resilience!"
+        },
+        {
+          "kind": "visual",
+          "icon": "📊",
+          "title": "Teacher vs. Self-Correction",
+          "body": "Compare how input tokens are fed to the model during training.",
+          "compare": {
+            "right": {
+              "tag": "Scheduled Sampling",
+              "text": "Gradually mixes in the model's own outputs as training progresses.",
+              "emoji": "🎲"
+            },
+            "left": {
+              "emoji": "🧑‍🏫",
+              "tag": "Teacher Forcing",
+              "text": "Always feeds 100% correct human labels at every step."
+            }
+          }
+        }
+      ]
+    },
+    {
+      "type": "practice",
+      "exercises": [
+        {
+          "id": "p1",
+          "type": "multiple_choice",
+          "xp": 2,
+          "prompt": "What is the main problem scheduled sampling tries to solve?",
+          "options": [
+            {
+              "id": "a",
+              "text": "Models running out of memory during long training runs",
+              "correct": false
+            },
+            {
+              "correct": false,
+              "text": "The high cost of downloading text datasets from the web",
+              "id": "b"
+            },
+            {
+              "text": "Exposure bias, where a model fails when it makes an early mistake",
+              "correct": true,
+              "id": "c"
+            },
+            {
+              "text": "Using too many parameters in the neural network",
+              "id": "d",
+              "correct": false
+            }
+          ],
+          "explain": "Exposure bias happens when a model is trained only on perfect text, making it fragile and unable to handle its own mistakes during free generation."
+        },
+        {
+          "id": "p2",
+          "type": "true_false",
+          "xp": 2,
+          "prompt": "True or False: Scheduled sampling increases the use of model predictions as training progress increases.",
+          "options": [
+            {
+              "id": "t",
+              "text": "True",
+              "correct": true
+            },
+            {
+              "correct": false,
+              "text": "False",
+              "id": "f"
+            }
+          ],
+          "explain": "Scheduled sampling starts with mostly ground-truth data (easy) and transitions to model predictions (harder) as training goes on."
+        },
+        {
+          "id": "p3",
+          "type": "fill_blank",
+          "xp": 2,
+          "prompt": "Fill in the missing word to complete how the model's inputs change during training.",
+          "sentence": "Scheduled sampling gradually shifts from feeding ground-truth to feeding the model's own predictions.",
+          "blank": "predictions",
+          "words": [
+            "predictions",
+            "weights",
+            "labels",
+            "tokens"
+          ],
+          "explain": "By replacing perfect labels with its own predictions as training goes on, the model learns to handle real-world generation."
+        },
+        {
+          "id": "p4",
+          "type": "spot_the_ai",
+          "xp": 2,
+          "prompt": "Which output represents a model trained with Scheduled Sampling versus one without?",
+          "options": [
+            {
+              "text": "Sentence: 'The dog read a book... wait, the dog looked at the book cover.' (Recovers from error)",
+              "correct": true,
+              "id": "ai_model"
+            },
+            {
+              "correct": false,
+              "text": "Sentence: 'The dog read a book banana library yellow under sky.' (Fails completely after error)",
+              "id": "human"
+            },
+            {
+              "id": "none",
+              "text": "Both sentences show the exact same ability to handle errors.",
+              "correct": false
+            }
+          ],
+          "explain": "The first option is generated by an AI model that was trained with scheduled sampling, as it managed to stay logical despite a minor early error. The second option completely broke down because it couldn't handle its own mistake."
+        }
+      ]
+    },
+    {
+      "type": "boss",
+      "exercises": [
+        {
+          "id": "b1",
+          "type": "multiple_choice",
+          "xp": 5,
+          "prompt": "Why is Scheduled Sampling used in sequence-to-sequence models?",
+          "options": [
+            {
+              "id": "a",
+              "text": "It makes the model train twice as fast on GPU hardware",
+              "correct": false
+            },
+            {
+              "correct": true,
+              "text": "It helps the model learn to recover from its own mistakes by mixing real data and predicted data",
+              "id": "b"
+            },
+            {
+              "text": "It schedules when to pause training to save energy",
+              "id": "c",
+              "correct": false
+            },
+            {
+              "id": "d",
+              "text": "It forces the model to only use human-approved words during generation",
+              "correct": false
+            }
+          ],
+          "explain": "Scheduled sampling is a training technique designed to fix exposure bias by slowly introducing the model's own (sometimes imperfect) predictions during training, instead of only showing it perfect training data."
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,223 @@
+{
+  "xp": 15,
+  "unit": 216,
+  "id": "u216-l5",
+  "estMinutes": 7,
+  "title": "Why WGAN Solved Vanishing Gradients",
+  "tierIcon": "🌊",
+  "tier": "Generative Adversarial Networks",
+  "concept": "WGAN provides a reliable gradient signal even when the critic is highly accurate, eliminating vanishing gradients. Boss explain ends with: 'Next up: Latent Space Manipulation.'",
+  "day": 1085,
+  "icon": "🌉",
+  "segments": [
+    {
+      "type": "warmup",
+      "exercises": [
+        {
+          "prompt": "What happens to a standard GAN's generator when the discriminator becomes too accurate?",
+          "options": [
+            {
+              "id": "opt_w1_1",
+              "correct": true,
+              "text": "Its gradients vanish because the feedback becomes zero"
+            },
+            {
+              "id": "opt_w1_2",
+              "correct": false,
+              "text": "Its loss function blows up to infinity"
+            },
+            {
+              "id": "opt_w1_3",
+              "correct": false,
+              "text": "It starts generating perfect images instantly"
+            }
+          ],
+          "explain": "In classic GANs, a perfect discriminator leaves the generator with nowhere to look for feedback, causing progress to stop completely.",
+          "type": "multiple_choice",
+          "id": "wgan_warmup_1",
+          "xp": 1
+        }
+      ]
+    },
+    {
+      "cards": [
+        {
+          "icon": "🎯",
+          "kind": "hook",
+          "body": "Imagine trying to find a target in the dark while a guide only says 'Yes' or 'No'. If you're far away, 'No' doesn't tell you which way to move. Standard GANs suffer from this exact issue when the discriminator gets too smart, leaving the generator completely lost.",
+          "title": "The Silent Guide"
+        },
+        {
+          "title": "What is WGAN?",
+          "body": "WGAN (Wasserstein GAN) replaces the binary 'yes/no' discriminator with a Critic. The Critic calculates a continuous distance (Wasserstein distance) between distributions. This ensures the generator always gets a useful gradient signal, even if the critic is highly accurate.",
+          "icon": "📊",
+          "kind": "definition"
+        },
+        {
+          "icon": "📝",
+          "kind": "analogy",
+          "body": "Standard GANs are like a teacher who only grades 'Pass' or 'Fail'. If you fail, you don't know how to improve. WGAN is like a teacher giving you a percentage score (e.g., 42%). Even if you are far from passing, you know exactly when you're getting warmer!",
+          "title": "The Grading System"
+        },
+        {
+          "title": "Measuring the Gap",
+          "kind": "example",
+          "icon": "🐕",
+          "body": "If a generator makes fuzzy noise and the real image is a dog, a standard discriminator just says '0% real' for the noise. A WGAN critic says 'Your noise is 10 units away from looking like a dog', giving the generator a clear slope (gradient) to climb."
+        },
+        {
+          "title": "The Smart Critic Myth",
+          "body": "You might think a weaker critic makes training easier for the generator. In fact, WGAN works best when the critic is trained to perfection! Because its feedback is continuous, a highly accurate critic actually provides the cleanest path to improvement.",
+          "icon": "🛡️",
+          "kind": "mythbust"
+        },
+        {
+          "title": "Gradient Feedback Comparison",
+          "kind": "visual",
+          "icon": "📈",
+          "compare": {
+            "left": {
+              "text": "Flat gradient when discriminator is perfect; generator stops learning.",
+              "emoji": "❌",
+              "tag": "Standard GAN"
+            },
+            "right": {
+              "emoji": "✅",
+              "text": "Smooth, continuous gradient slope even when critic is highly accurate.",
+              "tag": "Wasserstein GAN"
+            }
+          }
+        }
+      ],
+      "type": "teach"
+    },
+    {
+      "exercises": [
+        {
+          "xp": 2,
+          "prompt": "How does WGAN solve the vanishing gradient problem?",
+          "explain": "WGAN prevents vanishing gradients by replacing binary classification with a continuous distance metric, ensuring a steady stream of feedback.",
+          "options": [
+            {
+              "id": "opt_p1_1",
+              "text": "It provides a continuous slope of feedback instead of a flat yes/no classification",
+              "correct": true
+            },
+            {
+              "id": "opt_p1_2",
+              "correct": false,
+              "text": "It makes the critic stop learning after a few rounds"
+            },
+            {
+              "correct": false,
+              "id": "opt_p1_3",
+              "text": "It forces the generator to use smaller images"
+            }
+          ],
+          "id": "wgan_prac_1",
+          "type": "multiple_choice"
+        },
+        {
+          "id": "wgan_prac_2",
+          "type": "true_false",
+          "explain": "True. A WGAN critic can be trained to optimality (perfection) without causing the generator's gradients to vanish.",
+          "options": [
+            {
+              "correct": true,
+              "id": "opt_p2_1",
+              "text": "True"
+            },
+            {
+              "text": "False",
+              "correct": false,
+              "id": "opt_p2_2"
+            }
+          ],
+          "prompt": "Unlike standard GANs, WGAN training benefits from training the critic to be highly accurate.",
+          "xp": 2
+        },
+        {
+          "id": "wgan_prac_3",
+          "blank": "critic",
+          "xp": 2,
+          "prompt": "Fill in the blank to complete the sentence.",
+          "options": [
+            {
+              "id": "opt_p3_critic",
+              "correct": true,
+              "text": "critic"
+            },
+            {
+              "correct": false,
+              "text": "detector",
+              "id": "opt_p3_wrong1"
+            },
+            {
+              "correct": false,
+              "id": "opt_p3_wrong2",
+              "text": "stabilizer"
+            }
+          ],
+          "words": [
+            "critic",
+            "detector",
+            "stabilizer"
+          ],
+          "sentence": "WGAN replaces the traditional discriminator with a [blank] that outputs continuous scores.",
+          "type": "fill_blank",
+          "explain": "The WGAN uses a critic instead of a traditional binary classifier discriminator to measure how far apart the generated and real data distributions are."
+        },
+        {
+          "type": "spot_the_ai",
+          "id": "wgan_prac_4",
+          "options": [
+            {
+              "correct": false,
+              "id": "opt_p4_1",
+              "text": "Scenario A is WGAN because the training immediately froze."
+            },
+            {
+              "text": "Scenario B is WGAN because it continues to improve even when the critic is highly accurate.",
+              "correct": true,
+              "id": "opt_p4_2"
+            }
+          ],
+          "explain": "The first scenario describes the typical 'vanishing gradient' failure mode of classic GANs, whereas the second shows WGAN's stable, continuous improvement.",
+          "prompt": "Identify which scenario describes a WGAN:\nScenario A: The generator's loss graph goes completely flat and learning stops once the evaluator gets too smart.\nScenario B: The generator's loss graph shows steady, gradual improvement even when the evaluator is highly accurate.",
+          "xp": 2
+        }
+      ],
+      "type": "practice"
+    },
+    {
+      "exercises": [
+        {
+          "id": "wgan_boss_1",
+          "options": [
+            {
+              "correct": true,
+              "id": "opt_b1_1",
+              "text": "It uses Wasserstein distance to measure the gap between distributions continuously"
+            },
+            {
+              "correct": false,
+              "id": "opt_b1_2",
+              "text": "It penalizes the generator for producing colorful images"
+            },
+            {
+              "id": "opt_b1_3",
+              "correct": false,
+              "text": "It completely removes the discriminator from the network architecture"
+            }
+          ],
+          "explain": "The Wasserstein distance (or Earth Mover's Distance) provides a smooth, continuous metric of how much 'work' it takes to morph one distribution into another, preventing flat gradients. Next up: Latent Space Manipulation.",
+          "prompt": "Why does the WGAN critic provide a reliable gradient signal even when it is highly accurate?",
+          "xp": 5,
+          "type": "multiple_choice"
+        }
+      ],
+      "type": "boss"
+    }
+  ],
+  "hearts": 3
+}

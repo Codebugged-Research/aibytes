@@ -1,0 +1,217 @@
+{
+  "segments": [
+    {
+      "exercises": [
+        {
+          "explain": "In standard training, a discriminator gets too confident seeing only perfect 0s and 1s, which stops the generator from learning.",
+          "prompt": "What happens when a discriminator becomes 100% confident too early in GAN training?",
+          "xp": 1,
+          "options": [
+            {
+              "text": "The discriminator becomes too strong and stops providing useful gradients.",
+              "id": "opt1",
+              "correct": true
+            },
+            {
+              "id": "opt2",
+              "correct": false,
+              "text": "The generator becomes too smart and trains too quickly."
+            },
+            {
+              "correct": false,
+              "text": "The training data gets completely deleted.",
+              "id": "opt3"
+            }
+          ],
+          "id": "u210_l2_warmup_mc",
+          "type": "multiple_choice"
+        }
+      ],
+      "type": "warmup"
+    },
+    {
+      "cards": [
+        {
+          "icon": "🎮",
+          "body": "Imagine playing a game where the referee is a genius and you are just starting. If the ref instantly penalizes your every move with zero feedback, you will never learn how to play!",
+          "kind": "hook",
+          "title": "The Overpowered Referee"
+        },
+        {
+          "kind": "definition",
+          "title": "Softening the Rules",
+          "icon": "🧼",
+          "body": "Label Smoothing and Noisy Labels are tricks that soften the targets for the discriminator. Instead of hard 0 and 1 targets, we use soft numbers like 0.9 or occasionally flip the labels randomly."
+        },
+        {
+          "kind": "analogy",
+          "title": "The Kind Teacher",
+          "icon": "📝",
+          "body": "Think of a teacher grading a test. Instead of only giving absolute 0% or 100% scores, they give a 90% or a 95%. This keeps students motivated to improve without getting crushed by perfectionism."
+        },
+        {
+          "body": "When training a GAN to draw cats, instead of telling the discriminator 'Real images are exactly 1.0', we tell it 'Real images are 0.9'. This stops it from being too sure of itself.",
+          "icon": "🐱",
+          "kind": "example",
+          "title": "Cats at 90%"
+        },
+        {
+          "icon": "🛡️",
+          "kind": "mythbust",
+          "title": "Fuzzy But Better",
+          "body": "You might think making labels fuzzy makes the model less accurate. Actually, it prevents the discriminator from becoming a know-it-all, which helps the generator keep learning!"
+        },
+        {
+          "icon": "⚖️",
+          "compare": {
+            "left": {
+              "tag": "Hard Labels",
+              "text": "Real is 1.0, Fake is 0.0. Discriminator easily overpowers generator.",
+              "emoji": "🔴"
+            },
+            "right": {
+              "tag": "Soft/Noisy Labels",
+              "emoji": "🟢",
+              "text": "Real is 0.9, Fake is 0.1. Generator keeps receiving useful feedback."
+            }
+          },
+          "kind": "visual",
+          "title": "Hard vs. Soft Labels"
+        }
+      ],
+      "type": "teach"
+    },
+    {
+      "type": "practice",
+      "exercises": [
+        {
+          "xp": 2,
+          "options": [
+            {
+              "correct": false,
+              "text": "It deletes half the training dataset to speed up training.",
+              "id": "opt_p1"
+            },
+            {
+              "correct": true,
+              "text": "It softens target values to stop the discriminator from becoming too confident.",
+              "id": "opt_p2"
+            },
+            {
+              "correct": false,
+              "text": "It makes the generator produce blurred images on purpose.",
+              "id": "opt_p3"
+            }
+          ],
+          "id": "u210_l2_prac_mc",
+          "type": "multiple_choice",
+          "explain": "Label smoothing replaces absolute targets (0 and 1) with slightly softer values (like 0.9) to prevent extreme confidence.",
+          "prompt": "What is the primary purpose of using label smoothing in GANs?"
+        },
+        {
+          "options": [
+            {
+              "correct": true,
+              "text": "True",
+              "id": "opt_t1"
+            },
+            {
+              "id": "opt_t2",
+              "correct": false,
+              "text": "False"
+            }
+          ],
+          "xp": 2,
+          "prompt": "True or False: Noisy labels involve occasionally flipping real and fake labels during training.",
+          "explain": "Noisy labels mean we occasionally flip the labels (e.g., calling a fake image real) to challenge the discriminator and keep it on its toes.",
+          "type": "true_false",
+          "id": "u210_l2_prac_tf"
+        },
+        {
+          "blank": "vanishing",
+          "prompt": "Softening target labels prevents the discriminator from overpowering the generator and causing __________ gradients.",
+          "sentence": "Softening target labels prevents the discriminator from overpowering the generator and causing [blank] gradients.",
+          "explain": "If the discriminator is too confident, gradients drop to zero. Softening labels prevents these vanishing gradients.",
+          "id": "u210_l2_prac_fb",
+          "words": [
+            "vanishing",
+            "exploding"
+          ],
+          "xp": 2,
+          "type": "fill_blank",
+          "options": [
+            {
+              "correct": true,
+              "text": "vanishing",
+              "id": "vanishing_opt"
+            },
+            {
+              "text": "exploding",
+              "id": "exploding_opt",
+              "correct": false
+            }
+          ]
+        },
+        {
+          "prompt": "Which case represents the successful application of label smoothing in GAN training?",
+          "explain": "Case B shows the effect of label smoothing, which keeps the discriminator challenged so it continues guiding the generator.",
+          "type": "spot_the_ai",
+          "id": "u210_l2_prac_sai",
+          "options": [
+            {
+              "correct": false,
+              "text": "Case A: The discriminator immediately achieves 100% accuracy and the generator stops improving entirely.",
+              "id": "sai_a"
+            },
+            {
+              "id": "sai_b",
+              "correct": true,
+              "text": "Case B: The discriminator is kept slightly uncertain, allowing the generator to steadily improve its image quality."
+            }
+          ],
+          "xp": 2
+        }
+      ]
+    },
+    {
+      "exercises": [
+        {
+          "prompt": "How does changing target labels from 1.0 to 0.9 save the generator from stalling?",
+          "explain": "By using soft labels like 0.9, the discriminator never achieves absolute certainty, preserving the gradients the generator needs to learn. Up next: more stabilizing techniques for GANs!",
+          "type": "multiple_choice",
+          "id": "u210_l2_boss_mc",
+          "options": [
+            {
+              "correct": true,
+              "text": "It keeps gradients flowing to the generator by preventing 100% confidence.",
+              "id": "boss_opt1"
+            },
+            {
+              "text": "It forces the generator to use less memory during training.",
+              "id": "boss_opt2",
+              "correct": false
+            },
+            {
+              "id": "boss_opt3",
+              "correct": false,
+              "text": "It automatically labels unlabeled internet images."
+            }
+          ],
+          "xp": 5
+        }
+      ],
+      "type": "boss"
+    }
+  ],
+  "day": 1052,
+  "unit": 210,
+  "hearts": 3,
+  "concept": "Softening target labels (0.9 instead of 1.0) or flipping them randomly keeps the discriminator from overpowering the generator and causing vanishing gradients.",
+  "tierIcon": "🧰",
+  "icon": "🎲",
+  "estMinutes": 7,
+  "xp": 15,
+  "tier": "Generative Adversarial Networks",
+  "id": "u210-l2",
+  "title": "Label Smoothing & Noisy Labels"
+}

@@ -1,0 +1,224 @@
+{
+  "id": "u255-l3",
+  "unit": 255,
+  "day": 1278,
+  "tier": "NLP Basics",
+  "tierIcon": "🔤",
+  "title": "Managing Text Sequences in Production",
+  "icon": "🚀",
+  "concept": "Production sequence models must handle dynamic padding, tokenization latency, and vocabulary management for fast user queries.",
+  "xp": 15,
+  "hearts": 3,
+  "estMinutes": 7,
+  "segments": [
+    {
+      "type": "warmup",
+      "exercises": [
+        {
+          "id": "w1",
+          "type": "multiple_choice",
+          "xp": 1,
+          "prompt": "What makes managing text sequences in production challenging?",
+          "options": [
+            {
+              "text": "Users send text inputs of random, unpredictable lengths.",
+              "id": "w1",
+              "correct": true
+            },
+            {
+              "text": "Every user is forced to write exactly 50 words.",
+              "id": "w2",
+              "correct": false
+            },
+            {
+              "id": "w3",
+              "text": "The server only accepts one character at a time.",
+              "correct": false
+            }
+          ],
+          "explain": "In production, different users send texts of totally different lengths. The model must handle this variability efficiently."
+        }
+      ]
+    },
+    {
+      "type": "teach",
+      "cards": [
+        {
+          "kind": "hook",
+          "icon": "⚡",
+          "title": "Making AI Fast in Production",
+          "body": "When millions of people chat with an AI at the same time, every millisecond counts! How do we process sentences of completely different lengths instantly without slowing down the server? Let's dive in!"
+        },
+        {
+          "kind": "definition",
+          "icon": "⚙️",
+          "title": "Production Sequence Management",
+          "body": "Production sequence management is the practice of optimizing text models in real-world apps. It involves tokenizing text on-the-fly, managing vocabularies so the model understands new words, and using dynamic padding to keep calculations fast."
+        },
+        {
+          "kind": "analogy",
+          "icon": "🍔",
+          "title": "The Fast-Food Assembly Line",
+          "body": "Imagine running a fast-food counter. If you wait to cook until you have exactly ten people ordering the same burger (static batching), customers leave. Instead, you group orders as they arrive and adjust your tray sizes dynamically (dynamic padding) to serve them fast without wasting space!"
+        },
+        {
+          "kind": "example",
+          "icon": "🔍",
+          "title": "Search Engine Optimization",
+          "body": "When you type a query into a search engine, your text is tokenized in milliseconds. Instead of padding your short 3-word query to a giant 512-word limit, the server groups it with other short queries and pads it just enough to match the group's longest sentence, saving massive compute power."
+        },
+        {
+          "kind": "mythbust",
+          "icon": "🚫",
+          "title": "The Fixed-Size Myth",
+          "body": "Myth: You must always pad every text sequence to the maximum possible length (like 512 tokens) to make models happy. Reality: In production, doing this wastes computing power on empty spaces. Dynamic padding only pads to the longest text in the current batch!"
+        },
+        {
+          "kind": "visual",
+          "icon": "📊",
+          "title": "Padding Comparison",
+          "body": "See how static padding wastes space compared to dynamic padding.",
+          "compare": {
+            "right": {
+              "tag": "Dynamic Padding",
+              "emoji": "⚡",
+              "text": "Pads sentences to match only the longest sentence in the current batch, saving time."
+            },
+            "left": {
+              "emoji": "⬜",
+              "tag": "Static Padding",
+              "text": "Pads every single short sentence to a fixed length of 100, wasting compute power on empty tokens."
+            },
+            "title": "Static vs. Dynamic Padding"
+          }
+        }
+      ]
+    },
+    {
+      "type": "practice",
+      "exercises": [
+        {
+          "id": "p1",
+          "type": "multiple_choice",
+          "xp": 2,
+          "prompt": "Why is tokenizer speed so critical in production systems?",
+          "options": [
+            {
+              "text": "It increases the total vocabulary size of the model.",
+              "id": "mc1",
+              "correct": false
+            },
+            {
+              "id": "mc2",
+              "text": "It runs before the model generates text, directly impacting user wait time.",
+              "correct": true
+            },
+            {
+              "id": "mc3",
+              "correct": false,
+              "text": "It helps the model run without using any computer memory."
+            },
+            {
+              "text": "It automatically translates text into different languages.",
+              "correct": false,
+              "id": "mc4"
+            }
+          ],
+          "explain": "If tokenization takes too long, users will experience lag before the model even starts generating a response. Low-latency tokenizers are crucial for interactive apps."
+        },
+        {
+          "id": "p2",
+          "type": "true_false",
+          "xp": 2,
+          "prompt": "True or False: A model's vocabulary list in production never needs updates once the model is trained.",
+          "options": [
+            {
+              "text": "True",
+              "correct": false,
+              "id": "tf_true"
+            },
+            {
+              "id": "tf_false",
+              "correct": true,
+              "text": "False"
+            }
+          ],
+          "explain": "In production, new slang and terms arise constantly. If the vocabulary is never updated, the model will output '[UNK]' (unknown) tokens for new words."
+        },
+        {
+          "id": "p3",
+          "type": "fill_blank",
+          "xp": 2,
+          "prompt": "Fill in the blank to complete the explanation of efficient batching.",
+          "sentence": "To avoid wasting computation on empty spaces in a production batch, we use dynamic sequential padding.",
+          "blank": "padding",
+          "words": [
+            "padding",
+            "training",
+            "truncation",
+            "tokenizing"
+          ],
+          "explain": "Dynamic padding adjusts the padding size of each batch to match its longest sequence, preventing wasted CPU/GPU cycles on dummy tokens."
+        },
+        {
+          "id": "p4",
+          "type": "spot_the_ai",
+          "xp": 2,
+          "prompt": "Which of these system outputs shows a token management error that was exposed to the user?",
+          "options": [
+            {
+              "id": "sai1",
+              "correct": false,
+              "text": "Hey there! How can I help you today?"
+            },
+            {
+              "correct": false,
+              "id": "sai2",
+              "text": "Please enter a valid email address."
+            },
+            {
+              "text": "Error: Input contains [PAD] [PAD] [UNK] tokens in final output.",
+              "correct": true,
+              "id": "sai3"
+            }
+          ],
+          "explain": "Text 3 is a synthetic error message showing raw token symbols ([PAD], [UNK]), which usually indicates a failure in the vocabulary or decoding pipeline during production."
+        }
+      ]
+    },
+    {
+      "type": "boss",
+      "exercises": [
+        {
+          "id": "b1",
+          "type": "multiple_choice",
+          "xp": 5,
+          "prompt": "You are launching a chatbot and need to handle queries of varying lengths under tight latency constraints. Which strategy should you implement?",
+          "options": [
+            {
+              "text": "Wait for a set number of queries to arrive before starting any processing.",
+              "correct": false,
+              "id": "opt1"
+            },
+            {
+              "id": "opt2",
+              "text": "Group incoming queries dynamically and pad sequences to the maximum length of that specific batch.",
+              "correct": true
+            },
+            {
+              "text": "Pad every query to the maximum possible sequence length the model supports.",
+              "id": "opt3",
+              "correct": false
+            },
+            {
+              "correct": false,
+              "text": "Avoid padding entirely by truncating all user messages to exactly three words.",
+              "id": "opt4"
+            }
+          ],
+          "explain": "In live production environments, incoming user text queries are of random lengths. Using dynamic padding on incoming batches prevents wasted calculations on unnecessary padding tokens, keeping response times low."
+        }
+      ]
+    }
+  ]
+}

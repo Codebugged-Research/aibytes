@@ -1,0 +1,222 @@
+{
+  "id": "u285-l4",
+  "unit": 285,
+  "day": 1429,
+  "tier": "NLP Advanced",
+  "tierIcon": "🧠",
+  "title": "Batch Tokenization",
+  "icon": "📦",
+  "concept": "Tokenizing in batches on multiple CPU threads before sending tensors to the GPU prevents the input pipeline from stalling training.",
+  "xp": 15,
+  "hearts": 3,
+  "estMinutes": 7,
+  "segments": [
+    {
+      "type": "warmup",
+      "exercises": [
+        {
+          "id": "w1",
+          "type": "multiple_choice",
+          "xp": 1,
+          "prompt": "What does a tokenizer do in a machine learning pipeline?",
+          "options": [
+            {
+              "id": "a",
+              "correct": false,
+              "text": "It translates text into different languages."
+            },
+            {
+              "id": "b",
+              "correct": true,
+              "text": "It converts raw text into lists of numbers that models can understand."
+            },
+            {
+              "text": "It stores text files on a hard drive.",
+              "id": "c",
+              "correct": false
+            }
+          ],
+          "explain": "Tokenizers turn human words into lists of numbers (tokens) that AI models can calculate."
+        }
+      ]
+    },
+    {
+      "type": "teach",
+      "cards": [
+        {
+          "kind": "hook",
+          "icon": "⏳",
+          "title": "The GPU Waiting Game",
+          "body": "GPUs are incredibly fast at math, but they are terrible at reading raw text. If your GPU has to wait for a slow processor to turn text into numbers one sentence at a time, it sits idle. This idle time is called a pipeline stall, and it wastes precious training time and power!"
+        },
+        {
+          "kind": "definition",
+          "icon": "📦",
+          "title": "What is Batch Tokenization?",
+          "body": "Batch tokenization means processing many text sentences at the same time using multiple CPU workers. By doing this in parallel, we prepare large batches of numerical tokens and have them ready before the GPU even asks for them. This keeps our training pipeline flowing smoothly without any pauses."
+        },
+        {
+          "kind": "analogy",
+          "icon": "🥧",
+          "title": "The Pie Bakery",
+          "body": "Imagine a bakery where one baker bakes pies in a giant oven (the GPU), but needs cherries pitted first. If you pit cherries one by one as the baker waits, the oven sits empty and cold. Instead, a team of helpers (CPU threads) pits cherries in big buckets (batches) ahead of time. The baker always has a bucket ready to slide into the oven, keeping the kitchen running at maximum speed."
+        },
+        {
+          "kind": "example",
+          "icon": "⚡",
+          "title": "Speeding Up the Pipeline",
+          "body": "Instead of tokenizing one sentence at a time on a single processor, we use a dataset loader to spin up 4 CPU workers. \n\nThese workers clean, split, and convert thousands of sentences into numbers simultaneously. By the time the GPU finishes calculating one step of training, the next batch of token tensors is already waiting in memory, ready to be processed instantly."
+        },
+        {
+          "kind": "mythbust",
+          "icon": "🛑",
+          "title": "Should GPUs Do Everything?",
+          "body": "Some think we should do all data preparation directly on the GPU because GPUs are faster. In reality, text processing and tokenization are complex CPU tasks. Keeping tokenization on CPU threads while the GPU focuses purely on neural network math is the most efficient division of labor."
+        },
+        {
+          "kind": "visual",
+          "icon": "📊",
+          "title": "Two Pipeline Styles",
+          "body": "Compare how data flows to the GPU when tokenizing one-by-one versus tokenizing in parallel batches.",
+          "compare": {
+            "left": {
+              "tag": "One-by-One",
+              "text": "The GPU sits idle waiting for the single-threaded CPU to tokenize the next sentence.",
+              "emoji": "🐌"
+            },
+            "right": {
+              "tag": "Parallel Batches",
+              "text": "Multiple CPU threads prepare batches in advance, keeping the GPU constantly busy.",
+              "emoji": "🚀"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "type": "practice",
+      "exercises": [
+        {
+          "id": "p1",
+          "type": "multiple_choice",
+          "xp": 2,
+          "prompt": "What is the best way to prevent the GPU from waiting for text data during training?",
+          "options": [
+            {
+              "text": "Tokenizing one sentence at a time on the GPU.",
+              "id": "a",
+              "correct": false
+            },
+            {
+              "text": "Tokenizing large groups of text in parallel using multiple CPU threads.",
+              "id": "b",
+              "correct": true
+            },
+            {
+              "text": "Skipping tokenization and sending raw English text to the GPU.",
+              "id": "c",
+              "correct": false
+            },
+            {
+              "text": "Stopping the GPU every few seconds to manually convert text.",
+              "id": "d",
+              "correct": false
+            }
+          ],
+          "explain": "Processing text sentences in batches using multiple CPU threads prepares data in parallel, preventing the GPU from waiting."
+        },
+        {
+          "id": "p2",
+          "type": "true_false",
+          "xp": 2,
+          "prompt": "True or False: Preparing token batches on CPU threads helps stop the GPU from stalling.",
+          "options": [
+            {
+              "text": "True",
+              "id": "t",
+              "correct": true
+            },
+            {
+              "text": "False",
+              "id": "f",
+              "correct": false
+            }
+          ],
+          "explain": "Yes! By using multiple CPU threads to tokenize text in batches, we ensure the GPU always has a steady stream of data to train on."
+        },
+        {
+          "id": "p3",
+          "type": "fill_blank",
+          "xp": 2,
+          "prompt": "Fill in the blank to complete the explanation of a training bottleneck.",
+          "sentence": "When the GPU has to wait for the CPU to finish tokenizing text, the GPU sits ________.",
+          "blank": "idle",
+          "words": [
+            "idle",
+            "overloaded",
+            "hot"
+          ],
+          "explain": "If the CPU tokenizes text too slowly, the GPU runs out of data to process and sits idle, wasting valuable computing power."
+        },
+        {
+          "id": "p4",
+          "type": "spot_the_ai",
+          "xp": 2,
+          "prompt": "Which of these code structures represents a broken pipeline design?",
+          "options": [
+            {
+              "text": "A Python script that tokenizes text on a single thread and sends it to the GPU.",
+              "id": "a",
+              "correct": false
+            },
+            {
+              "text": "An AI model code snippet that tries to feed raw, unprocessed text files directly to a GPU.",
+              "id": "b",
+              "correct": true
+            },
+            {
+              "text": "A multi-threaded CPU pipeline that batches tokens and pushes them to the GPU.",
+              "id": "c",
+              "correct": false
+            }
+          ],
+          "explain": "The prompt asks to read text files, but there is no tokenizer converting words to numbers. Text files cannot be directly read by a neural network."
+        }
+      ]
+    },
+    {
+      "type": "boss",
+      "exercises": [
+        {
+          "id": "b1",
+          "type": "multiple_choice",
+          "xp": 5,
+          "prompt": "Why is batch tokenization on multiple CPU threads considered a best practice for high-performance deep learning?",
+          "options": [
+            {
+              "id": "a",
+              "correct": true,
+              "text": "It prepares data ahead of time on CPU threads so the GPU doesn't sit idle waiting for tokens."
+            },
+            {
+              "text": "It forces the GPU to slow down its calculations to match the CPU's speed.",
+              "id": "b",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "correct": false,
+              "text": "It tokenizes every word one by one directly inside the GPU's cores."
+            },
+            {
+              "text": "It bypasses the tokenizer entirely to feed raw text files directly to the GPU.",
+              "id": "d",
+              "correct": false
+            }
+          ],
+          "explain": "Tokenizing text on the CPU in parallel batches prepares the data ahead of time. This ensures your powerful GPU never has to wait around with nothing to compute, maximizing training efficiency!"
+        }
+      ]
+    }
+  ]
+}

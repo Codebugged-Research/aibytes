@@ -1,0 +1,222 @@
+{
+  "id": "u205-l1",
+  "unit": 205,
+  "day": 1026,
+  "tier": "Generative Adversarial Networks",
+  "tierIcon": "🚧",
+  "title": "A Different Kind of Hard",
+  "icon": "🚧",
+  "concept": "Every model you've trained before had one loss shrinking toward zero; a GAN has two losses pulling against each other, and that single difference is what makes GAN training genuinely trickier than anything covered so far.",
+  "xp": 15,
+  "hearts": 3,
+  "estMinutes": 7,
+  "segments": [
+    {
+      "type": "warmup",
+      "exercises": [
+        {
+          "id": "w1",
+          "type": "multiple_choice",
+          "xp": 1,
+          "prompt": "Recap: in a GAN, what are the generator and discriminator doing to each other during training?",
+          "options": [
+            {
+              "id": "a",
+              "text": "Competing — the generator tries to fool the discriminator while the discriminator tries not to be fooled",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "Cooperating on the exact same loss number",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "Ignoring each other and training completely independently",
+              "correct": false
+            }
+          ],
+          "explain": "Right — they're adversaries. That competing setup is exactly what today's lesson zooms out on."
+        }
+      ]
+    },
+    {
+      "type": "teach",
+      "cards": [
+        {
+          "kind": "hook",
+          "icon": "🚧",
+          "title": "Same toolbox, different job",
+          "body": "Every model so far — regression, classifiers, detectors, segmenters — trained the same fundamental way: pick a loss number, nudge the weights until it goes down. A GAN's two networks use those same building blocks (gradients, backprop, an optimizer) — but training two networks against each other turns out to be a genuinely different kind of job."
+        },
+        {
+          "kind": "definition",
+          "icon": "📉",
+          "title": "One number to shrink, always",
+          "body": "Traditional training gives you <strong>one loss function</strong>, and every step aims to make that one number smaller. A dropping curve is progress, a flat curve means it's stuck — that's the whole story."
+        },
+        {
+          "kind": "analogy",
+          "icon": "🤼",
+          "title": "Arm wrestling vs. hiking downhill",
+          "body": "Training a regular model is like hiking down a mountain solo: your altimeter reading only ever needs to go one direction, and every step down is closer to the bottom. Training a GAN is like arm wrestling: it's not one arm moving steadily downward — it's two arms pushing against each other, and every inch one side gains is exactly the inch the other side loses."
+        },
+        {
+          "kind": "example",
+          "icon": "🖼️",
+          "title": "The same number, two meanings",
+          "body": "In classification, if loss drops from 0.8 to 0.05, the model is clearly getting better at telling cats from dogs. In a GAN, if the generator's loss drops, that <strong>could</strong> mean its images got more convincing — or it could just mean the discriminator got weaker at the same moment. The same number can mean two different things depending on what the opponent is doing."
+        },
+        {
+          "kind": "mythbust",
+          "icon": "⚠️",
+          "title": "\"Isn't it just two models training separately?\"",
+          "body": "You might assume you can train the generator well, then train the discriminator well, like two separate models on two separate tasks. In reality, each network's training signal depends entirely on the <strong>other</strong> network's current state — retrain one, and the \"correct\" answer for the other one just changed underneath it."
+        },
+        {
+          "kind": "visual",
+          "icon": "🔀",
+          "title": "Compare",
+          "body": "The core shift, at a glance:",
+          "compare": {
+            "left": {
+              "emoji": "🏔️",
+              "tag": "Normal Training",
+              "text": "One loss<br>One direction (down)<br>Progress = curve drops"
+            },
+            "right": {
+              "emoji": "🤼",
+              "tag": "GAN Training",
+              "text": "Two losses<br>Pulling against each other<br>Progress ≠ one curve dropping"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "type": "practice",
+      "exercises": [
+        {
+          "id": "p1",
+          "type": "multiple_choice",
+          "xp": 2,
+          "prompt": "What makes GAN training fundamentally different from training a classifier or segmentation model?",
+          "options": [
+            {
+              "id": "a",
+              "text": "GAN training involves two competing losses instead of one loss moving in a single direction",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "GANs don't use gradients or backpropagation",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "GANs only work on image data",
+              "correct": false
+            },
+            {
+              "id": "d",
+              "text": "GAN training doesn't require an optimizer",
+              "correct": false
+            }
+          ],
+          "explain": "Right — two entangled, competing losses replace the familiar single-loss-going-down setup."
+        },
+        {
+          "id": "p2",
+          "type": "true_false",
+          "xp": 2,
+          "prompt": "True or false: in a GAN, if the generator's loss number drops, that always means the generator's images are objectively getting more realistic.",
+          "options": [
+            {
+              "id": "t",
+              "text": "True",
+              "correct": false
+            },
+            {
+              "id": "f",
+              "text": "False",
+              "correct": true
+            }
+          ],
+          "explain": "False — a dropping generator loss can also just mean the discriminator weakened, since the two losses are entangled instead of independent."
+        },
+        {
+          "id": "p3",
+          "type": "fill_blank",
+          "xp": 2,
+          "prompt": "Complete the sentence:",
+          "sentence": "Traditional models train toward one improving number; a GAN's two networks are more like ___ where one side's gain is the other side's loss.",
+          "blank": "arm wrestling",
+          "words": [
+            "arm wrestling",
+            "a shared spreadsheet",
+            "a single hiking trail"
+          ],
+          "explain": "Two sides pushing against each other, zero-sum — that's the arm-wrestling dynamic GANs introduce."
+        },
+        {
+          "id": "p4",
+          "type": "spot_the_ai",
+          "xp": 2,
+          "prompt": "Which statement correctly captures why GAN training is genuinely trickier than earlier model types?",
+          "options": [
+            {
+              "id": "a",
+              "text": "The generator's and discriminator's losses are entangled, so one loss dropping doesn't guarantee real progress the way it did for a single-loss model",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "GANs use a completely different kind of math with no losses at all",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "GAN training is easier because two networks help each other learn faster",
+              "correct": false
+            }
+          ],
+          "explain": "Entangled losses mean a single dropping number no longer reliably means what it used to."
+        }
+      ]
+    },
+    {
+      "type": "boss",
+      "exercises": [
+        {
+          "id": "b1",
+          "type": "multiple_choice",
+          "xp": 5,
+          "prompt": "You've seen that GANs replace 'one loss going downhill' with 'two competing losses.' What does this suggest about how you'll need to judge GAN training compared to earlier models?",
+          "options": [
+            {
+              "id": "a",
+              "text": "You'll need new ways to track progress, since watching a single loss curve drop no longer tells the whole story",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "You can use the exact same 'is the loss dropping' check as before, nothing changes",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "Loss curves become irrelevant and should be ignored entirely",
+              "correct": false
+            },
+            {
+              "id": "d",
+              "text": "Only the discriminator's loss matters, the generator's can be ignored",
+              "correct": false
+            }
+          ],
+          "explain": "Exactly — up next, we'll look at the balance problem this two-loss setup creates."
+        }
+      ]
+    }
+  ]
+}

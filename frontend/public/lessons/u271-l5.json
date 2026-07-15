@@ -1,0 +1,223 @@
+{
+  "id": "u271-l5",
+  "unit": 271,
+  "day": 1360,
+  "tier": "NLP Advanced",
+  "tierIcon": "🧠",
+  "title": "Stabilizing Deep Attention Stacks",
+  "icon": "🌉",
+  "concept": "Combining Pre-LN and residual shortcuts enables training massive, stable attention stacks without divergence. Boss explain ends with: 'Next up: Masked Self-Attention.'",
+  "xp": 15,
+  "hearts": 3,
+  "estMinutes": 7,
+  "segments": [
+    {
+      "type": "warmup",
+      "exercises": [
+        {
+          "id": "w1",
+          "type": "multiple_choice",
+          "xp": 1,
+          "prompt": "What happens to very deep neural networks if we do not stabilize their layers?",
+          "options": [
+            {
+              "text": "They become smarter instantly.",
+              "id": "a",
+              "correct": false
+            },
+            {
+              "id": "b",
+              "text": "They often fail and stop learning.",
+              "correct": true
+            },
+            {
+              "id": "c",
+              "text": "They consume less memory.",
+              "correct": false
+            }
+          ],
+          "explain": "Without normalization, signals in deep neural networks can grow too large or shrink to zero, causing the training process to fail (diverge)."
+        }
+      ]
+    },
+    {
+      "type": "teach",
+      "cards": [
+        {
+          "kind": "hook",
+          "icon": "🌉",
+          "title": "The Deep Stack Challenge",
+          "body": "Have you ever wondered how AI models grow to be hundreds of layers deep without getting confused? Without a stabilizer, stacking attention layers is like playing a massive game of telephone—the original message gets completely lost. Let's look at the secret to keeping deep stacks stable!"
+        },
+        {
+          "kind": "definition",
+          "icon": "🧹",
+          "title": "What is Pre-LN?",
+          "body": "Pre-Layer Normalization (Pre-LN) means we clean up and scale the data *before* it goes into the attention layer. By doing this, the untouched shortcut path (residual connection) remains completely clear. This keeps signals and gradients flowing smoothly through even the deepest AI models."
+        },
+        {
+          "kind": "analogy",
+          "icon": "🧱",
+          "title": "The Clay Tower",
+          "body": "Imagine building a giant tower out of soft clay blocks. If you only put supports at the very top, the bottom blocks collapse under the weight. \n\nPre-LN acts like putting a sturdy steel plate under every single clay block before you stack it. It ensures no block is crushed by the weight of the layers above, allowing you to build the tower as tall as you want."
+        },
+        {
+          "kind": "example",
+          "icon": "🚀",
+          "title": "From Post-LN to Pre-LN",
+          "body": "In early AI models (Post-LN), normalization happened *after* adding the shortcut. In deep networks, this warped the shortcut signal, causing the model to break during training. \n\nBy simply swapping the order to Pre-LN, modern giants like GPT-3 can easily train with over 90 layers without crashing!"
+        },
+        {
+          "kind": "mythbust",
+          "icon": "🕵️",
+          "title": "More Layers, More Problems?",
+          "body": "**Myth:** Stacking more attention layers always makes a model better and is easy to do.\n**Fact:** Without Pre-LN, adding more layers makes the network unstable and training fails completely. The order of normalization is the secret key that unlocks deep stacks."
+        },
+        {
+          "kind": "visual",
+          "icon": "🗺️",
+          "title": "Mapping the Signal Path",
+          "body": "See how the flow of information changes when we move the normalization step!",
+          "compare": {
+            "left": {
+              "tag": "Post-LN (Old)",
+              "text": "Normalizes after the addition. This warps the shortcut path and blocks gradients in deep stacks.",
+              "emoji": "⚠️"
+            },
+            "right": {
+              "emoji": "✅",
+              "tag": "Pre-LN (New)",
+              "text": "Normalizes before the attention layer. This keeps the shortcut path clean and stable."
+            },
+            "title": "Post-LN vs. Pre-LN"
+          }
+        }
+      ]
+    },
+    {
+      "type": "practice",
+      "exercises": [
+        {
+          "id": "p1",
+          "type": "multiple_choice",
+          "xp": 2,
+          "prompt": "Where does normalization happen in a Pre-LN attention block?",
+          "options": [
+            {
+              "text": "Right before the data enters the attention layer.",
+              "id": "a",
+              "correct": true
+            },
+            {
+              "correct": false,
+              "text": "Right after the attention layer's output is added to the shortcut.",
+              "id": "b"
+            },
+            {
+              "correct": false,
+              "text": "Only at the very end of the entire network.",
+              "id": "c"
+            },
+            {
+              "id": "d",
+              "text": "It is randomly applied to half of the layers.",
+              "correct": false
+            }
+          ],
+          "explain": "Pre-LN normalizes the inputs before the attention block, preserving a clean gradient path along the residual connection."
+        },
+        {
+          "id": "p2",
+          "type": "true_false",
+          "xp": 2,
+          "prompt": "True or False: Using Pre-LN makes it easier to train deeper attention networks without them failing.",
+          "options": [
+            {
+              "id": "t",
+              "correct": true,
+              "text": "True"
+            },
+            {
+              "id": "f",
+              "correct": false,
+              "text": "False"
+            }
+          ],
+          "explain": "Pre-LN stabilizes the training process, allowing us to train much deeper networks than we could with Post-LN."
+        },
+        {
+          "id": "p3",
+          "type": "fill_blank",
+          "xp": 2,
+          "prompt": "Fill in the missing word to complete the description of Pre-LN benefits.",
+          "sentence": "Pre-LN stabilizes deep stacks by keeping the residual ______ pathway clear.",
+          "blank": "shortcut",
+          "words": [
+            "shortcut",
+            "attention",
+            "multiplier"
+          ],
+          "explain": "Pre-LN keeps the residual shortcut pathway untouched, allowing signals to flow directly through the deep stack."
+        },
+        {
+          "id": "p4",
+          "type": "spot_the_ai",
+          "xp": 2,
+          "prompt": "Which model design will train successfully at 100 layers deep?",
+          "options": [
+            {
+              "id": "a",
+              "text": "Model A: Normalizes after the addition (Post-LN) to train 100 layers easily.",
+              "correct": false
+            },
+            {
+              "correct": true,
+              "id": "b",
+              "text": "Model B: Normalizes before the layer (Pre-LN) to train 100 layers easily."
+            },
+            {
+              "id": "c",
+              "text": "Model C: Removes the residual shortcut completely to train 100 layers easily.",
+              "correct": false
+            }
+          ],
+          "explain": "Model B is correct because Post-LN (normalizing after the shortcut addition) makes training very deep models unstable, while Pre-LN keeps it stable."
+        }
+      ]
+    },
+    {
+      "type": "boss",
+      "exercises": [
+        {
+          "id": "b1",
+          "type": "multiple_choice",
+          "xp": 5,
+          "prompt": "Why does combining Pre-LN with residual shortcuts allow us to train hundreds of attention layers without them failing?",
+          "options": [
+            {
+              "id": "a",
+              "correct": true,
+              "text": "Using Pre-LN keeps the clean gradient pathway open from top to bottom."
+            },
+            {
+              "id": "b",
+              "correct": false,
+              "text": "Post-LN removes the need for residual shortcuts entirely."
+            },
+            {
+              "text": "Deeper stacks always train perfectly without normalization.",
+              "correct": false,
+              "id": "c"
+            },
+            {
+              "correct": false,
+              "text": "Pre-LN makes gradients grow exponentially larger at every layer.",
+              "id": "d"
+            }
+          ],
+          "explain": "Exactly! Pre-LN and residual shortcuts work together to keep gradients clean and strong, no matter how deep the stack gets. Next up: Masked Self-Attention."
+        }
+      ]
+    }
+  ]
+}

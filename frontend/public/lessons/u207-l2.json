@@ -1,0 +1,222 @@
+{
+  "id": "u207-l2",
+  "unit": 207,
+  "day": 1037,
+  "tier": "Generative Adversarial Networks",
+  "tierIcon": "🪦",
+  "title": "Confident Judgments, Weak Gradients",
+  "icon": "📉",
+  "concept": "When the discriminator's output saturates near 0 or 1, the same math you saw with squashing functions kicks in: the curve goes nearly flat there, so the gradient signal flowing back to the generator shrinks to almost nothing — and the generator barely learns anything each step.",
+  "xp": 15,
+  "hearts": 3,
+  "estMinutes": 7,
+  "segments": [
+    {
+      "type": "warmup",
+      "exercises": [
+        {
+          "id": "w1",
+          "type": "multiple_choice",
+          "xp": 1,
+          "prompt": "Recap: What happens to the discriminator's judgments if it gets far ahead of the generator early in training?",
+          "options": [
+            {
+              "id": "a",
+              "text": "Its scores push toward extreme confidence, near 0 or 1, instead of staying cautious and in-between",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "Its scores become completely random",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "It stops producing scores entirely",
+              "correct": false
+            }
+          ],
+          "explain": "Right — an overpowered discriminator's judgments become extremely confident. Today: why that confidence quietly breaks the generator's training."
+        }
+      ]
+    },
+    {
+      "type": "teach",
+      "cards": [
+        {
+          "kind": "hook",
+          "icon": "🌊",
+          "title": "Remember the flat top of the curve?",
+          "body": "Back in Neural Network Basics, you met squashing functions like Sigmoid — S-shaped curves that compress any number into a tidy range. You also saw what happens to a neuron stuck outputting the exact same value forever: no signal ever flows back through it to update anything. Both ideas are about to collide inside the discriminator."
+        },
+        {
+          "kind": "definition",
+          "icon": "📉",
+          "title": "Saturation: where the curve goes flat",
+          "body": "A Sigmoid-style curve is steep in the middle but flattens out near its extreme ends (close to <code>0</code> or <code>1</code>). When an output sits in that flat zone, it's called <strong>saturation</strong> — and a flat curve means a tiny <strong>gradient</strong>, the signal that says how much to adjust. When the discriminator's judgment saturates near 0 or 1, the gradient flowing back to the generator shrinks to almost nothing."
+        },
+        {
+          "kind": "analogy",
+          "icon": "🎚️",
+          "title": "A dimmer switch already maxed out",
+          "body": "Think of a dimmer switch already twisted all the way to full brightness. Keep twisting, and the room doesn't get noticeably brighter — you're pushing on a part of the dial that barely responds anymore. A saturated discriminator output is the same: the generator can push and push, but the signal coming back barely moves."
+        },
+        {
+          "kind": "example",
+          "icon": "🔢",
+          "title": "The same push, a shrinking nudge",
+          "body": "When the discriminator is uncertain (score near 0.5), a small change in the generator's output can swing that score noticeably — a strong nudge to learn from. When the discriminator is saturated (score near 0.02), that same change in the generator barely budges the score at all — the nudge shrinks to almost nothing, exactly like a dying neuron's flat output producing no direction to adjust toward."
+        },
+        {
+          "kind": "mythbust",
+          "icon": "⚠️",
+          "title": "More training rounds won't fix a flat gradient",
+          "body": "You might assume that running more training rounds will eventually push the generator past this rough patch. In reality, if each round's gradient is close to zero, more rounds barely help — the generator keeps taking the same tiny, close-to-useless step over and over, no matter how many extra rounds you run."
+        },
+        {
+          "kind": "visual",
+          "icon": "⚖️",
+          "title": "Steep region vs. saturated region",
+          "body": "How much the generator learns depends on where the discriminator's score sits:",
+          "compare": {
+            "left": {
+              "emoji": "⛰️",
+              "tag": "Steep Region (score near 0.5)",
+              "text": "Curve is steep<br>Gradient is strong<br>Generator learns fast"
+            },
+            "right": {
+              "emoji": "🪫",
+              "tag": "Saturated Region (score near 0 or 1)",
+              "text": "Curve is nearly flat<br>Gradient is near zero<br>Generator barely learns"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "type": "practice",
+      "exercises": [
+        {
+          "id": "p1",
+          "type": "multiple_choice",
+          "xp": 2,
+          "prompt": "Why does a saturated discriminator score (near 0 or 1) cause a problem for the generator?",
+          "options": [
+            {
+              "id": "a",
+              "text": "The curve is nearly flat there, so the gradient signal flowing back to the generator becomes tiny",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "The discriminator stops running entirely once it's confident",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "The generator's images become too large to process",
+              "correct": false
+            },
+            {
+              "id": "d",
+              "text": "The training dataset runs out of new samples",
+              "correct": false
+            }
+          ],
+          "explain": "Exactly — a flat part of the curve means a near-zero gradient, so the generator gets almost no useful nudge."
+        },
+        {
+          "id": "p2",
+          "type": "true_false",
+          "xp": 2,
+          "prompt": "True or false: A saturated activation output (near the extreme of its range) tends to produce a small gradient.",
+          "options": [
+            {
+              "id": "t",
+              "text": "True",
+              "correct": true
+            },
+            {
+              "id": "f",
+              "text": "False",
+              "correct": false
+            }
+          ],
+          "explain": "True. That's the core idea of saturation — the curve flattens near its extremes, and a flat curve means a small gradient."
+        },
+        {
+          "id": "p3",
+          "type": "fill_blank",
+          "xp": 2,
+          "prompt": "Complete the sentence:",
+          "sentence": "When the discriminator's output ___ near 0 or 1, the gradient flowing back to the generator shrinks to almost nothing.",
+          "blank": "saturates",
+          "words": [
+            "saturates",
+            "multiplies",
+            "resets"
+          ],
+          "explain": "Saturation is when an output sits in the flat zone of the curve — and that flat zone carries almost no gradient."
+        },
+        {
+          "id": "p4",
+          "type": "spot_the_ai",
+          "xp": 2,
+          "prompt": "Which training moment shows the vanishing-gradient problem in action?",
+          "options": [
+            {
+              "id": "a",
+              "text": "The discriminator scores a fake 0.01, and the generator's weights barely change after that round of training",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "The discriminator scores a fake 0.5, and the generator's weights shift noticeably after that round",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "The discriminator's score swings from 0.3 to 0.7 across two rounds, prompting a big generator update",
+              "correct": false
+            }
+          ],
+          "explain": "An extreme score paired with a near-zero weight update is the signature of a vanishing gradient — saturation choking off the learning signal."
+        }
+      ]
+    },
+    {
+      "type": "boss",
+      "exercises": [
+        {
+          "id": "b1",
+          "type": "multiple_choice",
+          "xp": 5,
+          "prompt": "A saturated discriminator score produces a near-zero gradient, so the generator barely learns each step. Zooming out — why does an early skill gap between the two networks cause this at all?",
+          "options": [
+            {
+              "id": "a",
+              "text": "Because when one side is far more skilled than the other, the weaker side's results look the same (crushing defeat) no matter what it tries, leaving nothing specific to learn from",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "Because the generator runs out of random noise to start from",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "Because the discriminator's code has a bug that needs fixing",
+              "correct": false
+            },
+            {
+              "id": "d",
+              "text": "Because GPUs run out of memory when scores get too confident",
+              "correct": false
+            }
+          ],
+          "explain": "Exactly! Up next: a closer look at why a lopsided skill gap — not just the math of saturation — is at the root of this problem."
+        }
+      ]
+    }
+  ]
+}

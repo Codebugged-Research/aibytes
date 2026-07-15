@@ -1,0 +1,223 @@
+{
+  "id": "u237-l3",
+  "unit": 237,
+  "day": 1188,
+  "tier": "NLP Basics",
+  "tierIcon": "🔤",
+  "title": "Unrolling an RNN",
+  "icon": "⛓️",
+  "concept": "Unrolling visualizes the recurrent loop as a chain of identical feed-forward steps, one step per sequence token, sharing weights across time.",
+  "xp": 15,
+  "hearts": 3,
+  "estMinutes": 7,
+  "segments": [
+    {
+      "type": "warmup",
+      "exercises": [
+        {
+          "id": "w1",
+          "type": "multiple_choice",
+          "xp": 1,
+          "prompt": "Which type of neural network uses loops to process sequences of data over time?",
+          "options": [
+            {
+              "id": "a",
+              "text": "Recurrent Neural Networks (RNNs)",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "correct": false,
+              "text": "Convolutional Neural Networks (CNNs)"
+            },
+            {
+              "text": "Standard Feed-Forward Networks (MLPs)",
+              "correct": false,
+              "id": "c"
+            }
+          ],
+          "explain": "RNN stands for Recurrent Neural Network, which uses loops to process sequential data like text."
+        }
+      ]
+    },
+    {
+      "type": "teach",
+      "cards": [
+        {
+          "kind": "hook",
+          "icon": "⛓️",
+          "title": "Straightening the Loop",
+          "body": "RNNs are famous for looping their outputs back into their inputs to remember the past. But how do we actually trace, train, and visualize a network that runs in circles? We 'unroll' the loop into a straight line!"
+        },
+        {
+          "kind": "definition",
+          "icon": "🔓",
+          "title": "What is Unrolling?",
+          "body": "Unrolling an RNN means taking its recurrent loop and drawing it out step-by-step as a sequence of identical neural network layers. For each item in your input sequence (like words in a sentence), you draw one copy of the layer, showing how information flows from the past step to the present step."
+        },
+        {
+          "kind": "analogy",
+          "icon": "📸",
+          "title": "The Revolving Door Photo Strip",
+          "body": "Think of an RNN like a rotating revolving door at a busy hotel. Instead of looking at it spin round and round (the loop), 'unrolling' is like taking a panoramic, high-speed photo series of the door at 1:00 PM, 1:01 PM, and 1:02 PM, and lining those photos up side-by-side. It is still the exact same physical door (same weights), but now you can trace the path of guests step-by-step!"
+        },
+        {
+          "kind": "example",
+          "icon": "🐱",
+          "title": "Processing 'Cats love milk'",
+          "body": "If you feed the three-word sentence \"Cats love milk\" into an RNN, unrolling it reveals three connected steps. Step 1 processes \"Cats\" and passes its hidden state to Step 2. Step 2 processes \"love\" (combining it with Step 1's memory) and passes the update to Step 3, which processes \"milk\". Each step uses the exact same weights!"
+        },
+        {
+          "kind": "mythbust",
+          "icon": "🛡️",
+          "title": "Are we copying weights?",
+          "body": "Myth: Unrolling an RNN means we are building a brand-new, massive neural network with different weights for every single word.\nFact: The network remains compact. Unrolling is just a way of visualizing and calculating the flow of information. The weights (the rules for processing) are shared and identical at every single step in the chain!"
+        },
+        {
+          "kind": "visual",
+          "icon": "👁️",
+          "title": "Loop vs. Chain",
+          "body": "See how the looped representation on the left unfolds into a sequential chain of steps on the right.",
+          "compare": {
+            "left": {
+              "tag": "Loop View",
+              "text": "A single recurrent cell that feeds back into itself over and over.",
+              "emoji": "🔄"
+            },
+            "right": {
+              "emoji": "⛓️",
+              "tag": "Unrolled View",
+              "text": "A chain of identical cells side-by-side: Step 1 -> Step 2 -> Step 3."
+            }
+          }
+        }
+      ]
+    },
+    {
+      "type": "practice",
+      "exercises": [
+        {
+          "id": "p1",
+          "type": "multiple_choice",
+          "xp": 2,
+          "prompt": "If you unroll an RNN to process a sequence, how many steps will the unrolled chain have?",
+          "options": [
+            {
+              "text": "Exactly one step, regardless of the sequence length",
+              "correct": false,
+              "id": "a"
+            },
+            {
+              "text": "Ten steps for every single word",
+              "id": "b",
+              "correct": false
+            },
+            {
+              "text": "One step for each token in the input sequence",
+              "id": "c",
+              "correct": true
+            },
+            {
+              "correct": false,
+              "id": "d",
+              "text": "It depends on the number of layers in the GPU"
+            }
+          ],
+          "explain": "Unrolling creates one copy of the network step for each token or element in the input sequence (e.g., 5 steps for 5 words)."
+        },
+        {
+          "id": "p2",
+          "type": "true_false",
+          "xp": 2,
+          "prompt": "In an unrolled RNN, the output memory (hidden state) of step 1 is passed as an input to step 2.",
+          "options": [
+            {
+              "id": "t",
+              "correct": true,
+              "text": "True"
+            },
+            {
+              "text": "False",
+              "id": "f",
+              "correct": false
+            }
+          ],
+          "explain": "Yes! The hidden state from the previous step is passed as an input to the current step, creating the temporal connection."
+        },
+        {
+          "id": "p3",
+          "type": "fill_blank",
+          "xp": 2,
+          "prompt": "Fill in the missing word to describe how parameters are used in an unrolled RNN.",
+          "sentence": "Even though we draw the RNN as a sequence of steps, all steps share the exact same neural network [blank].",
+          "blank": "weights",
+          "words": [
+            "weights",
+            "datasets",
+            "tokens",
+            "layers"
+          ],
+          "explain": "An unrolled RNN is a chain of steps, but because they all belong to the same recurrent network, they all share the exact same weights (parameters)."
+        },
+        {
+          "id": "p4",
+          "type": "spot_the_ai",
+          "xp": 2,
+          "prompt": "Identify the correct description of RNN unrolling.",
+          "options": [
+            {
+              "text": "AI Model A: \"Unrolling visualizes the loop as a sequence of steps, where each step uses the same shared weights.\"",
+              "id": "a",
+              "correct": true
+            },
+            {
+              "text": "AI Model B: \"Unrolling converts the RNN into a feed-forward network where each time step gets its own unique weights.\"",
+              "id": "b",
+              "correct": false
+            },
+            {
+              "text": "AI Model C: \"Unrolling is a way to delete the past memory so the network only focuses on the current token.\"",
+              "correct": false,
+              "id": "c"
+            }
+          ],
+          "explain": "AI model A correctly explains that unrolling is a visualization technique where the same weights are shared across time steps, whereas the other options mistake it for creating independent weights or deleting historical data."
+        }
+      ]
+    },
+    {
+      "type": "boss",
+      "exercises": [
+        {
+          "id": "b1",
+          "type": "multiple_choice",
+          "xp": 5,
+          "prompt": "Which of the following is true about 'unrolling' an RNN?",
+          "options": [
+            {
+              "id": "a",
+              "text": "The network physically duplicates its hardware and weights for every input word.",
+              "correct": false
+            },
+            {
+              "id": "b",
+              "correct": true,
+              "text": "It is a conceptual view that visualizes the loop as a chain, sharing the same weights at every step."
+            },
+            {
+              "correct": false,
+              "id": "c",
+              "text": "It is a process that removes all memory from the network to make it faster."
+            },
+            {
+              "correct": false,
+              "text": "It converts the recurrent network into a standard non-recurrent Transformer.",
+              "id": "d"
+            }
+          ],
+          "explain": "Unrolling is a conceptual tool to help us calculate gradients and train RNNs. The actual neural network is still just one single loop in computer memory, using the exact same shared parameters (weights) at every single step."
+        }
+      ]
+    }
+  ]
+}

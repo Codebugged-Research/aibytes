@@ -1,0 +1,228 @@
+{
+  "unit": 216,
+  "tierIcon": "🌊",
+  "segments": [
+    {
+      "type": "warmup",
+      "exercises": [
+        {
+          "type": "multiple_choice",
+          "id": "u216_l2_warmup_1",
+          "explain": "A standard Discriminator only outputs a probability between 0 and 1, which can lead to dead gradients if it gets too smart. We need a better way!",
+          "options": [
+            {
+              "text": "It stops training and declares the Generator the winner.",
+              "correct": false,
+              "id": "opt_w1_1"
+            },
+            {
+              "correct": true,
+              "id": "opt_w1_2",
+              "text": "It gives perfect 0 or 1 outputs, leaving no useful feedback for the Generator to improve."
+            },
+            {
+              "correct": false,
+              "id": "opt_w1_3",
+              "text": "It starts generating its own images instead of judging."
+            }
+          ],
+          "prompt": "What happens when a standard GAN Discriminator becomes 'too smart' early in training?",
+          "xp": 1
+        }
+      ],
+      "cards": []
+    },
+    {
+      "cards": [
+        {
+          "title": "Beyond Yes and No",
+          "kind": "hook",
+          "body": "Imagine trying to learn to paint when your teacher only says 'yes' or 'no' without telling you how close you are to getting it right. That is what a standard GAN feels like! Let's meet the Critic.",
+          "icon": "🎭"
+        },
+        {
+          "body": "In a Wasserstein GAN (WGAN), the traditional Discriminator is replaced by a Critic. Instead of outputting a 0-to-1 probability of being real, the Critic outputs a continuous score. This score represents how realistic an image is, without placing a hard cap on the values.",
+          "icon": "⚖️",
+          "title": "What is the Critic?",
+          "kind": "definition"
+        },
+        {
+          "title": "The Grader vs. The Judge",
+          "icon": "🎨",
+          "body": "Think of a standard Discriminator like an exam grader who only writes 'Pass' or 'Fail'. Think of the Critic like a judge who scores you from -1000 to +1000. Even if you fail, you know if you got closer to passing than last time!",
+          "kind": "analogy"
+        },
+        {
+          "kind": "example",
+          "icon": "🐱",
+          "body": "If a Generator creates a blurry cat, a standard Discriminator might output a flat 0.0. The WGAN Critic might output a score of -5.2. If the Generator sharpens the whiskers slightly, the Critic's score might rise to -3.1. This keeps the learning signals flowing!",
+          "title": "Scoring Progress"
+        },
+        {
+          "title": "Myth: It's Just Probability",
+          "body": "You might think the Critic's score is just another name for probability. But it isn't! Because the score doesn't stop at 1.0 or 0.0, the gradient (the slope pointing toward improvement) never flattens out, preventing the Generator from getting stuck.",
+          "icon": "🛡️",
+          "kind": "mythbust"
+        },
+        {
+          "kind": "visual",
+          "compare": {
+            "left": {
+              "text": "Outputs a hard 0 or 1. If it gets too confident, the feedback slope becomes flat.",
+              "emoji": "🛑",
+              "tag": "Discriminator"
+            },
+            "right": {
+              "emoji": "📈",
+              "tag": "Critic",
+              "text": "Outputs a continuous real score. The feedback slope remains smooth and helpful."
+            }
+          },
+          "body": "Let's compare the feedback style of a classic Discriminator against the WGAN Critic to see why the Critic is more helpful during training.",
+          "title": "Discriminator vs. Critic",
+          "icon": "⚖️"
+        }
+      ],
+      "type": "teach",
+      "exercises": []
+    },
+    {
+      "cards": [],
+      "type": "practice",
+      "exercises": [
+        {
+          "options": [
+            {
+              "id": "opt_p1_1",
+              "text": "It outputs a continuous score indicating realism instead of a 0-to-1 probability.",
+              "correct": true
+            },
+            {
+              "id": "opt_p1_2",
+              "text": "It uses labels to classify the images into distinct categories like 'cat' or 'dog'.",
+              "correct": false
+            },
+            {
+              "text": "It automatically generates new samples when the Generator fails.",
+              "correct": false,
+              "id": "opt_p1_3"
+            }
+          ],
+          "xp": 2,
+          "prompt": "How does the output of a WGAN Critic differ from a traditional Discriminator?",
+          "explain": "The Critic does not output a probability; it outputs a continuous score (real numbers) representing realism, ensuring gradients never vanish.",
+          "type": "multiple_choice",
+          "id": "u216_l2_prac_1"
+        },
+        {
+          "id": "u216_l2_prac_2",
+          "explain": "True! A Critic outputs continuous scores rather than binary probability values, which avoids the vanishing gradient problem.",
+          "options": [
+            {
+              "id": "opt_p2_1",
+              "text": "True",
+              "correct": true
+            },
+            {
+              "id": "opt_p2_2",
+              "text": "False",
+              "correct": false
+            }
+          ],
+          "prompt": "True or False: The Critic's continuous score provides a smooth gradient everywhere, preventing the learning process from stalling.",
+          "xp": 2,
+          "type": "true_false"
+        },
+        {
+          "sentence": "The WGAN Critic guides the generator by outputting a continuous [blank] instead of a probability.",
+          "words": [
+            "score",
+            "probability",
+            "percentage"
+          ],
+          "prompt": "Fill in the missing word to describe how the WGAN Critic guides the generator.",
+          "type": "fill_blank",
+          "id": "u216_l2_prac_3",
+          "blank": "score",
+          "options": [
+            {
+              "text": "score",
+              "correct": true,
+              "id": "opt_p3_1"
+            },
+            {
+              "text": "probability",
+              "correct": false,
+              "id": "opt_p3_2"
+            },
+            {
+              "correct": false,
+              "id": "opt_p3_3",
+              "text": "percentage"
+            }
+          ],
+          "xp": 2,
+          "explain": "Instead of a probability, the Critic outputs a continuous score that can be any real number to indicate how realistic the image is."
+        },
+        {
+          "explain": "Case B represents the continuous scoring system of a Critic, while Case A represents the traditional probability output of a Discriminator.",
+          "id": "u216_l2_prac_4",
+          "type": "spot_the_ai",
+          "options": [
+            {
+              "id": "opt_p4_1",
+              "text": "Case B: The model evaluates an image and assigns it a quality score of +14.8.",
+              "correct": true
+            },
+            {
+              "correct": false,
+              "id": "opt_p4_2",
+              "text": "Case A: The model evaluates an image and outputs a 98% probability that it is real."
+            }
+          ],
+          "xp": 2,
+          "prompt": "Which of these scenarios represents a Critic evaluating a generated image?"
+        }
+      ]
+    },
+    {
+      "exercises": [
+        {
+          "explain": "The Critic's continuous score guarantees that even when the generator is performing poorly, there is always a clear direction (gradient) showing how to make the score higher. Up next, we'll look at the mathematical trick that keeps these scores stable: Lipschitz continuity!",
+          "type": "multiple_choice",
+          "id": "u216_l2_boss",
+          "prompt": "Why is having a continuous score from the Critic so helpful for training the Generator?",
+          "xp": 5,
+          "options": [
+            {
+              "id": "opt_b_1",
+              "text": "It restricts the generator to only producing black and white images.",
+              "correct": false
+            },
+            {
+              "correct": true,
+              "id": "opt_b_2",
+              "text": "It provides a continuous slope (gradient) that tells the generator how to improve, even if the generator's output is very poor."
+            },
+            {
+              "id": "opt_b_3",
+              "text": "It forces the generator to copy the training set exactly.",
+              "correct": false
+            }
+          ]
+        }
+      ],
+      "cards": [],
+      "type": "boss"
+    }
+  ],
+  "xp": 15,
+  "estMinutes": 7,
+  "hearts": 3,
+  "title": "The Critic Instead of the Discriminator",
+  "day": 1082,
+  "id": "u216-l2",
+  "icon": "⚖️",
+  "concept": "WGAN's 'critic' outputs a continuous score indicating realism rather than a 0/1 probability, providing a smooth gradient everywhere.",
+  "tier": "Generative Adversarial Networks"
+}

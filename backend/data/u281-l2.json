@@ -1,0 +1,222 @@
+{
+  "id": "u281-l2",
+  "unit": 281,
+  "day": 1407,
+  "tier": "NLP Advanced",
+  "tierIcon": "🧠",
+  "title": "BPE in Depth: Merges Table",
+  "icon": "📊",
+  "concept": "Byte Pair Encoding stores a list of merge rules; tokenizing new text means applying these rules in the exact order they were learned.",
+  "xp": 15,
+  "hearts": 3,
+  "estMinutes": 7,
+  "segments": [
+    {
+      "type": "warmup",
+      "exercises": [
+        {
+          "id": "w1",
+          "type": "multiple_choice",
+          "xp": 1,
+          "prompt": "How does Byte Pair Encoding (BPE) build its vocabulary?",
+          "options": [
+            {
+              "correct": true,
+              "id": "a",
+              "text": "By merging smaller units into larger ones step-by-step"
+            },
+            {
+              "text": "By splitting whole sentences randomly",
+              "correct": false,
+              "id": "b"
+            },
+            {
+              "correct": false,
+              "text": "By using a dictionary of predefined words",
+              "id": "c"
+            }
+          ],
+          "explain": "BPE works by starting with individual bytes or characters and gradually merging the most common pairs step-by-step."
+        }
+      ]
+    },
+    {
+      "type": "teach",
+      "cards": [
+        {
+          "kind": "hook",
+          "icon": "🗺️",
+          "title": "The Tokenization Roadmap",
+          "body": "Once a BPE tokenizer finishes training, how does it handle brand new text it has never seen before? It doesn't just guess; it follows a strict, step-by-step guidebook called the Merges Table!"
+        },
+        {
+          "kind": "definition",
+          "icon": "📋",
+          "title": "What is the Merges Table?",
+          "body": "The Merges Table is an ordered list of rules that BPE saves during training. It tells the tokenizer exactly which character pairs to merge, and in what order, to turn raw text into neat subword tokens."
+        },
+        {
+          "kind": "analogy",
+          "icon": "📖",
+          "title": "The Recipe Book Analogy",
+          "body": "Imagine a recipes cookbook. The recipe book tells you to first mix sugar and butter, then add flour, and finally bake. You can't bake before mixing! The Merges Table is like this recipe book—you must combine the letters in the exact order the recipes are written."
+        },
+        {
+          "kind": "example",
+          "icon": "💡",
+          "title": "Step-by-Step Merging",
+          "body": "If your merges table has two rules in order:\n1. 'h' + 'e' -> 'he'\n2. 'he' + 'y' -> 'hey'\n\nIf you tokenize 'hey', BPE first merges 'h' and 'e' to make 'he', and then merges 'he' and 'y' to make 'hey'. It cannot do step 2 before step 1!"
+        },
+        {
+          "kind": "mythbust",
+          "icon": "🚫",
+          "title": "Order Matters!",
+          "body": "Myth: A tokenizer can just merge any matching characters in any order they appear in the sentence.\nFact: The order of rules in the merges table is crucial. Applying rule #5 before rule #2 will completely scramble your tokens!"
+        },
+        {
+          "kind": "visual",
+          "icon": "📊",
+          "title": "Why Order is Everything",
+          "body": "See how the exact same characters turn out differently if you ignore the rule order. Order keeps tokens consistent!",
+          "compare": {
+            "left": {
+              "tag": "Correct Order",
+              "text": "1. 't'+'h' -> 'th'\n2. 'th'+'e' -> 'the'\nResult: [the]",
+              "emoji": "✅"
+            },
+            "right": {
+              "text": "1. Try 'th'+'e' first (fails, no 'th' yet!)\nResult: [t, h, e]",
+              "tag": "Wrong Order",
+              "emoji": "❌"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "type": "practice",
+      "exercises": [
+        {
+          "id": "p1",
+          "type": "multiple_choice",
+          "xp": 2,
+          "prompt": "What does the BPE Merges Table actually store?",
+          "options": [
+            {
+              "correct": false,
+              "text": "A list of all words in the English dictionary",
+              "id": "a"
+            },
+            {
+              "correct": true,
+              "text": "The ordered list of pair-merge rules learned during training",
+              "id": "b"
+            },
+            {
+              "id": "c",
+              "correct": false,
+              "text": "The final frequency count of every single letter"
+            },
+            {
+              "correct": false,
+              "text": "A list of grammatical rules for sentences",
+              "id": "d"
+            }
+          ],
+          "explain": "The merges table acts as a historical record of every single merge decision made during training, in the exact sequence they happened."
+        },
+        {
+          "id": "p2",
+          "type": "true_false",
+          "xp": 2,
+          "prompt": "True or False: A BPE tokenizer only needs the final vocabulary list to tokenize new text; it does not need the merges table.",
+          "options": [
+            {
+              "id": "a",
+              "correct": false,
+              "text": "True"
+            },
+            {
+              "text": "False",
+              "correct": true,
+              "id": "b"
+            }
+          ],
+          "explain": "Without the merges table, a BPE tokenizer wouldn't know how to convert new text into the tokens it learned. Both the vocabulary and the merges table are required."
+        },
+        {
+          "id": "p3",
+          "type": "fill_blank",
+          "xp": 2,
+          "prompt": "Fill in the missing word to describe how BPE processes new text:",
+          "sentence": "To tokenize new text, BPE must apply the merge rules in the exact sequence or ______ they were learned.",
+          "blank": "order",
+          "words": [
+            "order",
+            "speed",
+            "size"
+          ],
+          "explain": "Because BPE rules build on top of earlier rules (like building blocks), you must apply them in the exact order they were created."
+        },
+        {
+          "id": "p4",
+          "type": "spot_the_ai",
+          "xp": 2,
+          "prompt": "How does BPE decide which characters can be merged together?",
+          "options": [
+            {
+              "correct": false,
+              "id": "a",
+              "text": "It merges letters that are at the very beginning and very end of words first."
+            },
+            {
+              "correct": false,
+              "text": "It randomly selects pairs from anywhere in the sentence.",
+              "id": "b"
+            },
+            {
+              "correct": true,
+              "text": "It only merges character pairs that are right next to each other.",
+              "id": "c"
+            }
+          ],
+          "explain": "BPE only learns rules to merge adjacent (neighboring) tokens. It cannot merge tokens that are separated by other characters."
+        }
+      ]
+    },
+    {
+      "type": "boss",
+      "exercises": [
+        {
+          "id": "b1",
+          "type": "multiple_choice",
+          "xp": 5,
+          "prompt": "An AI model needs to tokenize a brand new sentence using an existing BPE vocabulary. How does it use the merges table to do this?",
+          "options": [
+            {
+              "correct": false,
+              "text": "Apply all merges simultaneously in a single parallel step",
+              "id": "a"
+            },
+            {
+              "text": "Scan the rules from top to bottom and apply them in the exact order learned",
+              "id": "b",
+              "correct": true
+            },
+            {
+              "correct": false,
+              "id": "c",
+              "text": "Apply rules starting with the rarest letters first"
+            },
+            {
+              "correct": false,
+              "id": "d",
+              "text": "Sort the rules alphabetically before applying them"
+            }
+          ],
+          "explain": "To tokenize new text, BPE searches the merges table and applies the rules in the exact order they were learned. Skipping order or guessing would break the tokenizer and result in the wrong tokens!"
+        }
+      ]
+    }
+  ]
+}

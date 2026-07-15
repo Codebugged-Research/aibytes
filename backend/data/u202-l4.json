@@ -1,0 +1,232 @@
+{
+  "id": "u202-l4",
+  "unit": 202,
+  "day": 1014,
+  "tier": "Generative Adversarial Networks",
+  "tierIcon": "🔥",
+  "title": "The Training Loop: Taking Turns",
+  "icon": "🔄",
+  "concept": "GANs train through an alternating loop: first update the discriminator using a batch of real and fake images, then update the generator to better fool that now-improved discriminator, and repeat.",
+  "xp": 15,
+  "hearts": 3,
+  "estMinutes": 7,
+  "segments": [
+    {
+      "type": "warmup",
+      "exercises": [
+        {
+          "id": "w1",
+          "type": "multiple_choice",
+          "xp": 1,
+          "prompt": "Recap: in the GAN game, what does the generator want to do to the discriminator?",
+          "options": [
+            {
+              "id": "a",
+              "text": "Fool it",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "Copy its weights exactly",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "Delete it",
+              "correct": false
+            },
+            {
+              "id": "d",
+              "text": "Train it directly, the way you'd train a student",
+              "correct": false
+            }
+          ],
+          "explain": "Right — fooling the discriminator is the generator's whole goal."
+        }
+      ]
+    },
+    {
+      "type": "teach",
+      "cards": [
+        {
+          "kind": "hook",
+          "icon": "🔄",
+          "title": "They don't train at the same time",
+          "body": "Here's something that surprises people: the generator and discriminator don't update simultaneously. They take turns, like two training partners trading rounds in a gym."
+        },
+        {
+          "kind": "definition",
+          "icon": "📋",
+          "title": "One training step, two turns",
+          "body": "A single GAN training step has two parts. <strong>Turn 1:</strong> update the discriminator on a batch of real images plus a batch of generator fakes. <strong>Turn 2:</strong> update the generator, using the (now slightly sharper) discriminator's judgments to improve its fakes."
+        },
+        {
+          "kind": "analogy",
+          "icon": "🥊",
+          "title": "Sparring partners trading rounds",
+          "body": "Picture two training partners who never spar at the exact same moment. Round 1: the coach drills partner A (the discriminator) on telling real punches from telegraphed fakes. Round 2: partner B (the generator) studies what just got read so easily and adjusts their technique to sneak a better move past next time. Then it's round 1 again — against a sharper judge."
+        },
+        {
+          "kind": "example",
+          "icon": "🔢",
+          "title": "Walking through one loop",
+          "body": "Step 1: grab 32 real training images plus 32 fresh fakes from the generator. Update the discriminator's weights so it scores the real ones higher and the fakes lower. Step 2: generate a new batch of fakes. Update the generator's weights based on how many of them fooled the just-updated discriminator. Step 3: repeat, thousands of times."
+        },
+        {
+          "kind": "mythbust",
+          "icon": "⚠️",
+          "title": "The generator never sees real images directly",
+          "body": "You might assume the generator's update step also uses real photos for comparison. It doesn't — only the discriminator ever looks at real training data. The generator only ever learns from the discriminator's reaction to its fakes."
+        },
+        {
+          "kind": "visual",
+          "icon": "🔄",
+          "title": "Turn 1 vs. Turn 2",
+          "body": "What gets updated in each half of the loop:",
+          "compare": {
+            "left": {
+              "emoji": "🕵️",
+              "tag": "Turn 1: Discriminator",
+              "text": "Sees real + fake batch<br>Learns to score them apart"
+            },
+            "right": {
+              "emoji": "🎨",
+              "tag": "Turn 2: Generator",
+              "text": "Sees discriminator's verdict<br>Learns to sneak past it"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "type": "practice",
+      "exercises": [
+        {
+          "id": "p1",
+          "type": "multiple_choice",
+          "xp": 2,
+          "prompt": "In a single GAN training step, which network is typically updated first?",
+          "options": [
+            {
+              "id": "a",
+              "text": "The discriminator",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "The generator",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "Both are updated at the exact same instant",
+              "correct": false
+            },
+            {
+              "id": "d",
+              "text": "Neither — they only update once every 10 steps",
+              "correct": false
+            }
+          ],
+          "explain": "Right — the loop starts by sharpening the discriminator on real and fake batches."
+        },
+        {
+          "id": "p2",
+          "type": "true_false",
+          "xp": 2,
+          "prompt": "True or false: during the generator's update turn, it is shown a batch of real training images.",
+          "options": [
+            {
+              "id": "t",
+              "text": "True",
+              "correct": false
+            },
+            {
+              "id": "f",
+              "text": "False",
+              "correct": true
+            }
+          ],
+          "explain": "False — the generator only ever sees noise and the discriminator's judgment on its own fakes, never real images directly."
+        },
+        {
+          "id": "p3",
+          "type": "fill_blank",
+          "xp": 2,
+          "prompt": "Complete the sentence:",
+          "sentence": "The discriminator is trained on a batch of ___ images and a batch of fake images.",
+          "blank": "real",
+          "words": [
+            "real",
+            "random",
+            "labeled"
+          ],
+          "explain": "Real images plus generator fakes make up the discriminator's training batch."
+        },
+        {
+          "id": "p4",
+          "type": "spot_the_ai",
+          "xp": 2,
+          "prompt": "Which best describes what happens right after the discriminator's turn in the loop?",
+          "options": [
+            {
+              "id": "a",
+              "text": "The generator is updated using feedback from that now-slightly-better discriminator",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "Training stops so a human can evaluate the images",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "The discriminator's weights are deleted and reinitialized",
+              "correct": false
+            },
+            {
+              "id": "d",
+              "text": "The real training images are updated to look more like fakes",
+              "correct": false
+            }
+          ],
+          "explain": "That's the second half of the loop — the generator adjusts based on how the sharpened discriminator judged it."
+        }
+      ]
+    },
+    {
+      "type": "boss",
+      "exercises": [
+        {
+          "id": "b1",
+          "type": "multiple_choice",
+          "xp": 5,
+          "prompt": "You're debugging a GAN training script. In one step, the discriminator is updated on a mixed batch of real and fake images. In the very next step, the generator is updated using only fake images and the discriminator's current judgments on them. Is this loop implemented correctly, and why?",
+          "options": [
+            {
+              "id": "a",
+              "text": "Yes — that's exactly the alternating pattern: the discriminator learns from real and fake images, then the generator learns purely from the discriminator's feedback on its own fakes",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "No — the generator should also be updated using real images each step",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "No — both networks must always update at the exact same time",
+              "correct": false
+            },
+            {
+              "id": "d",
+              "text": "No — the discriminator should never see real images",
+              "correct": false
+            }
+          ],
+          "explain": "Exactly! That alternating pattern is precisely how GANs train. Next: what happens over thousands of these loops — do both networks actually get better?"
+        }
+      ]
+    }
+  ]
+}

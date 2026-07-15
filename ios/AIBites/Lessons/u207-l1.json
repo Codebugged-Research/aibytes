@@ -1,0 +1,222 @@
+{
+  "id": "u207-l1",
+  "unit": 207,
+  "day": 1036,
+  "tier": "Generative Adversarial Networks",
+  "tierIcon": "🪦",
+  "title": "When the Discriminator Gets Too Good",
+  "icon": "🪦",
+  "concept": "If the discriminator becomes near-perfect at telling real from fake early in training, it starts handing back extremely confident, near-certain verdicts instead of nuanced ones — and that overconfidence is where the next GAN training struggle begins.",
+  "xp": 15,
+  "hearts": 3,
+  "estMinutes": 7,
+  "segments": [
+    {
+      "type": "warmup",
+      "exercises": [
+        {
+          "id": "w1",
+          "type": "multiple_choice",
+          "xp": 1,
+          "prompt": "Recap: What is mode collapse, the failure mode covered just before this?",
+          "options": [
+            {
+              "id": "a",
+              "text": "The generator finds a narrow set of outputs that reliably fool the discriminator and keeps repeating them instead of producing varied results",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "The discriminator refuses to output any judgment at all",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "The generator and discriminator both stop training permanently",
+              "correct": false
+            }
+          ],
+          "explain": "Right — mode collapse is the generator settling for a narrow winning trick instead of variety. Today: a completely different way GAN training can quietly break."
+        }
+      ]
+    },
+    {
+      "type": "teach",
+      "cards": [
+        {
+          "kind": "hook",
+          "icon": "🎓",
+          "title": "The judge who's seen it all",
+          "body": "Imagine a talent-show judge who has watched ten thousand auditions. By the third second of any act, they already know — no hesitation, no maybe. Early in GAN training, the discriminator can reach that same instant-certainty stage long before the generator has learned anything good."
+        },
+        {
+          "kind": "definition",
+          "icon": "🪦",
+          "title": "A discriminator that stops hedging its bets",
+          "body": "If the discriminator learns much faster than the generator early on, it can quickly become highly accurate at spotting fakes. Instead of outputting cautious, in-between scores, it starts issuing extremely confident verdicts — close to <code>0</code> (\"definitely fake\") or <code>1</code> (\"definitely real\") — for nearly everything it sees."
+        },
+        {
+          "kind": "analogy",
+          "icon": "🔍",
+          "title": "The instant-verdict art appraiser",
+          "body": "Picture an art appraiser who, after decades on the job, can spot a forgery the moment it enters the room — no squinting, no second look, just an immediate \"fake\" stamped with total certainty. That's useful for the appraiser's own accuracy, but a forger standing nearby learns nothing about which brushstroke gave them away."
+        },
+        {
+          "kind": "example",
+          "icon": "🔢",
+          "title": "What the numbers start to look like",
+          "body": "Early in training, a healthy discriminator might score a fake image <code>0.55</code> (barely leaning \"fake\") — mildly unsure. An overconfident discriminator instead scores that same fake <code>0.02</code> — essentially certain, no matter how close the fake actually came to fooling it."
+        },
+        {
+          "kind": "mythbust",
+          "icon": "⚠️",
+          "title": "Isn't a highly accurate discriminator good news?",
+          "body": "You might assume a discriminator that's very good at its job is purely a win — better judging should mean better training. In reality, that extreme confidence is exactly where trouble starts: the more certain its verdicts become, the less useful they turn out to be for teaching the generator anything. Next lesson digs into why."
+        },
+        {
+          "kind": "visual",
+          "icon": "⚖️",
+          "title": "Uncertain vs. overconfident discriminator",
+          "body": "How the discriminator's scores change as it gets ahead early:",
+          "compare": {
+            "left": {
+              "emoji": "🤔",
+              "tag": "Uncertain (Healthy)",
+              "text": "Scores cluster near 0.5<br>Verdicts feel tentative<br>Plenty of room to nudge"
+            },
+            "right": {
+              "emoji": "🪦",
+              "tag": "Overconfident (Too Good, Too Soon)",
+              "text": "Scores sit near 0 or 1<br>Verdicts feel absolute<br>Little room left to nudge"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "type": "practice",
+      "exercises": [
+        {
+          "id": "p1",
+          "type": "multiple_choice",
+          "xp": 2,
+          "prompt": "Why might the discriminator become overconfident early in GAN training?",
+          "options": [
+            {
+              "id": "a",
+              "text": "It can learn to spot the generator's still-weak fakes faster than the generator can learn to improve them",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "It is programmed with a hard rule to always output 0 or 1",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "The generator asks it to be more confident",
+              "correct": false
+            },
+            {
+              "id": "d",
+              "text": "It runs out of training data to judge",
+              "correct": false
+            }
+          ],
+          "explain": "Exactly — when the discriminator's learning outpaces the generator's early on, its judgments quickly become extreme and confident."
+        },
+        {
+          "id": "p2",
+          "type": "true_false",
+          "xp": 2,
+          "prompt": "True or false: An overconfident discriminator outputs scores close to 0.5, showing it's still unsure.",
+          "options": [
+            {
+              "id": "t",
+              "text": "True",
+              "correct": false
+            },
+            {
+              "id": "f",
+              "text": "False",
+              "correct": true
+            }
+          ],
+          "explain": "False. An overconfident discriminator does the opposite — its scores push toward the extremes, near 0 or 1, not toward the uncertain middle."
+        },
+        {
+          "id": "p3",
+          "type": "fill_blank",
+          "xp": 2,
+          "prompt": "Complete the sentence:",
+          "sentence": "When the discriminator gets far ahead early in training, its judgments become extremely ___ instead of cautious and in-between.",
+          "blank": "confident",
+          "words": [
+            "confident",
+            "random",
+            "silent"
+          ],
+          "explain": "An overpowered discriminator stops hedging — its verdicts become extremely confident, near 0 or 1."
+        },
+        {
+          "id": "p4",
+          "type": "spot_the_ai",
+          "xp": 2,
+          "prompt": "Which discriminator output shows the overconfidence problem building?",
+          "options": [
+            {
+              "id": "a",
+              "text": "A generated fake image is scored 0.01 — the discriminator is nearly certain it's fake",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "A generated fake image is scored 0.48 — the discriminator is nearly torn",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "A generated fake image is scored 0.52 — the discriminator leans only slightly toward real",
+              "correct": false
+            }
+          ],
+          "explain": "A score pinned near 0 (or near 1) — not the uncertain middle — is the signature of an overconfident discriminator."
+        }
+      ]
+    },
+    {
+      "type": "boss",
+      "exercises": [
+        {
+          "id": "b1",
+          "type": "multiple_choice",
+          "xp": 5,
+          "prompt": "The discriminator's judgments have become extremely confident, near 0 or 1, instead of cautious. What's the natural next question?",
+          "options": [
+            {
+              "id": "a",
+              "text": "What happens to the training signal sent back to the generator when the discriminator's output gets pinned at those extremes?",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "How many pixels does a generated image need?",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "What color scheme looks best in a user interface?",
+              "correct": false
+            },
+            {
+              "id": "d",
+              "text": "How long should a training dataset be stored on disk?",
+              "correct": false
+            }
+          ],
+          "explain": "Exactly! Up next: what happens to the feedback signal itself once the discriminator's confidence maxes out."
+        }
+      ]
+    }
+  ]
+}

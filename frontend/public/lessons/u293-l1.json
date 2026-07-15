@@ -1,0 +1,223 @@
+{
+  "id": "u293-l1",
+  "unit": 293,
+  "day": 1466,
+  "tier": "NLP Advanced",
+  "tierIcon": "🧠",
+  "title": "Deploying Large Text Models",
+  "icon": "🚀",
+  "concept": "Production deployment must handle the high memory footprint of weights, manage tokenization CPU latency, and keep generation speed fast.",
+  "xp": 15,
+  "hearts": 3,
+  "estMinutes": 7,
+  "segments": [
+    {
+      "type": "warmup",
+      "exercises": [
+        {
+          "id": "w1",
+          "type": "multiple_choice",
+          "xp": 1,
+          "prompt": "Why is deploying large text models harder than deploying normal text models more challenging for large text models compared to simple web applications?",
+          "options": [
+            {
+              "text": "They have massive memory footprints due to billions of weights.",
+              "correct": true,
+              "id": "opt_1"
+            },
+            {
+              "id": "opt_2",
+              "correct": false,
+              "text": "They do not require any memory at all."
+            },
+            {
+              "text": "They only run on old hardware.",
+              "id": "opt_3",
+              "correct": false
+            }
+          ],
+          "explain": "Unlike smaller web apps, large language models are extremely heavy because they hold billions of mathematical parameters (weights) that must live in active memory (GPU RAM) to work."
+        }
+      ]
+    },
+    {
+      "type": "teach",
+      "cards": [
+        {
+          "kind": "hook",
+          "icon": "🤔",
+          "title": "How Do We Share Giant Models?",
+          "body": "Have you ever wondered how ChatGPT answers millions of people at the exact same time without crashing? It's not just magic—it is a carefully optimized setup that manages massive computer memory and lightning-fast calculations."
+        },
+        {
+          "kind": "definition",
+          "icon": "🚀",
+          "title": "What is Model Deployment?",
+          "body": "Deploying large text models in production means hosting these giant neural networks so users can query them instantly. It requires balancing three major bottlenecks: the massive GPU memory needed to hold model weights, the CPU latency during text tokenization, and the generation speed (tokens per second)."
+        },
+        {
+          "kind": "analogy",
+          "icon": "🚉",
+          "title": "The Train Depot Analogy",
+          "body": "Imagine trying to run a city transit system. The heavy trains (model weights) require massive, expensive tracks (GPU memory) to sit on. Meanwhile, the ticket booths (tokenization) translate passenger arrivals into boarding passes on a separate CPU track, and the scheduling system must coordinate fast departures (generation speed) so passengers aren't stuck waiting."
+        },
+        {
+          "kind": "example",
+          "icon": "📝",
+          "title": "Behind the Scenes of a Query",
+          "body": "When you type a prompt into an AI assistant, the server first uses the CPU to break your text into tokens (tokenization). Then, it loads the model weights in GPU memory to process the prompt, and finally, it streams the generated response back to you word-by-word at a speed of 50 tokens per second."
+        },
+        {
+          "kind": "mythbust",
+          "icon": "🛑",
+          "title": "Is a Faster GPU the Only Fix?",
+          "body": "Many believe that to get fast text generation, you only need a faster GPU. In reality, text generation is often bottle-necked by how fast weights can be read from memory (memory bandwidth) and the time it takes the CPU to clean up and tokenize input text before the GPU even starts."
+        },
+        {
+          "kind": "visual",
+          "icon": "📊",
+          "title": "Training vs. Production",
+          "body": "To deploy models efficiently, you must shift your focus from training-time settings to resource-saving production setups.",
+          "compare": {
+            "right": {
+              "text": "Focuses on minimized weight size (quantization), low-latency tokenization, and high generation speed.",
+              "emoji": "⚡",
+              "tag": "Production Setup"
+            },
+            "left": {
+              "tag": "Training Setup",
+              "emoji": "🏋️‍♂️",
+              "text": "Focuses on raw computing power, high precision weights, and maximum data throughput."
+            }
+          }
+        }
+      ]
+    },
+    {
+      "type": "practice",
+      "exercises": [
+        {
+          "id": "p1",
+          "type": "multiple_choice",
+          "xp": 2,
+          "prompt": "What is tokenization latency in the context of model deployment?",
+          "options": [
+            {
+              "correct": false,
+              "text": "It is the process of training the model on new data.",
+              "id": "opt_1"
+            },
+            {
+              "text": "It is converting text into numbers, which is done on the CPU and can add delay.",
+              "id": "opt_2",
+              "correct": true
+            },
+            {
+              "text": "It is the physical cooling of the GPU chips.",
+              "correct": false,
+              "id": "opt_3,text:"
+            },
+            {
+              "text": "It is a security method to encrypt user passwords.",
+              "id": "opt_4",
+              "correct": false
+            }
+          ],
+          "explain": "Tokenization is the process of converting raw text into numbers (tokens) that the model can understand. This process typically runs on the CPU and can introduce latency before the GPU even begins generating text."
+        },
+        {
+          "id": "p2",
+          "type": "true_false",
+          "xp": 2,
+          "prompt": "True or False: CPU tokenization latency has no impact on the overall response time of a deployed model.",
+          "options": [
+            {
+              "correct": false,
+              "text": "True",
+              "id": "opt_true"
+            },
+            {
+              "text": "False",
+              "correct": true,
+              "id": "opt_false"
+            }
+          ],
+          "explain": "Even if generation is fast, the initial step of converting text to tokens on the CPU can introduce significant latency if not managed properly."
+        },
+        {
+          "id": "p3",
+          "type": "fill_blank",
+          "xp": 2,
+          "prompt": "Fill in the blank to complete the statement about model memory requirements.",
+          "sentence": "To run a large text model in production, the GPU memory must be large enough to hold all the model _______.",
+          "blank": "weights",
+          "words": [
+            "weights",
+            "users",
+            "cables",
+            "labels"
+          ],
+          "explain": "Large text models contain billions of parameters (weights) that must load directly into GPU memory to perform fast calculations."
+        },
+        {
+          "id": "p4",
+          "type": "spot_the_ai",
+          "xp": 2,
+          "prompt": "Which of these outputs represents a successfully optimized model deployment with high generation speed?",
+          "options": [
+            {
+              "correct": false,
+              "id": "opt_a",
+              "text": "Prompt A: 'Generating response... [Wait 5 seconds]... Hello... [Wait 5 seconds]... there.' (1 token/sec)"
+            },
+            {
+              "text": "Prompt B: 'Generating response: Hello there! How can I help you today?' (60 tokens/sec)",
+              "id": "opt_b",
+              "correct": true
+            },
+            {
+              "text": "Prompt C: 'Error: Out of memory. Please restart the server.' (0 tokens/sec)",
+              "id": "opt_c",
+              "correct": false
+            }
+          ],
+          "explain": "Prompt A shows a typical, slow generation rate of 1 token per second, which feels laggy. Prompt B shows a highly optimized system generating 60 tokens per second, which is ideal for real-time user experiences."
+        }
+      ]
+    },
+    {
+      "type": "boss",
+      "exercises": [
+        {
+          "id": "b1",
+          "type": "multiple_choice",
+          "xp": 5,
+          "prompt": "You are setting up a production environment for a 70-billion parameter model. Your team suggests using 'quantization' to optimize deployment. What is the primary benefit of this technique?",
+          "options": [
+            {
+              "text": "Quantization increases the model size to make CPU tokenization faster.",
+              "correct": false,
+              "id": "opt_1"
+            },
+            {
+              "text": "Quantization reduces the memory footprint of weights, helping them fit into GPU memory.",
+              "id": "opt_2",
+              "correct": true
+            },
+            {
+              "text": "Quantization eliminates the need for tokenization entirely by reading raw words.",
+              "correct": false,
+              "id": "opt_3"
+            },
+            {
+              "text": "Quantization is only used to speed up internet connection speeds during API calls.",
+              "id": "opt_4",
+              "correct": false
+            }
+          ],
+          "explain": "Deploying large text models requires handling huge memory footprints for weights, minimizing CPU latency during tokenization, and maximizing generation speed. Model quantization directly shrinks the weight size to fit on cheaper GPUs, making it a critical deployment strategy."
+        }
+      ]
+    }
+  ]
+}

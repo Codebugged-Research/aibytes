@@ -1,0 +1,223 @@
+{
+  "id": "u250-l4",
+  "unit": 250,
+  "day": 1254,
+  "tier": "NLP Basics",
+  "tierIcon": "🔤",
+  "title": "Top-K and Top-P Sampling",
+  "icon": "⚖️",
+  "concept": "Top-K limits sampling to the K most likely words; Top-P (nucleus sampling) limits sampling to a dynamic subset of words whose summed probability reaches P.",
+  "xp": 15,
+  "hearts": 3,
+  "estMinutes": 7,
+  "segments": [
+    {
+      "type": "warmup",
+      "exercises": [
+        {
+          "id": "w1",
+          "type": "multiple_choice",
+          "xp": 1,
+          "prompt": "Why do we use Top-K and Top-P sampling parameters?",
+          "options": [
+            {
+              "correct": false,
+              "id": "w_1",
+              "text": "They translate the output into different languages."
+            },
+            {
+              "text": "They limit the pool of words the AI can choose from for the next word.",
+              "correct": true,
+              "id": "w_2"
+            },
+            {
+              "correct": false,
+              "id": "w_3",
+              "text": "They make the AI generate text faster."
+            }
+          ],
+          "explain": "Top-K and Top-P are parameters that restrict which words the AI can select next, preventing it from choosing highly unlikely or bizarre words."
+        }
+      ]
+    },
+    {
+      "type": "teach",
+      "cards": [
+        {
+          "kind": "hook",
+          "icon": "⚖️",
+          "title": "Controlling AI Creativity",
+          "body": "Have you ever noticed that AI sometimes repeats the exact same boring words, or suddenly says something completely bizarre? \n\nBy tweaking two settings called Top-K and Top-P, we can control the balance between safe, predictable answers and wild, creative ideas!"
+        },
+        {
+          "kind": "definition",
+          "icon": "⚙️",
+          "title": "What are Top-K and Top-P?",
+          "body": "Top-K and Top-P are settings used to control how an AI chooses the next word:\n\n• **Top-K**: The AI looks at the list of possible next words and only selects from the 'K' most likely words (e.g., if K=10, it only considers the top 10 options).\n• **Top-P (Nucleus Sampling)**: The AI looks at the most likely words and adds their probabilities together. It stops adding words once the total probability reaches 'P' (e.g., 90%). It then only chooses from this dynamic group."
+        },
+        {
+          "kind": "analogy",
+          "icon": "🍦",
+          "title": "The Ice Cream Shop Choice",
+          "body": "Imagine you are at an ice cream parlor with 50 flavors. \n\nTop-K sampling is like deciding: 'I will only choose from my top 3 favorite flavors.' No matter how tasty the others look, you restrict your choice to a fixed number of options.\n\nTop-P sampling is like saying: 'I will look at the most popular flavors until I find a group that 90% of customers order.' If chocolate and vanilla make up 90% of sales, you only choose between those two. If it takes 15 different flavors to add up to 90%, you choose from all 15!"
+        },
+        {
+          "kind": "example",
+          "icon": "🥞",
+          "title": "Top-K vs. Top-P in Action",
+          "body": "Let's say the AI is finishing the sentence: \"For breakfast, I ate a...\"\n\n• With **Top-K = 3**: The AI will ONLY choose between the top 3 options: \"banana\" (40%), \"pancake\" (30%), or \"bagel\" (15%). It ignores everything else.\n\n• With **Top-P = 0.80 (80%)**: The AI adds up the probabilities: \"banana\" (40%) + \"pancake\" (30%) + \"bagel\" (15%) = 85%. Since this exceeds 80%, it stops and chooses only from these three. If the probabilities were flatter, it might have included 10 different words to reach 80%."
+        },
+        {
+          "kind": "mythbust",
+          "icon": "🔍",
+          "title": "The 100% Trap",
+          "body": "Myth: \"Setting Top-P to 1.0 makes the AI completely perfect and error-free.\"\n\nFact: Setting Top-P to 1.0 (or 100%) means the AI considers *every single word* in its vocabulary, even the highly unlikely ones. This actually increases the chance of the AI outputting random nonsense or weird typos!"
+        },
+        {
+          "kind": "visual",
+          "icon": "📊",
+          "title": "Visualizing the Cut-off",
+          "body": "Let's compare how Top-K and Top-P handle a list of potential next words.",
+          "compare": {
+            "left": {
+              "tag": "Top-K (Fixed Count)",
+              "text": "Looks at the top 'K' words. If K=3, it only chooses from the 3 most likely words, even if the 4th word is also very common.",
+              "emoji": "🔢"
+            },
+            "right": {
+              "emoji": "📈",
+              "text": "Looks at the top words until their summed probability hits 'P' (like 90%). The pool shrinks or grows depending on how likely the words are.",
+              "tag": "Top-P (Dynamic Pool)"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "type": "practice",
+      "exercises": [
+        {
+          "id": "p1",
+          "type": "multiple_choice",
+          "xp": 2,
+          "prompt": "What does Top-K sampling do?",
+          "options": [
+            {
+              "id": "opt_1",
+              "text": "It restricts the choice to a fixed number of the most likely words.",
+              "correct": true
+            },
+            {
+              "correct": false,
+              "id": "opt_2",
+              "text": "It only selects words that start with the letter K."
+            },
+            {
+              "id": "opt_3",
+              "text": "It dynamically expands the word pool based on percentage.",
+              "correct": false
+            },
+            {
+              "id": "opt_4",
+              "text": "It ensures the AI never repeats the same word twice.",
+              "correct": false
+            }
+          ],
+          "explain": "Top-K restricts the AI to choosing from a fixed, set number of the most likely next words, regardless of their actual probability percentages."
+        },
+        {
+          "id": "p2",
+          "type": "true_false",
+          "xp": 2,
+          "prompt": "True or False: Raising the Top-P value close to 1.0 makes the AI's output more predictable and less creative.",
+          "options": [
+            {
+              "id": "t",
+              "text": "True",
+              "correct": false
+            },
+            {
+              "id": "f",
+              "text": "False",
+              "correct": true
+            }
+          ],
+          "explain": "Setting Top-P to a lower value (like 0.1) restricts the choices to only the most highly probable words, making the output very safe and predictable. Raising Top-P allows more creative and less common words."
+        },
+        {
+          "id": "p3",
+          "type": "fill_blank",
+          "xp": 2,
+          "prompt": "Fill in the missing word to describe how Top-P selects words.",
+          "sentence": "Unlike the fixed word count of Top-K, Top-P sampling uses a ____________ selection pool based on cumulative probability.",
+          "blank": "dynamic",
+          "words": [
+            "dynamic",
+            "fixed",
+            "random",
+            "slow"
+          ],
+          "explain": "Top-P (nucleus) sampling is dynamic because the number of word choices expands or shrinks depending on how confident the AI is about the next word."
+        },
+        {
+          "id": "p4",
+          "type": "spot_the_ai",
+          "xp": 2,
+          "prompt": "Which statement correctly identifies a key difference between Top-K and Top-P sampling?",
+          "options": [
+            {
+              "text": "Top-P only chooses nouns, while Top-K only chooses verbs.",
+              "correct": false,
+              "id": "sai_1"
+            },
+            {
+              "text": "Top-P dynamically changes the number of word choices, while Top-K uses a fixed number.",
+              "correct": true,
+              "id": "sai_2"
+            },
+            {
+              "correct": false,
+              "id": "sai_3",
+              "text": "Top-P is much slower and rarely used compared to Top-K."
+            }
+          ],
+          "explain": "Top-P dynamically adjusts the size of the word pool based on probability, while Top-K always uses a rigid, predetermined number of words."
+        }
+      ]
+    },
+    {
+      "type": "boss",
+      "exercises": [
+        {
+          "id": "b1",
+          "type": "multiple_choice",
+          "xp": 5,
+          "prompt": "Let's test your mastery! What is the primary difference between Top-K and Top-P sampling, and how does lowering Top-P affect the output?",
+          "options": [
+            {
+              "text": "Top-K uses a percentage threshold, while Top-P uses a fixed count.",
+              "correct": false,
+              "id": "option_a"
+            },
+            {
+              "text": "Top-K limits choices to a fixed number, while Top-P dynamically limits choices based on cumulative probability.",
+              "correct": true,
+              "id": "option_b"
+            },
+            {
+              "correct": false,
+              "id": "option_c",
+              "text": "Setting Top-P to 0.1 will make the text highly creative, random, and unpredictable."
+            },
+            {
+              "correct": false,
+              "id": "option_d",
+              "text": "Both methods force the AI to only choose the single most probable word."
+            }
+          ],
+          "explain": "Top-K limits choices to a fixed number (K), while Top-P dynamically adjusts the number of choices based on their combined probability (P). Lowering P to 0.1 makes the AI choose only from the absolute top-tier, highly likely words, resulting in extremely predictable text."
+        }
+      ]
+    }
+  ]
+}

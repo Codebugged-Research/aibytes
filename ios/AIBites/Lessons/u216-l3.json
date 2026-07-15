@@ -1,0 +1,206 @@
+{
+  "hearts": 3,
+  "segments": [
+    {
+      "exercises": [
+        {
+          "type": "multiple_choice",
+          "id": "u216_l3_warmup_1",
+          "explain": "A standard GAN discriminator categorizes images as real or fake, whereas a Wasserstein GAN critic measures how far apart the real and fake distributions are.",
+          "options": [
+            {
+              "id": "w1",
+              "text": "It generates higher resolution images.",
+              "correct": false
+            },
+            {
+              "text": "It measures the distance between data distributions instead of doing binary classification.",
+              "id": "w2",
+              "correct": true
+            },
+            {
+              "text": "It works without any training data.",
+              "id": "w3",
+              "correct": false
+            }
+          ],
+          "xp": 1,
+          "prompt": "What is the main difference between a standard GAN discriminator and a WGAN critic?"
+        }
+      ],
+      "type": "warmup"
+    },
+    {
+      "cards": [
+        {
+          "body": "Imagine training a critic that changes its mind wildly with the smallest tweak. The generator would get chaotic feedback! To prevent this, we need a mathematical speed limit.",
+          "kind": "hook",
+          "icon": "🚦",
+          "title": "The Need for Limits"
+        },
+        {
+          "title": "What is 1-Lipschitz?",
+          "body": "The 1-Lipschitz constraint is a mathematical rule ensuring the critic's output never changes faster than its input. If you change the input image slightly, the score changes only slightly.",
+          "kind": "definition",
+          "icon": "📏"
+        },
+        {
+          "kind": "analogy",
+          "icon": "🏔️",
+          "title": "The Safe Mountain Slope",
+          "body": "Think of it like a strict hiking trail guide. Instead of sudden, vertical cliffs where you fall infinitely (exploding gradients), the trail has a maximum slope of 45 degrees. It's always a manageable, smooth slope."
+        },
+        {
+          "title": "Small Inputs, Small Output Changes",
+          "body": "If we change a pixel in an image by a value of 2, a 1-Lipschitz critic is guaranteed to change its rating by at most 2. This prevents the critic from giving wild, extreme feedback.",
+          "kind": "example",
+          "icon": "🔢"
+        },
+        {
+          "kind": "mythbust",
+          "title": "Is Weight Clipping Perfect?",
+          "icon": "🛡️",
+          "body": "You might think weight clipping is the perfect way to enforce this limit. While simple, clamping weights to a strict range like [-0.01, 0.01] often makes the critic learn very slowly or fail to learn complex features."
+        },
+        {
+          "compare": {
+            "right": {
+              "tag": "With 1-Lipschitz",
+              "emoji": "🚶",
+              "text": "Smooth, gradual changes that guide the generator reliably."
+            },
+            "left": {
+              "tag": "Without Constraint",
+              "emoji": "🧗",
+              "text": "Gradients can explode or vanish, leading to training failure."
+            }
+          },
+          "icon": "📊",
+          "kind": "visual",
+          "title": "Stable vs. Unstable Training"
+        }
+      ],
+      "type": "teach"
+    },
+    {
+      "exercises": [
+        {
+          "explain": "The 1-Lipschitz constraint guarantees that the critic's slope (gradient) is bounded, preventing sudden, wild changes in feedback.",
+          "xp": 2,
+          "prompt": "Why do we apply the 1-Lipschitz constraint to the WGAN critic?",
+          "id": "u216_l3_prac_1",
+          "type": "multiple_choice",
+          "options": [
+            {
+              "correct": true,
+              "id": "p1_1",
+              "text": "It limits how fast the critic's output can change relative to its input."
+            },
+            {
+              "id": "p1_2",
+              "correct": false,
+              "text": "It forces the generator to produce only one type of image."
+            },
+            {
+              "id": "p1_3",
+              "text": "It eliminates the need for any neural network weights.",
+              "correct": false
+            }
+          ]
+        },
+        {
+          "prompt": "Weight clipping is a method used to force the critic to satisfy the 1-Lipschitz constraint.",
+          "xp": 2,
+          "explain": "Weight clipping is a traditional, simple way to enforce the Lipschitz constraint by keeping weights within a tiny window (like -0.01 to 0.01).",
+          "options": [
+            {
+              "id": "p2_1",
+              "text": "True",
+              "correct": true
+            },
+            {
+              "correct": false,
+              "id": "p2_2",
+              "text": "False"
+            }
+          ],
+          "type": "true_false",
+          "id": "u216_l3_prac_2"
+        },
+        {
+          "type": "fill_blank",
+          "id": "u216_l3_prac_3",
+          "blank": "clipping",
+          "explain": "To enforce the Lipschitz constraint, traditional WGANs restrict the network weights to a tiny range using weight clipping.",
+          "sentence": "To satisfy the smoothness constraint, traditional WGANs restrict the weight values using weight clipping.",
+          "xp": 2,
+          "prompt": "To satisfy the smoothness constraint, traditional WGANs restrict the weight values using weight [blank].",
+          "words": [
+            "clipping",
+            "boosting",
+            "dropping"
+          ]
+        },
+        {
+          "options": [
+            {
+              "id": "p4_1",
+              "text": "A critic that gives smooth, gradual feedback to guide the generator.",
+              "correct": true
+            },
+            {
+              "text": "A critic that has extreme, unstable outputs that crash the training.",
+              "correct": false,
+              "id": "p4_2"
+            }
+          ],
+          "type": "spot_the_ai",
+          "id": "u216_l3_prac_4",
+          "prompt": "Which behavior shows the successful application of the 1-Lipschitz constraint?",
+          "xp": 2,
+          "explain": "Without the smoothness constraint, the critic's landscape has wild cliffs, causing gradient explosion. With the constraint, it is smooth, allowing stable training."
+        }
+      ],
+      "type": "practice"
+    },
+    {
+      "exercises": [
+        {
+          "prompt": "What is a major downside of using basic weight clipping to enforce the 1-Lipschitz constraint?",
+          "xp": 5,
+          "explain": "While weight clipping enforces the 1-Lipschitz constraint, it can limit the critic's capacity. In the next lesson, we will explore a better approach: Gradient Penalty.",
+          "options": [
+            {
+              "id": "b1",
+              "text": "It makes the training process run twice as fast.",
+              "correct": false
+            },
+            {
+              "correct": true,
+              "text": "It can limit the critic's ability to learn complex patterns due to restricted weights.",
+              "id": "b2"
+            },
+            {
+              "id": "b3",
+              "text": "It completely prevents the generator from updating its weights.",
+              "correct": false
+            }
+          ],
+          "id": "u216_l3_boss",
+          "type": "multiple_choice"
+        }
+      ],
+      "type": "boss"
+    }
+  ],
+  "tier": "Generative Adversarial Networks",
+  "xp": 15,
+  "day": 1083,
+  "id": "u216-l3",
+  "concept": "To keep gradients stable, the critic must be mathematically smooth (1-Lipschitz constraint), traditionally enforced by clipping weights to a tiny range.",
+  "title": "The 1-Lipschitz Constraint",
+  "tierIcon": "🌊",
+  "unit": 216,
+  "icon": "📏",
+  "estMinutes": 7
+}

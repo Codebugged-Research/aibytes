@@ -1,0 +1,224 @@
+{
+  "id": "u285-l1",
+  "unit": 285,
+  "day": 1426,
+  "tier": "NLP Advanced",
+  "tierIcon": "🧠",
+  "title": "The Speed Cost of Tokenizing",
+  "icon": "⏳",
+  "concept": "Before a GPU can process text, the CPU must tokenize the raw strings; in high-throughput production, tokenization latency can become the primary bottleneck.",
+  "xp": 15,
+  "hearts": 3,
+  "estMinutes": 7,
+  "segments": [
+    {
+      "type": "warmup",
+      "exercises": [
+        {
+          "id": "w1",
+          "type": "multiple_choice",
+          "xp": 1,
+          "prompt": "What is the primary job of a tokenizer in an AI pipeline?",
+          "options": [
+            {
+              "text": "Convert raw text into numbers (tokens) the model understands",
+              "correct": true,
+              "id": "a"
+            },
+            {
+              "id": "b",
+              "text": "Train the model's weights on a dataset",
+              "correct": false
+            },
+            {
+              "correct": false,
+              "text": "Translate code from Python to C++",
+              "id": "c"
+            }
+          ],
+          "explain": "Tokenization turns raw human text into numbers that a neural network can calculate."
+        }
+      ]
+    },
+    {
+      "type": "teach",
+      "cards": [
+        {
+          "kind": "hook",
+          "icon": "⚡",
+          "title": "The Hidden Speed Trap",
+          "body": "We often think of GPUs as the ultimate speed kings of AI. But did you know that your blazing-fast GPU can be brought to a complete crawl by a humble CPU splitting text into tokens? Let's find out why!"
+        },
+        {
+          "kind": "definition",
+          "icon": "⏳",
+          "title": "What is the Tokenization Bottleneck?",
+          "body": "Tokenization is the process of splitting raw text into small chunks (tokens) and mapping them to numbers. Because this step involves complex string manipulation, it is run on the CPU. If the CPU cannot tokenize text fast enough, the GPU wastes time waiting."
+        },
+        {
+          "kind": "analogy",
+          "icon": "📦",
+          "title": "The Labeling Bottleneck",
+          "body": "Imagine a high-speed automatic wrapping machine (the GPU) that packages boxes at lightning speed. However, before the boxes reach the machine, a single worker (the CPU) has to manually label each box with a barcode (tokens). If the worker can't label the boxes fast enough, the giant machine sits idle, waiting for work."
+        },
+        {
+          "kind": "example",
+          "icon": "🚀",
+          "title": "Real-World Delay",
+          "body": "If you send a massive batch of 10,000 long documents to an AI server, the GPU might finish its math in 1 second. However, the CPU might spend 3 seconds just splitting the words and looking up their token IDs. Your total time is dominated by the CPU's tokenization speed!"
+        },
+        {
+          "kind": "mythbust",
+          "icon": "🛑",
+          "title": "Myth: GPUs Are Always the Bottleneck",
+          "body": "It’s easy to think that because GPUs handle the heavy lifting, we only need to optimize neural network math. In reality, in high-throughput production, raw text preprocessing on the CPU is frequently the main slowdown."
+        },
+        {
+          "kind": "visual",
+          "icon": "📊",
+          "title": "The Pipeline Divide",
+          "body": "Let's compare the processing steps to see where the time is actually spent.",
+          "compare": {
+            "right": {
+              "tag": "GPU Processing",
+              "emoji": "🔥",
+              "text": "Runs parallel matrix math on numerical tokens. Extremely fast."
+            },
+            "left": {
+              "emoji": "💻",
+              "tag": "CPU Preprocessing",
+              "text": "Tokenizes strings, splits text, does vocabulary lookups. Slow and serial."
+            },
+            "title": "CPU vs. GPU Tasks"
+          }
+        }
+      ]
+    },
+    {
+      "type": "practice",
+      "exercises": [
+        {
+          "id": "p1",
+          "type": "multiple_choice",
+          "xp": 2,
+          "prompt": "Where does the tokenization process usually run in a standard machine learning pipeline?",
+          "options": [
+            {
+              "text": "Directly inside the GPU's high-speed memory cores",
+              "id": "a",
+              "correct": false
+            },
+            {
+              "id": "b",
+              "text": "On the CPU, as a preprocessing step before sending data to the GPU",
+              "correct": true
+            },
+            {
+              "text": "On the network router during data transmission",
+              "correct": false,
+              "id": "c"
+            },
+            {
+              "id": "d",
+              "correct": false,
+              "text": "Only in the cloud after the model finishes running"
+            }
+          ],
+          "explain": "Because tokenization requires parsing text and looking up values in a vocabulary table, it is typically executed on the CPU before data is sent to the GPU."
+        },
+        {
+          "id": "p2",
+          "type": "true_false",
+          "xp": 2,
+          "prompt": "True or False: Buying a faster GPU will always solve tokenization latency issues.",
+          "options": [
+            {
+              "text": "True",
+              "id": "true",
+              "correct": false
+            },
+            {
+              "text": "False",
+              "id": "false",
+              "correct": true
+            }
+          ],
+          "explain": "Even if your GPU is infinitely fast, the total time will still be limited by how fast the CPU can tokenize and feed the data."
+        },
+        {
+          "id": "p3",
+          "type": "fill_blank",
+          "xp": 2,
+          "prompt": "Fill in the missing component that performs tokenization in standard pipelines:",
+          "sentence": "Before the GPU can process text, the CPU must tokenize the raw strings first.",
+          "blank": "CPU",
+          "words": [
+            "GPU",
+            "CPU",
+            "RAM",
+            "SSD"
+          ],
+          "explain": "Because tokenization involves string processing and dictionary lookups, it runs on the CPU, which can slow down the GPU."
+        },
+        {
+          "id": "p4",
+          "type": "spot_the_ai",
+          "xp": 2,
+          "prompt": "Which response correctly explains why tokenization causes a speed bottleneck?",
+          "options": [
+            {
+              "id": "a",
+              "text": "Model A: \"It runs on the CPU, performing heavy string splitting and vocabulary lookups, which keeps the GPU waiting.\"",
+              "correct": true
+            },
+            {
+              "text": "Model B: \"It requires sending the text to an external database over the internet, causing network lag.\"",
+              "correct": false,
+              "id": "b"
+            },
+            {
+              "correct": false,
+              "id": "c",
+              "text": "Model C: \"It forces the GPU to run out of memory due to the size of the vocabulary matrix.\""
+            }
+          ],
+          "explain": "AI Model A is the AI because it correctly identifies that tokenization overhead is a CPU-bound string manipulation bottleneck, whereas Model B confuses it with network latency."
+        }
+      ]
+    },
+    {
+      "type": "boss",
+      "exercises": [
+        {
+          "id": "b1",
+          "type": "multiple_choice",
+          "xp": 5,
+          "prompt": "Your massive AI cluster is running at only 40% GPU utilization because the text preprocessing pipeline is clogged. Which of these describes the tokenization bottleneck?",
+          "options": [
+            {
+              "correct": false,
+              "text": "The GPU is too slow at multiplying matrix weights.",
+              "id": "a"
+            },
+            {
+              "id": "b",
+              "correct": true,
+              "text": "The CPU cannot convert raw text into tokens fast enough to keep the GPU busy."
+            },
+            {
+              "text": "The network connection between the user and the GPU is broken.",
+              "correct": false,
+              "id": "c"
+            },
+            {
+              "correct": false,
+              "text": "The model weights are too large to fit in the GPU's memory.",
+              "id": "d"
+            }
+          ],
+          "explain": "In high-throughput systems, tokenization runs on the CPU and can block the GPU from receiving data, turning the CPU's string processing speed into the primary bottleneck."
+        }
+      ]
+    }
+  ]
+}

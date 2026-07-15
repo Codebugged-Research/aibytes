@@ -1,0 +1,223 @@
+{
+  "id": "u289-l5",
+  "unit": 289,
+  "day": 1450,
+  "tier": "NLP Advanced",
+  "tierIcon": "🧠",
+  "title": "Deploying PEFT Models",
+  "icon": "🌉",
+  "concept": "PEFT allows serving many task-specific models on a single shared GPU, swapping only the tiny adapter weights on the fly. Boss explain ends with: 'Next up: Evaluation & Practice.'",
+  "xp": 15,
+  "hearts": 3,
+  "estMinutes": 7,
+  "segments": [
+    {
+      "type": "warmup",
+      "exercises": [
+        {
+          "id": "w1",
+          "type": "multiple_choice",
+          "xp": 1,
+          "prompt": "Why is it so easy to swap PEFT adapters in and out of GPU memory compared to full models?",
+          "options": [
+            {
+              "id": "a",
+              "text": "Because adapter files are extremely small compared to the base model",
+              "correct": true
+            },
+            {
+              "text": "Because adapters don't use any math operations",
+              "correct": false,
+              "id": "b"
+            },
+            {
+              "correct": false,
+              "id": "c",
+              "text": "Because adapters automatically delete the base model after use"
+            }
+          ],
+          "explain": "PEFT adapters are small (often less than 1% of the base model size). This makes them incredibly cheap to store and fast to transfer."
+        }
+      ]
+    },
+    {
+      "type": "teach",
+      "cards": [
+        {
+          "kind": "hook",
+          "icon": "🌉",
+          "title": "50 Models, 1 GPU?",
+          "body": "Imagine hosting 50 customized AI models for different tasks. If you deployed them the traditional way, you'd need 50 expensive GPUs! But with PEFT, you can run all 50 on a single GPU. Let's find out how dynamic adapter swapping makes this possible."
+        },
+        {
+          "kind": "definition",
+          "icon": "💾",
+          "title": "Dynamic Adapter Swapping",
+          "body": "To deploy PEFT models efficiently, we load one copy of the large base model into the GPU's memory. When a user requests a specific task, we dynamically load or swap only the tiny adapter weights (like LoRA parameters). This allows one server to act like dozens of specialized models at once!"
+        },
+        {
+          "kind": "analogy",
+          "icon": "🔑",
+          "title": "The Shared Car Rental",
+          "body": "Imagine a single rental car (the base model). Instead of buying 10 different cars for 10 drivers, you just hand each driver a customized keycard (the PEFT adapter). The keycard instantly sets the seats, mirrors, and radio to their exact preference. The heavy car stays the same, but the driving experience changes instantly!"
+        },
+        {
+          "kind": "example",
+          "icon": "🌍",
+          "title": "Multi-Tenant Translation",
+          "body": "Suppose you run a customer support platform. Instead of hosting three separate 70-billion parameter models for German, Spanish, and French translation, you host one base model. When a Spanish message arrives, the system quickly loads the Spanish LoRA adapter (only a few megabytes) to process it, saving gigabytes of memory."
+        },
+        {
+          "kind": "mythbust",
+          "icon": "🚫",
+          "title": "Do We Have to Merge?",
+          "body": "It is a common myth that you need to merge adapter weights into the base model before deploying them. While you can do that, keeping them separate allows you to swap them in milliseconds on the fly, which is the secret to high-efficiency multi-task serving."
+        },
+        {
+          "kind": "visual",
+          "icon": "📊",
+          "title": "Traditional vs. PEFT Serving",
+          "body": "Compare traditional deployment of multiple specialized models against PEFT multi-tenant adapter deployment.",
+          "compare": {
+            "left": {
+              "emoji": "💾",
+              "text": "Requires hosting multiple full-sized models in memory. Very expensive and wastes GPU space.",
+              "tag": "Traditional Serving"
+            },
+            "right": {
+              "text": "Hosts 1 shared base model and hot-swaps tiny adapter files in milliseconds. Cheap and scalable.",
+              "tag": "PEFT Serving",
+              "emoji": "⚡"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "type": "practice",
+      "exercises": [
+        {
+          "id": "p1",
+          "type": "multiple_choice",
+          "xp": 2,
+          "prompt": "When serving multiple different tasks on a single GPU using PEFT, what actually gets swapped in memory on the fly?",
+          "options": [
+            {
+              "id": "a",
+              "text": "The entire base model weights",
+              "correct": false
+            },
+            {
+              "correct": true,
+              "id": "b",
+              "text": "Only the tiny task-specific adapter weights"
+            },
+            {
+              "correct": false,
+              "id": "c",
+              "text": "The physical graphics cards"
+            },
+            {
+              "correct": false,
+              "id": "d",
+              "text": "The training datasets and labels"
+            }
+          ],
+          "explain": "The base model weights never change and stay loaded in memory. Only the tiny adapter weights are loaded or swapped dynamically depending on the task."
+        },
+        {
+          "id": "p2",
+          "type": "true_false",
+          "xp": 2,
+          "prompt": "True or False: Swapping different PEFT adapters on a single base model can be done quickly on the fly during live inference.",
+          "options": [
+            {
+              "correct": true,
+              "id": "t",
+              "text": "True"
+            },
+            {
+              "correct": false,
+              "id": "f",
+              "text": "False"
+            }
+          ],
+          "explain": "True! Because adapters are very small (often just a few megabytes), they can be swapped in memory in milliseconds, allowing rapid switching between different tasks."
+        },
+        {
+          "id": "p3",
+          "type": "fill_blank",
+          "xp": 2,
+          "prompt": "Fill in the missing word to complete the description of efficient PEFT deployment.",
+          "sentence": "Multi-tenant deployment works by keeping the base model in memory and swapping only the tiny task-specific [blank] on demand.",
+          "blank": "adapters",
+          "words": [
+            "adapters",
+            "datasets",
+            "hardware",
+            "servers"
+          ],
+          "explain": "By keeping the massive base model fixed in memory, we only need to swap the tiny task-specific adapters on the fly to change the model's behavior."
+        },
+        {
+          "id": "p4",
+          "type": "spot_the_ai",
+          "xp": 2,
+          "prompt": "Which of the following describes a PEFT-optimized deployment setup?",
+          "options": [
+            {
+              "id": "a",
+              "text": "Running five identical copies of a 70B model on five separate GPUs to handle five different languages.",
+              "correct": false
+            },
+            {
+              "correct": false,
+              "id": "b",
+              "text": "Updating all billions of parameters of a model using a massive cluster of supercomputers over three weeks."
+            },
+            {
+              "id": "c",
+              "text": "Hosting one base model on a single GPU and swapping out lightweight LoRA weights depending on which task the user requests.",
+              "correct": true
+            }
+          ],
+          "explain": "Option C describes the power of PEFT serving: keeping one large model in memory and dynamically swapping tiny adapter weights on the fly. Option A is traditional heavy deployment, and Option B describes training, not serving."
+        }
+      ]
+    },
+    {
+      "type": "boss",
+      "exercises": [
+        {
+          "id": "b1",
+          "type": "multiple_choice",
+          "xp": 5,
+          "prompt": "When deploying PEFT models to serve multiple tasks at the same time, how is GPU memory saved?",
+          "options": [
+            {
+              "text": "The base model weights must be duplicated for every active user",
+              "correct": false,
+              "id": "a"
+            },
+            {
+              "correct": true,
+              "id": "b",
+              "text": "The heavy base model stays in GPU memory, and only light adapter weights are swapped"
+            },
+            {
+              "correct": false,
+              "id": "c",
+              "text": "We must retrain the base model every time a new task is requested"
+            },
+            {
+              "correct": false,
+              "id": "d",
+              "text": "PEFT models can only be run one at a time on dedicated, separate servers"
+            }
+          ],
+          "explain": "Amazing job! You now understand how PEFT makes it practical to serve dozens of specialized AI models to users simultaneously without buying expensive hardware for each one. Next up: Evaluation & Practice."
+        }
+      ]
+    }
+  ]
+}

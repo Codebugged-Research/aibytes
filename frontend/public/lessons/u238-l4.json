@@ -1,0 +1,222 @@
+{
+  "id": "u238-l4",
+  "unit": 238,
+  "day": 1194,
+  "tier": "NLP Basics",
+  "tierIcon": "🔤",
+  "title": "Truncated BPTT",
+  "icon": "✂️",
+  "concept": "Truncated BPTT limits the backward pass to a fixed number of steps (e.g. 30 tokens) to save memory and stabilize gradient flow.",
+  "xp": 15,
+  "hearts": 3,
+  "estMinutes": 7,
+  "segments": [
+    {
+      "type": "warmup",
+      "exercises": [
+        {
+          "id": "w1",
+          "type": "multiple_choice",
+          "xp": 1,
+          "prompt": "Why can standard Backpropagation Through Time (BPTT) be problematic for very long sentences?",
+          "options": [
+            {
+              "id": "w_1",
+              "text": "It requires too much memory for long sequences.",
+              "correct": true
+            },
+            {
+              "text": "It makes the AI forget the immediate next word.",
+              "correct": false,
+              "id": "w_2"
+            },
+            {
+              "text": "It only works on images, not text.",
+              "id": "w_3",
+              "correct": false
+            }
+          ],
+          "explain": "Standard BPTT goes back to the very beginning, which requires keeping every single step in memory. This easily causes crashes on long inputs."
+        }
+      ]
+    },
+    {
+      "type": "teach",
+      "cards": [
+        {
+          "kind": "hook",
+          "icon": "🧠",
+          "title": "Memory Overload!",
+          "body": "Recurrent Neural Networks (RNNs) have a superpower: they can remember past words. But if a sequence is thousands of words long, tracking that memory all the way back to the beginning will crash your computer's memory! How do we keep the memory without the crash?"
+        },
+        {
+          "kind": "definition",
+          "icon": "✂️",
+          "title": "What is Truncated BPTT?",
+          "body": "Truncated Backpropagation Through Time (Truncated BPTT) is a training method for recurrent neural networks. Instead of calculating gradients all the way back to the very beginning of a long text, it stops and updates the model after a fixed number of steps (like 30 words)."
+        },
+        {
+          "kind": "analogy",
+          "icon": "📖",
+          "title": "The Clipboard Reader",
+          "body": "Imagine you are reading a massive book. Instead of holding the weight of the entire book in your hands all day, you only hold a small clipboard with the current chapter. As you read, you keep only the last few pages in memory, letting go of the earlier chapters so your hands don't get tired."
+        },
+        {
+          "kind": "example",
+          "icon": "📝",
+          "title": "Processing a Long Essay",
+          "body": "If you are training an AI to write a 1,000-word essay, standard BPTT would require keeping all 1,000 words in memory to calculate gradients. With Truncated BPTT set to 30, the AI processes the text in chunks of 30 words, updating its memory and forgetting the distant past to stay fast and efficient."
+        },
+        {
+          "kind": "mythbust",
+          "icon": "🛡️",
+          "title": "Does it forget everything?",
+          "body": "Many believe that Truncated BPTT means the network completely forgets everything older than 30 steps. In reality, the forward pass still carries hidden states (memory) forward across the whole sequence; we only cut off the backward pass (gradient calculation) to save memory."
+        },
+        {
+          "kind": "visual",
+          "icon": "⚖️",
+          "title": "Full vs. Truncated BPTT",
+          "body": "Comparing standard backpropagation through time against the truncated version.",
+          "compare": {
+            "left": {
+              "text": "Calculates gradients all the way back to the start. Uses massive memory.",
+              "emoji": "🐢",
+              "tag": "Full BPTT"
+            },
+            "right": {
+              "tag": "Truncated BPTT",
+              "text": "Stops the backward pass after a fixed number of steps. Saves memory.",
+              "emoji": "⚡"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "type": "practice",
+      "exercises": [
+        {
+          "id": "p1",
+          "type": "multiple_choice",
+          "xp": 2,
+          "prompt": "How does Truncated BPTT prevent a neural network from running out of memory during long sequences?",
+          "options": [
+            {
+              "correct": true,
+              "text": "It cuts off the backward pass after a fixed number of steps.",
+              "id": "mc_1"
+            },
+            {
+              "correct": false,
+              "text": "It deletes the first half of the input text before training.",
+              "id": "mc_2"
+            },
+            {
+              "id": "mc_3",
+              "text": "It speeds up training by skipping the forward pass entirely.",
+              "correct": false
+            },
+            {
+              "id": "mc_4",
+              "text": "It processes sentences in random order to confuse the AI.",
+              "correct": false
+            }
+          ],
+          "explain": "Truncated BPTT limits the backward pass to a fixed number of steps, preventing the computer from running out of memory on long inputs."
+        },
+        {
+          "id": "p2",
+          "type": "true_false",
+          "xp": 2,
+          "prompt": "True or False: Truncated BPTT is more memory-friendly than standard Backpropagation Through Time.",
+          "options": [
+            {
+              "correct": true,
+              "text": "True",
+              "id": "tf_t"
+            },
+            {
+              "id": "tf_f",
+              "text": "False",
+              "correct": false
+            }
+          ],
+          "explain": "Standard BPTT goes all the way to the beginning. Truncated BPTT stops after a user-defined number of steps, making it much more memory-efficient."
+        },
+        {
+          "id": "p3",
+          "type": "fill_blank",
+          "xp": 2,
+          "prompt": "Fill in the blank to complete the explanation of Truncated BPTT's main benefit.",
+          "sentence": "Truncated BPTT limits the backward pass to save memory and stabilize gradients.",
+          "blank": "memory",
+          "words": [
+            "speed",
+            "memory",
+            "layers"
+          ],
+          "explain": "Truncated BPTT limits the backward steps to prevent memory overload on long sequences."
+        },
+        {
+          "id": "p4",
+          "type": "spot_the_ai",
+          "xp": 2,
+          "prompt": "Three AI models are trying to process a very long book. Which one is using Truncated BPTT?",
+          "options": [
+            {
+              "id": "sai_a",
+              "text": "AI Model A: \"I will update my weights by backpropagating through only the last 30 words.\"",
+              "correct": true
+            },
+            {
+              "text": "AI Model B: \"I will calculate gradients all the way back to the very first word of this 10,000-word book.\"",
+              "id": "sai_b",
+              "correct": false
+            },
+            {
+              "correct": false,
+              "id": "sai_c",
+              "text": "AI Model C: \"I will randomly delete words to make the sentence shorter.\""
+            }
+          ],
+          "explain": "AI Model A uses Truncated BPTT, which limits the backward pass to a set number of steps (like 30) to prevent memory issues. Model B is standard BPTT, and Model C is not an AI training method."
+        }
+      ]
+    },
+    {
+      "type": "boss",
+      "exercises": [
+        {
+          "id": "b1",
+          "type": "multiple_choice",
+          "xp": 5,
+          "prompt": "You are training a chatbot on long novels, and your computer runs out of memory. How does Truncated BPTT solve this issue?",
+          "options": [
+            {
+              "correct": false,
+              "text": "It forces the network to ignore the last 30 words of a sentence.",
+              "id": "opt_1"
+            },
+            {
+              "id": "opt_2",
+              "correct": true,
+              "text": "It limits the backward pass to a fixed number of steps to save memory."
+            },
+            {
+              "correct": false,
+              "id": "opt_3",
+              "text": "It automatically increases the learning rate when sentences get longer."
+            },
+            {
+              "correct": false,
+              "text": "It runs backpropagation through the entire dataset at once.",
+              "id": "opt_4"
+            }
+          ],
+          "explain": "Truncated BPTT cuts off the backpropagation pass after a set number of steps (like 30 tokens). This keeps memory usage low and constant, preventing gradients from exploding or vanishing over long sequences."
+        }
+      ]
+    }
+  ]
+}

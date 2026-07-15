@@ -1,0 +1,223 @@
+{
+  "id": "u271-l1",
+  "unit": 271,
+  "day": 1356,
+  "tier": "NLP Advanced",
+  "tierIcon": "🧠",
+  "title": "Why LayerNorm Beats BatchNorm for Text",
+  "icon": "⚖️",
+  "concept": "Batch Normalization (callback to Unit 110) struggles with variable-length sequences and batch size fluctuations; Layer Normalization scales features per token independently, ensuring stability.",
+  "xp": 15,
+  "hearts": 3,
+  "estMinutes": 7,
+  "segments": [
+    {
+      "type": "warmup",
+      "exercises": [
+        {
+          "id": "w1",
+          "type": "multiple_choice",
+          "xp": 1,
+          "prompt": "What was the main purpose of Batch Normalization (BatchNorm) that we learned about earlier?",
+          "options": [
+            {
+              "id": "a",
+              "text": "To make models run faster on CPUs",
+              "correct": false
+            },
+            {
+              "correct": true,
+              "id": "b",
+              "text": "To stabilize and speed up neural network training"
+            },
+            {
+              "text": "To compress the size of the model files",
+              "correct": false,
+              "id": "c"
+            }
+          ],
+          "explain": "In Unit 110, we learned that Batch Normalization stabilizes training by normalizing activations across the entire batch, but text presents unique challenges that require a different approach."
+        }
+      ]
+    },
+    {
+      "type": "teach",
+      "cards": [
+        {
+          "kind": "hook",
+          "icon": "🤔",
+          "title": "The Text Trouble",
+          "body": "We know that Batch Normalization helps neural networks learn faster. But when it comes to text, BatchNorm falls flat. Sentences come in all shapes and sizes, and BatchNorm gets highly confused by empty padding. Let's find out how LayerNorm saves the day!"
+        },
+        {
+          "kind": "definition",
+          "icon": "⚖️",
+          "title": "What is LayerNorm?",
+          "body": "Layer Normalization (LayerNorm) scales and shifts the values of a single token's features at a time. Because it does not look at other sentences in the batch, it remains perfectly stable even when sentences have different lengths or when the batch size changes."
+        },
+        {
+          "kind": "analogy",
+          "icon": "📏",
+          "title": "The School Tailor",
+          "body": "Think of Batch Normalization like a school dress code based on the average height of the entire class. If a super tall or short student joins, the average changes, and the uniform doesn't fit anymore!\n\nLayer Normalization is like a tailor measuring each student individually. No matter how many students are in class, or how tall they are, everyone gets a perfectly tailored uniform."
+        },
+        {
+          "kind": "example",
+          "icon": "💬",
+          "title": "The Chatbot Challenge",
+          "body": "Imagine you are training a chatbot with a batch size of 2. \n\nSentence A is: 'Hi!' (1 token)\nSentence B is: 'How are you today?' (4 tokens)\n\nBatchNorm gets confused because the lengths don't match, and it has to guess values for the missing words. LayerNorm processes each word's features independently, so the sentence length difference doesn't disrupt the math at all!"
+        },
+        {
+          "kind": "mythbust",
+          "icon": "🎯",
+          "title": "Myth: Isn't BatchNorm Always Better?",
+          "body": "Many believe that LayerNorm is just a slower version of BatchNorm. In reality, LayerNorm is the secret engine behind Transformers (like GPT). Without its ability to handle variable sentence lengths, training modern AI models would be incredibly unstable."
+        },
+        {
+          "kind": "visual",
+          "icon": "👁️",
+          "title": "BatchNorm vs. LayerNorm",
+          "body": "Let's compare how BatchNorm and LayerNorm calculate their statistics across your data.",
+          "compare": {
+            "left": {
+              "emoji": "📊",
+              "text": "Calculates averages across the batch dimension. Struggles with padding and small batches.",
+              "tag": "Batch Norm"
+            },
+            "right": {
+              "text": "Calculates averages across the feature dimension. Highly stable for text sequences.",
+              "emoji": "🥞",
+              "tag": "Layer Norm"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "type": "practice",
+      "exercises": [
+        {
+          "id": "p1",
+          "type": "multiple_choice",
+          "xp": 2,
+          "prompt": "Why does Batch Normalization struggle when processing natural language text?",
+          "options": [
+            {
+              "correct": false,
+              "id": "a",
+              "text": "It makes the model train much slower."
+            },
+            {
+              "correct": true,
+              "id": "b",
+              "text": "Variable sentence lengths and small batch sizes make its math highly unstable."
+            },
+            {
+              "id": "c",
+              "text": "It only works for image data and cannot process text at all.",
+              "correct": false
+            },
+            {
+              "correct": false,
+              "id": "d",
+              "text": "It requires too much computer memory to run."
+            }
+          ],
+          "explain": "BatchNorm requires calculating statistics across the entire batch. If your batch size is too small or your sentences are padded, these statistics become unstable."
+        },
+        {
+          "id": "p2",
+          "type": "true_false",
+          "xp": 2,
+          "prompt": "True or False: Layer Normalization can work effectively even if your batch size is only 1.",
+          "options": [
+            {
+              "id": "true",
+              "text": "True",
+              "correct": true
+            },
+            {
+              "correct": false,
+              "id": "false",
+              "text": "False"
+            }
+          ],
+          "explain": "Unlike BatchNorm, which needs a large batch to calculate accurate averages, LayerNorm normalizes each token's features individually, so it works perfectly even with a batch size of one."
+        },
+        {
+          "id": "p3",
+          "type": "fill_blank",
+          "xp": 2,
+          "prompt": "Fill in the blank to describe LayerNorm's main advantage:",
+          "sentence": "Because LayerNorm works on a per-token basis, it is completely _______ of the batch size.",
+          "blank": "independent",
+          "words": [
+            "dependent",
+            "independent",
+            "slower",
+            "worse"
+          ],
+          "explain": "LayerNorm normalizes the features of each token individually, which makes it independent of the overall batch size."
+        },
+        {
+          "id": "p4",
+          "type": "spot_the_ai",
+          "xp": 2,
+          "prompt": "Which normalization layer should a Transformer model use to process text tokens?",
+          "options": [
+            {
+              "correct": false,
+              "id": "a",
+              "text": "self.norm = nn.BatchNorm1d(embed_dim)"
+            },
+            {
+              "text": "self.norm = nn.LayerNorm(embed_dim)",
+              "correct": true,
+              "id": "b"
+            },
+            {
+              "text": "self.norm = nn.Identity()",
+              "correct": false,
+              "id": "c"
+            }
+          ],
+          "explain": "The second option shows the AI generated code applying LayerNorm (nn.LayerNorm), which is the correct choice for sequence-based text data. The others either use BatchNorm or no normalization."
+        }
+      ]
+    },
+    {
+      "type": "boss",
+      "exercises": [
+        {
+          "id": "b1",
+          "type": "multiple_choice",
+          "xp": 5,
+          "prompt": "Why does LayerNorm outperform BatchNorm when training modern AI models on text data?",
+          "options": [
+            {
+              "correct": false,
+              "id": "a",
+              "text": "It calculates averages across the entire batch, requiring large batches to work well."
+            },
+            {
+              "text": "It only works on short sentences and fails when text gets too long.",
+              "correct": false,
+              "id": "b"
+            },
+            {
+              "id": "c",
+              "text": "It normalizes features per token, making it independent of batch size and padding.",
+              "correct": true
+            },
+            {
+              "text": "It runs slower on GPUs compared to older normalization methods.",
+              "correct": false,
+              "id": "d"
+            }
+          ],
+          "explain": "Layer Normalization is the hero of text processing because it treats each token individually, making it completely immune to changes in batch sizes or sentence lengths."
+        }
+      ]
+    }
+  ]
+}

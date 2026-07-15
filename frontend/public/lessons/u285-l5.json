@@ -1,0 +1,222 @@
+{
+  "id": "u285-l5",
+  "unit": 285,
+  "day": 1430,
+  "tier": "NLP Advanced",
+  "tierIcon": "🧠",
+  "title": "Minimizing Latency in Production",
+  "icon": "🌉",
+  "concept": "Always benchmark tokenization overhead; pre-tokenizing static datasets saves enormous CPU compute during model development. Boss explain ends with: 'Next up: Advanced NLP Concepts.'",
+  "xp": 15,
+  "hearts": 3,
+  "estMinutes": 7,
+  "segments": [
+    {
+      "type": "warmup",
+      "exercises": [
+        {
+          "id": "w1",
+          "type": "multiple_choice",
+          "xp": 1,
+          "prompt": "What does 'latency' mean in the context of production software?",
+          "options": [
+            {
+              "id": "w1",
+              "correct": true,
+              "text": "The time delay before a system responds to an input"
+            },
+            {
+              "id": "w2",
+              "correct": false,
+              "text": "The amount of storage space a model takes up on disk"
+            },
+            {
+              "correct": false,
+              "text": "The number of words in a model's vocabulary",
+              "id": "w3"
+            }
+          ],
+          "explain": "Latency is the delay or waiting time before a system responds. In production, we want this to be as low as possible!"
+        }
+      ]
+    },
+    {
+      "type": "teach",
+      "cards": [
+        {
+          "kind": "hook",
+          "icon": "🏎️",
+          "title": "The Hidden Speed Killer",
+          "body": "When building AI models, we focus a lot on GPUs. But did you know that slowly converting raw text into numbers (tokenization) on the CPU is often the hidden bottleneck that slows everything down? Let's unlock maximum speed!"
+        },
+        {
+          "kind": "definition",
+          "icon": "⏳",
+          "title": "What is Pre-Tokenization?",
+          "body": "Pre-tokenization is the process of converting raw text into token IDs BEFORE running your training loop or production pipeline, rather than doing it live (on-the-fly) for every single batch of data."
+        },
+        {
+          "kind": "analogy",
+          "icon": "🥗",
+          "title": "The Prep Chef Prep",
+          "body": "Think of pre-tokenizing like a restaurant prep chef chopping vegetables in the morning. Instead of waiting for a customer to order a salad and then chopping everything on the spot (which creates a long wait time, or latency), the chef chops it ahead of time. When the order arrives, they assemble it instantly. Pre-tokenization pre-chops your raw text so the GPU can eat immediately!"
+        },
+        {
+          "kind": "example",
+          "icon": "⚡",
+          "title": "Saves 10x Compute",
+          "body": "Imagine you are training a model on 1 million articles for 10 epochs. \n\n• Without pre-tokenization: You convert the same text to tokens 10 million times!\n• With pre-tokenization: You convert it once, save the token IDs to disk, and load them instantly for every epoch."
+        },
+        {
+          "kind": "mythbust",
+          "icon": "🔍",
+          "title": "Myth: Tokenization is Free",
+          "body": "People often think that tokenization is so fast that its overhead is negligible. In reality, when processing massive datasets or handling high-traffic production endpoints, tokenization overhead can accumulate to take up more than 30% of your total pipeline execution time!"
+        },
+        {
+          "kind": "visual",
+          "icon": "📊",
+          "title": "Pipeline Comparison",
+          "body": "Compare how raw text flows to the GPU during training under both approaches.",
+          "compare": {
+            "right": {
+              "tag": "Pre-Tokenized",
+              "emoji": "🚀",
+              "text": "Saved Token IDs -> Loaded Instantly -> GPU (Maximum GPU utilization)"
+            },
+            "left": {
+              "text": "Raw Text -> CPU Tokenizes -> GPU (CPU bottlenecks the GPU)",
+              "tag": "On-The-Fly",
+              "emoji": "🐢"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "type": "practice",
+      "exercises": [
+        {
+          "id": "p1",
+          "type": "multiple_choice",
+          "xp": 2,
+          "prompt": "What is the main benefit of pre-tokenizing static datasets?",
+          "options": [
+            {
+              "text": "It saves CPU cycles by avoiding repetitive on-the-fly tokenization.",
+              "id": "mc1",
+              "correct": true
+            },
+            {
+              "id": "mc2",
+              "correct": false,
+              "text": "It makes the model's vocabulary size smaller automatically."
+            },
+            {
+              "text": "It increases the final accuracy of the translation model.",
+              "id": "mc3",
+              "correct": false
+            },
+            {
+              "text": "It allows the model to learn new languages without training.",
+              "id": "mc4",
+              "correct": false
+            }
+          ],
+          "explain": "Tokenization is a CPU-bound process. By tokenizing our static data once and saving it, the CPU doesn't have to keep repeating the work during training."
+        },
+        {
+          "id": "p2",
+          "type": "true_false",
+          "xp": 2,
+          "prompt": "True or False: You should always benchmark tokenization overhead to find hidden bottlenecks in your pipeline.",
+          "options": [
+            {
+              "id": "tf1",
+              "correct": true,
+              "text": "True"
+            },
+            {
+              "id": "tf2",
+              "correct": false,
+              "text": "False"
+            }
+          ],
+          "explain": "Yes! Benchmarking is crucial because tokenization speed varies by tokenizer type and dataset size, letting you know where the bottlenecks are."
+        },
+        {
+          "id": "p3",
+          "type": "fill_blank",
+          "xp": 2,
+          "prompt": "Fill in the missing hardware component that gets overloaded with repetitive conversions:",
+          "sentence": "Pre-tokenizing static datasets saves enormous CPU compute during model development.",
+          "blank": "CPU",
+          "words": [
+            "GPU",
+            "CPU",
+            "RAM"
+          ],
+          "explain": "By pre-tokenizing data, we avoid using the CPU to repeat the same text-to-number conversion over and over again during training."
+        },
+        {
+          "id": "p4",
+          "type": "spot_the_ai",
+          "xp": 2,
+          "prompt": "Which training pipeline design is inefficient and likely AI-generated to show a bad practice?",
+          "options": [
+            {
+              "correct": false,
+              "text": "Model A: Tokenizes the entire static dataset once, saves it to disk, and streams the pre-tokenized IDs directly to the GPU.",
+              "id": "sai1"
+            },
+            {
+              "text": "Model B: Keeps dataset as raw text and tokenizes every sentence on the CPU on-the-fly, every single epoch.",
+              "id": "sai2",
+              "correct": true
+            },
+            {
+              "id": "sai3",
+              "correct": false,
+              "text": "Model C: Benchmarks tokenization speed beforehand to decide whether to cache tokenized files."
+            }
+          ],
+          "explain": "Model B is the AI-generated scenario because live tokenization of a static dataset for every single training epoch is highly inefficient and creates a CPU bottleneck."
+        }
+      ]
+    },
+    {
+      "type": "boss",
+      "exercises": [
+        {
+          "id": "b1",
+          "type": "multiple_choice",
+          "xp": 5,
+          "prompt": "Why does pre-tokenizing a static dataset save so much compute time during model training and deployment?",
+          "options": [
+            {
+              "text": "It increases the size of the vocabulary vocabulary dynamically.",
+              "id": "opt1",
+              "correct": false
+            },
+            {
+              "text": "It forces the GPU to perform the raw text formatting.",
+              "id": "opt2",
+              "correct": false
+            },
+            {
+              "text": "It removes the repetitive CPU tokenization step from the live training loop.",
+              "id": "opt3",
+              "correct": true
+            },
+            {
+              "text": "It compresses the text data into random audio waveforms.",
+              "id": "opt4",
+              "correct": false
+            }
+          ],
+          "explain": "Pre-tokenizing static datasets removes the repetitive CPU overhead during model training and inference. In production environments where latency matters, saving even milliseconds per request by caching tokenized structures is a massive win. Next up: Advanced NLP Concepts."
+        }
+      ]
+    }
+  ]
+}

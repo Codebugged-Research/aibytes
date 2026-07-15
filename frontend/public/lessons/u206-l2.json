@@ -1,0 +1,222 @@
+{
+  "id": "u206-l2",
+  "unit": 206,
+  "day": 1032,
+  "tier": "Generative Adversarial Networks",
+  "tierIcon": "🎪",
+  "title": "A Concrete Example",
+  "icon": "🎭",
+  "concept": "Training a GAN on a dataset of 10 different handwritten digit styles can mode-collapse so that the generator only ever produces convincing '3's, never anything else — a concrete picture of what the abstract idea looks like in practice.",
+  "xp": 15,
+  "hearts": 3,
+  "estMinutes": 7,
+  "segments": [
+    {
+      "type": "warmup",
+      "exercises": [
+        {
+          "id": "w1",
+          "type": "multiple_choice",
+          "xp": 1,
+          "prompt": "Recap: What does mode collapse mean for a generator's output?",
+          "options": [
+            {
+              "id": "a",
+              "text": "It keeps producing the same (or nearly the same) output over and over, ignoring the rest of the data's diversity",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "Its output quality degrades over time",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "It stops training entirely",
+              "correct": false
+            }
+          ],
+          "explain": "Right — narrow repetition, not necessarily bad quality. Now let's see exactly what that looks like with a real dataset."
+        }
+      ]
+    },
+    {
+      "type": "teach",
+      "cards": [
+        {
+          "kind": "hook",
+          "icon": "🔢",
+          "title": "Ten digits, one dataset",
+          "body": "Imagine training a GAN on a dataset of handwritten digits — thousands of examples of 0 through 9, each written in a dozen different handwriting styles. If training goes well, asking the generator for new samples should give you a healthy mix of all ten digits."
+        },
+        {
+          "kind": "definition",
+          "icon": "🎭",
+          "title": "What collapse looks like here",
+          "body": "If this GAN mode-collapses, the generator might discover that <strong>'3's</strong> are unusually easy to render convincingly — smooth curves the discriminator has trouble flagging as fake. From then on, it stops bothering with 0, 1, 2, 4, 5, 6, 7, 8, and 9 entirely."
+        },
+        {
+          "kind": "analogy",
+          "icon": "🎬",
+          "title": "The actor who only wears one mask",
+          "body": "Picture an actor cast to play ten different characters across a season of a play — a villain, a hero, a comic sidekick, and so on. Because audiences reacted best to the comic sidekick, they start showing up to EVERY scene wearing the comic sidekick's mask, no matter which character the script calls for."
+        },
+        {
+          "kind": "example",
+          "icon": "🖼️",
+          "title": "Ask for 50, get 50 threes",
+          "body": "You ask the collapsed generator for 50 new samples. Instead of a mix of digits, you get back roughly 50 images that all read as '3' — some tilted, some thicker, some thinner, but unmistakably all threes. Not a single 0, 7, or 9 in the batch."
+        },
+        {
+          "kind": "mythbust",
+          "icon": "⚠️",
+          "title": "\"It just needs to see more epochs\"",
+          "body": "You might think more training epochs will eventually nudge the generator toward the other nine digits. But once '3' is winning reliably, there's no built-in pull toward exploring 0-2 or 4-9 — the generator has no reason to leave a strategy that's already working."
+        },
+        {
+          "kind": "visual",
+          "icon": "🔀",
+          "title": "Real digit dataset vs. collapsed output",
+          "body": "What a sample grid looks like from each source:",
+          "compare": {
+            "left": {
+              "emoji": "🔟",
+              "tag": "Real Training Data",
+              "text": "0 through 9<br>Many handwriting styles<br>Balanced mix"
+            },
+            "right": {
+              "emoji": "3️⃣",
+              "tag": "Collapsed Generator",
+              "text": "Almost entirely '3's<br>Minor stylistic noise only<br>0,1,2,4-9 barely appear"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "type": "practice",
+      "exercises": [
+        {
+          "id": "p1",
+          "type": "multiple_choice",
+          "xp": 2,
+          "prompt": "In the digit-dataset example, why might the generator settle on '3' specifically instead of collapsing onto some other digit?",
+          "options": [
+            {
+              "id": "a",
+              "text": "Because '3's smooth curves happened to be unusually easy for the generator to render convincingly enough to fool the discriminator",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "Because '3' is defined in the dataset as the 'default' digit",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "Because the discriminator was only ever shown examples of the digit 3",
+              "correct": false
+            },
+            {
+              "id": "d",
+              "text": "Because '3' has the fewest pixels of any digit",
+              "correct": false
+            }
+          ],
+          "explain": "It's not about the digit 3 being special in the dataset — it's whichever output happens to reliably beat the discriminator first. In this walkthrough, that happened to be '3'."
+        },
+        {
+          "id": "p2",
+          "type": "true_false",
+          "xp": 2,
+          "prompt": "True or false: In this example, the collapsed generator's '3's would each look pixel-for-pixel identical.",
+          "options": [
+            {
+              "id": "t",
+              "text": "True",
+              "correct": false
+            },
+            {
+              "id": "f",
+              "text": "False",
+              "correct": true
+            }
+          ],
+          "explain": "False. The samples still vary slightly — tilt, thickness, style — but they're all recognizably the SAME digit. That cosmetic variation is what can make mode collapse easy to miss at a glance."
+        },
+        {
+          "id": "p3",
+          "type": "fill_blank",
+          "xp": 2,
+          "prompt": "Complete the sentence:",
+          "sentence": "In the digit example, the generator gets stuck producing only one digit's style over and over — in this case, always a ___.",
+          "blank": "3",
+          "words": [
+            "3",
+            "0",
+            "7"
+          ],
+          "explain": "The concrete failure in this example is the generator locking onto '3' and never producing any of the other nine digits."
+        },
+        {
+          "id": "p4",
+          "type": "spot_the_ai",
+          "xp": 2,
+          "prompt": "You trained a GAN on all 10 digit styles and generated a batch of 20 samples. Which result is the CONCRETE mode-collapse pattern described in this lesson?",
+          "options": [
+            {
+              "id": "a",
+              "text": "18 of the 20 samples are all clearly '3', in slightly different fonts and tilts",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "The 20 samples show a rough mix of several digits, roughly matching the training data's balance",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "The 20 samples are unreadable static/noise",
+              "correct": false
+            }
+          ],
+          "explain": "Overwhelming repetition of ONE digit — even with small stylistic tweaks — is exactly the mode-collapse pattern from this walkthrough."
+        }
+      ]
+    },
+    {
+      "type": "boss",
+      "exercises": [
+        {
+          "id": "b1",
+          "type": "multiple_choice",
+          "xp": 5,
+          "prompt": "In this digit example, the generator found that '3's alone were enough to reliably fool the discriminator — and it never had to try anything else. What question does that naturally raise?",
+          "options": [
+            {
+              "id": "a",
+              "text": "Why isn't the generator rewarded, or even nudged, for covering the full variety of digits instead of just the one that works?",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "Why does the discriminator only ever see the digit 3?",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "Why do humans write the digit 3 differently than other digits?",
+              "correct": false
+            },
+            {
+              "id": "d",
+              "text": "Why does the dataset only contain the digit 3?",
+              "correct": false
+            }
+          ],
+          "explain": "Exactly the right question! Next: let's dig into WHY the generator has no built-in incentive to cover the full diversity of real data."
+        }
+      ]
+    }
+  ]
+}

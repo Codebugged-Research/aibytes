@@ -1,0 +1,224 @@
+{
+  "id": "u238-l3",
+  "unit": 238,
+  "day": 1193,
+  "tier": "NLP Basics",
+  "tierIcon": "🔤",
+  "title": "Why BPTT Is Memory-Heavy",
+  "icon": "💾",
+  "concept": "Training long sequences requires storing all intermediate states for the backward pass, causing high memory consumption.",
+  "xp": 15,
+  "hearts": 3,
+  "estMinutes": 7,
+  "segments": [
+    {
+      "type": "warmup",
+      "exercises": [
+        {
+          "id": "w1",
+          "type": "multiple_choice",
+          "xp": 1,
+          "prompt": "What is a major challenge when using Backpropagation Through Time (BPTT) on very long sequences?",
+          "options": [
+            {
+              "text": "High memory consumption",
+              "correct": true,
+              "id": "a"
+            },
+            {
+              "text": "Instant training speeds",
+              "correct": false,
+              "id": "b"
+            },
+            {
+              "id": "c",
+              "correct": false,
+              "text": "Zero memory usage"
+            }
+          ],
+          "explain": "Training sequences require keeping track of intermediate steps to update the model's weights later. Longer sequences mean more steps to remember."
+        }
+      ]
+    },
+    {
+      "type": "teach",
+      "cards": [
+        {
+          "kind": "hook",
+          "icon": "🧠",
+          "title": "The Memory Trap",
+          "body": "Have you ever run out of memory when training a neural network on text or music? When we train models to remember the past, they have a massive memory problem. Let's find out why looking back in time is so expensive!"
+        },
+        {
+          "kind": "definition",
+          "icon": "💾",
+          "title": "What is BPTT?",
+          "body": "Backpropagation Through Time (BPTT) is the algorithm used to train Recurrent Neural Networks (RNNs). Because RNNs process data step-by-step, the computer has to keep the history of every single step in memory. To calculate how to update the model at the very end, it must trace its steps all the way back to the beginning."
+        },
+        {
+          "kind": "analogy",
+          "icon": "🎥",
+          "title": "The Infinite Movie Tape",
+          "body": "Imagine filming a movie in one long, continuous take. Instead of only keeping the final cut, you keep every single camera angle, lighting setup, and actor's pose for every second of the movie. Until the director yells 'Cut!' and approves the scene, you cannot throw any of these heavy tapes away. BPTT does the same by holding onto every single moment in time."
+        },
+        {
+          "kind": "example",
+          "icon": "📖",
+          "title": "Short Sentences vs. Long Books",
+          "body": "If you train an RNN on a paragraph with 10 words, it only needs to remember 10 intermediate states. But if you try to train it on an entire book chapter with 5,000 words, the computer must hold 5,000 states in its RAM at the same time. This quickly triggers 'Out of Memory' (OOM) errors on your graphics card."
+        },
+        {
+          "kind": "mythbust",
+          "icon": "⚡",
+          "title": "The One-Step Illusion",
+          "body": "People often think that because RNNs process one token at a time, they only need enough memory for that single token. In reality, while the *forward* pass is lightweight, the *backward* training pass forces the computer to hold onto every single step's memory at once!"
+        },
+        {
+          "kind": "visual",
+          "icon": "📊",
+          "title": "Visualizing the Memory Load",
+          "body": "Here is how memory usage compares when we increase the sequence length during training.",
+          "compare": {
+            "left": {
+              "emoji": "📝",
+              "tag": "Short Sequence",
+              "text": "Only a few states to store. Low memory usage."
+            },
+            "right": {
+              "emoji": "📚",
+              "text": "Hundreds of states piled up. High risk of Out-of-Memory.",
+              "tag": "Long Sequence"
+            },
+            "title": "Sequence Length vs Memory"
+          }
+        }
+      ]
+    },
+    {
+      "type": "practice",
+      "exercises": [
+        {
+          "id": "p1",
+          "type": "multiple_choice",
+          "xp": 2,
+          "prompt": "What happens to BPTT's memory consumption as your input sequences get longer?",
+          "options": [
+            {
+              "id": "a",
+              "text": "It increases linearly with the sequence length.",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "correct": false,
+              "text": "It stays exactly the same regardless of sequence length."
+            },
+            {
+              "text": "It decreases because the model gets smarter.",
+              "correct": false,
+              "id": "c"
+            },
+            {
+              "id": "d",
+              "text": "It only increases if we add more parameters to the model.",
+              "correct": false
+            }
+          ],
+          "explain": "As the sequence length grows, the number of states we must keep in memory grows at the same rate (linearly)."
+        },
+        {
+          "id": "p2",
+          "type": "true_false",
+          "xp": 2,
+          "prompt": "To train with BPTT, the computer must keep intermediate states from the beginning of the sequence until the backward pass is complete.",
+          "options": [
+            {
+              "id": "t",
+              "correct": true,
+              "text": "True"
+            },
+            {
+              "text": "False",
+              "correct": false,
+              "id": "f"
+            }
+          ],
+          "explain": "True. The computer cannot discard early states because it needs them to calculate gradients when backpropagating from the final step."
+        },
+        {
+          "id": "p3",
+          "type": "fill_blank",
+          "xp": 2,
+          "prompt": "Fill in the missing step of the training process that causes high memory usage.",
+          "sentence": "We must keep all intermediate states in memory because they are needed during the backward pass.",
+          "blank": "backward",
+          "words": [
+            "forward",
+            "backward",
+            "predictive",
+            "loss"
+          ],
+          "explain": "During the backward pass (backpropagation), the network traces its steps from the end back to the beginning, which requires all saved intermediate states."
+        },
+        {
+          "id": "p4",
+          "type": "spot_the_ai",
+          "xp": 2,
+          "prompt": "Which AI assistant makes an incorrect claim about BPTT memory usage?",
+          "options": [
+            {
+              "id": "a",
+              "text": "AI Model A: 'BPTT requires storing all hidden states across all time steps to perform the backward pass, leading to high memory usage.'",
+              "correct": false
+            },
+            {
+              "text": "AI Model B: 'BPTT is memory-efficient because it discards intermediate states immediately after processing them.'",
+              "correct": true,
+              "id": "b"
+            },
+            {
+              "id": "c",
+              "correct": false,
+              "text": "AI Model C: 'Longer sequences lead to higher memory footprints in BPTT because of the need to backpropagate through many time steps.'"
+            }
+          ],
+          "explain": "AI Model B incorrectly claims that memory is only used for the final output. In reality, BPTT must store all intermediate states to calculate gradients back through time."
+        }
+      ]
+    },
+    {
+      "type": "boss",
+      "exercises": [
+        {
+          "id": "b1",
+          "type": "multiple_choice",
+          "xp": 5,
+          "prompt": "Why does Backpropagation Through Time (BPTT) consume so much GPU memory when training on long sequences?",
+          "options": [
+            {
+              "text": "It recalculates all forward activations from scratch during the backward pass.",
+              "correct": false,
+              "id": "a"
+            },
+            {
+              "text": "It runs multiple copies of the model on different GPUs simultaneously.",
+              "id": "b",
+              "correct": false
+            },
+            {
+              "text": "It must store the hidden states of all time steps to compute gradients back to the start.",
+              "id": "c",
+              "correct": true
+            },
+            {
+              "text": "It saves every single weight update to a permanent hard drive after each token.",
+              "correct": false,
+              "id": "d"
+            }
+          ],
+          "explain": "BPTT needs to calculate gradients through time, which requires holding all intermediate states in GPU memory. For long sequences, this causes memory usage to scale linearly with the sequence length, easily leading to Out of Memory (OOM) errors."
+        }
+      ]
+    }
+  ]
+}

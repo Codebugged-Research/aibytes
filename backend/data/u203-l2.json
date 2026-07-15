@@ -1,0 +1,222 @@
+{
+  "id": "u203-l2",
+  "unit": 203,
+  "day": 1017,
+  "tier": "Generative Adversarial Networks",
+  "tierIcon": "📉",
+  "title": "How Does the Generator Learn?",
+  "icon": "🔄",
+  "concept": "The generator's loss is based purely on how often it fools the discriminator — it never sees real images directly, only a gradient signal routed backward through the discriminator's judgment.",
+  "xp": 15,
+  "hearts": 3,
+  "estMinutes": 7,
+  "segments": [
+    {
+      "type": "warmup",
+      "exercises": [
+        {
+          "id": "w1",
+          "type": "multiple_choice",
+          "xp": 1,
+          "prompt": "Recap: What loss function trains the discriminator, and what are its two possible target labels?",
+          "options": [
+            {
+              "id": "a",
+              "text": "Binary Cross-Entropy, with target 1 for real images and 0 for fake images",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "Mean Squared Error comparing pixel colors directly",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "A three-way loss with real, fake, and unknown labels",
+              "correct": false
+            }
+          ],
+          "explain": "Correct! The discriminator's loss is BCE with target 1 (real) or 0 (fake)."
+        }
+      ]
+    },
+    {
+      "type": "teach",
+      "cards": [
+        {
+          "kind": "hook",
+          "icon": "🙈",
+          "title": "Learning to draw with your eyes closed",
+          "body": "Imagine trying to learn to draw a realistic apple, but you're never allowed to look at a real apple. All you get is a single thumbs-up or thumbs-down from a judge after every attempt. That's exactly the position the generator is in."
+        },
+        {
+          "kind": "definition",
+          "icon": "🔄",
+          "title": "The Generator's Loss",
+          "body": "<strong>The generator's loss</strong> is NOT based on comparing its output to real images pixel-by-pixel. Instead, it's based on how successfully its fake images fool the discriminator — specifically, how close the discriminator's real-probability <code>p</code> on a fake image gets to 1 (fooled) instead of 0 (caught)."
+        },
+        {
+          "kind": "analogy",
+          "icon": "🎭",
+          "title": "Blindfolded sculptor, one verdict",
+          "body": "Picture a sculptor working blindfolded, who never gets to touch a real statue for reference. After each attempt, an assistant simply reports \"the judge is 80% convinced\" or \"only 10% convinced.\" The sculptor adjusts based purely on that single number climbing or falling — never on seeing the real thing."
+        },
+        {
+          "kind": "example",
+          "icon": "🔢",
+          "title": "Same score, opposite goal",
+          "body": "Say the generator makes a fake image and the discriminator outputs <code>p = 0.2</code> — only 20% convinced it's real, so the fake was caught. From the discriminator's side this is a *good* result (low loss, target 0). From the generator's side it's the opposite: it wanted that <code>p</code> pushed toward 1.0, so it treats <code>p = 0.2</code> as a high generator loss and adjusts in the direction that would have raised it."
+        },
+        {
+          "kind": "mythbust",
+          "icon": "⚠️",
+          "title": "No access to real pixels, ever",
+          "body": "You might assume the generator improves by comparing its fakes to real training images directly, the way you'd check a copy against an original. In reality, the generator's weights are never updated using real image data at all — every gradient it receives is routed backward through the discriminator's verdict."
+        },
+        {
+          "kind": "visual",
+          "icon": "⚖️",
+          "title": "What Each Network 'Sees'",
+          "body": "Comparing information access during training:",
+          "compare": {
+            "left": {
+              "emoji": "🕵️",
+              "tag": "Discriminator",
+              "text": "Sees real training images<br>Sees the generator's fake images<br>Learns from both, directly"
+            },
+            "right": {
+              "emoji": "🎨",
+              "tag": "Generator",
+              "text": "Never sees real images<br>Only sees its random noise input<br>Learns only via the discriminator's score"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "type": "practice",
+      "exercises": [
+        {
+          "id": "p1",
+          "type": "multiple_choice",
+          "xp": 2,
+          "prompt": "Why can't the generator use a simple 'compare pixels to a real photo' loss like ordinary supervised learning?",
+          "options": [
+            {
+              "id": "a",
+              "text": "It never has a matching real image to compare against — it only gets the discriminator's verdict",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "Pixel comparisons are too slow to compute on a GPU",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "Generators don't use gradients at all",
+              "correct": false
+            },
+            {
+              "id": "d",
+              "text": "Real images are deleted immediately after the discriminator trains",
+              "correct": false
+            }
+          ],
+          "explain": "Correct — there's no paired real image for any given fake, so pixel comparison isn't possible."
+        },
+        {
+          "id": "p2",
+          "type": "true_false",
+          "xp": 2,
+          "prompt": "True or false: a high discriminator confidence that a fake image is real (p close to 1) is a GOOD outcome for the generator.",
+          "options": [
+            {
+              "id": "t",
+              "text": "True",
+              "correct": true
+            },
+            {
+              "id": "f",
+              "text": "False",
+              "correct": false
+            }
+          ],
+          "explain": "True. Fooling the discriminator is exactly the generator's goal, so a high p means low generator loss."
+        },
+        {
+          "id": "p3",
+          "type": "fill_blank",
+          "xp": 2,
+          "prompt": "Complete the sentence:",
+          "sentence": "The generator's only training signal is the ___ that flows backward through the discriminator's judgment.",
+          "blank": "gradient",
+          "words": [
+            "gradient",
+            "dataset",
+            "pixel"
+          ],
+          "explain": "No real images ever reach the generator's weights directly — only a gradient computed from the discriminator's output."
+        },
+        {
+          "id": "p4",
+          "type": "spot_the_ai",
+          "xp": 2,
+          "prompt": "Which of these correctly describes how the generator's loss is calculated?",
+          "options": [
+            {
+              "id": "a",
+              "text": "From how convincingly its fakes fooled the discriminator — never from comparing to a real photo",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "From the average brightness difference between fake and real images",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "From counting how many pixels exactly match a reference photo",
+              "correct": false
+            }
+          ],
+          "explain": "Correct — the generator's loss is entirely about the discriminator's verdict, not pixel similarity."
+        }
+      ]
+    },
+    {
+      "type": "boss",
+      "exercises": [
+        {
+          "id": "b1",
+          "type": "multiple_choice",
+          "xp": 5,
+          "prompt": "A generator produces a fake face. The discriminator scores it p = 0.15 — mostly unconvinced. What does the generator's loss signal tell it to do next?",
+          "options": [
+            {
+              "id": "a",
+              "text": "Push its weights in whatever direction would have raised that 0.15 closer to 1.0 — even though it never sees a real face to compare against",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "Copy the pixels of the nearest real training image exactly",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "Ignore the score since it's below 0.5",
+              "correct": false
+            },
+            {
+              "id": "d",
+              "text": "Lower its own confidence in the discriminator's judgment",
+              "correct": false
+            }
+          ],
+          "explain": "Exactly — the generator only ever chases the discriminator's score upward. Next: how these two loss functions coexist in a single training loop without collapsing into one."
+        }
+      ]
+    }
+  ]
+}

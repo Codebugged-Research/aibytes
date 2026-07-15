@@ -1,0 +1,222 @@
+{
+  "id": "u203-l5",
+  "unit": 203,
+  "day": 1020,
+  "tier": "Generative Adversarial Networks",
+  "tierIcon": "📉",
+  "title": "Why This Setup Is Unusual",
+  "icon": "🎯",
+  "concept": "Every other model in the curriculum minimizes one shared loss in one direction; a GAN optimizes two competing losses where one network's progress can worsen the other's — setting up the need for a formal minimax objective.",
+  "xp": 15,
+  "hearts": 3,
+  "estMinutes": 7,
+  "segments": [
+    {
+      "type": "warmup",
+      "exercises": [
+        {
+          "id": "w1",
+          "type": "multiple_choice",
+          "xp": 1,
+          "prompt": "Recap: for a fake image scored p = 0.4, is Loss_D or Loss_G larger?",
+          "options": [
+            {
+              "id": "a",
+              "text": "Loss_G is larger (≈0.92 vs ≈0.51) — the generator hasn't fooled the discriminator well yet",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "Loss_D is larger",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "They are always exactly equal",
+              "correct": false
+            }
+          ],
+          "explain": "Correct! At p=0.4 the fake was mostly caught, so the generator (not the discriminator) pays the bigger loss."
+        }
+      ]
+    },
+    {
+      "type": "teach",
+      "cards": [
+        {
+          "kind": "hook",
+          "icon": "🔄",
+          "title": "Every other lesson had one arrow",
+          "body": "Look back across everything you've trained so far — regression models, classifiers, segmentation networks, even the CV capstone pipeline. Every single one had one number to shrink and one direction to walk: downhill. GANs break that pattern completely."
+        },
+        {
+          "kind": "definition",
+          "icon": "🎯",
+          "title": "One-Directional vs. Adversarial Training",
+          "body": "In <strong>ordinary supervised training</strong>, one loss function measures \"wrongness,\" and every update step makes that number smaller for the whole model. In a <strong>GAN</strong>, there are two loss functions with opposite goals: the discriminator wants to tell real from fake, and the generator wants to make that impossible. One network's progress can make the other's loss WORSE."
+        },
+        {
+          "kind": "analogy",
+          "icon": "⛷️",
+          "title": "A one-way ski slope vs. a seesaw",
+          "body": "Normal training is like skiing downhill — gravity (gradient descent) always pulls you toward a single valley floor. GAN training is like a seesaw with two riders: pushing your side down necessarily pushes the other side up. There's no shared \"bottom\" both networks glide toward together."
+        },
+        {
+          "kind": "example",
+          "icon": "🧾",
+          "title": "Recalling this unit's arc",
+          "body": "You've now seen the discriminator's Binary Cross-Entropy loss (Unit 67's formula, reused), the generator's fool-the-judge loss, the alternating-update training loop, and a worked numeric example where one score produced two very different loss values. Nowhere else in the curriculum has one score fed two competing loss functions at once."
+        },
+        {
+          "kind": "mythbust",
+          "icon": "⚠️",
+          "title": "It's not just 'harder,' it's structurally different",
+          "body": "You might think GAN training is simply a trickier version of the same one-loss recipe used everywhere else. In reality, it's a fundamentally different setup: a genuine two-player game, not a single optimization problem. That's *why* GAN training can oscillate or destabilize in ways a normal classifier never does."
+        },
+        {
+          "kind": "visual",
+          "icon": "⚖️",
+          "title": "Every Prior Model vs. GAN Training",
+          "body": "Comparing the shape of the optimization problem:",
+          "compare": {
+            "left": {
+              "emoji": "📉",
+              "tag": "Every Model Before This Unit",
+              "text": "One loss function<br>One direction: always down<br>Convergence means \"loss near zero\""
+            },
+            "right": {
+              "emoji": "🎭",
+              "tag": "GAN Training",
+              "text": "Two competing loss functions<br>One network's \"down\" is the other's \"up\"<br>Convergence means an ongoing balance, not zero loss"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "type": "practice",
+      "exercises": [
+        {
+          "id": "p1",
+          "type": "multiple_choice",
+          "xp": 2,
+          "prompt": "What makes GAN training structurally different from every other model trained earlier in this curriculum?",
+          "options": [
+            {
+              "id": "a",
+              "text": "It optimizes two separate, opposing loss functions instead of one shared loss that everyone improves together",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "It doesn't use gradients at all",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "It only ever trains for a single step total",
+              "correct": false
+            },
+            {
+              "id": "d",
+              "text": "It never uses probabilities",
+              "correct": false
+            }
+          ],
+          "explain": "Correct — two competing losses instead of one cooperative loss is the structural difference."
+        },
+        {
+          "id": "p2",
+          "type": "true_false",
+          "xp": 2,
+          "prompt": "True or false: in a well-trained GAN, both Loss_D and Loss_G should ideally shrink all the way to zero, just like in ordinary supervised training.",
+          "options": [
+            {
+              "id": "t",
+              "text": "True",
+              "correct": false
+            },
+            {
+              "id": "f",
+              "text": "False",
+              "correct": true
+            }
+          ],
+          "explain": "False. Loss_D near zero would mean the generator is failing completely, and vice versa — the goal is an ongoing balance, not both hitting zero."
+        },
+        {
+          "id": "p3",
+          "type": "fill_blank",
+          "xp": 2,
+          "prompt": "Complete the sentence:",
+          "sentence": "Unlike a normal classifier where every update makes the model's single loss go down, in a GAN one network's improvement can make the other network's loss go ___.",
+          "blank": "up",
+          "words": [
+            "up",
+            "down",
+            "away"
+          ],
+          "explain": "The two losses are adversarial — one network's gain is routinely the other's pain."
+        },
+        {
+          "id": "p4",
+          "type": "spot_the_ai",
+          "xp": 2,
+          "prompt": "Which statement best captures why GAN training is considered unusual compared to the rest of this curriculum?",
+          "options": [
+            {
+              "id": "a",
+              "text": "Two networks optimize opposing loss functions in alternating turns, rather than one network minimizing one shared loss",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "GANs don't require any labels at all, unlike everything before them",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "GANs are the only models in the curriculum that use neural networks",
+              "correct": false
+            }
+          ],
+          "explain": "Correct — the opposing, alternating two-loss structure is what sets GAN training apart."
+        }
+      ]
+    },
+    {
+      "type": "boss",
+      "exercises": [
+        {
+          "id": "b1",
+          "type": "multiple_choice",
+          "xp": 5,
+          "prompt": "You now understand both individual losses (Loss_D and Loss_G) and know they pull in opposite directions. What's the natural next question to ask about GAN training?",
+          "options": [
+            {
+              "id": "a",
+              "text": "Is there a single mathematical objective that formally captures both networks' opposing goals in one expression — the minimax objective?",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "How do we eliminate the generator's loss entirely?",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "How do we merge both networks into a single classifier?",
+              "correct": false
+            },
+            {
+              "id": "d",
+              "text": "How do we make the discriminator ignore fake images?",
+              "correct": false
+            }
+          ],
+          "explain": "Exactly! Both losses are really two views of one game. Next unit: the full minimax training objective that formally ties Loss_D and Loss_G together into a single equation."
+        }
+      ]
+    }
+  ]
+}

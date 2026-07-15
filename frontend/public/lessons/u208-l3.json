@@ -1,0 +1,222 @@
+{
+  "id": "u208-l3",
+  "unit": 208,
+  "day": 1043,
+  "tier": "Generative Adversarial Networks",
+  "tierIcon": "🎢",
+  "title": "Reading Oscillating Loss Curves",
+  "icon": "📉",
+  "concept": "Oscillating (not converging, not diverging, just bouncing) GAN loss curves are common — and often a sign of healthy, ongoing competition rather than a failed training run.",
+  "xp": 15,
+  "hearts": 3,
+  "estMinutes": 7,
+  "segments": [
+    {
+      "type": "warmup",
+      "exercises": [
+        {
+          "id": "w1",
+          "type": "multiple_choice",
+          "xp": 1,
+          "prompt": "Recap: Why do GAN loss curves tend to bounce instead of smoothly flattening out?",
+          "options": [
+            {
+              "id": "a",
+              "text": "Because each network is chasing a target that keeps changing as the other network updates",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "Because loss functions for GANs are calculated incorrectly",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "Because GPUs round loss values randomly",
+              "correct": false
+            }
+          ],
+          "explain": "Right — moving targets produce bouncing curves. Today: how to actually read those bounces."
+        }
+      ]
+    },
+    {
+      "type": "teach",
+      "cards": [
+        {
+          "kind": "hook",
+          "icon": "❤️",
+          "title": "A flat line isn't always the good sign",
+          "body": "In most ML training, a flat, low loss curve means 'success.' But stare at a GAN's loss curves expecting that same flat line, and you might panic over something that's actually healthy — or miss something that's actually broken."
+        },
+        {
+          "kind": "definition",
+          "icon": "📉",
+          "title": "Three shapes to tell apart",
+          "body": "GAN loss curves generally fall into three patterns: <strong>converging</strong> (settling toward a stable value — rare and not always meaningful for GANs), <strong>diverging</strong> (one or both losses shooting off toward infinity or zero — a real problem), and <strong>oscillating</strong> (bouncing within a range over time — often just normal back-and-forth competition)."
+        },
+        {
+          "kind": "analogy",
+          "icon": "💓",
+          "title": "Reading it like a heart-rate monitor",
+          "body": "A healthy heartbeat on a monitor isn't a flat line — it's a steady, repeating up-and-down rhythm. A flat line means something is badly wrong. GAN loss curves are similar: gentle, regular bouncing within a reasonable range can be a sign the two networks are actively competing and both still learning, not a sign of failure."
+        },
+        {
+          "kind": "example",
+          "icon": "🔍",
+          "title": "Normal bounce vs. real trouble",
+          "body": "Discriminator loss wobbling between 0.5 and 0.9 for hundreds of epochs while generated samples keep visibly improving? Probably normal oscillation. Discriminator loss suddenly rocketing toward 0 (or generator loss toward infinity) and samples turning to static noise? That's divergence — a real breakdown, not just a bounce."
+        },
+        {
+          "kind": "mythbust",
+          "icon": "⚠️",
+          "title": "'The loss isn't going down' doesn't always mean failure",
+          "body": "With most models, a loss that refuses to trend downward means something's wrong. With GANs, a generator loss that bounces around the same range for a long time — while sample quality visibly improves — can be completely fine. Loss value alone can be a misleading signal for GANs; you often have to look at generated samples too."
+        },
+        {
+          "kind": "visual",
+          "icon": "🔀",
+          "title": "Oscillating vs. diverging",
+          "body": "Two curve shapes that look similar at a glance but mean very different things:",
+          "compare": {
+            "left": {
+              "emoji": "〰️",
+              "tag": "Oscillating (often OK)",
+              "text": "Bounces within a range<br>Repeats over many epochs<br>Samples keep improving"
+            },
+            "right": {
+              "emoji": "📈",
+              "tag": "Diverging (real problem)",
+              "text": "Shoots toward 0 or infinity<br>Doesn't come back down<br>Samples degrade to noise"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "type": "practice",
+      "exercises": [
+        {
+          "id": "p1",
+          "type": "multiple_choice",
+          "xp": 2,
+          "prompt": "Which of these loss-curve behaviors is generally considered a real red flag in GAN training, rather than normal oscillation?",
+          "options": [
+            {
+              "id": "a",
+              "text": "One network's loss shooting sharply toward zero or infinity and never coming back, while output quality collapses",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "Discriminator loss wobbling gently between 0.5 and 0.8 over many epochs while sample quality keeps improving",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "Losses bouncing within a stable range for hundreds of epochs",
+              "correct": false
+            },
+            {
+              "id": "d",
+              "text": "Loss values that never form a single perfectly flat line",
+              "correct": false
+            }
+          ],
+          "explain": "A one-directional runaway toward 0 or infinity, paired with collapsing output quality, is divergence — the actual failure mode, not ordinary bouncing."
+        },
+        {
+          "id": "p2",
+          "type": "true_false",
+          "xp": 2,
+          "prompt": "True or false: In GAN training, a loss curve that never flattens into a smooth, stable line always means training has failed.",
+          "options": [
+            {
+              "id": "t",
+              "text": "True",
+              "correct": false
+            },
+            {
+              "id": "f",
+              "text": "False",
+              "correct": true
+            }
+          ],
+          "explain": "False — GAN loss curves often oscillate throughout training even when the generator is genuinely producing better results. A non-flat curve isn't automatically failure."
+        },
+        {
+          "id": "p3",
+          "type": "fill_blank",
+          "xp": 2,
+          "prompt": "Complete the sentence:",
+          "sentence": "Because loss values alone can be misleading in GAN training, practitioners often check the generator's actual output ___ alongside the loss curves.",
+          "blank": "samples",
+          "words": [
+            "samples",
+            "comments",
+            "filenames"
+          ],
+          "explain": "Since loss numbers can look similar for 'healthy oscillation' and 'quietly stuck,' checking actual generated samples gives you the fuller picture."
+        },
+        {
+          "id": "p4",
+          "type": "spot_the_ai",
+          "xp": 2,
+          "prompt": "Which pattern in a GAN's training logs is the clearest sign of healthy, normal oscillation rather than a broken run?",
+          "options": [
+            {
+              "id": "a",
+              "text": "Discriminator accuracy cycling between roughly 55% and 80% over hundreds of epochs, with generated images gradually looking sharper and more realistic",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "Discriminator accuracy locking at exactly 100% by epoch 5 and staying there for the rest of training",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "Generator loss climbing without bound while every generated image turns into solid gray noise",
+              "correct": false
+            }
+          ],
+          "explain": "Steady cycling within a reasonable range, paired with visibly improving outputs, is the signature of healthy oscillation."
+        }
+      ]
+    },
+    {
+      "type": "boss",
+      "exercises": [
+        {
+          "id": "b1",
+          "type": "multiple_choice",
+          "xp": 5,
+          "prompt": "You now know that oscillating loss curves aren't automatically a failure sign. Given that, what's the smartest way to judge whether a GAN's training run is actually going well?",
+          "options": [
+            {
+              "id": "a",
+              "text": "Look at both the loss curves' general behavior AND the actual generated samples over time, not the loss numbers alone",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "Only ever look at whether the loss reaches exactly zero",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "Stop training the instant any bounce appears in the loss curve",
+              "correct": false
+            },
+            {
+              "id": "d",
+              "text": "Ignore the loss curves entirely and only count total training time",
+              "correct": false
+            }
+          ],
+          "explain": "Exactly — combine curve behavior with a look at real generated samples, since loss numbers alone can be ambiguous for GANs. Next: some concrete tricks for keeping that oscillation under control."
+        }
+      ]
+    }
+  ]
+}

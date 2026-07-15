@@ -1,0 +1,222 @@
+{
+  "id": "u271-l2",
+  "unit": 271,
+  "day": 1357,
+  "tier": "NLP Advanced",
+  "tierIcon": "🧠",
+  "title": "Post-LN vs. Pre-LN Architectures",
+  "icon": "🔄",
+  "concept": "Post-LN places normalization after the residual addition (original Transformer); Pre-LN normalizes activations before the layer, making deep models easier to train without warmups.",
+  "xp": 15,
+  "hearts": 3,
+  "estMinutes": 7,
+  "segments": [
+    {
+      "type": "warmup",
+      "exercises": [
+        {
+          "id": "w1",
+          "type": "multiple_choice",
+          "xp": 1,
+          "prompt": "What is the main goal of Layer Normalization in a Transformer?",
+          "options": [
+            {
+              "id": "a",
+              "correct": true,
+              "text": "To keep signal values scaled and stable"
+            },
+            {
+              "correct": false,
+              "text": "To make the model run faster on CPUs",
+              "id": "b"
+            },
+            {
+              "text": "To delete useless words from the input",
+              "id": "c",
+              "correct": false
+            }
+          ],
+          "explain": "Layer Normalization (LN) rescales activations to prevent them from becoming too large or too small during training."
+        }
+      ]
+    },
+    {
+      "type": "teach",
+      "cards": [
+        {
+          "kind": "hook",
+          "icon": "🔄",
+          "title": "The Secret of Stable Training",
+          "body": "When researchers first tried to build deeper Transformers, they kept crashing during training. The secret to fixing it wasn't a bigger computer, but simply moving the 'Normalization' step to a different spot in the loop!"
+        },
+        {
+          "kind": "definition",
+          "icon": "📐",
+          "title": "Post-LN vs. Pre-LN",
+          "body": "In a Transformer layer, Layer Normalization (LN) keeps numbers at a healthy scale. Post-LN (the original way) normalizes the data *after* adding the residual connection. Pre-LN normalizes the data *before* it goes into the attention or feed-forward blocks, keeping gradients much more stable in deep networks."
+        },
+        {
+          "kind": "analogy",
+          "icon": "🧱",
+          "title": "The Block Tower Story",
+          "body": "Imagine building a tower of blocks. Post-LN is like stacking the blocks first, and then trying to level the whole tower. If the tower is too tall, it might tip over before you can stabilize it! Pre-LN is like leveling and sanding each block *before* adding it to the stack. The tower stays straight and stable the entire time you are building it."
+        },
+        {
+          "kind": "example",
+          "icon": "🚀",
+          "title": "How GPT-3 Stayed Stable",
+          "body": "In early models like the original BERT (Post-LN), training would instantly fail (diverge) if the learning rate was too high at the start, requiring a careful 'warmup'. Modern models like GPT-3 use Pre-LN, allowing them to train stably from step one without crashing."
+        },
+        {
+          "kind": "mythbust",
+          "icon": "👾",
+          "title": "Is Newer Always Worse?",
+          "body": "Many believe that because Post-LN was in the original Transformer paper, it must always be the best choice. In reality, almost all modern, ultra-deep models use Pre-LN because it is far easier to train without the training crashing."
+        },
+        {
+          "kind": "visual",
+          "icon": "🗺️",
+          "title": "Mapping the Flow",
+          "body": "Let's look at how data flows through a single layer in both styles. Notice where the Normalization (LN) block sits relative to the Sub-layer (Attention/MLP).",
+          "compare": {
+            "left": {
+              "text": "Inputs are normalized FIRST, then sent to the sub-layer and added to the shortcut.",
+              "emoji": "📥",
+              "tag": "Pre-LN"
+            },
+            "right": {
+              "tag": "Post-LN",
+              "text": "Inputs go to the sub-layer, get added to the shortcut, and the sum is normalized LAST.",
+              "emoji": "📤"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "type": "practice",
+      "exercises": [
+        {
+          "id": "p1",
+          "type": "multiple_choice",
+          "xp": 2,
+          "prompt": "Where does the Post-LN architecture place the normalization step?",
+          "options": [
+            {
+              "correct": false,
+              "text": "It places normalization before the attention block",
+              "id": "a"
+            },
+            {
+              "text": "It places normalization after the residual addition",
+              "id": "b",
+              "correct": true
+            },
+            {
+              "correct": false,
+              "text": "It completely removes the residual connection",
+              "id": "c"
+            },
+            {
+              "text": "It only normalizes the final output of the entire model",
+              "id": "d",
+              "correct": false
+            }
+          ],
+          "explain": "Post-LN places the normalization step after the residual addition. Because of this, gradients can grow too large near the output, making deep models unstable without a learning rate warmup."
+        },
+        {
+          "id": "p2",
+          "type": "true_false",
+          "xp": 2,
+          "prompt": "True or False: Pre-LN makes it easier to train very deep neural networks than Post-LN.",
+          "options": [
+            {
+              "id": "true",
+              "correct": true,
+              "text": "True"
+            },
+            {
+              "id": "false",
+              "correct": false,
+              "text": "False"
+            }
+          ],
+          "explain": "Pre-LN is widely used in modern LLMs because it allows stable training of networks with dozens or hundreds of layers without constant crashes."
+        },
+        {
+          "id": "p3",
+          "type": "fill_blank",
+          "xp": 2,
+          "prompt": "Which architecture stabilizes deep networks by normalising inputs early?",
+          "sentence": "Modern deep models use [blank] to keep training stable.",
+          "blank": "Pre-LN",
+          "words": [
+            "Pre-LN",
+            "Post-LN",
+            "Warmup"
+          ],
+          "explain": "Pre-LN applies normalization to the inputs before they enter the attention and feed-forward layers, preventing gradients from exploding."
+        },
+        {
+          "id": "p4",
+          "type": "spot_the_ai",
+          "xp": 2,
+          "prompt": "An AI system diagrams two layers:\n1. Input -> LN -> Sub-layer -> Add -> Output\n2. Input -> Sub-layer -> Add -> LN -> Output\n\nWhich one is correct?",
+          "options": [
+            {
+              "correct": false,
+              "text": "Diagram 1 is Post-LN, Diagram 2 is Pre-LN",
+              "id": "a"
+            },
+            {
+              "correct": true,
+              "text": "Diagram 1 is Pre-LN, Diagram 2 is Post-LN",
+              "id": "b"
+            },
+            {
+              "correct": false,
+              "text": "Both diagrams represent Post-LN",
+              "id": "c"
+            }
+          ],
+          "explain": "The first diagram shows normalization (LN) happening directly on the input branch before the weight layers, which is Pre-LN. The second diagram shows normalization happening after the skip connection adds the output, which is Post-LN."
+        }
+      ]
+    },
+    {
+      "type": "boss",
+      "exercises": [
+        {
+          "id": "b1",
+          "type": "multiple_choice",
+          "xp": 5,
+          "prompt": "Why does Pre-LN make it much easier to train very deep Transformers?",
+          "options": [
+            {
+              "correct": false,
+              "text": "It forces the model to use Post-LN anyway",
+              "id": "a"
+            },
+            {
+              "id": "b",
+              "correct": false,
+              "text": "It makes the model train slower by adding extra steps"
+            },
+            {
+              "id": "c",
+              "correct": true,
+              "text": "It stabilizes the gradient flow, removing the need for a strict warmup phase"
+            },
+            {
+              "id": "d",
+              "correct": false,
+              "text": "It reduces the total number of layers we can train"
+            }
+          ],
+          "explain": "Pre-LN normalizes the inputs right before the sub-layers (attention/feed-forward). This keeps gradients stable from the very first step, allowing us to train deep networks without needing a fragile warmup phase."
+        }
+      ]
+    }
+  ]
+}

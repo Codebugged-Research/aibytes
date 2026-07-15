@@ -1,0 +1,223 @@
+{
+  "id": "u252-l5",
+  "unit": 252,
+  "day": 1265,
+  "tier": "NLP Basics",
+  "tierIcon": "🔤",
+  "title": "Debugging Preprocessing Code",
+  "icon": "🌉",
+  "concept": "Always print and inspect tokenized sentences before feeding them to the network to catch silent data corruption. Boss explain ends with: 'Next up: Evaluating NLP Models.'",
+  "xp": 15,
+  "hearts": 3,
+  "estMinutes": 7,
+  "segments": [
+    {
+      "type": "warmup",
+      "exercises": [
+        {
+          "id": "w1",
+          "type": "multiple_choice",
+          "xp": 1,
+          "prompt": "What is the main goal of text preprocessing in NLP?",
+          "options": [
+            {
+              "id": "a",
+              "correct": true,
+              "text": "Convert text into numbers (tokens)"
+            },
+            {
+              "id": "b",
+              "correct": false,
+              "text": "Translate all sentences into French"
+            },
+            {
+              "correct": false,
+              "text": "Format the text into a PDF document",
+              "id": "c"
+            }
+          ],
+          "explain": "Before feeding text data to a neural network, we must convert it into numbers (tokens) that the computer can compute with."
+        }
+      ]
+    },
+    {
+      "type": "teach",
+      "cards": [
+        {
+          "kind": "hook",
+          "icon": "🌉",
+          "title": "The Silent Bug",
+          "body": "AI models don't read words—they read numbers! If your code silently turns 'Hello!' into random nonsense numbers, your model will try its best to learn from that garbage. Let's learn how to inspect our data before we break our models!"
+        },
+        {
+          "kind": "definition",
+          "icon": "🔍",
+          "title": "What is Preprocessing Debugging?",
+          "body": "Debugging preprocessing code means printing and visually checking the numbers (tokens) your text turns into. Since neural networks accept any numbers you feed them without complaining, inspecting the intermediate text-to-number step is the only way to catch silent errors like broken punctuation, empty words, or mismatched indices."
+        },
+        {
+          "kind": "analogy",
+          "icon": "🎂",
+          "title": "The Cake Batter Test",
+          "body": "Imagine you are baking a cake. If you just dump flour, sugar, and eggs into a closed blender and press 'start' without looking, you won't know if you accidentally added salt instead of sugar until you take a bite! Inspecting your tokens is like tasting your batter before baking: it lets you spot mistakes while you can still fix them."
+        },
+        {
+          "kind": "example",
+          "icon": "📝",
+          "title": "A Tokenization Check",
+          "body": "Imagine you want to tokenize: \"Don't panic!\"\n\nA buggy preprocessor might output:\n`['don', 't', 'panic']` ❌ (Missing the exclamation mark and splitting the word weirdly).\n\nA correct preprocessor should output:\n`['don', \"'t\", 'panic', '!']` or keep it clean as intended.\n\nIf you print the tokens, you catch this immediately!"
+        },
+        {
+          "kind": "mythbust",
+          "icon": "👾",
+          "title": "Myth: No Errors Means Success",
+          "body": "Many beginners think that if their code runs without throwing an error message, the data must be correct. This is a myth! Neural networks will happily train on completely scrambled or corrupted token sequences. They won't crash; they will just give you terrible results."
+        },
+        {
+          "kind": "visual",
+          "icon": "👀",
+          "title": "Before and After",
+          "body": "Always compare your raw inputs side-by-side with their processed tokens to ensure nothing was lost or corrupted during the translation.",
+          "compare": {
+            "left": {
+              "emoji": "📝",
+              "tag": "Raw Text",
+              "text": "Original sentences containing words, emojis, and punctuation."
+            },
+            "right": {
+              "tag": "Tokens",
+              "text": "The clean list of words or numbers your neural network actually reads.",
+              "emoji": "🔢"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "type": "practice",
+      "exercises": [
+        {
+          "id": "p1",
+          "type": "multiple_choice",
+          "xp": 2,
+          "prompt": "Why should we print and inspect tokenized sentences before training a neural network?",
+          "options": [
+            {
+              "correct": false,
+              "text": "To make the training run 10 times faster",
+              "id": "a"
+            },
+            {
+              "text": "To catch silent bugs like incorrect word-to-number mappings",
+              "correct": true,
+              "id": "b"
+            },
+            {
+              "text": "Because the GPU requires us to print every sentence first",
+              "correct": false,
+              "id": "c"
+            },
+            {
+              "text": "To automatically delete punctuation from our dataset",
+              "correct": false,
+              "id": "d"
+            }
+          ],
+          "explain": "If the vocabulary indices are offset, the model will receive the wrong words (e.g., associating 'cat' with the word 'run'). Printing the text and its corresponding token IDs helps you verify they match."
+        },
+        {
+          "id": "p2",
+          "type": "true_false",
+          "xp": 2,
+          "prompt": "True or False: If there is a bug in your text tokenization, the Python training loop will always crash and show an error.",
+          "options": [
+            {
+              "correct": false,
+              "id": "t",
+              "text": "True"
+            },
+            {
+              "id": "f",
+              "correct": true,
+              "text": "False"
+            }
+          ],
+          "explain": "Neural networks only care about numerical math. If you feed them incorrect token sequences, they will still run, but they will learn the wrong patterns."
+        },
+        {
+          "id": "p3",
+          "type": "fill_blank",
+          "xp": 2,
+          "prompt": "Fill in the blank to complete the standard safety check.",
+          "sentence": "To catch silent data bugs, we should always [blank] and inspect tokenized sentences before training.",
+          "blank": "print",
+          "words": [
+            "print",
+            "delete",
+            "hide",
+            "ignore"
+          ],
+          "explain": "Using the print command to check your tokens tells you exactly what numbers or words are being sent to your model before training begins."
+        },
+        {
+          "id": "p4",
+          "type": "spot_the_ai",
+          "xp": 2,
+          "prompt": "Which AI is acting as a helpful preprocessing debugger?",
+          "options": [
+            {
+              "text": "AI that automatically deletes all text files containing typos to save space.",
+              "id": "a",
+              "correct": false
+            },
+            {
+              "text": "AI that prints: \"Input: 'Hi team!' -> Tokens: [23, 102, 5]\" to let you verify the mapping.",
+              "correct": true,
+              "id": "b"
+            },
+            {
+              "id": "c",
+              "text": "AI that writes a script to download a dataset without showing you any of the text.",
+              "correct": false
+            }
+          ],
+          "explain": "AI B is the only one showing a real token inspection process with a sentence and its matching numerical ID list. AI A and C are just describing or writing standard code."
+        }
+      ]
+    },
+    {
+      "type": "boss",
+      "exercises": [
+        {
+          "id": "b1",
+          "type": "multiple_choice",
+          "xp": 5,
+          "prompt": "You've just built a complex preprocessing pipeline that converts text into token IDs. What is the safest next step before you start training your deep learning model?",
+          "options": [
+            {
+              "id": "a",
+              "text": "Training immediately to see if the final accuracy is good",
+              "correct": false
+            },
+            {
+              "id": "b",
+              "correct": true,
+              "text": "Printing and inspecting a few tokenized sentences to verify the vocabulary mapping"
+            },
+            {
+              "id": "c",
+              "correct": false,
+              "text": "Ignoring the input and only checking the output layer activations"
+            },
+            {
+              "id": "d",
+              "correct": false,
+              "text": "Deleting the preprocessing code and writing it from scratch every time"
+            }
+          ],
+          "explain": "Always peek at your data before training! If you don't inspect your tokens, you might feed nonsense to your model and waste hours. Next up: Evaluating NLP Models."
+        }
+      ]
+    }
+  ]
+}

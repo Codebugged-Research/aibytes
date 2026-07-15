@@ -1,0 +1,222 @@
+{
+  "id": "u263-l4",
+  "unit": 263,
+  "day": 1319,
+  "tier": "NLP Advanced",
+  "tierIcon": "🧠",
+  "title": "Monitoring Seq2Seq Training",
+  "icon": "📈",
+  "concept": "Track cross-entropy loss and validation BLEU scores jointly; validation loss can rise due to exposure bias even as BLEU improves.",
+  "xp": 15,
+  "hearts": 3,
+  "estMinutes": 7,
+  "segments": [
+    {
+      "type": "warmup",
+      "exercises": [
+        {
+          "id": "w1",
+          "type": "multiple_choice",
+          "xp": 1,
+          "prompt": "Which two metrics are most important to monitor together when training a Seq2Seq model?",
+          "options": [
+            {
+              "text": "Validation Loss and Validation BLEU score",
+              "correct": true,
+              "id": "a"
+            },
+            {
+              "id": "b",
+              "correct": false,
+              "text": "Training speed and CPU temperature"
+            },
+            {
+              "text": "File size and vocabulary length",
+              "id": "c",
+              "correct": false
+            }
+          ],
+          "explain": "Seq2Seq models generate text step-by-step. To evaluate them fully, we track both internal loss (cross-entropy) and output quality (BLEU)."
+        }
+      ]
+    },
+    {
+      "type": "teach",
+      "cards": [
+        {
+          "kind": "hook",
+          "icon": "📈",
+          "title": "Is It Actually Improving?",
+          "body": "Have you ever practiced a speech word-by-word, only to stumble when you had to say the whole thing out loud? Seq2Seq models face the same challenge! If we only look at training loss, we might think our AI is getting worse, when it is actually getting much better at translating!"
+        },
+        {
+          "kind": "definition",
+          "icon": "📊",
+          "title": "Dual-Metric Monitoring",
+          "body": "When training Seq2Seq models, we monitor two main things: Cross-Entropy Loss (how surprised the model is by the correct words) and the BLEU Score (how closely the model's self-generated translations match real human translations). Tracking both is crucial because they measure different things."
+        },
+        {
+          "kind": "analogy",
+          "icon": "🎤",
+          "title": "The Sheet Music vs. The Concert",
+          "body": "Imagine training a singer using sheet music. At first, they practice notes one by one while looking at the sheet (Training Loss). But during a live concert (Validation), they have to sing the whole song from memory without help (BLEU Score). Sometimes, even if they make minor mistakes on single notes, the overall performance sounds much better to the audience!"
+        },
+        {
+          "kind": "example",
+          "icon": "📝",
+          "title": "A Tale of Two Metrics",
+          "body": "Let's look at a training log:\nAt Epoch 5, Validation Loss is 1.2, and BLEU is 22. \nAt Epoch 10, Validation Loss rises to 1.5 (looks worse!), but BLEU increases to 28 (looks better!). \nThis is common: the model is making minor word confidence errors, but the actual sentences it outputs are much more accurate and readable!"
+        },
+        {
+          "kind": "mythbust",
+          "icon": "🚫",
+          "title": "The Loss Trap",
+          "body": "Myth: If validation loss starts going up, your Seq2Seq model is overfitting and you must stop training immediately.\nReality: Not necessarily! Because of 'exposure bias' (the model gets help during training but is on its own during testing), validation loss can rise even while the translation quality (BLEU score) continues to improve."
+        },
+        {
+          "kind": "visual",
+          "icon": "👁️",
+          "title": "Loss vs. BLEU",
+          "body": "Compare how training loss evaluates the model versus how the BLEU score evaluates it.",
+          "compare": {
+            "left": {
+              "tag": "Loss",
+              "text": "Evaluates predictions word-by-word with constant corrections. Can get worse if the model makes small mistakes early in a sentence.",
+              "emoji": "🔍"
+            },
+            "right": {
+              "emoji": "🏆",
+              "text": "Evaluates the complete generated sentence on its own. Can improve even if the model is penalized by loss metrics.",
+              "tag": "BLEU Score"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "type": "practice",
+      "exercises": [
+        {
+          "id": "p1",
+          "type": "multiple_choice",
+          "xp": 2,
+          "prompt": "Why can validation loss rise even while the validation BLEU score is improving?",
+          "options": [
+            {
+              "correct": true,
+              "id": "a",
+              "text": "Exposure bias makes word-by-word loss penalize minor deviations, even if the translation is good."
+            },
+            {
+              "text": "BLEU score only measures translation speed, not quality.",
+              "correct": false,
+              "id": "b"
+            },
+            {
+              "text": "The model is completely forgetting how to translate.",
+              "correct": false,
+              "id": "c"
+            },
+            {
+              "text": "Validation loss is calculated on training data instead of validation data.",
+              "correct": false,
+              "id": "d"
+            }
+          ],
+          "explain": "Validation loss tracks word-by-word prediction errors under teacher forcing, which can spike if the model makes minor errors early on, even if the overall sentence translation (BLEU) is still improving."
+        },
+        {
+          "id": "p2",
+          "type": "true_false",
+          "xp": 2,
+          "prompt": "True or False: A Seq2Seq model's validation loss and validation BLEU score always move in the same direction.",
+          "options": [
+            {
+              "correct": false,
+              "id": "t",
+              "text": "True"
+            },
+            {
+              "text": "False",
+              "correct": true,
+              "id": "f"
+            }
+          ],
+          "explain": "Cross-entropy loss measures word-by-word probability confidence, while BLEU measures the similarity of the final generated sentence to target translations. They can behave differently."
+        },
+        {
+          "id": "p3",
+          "type": "fill_blank",
+          "xp": 2,
+          "prompt": "Fill in the missing word to describe how Seq2Seq metrics behave during training.",
+          "sentence": "Even if validation loss increases, the validation BLEU score can still go up.",
+          "blank": "loss",
+          "words": [
+            "loss",
+            "size",
+            "speed"
+          ],
+          "explain": "Because of exposure bias, validation loss can increase even as the model's actual translation ability (measured by BLEU) gets better."
+        },
+        {
+          "id": "p4",
+          "type": "spot_the_ai",
+          "xp": 2,
+          "prompt": "Which model is showing normal Seq2Seq training behavior despite a rising validation loss?",
+          "options": [
+            {
+              "correct": false,
+              "text": "AI Model A: Validation loss increases from 1.1 to 1.8; BLEU score drops from 25 to 10.",
+              "id": "a"
+            },
+            {
+              "correct": true,
+              "id": "b",
+              "text": "AI Model B: Validation loss increases from 1.1 to 1.4; BLEU score increases from 25 to 30."
+            },
+            {
+              "text": "AI Model C: Validation loss stays at 0.1; BLEU score stays at 0.",
+              "id": "c",
+              "correct": false
+            }
+          ],
+          "explain": "AI Model B shows the classic mismatch: validation loss is rising, but BLEU (the actual translation quality) is still improving. AI Model A is likely overfitting or failing because both metrics are worsening."
+        }
+      ]
+    },
+    {
+      "type": "boss",
+      "exercises": [
+        {
+          "id": "b1",
+          "type": "multiple_choice",
+          "xp": 5,
+          "prompt": "You are deploying a new Spanish-to-English translation bot. How should you monitor its training process to ensure it outputs high-quality sentences?",
+          "options": [
+            {
+              "text": "Cross-entropy training loss is the only metric we need to track.",
+              "correct": false,
+              "id": "a"
+            },
+            {
+              "text": "Track both cross-entropy loss and validation BLEU, prioritizing BLEU for translation quality.",
+              "id": "b",
+              "correct": true
+            },
+            {
+              "correct": false,
+              "text": "Stop training as soon as validation loss goes up, even if BLEU is still rising.",
+              "id": "c"
+            },
+            {
+              "correct": false,
+              "id": "d",
+              "text": "Only track training loss, as validation metrics are not useful for Seq2Seq models."
+            }
+          ],
+          "explain": "Validation BLEU score measures the actual quality of the generated translations. Because training loss is calculated word-by-word with constant corrections (Teacher Forcing), it doesn't always match how well the model translates a full sentence from scratch on its own."
+        }
+      ]
+    }
+  ]
+}

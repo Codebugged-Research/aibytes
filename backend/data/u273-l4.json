@@ -1,0 +1,223 @@
+{
+  "id": "u273-l4",
+  "unit": 273,
+  "day": 1369,
+  "tier": "NLP Advanced",
+  "tierIcon": "🧠",
+  "title": "Optimizer States and Memory",
+  "icon": "💸",
+  "concept": "Adam optimizer states (first/second moments) consume 4x more memory than model weights; techniques like ZeRO partition these states across GPUs.",
+  "xp": 15,
+  "hearts": 3,
+  "estMinutes": 7,
+  "segments": [
+    {
+      "type": "warmup",
+      "exercises": [
+        {
+          "id": "w1",
+          "type": "multiple_choice",
+          "xp": 1,
+          "prompt": "What are 'optimizer states' in AI training?",
+          "options": [
+            {
+              "text": "Extra tracking data stored by the optimizer to guide weight updates.",
+              "id": "a",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "correct": false,
+              "text": "The raw text data used to train the model."
+            },
+            {
+              "text": "The final weights of the model after training is finished.",
+              "correct": false,
+              "id": "c"
+            }
+          ],
+          "explain": "Optimizer states are extra variables (like running averages of gradients) stored by training algorithms like Adam to update model weights correctly."
+        }
+      ]
+    },
+    {
+      "type": "teach",
+      "cards": [
+        {
+          "kind": "hook",
+          "icon": "💸",
+          "title": "The Hidden Memory Tax",
+          "body": "Have you ever wondered why training large AI models requires massive data centers? It's not just the size of the AI itself—it's the massive 'memory tax' paid to the math formulas keeping track of how the AI learns."
+        },
+        {
+          "kind": "definition",
+          "icon": "🧠",
+          "title": "What are Optimizer States?",
+          "body": "When training an AI with the popular 'Adam' optimizer, it doesn't just store the model's weights. It also tracks the speed (momentum) and variance of updates for every single parameter. These tracker values are called 'optimizer states', and they take up to 4 times more memory than the actual model weights!"
+        },
+        {
+          "kind": "analogy",
+          "icon": "📚",
+          "title": "The Editor's Desk",
+          "body": "Imagine you are writing a massive book. The book itself takes up space on your desk (these are the model weights). But to edit the book, you need a giant pile of notebooks tracking every single edit, mistake, and trend (the optimizer states). Soon, your desk is buried under the notebooks, not the book itself!"
+        },
+        {
+          "kind": "example",
+          "icon": "💡",
+          "title": "Memory Math in Action",
+          "body": "If you train a model with 1 billion parameters in 16-bit precision, the model weights take up 2 GB of memory. However, the Adam optimizer needs 8 GB of memory just to track the training statistics! To fit this on normal hardware, we use 'ZeRO' to split that 8 GB workload across several GPUs."
+        },
+        {
+          "kind": "mythbust",
+          "icon": "🛡️",
+          "title": "Weights vs. Helpers",
+          "body": "Many beginners think that the AI model weights take up the most memory during training. In reality, the helper data used by optimizers like Adam takes up the vast majority of the memory!"
+        },
+        {
+          "kind": "visual",
+          "icon": "📊",
+          "title": "Memory Distribution",
+          "body": "Here is how memory is split during standard training versus training with ZeRO optimization.",
+          "compare": {
+            "left": {
+              "tag": "Standard Training",
+              "emoji": "💔",
+              "text": "Each GPU must hold the full copy of the giant optimizer states, easily overloading memory."
+            },
+            "right": {
+              "tag": "ZeRO Training",
+              "emoji": "🤝",
+              "text": "Optimizer states are sliced up and shared across GPUs, saving massive amounts of memory."
+            }
+          }
+        }
+      ]
+    },
+    {
+      "type": "practice",
+      "exercises": [
+        {
+          "id": "p1",
+          "type": "multiple_choice",
+          "xp": 2,
+          "prompt": "During AI training, which of these components typically consumes the most memory?",
+          "options": [
+            {
+              "id": "a",
+              "correct": false,
+              "text": "Model weights"
+            },
+            {
+              "text": "Optimizer states (Adam tracking values)",
+              "id": "b",
+              "correct": true
+            },
+            {
+              "id": "c",
+              "correct": false,
+              "text": "The dataset inputs"
+            },
+            {
+              "correct": false,
+              "text": "The loss function output",
+              "id": "d"
+            }
+          ],
+          "explain": "The Adam optimizer stores two running averages (first and second moments) for each parameter in 32-bit float format, taking up 8 bytes of memory per parameter (4 times the standard 16-bit weight size)."
+        },
+        {
+          "id": "p2",
+          "type": "true_false",
+          "xp": 2,
+          "prompt": "True or False: ZeRO reduces memory usage by distributing optimizer states across multiple GPUs.",
+          "options": [
+            {
+              "correct": true,
+              "id": "true",
+              "text": "True"
+            },
+            {
+              "id": "false",
+              "correct": false,
+              "text": "False"
+            }
+          ],
+          "explain": "ZeRO works by splitting (partitioning) the optimizer states across multiple GPUs so that no single GPU has to store all of them."
+        },
+        {
+          "id": "p3",
+          "type": "fill_blank",
+          "xp": 2,
+          "prompt": "Fill in the blank to name the technology that splits optimizer states across GPUs.",
+          "sentence": "To prevent a single GPU from running out of memory, we use _______ to distribute the optimizer states.",
+          "blank": "ZeRO",
+          "words": [
+            "ZeRO",
+            "Adam",
+            "ReLU",
+            "SGD"
+          ],
+          "explain": "ZeRO (Zero Redundancy Optimizer) partitions optimizer states across multiple GPUs, reducing the memory footprint on each individual chip."
+        },
+        {
+          "id": "p4",
+          "type": "spot_the_ai",
+          "xp": 2,
+          "prompt": "You want to train a massive model but your GPU runs out of memory due to Adam optimizer states. Which setup is the correct solution?",
+          "options": [
+            {
+              "id": "opt1",
+              "text": "Keep all optimizer states on a single GPU and duplicate them across others.",
+              "correct": false
+            },
+            {
+              "id": "opt2",
+              "text": "Use ZeRO to partition the optimizer states so each GPU only holds a slice.",
+              "correct": true
+            },
+            {
+              "correct": false,
+              "id": "opt3",
+              "text": "Disable the optimizer entirely and update weights randomly."
+            }
+          ],
+          "explain": "Only the option using ZeRO to distribute memory across multiple GPUs correctly addresses the memory bottleneck of Adam optimizer states."
+        }
+      ]
+    },
+    {
+      "type": "boss",
+      "exercises": [
+        {
+          "id": "b1",
+          "type": "multiple_choice",
+          "xp": 5,
+          "prompt": "Your AI model is too large to train because the Adam optimizer states are taking up 8 bytes per parameter. How does ZeRO (Zero Redundancy Optimizer) help solve this memory crisis?",
+          "options": [
+            {
+              "id": "a",
+              "correct": false,
+              "text": "It compresses the model weights into 8-bit integers to save memory."
+            },
+            {
+              "text": "It deletes the optimizer states and trains the model without them.",
+              "correct": false,
+              "id": "b"
+            },
+            {
+              "text": "It partitions the heavy optimizer states across multiple different GPUs.",
+              "correct": true,
+              "id": "c"
+            },
+            {
+              "correct": false,
+              "text": "It stores all optimizer states on a single master GPU.",
+              "id": "d"
+            }
+          ],
+          "explain": "Adam needs 8 bytes of optimizer memory for every single parameter (4 bytes for the first moment, and 4 bytes for the second moment). ZeRO solves this by splitting these states up so each GPU only stores a fraction of them."
+        }
+      ]
+    }
+  ]
+}

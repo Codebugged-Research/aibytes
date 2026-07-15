@@ -1,0 +1,223 @@
+{
+  "id": "u252-l2",
+  "unit": 252,
+  "day": 1262,
+  "tier": "NLP Basics",
+  "tierIcon": "🔤",
+  "title": "Data Leakage via Vocabulary",
+  "icon": "💧",
+  "concept": "Building your vocabulary using the entire dataset (including validation/test splits) leaks information, inflating validation scores artificially.",
+  "xp": 15,
+  "hearts": 3,
+  "estMinutes": 7,
+  "segments": [
+    {
+      "type": "warmup",
+      "exercises": [
+        {
+          "id": "w1",
+          "type": "multiple_choice",
+          "xp": 1,
+          "prompt": "What is 'data leakage' in machine learning?",
+          "options": [
+            {
+              "id": "w1",
+              "text": "When test set information accidentally influences the model training process.",
+              "correct": true
+            },
+            {
+              "text": "When your computer runs out of memory while loading text.",
+              "correct": false,
+              "id": "w2"
+            },
+            {
+              "id": "w3",
+              "correct": false,
+              "text": "When you delete your dataset by accident."
+            }
+          ],
+          "explain": "Data leakage happens when information from outside the training dataset is used to build the model, leading to overly optimistic performance estimates."
+        }
+      ]
+    },
+    {
+      "type": "teach",
+      "cards": [
+        {
+          "kind": "hook",
+          "icon": "💧",
+          "title": "The Sneaky Leak",
+          "body": "Have you ever got an incredibly high score on a machine learning model, only for it to fail miserably in the real world? One sneaky culprit is vocabulary leakage—where your model gets a sneak peek at the words it is supposed to be tested on!"
+        },
+        {
+          "kind": "definition",
+          "icon": "📖",
+          "title": "What is Vocabulary Leakage?",
+          "body": "Vocabulary data leakage happens when you build your text model's dictionary using the entire dataset. By including the test or validation set in this step, your model learns which words exist in the test data before it actually takes the test!"
+        },
+        {
+          "kind": "analogy",
+          "icon": "📝",
+          "title": "The Ultimate Spelling Cheat Sheet",
+          "body": "Imagine you are writing a spelling test. Before the test, the teacher gives you a list of every single word that will ever be on any test this year. Even if you don't know their definitions yet, just knowing which specific words exist helps you guess and prepare. That is vocabulary leakage!"
+        },
+        {
+          "kind": "example",
+          "icon": "🔍",
+          "title": "Leakage in Action",
+          "body": "Imagine you are analyzing product reviews. You tokenize and build a vocabulary using all 10,000 reviews (train + test). The word \"defective\" only appears in the test set. Because you built the vocabulary on everything, your model's dictionary has a slot for \"defective\". It has successfully peeked into the future!"
+        },
+        {
+          "kind": "mythbust",
+          "icon": "🛡️",
+          "title": "Myth: Vocabulary Isn't Part of Training",
+          "body": "You might think that building a vocabulary is just preprocessing, so it doesn't count as training. But the vocabulary is the foundation of your model's features! Sharing it across splits leaks crucial details about the test set's distribution."
+        },
+        {
+          "kind": "visual",
+          "icon": "🔤",
+          "title": "Visualizing the Leak",
+          "body": "See how splitting your data correctly keeps the test vocabulary completely secret until evaluation time.",
+          "compare": {
+            "title": "Vocabulary Building Workflows",
+            "left": {
+              "text": "Build vocabulary using ALL data -> Split -> Train. (Model knows test words!)",
+              "emoji": "❌",
+              "tag": "Leaky Prep"
+            },
+            "right": {
+              "emoji": "✅",
+              "tag": "Safe Prep",
+              "text": "Split -> Build vocabulary on Train ONLY -> Transform Test. (No sneak peeks!)"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "type": "practice",
+      "exercises": [
+        {
+          "id": "p1",
+          "type": "multiple_choice",
+          "xp": 2,
+          "prompt": "What is the main consequence of vocabulary data leakage?",
+          "options": [
+            {
+              "id": "a",
+              "correct": true,
+              "text": "Validation scores are artificially inflated (too high)."
+            },
+            {
+              "correct": false,
+              "text": "The model forgets all words during training.",
+              "id": "b"
+            },
+            {
+              "text": "Training speed decreases dramatically.",
+              "correct": false,
+              "id": "c"
+            },
+            {
+              "text": "Validation scores become exactly 0%.",
+              "correct": false,
+              "id": "d"
+            }
+          ],
+          "explain": "When you build a vocabulary using the entire dataset, the validation scores are artificially inflated because the model already knows which words exist in the validation set."
+        },
+        {
+          "id": "p2",
+          "type": "true_false",
+          "xp": 2,
+          "prompt": "True or False: It is safe to use the entire dataset to build your vocabulary as long as you do not train the model weights on the test set.",
+          "options": [
+            {
+              "text": "True",
+              "correct": false,
+              "id": "t"
+            },
+            {
+              "text": "False",
+              "correct": true,
+              "id": "f"
+            }
+          ],
+          "explain": "To prevent leakage, you must build the vocabulary using ONLY the training split, and then apply that vocabulary to transform the validation/test splits."
+        },
+        {
+          "id": "p3",
+          "type": "fill_blank",
+          "xp": 2,
+          "prompt": "Fill in the blank to complete the rule of data leakage.",
+          "sentence": "Building a vocabulary using the entire dataset leaks information to the _______ set.",
+          "blank": "validation",
+          "words": [
+            "validation",
+            "hyperparameter",
+            "underfitting"
+          ],
+          "explain": "Building a vocabulary using both training and validation/test datasets leaks information, making your model look better on the validation set than it actually is."
+        },
+        {
+          "id": "p4",
+          "type": "spot_the_ai",
+          "xp": 2,
+          "prompt": "Identify the AI-generated (incorrect/unsafe) practice for text preprocessing:",
+          "options": [
+            {
+              "text": "Create a Train-Test split. Fit the vectorizer on the training data. Transform both the train and test data.",
+              "correct": false,
+              "id": "opt_a"
+            },
+            {
+              "correct": true,
+              "text": "Fit the vectorizer on the test data, then use those words to train the model on the training data.",
+              "id": "opt_b"
+            },
+            {
+              "id": "opt_c",
+              "correct": false,
+              "text": "Build your vocabulary strictly from the training partition to prevent any future words from leaking."
+            }
+          ],
+          "explain": "Option B is AI-generated because it claims to 'fit' the vectorizer on the test data. We should never fit preprocessing steps on test data!"
+        }
+      ]
+    },
+    {
+      "type": "boss",
+      "exercises": [
+        {
+          "id": "b1",
+          "type": "multiple_choice",
+          "xp": 5,
+          "prompt": "You are building a spam filter. How should you set up your CountVectorizer to guarantee there is NO vocabulary leakage?",
+          "options": [
+            {
+              "id": "opt1",
+              "text": "Fit the CountVectorizer on the entire dataset before splitting it.",
+              "correct": false
+            },
+            {
+              "text": "Fit the CountVectorizer on the test set first, then apply it to the training set.",
+              "id": "opt2",
+              "correct": false
+            },
+            {
+              "text": "Fit the CountVectorizer ONLY on the training split, and use it to transform the test split.",
+              "correct": true,
+              "id": "opt3"
+            },
+            {
+              "text": "Combine training and test sets whenever you need to build a vocabulary.",
+              "id": "opt4",
+              "correct": false
+            }
+          ],
+          "explain": "To avoid data leakage, you must only fit the vectorizer (which builds the vocabulary) on the training set. Fitting it on the entire dataset (or using cross-validation incorrectly) lets the model preview the test words!"
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,222 @@
+{
+  "id": "u203-l3",
+  "unit": 203,
+  "day": 1018,
+  "tier": "Generative Adversarial Networks",
+  "tierIcon": "📉",
+  "title": "Two Losses, One Training Loop",
+  "icon": "⚖️",
+  "concept": "Unlike normal supervised training with one shared loss, a GAN optimizes two separate loss functions — one for the discriminator, one for the generator — alternating which network's weights get updated.",
+  "xp": 15,
+  "hearts": 3,
+  "estMinutes": 7,
+  "segments": [
+    {
+      "type": "warmup",
+      "exercises": [
+        {
+          "id": "w1",
+          "type": "multiple_choice",
+          "xp": 1,
+          "prompt": "Recap: What does the generator's loss actually measure?",
+          "options": [
+            {
+              "id": "a",
+              "text": "How often its fakes fool the discriminator, via a gradient signal — never real images directly",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "The pixel distance between its fakes and real training photos",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "The amount of random noise it feeds into itself",
+              "correct": false
+            }
+          ],
+          "explain": "Correct! The generator's loss comes entirely from the discriminator's judgment."
+        }
+      ]
+    },
+    {
+      "type": "teach",
+      "cards": [
+        {
+          "kind": "hook",
+          "icon": "🔀",
+          "title": "One classroom, two different report cards",
+          "body": "Every other model you've trained in this course had one loss number that everyone tries to shrink together. A GAN is stranger: it's like a classroom where two students get graded on completely opposite report cards for the very same event."
+        },
+        {
+          "kind": "definition",
+          "icon": "⚖️",
+          "title": "Two Separate Loss Functions",
+          "body": "A GAN does NOT optimize a single shared loss the way a normal classifier does. It optimizes <strong>two independent loss functions</strong>: <code>Loss_D</code> (Binary Cross-Entropy, wants to correctly label real vs. fake) and <code>Loss_G</code> (wants to fool the discriminator). Each training step updates only ONE network's weights, using only that network's own loss."
+        },
+        {
+          "kind": "analogy",
+          "icon": "🪢",
+          "title": "Tug-of-war with two scorekeepers",
+          "body": "Think of a tug-of-war where each side has its own referee tracking its own scoresheet, not a shared scoreboard. One turn, the discriminator's referee blows the whistle and only the discriminator's team adjusts its grip. The next turn, it's the generator's referee's turn, and only the generator adjusts."
+        },
+        {
+          "kind": "example",
+          "icon": "🔁",
+          "title": "Alternating updates",
+          "body": "A typical training step looks like: <strong>Step A</strong> — freeze the generator, compute <code>Loss_D</code> on a batch of real and fake images, update only the discriminator's weights. <strong>Step B</strong> — freeze the discriminator, compute <code>Loss_G</code> on a fresh batch of fakes, update only the generator's weights. Repeat, back and forth, for thousands of steps."
+        },
+        {
+          "kind": "mythbust",
+          "icon": "⚠️",
+          "title": "It's not one loss with two parts",
+          "body": "You might think GANs just average <code>Loss_D</code> and <code>Loss_G</code> into one combined number, the way a multi-task model blends its losses. In reality, there is no shared total loss — the two aren't even added together. Each network only ever sees and minimizes its own."
+        },
+        {
+          "kind": "visual",
+          "icon": "⚖️",
+          "title": "Supervised Training vs. GAN Training",
+          "body": "Comparing how many loss functions are in play:",
+          "compare": {
+            "left": {
+              "emoji": "📉",
+              "tag": "Normal Supervised Model",
+              "text": "One loss function<br>One set of weights updated<br>Everyone improves together"
+            },
+            "right": {
+              "emoji": "🎭",
+              "tag": "GAN Training",
+              "text": "Two separate loss functions<br>Two sets of weights, updated in turns<br>One network's gain can be the other's loss"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "type": "practice",
+      "exercises": [
+        {
+          "id": "p1",
+          "type": "multiple_choice",
+          "xp": 2,
+          "prompt": "In a single GAN training step where the discriminator is being updated, what happens to the generator's weights?",
+          "options": [
+            {
+              "id": "a",
+              "text": "They stay frozen — only Loss_D drives this step's update",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "They also update, using Loss_D",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "Both networks update together using the average of both losses",
+              "correct": false
+            },
+            {
+              "id": "d",
+              "text": "They reset to random values",
+              "correct": false
+            }
+          ],
+          "explain": "Correct. Only one network's weights move per step, driven by that network's own loss."
+        },
+        {
+          "id": "p2",
+          "type": "true_false",
+          "xp": 2,
+          "prompt": "True or false: GANs minimize one combined loss function, just like a standard image classifier.",
+          "options": [
+            {
+              "id": "t",
+              "text": "True",
+              "correct": false
+            },
+            {
+              "id": "f",
+              "text": "False",
+              "correct": true
+            }
+          ],
+          "explain": "False. There are two separate losses, updated in alternating steps — never combined into one shared loss."
+        },
+        {
+          "id": "p3",
+          "type": "fill_blank",
+          "xp": 2,
+          "prompt": "Complete the sentence:",
+          "sentence": "Each GAN training step updates ___ network's weights, using only that network's own loss.",
+          "blank": "one",
+          "words": [
+            "one",
+            "both",
+            "neither"
+          ],
+          "explain": "Steps alternate: one step trains only the discriminator, the next trains only the generator."
+        },
+        {
+          "id": "p4",
+          "type": "spot_the_ai",
+          "xp": 2,
+          "prompt": "Which training loop description matches how GANs actually work?",
+          "options": [
+            {
+              "id": "a",
+              "text": "Alternate: update the discriminator using Loss_D, then update the generator using Loss_G, repeat",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "Compute one shared loss and back-propagate it through both networks at the same time, every step",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "Train the discriminator fully to convergence once, then discard it and train only the generator",
+              "correct": false
+            }
+          ],
+          "explain": "Correct — alternating updates, each driven by its own separate loss."
+        }
+      ]
+    },
+    {
+      "type": "boss",
+      "exercises": [
+        {
+          "id": "b1",
+          "type": "multiple_choice",
+          "xp": 5,
+          "prompt": "A teammate says: \"Just add Loss_D and Loss_G together and minimize the sum with one optimizer step, like we do for multi-task CNNs.\" What's wrong with that plan for a GAN?",
+          "options": [
+            {
+              "id": "a",
+              "text": "It ignores that the generator wants to INCREASE the discriminator's error while the discriminator wants to DECREASE it — the two losses pull in opposite directions, so they can't be jointly minimized the way cooperative multi-task losses can",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "Nothing is wrong — that's exactly how GANs are trained",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "It's wrong because GANs don't use loss functions at all",
+              "correct": false
+            },
+            {
+              "id": "d",
+              "text": "It's wrong because only the discriminator has a loss function",
+              "correct": false
+            }
+          ],
+          "explain": "Exactly! The two losses are adversarial, not cooperative, so they're optimized in alternating turns instead of jointly. Next: let's run real numbers through both loss functions in the same batch."
+        }
+      ]
+    }
+  ]
+}

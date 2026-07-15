@@ -1,0 +1,222 @@
+{
+  "id": "u207-l5",
+  "unit": 207,
+  "day": 1040,
+  "tier": "Generative Adversarial Networks",
+  "tierIcon": "🪦",
+  "title": "Keeping Both Networks in Balance",
+  "icon": "🌉",
+  "concept": "Beyond fixing the loss formula, keeping the generator's and discriminator's learning paces roughly matched matters too — because a discriminator that races too far ahead leaves the generator stuck with a flat, uninformative signal, no matter how the loss is written.",
+  "xp": 15,
+  "hearts": 3,
+  "estMinutes": 7,
+  "segments": [
+    {
+      "type": "warmup",
+      "exercises": [
+        {
+          "id": "w1",
+          "type": "multiple_choice",
+          "xp": 1,
+          "prompt": "Recap: What does the non-saturating loss trick actually change?",
+          "options": [
+            {
+              "id": "a",
+              "text": "It reformulates the generator's own loss so it keeps a strong gradient even when the discriminator is confident",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "It replaces the discriminator with a simpler network",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "It forces the discriminator to always output 0.5",
+              "correct": false
+            }
+          ],
+          "explain": "Right — the loss formula gets reshaped, not the discriminator itself. Today: why the training PACE of both networks matters too."
+        }
+      ]
+    },
+    {
+      "type": "teach",
+      "cards": [
+        {
+          "kind": "hook",
+          "icon": "🏃",
+          "title": "Tied together at the ankle",
+          "body": "Picture a three-legged race: two runners tied ankle-to-ankle. If one suddenly sprints ahead while the other keeps jogging, they don't finish faster together — they trip and go down. A generator and discriminator learning at very different paces are tied together the same way."
+        },
+        {
+          "kind": "definition",
+          "icon": "🌉",
+          "title": "Matching the pace, not just the formula",
+          "body": "Non-saturating loss helps once the discriminator is already confident — but it's better to avoid letting the discriminator race that far ahead in the first place. Practitioners also try to keep the generator and discriminator's learning paces roughly matched — for example, limiting how many extra training steps the discriminator gets per generator step — so neither network runs away and leaves the other with a flat, uninformative signal."
+        },
+        {
+          "kind": "analogy",
+          "icon": "🥁",
+          "title": "Two metronomes drifting apart",
+          "body": "Picture two metronomes meant to tick in unison, but one is wound to run twice as fast as the other. Each keeps perfect time on its own — yet together they drift out of sync almost immediately. A generator and discriminator learning at mismatched paces drift apart the exact same way, even though each is individually 'working.'"
+        },
+        {
+          "kind": "example",
+          "icon": "🔢",
+          "title": "Practical pacing knobs",
+          "body": "Some common ways practitioners keep the pace balanced: training the discriminator only 1 step per generator step instead of 5, giving the discriminator a slightly lower learning rate, or softening its \"real\" target from a hard 1.0 to something like 0.9 so it never gets too confident too fast."
+        },
+        {
+          "kind": "mythbust",
+          "icon": "⚠️",
+          "title": "The strongest possible discriminator isn't the goal",
+          "body": "You might assume you should always train the discriminator to be as accurate as possible, since a sharper judge sounds like better feedback. In reality, a discriminator pushed too far ahead becomes the grandmaster from a few lessons ago — decisive, but uninformative. A moderately challenged discriminator often trains a better generator overall."
+        },
+        {
+          "kind": "visual",
+          "icon": "⚖️",
+          "title": "Runaway pace vs. matched pace",
+          "body": "How training tends to unfold in each case:",
+          "compare": {
+            "left": {
+              "emoji": "🏎️",
+              "tag": "Runaway Discriminator",
+              "text": "Discriminator races ahead<br>Judgments saturate fast<br>Generator's gradient goes flat"
+            },
+            "right": {
+              "emoji": "🤝",
+              "tag": "Paced Training",
+              "text": "Both networks improve together<br>Judgments stay informative<br>Generator keeps a useful gradient"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "type": "practice",
+      "exercises": [
+        {
+          "id": "p1",
+          "type": "multiple_choice",
+          "xp": 2,
+          "prompt": "Why does keeping the generator and discriminator's learning paces matched help avoid vanishing gradients?",
+          "options": [
+            {
+              "id": "a",
+              "text": "It keeps the discriminator from racing so far ahead that its judgments saturate and stop giving the generator useful feedback",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "It makes both networks share the exact same weights",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "It removes the need for a loss function entirely",
+              "correct": false
+            },
+            {
+              "id": "d",
+              "text": "It guarantees the generator wins every round",
+              "correct": false
+            }
+          ],
+          "explain": "Exactly — matched pacing keeps the discriminator from getting so confident that its feedback flattens out."
+        },
+        {
+          "id": "p2",
+          "type": "true_false",
+          "xp": 2,
+          "prompt": "True or false: Training the discriminator to be as accurate as possible, as fast as possible, is always the best strategy for GAN training.",
+          "options": [
+            {
+              "id": "t",
+              "text": "True",
+              "correct": false
+            },
+            {
+              "id": "f",
+              "text": "False",
+              "correct": true
+            }
+          ],
+          "explain": "False. A discriminator that races too far ahead becomes overconfident and stops giving the generator useful feedback — moderate pacing often works better."
+        },
+        {
+          "id": "p3",
+          "type": "fill_blank",
+          "xp": 2,
+          "prompt": "Complete the sentence:",
+          "sentence": "Keeping the generator and discriminator's learning paces roughly ___ helps prevent one side from leaving the other with a flat, uninformative signal.",
+          "blank": "matched",
+          "words": [
+            "matched",
+            "encrypted",
+            "duplicated"
+          ],
+          "explain": "Matched pacing is what keeps neither network from racing so far ahead that its feedback goes flat."
+        },
+        {
+          "id": "p4",
+          "type": "spot_the_ai",
+          "xp": 2,
+          "prompt": "Which training setup is most likely to trigger the vanishing-gradient problem this unit has covered?",
+          "options": [
+            {
+              "id": "a",
+              "text": "The discriminator trains for many extra steps per generator step, quickly becoming overconfident",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "The discriminator and generator each take one training step per round, staying roughly matched",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "The discriminator's learning rate is deliberately lowered to stay closer to the generator's pace",
+              "correct": false
+            }
+          ],
+          "explain": "Extra, unmatched training steps let the discriminator race ahead, saturate, and stop giving the generator a useful gradient — exactly the failure mode this unit explored."
+        }
+      ]
+    },
+    {
+      "type": "boss",
+      "exercises": [
+        {
+          "id": "b1",
+          "type": "multiple_choice",
+          "xp": 5,
+          "prompt": "You've now covered why an overconfident discriminator causes vanishing gradients, and practical fixes like non-saturating loss and paced training. Even with all that in place, does GAN training become perfectly smooth?",
+          "options": [
+            {
+              "id": "a",
+              "text": "Not quite — the two networks constantly reacting to each other can still cause the whole training process to swing and oscillate rather than settle down smoothly",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "Yes, at that point GAN training never has any further struggles",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "No, because the generator and discriminator stop training entirely once balanced",
+              "correct": false
+            },
+            {
+              "id": "d",
+              "text": "Yes, because non-saturating loss makes the discriminator disappear",
+              "correct": false
+            }
+          ],
+          "explain": "Exactly! Up next, Unit 208: Training Instability & Oscillation — what happens when two constantly-reacting networks cause the whole training process to swing back and forth instead of settling down."
+        }
+      ]
+    }
+  ]
+}

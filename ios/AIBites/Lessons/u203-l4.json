@@ -1,0 +1,222 @@
+{
+  "id": "u203-l4",
+  "unit": 203,
+  "day": 1019,
+  "tier": "Generative Adversarial Networks",
+  "tierIcon": "📉",
+  "title": "A Worked Adversarial Loss Example",
+  "icon": "🔢",
+  "concept": "Walking through one concrete mini-batch of discriminator scores to compute Loss_D and Loss_G by hand, showing how the very same score feeds two different loss values.",
+  "xp": 15,
+  "hearts": 3,
+  "estMinutes": 7,
+  "segments": [
+    {
+      "type": "warmup",
+      "exercises": [
+        {
+          "id": "w1",
+          "type": "multiple_choice",
+          "xp": 1,
+          "prompt": "Recap: In one GAN training step, whose weights actually get updated?",
+          "options": [
+            {
+              "id": "a",
+              "text": "Only the network whose loss is being computed that step",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "Both networks, every single step",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "Whichever network scored higher that step",
+              "correct": false
+            }
+          ],
+          "explain": "Correct! Training alternates — one network's weights move per step."
+        }
+      ]
+    },
+    {
+      "type": "teach",
+      "cards": [
+        {
+          "kind": "hook",
+          "icon": "🧮",
+          "title": "Let's actually run the numbers",
+          "body": "So far this has all been conceptual. Time to plug in real scores from a tiny batch and watch both loss functions spit out actual numbers — the same way it happens inside a real GAN every training step."
+        },
+        {
+          "kind": "definition",
+          "icon": "🔢",
+          "title": "Setting Up the Batch",
+          "body": "Suppose the discriminator scores a mini-batch of 2 real and 2 fake images with these real-probabilities: real images → <code>p = 0.9, 0.7</code>; fake images → <code>p = 0.4, 0.2</code>. We'll compute <code>Loss_D</code> from all four scores, and <code>Loss_G</code> from just the two fake scores."
+        },
+        {
+          "kind": "analogy",
+          "icon": "🎤",
+          "title": "A talent-show scorecard",
+          "body": "Picture a talent show with 2 real acts and 2 lookalike impersonators. Judges (the discriminator) give each act a \"genuine\" score. The show's producer (<code>Loss_D</code>) grades the judges on how well those scores matched reality. The impersonators' coach (<code>Loss_G</code>) grades the impersonators purely on how high their scores climbed, regardless of what's true."
+        },
+        {
+          "kind": "example",
+          "icon": "📊",
+          "title": "Computing Loss_D and Loss_G",
+          "body": "<code>Loss_D</code> averages BCE across all 4 scores: real (target 1) → <code>-log(0.9)=0.11</code> and <code>-log(0.7)=0.36</code>; fake (target 0) → <code>-log(1-0.4)=0.51</code> and <code>-log(1-0.2)=0.22</code>. Average ≈ <code>0.3</code>. <code>Loss_G</code> only uses the 2 fake scores, wanting them pushed toward 1: <code>-log(0.4)=0.92</code> and <code>-log(0.2)=1.61</code>. Average ≈ <code>1.27</code>."
+        },
+        {
+          "kind": "mythbust",
+          "icon": "⚠️",
+          "title": "Same fake scores, different math",
+          "body": "You might think both networks compute the same loss from the same fake-image scores, since it's the same 4 numbers. In reality, the discriminator's math treats <code>p=0.4</code> as \"pretty good, target is 0, low-ish loss,\" while the generator's math treats that exact same <code>p=0.4</code> as \"not fooled enough, target is 1, higher loss.\" Same input number, opposite grading direction."
+        },
+        {
+          "kind": "visual",
+          "icon": "⚖️",
+          "title": "Loss_D vs. Loss_G on the Same Fakes",
+          "body": "How the two losses treat p = 0.4 and p = 0.2 differently:",
+          "compare": {
+            "left": {
+              "emoji": "🕵️",
+              "tag": "Loss_D (wants fakes caught)",
+              "text": "Target = 0 for fakes<br>Formula: -log(1-p)<br>Lower p = lower loss"
+            },
+            "right": {
+              "emoji": "🎨",
+              "tag": "Loss_G (wants fakes to fool)",
+              "text": "Target = 1 for fakes<br>Formula: -log(p)<br>Higher p = lower loss"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "type": "practice",
+      "exercises": [
+        {
+          "id": "p1",
+          "type": "multiple_choice",
+          "xp": 2,
+          "prompt": "In the worked example, the discriminator scores a fake image at p = 0.2 — barely convinced. Which statement is true?",
+          "options": [
+            {
+              "id": "a",
+              "text": "It contributes a small loss to Loss_D (target 0, good catch) but a large loss to Loss_G (target 1, bad fooling)",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "It contributes zero loss to both networks",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "It contributes a large loss to Loss_D and a small loss to Loss_G",
+              "correct": false
+            },
+            {
+              "id": "d",
+              "text": "It only affects Loss_D, since Loss_G ignores fake scores entirely",
+              "correct": false
+            }
+          ],
+          "explain": "Correct: -log(1-0.2)=0.22 for Loss_D (low), -log(0.2)=1.61 for Loss_G (high)."
+        },
+        {
+          "id": "p2",
+          "type": "true_false",
+          "xp": 2,
+          "prompt": "True or false: Loss_G is computed using the real image scores in the batch.",
+          "options": [
+            {
+              "id": "t",
+              "text": "True",
+              "correct": false
+            },
+            {
+              "id": "f",
+              "text": "False",
+              "correct": true
+            }
+          ],
+          "explain": "False. Loss_G only uses the fake-image scores — the generator never touches real images."
+        },
+        {
+          "id": "p3",
+          "type": "fill_blank",
+          "xp": 2,
+          "prompt": "Complete the sentence:",
+          "sentence": "For a fake image, Loss_D uses target 0 while Loss_G uses target ___ for that very same score.",
+          "blank": "1",
+          "words": [
+            "1",
+            "0",
+            "0.5"
+          ],
+          "explain": "Same score, opposite target: the discriminator wants to catch it (target 0), the generator wants it to pass (target 1)."
+        },
+        {
+          "id": "p4",
+          "type": "spot_the_ai",
+          "xp": 2,
+          "prompt": "Given a fake image scored p = 0.4 by the discriminator, which pair of loss contributions is correct (rounded)?",
+          "options": [
+            {
+              "id": "a",
+              "text": "Loss_D contribution ≈ 0.51, Loss_G contribution ≈ 0.92",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "Loss_D contribution ≈ 0.92, Loss_G contribution ≈ 0.51",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "Both contributions are exactly 0.40, matching the raw score",
+              "correct": false
+            }
+          ],
+          "explain": "Correct: -log(1-0.4)=0.51 for Loss_D, -log(0.4)=0.92 for Loss_G."
+        }
+      ]
+    },
+    {
+      "type": "boss",
+      "exercises": [
+        {
+          "id": "b1",
+          "type": "multiple_choice",
+          "xp": 5,
+          "prompt": "A new fake image gets discriminator score p = 0.6. Which of these correctly computes its contribution to each loss (rounded to 2 decimals)?",
+          "options": [
+            {
+              "id": "a",
+              "text": "Loss_D uses target 0: -log(1-0.6) = -log(0.4) ≈ 0.92. Loss_G uses target 1: -log(0.6) ≈ 0.51",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "Both losses equal 0.60, since that's the raw score",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "Loss_D ≈ 0.51 and Loss_G ≈ 0.92 (swapped)",
+              "correct": false
+            },
+            {
+              "id": "d",
+              "text": "Neither loss can be computed without a matching real image for comparison",
+              "correct": false
+            }
+          ],
+          "explain": "Exactly — same score, opposite grading direction, computed from formulas you now know cold. Next: let's step back and see just how unusual this entire two-loss setup really is."
+        }
+      ]
+    }
+  ]
+}

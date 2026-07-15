@@ -1,0 +1,222 @@
+{
+  "id": "u244-l4",
+  "unit": 244,
+  "day": 1224,
+  "tier": "NLP Basics",
+  "tierIcon": "🔤",
+  "title": "Compute Cost of Stacking",
+  "icon": "💸",
+  "concept": "Deep RNNs cannot process steps in parallel due to sequence dependency, so stacking layers makes training linearly slower and highly expensive.",
+  "xp": 15,
+  "hearts": 3,
+  "estMinutes": 7,
+  "segments": [
+    {
+      "type": "warmup",
+      "exercises": [
+        {
+          "id": "w1",
+          "type": "multiple_choice",
+          "xp": 1,
+          "prompt": "What is the main reason RNNs cannot easily process entire RNN sequences cannot be RNN sequences cannot be processed in parallel?",
+          "options": [
+            {
+              "id": "w_1",
+              "text": "Sequence dependency (steps rely on previous steps)",
+              "correct": true
+            },
+            {
+              "id": "w_2",
+              "text": "They are too simple to run fast",
+              "correct": false
+            },
+            {
+              "id": "w_3",
+              "correct": false,
+              "text": "They do not use memory at all"
+            }
+          ],
+          "explain": "Deep RNNs process sequence data step-by-step, meaning each step depends on the previous one. This is called sequence dependency."
+        }
+      ]
+    },
+    {
+      "type": "teach",
+      "cards": [
+        {
+          "kind": "hook",
+          "icon": "⚡",
+          "title": "The Stacking Tax",
+          "body": "We know that deep neural networks are powerful. But in the world of Recurrent Neural Networks (RNNs), stacking layers on top of each other comes with a massive, unavoidable tax on your time and electricity bill. Let's find out why!"
+        },
+        {
+          "kind": "definition",
+          "icon": "💸",
+          "title": "Compute Cost of Stacking",
+          "body": "Stacking layers in a Deep RNN means placing recurrent layers on top of each other. Because each layer relies on the output of the previous step and the layer below it, they cannot run at the same time. This sequence dependency makes training time scale up linearly with each new layer you add."
+        },
+        {
+          "kind": "analogy",
+          "icon": "🏗️",
+          "title": "The Brick Tower",
+          "body": "Imagine building a single-story brick house. To make it a double-story house (stacked layers), you must finish the ground floor before you can even start building the second floor. Because you cannot build both floors at the same time, adding layers adds a predictable, linear amount of extra waiting time!"
+        },
+        {
+          "kind": "example",
+          "icon": "⏱️",
+          "title": "Adding Up the Hours",
+          "body": "If a single-layer RNN takes 2 hours to train on your dataset, stacking 3 layers of the same size will take roughly 6 hours to train. The computer has to calculate the first layer's sequence before it can pass the results to start calculating the second, and then the third."
+        },
+        {
+          "kind": "mythbust",
+          "icon": "🛸",
+          "title": "Myth: More GPUs Solve It",
+          "body": "Many believe that buying a bigger GPU with more cores will let stacked RNN layers train simultaneously. In reality, because layer 2 physically requires the output of layer 1's step to calculate its own, even the fastest supercomputer has to wait and process them one after the other."
+        },
+        {
+          "kind": "visual",
+          "icon": "📊",
+          "title": "Single vs. Stacked Cost",
+          "body": "See how stacking layers changes the flow of computations and increases the work your hardware must do step-by-step.",
+          "compare": {
+            "right": {
+              "text": "Each layer waits for the layer below. Multiplies time and cost.",
+              "emoji": "🏢",
+              "tag": "Stacked Layers"
+            },
+            "left": {
+              "text": "Processes sequence step-by-step once. Low compute cost.",
+              "emoji": "🧱",
+              "tag": "Single Layer"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "type": "practice",
+      "exercises": [
+        {
+          "id": "p1",
+          "type": "multiple_choice",
+          "xp": 2,
+          "prompt": "Why can't stacked Deep RNN layers process all steps in parallel to save time?",
+          "options": [
+            {
+              "correct": true,
+              "text": "They are sequence-dependent and must process step-by-step.",
+              "id": "mc_1"
+            },
+            {
+              "correct": false,
+              "id": "mc_2",
+              "text": "They automatically turn off when they get too hot."
+            },
+            {
+              "id": "mc_3",
+              "correct": false,
+              "text": "They do not use math operations."
+            },
+            {
+              "id": "mc_4",
+              "correct": false,
+              "text": "They only run on computer CPUs, never GPUs."
+            }
+          ],
+          "explain": "RNNs are sequentially dependent: step 2 cannot start until step 1 finishes, and layer 2 cannot process a step until layer 1 outputs its result for that step. This prevents parallel processing."
+        },
+        {
+          "id": "p2",
+          "type": "true_false",
+          "xp": 2,
+          "prompt": "True or False: Adding more layers to an RNN makes training slower and more expensive.",
+          "options": [
+            {
+              "correct": true,
+              "text": "True",
+              "id": "tf_true"
+            },
+            {
+              "id": "tf_false",
+              "correct": false,
+              "text": "False"
+            }
+          ],
+          "explain": "Stacking layers makes training linearly slower because the upper layers must wait for the lower layers' outputs step-by-step."
+        },
+        {
+          "id": "p3",
+          "type": "fill_blank",
+          "xp": 2,
+          "prompt": "Fill in the blank to describe how training cost scales with stacked RNN layers.",
+          "sentence": "When you stack multiple RNN layers, the computational cost increases [blank] with the number of layers.",
+          "blank": "linearly",
+          "words": [
+            "linearly",
+            "exponentially",
+            "randomly"
+          ],
+          "explain": "Because each layer must wait for the one below it to finish its sequential steps, stacking $N$ layers increases the computational workload and time linearly."
+        },
+        {
+          "id": "p4",
+          "type": "spot_the_ai",
+          "xp": 2,
+          "prompt": "Which description accurately represents how a real-world stacked Deep RNN is trained?",
+          "options": [
+            {
+              "text": "Our new system trains a 10-layer RNN instantly by running all sequence steps and all layers at the exact same time.",
+              "id": "sai_1",
+              "correct": false
+            },
+            {
+              "correct": true,
+              "text": "To train our 3-layer RNN, the machine calculate step 1 for layer 1, passes it to layer 2, and repeats this sequentially.",
+              "id": "sai_2"
+            },
+            {
+              "correct": false,
+              "id": "sai_3",
+              "text": "We avoid the stacking tax by using a magic algorithm that predicts the future outputs of upper layers."
+            }
+          ],
+          "explain": "The prompt focusing on sequentially calculating step-by-step to build up the layers represents the real constraints of a Deep RNN. The option claiming they all run at once in parallel is incorrect."
+        }
+      ]
+    },
+    {
+      "type": "boss",
+      "exercises": [
+        {
+          "id": "b1",
+          "type": "multiple_choice",
+          "xp": 5,
+          "prompt": "If you decide to stack 5 RNN layers instead of using just 1 layer, what happens to the overall training time and compute cost?",
+          "options": [
+            {
+              "text": "The training cost stays the same because layers run in parallel.",
+              "id": "opt_1",
+              "correct": false
+            },
+            {
+              "id": "opt_2",
+              "text": "The training cost decreases because the network learns faster.",
+              "correct": false
+            },
+            {
+              "id": "opt_3",
+              "text": "The training cost increases linearly with the number of stacked layers.",
+              "correct": true
+            },
+            {
+              "text": "The training cost increases exponentially, making it instantly impossible.",
+              "correct": false,
+              "id": "opt_4"
+            }
+          ],
+          "explain": "Since deep RNN layers must process steps sequentially and wait for lower layers to finish, stacking $N$ layers means the total training time and compute cost scale linearly (multiply by $N$). You cannot run them in parallel."
+        }
+      ]
+    }
+  ]
+}

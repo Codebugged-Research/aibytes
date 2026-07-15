@@ -1,0 +1,222 @@
+{
+  "id": "u225-l4",
+  "unit": 225,
+  "day": 1129,
+  "tier": "NLP Basics",
+  "tierIcon": "🔤",
+  "title": "Laplace Smoothing in Naive Bayes",
+  "icon": "🧼",
+  "concept": "Adding 1 to every word count ensures that a single word not seen in a class doesn't zero out the entire document's probability calculation.",
+  "xp": 15,
+  "hearts": 3,
+  "estMinutes": 7,
+  "segments": [
+    {
+      "type": "warmup",
+      "exercises": [
+        {
+          "id": "w1",
+          "type": "multiple_choice",
+          "xp": 1,
+          "prompt": "What is the result of multiplying: 0.8 × 0.9 × 0.5 × 0?",
+          "options": [
+            {
+              "correct": true,
+              "text": "0",
+              "id": "a"
+            },
+            {
+              "correct": false,
+              "text": "100",
+              "id": "b"
+            },
+            {
+              "text": "0.5",
+              "correct": false,
+              "id": "c"
+            }
+          ],
+          "explain": "In math, multiplying any sequence of numbers by zero always results in zero, regardless of how large the other numbers are."
+        }
+      ]
+    },
+    {
+      "type": "teach",
+      "cards": [
+        {
+          "kind": "hook",
+          "icon": "🚨",
+          "title": "The Power of Zero",
+          "body": "Imagine writing a perfect spam filter. It works great until it sees the word 'Bargain' in a safe email. Because it has only seen 'Bargain' in spam emails before, it immediately multiplies the entire probability by zero and labels the safe email as 100% spam! One unseen word can break the whole system. Let's learn how to fix this with a little 'smoothing'."
+        },
+        {
+          "kind": "definition",
+          "icon": "🧼",
+          "title": "What is Laplace Smoothing?",
+          "body": "Laplace Smoothing is a technique in Naive Bayes where we add a small number (usually 1) to the count of every possible word. This prevents the model from calculating a 0% probability for documents that contain words it hasn't seen in a specific category before."
+        },
+        {
+          "kind": "analogy",
+          "icon": "🍕",
+          "title": "The New Food Critic",
+          "body": "Imagine a food critic who has never tried pineapple pizza. If they rate it 'zero percent', they might decide the entire restaurant is completely terrible, ignoring the amazing pasta. Laplace Smoothing is like giving every dish a baseline rating of at least 1 star. This way, one unfamiliar ingredient doesn't ruin the restaurant's entire score!"
+        },
+        {
+          "kind": "example",
+          "icon": "📩",
+          "title": "The Danger of Zero",
+          "body": "Suppose your spam filter has never seen the word 'Jackpot' in a friendly email. Without smoothing, the probability of 'Jackpot' in a friendly email is 0. If you receive a friendly email saying 'Hey, I won the jackpot!', the entire email's friendly probability gets multiplied by 0 and becomes 0. With smoothing, the count of 'Jackpot' becomes 1 instead of 0, keeping the calculation alive!"
+        },
+        {
+          "kind": "mythbust",
+          "icon": "🕵️",
+          "title": "Is It Cheating?",
+          "body": "People often think Laplace Smoothing cheats by making up fake data. In reality, it is a smart safety net. It doesn't change which emails are spam; it just prevents the math from breaking down when the model encounters words it hasn't seen in a specific category yet."
+        },
+        {
+          "kind": "visual",
+          "icon": "📊",
+          "title": "Smoothing in Action",
+          "body": "Compare how Naive Bayes handles a new word with and without Laplace Smoothing. Without smoothing, one new word destroys the whole prediction.",
+          "compare": {
+            "left": {
+              "text": "Probability of 'Bonus' = 0. Final score is multiplied by 0. Result: 0% chance of being a safe email.",
+              "tag": "No Smoothing",
+              "emoji": "⚠️"
+            },
+            "right": {
+              "emoji": "🧼",
+              "text": "Probability of 'Bonus' = 1/Total. Final score is multiplied by a tiny number. Result: Safe email!",
+              "tag": "With Smoothing"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "type": "practice",
+      "exercises": [
+        {
+          "id": "p1",
+          "type": "multiple_choice",
+          "xp": 2,
+          "prompt": "Why does a single word with a 0% probability ruin the entire calculation in Naive Bayes?",
+          "options": [
+            {
+              "id": "a",
+              "correct": false,
+              "text": "We add them together, so zero doesn't hurt."
+            },
+            {
+              "correct": true,
+              "id": "b",
+              "text": "We multiply them together, so a single zero makes the total zero."
+            },
+            {
+              "text": "We subtract them, which makes the result negative.",
+              "id": "c",
+              "correct": false
+            },
+            {
+              "text": "We divide them, which causes a crash.",
+              "id": "d",
+              "correct": false
+            }
+          ],
+          "explain": "Naive Bayes calculates the final score by multiplying the probabilities of all words. If any single word has a probability of 0, the final multiplied result becomes 0."
+        },
+        {
+          "id": "p2",
+          "type": "true_false",
+          "xp": 2,
+          "prompt": "True or False: Laplace Smoothing guarantees that every word has a probability greater than zero.",
+          "options": [
+            {
+              "text": "True",
+              "correct": true,
+              "id": "t"
+            },
+            {
+              "text": "False",
+              "id": "f",
+              "correct": false
+            }
+          ],
+          "explain": "Laplace Smoothing is applied to all words in the dictionary, ensuring even unseen words get a tiny, non-zero probability."
+        },
+        {
+          "id": "p3",
+          "type": "fill_blank",
+          "xp": 2,
+          "prompt": "Fill in the blank to complete the explanation of why we need smoothing.",
+          "sentence": "Multiplying by a probability of [blank] will wipe out the entire calculation.",
+          "blank": "zero",
+          "words": [
+            "zero",
+            "one",
+            "half"
+          ],
+          "explain": "In Naive Bayes, probabilities are multiplied together. If one word has a probability of zero, multiplying by it makes the entire result zero, ignoring all other words."
+        },
+        {
+          "id": "p4",
+          "type": "spot_the_ai",
+          "xp": 2,
+          "prompt": "Which action shows Laplace Smoothing being applied to a word count list?",
+          "options": [
+            {
+              "text": "Remove the unseen word from the email entirely.",
+              "id": "a",
+              "correct": false
+            },
+            {
+              "text": "Add 1 to the count of every word in the vocabulary.",
+              "id": "b",
+              "correct": true
+            },
+            {
+              "id": "c",
+              "correct": false,
+              "text": "Multiply all the counts by 10."
+            }
+          ],
+          "explain": "Adding 1 to every count (Laplace Smoothing) is the standard technique to ensure no word has a zero probability, keeping our math stable."
+        }
+      ]
+    },
+    {
+      "type": "boss",
+      "exercises": [
+        {
+          "id": "b1",
+          "type": "multiple_choice",
+          "xp": 5,
+          "prompt": "You are building a spam filter and notice that a new email containing the word 'Zucchini' is immediately marked as safe just because 'Zucchini' never appeared in your spam training data. How does Laplace Smoothing fix this bug?",
+          "options": [
+            {
+              "id": "a",
+              "text": "It deletes all words that only appear once in your training emails.",
+              "correct": false
+            },
+            {
+              "id": "b",
+              "text": "It adds 1 to all word counts so no probability drops to exactly zero.",
+              "correct": true
+            },
+            {
+              "id": "c",
+              "correct": false,
+              "text": "It automatically translates spam emails into different languages."
+            },
+            {
+              "correct": false,
+              "id": "d",
+              "text": "It forces every email to have an equal chance of being spam."
+            }
+          ],
+          "explain": "Laplace Smoothing adds 1 to every word count so that we never multiply by a 0% probability. This prevents a single unseen word from wiping out all other clues in a document."
+        }
+      ]
+    }
+  ]
+}

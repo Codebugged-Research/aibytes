@@ -1,0 +1,222 @@
+{
+  "id": "u238-l2",
+  "unit": 238,
+  "day": 1192,
+  "tier": "NLP Basics",
+  "tierIcon": "🔤",
+  "title": "Accumulating Gradients Over Time",
+  "icon": "📈",
+  "concept": "Gradients are calculated at each time step and summed backward through the unrolled chain to update the shared weights.",
+  "xp": 15,
+  "hearts": 3,
+  "estMinutes": 7,
+  "segments": [
+    {
+      "type": "warmup",
+      "exercises": [
+        {
+          "id": "w1",
+          "type": "multiple_choice",
+          "xp": 1,
+          "prompt": "What does 'accumulating gradients' mean in the context of training recurrent networks?",
+          "options": [
+            {
+              "id": "a",
+              "correct": true,
+              "text": "Summing gradients over time steps"
+            },
+            {
+              "text": "Deleting gradients after one step",
+              "correct": false,
+              "id": "b"
+            },
+            {
+              "correct": false,
+              "text": "Using different weights for every step",
+              "id": "c"
+            }
+          ],
+          "explain": "When we unroll an RNN, we apply the same weights at step 1, step 2, and so on. Accumulating gradients means adding them up to update these shared weights."
+        }
+      ]
+    },
+    {
+      "type": "teach",
+      "cards": [
+        {
+          "kind": "hook",
+          "icon": "📈",
+          "title": "Remembering Every Mistake",
+          "body": "When a neural network processes a sequence over time, it reuses the same brain (weights) at every single step. But how does it learn from its mistakes across the entire timeline? It accumulates gradients over time!"
+        },
+        {
+          "kind": "definition",
+          "icon": "⚙️",
+          "title": "Accumulating Gradients",
+          "body": "In Recurrent Neural Networks (RNNs), the same weights are reused at every time step. To train them, we calculate how much error occurred at each step, find the gradient (direction to improve) for each step, and sum them all up. This total sum is used to update our shared weights. This process is called Backpropagation Through Time (BPTT)."
+        },
+        {
+          "kind": "analogy",
+          "icon": "🏃",
+          "title": "The Shared Coach",
+          "body": "Imagine a relay race where a single baton is passed forward, but at the end of the race, runners pass feedback back to the start. Instead of each runner having their own unique training coach, there is only one Coach (the shared weights) who gets a note from every single runner. The Coach sums up all these notes to decide how to train for the next race."
+        },
+        {
+          "kind": "example",
+          "icon": "📝",
+          "title": "Predicting Word by Word",
+          "body": "Suppose you are predicting the next word in the sentence 'AI is fun'. At step 1 ('AI'), the network makes a small error. At step 2 ('is'), it makes another error. The network calculates the gradient for step 1 and step 2, adds them together, and updates the shared weight matrix once at the end of the sequence."
+        },
+        {
+          "kind": "mythbust",
+          "icon": "🛡️",
+          "title": "Myth: Unique Weights per Step",
+          "body": "Many people think that because an RNN has many time steps, it has different weights for each step. In reality, the weights are shared! The network simply adds up the gradients from all time steps to make a single, smart adjustment to those shared weights."
+        },
+        {
+          "kind": "visual",
+          "icon": "📊",
+          "title": "Comparing Weight Updates",
+          "body": "Let's look at how weights are updated in standard networks versus recurrent networks over time.",
+          "compare": {
+            "right": {
+              "tag": "Recurrent (BPTT)",
+              "text": "Weights are shared across time. Gradients from all steps are summed together to update the same weights.",
+              "emoji": "🔄"
+            },
+            "left": {
+              "text": "Each layer has its own unique weights. Gradients update each layer's weights independently.",
+              "tag": "Standard Feedforward",
+              "emoji": "🌱"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "type": "practice",
+      "exercises": [
+        {
+          "id": "p1",
+          "type": "multiple_choice",
+          "xp": 2,
+          "prompt": "Why do we accumulate (sum) gradients across all time steps in an RNN?",
+          "options": [
+            {
+              "correct": true,
+              "id": "a",
+              "text": "Because the weights are shared across all time steps."
+            },
+            {
+              "id": "b",
+              "correct": false,
+              "text": "Because gradients disappear if we do not add them."
+            },
+            {
+              "text": "To make the network run faster without using memory.",
+              "correct": false,
+              "id": "c"
+            },
+            {
+              "id": "d",
+              "text": "To ensure the sequence length never changes.",
+              "correct": false
+            }
+          ],
+          "explain": "Since the same weights are used at every step of the sequence, we must combine the gradients from all steps (by summing them) to update these shared weights."
+        },
+        {
+          "id": "p2",
+          "type": "true_false",
+          "xp": 2,
+          "prompt": "True or False: Backpropagation Through Time (BPTT) requires summing up gradients from different time steps to update the shared weights.",
+          "options": [
+            {
+              "text": "True",
+              "id": "t",
+              "correct": true
+            },
+            {
+              "id": "f",
+              "text": "False",
+              "correct": false
+            }
+          ],
+          "explain": "BPTT unrolls the network over time steps, calculates gradients for each step, and sums them to update the shared weights."
+        },
+        {
+          "id": "p3",
+          "type": "fill_blank",
+          "xp": 2,
+          "prompt": "Fill in the missing word to describe how gradients are combined in BPTT.",
+          "sentence": "Gradients calculated at each time step are [blank] together to update the shared weights.",
+          "blank": "summed",
+          "words": [
+            "summed",
+            "multiplied",
+            "ignored"
+          ],
+          "explain": "Because the same weights are shared across all time steps, the gradients from each step are summed together to perform the final update."
+        },
+        {
+          "id": "p4",
+          "type": "spot_the_ai",
+          "xp": 2,
+          "prompt": "Which of these describes the correct way an AI model accumulates gradients over time?",
+          "options": [
+            {
+              "correct": true,
+              "text": "An AI that sums the gradients from all steps to update the shared weights.",
+              "id": "a"
+            },
+            {
+              "correct": false,
+              "id": "b",
+              "text": "An AI that multiplies the gradients of each step together to scale the weights."
+            },
+            {
+              "id": "c",
+              "correct": false,
+              "text": "An AI that creates brand new weights for every step and updates them separately."
+            }
+          ],
+          "explain": "Option B is incorrect because we sum the gradients, not multiply them. Option C is incorrect because weights are shared, not unique. Option A correctly describes accumulating gradients at each step for the shared weights."
+        }
+      ]
+    },
+    {
+      "type": "boss",
+      "exercises": [
+        {
+          "id": "b1",
+          "type": "multiple_choice",
+          "xp": 5,
+          "prompt": "You are designing a recurrent network to analyze a sequence of 5 time steps. How does the network use backpropagation through time to update its shared weights?",
+          "options": [
+            {
+              "text": "We calculate gradients at each step and sum them together to update the shared weights.",
+              "correct": true,
+              "id": "a"
+            },
+            {
+              "id": "b",
+              "correct": false,
+              "text": "We discard all gradients except for the very last step's gradient."
+            },
+            {
+              "text": "We train separate weights for each time step in the sequence.",
+              "correct": false,
+              "id": "c"
+            },
+            {
+              "text": "We multiply the weights at each step by the time index.",
+              "id": "d",
+              "correct": false
+            }
+          ],
+          "explain": "When backpropagating through time, we calculate the gradients at each unrolled step. Because the exact same weights are used at every step, we sum (or accumulate) these individual gradients to make a single update to the shared weights."
+        }
+      ]
+    }
+  ]
+}

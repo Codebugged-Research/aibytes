@@ -1,0 +1,223 @@
+{
+  "id": "u247-l2",
+  "unit": 247,
+  "day": 1237,
+  "tier": "NLP Basics",
+  "tierIcon": "🔤",
+  "title": "Pooling Hidden States",
+  "icon": "📥",
+  "concept": "We map the final step's hidden state (which contains context for the whole text) or average all states to make the classification decision.",
+  "xp": 15,
+  "hearts": 3,
+  "estMinutes": 7,
+  "segments": [
+    {
+      "type": "warmup",
+      "exercises": [
+        {
+          "id": "w1",
+          "type": "multiple_choice",
+          "xp": 1,
+          "prompt": "What are hidden states in a text-processing neural network?",
+          "options": [
+            {
+              "correct": false,
+              "id": "a",
+              "text": "The raw text input strings"
+            },
+            {
+              "correct": true,
+              "id": "b",
+              "text": "The internal memory vectors that represent context"
+            },
+            {
+              "text": "The final output labels like 'Spam' or 'Not Spam'",
+              "correct": false,
+              "id": "c"
+            }
+          ],
+          "explain": "Hidden states are the internal memory vectors that a neural network keeps as it reads through a sequence of text."
+        }
+      ]
+    },
+    {
+      "type": "teach",
+      "cards": [
+        {
+          "kind": "hook",
+          "icon": "🔍",
+          "title": "From Many to One",
+          "body": "Text models process words one by one, creating a hidden state for each word. But how do we make a final decision, like classifying a whole email as spam, when we have a long chain of hidden states? We pool them together!"
+        },
+        {
+          "kind": "definition",
+          "icon": "📥",
+          "title": "What is Pooling?",
+          "body": "Pooling hidden states means taking the high-dimensional memory states from our text model and combining or selecting them into a single summary vector. This summary represents the entire sentence's meaning for our final decision maker."
+        },
+        {
+          "kind": "analogy",
+          "icon": "📖",
+          "title": "The Book Reviewer",
+          "body": "Imagine reading a short story. Instead of trying to remember every single word when you write a book review, you just write down the final summary in your head, or take the average vibe of all the chapters. Pooling is like taking that final summary to make your final choice."
+        },
+        {
+          "kind": "example",
+          "icon": "🎬",
+          "title": "Sentiment Scoring",
+          "body": "If we analyze the sentence 'I love this movie!', the model produces a hidden state for each word. We can use 'Last-Step Pooling' to grab only the final state (which has processed all words), or 'Mean Pooling' to average the states of all four words together. Both give us a single vector to predict a positive sentiment."
+        },
+        {
+          "kind": "mythbust",
+          "icon": "🚫",
+          "title": "The Hidden State Hoard",
+          "body": "Many believe we must always save and use every single hidden state individually to classify text. In reality, classifiers need a single fixed-size input, so we must pool (summarize) those states first!"
+        },
+        {
+          "kind": "visual",
+          "icon": "📊",
+          "title": "Pooling Methods",
+          "body": "Compare the two main ways we pool hidden states from a text sequence to make a decision.",
+          "compare": {
+            "right": {
+              "text": "Calculates the average of all hidden states across every word in the sentence.",
+              "tag": "Mean Pooling",
+              "emoji": "🧮"
+            },
+            "left": {
+              "text": "Grabs the very last hidden state, representing the accumulated context at the end of the sentence.",
+              "emoji": "🏁",
+              "tag": "Last-Step Pooling"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "type": "practice",
+      "exercises": [
+        {
+          "id": "p1",
+          "type": "multiple_choice",
+          "xp": 2,
+          "prompt": "Why is the final step's hidden state often chosen for pooling?",
+          "options": [
+            {
+              "text": "It only looks at the very first word.",
+              "correct": false,
+              "id": "a"
+            },
+            {
+              "correct": true,
+              "id": "b",
+              "text": "It uses the final state because it contains context from the whole text."
+            },
+            {
+              "id": "c",
+              "text": "It randomly throws away half of the words.",
+              "correct": false
+            },
+            {
+              "id": "d",
+              "text": "It ignores all hidden states entirely.",
+              "correct": false
+            }
+          ],
+          "explain": "Last-step pooling looks at the very final state of the sequence, which has already processed all previous words and carries the accumulated context."
+        },
+        {
+          "id": "p2",
+          "type": "true_false",
+          "xp": 2,
+          "prompt": "Pooling hidden states helps convert a sequence of word states into a single summary vector for classification.",
+          "options": [
+            {
+              "correct": true,
+              "id": "true",
+              "text": "True"
+            },
+            {
+              "correct": false,
+              "id": "false",
+              "text": "False"
+            }
+          ],
+          "explain": "Pooling is essential because classification layers expect a single, fixed-size representation of the input text, not an arbitrary length sequence of states."
+        },
+        {
+          "id": "p3",
+          "type": "fill_blank",
+          "xp": 2,
+          "prompt": "Fill in the missing word to describe how mean pooling combines hidden states.",
+          "sentence": "Mean pooling works by taking the hidden states of all steps and finding their average.",
+          "blank": "average",
+          "words": [
+            "maximum",
+            "average",
+            "difference",
+            "sum"
+          ],
+          "explain": "Mean pooling calculates the mathematical average of all hidden states in the sequence."
+        },
+        {
+          "id": "p4",
+          "type": "spot_the_ai",
+          "xp": 2,
+          "prompt": "Which AI model correctly implements a pooling strategy to classify a sentence?",
+          "options": [
+            {
+              "correct": false,
+              "id": "a",
+              "text": "AI Model A: Feeds the raw sequence of 20 separate hidden states directly into a single classification node."
+            },
+            {
+              "correct": true,
+              "id": "b",
+              "text": "AI Model B: Averages the 20 hidden states into one single summary vector before feeding it to the classifier."
+            },
+            {
+              "correct": false,
+              "id": "c",
+              "text": "AI Model C: Deletes all 20 hidden states and uses a random number generator to classify the text."
+            }
+          ],
+          "explain": "AI Model B successfully uses pooling to summarize the sequence of states into a single vector, which is required for standard classifier layers. Model A incorrectly feeds the raw sequence directly without pooling."
+        }
+      ]
+    },
+    {
+      "type": "boss",
+      "exercises": [
+        {
+          "id": "b1",
+          "type": "multiple_choice",
+          "xp": 5,
+          "prompt": "Why do we need a pooling step before sending hidden states to the final classification layer?",
+          "options": [
+            {
+              "text": "It doubles the number of hidden states to make the network larger.",
+              "correct": false,
+              "id": "a"
+            },
+            {
+              "correct": true,
+              "id": "b",
+              "text": "It condenses all hidden states into a single vector for the classifier."
+            },
+            {
+              "id": "c",
+              "text": "It deletes the entire sequence to save memory.",
+              "correct": false
+            },
+            {
+              "correct": false,
+              "id": "d",
+              "text": "It translates the text into another language first."
+            }
+          ],
+          "explain": "Pooling acts like a filter or summarizer, condensing all the deep patterns hidden in the sequence's states down to one single vector so the final classifier can make a clear decision."
+        }
+      ]
+    }
+  ]
+}

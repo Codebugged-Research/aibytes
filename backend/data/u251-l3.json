@@ -1,0 +1,222 @@
+{
+  "id": "u251-l3",
+  "unit": 251,
+  "day": 1258,
+  "tier": "NLP Basics",
+  "tierIcon": "🔤",
+  "title": "Assembling the Model: Embedding to Dense",
+  "icon": "🏗️",
+  "concept": "Building the network: embedding lookup layer -> LSTM/GRU layer -> global pooling -> dense classification head.",
+  "xp": 15,
+  "hearts": 3,
+  "estMinutes": 7,
+  "segments": [
+    {
+      "type": "warmup",
+      "exercises": [
+        {
+          "id": "w1",
+          "type": "multiple_choice",
+          "xp": 1,
+          "prompt": "What does an Embedding layer output when you feed into the next layer of the network?",
+          "options": [
+            {
+              "text": "Vector representations of words",
+              "correct": true,
+              "id": "v"
+            },
+            {
+              "text": "The final classification label",
+              "id": "w",
+              "correct": false
+            },
+            {
+              "id": "x",
+              "correct": false,
+              "text": "A single summed number"
+            }
+          ],
+          "explain": "An Embedding layer is designed to convert discrete word IDs (like index 42) into continuous vector representations."
+        }
+      ]
+    },
+    {
+      "type": "teach",
+      "cards": [
+        {
+          "kind": "hook",
+          "icon": "⚡",
+          "title": "Putting It All Together",
+          "body": "We have learned how words become vectors, how LSTMs read sequences, and how pooling summarizes them. Now, it's time to put all these pieces together! Let's build a complete, working pipeline that goes from raw words to final predictions."
+        },
+        {
+          "kind": "definition",
+          "icon": "🏗️",
+          "title": "Assembling the Network",
+          "body": "An NLP classification pipeline connects multiple layers in a specific order: an Embedding layer turns word IDs into vectors, an LSTM/GRU layer tracks the sequence of words, a Global Pooling layer shrinks the sequence into a single summary vector, and a Dense layer outputs the final classification decision."
+        },
+        {
+          "kind": "analogy",
+          "icon": "🧱",
+          "title": "The Lego Tower",
+          "body": "Imagine building a Lego tower. First, you pick your special base blocks (Embedding), then you stack flexible connectors that build up a story (LSTM), shrink it down to a single sturdy roof piece (Pooling), and finally put the final flag on top to show what kind of building it is (Dense classification head). Each layer does one job to transform raw plastic into a finished toy."
+        },
+        {
+          "kind": "example",
+          "icon": "📝",
+          "title": "Step-by-Step flow",
+          "body": "Let's trace the sentence \"I love coding\" through our assembled model:\n1. 'I', 'love', 'coding' become vectors via Embedding.\n2. LSTM processes them one by one, keeping track of the sentence flow.\n3. Global Max Pooling grabs the strongest signals from the LSTM output.\n4. The Dense layer looks at this summary and outputs \"Positive\" (1)."
+        },
+        {
+          "kind": "mythbust",
+          "icon": "👾",
+          "title": "The Missing Link",
+          "body": "Many beginners think you can just plug an LSTM directly into a Dense classifier. But LSTMs output a sequence of vectors (one for every word). If you don't use a Pooling layer first to shrink this sequence down, the Dense layer won't know how to handle inputs of different sentence lengths!"
+        },
+        {
+          "kind": "visual",
+          "icon": "⚖️",
+          "title": "Processing vs. Classifying",
+          "body": "Let's compare the role of the sequential processor (LSTM) versus the final decision maker (Dense Head).",
+          "compare": {
+            "right": {
+              "tag": "Dense Head",
+              "text": "Takes the summarized sequence and maps it directly to class probabilities (like positive/negative).",
+              "emoji": "🎯"
+            },
+            "left": {
+              "tag": "LSTM/GRU Layer",
+              "emoji": "🔄",
+              "text": "Processes words one-by-one to capture context, flow, and order. Outputs a sequence."
+            }
+          }
+        }
+      ]
+    },
+    {
+      "type": "practice",
+      "exercises": [
+        {
+          "id": "p1",
+          "type": "multiple_choice",
+          "xp": 2,
+          "prompt": "Why is the Embedding layer placed at the very beginning of our text classification model?",
+          "options": [
+            {
+              "correct": true,
+              "text": "It translates raw word ID numbers into word vectors.",
+              "id": "a"
+            },
+            {
+              "text": "It makes the final decision on the classification.",
+              "correct": false,
+              "id": "b"
+            },
+            {
+              "correct": false,
+              "id": "c",
+              "text": "It shrinks the entire sentence into one single vector."
+            },
+            {
+              "correct": false,
+              "id": "d",
+              "text": "It memorizes long-term dependencies."
+            }
+          ],
+          "explain": "The Embedding layer must always come first to translate raw token index numbers into continuous word vectors that neural network layers can understand."
+        },
+        {
+          "id": "p2",
+          "type": "true_false",
+          "xp": 2,
+          "prompt": "True or False: We need a pooling layer between the LSTM and the Dense layer to shrink the sequence into a single, fixed-size vector.",
+          "options": [
+            {
+              "id": "true",
+              "correct": true,
+              "text": "True"
+            },
+            {
+              "correct": false,
+              "id": "false",
+              "text": "False"
+            }
+          ],
+          "explain": "A Dense layer expects a fixed-size vector input. Without pooling (or flattening), the sequence length from the LSTM varies depending on the sentence length, which will cause errors in the Dense layer."
+        },
+        {
+          "id": "p3",
+          "type": "fill_blank",
+          "xp": 2,
+          "prompt": "Fill in the missing layer that connects the sequential output to the classifier:",
+          "sentence": "Embedding -> LSTM -> Global [blank] -> Dense",
+          "blank": "Pooling",
+          "words": [
+            "Pooling",
+            "Activation",
+            "Dropout"
+          ],
+          "explain": "Global Pooling acts as the bridge by compressing the variable-length sequence output of the LSTM into a single fixed-size vector for the Dense layer."
+        },
+        {
+          "id": "p4",
+          "type": "spot_the_ai",
+          "xp": 2,
+          "prompt": "Which of these model architectures is assembled correctly for text classification?",
+          "options": [
+            {
+              "id": "ai_a",
+              "text": "Option A: Input -> Embedding -> Dense -> LSTM -> Global Pooling",
+              "correct": false
+            },
+            {
+              "correct": true,
+              "text": "Option B: Input -> Embedding -> LSTM -> Global Pooling -> Dense",
+              "id": "human"
+            },
+            {
+              "correct": false,
+              "text": "Option C: Input -> Dense -> Global Pooling -> LSTM -> Embedding",
+              "id": "ai_b"
+            }
+          ],
+          "explain": "Only Option B lists the layers in the logical sequence of representation, processing, summarization, and decision-making. Option A and C place the classification head (Dense) before the sequence is even summarized."
+        }
+      ]
+    },
+    {
+      "type": "boss",
+      "exercises": [
+        {
+          "id": "b1",
+          "type": "multiple_choice",
+          "xp": 5,
+          "prompt": "You are building a neural network to classify movie reviews. What is the correct order of layers to process the raw word IDs into a final sentiment prediction?",
+          "options": [
+            {
+              "id": "correct",
+              "text": "Embedding -> LSTM -> Global Pooling -> Dense",
+              "correct": true
+            },
+            {
+              "text": "Dense -> Global Pooling -> LSTM -> Embedding",
+              "id": "wrong1",
+              "correct": false
+            },
+            {
+              "id": "wrong2",
+              "correct": false,
+              "text": "Embedding -> Dense -> LSTM -> Global Pooling"
+            },
+            {
+              "id": "wrong3",
+              "correct": false,
+              "text": "LSTM -> Embedding -> Global Pooling -> Dense"
+            }
+          ],
+          "explain": "To build an NLP classification model, the text must first be converted to dense vectors (Embedding), processed sequentially (LSTM/GRU), compressed to summarize the sequence (Pooling), and finally mapped to the target classes (Dense classification head)."
+        }
+      ]
+    }
+  ]
+}

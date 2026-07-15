@@ -1,0 +1,222 @@
+{
+  "id": "u205-l3",
+  "unit": 205,
+  "day": 1028,
+  "tier": "Generative Adversarial Networks",
+  "tierIcon": "🚧",
+  "title": "No Single 'Loss Going Down' to Watch",
+  "icon": "🎯",
+  "concept": "Unlike normal training where a dropping loss curve means progress, GAN loss curves can bounce around even while the generator is genuinely improving, which makes it hard to tell from the numbers alone whether training is working.",
+  "xp": 15,
+  "hearts": 3,
+  "estMinutes": 7,
+  "segments": [
+    {
+      "type": "warmup",
+      "exercises": [
+        {
+          "id": "w1",
+          "type": "multiple_choice",
+          "xp": 1,
+          "prompt": "Recap: what happens if the discriminator gets too good too fast?",
+          "options": [
+            {
+              "id": "a",
+              "text": "The generator stops getting a useful gradient signal, because the discriminator rejects everything with near-total confidence",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "The discriminator automatically fixes the generator's weights",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "Training speeds up because the discriminator no longer needs updates",
+              "correct": false
+            }
+          ],
+          "explain": "Right. Today's problem: even watching the loss numbers closely doesn't clearly reveal when this — or real progress — is happening."
+        }
+      ]
+    },
+    {
+      "type": "teach",
+      "cards": [
+        {
+          "kind": "hook",
+          "icon": "🎯",
+          "title": "So... is it working?",
+          "body": "With a classifier, you glance at the loss curve and know instantly: down is good, flat means stuck. With a GAN, you can stare at both loss curves bouncing up and down for a while and genuinely not know whether training is going well."
+        },
+        {
+          "kind": "definition",
+          "icon": "📊",
+          "title": "Loss curves that don't settle",
+          "body": "Because the generator's loss and the discriminator's loss pull against each other, both numbers can oscillate — rise, fall, spike, dip — throughout training, even during stretches where the generator's actual output is steadily getting more realistic."
+        },
+        {
+          "kind": "analogy",
+          "icon": "⛵",
+          "title": "Tacking a sailboat upwind",
+          "body": "A sailboat can't sail straight into the wind, so it zigzags — heading swings left, then right, then left again, constantly changing. Someone glancing only at the compass would think the boat is lost or going nowhere. But zoom out, and the boat is steadily closing in on its destination. GAN loss curves zigzag the same way: the moment-to-moment number bounces, but the actual images can still be marching toward better quality."
+        },
+        {
+          "kind": "example",
+          "icon": "📉",
+          "title": "A concrete case",
+          "body": "Picture a generator loss that goes 2.1 → 1.4 → 2.6 → 1.1 → 2.3 across five checkpoints. On a classifier, that pattern would scream \"broken, not learning.\" On a GAN, that same jagged pattern can appear <strong>while the generated images are visibly improving</strong> checkpoint to checkpoint — because every dip and spike is partly just a reaction to the discriminator changing too."
+        },
+        {
+          "kind": "mythbust",
+          "icon": "⚠️",
+          "title": "\"Doesn't a rising loss always mean it's getting worse?\"",
+          "body": "With single-loss training, yes. With a GAN, a rising generator loss might just mean the discriminator briefly got sharper — not that the generator's actual images got worse. The two numbers react to each other, so neither one alone tells you the full story."
+        },
+        {
+          "kind": "visual",
+          "icon": "🔀",
+          "title": "Compare",
+          "body": "What the two training styles look like on a chart:",
+          "compare": {
+            "left": {
+              "emoji": "📉",
+              "tag": "Normal Training",
+              "text": "Loss curve drops steadily<br>Down = progress<br>Flat = stuck"
+            },
+            "right": {
+              "emoji": "🎢",
+              "tag": "GAN Training",
+              "text": "Curves bounce and oscillate<br>Bounce ≠ broken<br>Numbers react to each other"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "type": "practice",
+      "exercises": [
+        {
+          "id": "p1",
+          "type": "multiple_choice",
+          "xp": 2,
+          "prompt": "Why can a GAN's loss curves bounce around even while the generator is genuinely improving?",
+          "options": [
+            {
+              "id": "a",
+              "text": "The generator's and discriminator's losses react to each other, so a rising or falling number can just reflect the opponent changing, not real progress or regress",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "The loss values are recorded incorrectly by the training software",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "GAN loss curves are actually random numbers with no meaning at all",
+              "correct": false
+            },
+            {
+              "id": "d",
+              "text": "Bouncing only happens when the dataset is corrupted",
+              "correct": false
+            }
+          ],
+          "explain": "Right — the two losses are entangled, so a bounce doesn't automatically mean something is broken."
+        },
+        {
+          "id": "p2",
+          "type": "true_false",
+          "xp": 2,
+          "prompt": "True or false: in GAN training, a rising loss number always means the generator's output quality is getting worse.",
+          "options": [
+            {
+              "id": "t",
+              "text": "True",
+              "correct": false
+            },
+            {
+              "id": "f",
+              "text": "False",
+              "correct": true
+            }
+          ],
+          "explain": "False — a rising generator loss can just reflect the discriminator briefly sharpening, not the generator's images getting worse."
+        },
+        {
+          "id": "p3",
+          "type": "fill_blank",
+          "xp": 2,
+          "prompt": "Complete the sentence:",
+          "sentence": "Watching a bouncing GAN loss curve is like watching a sailboat's compass heading zigzag while tacking upwind — the heading swings, but the boat can still be steadily ___ its destination.",
+          "blank": "approaching",
+          "words": [
+            "approaching",
+            "ignoring",
+            "forgetting"
+          ],
+          "explain": "The zigzag is expected; the boat (and the generator) can still be making real progress underneath it."
+        },
+        {
+          "id": "p4",
+          "type": "spot_the_ai",
+          "xp": 2,
+          "prompt": "Which situation best illustrates why you can't judge GAN progress from a single dropping loss curve?",
+          "options": [
+            {
+              "id": "a",
+              "text": "The generator's loss goes 2.1 → 1.4 → 2.6 → 1.1 → 2.3 across checkpoints, while the actual generated images keep looking more realistic",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "A classifier's loss drops smoothly from 0.9 to 0.1 while its accuracy climbs from 60% to 95%",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "A regression model's loss steadily decreases each epoch",
+              "correct": false
+            }
+          ],
+          "explain": "A jagged loss curve alongside genuinely improving images is exactly the disconnect that makes GAN loss numbers unreliable on their own."
+        }
+      ]
+    },
+    {
+      "type": "boss",
+      "exercises": [
+        {
+          "id": "b1",
+          "type": "multiple_choice",
+          "xp": 5,
+          "prompt": "Both loss curves can bounce around even during real progress. If loss numbers alone aren't reliable, what's a natural next question about how GAN training is actually evaluated in practice?",
+          "options": [
+            {
+              "id": "a",
+              "text": "What else can you look at, besides the loss numbers, to judge whether a GAN is actually improving?",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "How do you make loss curves illegal in GAN training?",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "How can you convert the loss number into a temperature in Celsius?",
+              "correct": false
+            },
+            {
+              "id": "d",
+              "text": "How many discriminators does a GAN legally require?",
+              "correct": false
+            }
+          ],
+          "explain": "Exactly — next lesson: how practitioners actually judge GAN progress day to day."
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,208 @@
+{
+  "concept": "Weight clipping can limit model capacity; WGAN-GP improves stability by penalizing the critic if its gradient norm deviates from 1.",
+  "estMinutes": 7,
+  "segments": [
+    {
+      "exercises": [
+        {
+          "options": [
+            {
+              "id": "w_clip_good",
+              "text": "It makes the model learn complex details faster and better",
+              "correct": false
+            },
+            {
+              "correct": true,
+              "id": "w_clip_bad",
+              "text": "It severely limits the model capacity, making it hard to learn complex images"
+            },
+            {
+              "id": "w_clip_none",
+              "text": "It has no effect on the training stability of WGANs",
+              "correct": false
+            }
+          ],
+          "type": "multiple_choice",
+          "explain": "Before WGAN-GP, standard WGAN used weight clipping, which simply forced weights into a tiny box and limited how smart the model could get.",
+          "xp": 1,
+          "prompt": "What is the main drawback of standard WGAN's weight clipping?",
+          "id": "wgan_gp_warmup_1"
+        }
+      ],
+      "type": "warmup"
+    },
+    {
+      "cards": [
+        {
+          "icon": "🐶",
+          "kind": "hook",
+          "body": "Imagine putting a leash on a puppy. If you pull too hard, it can't move. In WGAN, we clipped weights to keep things stable, but it made our Critic too simple to learn details. WGAN-GP solves this!",
+          "title": "Unleashing the Critic"
+        },
+        {
+          "icon": "🔧",
+          "title": "What is WGAN-GP?",
+          "kind": "definition",
+          "body": "WGAN-GP (Wasserstein GAN with Gradient Penalty) replaces weight clipping. Instead of capping weights, it adds a penalty to the training loss if the Critic's gradients deviate too far from a target speed (a norm of 1)."
+        },
+        {
+          "title": "The Cruise Control Analogy",
+          "icon": "🚗",
+          "kind": "analogy",
+          "body": "Imagine driving a car down a mountain. Weight clipping is like slamming the brakes completely locked—you slide or stop. Gradient Penalty is like adaptive cruise control, keeping your speed right at the speed limit."
+        },
+        {
+          "icon": "📈",
+          "title": "Smoothing the Slopes",
+          "kind": "example",
+          "body": "If the Critic rates a fake image as 10 and a real image as 12, the slope (gradient) between them should change smoothly. If the change is too steep or too flat, the Gradient Penalty kicks in to smooth it out."
+        },
+        {
+          "kind": "mythbust",
+          "title": "Does Penalty Mean Slower?",
+          "icon": "🚀",
+          "body": "You might think penalizing gradients makes the model train slower. Actually, it allows the Critic to learn much more complex structures, leading to faster, more stable overall convergence!"
+        },
+        {
+          "title": "Clipping vs. Penalty",
+          "compare": {
+            "right": {
+              "emoji": "⚖️",
+              "tag": "Gradient Penalty",
+              "text": "Softly penalizes bad slope speeds, keeping capacity high."
+            },
+            "left": {
+              "text": "Forces all weights into a hard range, losing fine details.",
+              "tag": "Weight Clipping",
+              "emoji": "✂️"
+            }
+          },
+          "icon": "⚖️",
+          "kind": "visual",
+          "body": "Let's compare the two ways of keeping our Critic's math in check. WGAN-GP is much gentler and smarter than Weight Clipping."
+        }
+      ],
+      "type": "teach"
+    },
+    {
+      "type": "practice",
+      "exercises": [
+        {
+          "explain": "WGAN-GP penalizes the Critic if the gradient norm of its outputs with respect to its inputs deviates from 1. This keeps the gradient updates smooth.",
+          "xp": 2,
+          "options": [
+            {
+              "correct": true,
+              "id": "norm_1",
+              "text": "It penalizes the Critic when its gradient norm deviates from 1"
+            },
+            {
+              "id": "weight_zero",
+              "text": "It forces all weights to be exactly zero",
+              "correct": false
+            },
+            {
+              "text": "It penalizes the Generator whenever it makes a realistic image",
+              "correct": false,
+              "id": "gen_pen"
+            }
+          ],
+          "type": "multiple_choice",
+          "id": "wgan_gp_prac_1",
+          "prompt": "How does WGAN-GP maintain stable training?"
+        },
+        {
+          "options": [
+            {
+              "text": "True",
+              "correct": true,
+              "id": "true_val"
+            },
+            {
+              "id": "false_val",
+              "text": "False",
+              "correct": false
+            }
+          ],
+          "type": "true_false",
+          "id": "wgan_gp_prac_2",
+          "prompt": "WGAN-GP allows the Critic to have more capacity than standard WGAN with weight clipping.",
+          "explain": "True. Gradient Penalty acts as a soft constraint on the slope of the function, leaving the weights free to adjust to represent complex features.",
+          "xp": 2
+        },
+        {
+          "explain": "By avoiding weight clipping, WGAN-GP preserves model capacity so it can learn highly detailed features without collapsing.",
+          "options": [],
+          "xp": 2,
+          "blank": "capacity",
+          "words": [
+            "capacity",
+            "speed",
+            "loss"
+          ],
+          "sentence": "Unlike weight clipping, WGAN-GP maintains model [blank] by penalizing gradients rather than cutting off weights.",
+          "prompt": "",
+          "id": "wgan_gp_prac_3,options:[{correct:true,id:",
+          "type": "fill_blank"
+        },
+        {
+          "xp": 2,
+          "explain": "The first output shows a typical failure mode of weight clipping (blurry, repeated features), while the second showcases the sharp, stable details of WGAN-GP.",
+          "prompt": "Which output showcases a GAN trained successfully with WGAN-GP over standard weight-clipped WGAN?",
+          "id": "wgan_gp_prac_4",
+          "type": "spot_the_ai",
+          "options": [
+            {
+              "text": "Option B: High-resolution faces with complex details like individual hair strands generated stably.",
+              "correct": true,
+              "id": "ai_opt_2"
+            },
+            {
+              "text": "Option A: Low-resolution, blurry faces where all features look like a simplified average.",
+              "correct": false,
+              "id": "ai_opt_1"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "boss",
+      "exercises": [
+        {
+          "id": "wgan_gp_boss_1",
+          "prompt": "How does WGAN-GP avoid the capacity limits of weight clipping while keeping the training stable?",
+          "xp": 5,
+          "explain": "In WGAN-GP, we penalize the model if the gradient norm deviates from 1, which keeps training stable while preserving capacity. Next, we will explore conditional GANs to control what the model generates.",
+          "type": "multiple_choice",
+          "options": [
+            {
+              "id": "clipping_limit",
+              "text": "By clipping the weights to a tiny range near zero",
+              "correct": false
+            },
+            {
+              "correct": true,
+              "id": "grad_norm_1",
+              "text": "By penalizing the critic when its gradient norm deviates from 1"
+            },
+            {
+              "id": "gen_loss",
+              "text": "By forcing the generator to run twice as fast",
+              "correct": false
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "hearts": 3,
+  "xp": 15,
+  "tierIcon": "🌊",
+  "day": 1084,
+  "icon": "🔧",
+  "title": "WGAN with Gradient Penalty (WGAN-GP)",
+  "unit": 216,
+  "id": "u216-l4",
+  "tier": "Generative Adversarial Networks"
+}

@@ -1,0 +1,222 @@
+{
+  "id": "u203-l1",
+  "unit": 203,
+  "day": 1016,
+  "tier": "Generative Adversarial Networks",
+  "tierIcon": "📉",
+  "title": "How Does the Discriminator Learn?",
+  "icon": "📉",
+  "concept": "The discriminator is trained as an ordinary binary classifier using Binary Cross-Entropy loss, comparing its real-vs-fake probability against the true label of each image.",
+  "xp": 15,
+  "hearts": 3,
+  "estMinutes": 7,
+  "segments": [
+    {
+      "type": "warmup",
+      "exercises": [
+        {
+          "id": "w1",
+          "type": "multiple_choice",
+          "xp": 1,
+          "prompt": "Recap: In a GAN, what is the discriminator's basic job?",
+          "options": [
+            {
+              "id": "a",
+              "text": "Look at an image and output a probability that it's real",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "Generate new fake images out of random noise",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "Sort images into ten different object categories",
+              "correct": false
+            }
+          ],
+          "explain": "Correct! The discriminator is a binary classifier: real or fake."
+        }
+      ]
+    },
+    {
+      "type": "teach",
+      "cards": [
+        {
+          "kind": "hook",
+          "icon": "🎯",
+          "title": "One number, one verdict",
+          "body": "The discriminator doesn't do anything fancy — it looks at a single image and spits out one number: how real does this look? Everything about how it learns comes down to grading that one number."
+        },
+        {
+          "kind": "definition",
+          "icon": "📉",
+          "title": "The Discriminator's Loss",
+          "body": "<strong>The discriminator</strong> is trained as an ordinary binary classifier. It outputs a probability <code>p</code> that an image is real, and its loss is the very same <strong>Binary Cross-Entropy</strong> formula you already know: a tiny penalty when <code>p</code> matches the true label, a penalty that explodes when it is confidently wrong."
+        },
+        {
+          "kind": "analogy",
+          "icon": "🏦",
+          "title": "The bank teller sorting bills",
+          "body": "A bank teller trained to spot counterfeit cash sees a mix of real and fake bills all day. Each time, they commit to a confidence: \"I'm 95% sure this is real.\" A supervisor docks them hard for being loudly wrong and barely dings them for a cautious near-miss — that's exactly how BCE grades the discriminator."
+        },
+        {
+          "kind": "example",
+          "icon": "🔢",
+          "title": "Grading one real, one fake image",
+          "body": "A real image has target = 1. If the discriminator says <code>p = 0.8</code>, its loss is <code>-log(0.8) ≈ 0.22</code>. A fake image has target = 0. If the discriminator says <code>p = 0.3</code>, its loss is <code>-log(1-0.3) = -log(0.7) ≈ 0.36</code>. Averaged over this tiny batch of two, the discriminator's loss is about <code>0.29</code>."
+        },
+        {
+          "kind": "mythbust",
+          "icon": "⚠️",
+          "title": "It's not a special GAN-only formula",
+          "body": "You might think GANs invented a brand-new loss for the discriminator. In reality, it's the same Binary Cross-Entropy from Unit 67 — the only twist is where the labels come from: 1 for real training images, 0 for the generator's freshly made fakes."
+        },
+        {
+          "kind": "visual",
+          "icon": "⚖️",
+          "title": "Ordinary Classifier vs. GAN Discriminator",
+          "body": "Comparing what feeds into BCE loss:",
+          "compare": {
+            "left": {
+              "emoji": "🏷️",
+              "tag": "Ordinary Classifier",
+              "text": "Labels come from a fixed dataset<br>e.g. cat vs. dog<br>Labels never change"
+            },
+            "right": {
+              "emoji": "🎭",
+              "tag": "GAN Discriminator",
+              "text": "Labels come from the data's source<br>1 = real training image<br>0 = generator's fake output"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "type": "practice",
+      "exercises": [
+        {
+          "id": "p1",
+          "type": "multiple_choice",
+          "xp": 2,
+          "prompt": "A discriminator looks at a real image (target = 1) and outputs p = 0.95. Roughly how does this affect its BCE loss?",
+          "options": [
+            {
+              "id": "a",
+              "text": "Very low loss — the prediction closely matches the true label with high confidence",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "Very high loss, because 0.95 isn't exactly 1.0",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "Zero loss always, for any real image",
+              "correct": false
+            },
+            {
+              "id": "d",
+              "text": "The loss is undefined for real images",
+              "correct": false
+            }
+          ],
+          "explain": "-log(0.95) ≈ 0.05 — a near-zero penalty for a confident, correct guess."
+        },
+        {
+          "id": "p2",
+          "type": "true_false",
+          "xp": 2,
+          "prompt": "True or false: the discriminator's target label is 0 whenever it is shown a real training image.",
+          "options": [
+            {
+              "id": "t",
+              "text": "True",
+              "correct": false
+            },
+            {
+              "id": "f",
+              "text": "False",
+              "correct": true
+            }
+          ],
+          "explain": "False. Real images get target 1; only the generator's fake images get target 0."
+        },
+        {
+          "id": "p3",
+          "type": "fill_blank",
+          "xp": 2,
+          "prompt": "Complete the sentence:",
+          "sentence": "BCE penalizes the discriminator most when it is ___ wrong about whether an image is real or fake.",
+          "blank": "confidently",
+          "words": [
+            "confidently",
+            "barely",
+            "occasionally"
+          ],
+          "explain": "The loss explodes as a wrong prediction's confidence approaches 100%, just like in Unit 67."
+        },
+        {
+          "id": "p4",
+          "type": "spot_the_ai",
+          "xp": 2,
+          "prompt": "Which of these correctly describes what the discriminator's loss is computing?",
+          "options": [
+            {
+              "id": "a",
+              "text": "How far its real/fake probability is from the true label (1 or 0), using -log(p) or -log(1-p)",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "The pixel-by-pixel difference between the fake image and a real image",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "The number of unique colors used in the generated image",
+              "correct": false
+            }
+          ],
+          "explain": "Correct — it's plain Binary Cross-Entropy on a probability, not a pixel comparison."
+        }
+      ]
+    },
+    {
+      "type": "boss",
+      "exercises": [
+        {
+          "id": "b1",
+          "type": "multiple_choice",
+          "xp": 5,
+          "prompt": "A discriminator is shown a fake image (target = 0) and outputs p = 0.9 — it was badly fooled. Which statement correctly describes its loss for this example?",
+          "options": [
+            {
+              "id": "a",
+              "text": "The loss is very high, roughly -log(1-0.9) = -log(0.1) ≈ 2.30, because the discriminator was confidently wrong",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "The loss is zero because the discriminator made a confident prediction",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "The loss is negative because the prediction was above 0.5",
+              "correct": false
+            },
+            {
+              "id": "d",
+              "text": "The loss can't be computed because the image is fake, not real",
+              "correct": false
+            }
+          ],
+          "explain": "Exactly! Getting badly fooled by a good fake produces a large BCE loss — that's the signal that pushes the discriminator to get sharper. Next: how does the generator learn, when it never even sees the real images?"
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,222 @@
+{
+  "id": "u224-l5",
+  "unit": 224,
+  "day": 1125,
+  "tier": "NLP Basics",
+  "tierIcon": "🔤",
+  "title": "Evaluating Text Classifiers",
+  "icon": "📊",
+  "concept": "Evaluating text classifiers relies on precision, recall, and F1-score (callback to Unit 128) rather than accuracy, especially for rare categories. Boss explain ends with: 'Next up: Naive Bayes.'",
+  "xp": 15,
+  "hearts": 3,
+  "estMinutes": 7,
+  "segments": [
+    {
+      "type": "warmup",
+      "exercises": [
+        {
+          "id": "w1",
+          "type": "multiple_choice",
+          "xp": 1,
+          "prompt": "Why is simple accuracy sometimes a bad metric for text classification?",
+          "options": [
+            {
+              "correct": false,
+              "id": "opt1",
+              "text": "It counts how many words are in each sentence."
+            },
+            {
+              "id": "opt2",
+              "correct": true,
+              "text": "It can look very high even if the model fails to find the rare category we care about."
+            },
+            {
+              "correct": false,
+              "id": "opt3",
+              "text": "It always guarantees the model is perfectly fair."
+            }
+          ],
+          "explain": "Accuracy only counts how many total guesses were correct. If a category is very rare, accuracy doesn't tell us if we are actually finding it."
+        }
+      ]
+    },
+    {
+      "type": "teach",
+      "cards": [
+        {
+          "kind": "hook",
+          "icon": "📥",
+          "title": "The 99% Accuracy Trap",
+          "body": "Imagine building a spam filter that claims to be 99% accurate, but it still lets every single annoying advertisement fly right into your inbox! How is that possible? Let's find out why simple accuracy can be a trap when dealing with text."
+        },
+        {
+          "kind": "definition",
+          "icon": "🎯",
+          "title": "Precision, Recall, and F1",
+          "body": "To evaluate text classifiers, we look at three main metrics instead of just overall accuracy:\n\n• Precision: Out of all the texts we labeled as \"Spam\", how many were actually spam?\n• Recall: Out of all the actual spam texts out there, how many did we successfully find?\n• F1-Score: A balanced score that combines both precision and recall into a single number."
+        },
+        {
+          "kind": "analogy",
+          "icon": "🎒",
+          "title": "The Security Guard",
+          "body": "Imagine you are a security guard checking bags at a concert. \n\n• Precision is like making sure that if you yell \"Danger!\", it is actually a forbidden item. \n• Recall is making sure you catch every single forbidden item in the line, even if it means checking extra bags. \n\nDepending on your goal, you might care more about being precise or catching everything!"
+        },
+        {
+          "kind": "example",
+          "icon": "🚨",
+          "title": "The Danger of High Accuracy",
+          "body": "Imagine you build a classifier to detect urgent emergency messages in a chat app. Only 1 out of 1,000 messages is an emergency. \n\nIf your model simply guesses \"Not an emergency\" for every single message, it gets 99.9% accuracy! However, its recall is 0% because it missed the only real emergency. This is why we need precision and recall!"
+        },
+        {
+          "kind": "mythbust",
+          "icon": "🔍",
+          "title": "Is 99% Always Good?",
+          "body": "• Myth: A text classifier with 99% accuracy is always ready for the real world.\n• Fact: If the category you want to find is rare (like hate speech or fraud), a model can get 99% accuracy by just saying \"No\" to everything. We must look at precision and recall to see if it actually works!"
+        },
+        {
+          "kind": "visual",
+          "icon": "⚖️",
+          "title": "Precision vs. Recall",
+          "body": "See how we focus on different goals depending on the problem we want to solve:",
+          "compare": {
+            "right": {
+              "emoji": "🕸️",
+              "text": "Wants to catch every single bad text, even if it flags some innocent ones by mistake.",
+              "tag": "Recall-Focused"
+            },
+            "left": {
+              "emoji": "🎯",
+              "text": "Wants to be absolutely sure that whatever is flagged is correct (e.g., blocking only real spam).",
+              "tag": "Precision-Focused"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "type": "practice",
+      "exercises": [
+        {
+          "id": "p1",
+          "type": "multiple_choice",
+          "xp": 2,
+          "prompt": "Which metric tells you: \"Out of all the texts the model flagged as spam, how many were actually spam?\"",
+          "options": [
+            {
+              "text": "Precision",
+              "correct": true,
+              "id": "opt1"
+            },
+            {
+              "correct": false,
+              "id": "opt2",
+              "text": "Accuracy"
+            },
+            {
+              "text": "Recall",
+              "correct": false,
+              "id": "opt3"
+            },
+            {
+              "id": "opt4",
+              "correct": false,
+              "text": "Data size"
+            }
+          ],
+          "explain": "Precision tells us what fraction of our positive predictions (what we labeled as spam) were actually correct."
+        },
+        {
+          "id": "p2",
+          "type": "true_false",
+          "xp": 2,
+          "prompt": "True or False: Accuracy is often a misleading metric when one text category is much more common than the others.",
+          "options": [
+            {
+              "id": "true_id",
+              "correct": true,
+              "text": "True"
+            },
+            {
+              "text": "False",
+              "id": "false_id",
+              "correct": false
+            }
+          ],
+          "explain": "If 99% of your data belongs to one category, a useless model that always guesses that one category will get 99% accuracy. Thus, accuracy is misleading."
+        },
+        {
+          "id": "p3",
+          "type": "fill_blank",
+          "xp": 2,
+          "prompt": "Fill in the blank to complete the statement about classifier evaluation.",
+          "sentence": "If you want to make sure your model catches every single spam email, you want to focus on high [blank].",
+          "blank": "recall",
+          "words": [
+            "recall",
+            "accuracy",
+            "precision"
+          ],
+          "explain": "Recall measuring how many of the actual target items (like spam) your model successfully found and caught."
+        },
+        {
+          "id": "p4",
+          "type": "spot_the_ai",
+          "xp": 2,
+          "prompt": "Two of these statements about evaluating text classifiers are correct. Spot the AI-generated incorrect statement!",
+          "options": [
+            {
+              "text": "If you have a dataset where only 1% of the texts are toxic, a model that marks everything as 'clean' will have 99% accuracy but a recall of 0% for toxic comments.",
+              "correct": false,
+              "id": "opt1"
+            },
+            {
+              "text": "When dealing with extremely rare categories in text classification, accuracy is the most reliable metric, and you can safely ignore precision, recall, and F1-score.",
+              "correct": true,
+              "id": "opt2"
+            },
+            {
+              "correct": false,
+              "id": "opt3",
+              "text": "The F1-score is a helpful metric because it gives you a single balanced score that takes both precision and recall into account."
+            }
+          ],
+          "explain": "The second statement is written by an AI because it falsely claims that accuracy is the best metric for rare categories and that F1-score is useless."
+        }
+      ]
+    },
+    {
+      "type": "boss",
+      "exercises": [
+        {
+          "id": "b1",
+          "type": "multiple_choice",
+          "xp": 5,
+          "prompt": "Your email spam filter has 99.9% accuracy because 99.9% of your emails are normal, but it lets all spam emails straight into your inbox. What is the main takeaway here?",
+          "options": [
+            {
+              "text": "99% Accuracy means the model is definitely perfect at finding the rare text.",
+              "id": "opt1",
+              "correct": false
+            },
+            {
+              "text": "Evaluating precision and recall is more reliable than using accuracy alone.",
+              "correct": true,
+              "id": "opt2"
+            },
+            {
+              "correct": false,
+              "id": "opt3",
+              "text": "We should only look at accuracy when we have very rare categories."
+            },
+            {
+              "text": "F1-score is not useful if we care about precision and recall.",
+              "id": "opt4",
+              "correct": false
+            }
+          ],
+          "explain": "When dealing with unbalanced datasets where the target category is very rare, evaluating with simple accuracy will trick you. Precision, recall, and the F1-score give you the real picture of how your classifier is performing. Next up: Naive Bayes."
+        }
+      ]
+    }
+  ]
+}

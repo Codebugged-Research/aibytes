@@ -1,0 +1,223 @@
+{
+  "id": "u292-l3",
+  "unit": 292,
+  "day": 1463,
+  "tier": "NLP Advanced",
+  "tierIcon": "🧠",
+  "title": "Diagnosing Exploding Attention Scores",
+  "icon": "💥",
+  "concept": "If attention scaling (1/sqrt(d_k)) is missing, similarity scores explode, causing softmax gradients to vanish during training.",
+  "xp": 15,
+  "hearts": 3,
+  "estMinutes": 7,
+  "segments": [
+    {
+      "type": "warmup",
+      "exercises": [
+        {
+          "id": "w1",
+          "type": "multiple_choice",
+          "xp": 1,
+          "prompt": "In Scaled Dot-Product Attention, what scaling factor is used to divide the query-key dot products before applying softmax?",
+          "options": [
+            {
+              "id": "wu_opt_1",
+              "correct": true,
+              "text": "The square root of the key dimension (d_k)"
+            },
+            {
+              "correct": false,
+              "text": "The sum of all word lengths in the input sentence",
+              "id": "wu_opt_2"
+            },
+            {
+              "id": "wu_opt_3",
+              "correct": false,
+              "text": "The total number of heads in the multi-head attention block"
+            }
+          ],
+          "explain": "The formula for Scaled Dot-Product Attention scales the dot product of the queries (Q) and keys (K) by dividing by the square root of the key dimension (d_k)."
+        }
+      ]
+    },
+    {
+      "type": "teach",
+      "cards": [
+        {
+          "kind": "hook",
+          "icon": "💥",
+          "title": "When Attention Gets Too Loud",
+          "body": "Have you ever turned up your speakers so loud that the sound got completely distorted and fuzzy? In Transformer models, attention scores can do the exact same thing! If we don't scale them down, they explode, causing the AI's learning process to completely freeze up. Let's find out how to keep our models under control."
+        },
+        {
+          "kind": "definition",
+          "icon": "🎛️",
+          "title": "What is Exploding Attention?",
+          "body": "Scaled Dot-Product Attention measures similarity between words. If we don't scale the dot product by dividing it by the square root of the key dimension (d_k), the scores grow extremely large as the vector size increases. These huge scores force the softmax function to output values very close to 0 or 1, making its gradients vanish and preventing the model from learning."
+        },
+        {
+          "kind": "analogy",
+          "icon": "📢",
+          "title": "The Megaphone Party",
+          "body": "Imagine you are listening to a group of friends chatting in a small room. If everyone speaks at a normal volume, you can easily pay attention to the most interesting person. But if everyone starts using megaphones, the volume levels explode. The loudest voice completely deafens you to everyone else, and you lose the ability to compare who is saying what. Scaling the attention scores is like asking everyone to put down the megaphones and speak at a normal conversational volume."
+        },
+        {
+          "kind": "example",
+          "icon": "📝",
+          "title": "Scaling in Action",
+          "body": "Suppose your key dimension size is 64. Without scaling, your similarity scores might reach values like 45 and 50. Softmax(45, 50) outputs almost exactly 0 and 1, leaving no room for nuance. By dividing the scores by the square root of 64 (which is 8), the scores become a manageable 5.6 and 6.25, keeping the softmax gradients active and healthy!"
+        },
+        {
+          "kind": "mythbust",
+          "icon": "🔍",
+          "title": "Is Bigger Always Better?",
+          "body": "Some believe that larger attention scores are always better because they show 'stronger' connections. In reality, extremely large scores force the softmax function to become too confident, flatlining the mathematical gradients needed for learning. A controlled, scaled score is what keeps the model smart!"
+        },
+        {
+          "kind": "visual",
+          "icon": "📊",
+          "title": "Scaled vs. Unscaled Attention",
+          "body": "Compare what happens to attention scores and gradients when we scale them versus when we forget to scale them.",
+          "compare": {
+            "right": {
+              "emoji": "💥",
+              "tag": "Unscaled (Missing divisor)",
+              "text": "Exploded scores, extreme softmax outputs (0 or 1), and vanishing gradients that freeze learning."
+            },
+            "left": {
+              "text": "Moderate scores, balanced softmax distribution, and healthy gradients that allow training to succeed.",
+              "tag": "Scaled (Divided by sqrt(d_k))",
+              "emoji": "⚖️"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "type": "practice",
+      "exercises": [
+        {
+          "id": "p1",
+          "type": "multiple_choice",
+          "xp": 2,
+          "prompt": "How does scaled dot-product attention prevent similarity scores from exploding?",
+          "options": [
+            {
+              "correct": false,
+              "id": "q1_opt1",
+              "text": "By subtracting the average query length from every attention score."
+            },
+            {
+              "correct": true,
+              "text": "By dividing the dot products by the square root of the key dimension (d_k).",
+              "id": "q1_opt2"
+            },
+            {
+              "correct": false,
+              "text": "By multiplying the scores by the total number of words in the sentence.",
+              "id": "q1_opt3"
+            },
+            {
+              "correct": false,
+              "text": "By setting all attention scores above 10 to a constant value of zero.",
+              "id": "q1_opt4"
+            }
+          ],
+          "explain": "Dividing by the square root of the key dimension (d_k) keeps the dot product values from growing too large as the dimension size increases."
+        },
+        {
+          "id": "p2",
+          "type": "true_false",
+          "xp": 2,
+          "prompt": "Omitting the scaling factor in attention calculation can cause the model to stop learning during training.",
+          "options": [
+            {
+              "text": "True",
+              "correct": true,
+              "id": "tf_true"
+            },
+            {
+              "id": "tf_false",
+              "text": "False",
+              "correct": false
+            }
+          ],
+          "explain": "True. Without scaling, the attention scores can grow very large, leading to vanishing gradients in the softmax function, which stops the model from learning."
+        },
+        {
+          "id": "p3",
+          "type": "fill_blank",
+          "xp": 2,
+          "prompt": "Fill in the missing word to complete the explanation of vanishing gradients in attention layers.",
+          "sentence": "When attention scores explode, the output of the [blank] function becomes extremely flat, causing its gradients to vanish.",
+          "blank": "softmax",
+          "words": [
+            "softmax",
+            "addition",
+            "multiplication",
+            "subtraction"
+          ],
+          "explain": "Without scaling, attention scores grow too large, causing the softmax function to saturate (flatten out) and its gradients to vanish."
+        },
+        {
+          "id": "p4",
+          "type": "spot_the_ai",
+          "xp": 2,
+          "prompt": "Two AI assistants are arguing about why a model's weights stop updating when the attention scaling factor is missing. Who is correct?",
+          "options": [
+            {
+              "id": "sai_1",
+              "text": "AI A says that missing scaling makes the model run out of memory because the vectors grow physically larger.",
+              "correct": false
+            },
+            {
+              "id": "sai_2",
+              "correct": true,
+              "text": "AI B explains that without scaling, large scores push the softmax into flat regions where gradients vanish, halting training."
+            },
+            {
+              "text": "AI C claims that scaling is only used to speed up GPU calculations and has no effect on gradients.",
+              "id": "sai_3",
+              "correct": false
+            }
+          ],
+          "explain": "AI B is correct because the lack of scaling (1/sqrt(d_k)) leads to massive attention scores, which push the softmax function into flat, saturated regions where gradients vanish."
+        }
+      ]
+    },
+    {
+      "type": "boss",
+      "exercises": [
+        {
+          "id": "b1",
+          "type": "multiple_choice",
+          "xp": 5,
+          "prompt": "During training, a researcher notices that their Transformer model is not updating its weights because the attention gradients have completely vanished. Which of the following best explains why omitting the 1/sqrt(d_k) scaling factor causes this issue?",
+          "options": [
+            {
+              "text": "It causes the model weights to overflow and turn into NaN immediately before the first forward pass.",
+              "correct": false,
+              "id": "opt_1"
+            },
+            {
+              "id": "opt_2",
+              "text": "It leads to extremely large attention scores, which push the softmax function into flat regions with near-zero gradients.",
+              "correct": true
+            },
+            {
+              "id": "opt_3",
+              "text": "It forces the attention scores to become negative, causing the softmax function to output zero values.",
+              "correct": false
+            },
+            {
+              "text": "It increases the dimension size of the keys and queries during training, making them too large to fit in memory.",
+              "correct": false,
+              "id": "opt_4"
+            }
+          ],
+          "explain": "Without dividing by the square root of the key dimension (d_k), dot-product attention scores grow too large in magnitude. This pushes the softmax function into flat, saturated regions where gradients approach zero, halting weight updates during backpropagation."
+        }
+      ]
+    }
+  ]
+}

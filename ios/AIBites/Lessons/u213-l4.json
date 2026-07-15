@@ -1,0 +1,223 @@
+{
+  "segments": [
+    {
+      "exercises": [
+        {
+          "prompt": "How does a traditional image discriminator evaluate an input image?",
+          "id": "warmup_q1",
+          "options": [
+            {
+              "correct": false,
+              "text": "It only looks at the absolute center pixel",
+              "id": "opt_1"
+            },
+            {
+              "correct": true,
+              "text": "It scores the entire image as a single real/fake choice",
+              "id": "opt_2"
+            },
+            {
+              "id": "opt_3",
+              "text": "It ignores the image size completely",
+              "correct": false
+            }
+          ],
+          "type": "multiple_choice",
+          "xp": 1,
+          "explain": "Traditional discriminators look at the entire image to output a single score, but they often miss the fine textures."
+        }
+      ],
+      "type": "warmup"
+    },
+    {
+      "cards": [
+        {
+          "kind": "hook",
+          "icon": "🔍",
+          "body": "Imagine drawing a beautiful forest, but the leaves look like blurry green blobs. Standard AI judges only look at the whole picture and say, 'Looks like a forest!' and ignore the blurry leaves. How do we force the AI to fix the details?",
+          "title": "The Blurry Details Problem"
+        },
+        {
+          "body": "A PatchGAN discriminator is a special neural network that judges an image by dividing it into a grid of small local patches (like N x N blocks) and deciding if each individual patch looks real or fake.",
+          "kind": "definition",
+          "icon": "🧩",
+          "title": "What is PatchGAN?"
+        },
+        {
+          "icon": "🔎",
+          "title": "The Magnifying Glass Inspector",
+          "body": "Think of an art inspector using a magnifying glass. Instead of just glancing at a massive painting from far away, they inspect small 10cm x 10cm squares one by one. If even one square has fake brushstrokes, the painting fails!",
+          "kind": "analogy"
+        },
+        {
+          "title": "Zooming in on a Shoe",
+          "kind": "example",
+          "icon": "👟",
+          "body": "In Pix2Pix, PatchGAN might look at a generated 256x256 image of a shoe using 70x70 patches. It scores each patch separately, forcing the generator to make the leather texture, laces, and stitching look incredibly sharp."
+        },
+        {
+          "title": "Is it a Brand New Network?",
+          "body": "Some think PatchGAN is a completely different architecture from a standard CNN. In reality, it is just a regular Convolutional Network! The trick is that its final output is a grid of values (like 30x30) instead of a single number.",
+          "icon": "💡",
+          "kind": "mythbust"
+        },
+        {
+          "compare": {
+            "left": {
+              "text": "Looks at the global layout, leading to blurry details and flat textures.",
+              "tag": "Full-Image Discriminator",
+              "emoji": "🖼️"
+            },
+            "right": {
+              "tag": "PatchGAN Discriminator",
+              "text": "Inspects local N x N patches, forcing sharp details, hair, and textures.",
+              "emoji": "🧩"
+            }
+          },
+          "kind": "visual",
+          "icon": "⚖️",
+          "title": "Global vs. Patch-based Judging"
+        }
+      ],
+      "type": "teach"
+    },
+    {
+      "type": "practice",
+      "exercises": [
+        {
+          "id": "prac_q1",
+          "prompt": "Why does PatchGAN evaluate images in local N x N patches?",
+          "xp": 2,
+          "explain": "By looking at local N x N patches, PatchGAN forces the generator to focus on high-frequency details like textures and sharp edges.",
+          "options": [
+            {
+              "text": "It focuses on high-frequency local textures and sharp details.",
+              "correct": true,
+              "id": "p1_o1"
+            },
+            {
+              "correct": false,
+              "text": "It makes the entire image output uniform in color.",
+              "id": "p1_o2"
+            },
+            {
+              "text": "It ignores local textures to look only at the general shape.",
+              "id": "p1_o3",
+              "correct": false
+            }
+          ],
+          "type": "multiple_choice"
+        },
+        {
+          "type": "true_false",
+          "explain": "True. PatchGAN classifies each patch in the grid as real or fake, rather than producing one single score for the entire image.",
+          "xp": 2,
+          "prompt": "True or False: PatchGAN outputs a grid of real/fake decisions rather than a single global real/fake score.",
+          "id": "prac_q2",
+          "options": [
+            {
+              "correct": true,
+              "id": "p2_o1",
+              "text": "True"
+            },
+            {
+              "correct": false,
+              "id": "p2_o2",
+              "text": "False"
+            }
+          ]
+        },
+        {
+          "type": "fill_blank",
+          "sentence": "PatchGAN divides the input image into N x N [blank] to evaluate local realistic details.",
+          "xp": 2,
+          "words": [
+            "patches",
+            "pixels",
+            "layers"
+          ],
+          "options": [
+            {
+              "text": "patches",
+              "id": "p3_o1",
+              "correct": true
+            },
+            {
+              "text": "pixels",
+              "id": "p3_o2",
+              "correct": false
+            },
+            {
+              "id": "p3_o3",
+              "correct": false,
+              "text": "layers"
+            }
+          ],
+          "explain": "A PatchGAN discriminator divides the image into local N x N patches and determines the authenticity of each patch.",
+          "blank": "patches",
+          "prompt": "PatchGAN divides the input image into N x N [blank] to evaluate local realistic details.",
+          "id": "prac_q3"
+        },
+        {
+          "options": [
+            {
+              "correct": false,
+              "text": "An image generator that produces realistic global layouts but has very blurry textures and smooth skin.",
+              "id": "p4_o1"
+            },
+            {
+              "text": "A generator producing realistic individual hair strands, pores, and sharp fabric textures due to patch-level evaluation.",
+              "id": "p4_o2",
+              "correct": true
+            }
+          ],
+          "type": "spot_the_ai",
+          "xp": 2,
+          "explain": "Option B exhibits the sharp local textures (hair, skin details) characteristic of PatchGAN's patch-level supervision, whereas Option A has blurry details.",
+          "prompt": "Which scenario describes the effect of training a generator with a PatchGAN discriminator?",
+          "id": "prac_q4"
+        }
+      ]
+    },
+    {
+      "exercises": [
+        {
+          "options": [
+            {
+              "correct": false,
+              "id": "b_o1",
+              "text": "It requires the generator to process images one single pixel at a time."
+            },
+            {
+              "correct": true,
+              "text": "It has fewer parameters, runs faster, and can be applied to arbitrarily large images.",
+              "id": "b_o2"
+            },
+            {
+              "text": "It guarantees that the global colors are always mathematically perfect.",
+              "correct": false,
+              "id": "b_o3"
+            }
+          ],
+          "type": "multiple_choice",
+          "explain": "PatchGAN uses fewer parameters because the receptive field is restricted to local N x N patches, making it faster and easier to train on different image sizes. Next, we will explore cycle consistency in unsupervised translation!",
+          "xp": 5,
+          "prompt": "What is an additional advantage of using a PatchGAN discriminator over a global one?",
+          "id": "boss_q1"
+        }
+      ],
+      "type": "boss"
+    }
+  ],
+  "estMinutes": 7,
+  "tierIcon": "🎨",
+  "concept": "The PatchGAN discriminator classifies local N x N patches as real or fake, rather than the whole image, forcing the generator to produce sharp, realistic high-frequency detail.",
+  "icon": "🧩",
+  "tier": "Generative Adversarial Networks",
+  "title": "The PatchGAN Discriminator",
+  "id": "u213-l4",
+  "day": 1069,
+  "unit": 213,
+  "xp": 15,
+  "hearts": 3
+}

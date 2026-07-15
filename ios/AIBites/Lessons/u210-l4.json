@@ -1,0 +1,212 @@
+{
+  "title": "Experience Replay for GANs",
+  "unit": 210,
+  "tierIcon": "🧰",
+  "segments": [
+    {
+      "exercises": [
+        {
+          "type": "multiple_choice",
+          "explain": "In traditional training, the generator only sees the discriminator's current feedback, which can lead to circular patterns or forgetting.",
+          "id": "u210-l4-w1",
+          "prompt": "What is a major risk when a GAN's generator only trains against the immediate, latest version of the discriminator?",
+          "xp": 1,
+          "options": [
+            {
+              "correct": false,
+              "text": "The discriminator becomes permanently smart.",
+              "id": "w1_opt1"
+            },
+            {
+              "correct": true,
+              "text": "The generator might exploit temporary blind spots, causing training to loop.",
+              "id": "w1_opt2"
+            },
+            {
+              "text": "The training speed triples automatically.",
+              "id": "w1_opt3",
+              "correct": false
+            }
+          ]
+        }
+      ],
+      "type": "warmup",
+      "cards": []
+    },
+    {
+      "type": "teach",
+      "cards": [
+        {
+          "title": "The Memory Trap",
+          "kind": "hook",
+          "icon": "🧠",
+          "body": "Imagine playing Rock-Paper-Scissors against someone who only remembers your very last move. You'd just loop the same tricks! The same thing happens to GANs. Let's see how we can give the discriminator a memory."
+        },
+        {
+          "body": "Experience Replay is a technique where we store past images created by the generator in a buffer. Instead of only showing the discriminator the newest creations, we occasionally show it these older images so it doesn't forget how to catch past tricks.",
+          "icon": "💾",
+          "kind": "definition",
+          "title": "What is Experience Replay?"
+        },
+        {
+          "body": "Think of a teacher grading history exams. If they only grade today's essays on Roman history, they might forget how to spot mistakes on last week's homework about Ancient Greece. Keeping an archive of past homework helps the teacher stay sharp on everything.",
+          "title": "The History Teacher",
+          "kind": "analogy",
+          "icon": "📚"
+        },
+        {
+          "title": "Spotted Cat Ears",
+          "kind": "example",
+          "icon": "🐈",
+          "body": "Suppose our generator learned to make realistic cat ears last week, but today it is only making whiskers. Without Experience Replay, the discriminator might forget what bad ears look like, allowing the generator to sneak bad ears back in. Replay keeps the cat ears in the training mix."
+        },
+        {
+          "kind": "mythbust",
+          "title": "Not Just Speed",
+          "body": "Myth: Experience Replay is only used to speed up training. Fact: It's actually used to stabilize training and prevent catastrophic forgetting, ensuring the generator doesn't exploit temporary loopholes.",
+          "icon": "🛡️"
+        },
+        {
+          "compare": {
+            "left": {
+              "text": "Generator exploits temporary blind spots, leading to circular training loops.",
+              "emoji": "🔄",
+              "tag": "Without Replay"
+            },
+            "right": {
+              "tag": "With Replay",
+              "emoji": "🧠",
+              "text": "Discriminator remembers past tricks, forcing the generator to improve globally."
+            }
+          },
+          "icon": "⚖️",
+          "body": "Compare how training behaves with and without a replay buffer.",
+          "title": "Memory vs. Forgetfulness",
+          "kind": "visual"
+        }
+      ],
+      "exercises": []
+    },
+    {
+      "cards": [],
+      "exercises": [
+        {
+          "prompt": "Why do we use an experience replay buffer in GAN training?",
+          "id": "u210-l4-p1",
+          "explain": "An experience replay buffer stores generated images from previous steps, preventing the discriminator from forgetting what older fake images looked like.",
+          "xp": 2,
+          "type": "multiple_choice",
+          "options": [
+            {
+              "text": "It keeps a history of generated images to stop the discriminator from forgetting past tricks.",
+              "correct": true,
+              "id": "p1_opt1"
+            },
+            {
+              "text": "It automatically deletes real training images to save hard drive space.",
+              "correct": false,
+              "id": "p1_opt2"
+            },
+            {
+              "id": "p1_opt3",
+              "correct": false,
+              "text": "It speeds up the generator by skipping the discriminator altogether."
+            }
+          ]
+        },
+        {
+          "explain": "The replay buffer contains a history of generated samples, not just the single newest image from the current training step.",
+          "id": "u210-l4-p2",
+          "prompt": "True or False: The experience replay buffer only stores the single most recently generated image.",
+          "xp": 2,
+          "type": "true_false",
+          "options": [
+            {
+              "id": "p2_opt1",
+              "correct": false,
+              "text": "True"
+            },
+            {
+              "id": "p2_opt2",
+              "correct": true,
+              "text": "False"
+            }
+          ]
+        },
+        {
+          "sentence": "To prevent the discriminator from forgetting old tricks, we store past generated images in a replay [blank].",
+          "xp": 2,
+          "type": "fill_blank",
+          "id": "u210-l4-p3",
+          "options": [],
+          "explain": "The replay buffer acts as a storage pool containing older generated images that are mixed into current training batches.",
+          "words": [
+            "buffer",
+            "generator",
+            "speed"
+          ],
+          "prompt": "Fill in the missing word to complete the concept of GAN memory.",
+          "blank": "buffer"
+        },
+        {
+          "explain": "Without replay, the generator can cycle back to old, poorly generated patterns (like bad ears) as soon as the discriminator forgets them.",
+          "xp": 2,
+          "type": "spot_the_ai",
+          "options": [
+            {
+              "text": "A generator that successfully fools the discriminator by reusing an old error that the discriminator forgot about.",
+              "id": "p4_opt1",
+              "correct": true
+            },
+            {
+              "text": "A discriminator that correctly identifies real photographs 100% of the time.",
+              "id": "p4_opt2",
+              "correct": false
+            }
+          ],
+          "prompt": "Which of these scenarios demonstrates a GAN training loop that lacks Experience Replay?",
+          "id": "u210-l4-p4"
+        }
+      ],
+      "type": "practice"
+    },
+    {
+      "cards": [],
+      "exercises": [
+        {
+          "id": "u210-l4-b1",
+          "prompt": "How does Experience Replay specifically stop the generator from exploiting short-term blind spots?",
+          "xp": 5,
+          "options": [
+            {
+              "id": "b1_opt1",
+              "correct": true,
+              "text": "It presents a mix of new and older stored images to keep the discriminator's memory broad."
+            },
+            {
+              "id": "b1_opt2",
+              "correct": false,
+              "text": "It forces the generator to only produce identical copies of its very first output."
+            },
+            {
+              "id": "b1_opt3",
+              "correct": false,
+              "text": "It completely freezes the discriminator's learning rate forever."
+            }
+          ],
+          "type": "multiple_choice",
+          "explain": "By showing the discriminator a mix of current and older generated images, it maintains a robust memory of what makes an image fake, preventing the generator from exploiting temporary blind spots. In the next lesson, we will wrap up our GAN unit!"
+        }
+      ],
+      "type": "boss"
+    }
+  ],
+  "icon": "💾",
+  "concept": "Maintaining a buffer of previously generated images to occasionally feed to the discriminator stops the generator from repeatedly exploiting short-term discriminator blind spots.",
+  "day": 1054,
+  "id": "u210-l4",
+  "tier": "Generative Adversarial Networks",
+  "hearts": 3,
+  "estMinutes": 7,
+  "xp": 15
+}

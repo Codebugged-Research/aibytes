@@ -1,0 +1,223 @@
+{
+  "id": "u273-l2",
+  "unit": 273,
+  "day": 1367,
+  "tier": "NLP Advanced",
+  "tierIcon": "🧠",
+  "title": "Data Parallelism vs. Model Parallelism",
+  "icon": "👥",
+  "concept": "Data parallelism splits the batch across GPUs; model parallelism splits the network layers (or attention heads) across GPUs when the model is too big for one memory card.",
+  "xp": 15,
+  "hearts": 3,
+  "estMinutes": 7,
+  "segments": [
+    {
+      "type": "warmup",
+      "exercises": [
+        {
+          "id": "w1",
+          "type": "multiple_choice",
+          "xp": 1,
+          "prompt": "Why can't we just load any AI model onto a single GPU?",
+          "options": [
+            {
+              "text": "The training dataset is too small",
+              "correct": false,
+              "id": "opt_1"
+            },
+            {
+              "id": "opt_2",
+              "text": "The AI model has too many parameters to fit in a single GPU's memory",
+              "correct": true
+            },
+            {
+              "text": "The computer does not have an internet connection",
+              "id": "opt_3",
+              "correct": false
+            }
+          ],
+          "explain": "When a model is too large for a single GPU's memory (RAM), it causes an \"out of memory\" error. We must split the model itself across multiple cards."
+        }
+      ]
+    },
+    {
+      "type": "teach",
+      "cards": [
+        {
+          "kind": "hook",
+          "icon": "👥",
+          "title": "Too Big for One GPU",
+          "body": "Modern AI models are absolutely massive, sometimes containing hundreds of billions of parameters. They are so big that they cannot fit inside the memory of a single computer chip! \n\nHow do we train these digital giants without running out of memory or waiting years for training to finish? We split the work!"
+        },
+        {
+          "kind": "definition",
+          "icon": "⚙️",
+          "title": "Splitting the Work",
+          "body": "When training giant AI models, we use two main strategies:\n\n• **Data Parallelism**: The entire model is copied onto multiple GPUs. We split the batch of training data so each GPU processes a different slice of data at the same time.\n\n• **Model Parallelism**: The model is too big to fit on one GPU. We split the model's layers or attention heads across different GPUs, and the data flows from one GPU to the next."
+        },
+        {
+          "kind": "analogy",
+          "icon": "🍕",
+          "title": "The Pizza Kitchen Analog",
+          "body": "Think of making 100 pizzas. \n\n🍕 **Data Parallelism** is like hiring 4 chefs. Each chef gets their own identical kitchen and makes 25 complete pizzas from start to finish.\n\n🍕 **Model Parallelism** is like building a giant, complex pizza assembly line. One chef rolls the dough, the next adds sauce, and the third bakes it, because the giant pizza oven and ingredients are too massive for one kitchen to hold!"
+        },
+        {
+          "kind": "example",
+          "icon": "💡",
+          "title": "Training Giant LLMs",
+          "body": "Imagine training a massive LLM like GPT-4:\n\n• If the model fits on a single GPU but training on millions of texts is too slow, we copy the model to 8 GPUs. Each GPU processes a different set of sentences. This is **Data Parallelism**.\n\n• If the model is so massive that loading it causes an \"Out of Memory\" error on one GPU, we must split the first 40 layers to GPU 1 and the next 40 layers to GPU 2. This is **Model Parallelism**."
+        },
+        {
+          "kind": "mythbust",
+          "icon": "🔍",
+          "title": "Is Bigger Always Faster?",
+          "body": "**Myth:** Model Parallelism is always faster than Data Parallelism because it sounds more advanced.\n\n**Fact:** Model Parallelism actually introduces communication delays because GPUs have to wait for each other to finish their layers. We only use Model Parallelism when a model is physically too big to fit on a single GPU's memory card!"
+        },
+        {
+          "kind": "visual",
+          "icon": "📊",
+          "title": "Visualizing the Splits",
+          "body": "Here is how the workload is divided between GPUs under both methods.",
+          "compare": {
+            "left": {
+              "text": "Same model on all GPUs. Each GPU gets a different slice of the dataset.",
+              "tag": "Data Parallelism",
+              "emoji": "🥞"
+            },
+            "right": {
+              "tag": "Model Parallelism",
+              "emoji": "✂️",
+              "text": "Model layers are split. GPU 1 holds Layer 1-5, GPU 2 holds Layer 6-10."
+            }
+          }
+        }
+      ]
+    },
+    {
+      "type": "practice",
+      "exercises": [
+        {
+          "id": "p1",
+          "type": "multiple_choice",
+          "xp": 2,
+          "prompt": "What does Data Parallelism do to speed up training?",
+          "options": [
+            {
+              "correct": true,
+              "text": "It splits the batch of training data across multiple GPUs running identical copies of the model.",
+              "id": "opt_1"
+            },
+            {
+              "id": "opt_2",
+              "correct": false,
+              "text": "It cuts the model in half so each GPU only holds a few layers."
+            },
+            {
+              "text": "It runs the training process on a CPU instead of a GPU.",
+              "id": "opt_3",
+              "correct": false
+            },
+            {
+              "id": "opt_4",
+              "correct": false,
+              "text": "It discards half of the dataset to save memory space."
+            }
+          ],
+          "explain": "Data Parallelism copies the entire model to each GPU and splits the batch of incoming training data among them."
+        },
+        {
+          "id": "p2",
+          "type": "true_false",
+          "xp": 2,
+          "prompt": "True or False: Model Parallelism is always faster and easier to set up than Data Parallelism.",
+          "options": [
+            {
+              "text": "True",
+              "id": "opt_1",
+              "correct": false
+            },
+            {
+              "correct": true,
+              "id": "opt_2",
+              "text": "False"
+            }
+          ],
+          "explain": "Data Parallelism is highly efficient because GPUs can compute their data slices independently, whereas Model Parallelism requires GPUs to constantly send layer outputs to each other."
+        },
+        {
+          "id": "p3",
+          "type": "fill_blank",
+          "xp": 2,
+          "prompt": "Fill in the blank to complete the definition of Model Parallelism.",
+          "sentence": "Model Parallelism splits the model's [blank] across different GPUs.",
+          "blank": "layers",
+          "words": [
+            "data",
+            "layers",
+            "images",
+            "users"
+          ],
+          "explain": "Model Parallelism is used when the model is too big to fit on one chip, requiring us to split the model's layers across multiple GPUs."
+        },
+        {
+          "id": "p4",
+          "type": "spot_the_ai",
+          "xp": 2,
+          "prompt": "Why would a developer choose Model Parallelism over Data Parallelism?",
+          "options": [
+            {
+              "text": "Data Parallelism is only for text, while Model Parallelism is only for images.",
+              "correct": false,
+              "id": "opt_1"
+            },
+            {
+              "id": "opt_2",
+              "text": "Model Parallelism is used when the model is too massive to fit on a single GPU.",
+              "correct": true
+            },
+            {
+              "text": "Model Parallelism runs on CPUs, while Data Parallelism runs on GPUs.",
+              "correct": false,
+              "id": "opt_3"
+            }
+          ],
+          "explain": "Data Parallelism copies the model to each GPU, which works great for smaller models. Model Parallelism is specifically designed for giant models that cannot fit on a single GPU's memory."
+        }
+      ]
+    },
+    {
+      "type": "boss",
+      "exercises": [
+        {
+          "id": "b1",
+          "type": "multiple_choice",
+          "xp": 5,
+          "prompt": "You have a massive AI model with 100 billion parameters that cannot fit on one GPU's memory, and a dataset of 1 million images. How should you split the work?",
+          "options": [
+            {
+              "correct": false,
+              "id": "opt_1",
+              "text": "Data Parallelism splits the model layers, while Model Parallelism splits the data batch."
+            },
+            {
+              "text": "Data Parallelism splits the data batch, while Model Parallelism splits the model layers.",
+              "correct": true,
+              "id": "opt_2"
+            },
+            {
+              "text": "Both techniques split both the model layers and the data batch at the same time.",
+              "id": "opt_3",
+              "correct": false
+            },
+            {
+              "text": "Data Parallelism is only used for small models that fit easily on a single GPU.",
+              "id": "opt_4",
+              "correct": false
+            }
+          ],
+          "explain": "Data Parallelism copies the whole model to each GPU and splits up the dataset (batch). Model Parallelism cuts the model itself into pieces because it is too giant to fit into the memory of a single GPU."
+        }
+      ]
+    }
+  ]
+}

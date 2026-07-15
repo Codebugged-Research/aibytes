@@ -1,0 +1,222 @@
+{
+  "id": "u206-l3",
+  "unit": 206,
+  "day": 1033,
+  "tier": "Generative Adversarial Networks",
+  "tierIcon": "🎪",
+  "title": "Why Does This Happen?",
+  "icon": "🤔",
+  "concept": "The generator is only rewarded for fooling the discriminator right now, with no explicit incentive to cover the full diversity of real data — it can 'get away with' narrow output as long as it's convincing.",
+  "xp": 15,
+  "hearts": 3,
+  "estMinutes": 7,
+  "segments": [
+    {
+      "type": "warmup",
+      "exercises": [
+        {
+          "id": "w1",
+          "type": "multiple_choice",
+          "xp": 1,
+          "prompt": "Recap: In the 10-digit example, what did the mode-collapsed generator end up producing almost exclusively?",
+          "options": [
+            {
+              "id": "a",
+              "text": "Convincing '3's, and almost nothing else",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "A balanced mix of all 10 digits",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "Random noise",
+              "correct": false
+            }
+          ],
+          "explain": "Right — it locked onto '3' because that's what reliably won. Today: the underlying reason WHY it can get away with that."
+        }
+      ]
+    },
+    {
+      "type": "teach",
+      "cards": [
+        {
+          "kind": "hook",
+          "icon": "🤔",
+          "title": "Wait... why doesn't it just diversify?",
+          "body": "It seems like an obvious flaw: if the generator keeps making the exact same '3', shouldn't SOMETHING push it to branch out? To understand why it doesn't, you have to look at exactly what the generator is being graded on."
+        },
+        {
+          "kind": "definition",
+          "icon": "🎯",
+          "title": "The generator's only job: fool it, right now",
+          "body": "At every training step, the generator is only rewarded for one thing: <strong>did THIS batch of outputs fool the discriminator?</strong> There is no separate score for 'did you also cover 0, 1, 2, 4-9?' — diversity is never directly part of the reward."
+        },
+        {
+          "kind": "analogy",
+          "icon": "📝",
+          "title": "The one trick-answer that always scores",
+          "body": "Imagine a student who notices the teacher's pop quizzes always include one true/false question, and that writing 'True' happens to be correct almost every time. The student stops studying the rest of the material — writing 'True' keeps earning full credit on that question, so there's no pressure, from the grading system itself, to learn anything broader."
+        },
+        {
+          "kind": "example",
+          "icon": "📉",
+          "title": "No penalty for what's missing",
+          "body": "Once the generator's '3's are fooling the discriminator, the gradient pushes it to make MORE convincing '3's — not toward trying a '7' instead. There's no line item in its loss that says 'you haven't made a 7 in 500 batches, go fix that.' Absence isn't punished; only being caught is."
+        },
+        {
+          "kind": "mythbust",
+          "icon": "⚠️",
+          "title": "\"Won't the discriminator eventually catch on?\"",
+          "body": "It might! But by the time the discriminator learns to reject an overused '3', the generator can simply pivot to a DIFFERENT single winning trick — maybe a '7' this time — rather than learning to cover all ten digits at once. Chasing one narrow target after another is still narrow."
+        },
+        {
+          "kind": "visual",
+          "icon": "🔀",
+          "title": "What's rewarded vs. what's missing",
+          "body": "The core mismatch driving mode collapse:",
+          "compare": {
+            "left": {
+              "emoji": "✅",
+              "tag": "What's Rewarded",
+              "text": "Fooling the discriminator<br>on THIS batch, right now<br>Nothing else, explicitly"
+            },
+            "right": {
+              "emoji": "❓",
+              "tag": "What's Missing",
+              "text": "No credit for variety<br>No penalty for narrowness<br>No 'cover all 10 digits' rule"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "type": "practice",
+      "exercises": [
+        {
+          "id": "p1",
+          "type": "multiple_choice",
+          "xp": 2,
+          "prompt": "Why can the generator 'get away with' producing only one narrow type of output?",
+          "options": [
+            {
+              "id": "a",
+              "text": "Because its training reward is based only on fooling the discriminator right now — there's no explicit reward for covering the full diversity of real data",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "Because the discriminator is programmed to ignore repeated outputs",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "Because the training dataset itself only contains one type of example",
+              "correct": false
+            },
+            {
+              "id": "d",
+              "text": "Because generators are incapable of producing more than one kind of output",
+              "correct": false
+            }
+          ],
+          "explain": "The reward signal only checks 'did this fool the discriminator' — it has no built-in notion of variety."
+        },
+        {
+          "id": "p2",
+          "type": "true_false",
+          "xp": 2,
+          "prompt": "True or false: The generator's loss function includes an explicit term that directly penalizes it for lacking output diversity.",
+          "options": [
+            {
+              "id": "t",
+              "text": "True",
+              "correct": false
+            },
+            {
+              "id": "f",
+              "text": "False",
+              "correct": true
+            }
+          ],
+          "explain": "False — that's exactly the gap that allows mode collapse. Standard GAN training has no explicit diversity term; the generator only chases 'does this fool the discriminator right now.'"
+        },
+        {
+          "id": "p3",
+          "type": "fill_blank",
+          "xp": 2,
+          "prompt": "Complete the sentence:",
+          "sentence": "The generator is only rewarded for fooling the discriminator ___ — with no explicit incentive to also cover the full diversity of real data.",
+          "blank": "right now",
+          "words": [
+            "right now",
+            "for accuracy",
+            "for creativity"
+          ],
+          "explain": "The reward is about THIS moment, THIS batch — never about whether the generator's overall range of outputs matches the real data's diversity."
+        },
+        {
+          "id": "p4",
+          "type": "spot_the_ai",
+          "xp": 2,
+          "prompt": "Which statement correctly explains why mode collapse happens?",
+          "options": [
+            {
+              "id": "a",
+              "text": "The generator has no built-in penalty for narrow output, only a reward for whatever currently fools the discriminator",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "The generator deliberately tries to sabotage training",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "The discriminator forces the generator to only produce one output",
+              "correct": false
+            }
+          ],
+          "explain": "Mode collapse is a side effect of the reward structure, not intentional sabotage or something forced by the discriminator."
+        }
+      ]
+    },
+    {
+      "type": "boss",
+      "exercises": [
+        {
+          "id": "b1",
+          "type": "multiple_choice",
+          "xp": 5,
+          "prompt": "Since there's no explicit 'diversity score' the generator is graded on, and the loss numbers alone might even look healthy during collapse, how would you actually notice mode collapse is happening during training?",
+          "options": [
+            {
+              "id": "a",
+              "text": "By looking directly at a large batch of generated samples and checking for suspicious repetition — a visual check, not just a number",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "By checking only the final generator loss value after training completes",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "By assuming training worked if the discriminator's accuracy hits exactly 50%",
+              "correct": false
+            },
+            {
+              "id": "d",
+              "text": "By reading the dataset's file size",
+              "correct": false
+            }
+          ],
+          "explain": "Exactly! Next: let's get practical about HOW to actually spot mode collapse by eye."
+        }
+      ]
+    }
+  ]
+}

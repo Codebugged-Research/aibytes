@@ -1,0 +1,223 @@
+{
+  "id": "u272-l1",
+  "unit": 272,
+  "day": 1361,
+  "tier": "NLP Advanced",
+  "tierIcon": "🧠",
+  "title": "Why Decoders Need Masking",
+  "icon": "😷",
+  "concept": "During autoregressive text generation, the model must not look at future tokens; masking enforces this constraint during parallel training.",
+  "xp": 15,
+  "hearts": 3,
+  "estMinutes": 7,
+  "segments": [
+    {
+      "type": "warmup",
+      "exercises": [
+        {
+          "id": "w1",
+          "type": "multiple_choice",
+          "xp": 1,
+          "prompt": "How do autoregressive text generators write a sentence?",
+          "options": [
+            {
+              "correct": true,
+              "id": "w_opt_1",
+              "text": "One word at a time"
+            },
+            {
+              "correct": false,
+              "text": "All words at the exact same millisecond",
+              "id": "w_opt_2"
+            },
+            {
+              "text": "By starting with the last word and working backward",
+              "id": "w_opt_3",
+              "correct": false
+            }
+          ],
+          "explain": "Generative decoders write text one token (word or word-part) at a time, moving forward step-by-step."
+        }
+      ]
+    },
+    {
+      "type": "teach",
+      "cards": [
+        {
+          "kind": "hook",
+          "icon": "🕵️",
+          "title": "No Cheating Allowed!",
+          "body": "When AI generates text, it writes one word at a time, just like you do. But during training, we feed it whole sentences at once to save time. How do we keep the AI from cheating by looking ahead at the words it is supposed to guess? We use a digital blindfold!"
+        },
+        {
+          "kind": "definition",
+          "icon": "😷",
+          "title": "What is Masking?",
+          "body": "Masking is a technique used in decoder models that hides future words during training. By blocking out the future, we force the model to predict the next word using only the words that came before it."
+        },
+        {
+          "kind": "analogy",
+          "icon": "📖",
+          "title": "The Mystery Novel Spoiler-Blocker",
+          "body": "Imagine reading a mystery novel, but your eyes keep jumping to the last page. You'd spoil the ending! Masking is like wearing special glasses that only let you see the words you have already read, blocking out the future pages so you can learn to guess what happens next honestly."
+        },
+        {
+          "kind": "example",
+          "icon": "📝",
+          "title": "Masking in Action",
+          "body": "If the model is learning the sentence \"Cats love to sleep\", we want it to predict \"sleep\" based only on \"Cats love to\". Masking hides the word \"sleep\" (and anything after it) while the model is practicing that step, so it can't just copy the answer."
+        },
+        {
+          "kind": "mythbust",
+          "icon": "🛡️",
+          "title": "Do We Always Mask?",
+          "body": "You might think masking is used when the AI is talking to users. Actually, masking is only needed during training! Once the model is trained and writing on its own, there are no future words to hide because they haven't been written yet."
+        },
+        {
+          "kind": "visual",
+          "icon": "👁️",
+          "title": "Visible vs. Hidden",
+          "body": "Let's look at how the model sees the sentence \"Life is good\" during training step 2 (predicting the third word).",
+          "compare": {
+            "left": {
+              "tag": "Without Masking (Cheating)",
+              "text": "Input: \"Life is [good]\" -> The model sees the target word \"good\" ahead of time!",
+              "emoji": "🔓"
+            },
+            "right": {
+              "emoji": "🔒",
+              "text": "Input: \"Life is [hidden]\" -> The model must guess \"good\" using only \"Life is\".",
+              "tag": "With Masking (Correct)"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "type": "practice",
+      "exercises": [
+        {
+          "id": "p1",
+          "type": "multiple_choice",
+          "xp": 2,
+          "prompt": "Why do we need to apply masking to a decoder model?",
+          "options": [
+            {
+              "id": "opt_a",
+              "text": "To prevent the model from looking ahead at future words.",
+              "correct": true
+            },
+            {
+              "text": "To translate sentences into multiple languages at once.",
+              "id": "opt_b",
+              "correct": false
+            },
+            {
+              "correct": false,
+              "id": "opt_c",
+              "text": "To delete incorrect words from the training dataset."
+            },
+            {
+              "text": "To make the model read from right to left only.",
+              "id": "opt_d",
+              "correct": false
+            }
+          ],
+          "explain": "Decoders predict text one word at a time. If they could see the future words during training, they wouldn't learn how to generate text on their own."
+        },
+        {
+          "id": "p2",
+          "type": "true_false",
+          "xp": 2,
+          "prompt": "True or False: Masking is required when a fully trained decoder model is generating text for a user.",
+          "options": [
+            {
+              "correct": false,
+              "text": "True",
+              "id": "true_id"
+            },
+            {
+              "correct": true,
+              "text": "False",
+              "id": "false_id"
+            }
+          ],
+          "explain": "Masking is only used during the training phase to simulate step-by-step generation. During real-world generation, the future words do not exist yet, so there is nothing to mask."
+        },
+        {
+          "id": "p3",
+          "type": "fill_blank",
+          "xp": 2,
+          "prompt": "Fill in the blank to complete the rule of decoder masking.",
+          "sentence": "Masking prevents the decoder from looking at tokens in the [blank].",
+          "blank": "future",
+          "words": [
+            "past",
+            "future",
+            "hidden",
+            "first"
+          ],
+          "explain": "Masking hides future tokens so the model only uses past tokens to predict the next word."
+        },
+        {
+          "id": "p4",
+          "type": "spot_the_ai",
+          "xp": 2,
+          "prompt": "Identify the model system that is cheating during its training process.",
+          "options": [
+            {
+              "text": "System A: To predict 'shine', it uses the context 'The sun will'.",
+              "id": "sys_a",
+              "correct": false
+            },
+            {
+              "id": "sys_b",
+              "correct": true,
+              "text": "System B: To predict 'shine', it looks ahead at the input sequence 'The sun will shine'."
+            },
+            {
+              "correct": false,
+              "text": "System C: To predict 'sun', it uses the context 'The'.",
+              "id": "sys_c"
+            }
+          ],
+          "explain": "System B is cheating because it is using the future word \"shine\" to predict \"shine\". A correct autoregressive model must only look at the past words \"The sun will\"."
+        }
+      ]
+    },
+    {
+      "type": "boss",
+      "exercises": [
+        {
+          "id": "b1",
+          "type": "multiple_choice",
+          "xp": 5,
+          "prompt": "Why is masking critical when training a decoder model to generate text?",
+          "options": [
+            {
+              "id": "opt_1",
+              "text": "It speeds up training by skipping easy words.",
+              "correct": false
+            },
+            {
+              "id": "opt_2",
+              "correct": false,
+              "text": "It allows the model to translate languages backward."
+            },
+            {
+              "correct": true,
+              "text": "It stops the model from cheating by looking at future words it needs to predict.",
+              "id": "opt_3"
+            },
+            {
+              "text": "It reduces the memory size of the vocabulary.",
+              "id": "opt_4",
+              "correct": false
+            }
+          ],
+          "explain": "Without masking, the decoder can cheat during training by looking ahead at the answer. This prevents it from learning how to actually generate the next word on its own during real-world testing."
+        }
+      ]
+    }
+  ]
+}

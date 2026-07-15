@@ -1,0 +1,222 @@
+{
+  "id": "u208-l4",
+  "unit": 208,
+  "day": 1044,
+  "tier": "Generative Adversarial Networks",
+  "tierIcon": "🎢",
+  "title": "Learning Rate and Update Ratio Tricks",
+  "icon": "🎯",
+  "concept": "Two practical stabilization techniques: carefully tuning the generator's and discriminator's learning rates relative to each other, and sometimes updating one network more or less frequently than the other.",
+  "xp": 15,
+  "hearts": 3,
+  "estMinutes": 7,
+  "segments": [
+    {
+      "type": "warmup",
+      "exercises": [
+        {
+          "id": "w1",
+          "type": "multiple_choice",
+          "xp": 1,
+          "prompt": "Recap: What should you check alongside the loss curves to judge whether GAN training is actually going well?",
+          "options": [
+            {
+              "id": "a",
+              "text": "The actual generated samples over time",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "Only the total number of epochs run",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "The file size of the model",
+              "correct": false
+            }
+          ],
+          "explain": "Right — samples plus curves. Today: two concrete knobs you can turn to help tame that oscillation in the first place."
+        }
+      ]
+    },
+    {
+      "type": "teach",
+      "cards": [
+        {
+          "kind": "hook",
+          "icon": "⚙️",
+          "title": "Two dials, one shared machine",
+          "body": "If generator and discriminator are locked in a constant back-and-forth, one lever you actually control is: how fast, and how often, does each one get to move?"
+        },
+        {
+          "kind": "definition",
+          "icon": "🎚️",
+          "title": "Learning rate balance",
+          "body": "The <strong>learning rate</strong> controls how big a step each network takes per update. If the discriminator's learning rate is much higher than the generator's, it can race ahead and overpower the generator (and vice versa). Practitioners often tune the generator's and discriminator's learning rates separately — sometimes using different values for each — to try to keep the competition roughly even."
+        },
+        {
+          "kind": "analogy",
+          "icon": "🎻",
+          "title": "A duet, not a solo",
+          "body": "Think of a musical duet where one singer is much louder than the other — the audience only hears one voice, and the performance falls apart. A sound engineer adjusts each microphone's volume separately so both voices stay balanced. Tuning generator and discriminator learning rates separately is a similar kind of balancing act, done so neither one drowns out the other."
+        },
+        {
+          "kind": "example",
+          "icon": "🔢",
+          "title": "Updating one network more often",
+          "body": "Beyond learning rate, you can also change the <strong>update ratio</strong> — for example, updating the discriminator 5 times for every 1 generator update. This gives the discriminator more chances to sharpen its judgment between generator updates, another way practitioners try to keep the two sides from swinging wildly out of balance."
+        },
+        {
+          "kind": "mythbust",
+          "icon": "⚠️",
+          "title": "There's no single 'correct' setting",
+          "body": "You might expect there's one proven learning rate and update ratio that always works. There isn't — the right balance depends on the specific dataset, architecture, and GAN variant. These are tuning knobs practitioners experiment with, not fixed rules with one universal right answer."
+        },
+        {
+          "kind": "visual",
+          "icon": "🔀",
+          "title": "Two knobs you can turn",
+          "body": "The two most common tuning levers:",
+          "compare": {
+            "left": {
+              "emoji": "🎚️",
+              "tag": "Learning Rate",
+              "text": "How big each update step is<br>Can differ for G vs. D<br>Prevents one side racing ahead"
+            },
+            "right": {
+              "emoji": "🔢",
+              "tag": "Update Ratio",
+              "text": "How often each one updates<br>e.g. 5 D-updates per G-update<br>Gives one side more 'practice'"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "type": "practice",
+      "exercises": [
+        {
+          "id": "p1",
+          "type": "multiple_choice",
+          "xp": 2,
+          "prompt": "What is one reason practitioners sometimes use different learning rates for the generator and discriminator?",
+          "options": [
+            {
+              "id": "a",
+              "text": "To prevent one network's updates from being so large that it races ahead and overwhelms the other, feeding the oscillation",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "Because the two networks are required by law to use different learning rates",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "Because using the same learning rate would make training run out of memory",
+              "correct": false
+            },
+            {
+              "id": "d",
+              "text": "Because different learning rates make the model file smaller",
+              "correct": false
+            }
+          ],
+          "explain": "Separate learning rates are a balancing tool — keeping one network's steps from being disproportionately large compared to the other's."
+        },
+        {
+          "id": "p2",
+          "type": "true_false",
+          "xp": 2,
+          "prompt": "True or false: Updating the discriminator multiple times for every single generator update is a technique some practitioners use to help stabilize GAN training.",
+          "options": [
+            {
+              "id": "t",
+              "text": "True",
+              "correct": true
+            },
+            {
+              "id": "f",
+              "text": "False",
+              "correct": false
+            }
+          ],
+          "explain": "True — giving the discriminator extra update steps per generator update (an 'update ratio' like 5:1) is a real, commonly used stabilization trick."
+        },
+        {
+          "id": "p3",
+          "type": "fill_blank",
+          "xp": 2,
+          "prompt": "Complete the sentence:",
+          "sentence": "Tuning the generator's and discriminator's learning rates ___ (rather than always using the exact same value for both) is one way practitioners try to keep the adversarial competition balanced.",
+          "blank": "separately",
+          "words": [
+            "separately",
+            "identically",
+            "randomly"
+          ],
+          "explain": "Tuning them separately lets you compensate for one network naturally learning faster or slower than the other."
+        },
+        {
+          "id": "p4",
+          "type": "spot_the_ai",
+          "xp": 2,
+          "prompt": "Which of these is a genuine example of the 'update ratio' stabilization trick?",
+          "options": [
+            {
+              "id": "a",
+              "text": "Running 5 discriminator update steps for every 1 generator update step, so the discriminator gets more practice between generator changes",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "Running both networks on entirely different, unrelated datasets",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "Deleting the discriminator entirely after epoch 10",
+              "correct": false
+            }
+          ],
+          "explain": "Giving one network more update steps per cycle than the other is exactly what 'update ratio' tuning means."
+        }
+      ]
+    },
+    {
+      "type": "boss",
+      "exercises": [
+        {
+          "id": "b1",
+          "type": "multiple_choice",
+          "xp": 5,
+          "prompt": "Learning rate tuning and update ratios are both ways of adjusting how fast or how often each network gets to move. What do these two tricks have in common, at a high level?",
+          "options": [
+            {
+              "id": "a",
+              "text": "They both try to keep the generator-discriminator competition roughly balanced, since one side racing too far ahead feeds oscillation and instability",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "They both permanently fix the moving-target problem so it never happens again",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "They both only apply to the discriminator, never the generator",
+              "correct": false
+            },
+            {
+              "id": "d",
+              "text": "They both make GAN training identical to standard classifier training",
+              "correct": false
+            }
+          ],
+          "explain": "Exactly — both are balancing tools, not permanent fixes. They help manage the oscillation, not eliminate the underlying dynamic. Time to pull it all together."
+        }
+      ]
+    }
+  ]
+}

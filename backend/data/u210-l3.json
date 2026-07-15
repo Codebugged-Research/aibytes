@@ -1,0 +1,211 @@
+{
+  "day": 1053,
+  "segments": [
+    {
+      "type": "warmup",
+      "exercises": [
+        {
+          "id": "u210_l3_warmup",
+          "explain": "Traditional GANs only check if the final output is 'real' or 'fake'. Feature matching helps by looking at internal features instead.",
+          "options": [
+            {
+              "id": "opt_w1",
+              "text": "It only looks at the final true/false score of the discriminator",
+              "correct": true
+            },
+            {
+              "id": "opt_w2",
+              "text": "It automatically makes images high-resolution",
+              "correct": false
+            },
+            {
+              "id": "opt_w3",
+              "text": "It bypasses the discriminator completely",
+              "correct": false
+            }
+          ],
+          "xp": 1,
+          "type": "multiple_choice",
+          "prompt": "What is a key limitation of the standard GAN objective that Feature Matching aims to solve?"
+        }
+      ],
+      "cards": []
+    },
+    {
+      "cards": [
+        {
+          "icon": "🎯",
+          "kind": "hook",
+          "body": "Imagine you're trying to copy a famous painting. If the art critic only tells you 'yes, this is real' or 'no, this is fake,' it's hard to learn. What if they told you how closely your brushstrokes and colors matched the original at every stage? That's what Feature Matching does!",
+          "title": "Beyond Pass or Fail"
+        },
+        {
+          "icon": "🧠",
+          "body": "Feature Matching is a training technique where we train the generator to match the intermediate layer activations (features) of the discriminator on real images, instead of just aiming to fool the discriminator's final binary output.",
+          "title": "What is Feature Matching?",
+          "kind": "definition"
+        },
+        {
+          "body": "Think of a baking apprentice. Instead of just trying to make a cake that looks exactly like the master baker's cake from the outside, the apprentice tries to match the texture of the batter, the rising height, and the fluffiness of the crumb at every step of the baking process.",
+          "title": "The Baking Apprentice",
+          "kind": "analogy",
+          "icon": "🍰"
+        },
+        {
+          "body": "In a deep neural network, the middle layers capture features like textures, edges, and shapes. In Feature Matching, we calculate the average feature values of real images in a middle layer and force the generator to produce fake images that match these same average values.",
+          "title": "Matching the Middle Layers",
+          "icon": "📊",
+          "kind": "example"
+        },
+        {
+          "title": "Copycats or Learners?",
+          "kind": "mythbust",
+          "icon": "🛡️",
+          "body": "Myth: Feature Matching makes the generator perfectly copy real images. Fact: It doesn't force a pixel-by-pixel copy. It simply ensures the statistics of the generated features look natural and realistic to the discriminator's inner layers."
+        },
+        {
+          "title": "Comparing the Targets",
+          "compare": {
+            "right": {
+              "text": "Generator tries to match the internal feature representations of real data.",
+              "tag": "Feature Matching",
+              "emoji": "📈"
+            },
+            "left": {
+              "emoji": "🏁",
+              "text": "Generator only tries to maximize the final output score (fooling the discriminator).",
+              "tag": "Standard GAN"
+            }
+          },
+          "icon": "⚖️",
+          "body": "Let's compare the training targets of standard GANs versus Feature Matching.",
+          "kind": "visual"
+        }
+      ],
+      "type": "teach",
+      "exercises": []
+    },
+    {
+      "cards": [],
+      "type": "practice",
+      "exercises": [
+        {
+          "explain": "Feature matching uses the intermediate layer statistics from the discriminator as a guide for the generator.",
+          "id": "u210_l3_p1",
+          "prompt": "What does the generator try to match during Feature Matching training?",
+          "type": "multiple_choice",
+          "options": [
+            {
+              "id": "p1_o1",
+              "text": "Intermediate layer activations of the discriminator",
+              "correct": true
+            },
+            {
+              "text": "The final probability score only",
+              "correct": false,
+              "id": "p1_o2"
+            },
+            {
+              "id": "p1_o3",
+              "text": "The pixel values of the generator's input noise",
+              "correct": false
+            }
+          ],
+          "xp": 2
+        },
+        {
+          "type": "true_false",
+          "prompt": "True or False: Feature Matching helps stabilize training and prevent mode collapse.",
+          "id": "u210_l3_p2",
+          "explain": "True. Feature matching prevents the generator from overtraining on a single point or collapsing, because it has to match statistical features of real data.",
+          "options": [
+            {
+              "correct": true,
+              "text": "True",
+              "id": "p2_o1"
+            },
+            {
+              "id": "p2_o2",
+              "correct": false,
+              "text": "False"
+            }
+          ],
+          "xp": 2
+        },
+        {
+          "prompt": "Complete the statement about Feature Matching:",
+          "id": "u210_l3_p3",
+          "sentence": "Instead of the final output, feature matching optimizes the generator using the statistics of the [blank] layers.",
+          "type": "fill_blank",
+          "words": [
+            "final",
+            "intermediate",
+            "input"
+          ],
+          "explain": "Feature matching targets the intermediate (middle) layers rather than the final output layer.",
+          "xp": 2,
+          "blank": "intermediate"
+        },
+        {
+          "id": "u210_l3_p4",
+          "prompt": "Identify which scenario demonstrates a generator trained effectively with Feature Matching.",
+          "type": "spot_the_ai",
+          "options": [
+            {
+              "text": "Scenario A: The generator outputs images with realistic textures and structures that mimic real data statistics.",
+              "correct": true,
+              "id": "p4_o1"
+            },
+            {
+              "correct": false,
+              "text": "Scenario B: The generator outputs chaotic noise that happens to trick a weak discriminator.",
+              "id": "p4_o2"
+            }
+          ],
+          "xp": 2,
+          "explain": "Scenario A shows a generator that has learned rich internal features (textures, lighting, edges) matching real statistics. Scenario B shows a standard generator that only learned how to trick the final output, resulting in weird artifacts."
+        }
+      ]
+    },
+    {
+      "type": "boss",
+      "cards": [],
+      "exercises": [
+        {
+          "prompt": "How does the generator's loss function change when using Feature Matching?",
+          "id": "u210_l3_boss",
+          "explain": "Feature matching uses the discriminator as a feature extractor, calculating the distance between the mean of features of real data and generated data. Next, we will explore Minibatch Discrimination!",
+          "options": [
+            {
+              "text": "It minimizes the difference in feature means between real and generated images.",
+              "correct": true,
+              "id": "b1_o1"
+            },
+            {
+              "id": "b1_o2",
+              "correct": false,
+              "text": "It removes the discriminator entirely from the training loop."
+            },
+            {
+              "id": "b1_o3,",
+              "text": "It matches the exact pixel locations of the target dataset.",
+              "correct": false
+            }
+          ],
+          "xp": 5,
+          "type": "multiple_choice"
+        }
+      ]
+    }
+  ],
+  "id": "u210-l3",
+  "xp": 15,
+  "title": "Feature Matching",
+  "estMinutes": 7,
+  "concept": "Feature matching trains the generator to match the intermediate layer activations of the discriminator on real images, rather than only optimizing for the final binary output.",
+  "tierIcon": "🧰",
+  "icon": "🎨",
+  "tier": "Generative Adversarial Networks",
+  "hearts": 3,
+  "unit": 210
+}

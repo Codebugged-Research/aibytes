@@ -1,0 +1,223 @@
+{
+  "id": "u280-l2",
+  "unit": 280,
+  "day": 1402,
+  "tier": "NLP Advanced",
+  "tierIcon": "🧠",
+  "title": "The Subword Tagging Challenge",
+  "icon": "✂️",
+  "concept": "Subword tokenizers split words; if 'McDonald' becomes ['Mc', 'Donald'], we assign the entity tag to the first subword and a special ignore tag to the rest.",
+  "xp": 15,
+  "hearts": 3,
+  "estMinutes": 7,
+  "segments": [
+    {
+      "type": "warmup",
+      "exercises": [
+        {
+          "id": "w1",
+          "type": "multiple_choice",
+          "xp": 1,
+          "prompt": "What do modern tokenizers do to long or rare words?",
+          "options": [
+            {
+              "text": "They delete them",
+              "correct": false,
+              "id": "a"
+            },
+            {
+              "id": "b",
+              "correct": true,
+              "text": "They split them into smaller subwords"
+            },
+            {
+              "id": "c",
+              "text": "They capitalize all of them",
+              "correct": false
+            }
+          ],
+          "explain": "Tokenizers split long or complex words into smaller units (subwords) to easily manage vocabulary size."
+        }
+      ]
+    },
+    {
+      "type": "teach",
+      "cards": [
+        {
+          "kind": "hook",
+          "icon": "✂️",
+          "title": "Chopped Up Words!",
+          "body": "When AI reads text, it often chops long words into smaller subwords. But how do we label a name if it gets cut in half? Let's solve the subword tagging puzzle!"
+        },
+        {
+          "kind": "definition",
+          "icon": "🏷️",
+          "title": "Subword Tag Alignment",
+          "body": "Subword tokenizers often chop words into smaller pieces. To prevent training confusion, we only assign the real entity tag (like 'Person') to the first piece. All subsequent pieces of that word get a special ignore tag (usually -100)."
+        },
+        {
+          "kind": "analogy",
+          "icon": "🚂",
+          "title": "The Train Analogy",
+          "body": "Imagine you are labeling a long train labeled 'Toy-Store'. If you put a 'Shop' sticker on the front engine ('Toy-'), you don't need to paste the same sticker on the passenger cars ('Store') trailing behind it. You just label the leader and ignore the rest!"
+        },
+        {
+          "kind": "example",
+          "icon": "🍔",
+          "title": "Tagging McDonald's",
+          "body": "If 'McDonald' is split into ['Mc', 'Donald'] and represents a Business entity:\n• 'Mc' gets tagged as B-ORG (Beginning of Organization)\n• 'Donald' gets tagged as -100 (Ignore)\nThis prevents the model from thinking 'Donald' is a brand-new entity on its own!"
+        },
+        {
+          "kind": "mythbust",
+          "icon": "👾",
+          "title": "The Labeling Trap",
+          "body": "Myth: We must give every single subword piece a real entity label.\nReality: Doing this confuses the AI because 'Donald' by itself isn't the whole entity name. We label the first piece and tell the AI to ignore the trailing pieces."
+        },
+        {
+          "kind": "visual",
+          "icon": "👁️",
+          "title": "Tag Comparison",
+          "body": "See how we handle tags when a word gets split into pieces. We keep the true label on the first piece and shield the rest.",
+          "compare": {
+            "right": {
+              "text": "['Mc', 'Donald']\\n['B-ORG', '-100 (Ignore)']",
+              "tag": "Correct Alignment",
+              "emoji": "✅"
+            },
+            "title": "Tagging Split Words",
+            "left": {
+              "tag": "Confusing Tagging",
+              "emoji": "❌",
+              "text": "['Mc', 'Donald']\\n['B-ORG', 'B-ORG']"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "type": "practice",
+      "exercises": [
+        {
+          "id": "p1",
+          "type": "multiple_choice",
+          "xp": 2,
+          "prompt": "Why do we assign a special ignore tag (like -100) to trailing subwords?",
+          "options": [
+            {
+              "id": "a",
+              "correct": false,
+              "text": "It makes the AI predict faster"
+            },
+            {
+              "id": "b",
+              "text": "It prevents split-word pieces from confusing the model's learning loss",
+              "correct": true
+            },
+            {
+              "text": "It automatically translates the text into other languages",
+              "correct": false,
+              "id": "c"
+            },
+            {
+              "id": "d",
+              "text": "It deletes the words from the sentence entirely",
+              "correct": false
+            }
+          ],
+          "explain": "Using a special ignore tag (typically -100) tells the neural network's loss function to skip these positions during training."
+        },
+        {
+          "id": "p2",
+          "type": "true_false",
+          "xp": 2,
+          "prompt": "True or False: A tokenizer can split a single word like 'McDonald' into multiple subword pieces.",
+          "options": [
+            {
+              "correct": true,
+              "id": "t",
+              "text": "True"
+            },
+            {
+              "id": "f",
+              "correct": false,
+              "text": "False"
+            }
+          ],
+          "explain": "Subword tokenizers frequently break unfamiliar or complex words into smaller subword tokens to handle spelling variations."
+        },
+        {
+          "id": "p3",
+          "type": "fill_blank",
+          "xp": 2,
+          "prompt": "Fill in the missing strategy for dealing with split words:",
+          "sentence": "To prevent training errors, we give the first subword the real tag and assign an [blank] tag to the remaining subwords.",
+          "blank": "ignore",
+          "words": [
+            "ignore",
+            "extra",
+            "duplicate"
+          ],
+          "explain": "We use a special ignore tag (like -100) for trailing subwords so the model only learns from the main starting piece."
+        },
+        {
+          "id": "p4",
+          "type": "spot_the_ai",
+          "xp": 2,
+          "prompt": "Which tagging setup is correct for the split word ['Mc', 'Donald'] representing an Organization?",
+          "options": [
+            {
+              "id": "a",
+              "correct": false,
+              "text": "Label 'Mc' as B-ORG, and label 'Donald' as I-ORG"
+            },
+            {
+              "id": "b",
+              "text": "Label 'Mc' as B-ORG, and label 'Donald' as -100 (Ignore)",
+              "correct": true
+            },
+            {
+              "correct": false,
+              "id": "c",
+              "text": "Label 'Mc' as -100 (Ignore), and label 'Donald' as B-ORG"
+            }
+          ],
+          "explain": "The first piece 'Mc' receives the actual entity tag, while the trailing piece 'Donald' gets the ignore label (-100)."
+        }
+      ]
+    },
+    {
+      "type": "boss",
+      "exercises": [
+        {
+          "id": "b1",
+          "type": "multiple_choice",
+          "xp": 5,
+          "prompt": "During Named Entity Recognition, the name 'Goldman' is split into ['Gold', '##man']. How should we label these subwords?",
+          "options": [
+            {
+              "text": "Label both 'Gold' and 'man' as B-LOC",
+              "correct": false,
+              "id": "a"
+            },
+            {
+              "correct": true,
+              "text": "Label 'Gold' as B-LOC, and 'man' with a special ignore tag like -100",
+              "id": "b"
+            },
+            {
+              "text": "Label 'Gold' as O (Outside) and 'man' as B-LOC",
+              "correct": false,
+              "id": "c"
+            },
+            {
+              "id": "d",
+              "correct": false,
+              "text": "Skip the word 'Goldman' entirely from training"
+            }
+          ],
+          "explain": "We label the very first subword ('Gold') with the entity class (B-LOC) and assign the special ignore tag (like -100) to the remaining subword ('man') so the model's loss calculation doesn't get confused by split parts."
+        }
+      ]
+    }
+  ]
+}

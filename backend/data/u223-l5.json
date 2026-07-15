@@ -1,0 +1,223 @@
+{
+  "id": "u223-l5",
+  "unit": 223,
+  "day": 1120,
+  "tier": "NLP Basics",
+  "tierIcon": "🔤",
+  "title": "Smoothing Techniques",
+  "icon": "🧼",
+  "concept": "Smoothing (like Laplace smoothing) shifts a small amount of probability mass to unseen N-grams so the model never predicts a zero probability. Boss explain ends with: 'Next up: Text Classification.'",
+  "xp": 15,
+  "hearts": 3,
+  "estMinutes": 7,
+  "segments": [
+    {
+      "type": "warmup",
+      "exercises": [
+        {
+          "id": "w1",
+          "type": "multiple_choice",
+          "xp": 1,
+          "prompt": "What causes an N-gram language model to calculate a probability of zero?",
+          "options": [
+            {
+              "correct": true,
+              "text": "Unseen words or word sequences",
+              "id": "a"
+            },
+            {
+              "id": "b",
+              "correct": false,
+              "text": "Words that are spelled incorrectly"
+            },
+            {
+              "id": "c",
+              "correct": false,
+              "text": "Words that are too long"
+            }
+          ],
+          "explain": "When a model sees a word it has never encountered during training, it calculates its frequency as 0, which creates a zero probability problem."
+        }
+      ]
+    },
+    {
+      "type": "teach",
+      "cards": [
+        {
+          "kind": "hook",
+          "icon": "🧐",
+          "title": "The Danger of Zero",
+          "body": "Imagine building a language model that reads a whole library, but has never seen the word 'quokka'. If a user types 'I love quokkas', a simple model will multiply its probabilities by zero and break down! How do we stop unseen words from ruining our predictions? We use smoothing!"
+        },
+        {
+          "kind": "definition",
+          "icon": "🧼",
+          "title": "What is Smoothing?",
+          "body": "Smoothing is a technique that takes a tiny bit of probability from words we see often and gives it to words we have never seen before. One common method is Laplace Smoothing, which adds a small number (usually 1) to all word counts. This ensures that no word or sequence ever gets a probability of zero!"
+        },
+        {
+          "kind": "analogy",
+          "icon": "🧁",
+          "title": "The Bakery Menu Analogy",
+          "body": "Imagine you own a bakery and sell 5 flavors of cupcakes. A customer walks in and asks for a 'Blueberry Explosion' cupcake. You have never baked one before. Instead of panicking, shouting 'Impossible!' and shutting down the bakery, you simply say 'We don't have it today, but there's a tiny chance we might make it tomorrow!' Smoothing is like keeping a tiny bit of hope alive for flavors you haven't baked yet."
+        },
+        {
+          "kind": "example",
+          "icon": "🍒",
+          "title": "Smoothing in Action",
+          "body": "Suppose your training text is: 'I like apples. I like bananas.'\nThe word 'cherry' never appears. \n\nWithout smoothing, the probability of 'cherry' is 0%. If the model tries to evaluate the phrase 'I like cherries', the total probability crashes to 0!\n\nWith Laplace smoothing, we pretend we saw 'cherry' at least 1 time. Now, its probability is small (like 0.1%), but it is NOT zero!"
+        },
+        {
+          "kind": "mythbust",
+          "icon": "🛡️",
+          "title": "Does Smoothing 'Ruins' the Math?",
+          "body": "Many beginners think that smoothing makes language models less accurate because it changes the real counts of the words. In reality, it makes models much more robust! Unseen words happen all the time in real life, and smoothing is the secret armor that keeps our model running smoothly."
+        },
+        {
+          "kind": "visual",
+          "icon": "📊",
+          "title": "Smoothing vs. No Smoothing",
+          "body": "Let's compare how a model calculates probabilities for a brand new, unseen sentence with and without smoothing.",
+          "compare": {
+            "right": {
+              "text": "Unseen words get a tiny, non-zero probability (e.g. 0.01%). The sentence gets a valid probability. The model succeeds!",
+              "emoji": "✅",
+              "tag": "With Smoothing"
+            },
+            "left": {
+              "text": "Unseen words get 0% probability. One zero multiplies the whole sentence probability to 0%. The model fails!",
+              "emoji": "❌",
+              "tag": "No Smoothing"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "type": "practice",
+      "exercises": [
+        {
+          "id": "p1",
+          "type": "multiple_choice",
+          "xp": 2,
+          "prompt": "Why is a probability of 0 so dangerous in an N-gram language model?",
+          "options": [
+            {
+              "text": "It multiplies the entire sentence probability to zero.",
+              "id": "a",
+              "correct": true
+            },
+            {
+              "correct": false,
+              "text": "It makes the computer run out of memory.",
+              "id": "b"
+            },
+            {
+              "correct": false,
+              "text": "It causes the computer to delete the training data.",
+              "id": "c"
+            },
+            {
+              "text": "It forces the model to only print punctuation.",
+              "id": "d",
+              "correct": false
+            }
+          ],
+          "explain": "Multiplying any number by zero results in zero. If an unseen N-gram has a probability of 0, the math multiplies the entire sentence probability down to 0, which breaks our predictions."
+        },
+        {
+          "id": "p2",
+          "type": "true_false",
+          "xp": 2,
+          "prompt": "True or False: Smoothing increases the probability of the most common words in your text.",
+          "options": [
+            {
+              "correct": false,
+              "text": "True",
+              "id": "true"
+            },
+            {
+              "text": "False",
+              "id": "false",
+              "correct": true
+            }
+          ],
+          "explain": "Smoothing actually lowers the probability of very frequent words slightly to share that 'probability mass' with unseen words."
+        },
+        {
+          "id": "p3",
+          "type": "fill_blank",
+          "xp": 2,
+          "prompt": "Fill in the blank to name the classic smoothing method:",
+          "sentence": "One of the most famous smoothing techniques is called ________ smoothing.",
+          "blank": "Laplace",
+          "words": [
+            "Laplace",
+            "Python",
+            "Zero",
+            "Multiply"
+          ],
+          "explain": "Laplace smoothing is one of the simplest techniques that adds a small constant to all counts so no probability drops to zero."
+        },
+        {
+          "id": "p4",
+          "type": "spot_the_ai",
+          "xp": 2,
+          "prompt": "Which model is successfully using a smoothing technique?",
+          "options": [
+            {
+              "text": "Model A: 'The probability of this new sentence is exactly 0.00% because I have never seen the word pizza.'",
+              "id": "a",
+              "correct": false
+            },
+            {
+              "text": "Model B: 'The probability of this new sentence is 0.01% because I adjusted my counts to allow unseen words.'",
+              "id": "b",
+              "correct": true
+            },
+            {
+              "correct": false,
+              "text": "Model C: 'I cannot process this sentence because it contains a typo.'",
+              "id": "c"
+            }
+          ],
+          "explain": "The sentence with Laplace smoothing is generated by a model that handles unseen words safely. The model with '0% chance' is showing a classic zero-probability failure."
+        }
+      ]
+    },
+    {
+      "type": "boss",
+      "exercises": [
+        {
+          "id": "b1",
+          "type": "multiple_choice",
+          "xp": 5,
+          "prompt": "How does Laplace smoothing solve the 'zero probability' problem when a language model encounters an unseen word sequence?",
+          "options": [
+            {
+              "id": "a",
+              "correct": false,
+              "text": "It removes rare words from the dataset entirely."
+            },
+            {
+              "id": "b",
+              "correct": false,
+              "text": "It forces all words to have exactly the same probability."
+            },
+            {
+              "text": "It adds a small count to all words so none have a zero probability.",
+              "id": "c",
+              "correct": true
+            },
+            {
+              "id": "d",
+              "correct": false,
+              "text": "It makes the model run faster by skipping unseen words."
+            }
+          ],
+          "explain": "Laplace smoothing acts like a safety net, adding a small count to every possible word so that a single new word doesn't crash your entire probability calculation. Excellent job mastering N-gram smoothing! Next up: Text Classification."
+        }
+      ]
+    }
+  ]
+}

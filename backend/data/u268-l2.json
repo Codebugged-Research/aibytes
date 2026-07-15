@@ -1,0 +1,222 @@
+{
+  "id": "u268-l2",
+  "unit": 268,
+  "day": 1342,
+  "tier": "NLP Advanced",
+  "tierIcon": "🧠",
+  "title": "Injecting Position Information",
+  "icon": "➕",
+  "concept": "We add a positional encoding vector directly to the word embedding, giving the model a coordinate system to identify where each word sits.",
+  "xp": 15,
+  "hearts": 3,
+  "estMinutes": 7,
+  "segments": [
+    {
+      "type": "warmup",
+      "exercises": [
+        {
+          "id": "w1",
+          "type": "multiple_choice",
+          "xp": 1,
+          "prompt": "What happens if you feed a sentence into a transformer without any positional information-rich sentence to a transformer without any positional encoding?",
+          "options": [
+            {
+              "id": "w_1",
+              "correct": false,
+              "text": "It reads them one by one, very slowly."
+            },
+            {
+              "text": "It loses all track of word order and treats them like a bag of words.",
+              "id": "w_2",
+              "correct": true
+            },
+            {
+              "correct": false,
+              "text": "It automatically guesses the correct order using grammar rules.",
+              "id": "w_3"
+            }
+          ],
+          "explain": "Without positional encoding, a transformer sees the words all at once and cannot tell their order, making 'cats chase mice' and 'mice chase cats' look identical."
+        }
+      ]
+    },
+    {
+      "type": "teach",
+      "cards": [
+        {
+          "kind": "hook",
+          "icon": "➕",
+          "title": "Words Without Order",
+          "body": "A transformer processes all words in a sentence at the exact same time. This is super fast, but it has a catch: the model has no idea which word comes first! How do we teach it word order? We inject position information!"
+        },
+        {
+          "kind": "definition",
+          "icon": "📍",
+          "title": "Positional Encoding",
+          "body": "Positional Encoding is the process of adding a special helper vector directly to each word's embedding. This helper vector acts like a GPS coordinate, telling the AI exactly where that word sits in the sentence."
+        },
+        {
+          "kind": "analogy",
+          "icon": "🎴",
+          "title": "The Numbered Cards",
+          "body": "Imagine you have a stack of identical blank cards. If you write numbers from 1 to 5 in the corners, you suddenly know the exact order they belong in, even if they get shuffled around on the table. Adding positional vectors to word vectors does the exact same thing!"
+        },
+        {
+          "kind": "example",
+          "icon": "📝",
+          "title": "Order Changes Meaning",
+          "body": "Take the words 'not' and 'good'. In the sentence 'not good', 'not' has position 1 and 'good' has position 2. In 'good, not!', the positions flip. By adding position vectors, the AI gets different final vectors for 'not' in both sentences, allowing it to correctly understand the order."
+        },
+        {
+          "kind": "mythbust",
+          "icon": "🛡️",
+          "title": "Will it Mess Up the Words?",
+          "body": "Many think that adding a position vector will ruin or overwrite the meaning of the word vector. In practice, the AI's math easily keeps them separated! The model can read both the word's meaning and its position without any confusion."
+        },
+        {
+          "kind": "visual",
+          "icon": "📊",
+          "title": "Combining Vectors",
+          "body": "Here is how we combine meaning and position before feeding them into the transformer.",
+          "compare": {
+            "left": {
+              "emoji": "🔤",
+              "text": "Just the word vector: knows 'dog' but doesn't know where it is in the sentence.",
+              "tag": "Word Meaning"
+            },
+            "right": {
+              "emoji": "📍",
+              "text": "Word vector ADDED to position vector: knows 'dog' is the 3rd word.",
+              "tag": "Word + Position"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "type": "practice",
+      "exercises": [
+        {
+          "id": "p1",
+          "type": "multiple_choice",
+          "xp": 2,
+          "prompt": "Why do we need to inject positional information in the first place?",
+          "options": [
+            {
+              "id": "mc_1",
+              "correct": false,
+              "text": "Word vectors are too small."
+            },
+            {
+              "id": "mc_2",
+              "correct": true,
+              "text": "Transformers process all words at the same time and have no built-in sense of order."
+            },
+            {
+              "correct": false,
+              "text": "To make the words translate into different languages automatically.",
+              "id": "mc_3"
+            },
+            {
+              "id": "mc_4",
+              "correct": false,
+              "text": "To stop the model from outputting punctuation."
+            }
+          ],
+          "explain": "A transformer processes all tokens simultaneously, meaning it lacks inherent knowledge of word order. Positional encodings provide the necessary coordinates."
+        },
+        {
+          "id": "p2",
+          "type": "true_false",
+          "xp": 2,
+          "prompt": "True or False: The position vector has the exact same size (dimension) as the word vector so they can be added together.",
+          "options": [
+            {
+              "text": "True",
+              "id": "tf_t",
+              "correct": true
+            },
+            {
+              "text": "False",
+              "id": "tf_f",
+              "correct": false
+            }
+          ],
+          "explain": "Positional vectors are added directly to the word embeddings, so they both share the exact same vector dimension."
+        },
+        {
+          "id": "p3",
+          "type": "fill_blank",
+          "xp": 2,
+          "prompt": "Fill in the missing word to describe how we combine word vectors and position vectors.",
+          "sentence": "We inject position information by [blank] the position vector directly to the word vector.",
+          "blank": "adding",
+          "words": [
+            "adding",
+            "multiplying",
+            "deleting"
+          ],
+          "explain": "We inject position by adding the position vector directly to the word vector. This keeps the vector size the same while embedding the position."
+        },
+        {
+          "id": "p4",
+          "type": "spot_the_ai",
+          "xp": 2,
+          "prompt": "Spot the AI-generated statement that contains incorrect math concepts.",
+          "options": [
+            {
+              "text": "Human: 'We add a positional coordinate vector to each word vector.'",
+              "id": "sai_1",
+              "correct": false
+            },
+            {
+              "id": "sai_2",
+              "correct": true,
+              "text": "AI: 'We multiply the word vector by the positional vector to mix them together.'"
+            },
+            {
+              "text": "Human: 'Without positions, the model treats a sentence as an unordered bag of words.'",
+              "id": "sai_3",
+              "correct": false
+            }
+          ],
+          "explain": "The AI-generated statement is incorrect because positional vectors are added to the word vectors, not multiplied. Multiplying them would distort the word meanings."
+        }
+      ]
+    },
+    {
+      "type": "boss",
+      "exercises": [
+        {
+          "id": "b1",
+          "type": "multiple_choice",
+          "xp": 5,
+          "prompt": "Why is injecting positional information so critical for transformer models?",
+          "options": [
+            {
+              "correct": true,
+              "text": "Without positional encodings, the model cannot tell the difference between 'dog bites man' and 'man bites dog'.",
+              "id": "opt_1"
+            },
+            {
+              "correct": false,
+              "text": "Positional encodings are only used to make the words longer so they process faster.",
+              "id": "opt_2"
+            },
+            {
+              "correct": false,
+              "text": "Positional encodings completely replace the word embeddings.",
+              "id": "opt_3"
+            },
+            {
+              "correct": false,
+              "text": "Positional encodings force the model to process words one by one, slowing it down.",
+              "id": "opt_4,text:"
+            }
+          ],
+          "explain": "Since transformers don't process words sequentially like older models, they are completely 'word-order blind' without positional encodings. We add these coordinate vectors directly to the word embeddings so the model knows where each word sits in the sentence."
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,223 @@
+{
+  "segments": [
+    {
+      "exercises": [
+        {
+          "xp": 1,
+          "prompt": "Quick recap: What is the main advantage of using CycleGAN?",
+          "options": [
+            {
+              "correct": false,
+              "id": "w1_opt1",
+              "text": "It requires identical, pixel-aligned image pairs for training."
+            },
+            {
+              "id": "w1_opt2",
+              "text": "It learns translation patterns using two unpaired sets of images.",
+              "correct": true
+            },
+            {
+              "id": "w1_opt3",
+              "text": "It only works with grayscale images.",
+              "correct": false
+            }
+          ],
+          "type": "multiple_choice",
+          "id": "u214-l2-w1",
+          "explain": "Yesterday, we learned that CycleGAN allows us to translate images between two domains (like horses to zebras) even when we don't have matching pairs in our dataset!"
+        }
+      ],
+      "type": "warmup"
+    },
+    {
+      "type": "teach",
+      "cards": [
+        {
+          "title": "The Translation Test",
+          "body": "Imagine translating an English book into French, and then someone else translates it back into English. If the final English book is completely different from where you started, the translation process is broken! CycleGAN faces a similar challenge when turning horses into zebras.",
+          "kind": "hook",
+          "icon": "📖"
+        },
+        {
+          "body": "Cycle consistency loss is a mathematical rule that forces a network to make sure an image translated from domain A to B, and then back to A, looks exactly like the original input image. This stops the AI from generating random, unrelated pictures.",
+          "icon": "🔄",
+          "title": "Cycle Consistency Loss",
+          "kind": "definition"
+        },
+        {
+          "body": "Think of it like round-trip travel. If you take a flight from New York to Paris, and then fly back, you should end up right back at your original home in New York, not in Tokyo! The 'round-trip' keeps the destination connected to the origin.",
+          "title": "The Round-Trip Ticket",
+          "icon": "✈️",
+          "kind": "analogy"
+        },
+        {
+          "icon": "🐎",
+          "title": "Horse to Zebra and Back",
+          "kind": "example",
+          "body": "If we translate a photo of a brown horse standing near a tree into a zebra, the zebra must still be standing in the exact same pose near the exact same tree. Turning the zebra back into a horse must recover the original brown horse perfectly."
+        },
+        {
+          "body": "Some believe CycleGAN only needs one generator to do this. Actually, it needs two: Generator X-to-Y (horse to zebra) and Generator Y-to-X (zebra to horse), working together to complete the loop.",
+          "title": "One Generator is Not Enough",
+          "icon": "💡",
+          "kind": "mythbust"
+        },
+        {
+          "kind": "visual",
+          "compare": {
+            "right": {
+              "text": "The same brown horse in the same field after round-trip translation.",
+              "tag": "Reconstruction (A')",
+              "emoji": "🔄"
+            },
+            "left": {
+              "tag": "Original (A)",
+              "emoji": "🐴",
+              "text": "A brown horse standing in a grassy field."
+            }
+          },
+          "title": "The Cycle Loop",
+          "icon": "♻️"
+        }
+      ]
+    },
+    {
+      "exercises": [
+        {
+          "id": "u214-l2-p1",
+          "prompt": "What does cycle consistency loss actually do?",
+          "xp": 2,
+          "type": "multiple_choice",
+          "options": [
+            {
+              "correct": true,
+              "id": "p1_opt1",
+              "text": "It ensures that translating an image forward and backward reconstructs the original image."
+            },
+            {
+              "id": "p1_opt2",
+              "text": "It randomly deletes pixels to make the generator work harder.",
+              "correct": false
+            },
+            {
+              "text": "It forces the discriminator to always win the game.",
+              "id": "p1_opt3",
+              "correct": false
+            }
+          ],
+          "explain": "Cycle consistency loss measures how much the reconstructed image differs from the original input image after a round-trip translation."
+        },
+        {
+          "type": "true_false",
+          "xp": 2,
+          "prompt": "True or False: Without cycle consistency loss, a horse-to-zebra generator might ignore the input horse's pose completely.",
+          "id": "u214-l2-p2",
+          "explain": "Without cycle consistency, the generator could ignore the input image's structure and just generate any random, realistic image of the target style.",
+          "options": [
+            {
+              "id": "p2_opt1",
+              "text": "True",
+              "correct": true
+            },
+            {
+              "id": "p2_opt2",
+              "text": "False",
+              "correct": false
+            }
+          ]
+        },
+        {
+          "prompt": "Fill in the blank to complete the CycleGAN objective.",
+          "xp": 2,
+          "id": "u214-l2-p3",
+          "sentence": "Cycle consistency loss compares the original input image directly with the [blank] image.",
+          "words": [
+            "reconstructed",
+            "fake",
+            "random"
+          ],
+          "options": [
+            {
+              "correct": true,
+              "text": "reconstructed",
+              "id": "rec"
+            },
+            {
+              "text": "fake",
+              "id": "fake",
+              "correct": false
+            },
+            {
+              "text": "random",
+              "correct": false,
+              "id": "random"
+            }
+          ],
+          "blank": "reconstructed",
+          "explain": "Cycle consistency requires the original image and the reconstructed image (after translating to the target style and back) to be as identical as possible.",
+          "type": "fill_blank"
+        },
+        {
+          "explain": "The cycle consistency constraint ensures the output zebra retains the exact pose, background, and structure of the original input horse.",
+          "id": "u214-l2-p4",
+          "xp": 2,
+          "prompt": "Which image demonstrates successful cycle consistency?",
+          "options": [
+            {
+              "id": "p4_opt1",
+              "text": "A photo of a zebra generated in a random jungle setting, ignoring the input horse photo.",
+              "correct": false
+            },
+            {
+              "correct": true,
+              "id": "p4_opt2",
+              "text": "A zebra image that perfectly preserves the background scenery and standing pose of the input horse."
+            }
+          ],
+          "type": "spot_the_ai"
+        }
+      ],
+      "type": "practice"
+    },
+    {
+      "exercises": [
+        {
+          "prompt": "Why is cycle consistency loss so vital for unpaired image-to-image translation?",
+          "xp": 5,
+          "id": "u214-l2-b1",
+          "explain": "Cycle consistency ensures we don't lose the structural details of our input image during the style translation process! In the next lesson, we will explore the identity loss used in CycleGAN.",
+          "type": "multiple_choice",
+          "options": [
+            {
+              "correct": false,
+              "text": "It makes training twice as fast.",
+              "id": "b1_opt1"
+            },
+            {
+              "text": "It prevents the generator from ignoring the structure of the input image.",
+              "correct": true,
+              "id": "b1_opt2"
+            },
+            {
+              "text": "It removes the need for any discriminators in the network.",
+              "id": "b1_opt3",
+              "correct": false
+            }
+          ]
+        }
+      ],
+      "type": "boss"
+    }
+  ],
+  "xp": 15,
+  "concept": "To prevent the generator from ignoring the input, CycleGAN enforces cycle consistency: translating from A to B and back to A must yield the original image.",
+  "estMinutes": 7,
+  "unit": 214,
+  "icon": "♻️",
+  "hearts": 3,
+  "title": "Cycle Consistency Loss",
+  "tier": "Generative Adversarial Networks",
+  "tierIcon": "🔄",
+  "id": "u214-l2",
+  "day": 1072
+}

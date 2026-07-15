@@ -1,0 +1,223 @@
+{
+  "xp": 15,
+  "day": 1081,
+  "tierIcon": "🌊",
+  "segments": [
+    {
+      "exercises": [
+        {
+          "xp": 1,
+          "prompt": "Why do we look for alternatives to the standard GAN's binary cross-entropy loss?",
+          "options": [
+            {
+              "id": "w1",
+              "correct": false,
+              "text": "Standard GANs are always perfectly stable."
+            },
+            {
+              "id": "w2",
+              "correct": true,
+              "text": "Standard GANs can suffer from unstable training when distributions do not overlap."
+            },
+            {
+              "text": "Standard GANs do not use any loss functions.",
+              "correct": false,
+              "id": "w3"
+            }
+          ],
+          "explain": "Standard GANs try to decide if an image is real or fake, which can fail if the generator is completely off. Measuring distance tells us how far apart they are instead!",
+          "type": "multiple_choice",
+          "id": "u216_l1_warmup"
+        }
+      ],
+      "type": "warmup"
+    },
+    {
+      "type": "teach",
+      "cards": [
+        {
+          "body": "Imagine trying to build a sandcastle that looks exactly like a photo, but you keep getting a simple 'yes' or 'no' on whether it is perfect. That's how standard GANs train! What if we measured how much sand we need to move instead?",
+          "kind": "hook",
+          "title": "Shoveling Sand",
+          "icon": "🏰"
+        },
+        {
+          "icon": "📐",
+          "title": "What is Earth Mover's Distance?",
+          "body": "The Earth Mover's Distance (EMD), or Wasserstein Distance, measures the minimum effort required to transform one probability distribution into another. In WGANs, it replaces binary classification with a continuous distance measurement.",
+          "kind": "definition"
+        },
+        {
+          "title": "The Dirt Pile Analogy",
+          "icon": "🚜",
+          "body": "Think of the real data distribution as a pile of dirt, and the generated distribution as a hole we want to fill. The Earth Mover's Distance is the amount of dirt multiplied by the distance we must carry it to fill the hole completely.",
+          "kind": "analogy"
+        },
+        {
+          "icon": "🎨",
+          "title": "Continuous Feedback",
+          "body": "If our generator makes images that are all pure red pixels, and the real images are pure blue, a standard GAN just says '100% fake'. WGAN measures how far 'red' is from 'blue' in pixel space, giving a smooth gradient to help the generator improve step-by-step.",
+          "kind": "example"
+        },
+        {
+          "kind": "mythbust",
+          "title": "It is Not Just an Optimizer Swap",
+          "icon": "🗺️",
+          "body": "Many think WGANs just change the optimizer. Actually, they change the entire way we measure similarity between distributions, turning a hard true/false test into a smooth, geography-like mapping journey."
+        },
+        {
+          "icon": "⚖️",
+          "title": "Loss Comparison",
+          "compare": {
+            "left": {
+              "emoji": "❌",
+              "tag": "Standard GAN Loss",
+              "text": "Classifies real vs. fake. Gradients vanish if the generator is too poor."
+            },
+            "right": {
+              "text": "Measures physical distance. Gradients stay strong even when distributions do not overlap.",
+              "emoji": "✅",
+              "tag": "Wasserstein Loss"
+            }
+          },
+          "kind": "visual"
+        }
+      ]
+    },
+    {
+      "exercises": [
+        {
+          "type": "multiple_choice",
+          "xp": 2,
+          "id": "u216_l1_p1",
+          "prompt": "What does the Earth Mover's Distance measure in a WGAN?",
+          "options": [
+            {
+              "text": "It measures the minimum effort to move probability mass to match another distribution.",
+              "correct": true,
+              "id": "p1_1"
+            },
+            {
+              "correct": false,
+              "id": "p1_2",
+              "text": "It calculates the physical weight of the computer server running the GAN."
+            },
+            {
+              "id": "p1_3",
+              "text": "It determines the speed of data transfer across networks.",
+              "correct": false
+            }
+          ],
+          "explain": "Earth Mover's Distance calculates the minimum effort (mass times distance) needed to reshape one distribution into the target distribution."
+        },
+        {
+          "explain": "True! Wasserstein distance provides smooth, continuous gradients even when the real and generated distributions have no overlap.",
+          "options": [
+            {
+              "text": "True",
+              "id": "p2_t",
+              "correct": true
+            },
+            {
+              "text": "False",
+              "correct": false,
+              "id": "p2_f"
+            }
+          ],
+          "prompt": "Wasserstein distance helps solve the vanishing gradient problem when distributions do not overlap.",
+          "id": "u216_l1_p2",
+          "xp": 2,
+          "type": "true_false"
+        },
+        {
+          "sentence": "Earth Mover's Distance measures how much probability [blank] must be shifted to align the distributions.",
+          "words": [
+            "mass",
+            "speed",
+            "loss"
+          ],
+          "id": "u216_l1_p3",
+          "type": "fill_blank",
+          "prompt": "Earth Mover's Distance measures how much probability [blank] must be shifted to align the distributions.",
+          "xp": 2,
+          "blank": "mass",
+          "explain": "The Earth Mover's Distance calculates the cost of moving probability mass over a given distance.",
+          "options": [
+            {
+              "id": "opt_mass",
+              "correct": true,
+              "text": "mass"
+            },
+            {
+              "text": "speed",
+              "id": "opt_speed",
+              "correct": false
+            },
+            {
+              "correct": false,
+              "id": "opt_loss",
+              "text": "loss"
+            }
+          ]
+        },
+        {
+          "xp": 2,
+          "id": "u216_l1_p4",
+          "type": "spot_the_ai",
+          "explain": "System A uses Wasserstein distance (WGAN) to achieve stable convergence, whereas System B uses binary classification which suffers from mode collapse.",
+          "options": [
+            {
+              "text": "System A: Constantly improves quality by measuring distribution distance.",
+              "correct": true,
+              "id": "p4_a"
+            },
+            {
+              "id": "p4_b",
+              "correct": false,
+              "text": "System B: Frequently collapses into generating only one type of blurred image."
+            }
+          ],
+          "prompt": "Which system exhibits the stable training benefits of utilizing Wasserstein Distance?"
+        }
+      ],
+      "type": "practice"
+    },
+    {
+      "type": "boss",
+      "exercises": [
+        {
+          "explain": "WGANs use Wasserstein Distance to provide a smooth metric space, preventing vanishing gradients. In the next lesson, we will look at how we enforce the mathematical constraints required for this distance metric to work.",
+          "type": "multiple_choice",
+          "prompt": "Why is Wasserstein Distance preferred over binary cross-entropy in modern stable GAN architectures?",
+          "id": "u216_l1_boss",
+          "xp": 5,
+          "options": [
+            {
+              "text": "It increases the training speed by using binary labels.",
+              "id": "b1",
+              "correct": false
+            },
+            {
+              "text": "It provides smooth, continuous gradients that prevent vanishing gradient issues.",
+              "id": "b2",
+              "correct": true
+            },
+            {
+              "id": "b3",
+              "correct": false,
+              "text": "It removes the need for a discriminator entirely."
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "icon": "🌊",
+  "title": "The Earth Mover's Distance",
+  "id": "u216-l1",
+  "hearts": 3,
+  "concept": "WGAN replaces binary cross-entropy with the Earth Mover's (Wasserstein) Distance, measuring how much probability mass must be moved to match distributions.",
+  "tier": "Generative Adversarial Networks",
+  "estMinutes": 7,
+  "unit": 216
+}

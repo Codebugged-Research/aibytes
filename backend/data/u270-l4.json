@@ -1,0 +1,223 @@
+{
+  "id": "u270-l4",
+  "unit": 270,
+  "day": 1354,
+  "tier": "NLP Advanced",
+  "tierIcon": "🧠",
+  "title": "Decoder Block Shape Flow",
+  "icon": "📐",
+  "concept": "Tracking tensor dimensions: queries from decoder, keys/values from encoder, combined to output softmax logits over the target vocabulary.",
+  "xp": 15,
+  "hearts": 3,
+  "estMinutes": 7,
+  "segments": [
+    {
+      "type": "warmup",
+      "exercises": [
+        {
+          "id": "w1",
+          "type": "multiple_choice",
+          "xp": 1,
+          "prompt": "In the decoder's cross-attention layer, where do the Keys and Values come from?",
+          "options": [
+            {
+              "correct": true,
+              "text": "Encoder",
+              "id": "a"
+            },
+            {
+              "text": "Decoder",
+              "id": "b",
+              "correct": false
+            },
+            {
+              "correct": false,
+              "id": "c",
+              "text": "Vocabulary List"
+            }
+          ],
+          "explain": "In cross-attention, the Queries (Q) come from the decoder, while the Keys (K) and Values (V) come from the encoder."
+        }
+      ]
+    },
+    {
+      "type": "teach",
+      "cards": [
+        {
+          "kind": "hook",
+          "icon": "🗺️",
+          "title": "Mapping the Flow",
+          "body": "Have you ever wondered how a model connects what it has already translated with the original source sentence? It's all about how shapes flow and match up inside the decoder! Let's trace the journey of these tensors."
+        },
+        {
+          "kind": "definition",
+          "icon": "📐",
+          "title": "What is Decoder Shape Flow?",
+          "body": "In a Transformer, the Decoder block processes target text. Inside its cross-attention layer, 'Queries' come from the decoder's own target sequence, while 'Keys' and 'Values' come from the encoder's source sequence. The final output is reshaped to match the target vocabulary size, allowing the model to predict the next word."
+        },
+        {
+          "kind": "analogy",
+          "icon": "🍳",
+          "title": "The Master Chef's Kitchen",
+          "body": "Imagine a master chef cooking a custom meal for a guest. The guest's specific dietary requests are the Queries. The chef's pantry filled with labeled ingredients represents the Keys, and the actual ingredients themselves are the Values. The chef matches the requests (Queries) to the pantry items (Keys) to cook and serve the perfect plate (Output)!"
+        },
+        {
+          "kind": "example",
+          "icon": "💡",
+          "title": "Tensor Shapes in Action",
+          "body": "If we are translating English to French, our Encoder output (Keys/Values) might have a shape of [Batch: 8, Encoder Length: 15, Hidden Size: 512]. Our Decoder target (Queries) might have a shape of [Batch: 8, Decoder Length: 10, Hidden Size: 512]. After cross-attention, the output retains the decoder length: [8, 10, 512]."
+        },
+        {
+          "kind": "mythbust",
+          "icon": "🚫",
+          "title": "The Length Illusion",
+          "body": "Many believe that because the decoder combines data from the encoder, the output tensor must match the length of the encoder's input sequence. In reality, the output sequence length always matches the decoder's target sequence length so it can predict the next word in the translation."
+        },
+        {
+          "kind": "visual",
+          "icon": "📊",
+          "title": "Decoder Input vs. Output Shape",
+          "body": "Notice how the sequence length of the decoder is preserved throughout the attention block, while the encoder's length is absorbed during the attention weight multiplication.",
+          "compare": {
+            "left": {
+              "emoji": "📥",
+              "text": "Shape: [Batch, Decoder Length, Hidden Dimension]",
+              "tag": "Queries (Decoder)"
+            },
+            "right": {
+              "emoji": "📤",
+              "text": "Shape: [Batch, Decoder Length, Vocab Size]",
+              "tag": "Final Output Logits"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "type": "practice",
+      "exercises": [
+        {
+          "id": "p1",
+          "type": "multiple_choice",
+          "xp": 2,
+          "prompt": "When we perform cross-attention between a decoder tensor (Queries) and encoder tensors (Keys/Values), what is the shape of the resulting output tensor?",
+          "options": [
+            {
+              "correct": true,
+              "id": "a",
+              "text": "[Batch, Decoder Length, Hidden Dimension]"
+            },
+            {
+              "correct": false,
+              "id": "b",
+              "text": "[Batch, Encoder Length, Hidden Dimension]"
+            },
+            {
+              "id": "c",
+              "text": "[Batch, Encoder Length, Vocab Size]",
+              "correct": false
+            },
+            {
+              "id": "d",
+              "text": "[Batch, Decoder Length, Encoder Length]",
+              "correct": false
+            }
+          ],
+          "explain": "Cross-attention takes Queries from the decoder target and Keys/Values from the encoder. The resulting output retains the batch size and the decoder sequence length, keeping the shape [Batch, Decoder Length, Hidden Dimension]."
+        },
+        {
+          "id": "p2",
+          "type": "true_false",
+          "xp": 2,
+          "prompt": "True or False: The final output dimension of the decoder block is directly determined by the encoder's sequence length.",
+          "options": [
+            {
+              "id": "true",
+              "correct": false,
+              "text": "True"
+            },
+            {
+              "correct": true,
+              "id": "false",
+              "text": "False"
+            }
+          ],
+          "explain": "The final projection layer maps the hidden dimensions to the vocabulary size, not the encoder sequence length, so it can predict word probabilities."
+        },
+        {
+          "id": "p3",
+          "type": "fill_blank",
+          "xp": 2,
+          "prompt": "Fill in the missing source of tensor values:",
+          "sentence": "During cross-attention, the target sequence provides the ________, while the encoder provides the Keys and Values.",
+          "blank": "Queries",
+          "words": [
+            "Queries",
+            "Logits",
+            "Weights",
+            "Vocab"
+          ],
+          "explain": "Inside the decoder's cross-attention mechanism, the Queries represent the target sequence we are translating into, while Keys and Values represent the source sequence from the encoder."
+        },
+        {
+          "id": "p4",
+          "type": "spot_the_ai",
+          "xp": 2,
+          "prompt": "Which of the following describes how the decoder block shapes the final output for vocabulary predictions?",
+          "options": [
+            {
+              "correct": true,
+              "id": "a",
+              "text": "The decoder outputs a shape of [Batch, Decoder Length, Vocab Size] to assign a probability score to every word in the vocabulary."
+            },
+            {
+              "id": "b",
+              "text": "The decoder output shape matches the encoder sequence length so that the vocabulary size is completely bypassed.",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "The decoder outputs a 2D convolutional grid matching the image dimensions to calculate vocabulary color pixels.",
+              "correct": false
+            }
+          ],
+          "explain": "Option A correctly describes the final step of the decoder, where the hidden dimensions are projected to the vocabulary size to calculate logits for word prediction. Option B incorrectly claims it outputs encoder sequence lengths, and Option C is AI-generated nonsense about static image grids."
+        }
+      ]
+    },
+    {
+      "type": "boss",
+      "exercises": [
+        {
+          "id": "b1",
+          "type": "multiple_choice",
+          "xp": 5,
+          "prompt": "At the very end of the Decoder block, the tensor passes through a linear projection layer to prepare for predicting the next word. What is the final shape of the tensor before calculating softmax logits?",
+          "options": [
+            {
+              "id": "a",
+              "text": "[Batch Size, Encoder Sequence Length, Decoder Sequence Length]",
+              "correct": false
+            },
+            {
+              "text": "[Batch Size, Vocab Size, Vocab Size]",
+              "id": "b",
+              "correct": false
+            },
+            {
+              "correct": true,
+              "id": "c",
+              "text": "[Batch Size, Decoder Sequence Length, Vocab Size]"
+            },
+            {
+              "text": "[Batch Size, Decoder Sequence Length, Hidden Dimension]",
+              "id": "d",
+              "correct": false
+            }
+          ],
+          "explain": "The Attention layer cross-references Queries (decoder shape) with Keys/Values (encoder shape), but the final feed-forward and projection layers reshape the tensor to [Batch, Target Sequence Length, Vocab Size] to calculate probabilities for the next word."
+        }
+      ]
+    }
+  ]
+}

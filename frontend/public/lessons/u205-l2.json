@@ -1,0 +1,222 @@
+{
+  "id": "u205-l2",
+  "unit": 205,
+  "day": 1027,
+  "tier": "Generative Adversarial Networks",
+  "tierIcon": "🚧",
+  "title": "The Balance Problem",
+  "icon": "⚖️",
+  "concept": "If the discriminator gets too good too fast, the generator gets no useful signal to learn from because the discriminator is always confidently right; if the generator gets too good too fast, the discriminator can't provide a meaningful signal either.",
+  "xp": 15,
+  "hearts": 3,
+  "estMinutes": 7,
+  "segments": [
+    {
+      "type": "warmup",
+      "exercises": [
+        {
+          "id": "w1",
+          "type": "multiple_choice",
+          "xp": 1,
+          "prompt": "Recap: why is 'one loss dropping' not a reliable progress signal in GAN training?",
+          "options": [
+            {
+              "id": "a",
+              "text": "Because the generator's and discriminator's losses are entangled — a change in one can just reflect a change in the other",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "Because GANs don't actually compute a loss at all",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "Because loss is only used for classifiers, never for GANs",
+              "correct": false
+            }
+          ],
+          "explain": "Right. Today: one specific way that entanglement breaks training — a balance problem that can tip in either direction."
+        }
+      ]
+    },
+    {
+      "type": "teach",
+      "cards": [
+        {
+          "kind": "hook",
+          "icon": "⚖️",
+          "title": "Both sides have to stay in the fight",
+          "body": "In an arm-wrestling match, training only works if both arms are still straining against each other. If one arm just goes limp, or one arm is a professional powerlifter, the match stops teaching anyone anything."
+        },
+        {
+          "kind": "definition",
+          "icon": "📵",
+          "title": "When the discriminator wins too hard",
+          "body": "If the discriminator becomes an expert at spotting fakes before the generator has caught up, it starts rejecting every generated sample with near-100% confidence. That near-certain rejection doesn't just mean \"the generator is bad\" — it <strong>removes the useful signal</strong> the generator needs in order to improve at all."
+        },
+        {
+          "kind": "analogy",
+          "icon": "🃏",
+          "title": "A poker player who reads every bluff perfectly",
+          "body": "Imagine a poker opponent who calls every single bluff you attempt, instantly, with total confidence. You don't just lose — you learn nothing about which parts of your bluff were weak, because the outcome (\"called, every time\") never changes no matter what you try. A discriminator that's too good acts the same way: its verdict is so uniformly confident that the generator gets no useful feedback on what to fix."
+        },
+        {
+          "kind": "example",
+          "icon": "🔄",
+          "title": "The problem runs both directions",
+          "body": "The imbalance isn't one-sided. If the generator races ahead and starts producing images the discriminator genuinely can't tell from real ones, the discriminator's guesses become close to a coin flip — and a coin flip carries almost no useful information either. A discriminator that can't tell fakes from real can't teach the generator anything specific about how to improve further."
+        },
+        {
+          "kind": "mythbust",
+          "icon": "⚠️",
+          "title": "\"Shouldn't the 'best' discriminator always help the most?\"",
+          "body": "It's tempting to think a highly accurate discriminator is always good news, the way a strict, accurate teacher usually helps students learn. But an adversarial discriminator's job isn't just to be accurate — it's to stay <strong>just informative enough</strong> to keep giving the generator something useful to push against. Too accurate, too early, and it stops being a useful teacher."
+        },
+        {
+          "kind": "visual",
+          "icon": "🔀",
+          "title": "Two ways to fall out of balance",
+          "body": "Same root problem, opposite directions:",
+          "compare": {
+            "left": {
+              "emoji": "🧊",
+              "tag": "Discriminator too strong",
+              "text": "Always confident<br>Generator gets no signal<br>Gradient vanishes"
+            },
+            "right": {
+              "emoji": "🌫️",
+              "tag": "Generator too strong",
+              "text": "Discriminator can't tell<br>Guesses are near-random<br>Signal disappears too"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "type": "practice",
+      "exercises": [
+        {
+          "id": "p1",
+          "type": "multiple_choice",
+          "xp": 2,
+          "prompt": "Why does a discriminator that's 'too good too fast' cause problems for the generator?",
+          "options": [
+            {
+              "id": "a",
+              "text": "It rejects every fake so confidently that the generator gets no useful gradient signal for how to improve",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "It starts generating its own fake images",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "It causes the generator to stop training entirely and crash",
+              "correct": false
+            },
+            {
+              "id": "d",
+              "text": "It makes the generator's outputs blurrier automatically",
+              "correct": false
+            }
+          ],
+          "explain": "Right — near-certain rejection every time removes the useful signal the generator needs."
+        },
+        {
+          "id": "p2",
+          "type": "true_false",
+          "xp": 2,
+          "prompt": "True or false: if the generator becomes too good too fast, the discriminator can still provide a strong, useful training signal.",
+          "options": [
+            {
+              "id": "t",
+              "text": "True",
+              "correct": false
+            },
+            {
+              "id": "f",
+              "text": "False",
+              "correct": true
+            }
+          ],
+          "explain": "False — the discriminator's guesses become close to random, which carries little useful signal for either network."
+        },
+        {
+          "id": "p3",
+          "type": "fill_blank",
+          "xp": 2,
+          "prompt": "Complete the sentence:",
+          "sentence": "A discriminator that catches every fake with total confidence is like a poker opponent who reads every bluff instantly — you don't lose gracefully, you just get no useful ___ on what to fix.",
+          "blank": "feedback",
+          "words": [
+            "feedback",
+            "money",
+            "cards"
+          ],
+          "explain": "No matter what the generator tries, the outcome never changes — so there's no feedback to learn from."
+        },
+        {
+          "id": "p4",
+          "type": "spot_the_ai",
+          "xp": 2,
+          "prompt": "Which scenario shows the balance problem tipping toward 'generator too strong'?",
+          "options": [
+            {
+              "id": "a",
+              "text": "The discriminator's real-vs-fake guesses hover near 50%, barely better than a coin flip, even though it's still trying",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "The discriminator confidently and correctly rejects every fake image with 99% confidence",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "Both networks stop updating their weights at the same time",
+              "correct": false
+            }
+          ],
+          "explain": "Near-50% guessing means the discriminator can no longer tell real from fake — a sign the generator has pulled ahead."
+        }
+      ]
+    },
+    {
+      "type": "boss",
+      "exercises": [
+        {
+          "id": "b1",
+          "type": "multiple_choice",
+          "xp": 5,
+          "prompt": "Balance can break in two directions — discriminator too strong OR generator too strong. What do both breakdowns have in common?",
+          "options": [
+            {
+              "id": "a",
+              "text": "Either way, the generator stops receiving a useful training signal, just for different reasons",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "Both cases cause the discriminator to be deleted from training",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "Both cases mean the dataset was too small",
+              "correct": false
+            },
+            {
+              "id": "d",
+              "text": "Both cases only affect image resolution",
+              "correct": false
+            }
+          ],
+          "explain": "Exactly. Next: why watching the loss numbers themselves doesn't reliably tell you which direction things are drifting."
+        }
+      ]
+    }
+  ]
+}

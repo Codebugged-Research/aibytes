@@ -1,0 +1,222 @@
+{
+  "id": "u206-l5",
+  "unit": 206,
+  "day": 1035,
+  "tier": "Generative Adversarial Networks",
+  "tierIcon": "🎪",
+  "title": "Partial Fixes for Mode Collapse",
+  "icon": "⚖️",
+  "concept": "There's no single fix for mode collapse — techniques like minibatch discrimination and unrolled GANs offer partial mitigation, but it remains an open, actively-researched problem, one of several training struggles that motivate the next failure mode: vanishing gradients.",
+  "xp": 15,
+  "hearts": 3,
+  "estMinutes": 7,
+  "segments": [
+    {
+      "type": "warmup",
+      "exercises": [
+        {
+          "id": "w1",
+          "type": "multiple_choice",
+          "xp": 1,
+          "prompt": "Recap: What's the practical way to check whether your GAN has mode-collapsed?",
+          "options": [
+            {
+              "id": "a",
+              "text": "Generate a large batch of samples and visually check for repetition",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "Check only the final loss number",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "Assume it's fine if training finishes without errors",
+              "correct": false
+            }
+          ],
+          "explain": "Right — a visual batch check, since loss numbers alone can be misleading. Today: what can actually be done about it once you spot it."
+        }
+      ]
+    },
+    {
+      "type": "teach",
+      "cards": [
+        {
+          "kind": "hook",
+          "icon": "⚖️",
+          "title": "No single silver bullet",
+          "body": "Once you can spot mode collapse, the obvious next question is: how do you stop it? The honest answer is that there's no one fix that reliably solves it — just a handful of partial mitigations researchers have developed, each helping somewhat, none guaranteeing a cure."
+        },
+        {
+          "kind": "definition",
+          "icon": "👥",
+          "title": "Minibatch discrimination",
+          "body": "One popular idea: let the discriminator compare samples <em>within the same batch</em> to each other, not just judge each one in isolation. If it notices a batch is suspiciously similar to itself, it can flag that — giving the generator pressure to diversify."
+        },
+        {
+          "kind": "analogy",
+          "icon": "🕵️",
+          "title": "Extending the lineup trick",
+          "body": "Remember the detective's lineup from last lesson — repeats are obvious once you compare photos side by side? Minibatch discrimination gives the discriminator that same lineup power: instead of judging one fake at a time, it gets to compare several candidates side-by-side and notice when they're suspiciously identical."
+        },
+        {
+          "kind": "example",
+          "icon": "🌦️",
+          "title": "Unrolled GANs: peeking ahead",
+          "body": "Another approach, <strong>unrolled GANs</strong>, lets the generator preview several future discriminator updates before committing to a move — like a weather forecaster checking several days ahead instead of reacting only to today's forecast. This discourages the generator from exploiting a discriminator weakness that's about to disappear anyway."
+        },
+        {
+          "kind": "mythbust",
+          "icon": "⚠️",
+          "title": "\"So is mode collapse solved now?\"",
+          "body": "Not even close. Minibatch discrimination, unrolled GANs, and other tricks (like feature matching or replaying older generated samples) are partial mitigations, not guarantees — and they often trade off against training speed or stability. Mode collapse remains an open, actively-researched problem in GAN training."
+        },
+        {
+          "kind": "visual",
+          "icon": "🔀",
+          "title": "The problem vs. the mitigations",
+          "body": "Where things stand today:",
+          "compare": {
+            "left": {
+              "emoji": "🎯",
+              "tag": "The Problem",
+              "text": "Generator narrows to<br>one winning output<br>No full fix exists yet"
+            },
+            "right": {
+              "emoji": "🧰",
+              "tag": "Partial Mitigations",
+              "text": "Minibatch discrimination<br>Unrolled GANs<br>Help, don't guarantee"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "type": "practice",
+      "exercises": [
+        {
+          "id": "p1",
+          "type": "multiple_choice",
+          "xp": 2,
+          "prompt": "What does minibatch discrimination let the discriminator do?",
+          "options": [
+            {
+              "id": "a",
+              "text": "Compare multiple samples within the same batch to each other, to spot suspicious repetition",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "Train ten times faster than normal",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "Automatically generate new training data",
+              "correct": false
+            },
+            {
+              "id": "d",
+              "text": "Skip judging fake samples entirely",
+              "correct": false
+            }
+          ],
+          "explain": "Minibatch discrimination gives the discriminator a wider view — comparing samples to each other, not just judging each one alone — so repetition becomes visible to it."
+        },
+        {
+          "id": "p2",
+          "type": "true_false",
+          "xp": 2,
+          "prompt": "True or false: Techniques like minibatch discrimination and unrolled GANs completely and permanently solve mode collapse.",
+          "options": [
+            {
+              "id": "t",
+              "text": "True",
+              "correct": false
+            },
+            {
+              "id": "f",
+              "text": "False",
+              "correct": true
+            }
+          ],
+          "explain": "False. They're partial mitigations that help reduce the RISK of mode collapse — mode collapse remains an open, actively-researched problem, not a solved one."
+        },
+        {
+          "id": "p3",
+          "type": "fill_blank",
+          "xp": 2,
+          "prompt": "Complete the sentence:",
+          "sentence": "Unrolled GANs let the generator preview several future discriminator updates before committing, similar to a forecaster checking several days ___ instead of just today.",
+          "blank": "ahead",
+          "words": [
+            "ahead",
+            "behind",
+            "sideways"
+          ],
+          "explain": "Peeking ahead at where the discriminator is heading discourages the generator from exploiting a weakness that's about to vanish."
+        },
+        {
+          "id": "p4",
+          "type": "spot_the_ai",
+          "xp": 2,
+          "prompt": "Which statement accurately reflects the current state of mode collapse research?",
+          "options": [
+            {
+              "id": "a",
+              "text": "There are several partial mitigation techniques, but mode collapse remains an open, actively-researched problem",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "Mode collapse was fully solved by minibatch discrimination alone",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "Mode collapse only affected early GANs and no longer occurs in any modern architecture",
+              "correct": false
+            }
+          ],
+          "explain": "Accurate framing: partial tools exist, but no complete fix — this is still active research territory."
+        }
+      ]
+    },
+    {
+      "type": "boss",
+      "exercises": [
+        {
+          "id": "b1",
+          "type": "multiple_choice",
+          "xp": 5,
+          "prompt": "You've now seen mode collapse end-to-end: what it is, a concrete digit example, why it happens, how to spot it, and some partial mitigations. But even a generator producing perfectly diverse output can hit a completely different wall: what happens when the discriminator's feedback signal itself goes quiet? What's the natural next topic?",
+          "options": [
+            {
+              "id": "a",
+              "text": "Vanishing gradients — when the generator stops getting a useful learning signal from the discriminator at all",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "How to compress trained models for mobile devices",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "How to caption images automatically",
+              "correct": false
+            },
+            {
+              "id": "d",
+              "text": "How to encrypt training data",
+              "correct": false
+            }
+          ],
+          "explain": "Exactly! Mode collapse is one way a GAN can quietly fail even while the loss numbers look fine. Next up, Unit 207: Vanishing Gradients in GAN Training — a totally different failure mode lurking in the same competition."
+        }
+      ]
+    }
+  ]
+}

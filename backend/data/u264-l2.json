@@ -1,0 +1,223 @@
+{
+  "id": "u264-l2",
+  "unit": 264,
+  "day": 1322,
+  "tier": "NLP Advanced",
+  "tierIcon": "🧠",
+  "title": "Why Recurrence Is a Bottleneck",
+  "icon": "⏳",
+  "concept": "RNNs process tokens step-by-step; layer updates depend on prior steps, preventing parallel training across GPU cores.",
+  "xp": 15,
+  "hearts": 3,
+  "estMinutes": 7,
+  "segments": [
+    {
+      "type": "warmup",
+      "exercises": [
+        {
+          "id": "w1",
+          "type": "multiple_choice",
+          "xp": 1,
+          "prompt": "How does a Recurrent Neural Network (RNN) process a sequence of words?",
+          "options": [
+            {
+              "id": "a",
+              "correct": true,
+              "text": "Step-by-step, one after another"
+            },
+            {
+              "text": "All at the exact same time",
+              "id": "b",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "correct": false,
+              "text": "In a completely random order"
+            }
+          ],
+          "explain": "RNNs process data one step at a time, in order. This is known as sequential processing."
+        }
+      ]
+    },
+    {
+      "type": "teach",
+      "cards": [
+        {
+          "kind": "hook",
+          "icon": "⏳",
+          "title": "The GPU Traffic Jam",
+          "body": "Modern GPUs have thousands of tiny processors designed to do millions of calculations at the same time. But what if we give them a task where they are forced to do only one thing at a time? That's the big bottleneck of RNNs!"
+        },
+        {
+          "kind": "definition",
+          "icon": "⛓️",
+          "title": "What is Recurrence?",
+          "body": "Recurrence means processing data in a strict sequence, one step after another. In an RNN, to calculate the hidden state for the current word, the model must wait for the hidden state of the previous word. This creates a computational bottleneck."
+        },
+        {
+          "kind": "analogy",
+          "icon": "🪣",
+          "title": "The Bucket Brigade",
+          "body": "Imagine a line of people passing a bucket of water. Person 3 cannot pass the bucket until they receive it from Person 2, who had to wait for Person 1. Even if you hire 100 extra workers (like adding extra GPU cores), they all have to stand around waiting for the bucket to reach them one by one."
+        },
+        {
+          "kind": "example",
+          "icon": "📝",
+          "title": "Step-by-Step Processing",
+          "body": "When reading the sentence \"The sky is blue\", an RNN processes \"The\", updates its memory, then processes \"sky\", updates its memory again, and so on. If you have a document with 10,000 words, the GPU is forced to wait and do 10,000 sequential calculations in a row."
+        },
+        {
+          "kind": "mythbust",
+          "icon": "🚫",
+          "title": "Myth: More GPUs Fix Everything",
+          "body": "Many believe that buying a bigger, faster GPU will automatically make RNNs train instantly. But because RNNs are sequential, a faster GPU still has to wait for step 1 to finish before doing step 2. The core design of the algorithm, not the hardware, is the limit."
+        },
+        {
+          "kind": "visual",
+          "icon": "📊",
+          "title": "Sequential vs. Parallel Flow",
+          "body": "See how the way data flows through a network determines whether a GPU can work at full speed or is forced to wait.",
+          "compare": {
+            "left": {
+              "emoji": "⛓️",
+              "text": "Word 1 → Word 2 → Word 3. Each step waits for the previous one. Slow training!",
+              "tag": "RNN (Sequential)"
+            },
+            "right": {
+              "emoji": "⚡",
+              "text": "Word 1 & Word 2 & Word 3 processed all at once. Fast training!",
+              "tag": "Non-Recurrent (Parallel)"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "type": "practice",
+      "exercises": [
+        {
+          "id": "p1",
+          "type": "multiple_choice",
+          "xp": 2,
+          "prompt": "Why can't RNNs take advantage of parallel processing on a GPU?",
+          "options": [
+            {
+              "text": "They use too much random noise during training.",
+              "id": "a",
+              "correct": false
+            },
+            {
+              "id": "b",
+              "correct": false,
+              "text": "They process all words in a sentence at the exact same millisecond."
+            },
+            {
+              "text": "Each step depends on the calculation of the previous step.",
+              "id": "c",
+              "correct": true
+            },
+            {
+              "text": "They do not use GPU accelerators at all.",
+              "id": "d",
+              "correct": false
+            }
+          ],
+          "explain": "RNNs require the output of the previous step to calculate the current step, which forces the processor to work sequentially rather than in parallel."
+        },
+        {
+          "id": "p2",
+          "type": "true_false",
+          "xp": 2,
+          "prompt": "True or False: The sequential nature of RNNs prevents them from fully utilizing a GPU's parallel processing power.",
+          "options": [
+            {
+              "correct": true,
+              "text": "True",
+              "id": "t"
+            },
+            {
+              "id": "f",
+              "correct": false,
+              "text": "False"
+            }
+          ],
+          "explain": "This is true. Because RNNs are sequential, they cannot process all words at the same time, leaving most of the GPU's parallel cores unused and waiting."
+        },
+        {
+          "id": "p3",
+          "type": "fill_blank",
+          "xp": 2,
+          "prompt": "Fill in the missing word to describe why RNNs cause a training bottleneck.",
+          "sentence": "RNNs cannot train in parallel because their step-by-step nature makes them inherently ____________.",
+          "blank": "sequential",
+          "words": [
+            "parallel",
+            "sequential",
+            "instant",
+            "random"
+          ],
+          "explain": "Because RNNs are sequential, they must process tokens one after another. This prevents the GPU from processing all tokens at the same time (in parallel)."
+        },
+        {
+          "id": "p4",
+          "type": "spot_the_ai",
+          "xp": 2,
+          "prompt": "Which of the following describes an RNN's sequential behavior?",
+          "options": [
+            {
+              "text": "An AI model that reads a sentence word-by-word, updating its internal state after each word.",
+              "id": "a",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "correct": false,
+              "text": "An AI model that calculates the 10th word of a sentence before it calculates the 1st word."
+            },
+            {
+              "text": "An AI model that processes all words simultaneously without any step-by-step memory updates.",
+              "id": "c",
+              "correct": false
+            }
+          ],
+          "explain": "The second option is incorrect because RNNs cannot skip ahead; they must wait for previous steps to finish. The third option describes Transformers, not RNNs. The first option correctly describes how RNNs process sequences."
+        }
+      ]
+    },
+    {
+      "type": "boss",
+      "exercises": [
+        {
+          "id": "b1",
+          "type": "multiple_choice",
+          "xp": 5,
+          "prompt": "If you train an RNN on a sentence with 100 words, why does the GPU slow down?",
+          "options": [
+            {
+              "id": "a",
+              "correct": false,
+              "text": "It splits the sentence into 100 parts and processes them at the exact same time."
+            },
+            {
+              "id": "b",
+              "correct": true,
+              "text": "It must run 99 sequential steps first, making the GPU wait for each word to finish."
+            },
+            {
+              "text": "It skips the middle words to save time and speed up training on the GPU.",
+              "id": "c",
+              "correct": false
+            },
+            {
+              "text": "It stores all words in the GPU's memory instantly without doing any steps.",
+              "id": "d",
+              "correct": false
+            }
+          ],
+          "explain": "To process the 100th word, an RNN must complete 99 consecutive steps beforehand. GPUs cannot speed this up because each step's output is required to start the next one, creating a massive training bottleneck."
+        }
+      ]
+    }
+  ]
+}

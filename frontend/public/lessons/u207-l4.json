@@ -1,0 +1,222 @@
+{
+  "id": "u207-l4",
+  "unit": 207,
+  "day": 1039,
+  "tier": "Generative Adversarial Networks",
+  "tierIcon": "🪦",
+  "title": "The Non-Saturating Loss Trick",
+  "icon": "🔧",
+  "concept": "A common practical fix reformulates the generator's loss so it still provides a strong gradient signal even when the discriminator is confident, instead of using the original framing that flattens out and goes quiet at exactly the moment the generator needs feedback most.",
+  "xp": 15,
+  "hearts": 3,
+  "estMinutes": 7,
+  "segments": [
+    {
+      "type": "warmup",
+      "exercises": [
+        {
+          "id": "w1",
+          "type": "multiple_choice",
+          "xp": 1,
+          "prompt": "Recap: Why does a beginner learn so little from repeatedly losing badly to a grandmaster?",
+          "options": [
+            {
+              "id": "a",
+              "text": "Every attempt ends in roughly the same crushing defeat, leaving no specific signal about what to change",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "Because chess has no way to track wins and losses",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "Because the grandmaster never plays the same opening twice",
+              "correct": false
+            }
+          ],
+          "explain": "Right — a lopsided mismatch produces the same outcome regardless of effort. Today: a practical trick that keeps the feedback signal alive anyway."
+        }
+      ]
+    },
+    {
+      "type": "teach",
+      "cards": [
+        {
+          "kind": "hook",
+          "icon": "🥊",
+          "title": "What if you scored the near-miss instead of the knockout?",
+          "body": "A boxing judge who only records \"knockout\" or \"no knockout\" tells a fighter nothing about how close a near-miss punch actually landed. A judge who scores how close every punch came gives the fighter something to adjust. GAN training has a version of this exact choice."
+        },
+        {
+          "kind": "definition",
+          "icon": "🔧",
+          "title": "Reframing the question the generator asks",
+          "body": "The original generator loss effectively asks: <em>\"how confidently did the discriminator correctly call this fake?\"</em> — and that question goes flat once the discriminator is confident, because the answer barely changes. The <strong>non-saturating loss</strong> flips the question the generator optimizes to: <em>\"how close did I come to convincing the discriminator this was real?\"</em> — a question that keeps producing a strong, useful signal even in the exact same confident-discriminator situation."
+        },
+        {
+          "kind": "analogy",
+          "icon": "🎯",
+          "title": "Scoring near-misses, not just hits",
+          "body": "Imagine a carnival ring-toss booth that only tells you \"ring landed\" or \"ring missed\" — a near-miss and a wild throw both just register as \"missed,\" no useful difference. Now imagine a booth that instead measures how many inches the ring landed from the peg. Suddenly every throw, even a miss, tells you something you can adjust for the next one."
+        },
+        {
+          "kind": "example",
+          "icon": "🔢",
+          "title": "Same situation, a livelier signal",
+          "body": "In the exact same round — discriminator scores a fake image 0.02 — the original framing barely nudges the generator's weights, because \"how confidently was I caught\" has flattened out. The non-saturating framing, asking \"how close did I get to fooling it,\" still produces a meaningful nudge in that same round, because that particular question doesn't go flat at the same spot."
+        },
+        {
+          "kind": "mythbust",
+          "icon": "⚠️",
+          "title": "It's not a new discriminator or a new network",
+          "body": "You might assume fixing this requires building a whole new discriminator, or adding extra network layers. In reality, the discriminator and its forward pass stay exactly the same — only the formula used to score the generator's own loss changes. It's a reformulation, not a redesign."
+        },
+        {
+          "kind": "visual",
+          "icon": "⚖️",
+          "title": "Original loss vs. non-saturating loss",
+          "body": "How each framing behaves once the discriminator gets confident:",
+          "compare": {
+            "left": {
+              "emoji": "🪫",
+              "tag": "Original Generator Loss",
+              "text": "Flattens out near confident scores<br>Gradient shrinks to near zero<br>Generator stalls"
+            },
+            "right": {
+              "emoji": "🔧",
+              "tag": "Non-Saturating Loss",
+              "text": "Stays steep near confident scores<br>Gradient stays meaningful<br>Generator keeps learning"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "type": "practice",
+      "exercises": [
+        {
+          "id": "p1",
+          "type": "multiple_choice",
+          "xp": 2,
+          "prompt": "What does the non-saturating loss trick change about GAN training?",
+          "options": [
+            {
+              "id": "a",
+              "text": "It reformulates the generator's loss so it keeps a strong gradient signal even when the discriminator is confident",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "It swaps the discriminator out for a completely different network",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "It removes the discriminator's ability to output confident scores",
+              "correct": false
+            },
+            {
+              "id": "d",
+              "text": "It deletes training data the discriminator has already seen",
+              "correct": false
+            }
+          ],
+          "explain": "Exactly — same discriminator, same forward pass; only the formula scoring the generator's loss is reshaped to avoid going flat."
+        },
+        {
+          "id": "p2",
+          "type": "true_false",
+          "xp": 2,
+          "prompt": "True or false: The non-saturating loss trick requires building an entirely new discriminator network.",
+          "options": [
+            {
+              "id": "t",
+              "text": "True",
+              "correct": false
+            },
+            {
+              "id": "f",
+              "text": "False",
+              "correct": true
+            }
+          ],
+          "explain": "False. It only changes the formula used to compute the generator's loss — the discriminator itself stays the same."
+        },
+        {
+          "id": "p3",
+          "type": "fill_blank",
+          "xp": 2,
+          "prompt": "Complete the sentence:",
+          "sentence": "Instead of asking how confidently it got caught, the generator's non-saturating loss asks how close it came to ___ the discriminator.",
+          "blank": "fooling",
+          "words": [
+            "fooling",
+            "deleting",
+            "measuring"
+          ],
+          "explain": "The reframed question — how close did I come to fooling it — keeps producing a useful gradient even when the discriminator is confident."
+        },
+        {
+          "id": "p4",
+          "type": "spot_the_ai",
+          "xp": 2,
+          "prompt": "Which describes the non-saturating loss trick correctly?",
+          "options": [
+            {
+              "id": "a",
+              "text": "Reformulating the generator's loss so its gradient stays strong even when the discriminator is confident, without changing the discriminator itself",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "Training the discriminator to become less accurate on purpose",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "Adding a second discriminator network that never gets confident",
+              "correct": false
+            }
+          ],
+          "explain": "The trick is purely a reformulation of the generator's own loss — a conceptual reframing, not a new component."
+        }
+      ]
+    },
+    {
+      "type": "boss",
+      "exercises": [
+        {
+          "id": "b1",
+          "type": "multiple_choice",
+          "xp": 5,
+          "prompt": "Non-saturating loss fixes the flat-gradient problem on the generator's side. Does that alone guarantee smooth, balanced training between the two networks?",
+          "options": [
+            {
+              "id": "a",
+              "text": "Not necessarily — keeping both networks learning at roughly matched paces still matters, even with a steadier loss formula",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "Yes, once this trick is applied no other training precaution is ever needed again",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "No, this trick actually makes the discriminator stop learning entirely",
+              "correct": false
+            },
+            {
+              "id": "d",
+              "text": "Yes, because it removes the discriminator from training",
+              "correct": false
+            }
+          ],
+          "explain": "Exactly! Up next: why keeping the generator and discriminator's learning paces in balance still matters, even with a steadier loss."
+        }
+      ]
+    }
+  ]
+}

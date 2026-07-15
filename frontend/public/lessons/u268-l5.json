@@ -1,0 +1,222 @@
+{
+  "id": "u268-l5",
+  "unit": 268,
+  "day": 1345,
+  "tier": "NLP Advanced",
+  "tierIcon": "🧠",
+  "title": "Position-Aware Attention",
+  "icon": "🌉",
+  "concept": "Positional encoding adds the necessary sequence ordering to self-attention without bringing back slow recurrent loops. Boss explain ends with: 'Next up: The Encoder Block.'",
+  "xp": 15,
+  "hearts": 3,
+  "estMinutes": 7,
+  "segments": [
+    {
+      "type": "warmup",
+      "exercises": [
+        {
+          "id": "w1",
+          "type": "multiple_choice",
+          "xp": 1,
+          "prompt": "What is the main limitation of standard self-attention when processing a sentence?",
+          "options": [
+            {
+              "text": "It has no built-in sense of word order.",
+              "id": "a",
+              "correct": true
+            },
+            {
+              "text": "It can only read three-letter words.",
+              "correct": false,
+              "id": "b"
+            },
+            {
+              "id": "c",
+              "text": "It is too slow to use on modern computers.",
+              "correct": false
+            }
+          ],
+          "explain": "Standard self-attention processes all words at the same time, meaning it doesn't automatically know which word comes first or last."
+        }
+      ]
+    },
+    {
+      "type": "teach",
+      "cards": [
+        {
+          "kind": "hook",
+          "icon": "🌉",
+          "title": "The Order Problem",
+          "body": "Transformers process all words in a sentence at the exact same time. This is super fast, but there is a catch: how does it know which word comes first if it looks at them all at once?"
+        },
+        {
+          "kind": "definition",
+          "icon": "🏷️",
+          "title": "What is Positional Encoding?",
+          "body": "Positional Encoding is a technique that adds unique mathematical signals to each word's representation. This tag tells the Transformer exactly where a word sits in a sentence, preserving the word order."
+        },
+        {
+          "kind": "analogy",
+          "icon": "📖",
+          "title": "The Recipe Analogy",
+          "body": "Imagine reading a recipe where the steps are scattered across the page. If the steps aren't numbered, you might bake the cake before mixing the flour! Positional encoding is like adding step numbers (1, 2, 3...) to each word so the computer knows their exact order."
+        },
+        {
+          "kind": "example",
+          "icon": "🐈",
+          "title": "Who Chased Whom?",
+          "body": "Take the sentences 'Cats chase mice' and 'Mice chase cats'. Without positional signals, a Transformer sees the exact same set of words. Adding position tags helps it tell who is doing the chasing!"
+        },
+        {
+          "kind": "mythbust",
+          "icon": "⚡",
+          "title": "No Slowdowns Required",
+          "body": "People often think adding position info requires slow, step-by-step loops like older AI systems. Actually, we just add a clever set of coordinates directly to the word coordinates, keeping everything lightning fast!"
+        },
+        {
+          "kind": "visual",
+          "icon": "👁️",
+          "title": "Bag of Words vs. Ordered Sequence",
+          "body": "See how adding order information changes how a Transformer views a sentence compared to raw attention.",
+          "compare": {
+            "left": {
+              "emoji": "👜",
+              "text": "Sees a 'bag of words' with no order: (chase, cats, mice)",
+              "tag": "Raw Attention"
+            },
+            "right": {
+              "emoji": "📏",
+              "text": "Sees a clear sequence: (1st: Cats, 2nd: chase, 3rd: mice)",
+              "tag": "Position-Aware"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "type": "practice",
+      "exercises": [
+        {
+          "id": "p1",
+          "type": "multiple_choice",
+          "xp": 2,
+          "prompt": "Why is position-aware attention necessary in a Transformer?",
+          "options": [
+            {
+              "text": "It makes the model process words one at a time.",
+              "correct": false,
+              "id": "a"
+            },
+            {
+              "id": "b",
+              "correct": false,
+              "text": "It translates the words into another language."
+            },
+            {
+              "correct": true,
+              "id": "c",
+              "text": "It gives the model context about where each word is located."
+            },
+            {
+              "correct": false,
+              "id": "d",
+              "text": "It automatically fixes spelling mistakes."
+            }
+          ],
+          "explain": "Self-attention looks at all words simultaneously. Without position-aware tags, it cannot tell the difference between words at the start, middle, or end of a sentence."
+        },
+        {
+          "id": "p2",
+          "type": "true_false",
+          "xp": 2,
+          "prompt": "True or False: Positional encoding allows Transformers to keep track of word order without using slow, step-by-step loops.",
+          "options": [
+            {
+              "correct": true,
+              "id": "a",
+              "text": "True"
+            },
+            {
+              "id": "b",
+              "correct": false,
+              "text": "False"
+            }
+          ],
+          "explain": "Positional encoding is added directly to the word representations at the very beginning, allowing the network to process everything in parallel."
+        },
+        {
+          "id": "p3",
+          "type": "fill_blank",
+          "xp": 2,
+          "prompt": "Fill in the missing word to complete the explanation of positional encoding.",
+          "sentence": "Transformers need positional encoding to understand the sequence and _____ of words.",
+          "blank": "order",
+          "words": [
+            "order",
+            "size",
+            "speed"
+          ],
+          "explain": "Without position signals, the Transformer only knows which words are in the sentence, but not their sequence or order."
+        },
+        {
+          "id": "p4",
+          "type": "spot_the_ai",
+          "xp": 2,
+          "prompt": "An AI assistant says: \"Without positional encoding, a Transformer treats the sentence 'I love cake' exactly the same as 'Cake love I'.\" Is the assistant correct?",
+          "options": [
+            {
+              "correct": false,
+              "text": "The assistant is incorrect because Transformers naturally read from left to right.",
+              "id": "a"
+            },
+            {
+              "text": "The assistant is correct because raw attention does not have a built-in sense of order.",
+              "id": "b",
+              "correct": true
+            },
+            {
+              "id": "c",
+              "text": "The assistant is incorrect because position is only important for punctuation.",
+              "correct": false
+            }
+          ],
+          "explain": "The AI assistant is correct. Standard self-attention treats a sentence like an unordered bag of words unless we specifically add positional information."
+        }
+      ]
+    },
+    {
+      "type": "boss",
+      "exercises": [
+        {
+          "id": "b1",
+          "type": "multiple_choice",
+          "xp": 5,
+          "prompt": "How does position-aware attention keep track of where words are in a sentence without slowing down?",
+          "options": [
+            {
+              "text": "It processes words one by one in a slow loop.",
+              "id": "a",
+              "correct": false
+            },
+            {
+              "text": "It adds fixed mathematical patterns directly to the word representations.",
+              "correct": true,
+              "id": "b"
+            },
+            {
+              "id": "c",
+              "text": "It shuffles the words randomly to test the model's memory.",
+              "correct": false
+            },
+            {
+              "id": "d",
+              "correct": false,
+              "text": "It deletes grammar words like 'the' and 'and'."
+            }
+          ],
+          "explain": "Fantastic job! You now understand how Transformers keep track of word order. Next up: The Encoder Block."
+        }
+      ]
+    }
+  ]
+}

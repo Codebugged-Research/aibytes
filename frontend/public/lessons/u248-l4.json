@@ -1,0 +1,223 @@
+{
+  "id": "u248-l4",
+  "unit": 248,
+  "day": 1244,
+  "tier": "NLP Basics",
+  "tierIcon": "🔤",
+  "title": "The CRF Layer in Sequence Labeling",
+  "icon": "🔗",
+  "concept": "A Conditional Random Field (CRF) layer is often added on top of an LSTM to model label-label transitions, preventing impossible tag patterns (e.g. 'Inside-Org' immediately after 'Outside').",
+  "xp": 15,
+  "hearts": 3,
+  "estMinutes": 7,
+  "segments": [
+    {
+      "type": "warmup",
+      "exercises": [
+        {
+          "id": "w1",
+          "type": "multiple_choice",
+          "xp": 1,
+          "prompt": "Which type of task is a CRF layer typically used to improve?",
+          "options": [
+            {
+              "text": "Image generation",
+              "correct": false,
+              "id": "w_opt_1"
+            },
+            {
+              "text": "Sequence labeling",
+              "id": "w_opt_2",
+              "correct": true
+            },
+            {
+              "correct": false,
+              "id": "w_opt_3",
+              "text": "Audio volume control"
+            }
+          ],
+          "explain": "Sequence labeling tasks (like finding entities) require tags to follow specific rules. A CRF layer enforces these rules across the sequence."
+        }
+      ]
+    },
+    {
+      "type": "teach",
+      "cards": [
+        {
+          "kind": "hook",
+          "icon": "🚦",
+          "title": "Grammar for Labels",
+          "body": "Imagine building an AI to find names and locations in text. An LSTM model is great at understanding words, but it sometimes makes silly mistakes, like labeling a word as the middle of a name without labeling the start of it. How do we teach our AI the rules of grammar for labels? We use a CRF layer!"
+        },
+        {
+          "kind": "definition",
+          "icon": "🔗",
+          "title": "What is a CRF Layer?",
+          "body": "A Conditional Random Field (CRF) layer is a helper added to the end of sequence models like LSTMs. While the LSTM understands the words, the CRF focuses on the labels themselves. It learns transition rules—like 'an Inside-Entity tag must always follow a Beginning-Entity tag'—to ensure the final predicted sequence makes logical sense."
+        },
+        {
+          "kind": "analogy",
+          "icon": "🍽️",
+          "title": "The Master Chef Menu",
+          "body": "Think of labeling words like planning a 3-course meal. A simple classifier decides each dish in isolation: it might serve chocolate cake for the appetizer, chocolate cake for the main, and chocolate cake for dessert! A CRF is like a master chef who looks at the whole menu. It knows that dessert shouldn't come first, ensuring a logical flow from appetizer to main to dessert."
+        },
+        {
+          "kind": "example",
+          "icon": "📝",
+          "title": "Correcting Tag Mistakes",
+          "body": "In Named Entity Recognition, we use tags like B-PER (Begin Person) and I-PER (Inside Person). If a model predicts 'B-PER' for 'Barack' and then 'I-ORG' (Inside Organization) for 'Obama', that is an impossible sequence. A CRF layer mathematically blocks these illegal jumps, forcing the model to output 'I-PER' instead of 'I-ORG'."
+        },
+        {
+          "kind": "mythbust",
+          "icon": "🚫",
+          "title": "Myth: LSTMs are Enough",
+          "body": "People often think that LSTMs alone are enough to prevent bad label sequences because they look at context. However, LSTMs focus on the input words, not the output labels. Without a CRF layer, the model has no strict rules about which label is allowed to follow another, leading to chaotic predictions."
+        },
+        {
+          "kind": "visual",
+          "icon": "👁️‍🗨️",
+          "title": "Comparing Output Predictions",
+          "body": "See how adding a CRF layer enforces logical sequence rules compared to a standard classifier that makes independent guesses.",
+          "compare": {
+            "right": {
+              "tag": "With CRF",
+              "emoji": "✅",
+              "text": "Predicts: [B-PER] -> [I-PER] -> [O] (Valid transition enforced by CRF rules)"
+            },
+            "left": {
+              "text": "Predicts: [B-PER] -> [I-ORG] -> [O] (Invalid transition from Person to Org tag)",
+              "tag": "Without CRF",
+              "emoji": "❌"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "type": "practice",
+      "exercises": [
+        {
+          "id": "p1",
+          "type": "multiple_choice",
+          "xp": 2,
+          "prompt": "What is the primary job of a CRF layer in sequence labeling?",
+          "options": [
+            {
+              "text": "It translates words into different languages.",
+              "correct": false,
+              "id": "opt_1"
+            },
+            {
+              "text": "It models the transitions between labels to prevent impossible sequences.",
+              "id": "opt_2",
+              "correct": true
+            },
+            {
+              "id": "opt_3",
+              "correct": false,
+              "text": "It randomly changes the labels to add variety."
+            },
+            {
+              "id": "opt_4",
+              "correct": false,
+              "text": "It converts text documents into numbers."
+            }
+          ],
+          "explain": "An LSTM analyzes the input sentences and words, while the CRF layer on top enforces rules about how the output labels can transition from one to the next."
+        },
+        {
+          "id": "p2",
+          "type": "true_false",
+          "xp": 2,
+          "prompt": "True or False: A CRF layer decides the labels by looking at the entire sequence path, rather than labeling each word independently.",
+          "options": [
+            {
+              "text": "True",
+              "correct": true,
+              "id": "true_opt"
+            },
+            {
+              "correct": false,
+              "id": "false_opt",
+              "text": "False"
+            }
+          ],
+          "explain": "A CRF layer calculates the probability of the entire sequence of labels together, ensuring they make global sense rather than evaluating each word independently."
+        },
+        {
+          "id": "p3",
+          "type": "fill_blank",
+          "xp": 2,
+          "prompt": "Fill in the missing word to complete the explanation of the CRF layer.",
+          "sentence": "A CRF layer models label-to-label transitions to prevent impossible label sequences.",
+          "blank": "transitions",
+          "words": [
+            "transitions",
+            "speeds",
+            "vocabularies",
+            "embeddings"
+          ],
+          "explain": "A CRF layer excels at learning which label transitions are allowed (like B-PER to I-PER) and which are forbidden."
+        },
+        {
+          "id": "p4",
+          "type": "spot_the_ai",
+          "xp": 2,
+          "prompt": "Which of the following descriptions of a CRF layer is written by a hallucinating AI?",
+          "options": [
+            {
+              "correct": false,
+              "id": "opt_1",
+              "text": "A CRF layer acts as a sequence-level classifier, finding the best overall path of labels rather than making isolated decisions."
+            },
+            {
+              "correct": true,
+              "text": "A CRF layer is used to predict the next most likely word in a sentence based on vocabulary frequency.",
+              "id": "opt_2"
+            },
+            {
+              "id": "opt_3",
+              "correct": false,
+              "text": "By using transition scores, a CRF prevents invalid transitions such as an 'Inside' tag appearing without a preceding 'Begin' tag."
+            }
+          ],
+          "explain": "Option B is generated by AI because it claims the CRF layer predicts the next word in a sentence, which is the job of a language model, not sequence labeling. CRF models the relationships between sequence labels."
+        }
+      ]
+    },
+    {
+      "type": "boss",
+      "exercises": [
+        {
+          "id": "b1",
+          "type": "multiple_choice",
+          "xp": 5,
+          "prompt": "Why do we add a CRF layer at the top of a sequence labeling model instead of just using a standard word-by-word classifier?",
+          "options": [
+            {
+              "correct": false,
+              "text": "It processes the text much faster by ignoring the sequence order.",
+              "id": "opt_1"
+            },
+            {
+              "text": "It completely replaces the LSTM layer to save memory.",
+              "correct": false,
+              "id": "opt_2"
+            },
+            {
+              "correct": true,
+              "id": "opt_3",
+              "text": "It models tag-to-tag transitions to choose the most likely sequence of labels."
+            },
+            {
+              "id": "opt_4",
+              "text": "It automatically translates the text into multiple languages.",
+              "correct": false
+            }
+          ],
+          "explain": "The CRF layer is powerful because it looks at the relationship between adjacent labels (transitions) across the entire sequence, rather than just guessing each word's label in isolation."
+        }
+      ]
+    }
+  ]
+}

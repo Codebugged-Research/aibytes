@@ -1,0 +1,223 @@
+{
+  "id": "u246-l4",
+  "unit": 246,
+  "day": 1234,
+  "tier": "NLP Basics",
+  "tierIcon": "🔤",
+  "title": "Attention Masking",
+  "icon": "👁️",
+  "concept": "Masking tells the loss function and attention layers to ignore padded positions, ensuring they have zero impact on backpropagation.",
+  "xp": 15,
+  "hearts": 3,
+  "estMinutes": 7,
+  "segments": [
+    {
+      "type": "warmup",
+      "exercises": [
+        {
+          "id": "w1",
+          "type": "multiple_choice",
+          "xp": 1,
+          "prompt": "Why do we add padding tokens to sentences in the first place?",
+          "options": [
+            {
+              "correct": false,
+              "text": "To translate words to French.",
+              "id": "a"
+            },
+            {
+              "text": "To make different sentences the same length.",
+              "correct": true,
+              "id": "b"
+            },
+            {
+              "text": "To make the AI write faster.",
+              "correct": false,
+              "id": "c"
+            }
+          ],
+          "explain": "Padding adds placeholders to make sequences the same length so they can be processed together in batches."
+        }
+      ]
+    },
+    {
+      "type": "teach",
+      "cards": [
+        {
+          "kind": "hook",
+          "icon": "🎭",
+          "title": "Don't Look at the Blanks!",
+          "body": "When we feed sentences of different lengths into an AI, we pad them with extra empty spaces to make them equal. But how do we stop the AI from wasting its brainpower on these empty spaces? We use a mask!"
+        },
+        {
+          "kind": "definition",
+          "icon": "👁️",
+          "title": "What is Attention Masking?",
+          "body": "An Attention Mask is a sequence of 1s and 0s sent to the AI. A '1' tells the AI to pay attention to a real word, while a '0' tells it to completely ignore a padded placeholder."
+        },
+        {
+          "kind": "analogy",
+          "icon": "🎞️",
+          "title": "The Tape Analogy",
+          "body": "Imagine reading a book where someone has covered all the blank margins with black tape. You don't waste energy staring at the tape; your eyes only focus on the actual words. Attention masking works like that tape, covering up empty padding so the AI's \"eyes\" only read real words."
+        },
+        {
+          "kind": "example",
+          "icon": "📝",
+          "title": "Masking in Action",
+          "body": "If your model processes the padded sentence \"Go home [PAD] [PAD]\", the attention mask will be [1, 1, 0, 0]. The AI calculates math only for \"Go\" and \"home\", ignoring the zeros completely."
+        },
+        {
+          "kind": "mythbust",
+          "icon": "🕵️",
+          "title": "Do AIs Automatically Ignore Padding?",
+          "body": "People often think the AI automatically knows that '[PAD]' tokens are empty and useless. In reality, without a mask, the AI treats padding like normal words, which messes up its mathematical calculations and learning!"
+        },
+        {
+          "kind": "visual",
+          "icon": "📊",
+          "title": "Masked vs. Unmasked",
+          "body": "See how masking changes what the model actually pays attention to during training.",
+          "compare": {
+            "left": {
+              "emoji": "❌",
+              "tag": "No Mask",
+              "text": "The AI processes both the real words and the padding tokens, wasting calculations on empty space."
+            },
+            "right": {
+              "text": "The AI uses 1s and 0s to block out the padding, focusing calculations only on the actual text.",
+              "emoji": "✅",
+              "tag": "With Mask"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "type": "practice",
+      "exercises": [
+        {
+          "id": "p1",
+          "type": "multiple_choice",
+          "xp": 2,
+          "prompt": "What is the main benefit of masking during backpropagation (learning)?",
+          "options": [
+            {
+              "text": "They make the sentences much longer.",
+              "correct": false,
+              "id": "a"
+            },
+            {
+              "id": "b",
+              "correct": true,
+              "text": "They ensure padding has zero impact on backpropagation."
+            },
+            {
+              "id": "c",
+              "correct": false,
+              "text": "They speed up the model by deleting words."
+            },
+            {
+              "correct": false,
+              "id": "d",
+              "text": "They translate the text into numbers."
+            }
+          ],
+          "explain": "Masking ensures that only real tokens affect the learning process, keeping the padding tokens from changing the model's weights."
+        },
+        {
+          "id": "p2",
+          "type": "true_false",
+          "xp": 2,
+          "prompt": "True or False: Attention masking prevents padding tokens from affecting the calculation of attention scores.",
+          "options": [
+            {
+              "text": "True",
+              "id": "a",
+              "correct": true
+            },
+            {
+              "correct": false,
+              "id": "b",
+              "text": "False"
+            }
+          ],
+          "explain": "Masks block the attention layers from looking at pad tokens, preventing them from skewing the final results."
+        },
+        {
+          "id": "p3",
+          "type": "fill_blank",
+          "xp": 2,
+          "prompt": "Fill in the missing word to complete how masks hide padding.",
+          "sentence": "Attention masks use ___ to tell the model which positions to ignore.",
+          "blank": "zeros",
+          "words": [
+            "zeros",
+            "ones",
+            "words",
+            "letters"
+          ],
+          "explain": "We use zeros in the attention mask to cover up the padded areas, instructing the model's math equations to ignore them."
+        },
+        {
+          "id": "p4",
+          "type": "spot_the_ai",
+          "xp": 2,
+          "prompt": "Which description of attention masking is correct?",
+          "options": [
+            {
+              "correct": true,
+              "id": "a",
+              "text": "AI uses a mask of 1s and 0s to focus only on real words and ignore padding."
+            },
+            {
+              "id": "b",
+              "correct": false,
+              "text": "AI uses a mask to force the model to pay extra attention to [PAD] tokens."
+            },
+            {
+              "correct": false,
+              "id": "c",
+              "text": "AI deletes all padding tokens physically from the memory during attention."
+            }
+          ],
+          "explain": "Option B is incorrect because masking blocks attention, it does not force the AI to look at padding. Option C is wrong because masking does not delete text. Option A correctly identifies how masking keeps calculations focused only on the real words."
+        }
+      ]
+    },
+    {
+      "type": "boss",
+      "exercises": [
+        {
+          "id": "b1",
+          "type": "multiple_choice",
+          "xp": 5,
+          "prompt": "Why is an attention mask absolutely necessary when training a model with padded sequences?",
+          "options": [
+            {
+              "text": "It automatically deletes all padding tokens from the dataset to save disk space.",
+              "correct": false,
+              "id": "a"
+            },
+            {
+              "text": "It blocks the AI from looking at padded tokens, preventing them from ruining calculations.",
+              "id": "b",
+              "correct": true
+            },
+            {
+              "correct": false,
+              "id": "c",
+              "text": "It forces the AI to pay equal attention to every single token in the sentence."
+            },
+            {
+              "id": "d",
+              "correct": false,
+              "text": "It encrypts the text so other AI models cannot copy the training data."
+            }
+          ],
+          "explain": "Padding adds dummy values to make sequences equal length, but we must use a mask to hide them so the model does not learn from useless empty space."
+        }
+      ]
+    }
+  ]
+}

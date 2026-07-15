@@ -1,0 +1,222 @@
+{
+  "id": "u201-l4",
+  "unit": 201,
+  "day": 1009,
+  "tier": "Generative Adversarial Networks",
+  "tierIcon": "🎭",
+  "title": "Autoencoders as a Simple Generative Idea",
+  "icon": "🧬",
+  "concept": "An autoencoder compresses an input into a compact latent code and reconstructs it (recall Unit 172's reconstruction-based anomaly detection). That hints at generative capability, but a standard autoencoder isn't actually trained to produce convincing brand-new samples the way a true generative model is.",
+  "xp": 15,
+  "hearts": 3,
+  "estMinutes": 7,
+  "segments": [
+    {
+      "type": "warmup",
+      "exercises": [
+        {
+          "id": "w1",
+          "type": "multiple_choice",
+          "xp": 1,
+          "prompt": "Recap: In generative modeling, what does it mean for a model to \"sample from a distribution\" it learned?",
+          "options": [
+            {
+              "id": "a",
+              "text": "It picks a fresh point from the learned pattern of the training data to produce a new, plausible example",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "It randomly selects and copies one exact file from the training set",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "It measures how far apart two training images are in pixels",
+              "correct": false
+            }
+          ],
+          "explain": "Yes! Sampling means drawing a new point from the learned pattern, producing a genuinely new example."
+        }
+      ]
+    },
+    {
+      "type": "teach",
+      "cards": [
+        {
+          "kind": "hook",
+          "icon": "🪞",
+          "title": "A network you've already met",
+          "body": "You've already worked with a network that squeezes an image down into a tiny code and rebuilds it from scratch — Unit 172's reconstruction-based anomaly detector, where a large reconstruction error was the anomaly signal. Could that same squeeze-and-rebuild trick be used to dream up brand-new images?"
+        },
+        {
+          "kind": "definition",
+          "icon": "🧬",
+          "title": "What is an autoencoder?",
+          "body": "An <strong>autoencoder</strong> is a neural network with two halves: an <strong>encoder</strong> that compresses an input into a compact internal representation (a <strong>latent code</strong>), and a <strong>decoder</strong> that reconstructs the original input from that code. Recall Unit 172: a normal-trained autoencoder reconstructs normal inputs well, and struggles on anomalies."
+        },
+        {
+          "kind": "analogy",
+          "icon": "📝",
+          "title": "A photocopier with a sticky note",
+          "body": "An autoencoder is like a photocopier forced to shrink a full page down to a single sticky note of shorthand notes, then redraw the entire page from just those notes. It gets remarkably good at reproducing pages similar to ones it has seen — but it was never trained to draw a brand-new page purely from imagination."
+        },
+        {
+          "kind": "example",
+          "icon": "😐",
+          "title": "Feeding it noise instead of a real code",
+          "body": "Feed a trained face autoencoder a real face photo, and its decoder reconstructs a close copy — no surprise there. But feed the decoder pure random noise in place of a real encoded photo, and it usually produces a blurry, unconvincing mess, not a crisp new face."
+        },
+        {
+          "kind": "mythbust",
+          "icon": "⚠️",
+          "title": "Reconstructing isn't the same as generating",
+          "body": "Since autoencoders can rebuild images, it's tempting to assume they can generate any new image on demand. In reality, a standard autoencoder is trained only to minimize reconstruction error on real inputs — its latent space isn't organized to make random sampling produce realistic results. That gap is exactly what purpose-built generative models are designed to close."
+        },
+        {
+          "kind": "visual",
+          "icon": "⚖️",
+          "title": "Autoencoder vs. a true generative model",
+          "body": "Same squeeze-and-rebuild shape, very different training goals:",
+          "compare": {
+            "left": {
+              "emoji": "🪞",
+              "tag": "Autoencoder",
+              "text": "Trained to reconstruct real input<br>Great at rebuilding what it has seen<br>Weak at inventing from random input"
+            },
+            "right": {
+              "emoji": "✨",
+              "tag": "True generative model",
+              "text": "Trained to produce convincing output<br>from random input, no real input needed<br>Purpose-built for novel generation"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "type": "practice",
+      "exercises": [
+        {
+          "id": "p1",
+          "type": "multiple_choice",
+          "xp": 2,
+          "prompt": "What are the two halves of an autoencoder?",
+          "options": [
+            {
+              "id": "a",
+              "text": "An encoder that compresses the input, and a decoder that reconstructs it",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "A generator that creates fakes, and a discriminator that judges them",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "A classifier head and a detector head",
+              "correct": false
+            },
+            {
+              "id": "d",
+              "text": "A training loop and a validation loop",
+              "correct": false
+            }
+          ],
+          "explain": "Correct! Encoder compresses to a latent code, decoder reconstructs from that code."
+        },
+        {
+          "id": "p2",
+          "type": "true_false",
+          "xp": 2,
+          "prompt": "True or false: A standard autoencoder is explicitly trained to produce realistic new images from random noise.",
+          "options": [
+            {
+              "id": "t",
+              "text": "True",
+              "correct": false
+            },
+            {
+              "id": "f",
+              "text": "False",
+              "correct": true
+            }
+          ],
+          "explain": "False. It's trained to minimize reconstruction error on real inputs — feeding it random noise usually yields a blurry, unconvincing result."
+        },
+        {
+          "id": "p3",
+          "type": "fill_blank",
+          "xp": 2,
+          "prompt": "Complete the sentence:",
+          "sentence": "An autoencoder's decoder reconstructs an image from a compact ___ representation created by the encoder.",
+          "blank": "latent",
+          "words": [
+            "latent",
+            "labeled",
+            "boundary"
+          ],
+          "explain": "The compressed internal representation an encoder produces is called a latent code."
+        },
+        {
+          "id": "p4",
+          "type": "spot_the_ai",
+          "xp": 2,
+          "prompt": "Which statement correctly describes what an autoencoder was actually trained to do?",
+          "options": [
+            {
+              "id": "a",
+              "text": "Minimize the difference between a real input and its reconstruction after compression",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "Maximize how convincing its output looks when starting from pure random noise",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "Compete against a second network that tries to catch its fakes",
+              "correct": false
+            }
+          ],
+          "explain": "Correct! Reconstruction accuracy on real inputs is the autoencoder's actual training goal."
+        }
+      ]
+    },
+    {
+      "type": "boss",
+      "exercises": [
+        {
+          "id": "b1",
+          "type": "multiple_choice",
+          "xp": 5,
+          "prompt": "An engineer feeds pure random static into a pretrained face autoencoder's decoder, hoping it generates a brand-new realistic face. What most likely happens, and why?",
+          "options": [
+            {
+              "id": "a",
+              "text": "It likely produces a blurry, unrealistic image, because the autoencoder was only trained to reconstruct real encoded inputs, not to produce convincing output from arbitrary random codes",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "It produces a perfectly realistic new face, because autoencoders are fully general-purpose generators",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "It crashes, because autoencoders cannot accept any input besides real photos",
+              "correct": false
+            },
+            {
+              "id": "d",
+              "text": "It produces an exact copy of a training photo, since autoencoders always memorize their inputs",
+              "correct": false
+            }
+          ],
+          "explain": "Exactly! Reconstruction skill on real inputs doesn't transfer to convincing generation from random codes. Next: GANs close that gap with a completely different training idea — competition."
+        }
+      ]
+    }
+  ]
+}

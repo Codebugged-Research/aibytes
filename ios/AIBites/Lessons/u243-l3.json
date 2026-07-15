@@ -1,0 +1,223 @@
+{
+  "id": "u243-l3",
+  "unit": 243,
+  "day": 1218,
+  "tier": "NLP Basics",
+  "tierIcon": "🔤",
+  "title": "Two Independent Recurrent Layers",
+  "icon": "👥",
+  "concept": "Bidirectional architectures run two independent RNNs on the input sequence: one forward, one backward, then concatenate their hidden states at each step.",
+  "xp": 15,
+  "hearts": 3,
+  "estMinutes": 7,
+  "segments": [
+    {
+      "type": "warmup",
+      "exercises": [
+        {
+          "id": "w1",
+          "type": "multiple_choice",
+          "xp": 1,
+          "prompt": "What is a limitation of a standard, one-direction RNN?",
+          "options": [
+            {
+              "correct": false,
+              "text": "They can easily see the future words.",
+              "id": "a"
+            },
+            {
+              "id": "b",
+              "correct": true,
+              "text": "They only look at past words in one direction."
+            },
+            {
+              "text": "They do not use recurrent connections.",
+              "id": "c",
+              "correct": false
+            }
+          ],
+          "explain": "Standard RNNs process sequences in one direction (usually left-to-right), which means they cannot easily use future context to understand a current word."
+        }
+      ]
+    },
+    {
+      "type": "teach",
+      "cards": [
+        {
+          "kind": "hook",
+          "icon": "🔄",
+          "title": "Reading Forward and Backward",
+          "body": "When you read a sentence, you sometimes need to look ahead to understand a word's true meaning. Standard RNNs only look backward. How can we look both ways at once? By running two separate brains in opposite directions!"
+        },
+        {
+          "kind": "definition",
+          "icon": "👥",
+          "title": "Two Independent Layers",
+          "body": "A Bidirectional RNN uses two independent recurrent layers. One layer processes the sequence from left to right (forward), and the other processes it from right to left (backward). Finally, the network merges (concatenates) their hidden states at each step so it understands both past and future context."
+        },
+        {
+          "kind": "analogy",
+          "icon": "🕵️‍♂️",
+          "title": "The Two Detectives",
+          "body": "Imagine reading a mystery novel. One detective starts reading from the front cover to the back, while another detective reads from the back cover to the front. At the very end, they meet up and combine their notes for every single page. By combining their opposite journeys, they get a complete, spoiler-free view of the whole story!"
+        },
+        {
+          "kind": "example",
+          "icon": "📝",
+          "title": "Filling in the Blanks",
+          "body": "If we process the sentence \"The weather is [blank]\", the forward layer reads \"The -> weather -> is\" to predict what comes next. The backward layer reads the sequence in reverse. When we combine them, the model knows both what came before and what comes after the blank!"
+        },
+        {
+          "kind": "mythbust",
+          "icon": "🚫",
+          "title": "Do They Talk Mid-Sentence?",
+          "body": "Some think the forward and backward layers constantly talk to each other while reading. Actually, they are completely independent! They run their own paths separately and only combine their final results at each step."
+        },
+        {
+          "kind": "visual",
+          "icon": "👁️‍🗨️",
+          "title": "Visualizing the Flow",
+          "body": "Let's look at how the data flows through the two independent layers for the sequence [A, B, C].",
+          "compare": {
+            "right": {
+              "emoji": "⬅️",
+              "tag": "Backward Layer",
+              "text": "Processes: C ➔ B ➔ A. Builds context from the end of the sequence."
+            },
+            "left": {
+              "tag": "Forward Layer",
+              "emoji": "➡️",
+              "text": "Processes: A ➔ B ➔ C. Builds context from the beginning of the sequence."
+            }
+          }
+        }
+      ]
+    },
+    {
+      "type": "practice",
+      "exercises": [
+        {
+          "id": "p1",
+          "type": "multiple_choice",
+          "xp": 2,
+          "prompt": "How does a bidirectional RNN combine the information from the forward and backward layers?",
+          "options": [
+            {
+              "text": "By concatenating (merging) their hidden states at each step",
+              "id": "a",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "correct": false,
+              "text": "By multiplying their weights together"
+            },
+            {
+              "correct": false,
+              "text": "By deleting the backward layer's outputs",
+              "id": "c"
+            },
+            {
+              "text": "By averaging all words in the sentence first",
+              "id": "d",
+              "correct": false
+            }
+          ],
+          "explain": "At each step, the bidirectional network takes the hidden state of the forward RNN and the hidden state of the backward RNN and concatenates (merges) them together."
+        },
+        {
+          "id": "p2",
+          "type": "true_false",
+          "xp": 2,
+          "prompt": "True or False: The forward and backward layers share the exact same weights.",
+          "options": [
+            {
+              "text": "True",
+              "id": "t",
+              "correct": false
+            },
+            {
+              "text": "False",
+              "id": "f",
+              "correct": true
+            }
+          ],
+          "explain": "The forward and backward layers are separate RNNs with their own unique parameters and weights."
+        },
+        {
+          "id": "p3",
+          "type": "fill_blank",
+          "xp": 2,
+          "prompt": "Fill in the missing word to describe how the two recurrent layers process information.",
+          "sentence": "A bidirectional RNN runs two _____ recurrent layers in opposite directions.",
+          "blank": "independent",
+          "words": [
+            "independent",
+            "dependent",
+            "identical",
+            "slow"
+          ],
+          "explain": "The two recurrent layers are completely independent, meaning they do not share weights or interfere with each other while processing the sequence."
+        },
+        {
+          "id": "p4",
+          "type": "spot_the_ai",
+          "xp": 2,
+          "prompt": "Which statement correctly describes the backward layer in a bidirectional architecture?",
+          "options": [
+            {
+              "text": "It processes the sequence from left to right, just like the forward layer.",
+              "id": "a",
+              "correct": false
+            },
+            {
+              "text": "It processes the sequence in reverse, starting from the last item.",
+              "id": "b",
+              "correct": true
+            },
+            {
+              "correct": false,
+              "text": "It skips every second word to save processing power.",
+              "id": "c"
+            }
+          ],
+          "explain": "The backward layer must read the input sequence starting from the very last element and moving toward the first element."
+        }
+      ]
+    },
+    {
+      "type": "boss",
+      "exercises": [
+        {
+          "id": "b1",
+          "type": "multiple_choice",
+          "xp": 5,
+          "prompt": "How do the two recurrent layers in a bidirectional RNN interact while processing an input sequence?",
+          "options": [
+            {
+              "id": "a",
+              "correct": false,
+              "text": "The forward layer feeds its hidden state directly into the backward layer at each word."
+            },
+            {
+              "text": "They share the exact same weights and process the text in the same direction.",
+              "id": "b",
+              "correct": false
+            },
+            {
+              "text": "They run independently in opposite directions, and their outputs are combined at the end.",
+              "id": "c",
+              "correct": true
+            },
+            {
+              "correct": false,
+              "text": "The backward layer must finish the entire sentence before the forward layer can start.",
+              "id": "d"
+            }
+          ],
+          "explain": "Bidirectional layers create two completely separate, independent RNNs (one running forward, one running backward). They do not share weights or feed into each other step-by-step; they only combine their outputs at the very end of the process."
+        }
+      ]
+    }
+  ]
+}
