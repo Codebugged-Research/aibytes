@@ -1,0 +1,222 @@
+{
+  "id": "u148-l4",
+  "unit": 148,
+  "day": 744,
+  "tier": "Modern Object Detection",
+  "tierIcon": "🎯",
+  "title": "YOLO v9 & YOLO v10",
+  "icon": "⚡",
+  "concept": "YOLOv9's PGI and YOLOv10's NMS-free architecture push the limits of speed and structural training efficiency.",
+  "xp": 15,
+  "hearts": 3,
+  "estMinutes": 7,
+  "segments": [
+    {
+      "type": "warmup",
+      "exercises": [
+        {
+          "id": "w4",
+          "type": "multiple_choice",
+          "xp": 1,
+          "prompt": "Recap: What is the main benefit of decoupled heads in object detection?",
+          "options": [
+            {
+              "id": "a",
+              "text": "They separate classification and localization tasks into specialized branches",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "They double the image resolution",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "They allow the model to run without a backbone",
+              "correct": false
+            }
+          ],
+          "explain": "Correct! Decoupled heads split classification and regression tasks to improve performance."
+        }
+      ]
+    },
+    {
+      "type": "teach",
+      "cards": [
+        {
+          "kind": "hook",
+          "icon": "🏎️",
+          "title": "The Real-Time Bottleneck",
+          "body": "Even with real-time neural networks, there is a hidden speed bottleneck. After the network runs, the CPU must spend time running Non-Maximum Suppression (NMS) to delete duplicate boxes. Can we train a network to be so smart it never needs NMS?"
+        },
+        {
+          "kind": "definition",
+          "icon": "⚡",
+          "title": "YOLOv9 & YOLOv10",
+          "body": "<strong>YOLOv9</strong> introduced <strong>Programmable Gradient Information</strong> (PGI) to keep training signal clean. <strong>YOLOv10</strong> achieved <strong>NMS-free</strong> inference using dual label assignment. During training, one branch uses anchors to ensure convergence, while a matching branch learns 1-to-1 matching to output exactly one box per object."
+        },
+        {
+          "kind": "analogy",
+          "icon": "🎯",
+          "title": "The Sniper vs. The Shotgun",
+          "body": "Older models are like a shotgun: they shoot many predictions (multiple boxes) and NMS cleans them up. YOLOv10 is like a sniper: it takes aim and fires exactly one bullet (one box) per target, completely removing the cleanup step."
+        },
+        {
+          "kind": "example",
+          "icon": "🚦",
+          "title": "Zero Cleanup Latency",
+          "body": "In a self-driving camera feed, YOLOv10 outputs exactly one bounding box for each car. Since there are no duplicate boxes, the CPU skips NMS, saving 5-10 milliseconds per frame for real-time safety."
+        },
+        {
+          "kind": "mythbust",
+          "icon": "⚠️",
+          "title": "NMS-Free Output",
+          "body": "You might think NMS-free models have messy, overlapping predictions. Fact: Thanks to dual-label assignment during training, YOLOv10 behaves normally but outputs clean, single-box predictions natively."
+        },
+        {
+          "kind": "visual",
+          "icon": "⚖️",
+          "title": "Traditional vs. NMS-Free Inference",
+          "body": "How YOLOv10 speeds up inference by removing NMS:",
+          "compare": {
+            "left": {
+              "emoji": "🐢",
+              "tag": "Traditional (YOLOv8)",
+              "text": "Network outputs many boxes<br>CPU runs NMS to sort and delete<br>Introduces processing latency"
+            },
+            "right": {
+              "emoji": "⚡",
+              "tag": "NMS-Free (YOLOv10)",
+              "text": "Network outputs exactly 1 box per object<br>No NMS required<br>Lowest possible end-to-end latency"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "type": "practice",
+      "exercises": [
+        {
+          "id": "p1",
+          "type": "multiple_choice",
+          "xp": 2,
+          "prompt": "What major bottleneck does YOLOv10 eliminate during inference?",
+          "options": [
+            {
+              "id": "a",
+              "text": "Non-Maximum Suppression (NMS)",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "The convolutional layers",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "Batch normalization",
+              "correct": false
+            },
+            {
+              "id": "d",
+              "text": "Data augmentation",
+              "correct": false
+            }
+          ],
+          "explain": "Correct! YOLOv10 eliminates the NMS step, speeding up inference."
+        },
+        {
+          "id": "p2",
+          "type": "true_false",
+          "xp": 2,
+          "prompt": "True or False: Programmable Gradient Information (PGI) in YOLOv9 helps prevent the loss of feature details in very deep network architectures.",
+          "options": [
+            {
+              "id": "t",
+              "text": "True",
+              "correct": true
+            },
+            {
+              "id": "f",
+              "text": "False",
+              "correct": false
+            }
+          ],
+          "explain": "True. PGI provides auxiliary gradient signals to ensure deep layers learn complete features."
+        },
+        {
+          "id": "p3",
+          "type": "fill_blank",
+          "xp": 2,
+          "prompt": "Complete the sentence:",
+          "sentence": "YOLOv10 training uses dual label assignment, combining one-to-many predictions with ___ predictions to eliminate NMS.",
+          "blank": "one-to-one",
+          "words": [
+            "one-to-one",
+            "many-to-many",
+            "sparse"
+          ],
+          "explain": "One-to-one matching training forces the model to predict exactly one box per object."
+        },
+        {
+          "id": "p4",
+          "type": "spot_the_ai",
+          "xp": 2,
+          "prompt": "Why is removing NMS beneficial for real-time edge devices?",
+          "options": [
+            {
+              "id": "a",
+              "text": "It saves CPU computation time, reducing end-to-end processing delay",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "It decreases the size of the image files on disk",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "It prevents the camera from getting hot",
+              "correct": false
+            }
+          ],
+          "explain": "Correct! NMS runs on CPU/GPU after the model pass. Deleting it saves compute and reduces latency."
+        }
+      ]
+    },
+    {
+      "type": "boss",
+      "exercises": [
+        {
+          "id": "b1",
+          "type": "multiple_choice",
+          "xp": 5,
+          "prompt": "You are deploying a detection system on a smart watch with a very weak CPU. Why would you select YOLOv10 over YOLOv8?",
+          "options": [
+            {
+              "id": "a",
+              "text": "YOLOv10 is NMS-free, meaning the weak CPU does not need to perform expensive bounding box overlap sorting.",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "YOLOv8 can only run on desktop computers.",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "YOLOv10 does not use backpropagation.",
+              "correct": false
+            },
+            {
+              "id": "d",
+              "text": "YOLOv10 makes the screen brighter.",
+              "correct": false
+            }
+          ],
+          "explain": "Exactly! Eliminating post-processing NMS is a massive win for CPU-constrained edge hardware."
+        }
+      ]
+    }
+  ]
+}

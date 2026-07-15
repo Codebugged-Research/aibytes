@@ -1,0 +1,222 @@
+{
+  "id": "u193-l4",
+  "unit": 193,
+  "day": 969,
+  "tier": "Video & Temporal Vision",
+  "tierIcon": "\ud83c\udfac",
+  "title": "The I3D Architecture (Inflated 3D)",
+  "icon": "\ud83c\udf88",
+  "concept": "I3D (Inflated 3D) converts successful 2D architectures into 3D models by inflating kernels, bootstrapping weights from ImageNet.",
+  "xp": 15,
+  "hearts": 3,
+  "estMinutes": 7,
+  "segments": [
+    {
+      "type": "warmup",
+      "exercises": [
+        {
+          "id": "w1",
+          "type": "multiple_choice",
+          "xp": 1,
+          "prompt": "Recap: What is the primary input to the temporal stream of a Two-Stream network?",
+          "options": [
+            {
+              "id": "a",
+              "text": "Stacked optical flow frames",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "Raw RGB frames",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "Audio spectrograms",
+              "correct": false
+            }
+          ],
+          "explain": "Yes! The temporal stream processes pre-calculated optical flow fields."
+        }
+      ]
+    },
+    {
+      "type": "teach",
+      "cards": [
+        {
+          "kind": "hook",
+          "icon": "\ud83c\udf88",
+          "title": "Inflating a balloon",
+          "body": "It takes millions of images to train a deep 2D model like Inception. But video datasets are much smaller. How can we get the power of deep 2D models without starting from scratch? We can inflate a flat 2D network like a balloon, turning its 2D filters into 3D filters!"
+        },
+        {
+          "kind": "definition",
+          "icon": "\ud83c\udf88",
+          "title": "I3D (Inflated 3D)",
+          "body": "<strong>I3D</strong> (Inflated 3D ConvNet) is an architecture that takes a successful 2D network (like Inception-v1) and inflates all its 2D filters ($k \times k$) into 3D filters ($k \times k \times k$). It bootstraps training by repeating the pre-trained 2D ImageNet weights along the time axis."
+        },
+        {
+          "kind": "analogy",
+          "icon": "\ud83e\udd5e",
+          "title": "Extruding play-doh",
+          "body": "Imagine squeezing Play-Doh through a square mold. You get a long square log. Inflation is like taking a flat 2D filter (the square mold) and extruding it along the time axis to create a solid 3D filter (the log), inheriting the shape features."
+        },
+        {
+          "kind": "example",
+          "icon": "\ud83d\udcd0",
+          "title": "Weight inflation math",
+          "body": "If a 2D filter has a weight $w$, we inflate it to a 3D temporal size of 3 by repeating the weight: $[w/3, w/3, w/3]$. Dividing by 3 ensures the output activations remain identical to the original 2D network on static images!"
+        },
+        {
+          "kind": "mythbust",
+          "icon": "\ud83d\udeab",
+          "title": "Not starting from zero",
+          "body": "You might think 3D networks must always be trained from scratch. I3D proves we can reuse **transfer learning** from 2D image models! Bootstrapping 2D weights from ImageNet gives the 3D model an immediate head start, accelerating training."
+        },
+        {
+          "kind": "visual",
+          "icon": "\u2696\ufe0f",
+          "title": "2D Filter vs. Inflated 3D Filter",
+          "body": "Comparing filter shapes and weight distribution:",
+          "compare": {
+            "left": {
+              "emoji": "\u2b1c",
+              "tag": "2D Filter (e.g. 3x3)",
+              "text": "Weights: $W$<br>Trained on ImageNet (2D)<br>Processes a single image frame"
+            },
+            "right": {
+              "emoji": "\ud83c\udf88",
+              "tag": "Inflated 3D Filter (e.g. 3x3x3)",
+              "text": "Weights: $[W/3, W/3, W/3]$<br>Bootstrapped from 2D weights<br>Processes a volume of frames"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "type": "practice",
+      "exercises": [
+        {
+          "id": "p1",
+          "type": "multiple_choice",
+          "xp": 2,
+          "prompt": "What does the 'I' in I3D stand for?",
+          "options": [
+            {
+              "id": "a",
+              "text": "Inflated",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "Interactive",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "ImageNet",
+              "correct": false
+            },
+            {
+              "id": "d",
+              "text": "Integrated",
+              "correct": false
+            }
+          ],
+          "explain": "Correct! I3D stands for Inflated 3D ConvNet, referring to the inflation of 2D layers into 3D layers."
+        },
+        {
+          "id": "p2",
+          "type": "true_false",
+          "xp": 2,
+          "prompt": "True or false: When inflating a 2D filter of weight W into a 3x3x3 filter, we divide the weights by the temporal size (3) to preserve activation scale.",
+          "options": [
+            {
+              "id": "t",
+              "text": "True",
+              "correct": true
+            },
+            {
+              "id": "f",
+              "text": "False",
+              "correct": false
+            }
+          ],
+          "explain": "True. Dividing the weights by the temporal kernel size ensures that a static video input produces the exact same activation values as a single 2D image."
+        },
+        {
+          "id": "p3",
+          "type": "fill_blank",
+          "xp": 2,
+          "prompt": "Complete the sentence:",
+          "sentence": "I3D allows us to leverage transfer learning by bootstrapping weights from pre-trained ___ models.",
+          "blank": "2D image",
+          "words": [
+            "2D image",
+            "audio",
+            "1D text"
+          ],
+          "explain": "I3D reuse weights from models pre-trained on large 2D image datasets like ImageNet."
+        },
+        {
+          "id": "p4",
+          "type": "spot_the_ai",
+          "xp": 2,
+          "prompt": "Which architecture was originally inflated to create the standard I3D network?",
+          "options": [
+            {
+              "id": "a",
+              "text": "Inception-v1 (GoogLeNet)",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "AlexNet",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "LeNet-5",
+              "correct": false
+            }
+          ],
+          "explain": "The original I3D model was created by inflating the Inception-v1 architecture."
+        }
+      ]
+    },
+    {
+      "type": "boss",
+      "exercises": [
+        {
+          "id": "b1",
+          "type": "multiple_choice",
+          "xp": 5,
+          "prompt": "Why is bootstrapping pre-trained weights so helpful for video models like I3D?",
+          "options": [
+            {
+              "id": "a",
+              "text": "Because video datasets are relatively small, and pre-trained image weights provide strong baseline object detection features.",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "Because it automatically reduces the size of video files.",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "Because pre-trained weights make 3D networks run without using any electricity.",
+              "correct": false
+            },
+            {
+              "id": "d",
+              "text": "Because it converts 3D convolutions back into 2D convolutions.",
+              "correct": false
+            }
+          ],
+          "explain": "Exactly! Video datasets with clean labels are hard to collect. Reusing weights from 2D ImageNet training gives the model a massive head start in understanding shapes and textures. Next: how do we compare all these video models? Next up: Comparing Video Models."
+        }
+      ]
+    }
+  ]
+}

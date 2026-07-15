@@ -1,0 +1,222 @@
+{
+  "id": "u146-l1",
+  "unit": 146,
+  "day": 731,
+  "tier": "Object Detection Foundations",
+  "tierIcon": "🎯",
+  "title": "True Positives in Detection",
+  "icon": "✅",
+  "concept": "A predicted box is a True Positive if it has the correct class label and an IoU overlap with the ground truth box above a set threshold.",
+  "xp": 15,
+  "hearts": 3,
+  "estMinutes": 7,
+  "segments": [
+    {
+      "type": "warmup",
+      "exercises": [
+        {
+          "id": "w1",
+          "type": "multiple_choice",
+          "xp": 1,
+          "prompt": "Recap: What makes the RPN faster than Selective Search?",
+          "options": [
+            {
+              "id": "a",
+              "text": "It runs on the GPU using parallel matrix operations",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "It uses manual heuristics",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "It runs on the CPU",
+              "correct": false
+            }
+          ],
+          "explain": "GPU acceleration allows the RPN to compute thousands of anchor proposals in milliseconds."
+        }
+      ]
+    },
+    {
+      "type": "teach",
+      "cards": [
+        {
+          "kind": "hook",
+          "icon": "🎯",
+          "title": "Is That Box Correct?",
+          "body": "If you ask a model to find dogs, and it predicts a perfect bounding box around a tree and labels it 'dog', it's wrong. If it finds a dog but the box is huge and covers the whole backyard, it's also wrong. We need a strict rule to define when a box is correct."
+        },
+        {
+          "kind": "definition",
+          "icon": "✅",
+          "title": "True Positives (TP)",
+          "body": "In object detection, a prediction is classified as a <strong>True Positive (TP)</strong> if: 1) the predicted class label matches the ground truth label, and 2) the <strong>IoU overlap</strong> between the predicted box and the ground truth box is greater than or equal to a set threshold (typically <code>0.5</code>)."
+        },
+        {
+          "kind": "analogy",
+          "icon": "🎯",
+          "title": "Target Practice",
+          "body": "Imagine target shooting. To score a hit (True Positive), two things must happen: you must shoot the correct target (correct class), and your bullet hole must land inside the target ring (IoU above the threshold)."
+        },
+        {
+          "kind": "example",
+          "icon": "✅",
+          "title": "Evaluating a Hit",
+          "body": "A model predicts a 'car' box with an IoU of <code>0.65</code> with a ground truth car. The threshold is <code>0.5</code>. Since the class matches and the IoU is above 0.5, this is a True Positive. If the class was 'bus', it would be a False Positive!"
+        },
+        {
+          "kind": "mythbust",
+          "icon": "⚠️",
+          "title": "Confidence alone is not enough",
+          "body": "You might think a prediction with 99% confidence is automatically correct. In evaluation, if a 99% confidence box does not overlap the real object (IoU < 0.5), it is marked as a **False Positive**, penalizing the model's score."
+        },
+        {
+          "kind": "visual",
+          "icon": "⚖️",
+          "title": "Correct vs. Incorrect Detections",
+          "body": "Visualizing true positives vs false positives in detection:",
+          "compare": {
+            "left": {
+              "emoji": "✅",
+              "tag": "True Positive (TP)",
+              "text": "Correct label AND high IoU.<br><code>e.g. \"Dog\" box with IoU = 0.72</code>"
+            },
+            "right": {
+              "emoji": "❌",
+              "tag": "False Positive (FP)",
+              "text": "Incorrect label OR low IoU.<br><code>e.g. \"Dog\" box with IoU = 0.15</code>"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "type": "practice",
+      "exercises": [
+        {
+          "id": "p1",
+          "type": "multiple_choice",
+          "xp": 2,
+          "prompt": "What two conditions must a predicted bounding box meet to be classified as a True Positive (TP)?",
+          "explain": "A True Positive requires matching the category label and overlapping the real object's box above the threshold (e.g. IoU >= 0.5).",
+          "options": [
+            {
+              "id": "a",
+              "text": "Correct class label and an IoU overlap above the evaluation threshold",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "Correct color schema and image size",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "High learning rate and small batch size",
+              "correct": false
+            },
+            {
+              "id": "d",
+              "text": "It must be the only box in the image",
+              "correct": false
+            }
+          ]
+        },
+        {
+          "id": "p2",
+          "type": "true_false",
+          "xp": 2,
+          "prompt": "True or False: A predicted box that perfectly surrounds a cat but is labeled as 'dog' is still a True Positive.",
+          "explain": "False. Even if the box coordinates are perfect, if the classification label is incorrect, it is a False Positive.",
+          "options": [
+            {
+              "id": "t",
+              "text": "True",
+              "correct": false
+            },
+            {
+              "id": "f",
+              "text": "False",
+              "correct": true
+            }
+          ]
+        },
+        {
+          "id": "p3",
+          "type": "fill_blank",
+          "xp": 2,
+          "prompt": "Complete the sentence:",
+          "explain": "Predictions that do not align with target objects are False Positives.",
+          "sentence": "A high-confidence prediction in the wrong location (IoU < 0.5) is graded as a ___ Positive.",
+          "blank": "False",
+          "words": [
+            "False",
+            "True",
+            "Background"
+          ]
+        },
+        {
+          "id": "p4",
+          "type": "spot_the_ai",
+          "xp": 2,
+          "prompt": "Which prediction represents a True Positive (evaluation threshold = 0.50)?",
+          "explain": "Option A has matching class labels ('car') and a high IoU (0.78 >= 0.5), making it a True Positive.",
+          "options": [
+            {
+              "id": "a",
+              "text": "Prediction: 'Car' at coordinates, IoU with real car = 0.78",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "Prediction: 'Dog' at coordinates, IoU with real cat = 0.90",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "Prediction: 'Car' at coordinates, IoU with real car = 0.12",
+              "correct": false
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "boss",
+      "exercises": [
+        {
+          "id": "b1",
+          "type": "multiple_choice",
+          "xp": 5,
+          "prompt": "A model predicts a 'person' bounding box. The box has an IoU of 0.55 with a real person, and the confidence score is 92%. The evaluation threshold is set to 0.50. How is this prediction classified?",
+          "options": [
+            {
+              "id": "a",
+              "text": "True Positive (TP), because the class matches and the IoU is above the threshold.",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "False Positive (FP), because the IoU is too close to the boundary.",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "False Negative (FN), because the confidence is not 100%.",
+              "correct": false
+            },
+            {
+              "id": "d",
+              "text": "A background anchor.",
+              "correct": false
+            }
+          ],
+          "explain": "Exactly! The class matches ('person') and the IoU of 0.55 meets the threshold requirement of 0.50, qualifying it as a True Positive. Next: let's learn how we evaluate precision and recall together!"
+        }
+      ]
+    }
+  ]
+}

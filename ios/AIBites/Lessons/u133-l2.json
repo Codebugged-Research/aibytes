@@ -1,0 +1,222 @@
+{
+  "id": "u133-l2",
+  "unit": 133,
+  "day": 667,
+  "tier": "Image Classification in Depth",
+  "tierIcon": "🏷️",
+  "title": "Sigmoid vs. Softmax Activation",
+  "icon": "🔄",
+  "concept": "Sigmoid activation treats each class score independently, while Softmax makes them compete.",
+  "xp": 15,
+  "hearts": 3,
+  "estMinutes": 7,
+  "segments": [
+    {
+      "type": "warmup",
+      "exercises": [
+        {
+          "id": "w1",
+          "type": "multiple_choice",
+          "xp": 1,
+          "prompt": "Recap: What does Softmax do to logits in single-label classification?",
+          "options": [
+            {
+              "id": "a",
+              "text": "It normalizes them so they sum to 1.",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "It forces them to be binary 0 or 1.",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "It computes the average error of the model.",
+              "correct": false
+            }
+          ],
+          "explain": "Correct! Softmax links all logits together to output a distribution that sums to 1."
+        }
+      ]
+    },
+    {
+      "type": "teach",
+      "cards": [
+        {
+          "kind": "hook",
+          "icon": "🔌",
+          "title": "Independent switches",
+          "body": "Think of a control panel with five separate light switches. Flipping one switch up doesn't force the others down. In multi-label networks, we want our output nodes to act like these independent switches."
+        },
+        {
+          "kind": "definition",
+          "icon": "🔄",
+          "title": "Why Sigmoid?",
+          "body": "Instead of Softmax, multi-label networks use the <strong>Sigmoid function</strong> on each output node. The Sigmoid function <code>1 / (1 + e^-x)</code> squashes each logit score individually into a range between 0 and 1, representing the probability of that specific class."
+        },
+        {
+          "kind": "analogy",
+          "icon": "🍿",
+          "title": "Buffet line vs. set menu",
+          "body": "Softmax is like a set menu: you get one main dish, and choosing chicken means you don't get beef. Sigmoid is like a buffet: you can take chicken, beef, and salad independently; the quantity of one doesn't limit the others."
+        },
+        {
+          "kind": "example",
+          "icon": "🔢",
+          "title": "Logit comparison",
+          "body": "If raw logits are <code>[3.0, 0.0, -3.0]</code>, Softmax gives <code>[0.95, 0.05, 0.00]</code> (linked, sums to 1). Sigmoid calculates each independently, yielding <code>[0.95, 0.50, 0.05]</code> (not linked, sum is 1.50)."
+        },
+        {
+          "kind": "mythbust",
+          "icon": "⚠️",
+          "title": "Sigmoid is not just for binary classification",
+          "body": "You might think Sigmoid is only for simple yes/no models. In multi-label classification, we run multiple Sigmoid activations at the end of the network, transforming a multi-class problem into multiple independent binary problems."
+        },
+        {
+          "kind": "visual",
+          "icon": "⚖️",
+          "title": "Softmax vs. Sigmoid Outputs",
+          "body": "Comparing the math behavior of activations on logits [2.0, 2.0]:",
+          "compare": {
+            "left": {
+              "emoji": "🗳️",
+              "tag": "Softmax Output",
+              "text": "Probabilities: [0.50, 0.50]<br>Values must share total pool<br>Sum is always exactly 1.0"
+            },
+            "right": {
+              "emoji": "🎛️",
+              "tag": "Sigmoid Output",
+              "text": "Probabilities: [0.88, 0.88]<br>Each calculated independently<br>Sum can be anything"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "type": "practice",
+      "exercises": [
+        {
+          "id": "p1",
+          "type": "multiple_choice",
+          "xp": 2,
+          "prompt": "Which activation function is used on the final layer of a multi-label classification network?",
+          "explain": "Sigmoid is applied independently to each class, allowing multiple classes to have high probabilities.",
+          "options": [
+            {
+              "id": "a",
+              "text": "Sigmoid applied to each output node independently",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "Softmax applied across all nodes globally",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "ReLU to drop negative scores to zero",
+              "correct": false
+            },
+            {
+              "id": "d",
+              "text": "Tanh to squash values between -1 and 1",
+              "correct": false
+            }
+          ]
+        },
+        {
+          "id": "p2",
+          "type": "true_false",
+          "xp": 2,
+          "prompt": "True or false: The output probabilities of a multi-label classifier using Sigmoid activation must sum to 1.",
+          "explain": "False. Since each Sigmoid output is computed independently, their sum is unconstrained and can be greater or less than 1.",
+          "options": [
+            {
+              "id": "t",
+              "text": "True",
+              "correct": false
+            },
+            {
+              "id": "f",
+              "text": "False",
+              "correct": true
+            }
+          ]
+        },
+        {
+          "id": "p3",
+          "type": "fill_blank",
+          "xp": 2,
+          "prompt": "Complete the sentence:",
+          "explain": "The Sigmoid function's output range is strictly between 0.0 and 1.0.",
+          "sentence": "Sigmoid activation maps each logit independently to a probability between 0 and ___.",
+          "blank": "1",
+          "words": [
+            "1",
+            "10",
+            "infinity"
+          ]
+        },
+        {
+          "id": "p4",
+          "type": "spot_the_ai",
+          "xp": 2,
+          "prompt": "Which activation setup represents a multi-label model predicting three independent classes?",
+          "explain": "Applying Sigmoid to each logit independently is the correct way to output independent probabilities.",
+          "options": [
+            {
+              "id": "a",
+              "text": "Class 1: Sigmoid(Logit1); Class 2: Sigmoid(Logit2); Class 3: Sigmoid(Logit3)",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "All classes: Softmax([Logit1, Logit2, Logit3])",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "Class 1: ReLU(Logit1); Class 2: ReLU(Logit2); Class 3: ReLU(Logit3)",
+              "correct": false
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "boss",
+      "exercises": [
+        {
+          "id": "b1",
+          "type": "multiple_choice",
+          "xp": 5,
+          "prompt": "You notice that your neural network's final layer output for an image of a desk has high logits for both 'Laptop' and 'Keyboard'. If you use Softmax, what happens? If you use Sigmoid, what happens?",
+          "options": [
+            {
+              "id": "a",
+              "text": "Softmax forces them to split the probability (e.g. 0.5 each). Sigmoid allows both to be high (e.g. 0.95 each).",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "Softmax allows both to be 1.0. Sigmoid forces one to be 0.0.",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "Softmax makes the model train faster. Sigmoid causes gradients to explode.",
+              "correct": false
+            },
+            {
+              "id": "d",
+              "text": "Both activations behave identically in this scenario.",
+              "correct": false
+            }
+          ],
+          "explain": "Exactly! Softmax forces competition, meaning even if both objects are clearly present, they cannot both have high probabilities. Sigmoid evaluates them independently, allowing both to be close to 1.0. Next, let's see how we calculate loss for these independent predictions!"
+        }
+      ]
+    }
+  ]
+}

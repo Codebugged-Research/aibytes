@@ -1,0 +1,222 @@
+{
+  "id": "u150-l1",
+  "unit": 150,
+  "day": 751,
+  "tier": "Modern Object Detection",
+  "tierIcon": "🎯",
+  "title": "The Problem with Anchors",
+  "icon": "🪨",
+  "concept": "Anchor boxes require manual configuration, waste computational resources on background clutter, and struggle with irregular object shapes.",
+  "xp": 15,
+  "hearts": 3,
+  "estMinutes": 7,
+  "segments": [
+    {
+      "type": "warmup",
+      "exercises": [
+        {
+          "id": "w1",
+          "type": "multiple_choice",
+          "xp": 1,
+          "prompt": "Recap: What is the primary role of default/anchor boxes in detectors like SSD?",
+          "options": [
+            {
+              "id": "a",
+              "text": "They serve as preset shape stencils that the model adjusts to fit objects",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "They crop the image files to save disk storage",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "They classify the color of the background pixels",
+              "correct": false
+            }
+          ],
+          "explain": "Correct! Anchor boxes provide reference templates for bounding box predictions."
+        }
+      ]
+    },
+    {
+      "type": "teach",
+      "cards": [
+        {
+          "kind": "hook",
+          "icon": "🪨",
+          "title": "The Anchor Headache",
+          "body": "For years, anchor boxes were the gold standard for object detection. But they are a developer's nightmare. If you change your dataset, you must manually redesign your anchors! Why do anchor boxes cause so many headaches?"
+        },
+        {
+          "kind": "definition",
+          "icon": "🪨",
+          "title": "The Problem with Anchors",
+          "body": "Anchor-based models require developers to manually tune <strong>anchor hyperparameters</strong> (sizes, aspect ratios, and scales). They also create a massive <strong>class imbalance</strong> (99% of anchors are just empty background) and waste CPU power calculating overlaps for thousands of empty boxes."
+        },
+        {
+          "kind": "analogy",
+          "icon": "📦",
+          "title": "The Shoe Box Closet",
+          "body": "Imagine organizing your shoes by buying 100 plastic boxes of different sizes first. If you buy a new pair of tall boots, they might not fit any box! You have to throw them out or buy a new box shape. That's the anchor box problem."
+        },
+        {
+          "kind": "example",
+          "icon": "🛸",
+          "title": "Drone Footages",
+          "body": "A developer trains an anchor-based model on street photos. When deploying the model on drone footage, it fails because birds-eye-view cars look like small squares, while the preset anchor templates are designed for long, horizontal cars seen from the side."
+        },
+        {
+          "kind": "mythbust",
+          "icon": "⚠️",
+          "title": "More Anchors, Better Accuracy?",
+          "body": "You might think adding 20 anchors per grid cell increases accuracy. Fact: More anchors create massive negative box clutter and slow down the model, which can actually hurt both speed and classification accuracy."
+        },
+        {
+          "kind": "visual",
+          "icon": "⚖️",
+          "title": "Anchor-Based vs. Anchor-Free Output",
+          "body": "How anchor templates compare to direct regression:",
+          "compare": {
+            "left": {
+              "emoji": "📦",
+              "tag": "Anchor-Based (YOLOv5)",
+              "text": "Tans of preset box templates per cell<br>Requires manual shape tuning<br>High CPU waste evaluating empty boxes"
+            },
+            "right": {
+              "emoji": "🔓",
+              "tag": "Anchor-Free (YOLOv8)",
+              "text": "Zero preset templates<br>Direct pixel-to-border offset prediction<br>Simpler, cleaner design"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "type": "practice",
+      "exercises": [
+        {
+          "id": "p1",
+          "type": "multiple_choice",
+          "xp": 2,
+          "prompt": "Why is manual anchor box selection considered a drawback?",
+          "options": [
+            {
+              "id": "a",
+              "text": "Anchors must be manually tuned for every specific dataset, which is tedious and error-prone",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "They make the loss function calculation impossible",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "They prevent the model from using GPU acceleration",
+              "correct": false
+            },
+            {
+              "id": "d",
+              "text": "They can only detect square objects",
+              "correct": false
+            }
+          ],
+          "explain": "Correct! Anchors are dataset-specific; changing the objects requires recalculating anchor sizes."
+        },
+        {
+          "id": "p2",
+          "type": "true_false",
+          "xp": 2,
+          "prompt": "True or False: Anchor-based models create a large class imbalance because they generate thousands of negative (background) boxes for every positive object.",
+          "options": [
+            {
+              "id": "t",
+              "text": "True",
+              "correct": true
+            },
+            {
+              "id": "f",
+              "text": "False",
+              "correct": false
+            }
+          ],
+          "explain": "True. The model spends a lot of energy learning that empty anchor boxes are background, which is inefficient."
+        },
+        {
+          "id": "p3",
+          "type": "fill_blank",
+          "xp": 2,
+          "prompt": "Complete the sentence:",
+          "sentence": "Anchor boxes require manual tuning of sizes and ___ ratios to fit the objects in the dataset.",
+          "blank": "aspect",
+          "words": [
+            "aspect",
+            "learning",
+            "resolution"
+          ],
+          "explain": "Aspect ratios (width vs. height) are key hyperparameters for anchor box designs."
+        },
+        {
+          "id": "p4",
+          "type": "spot_the_ai",
+          "xp": 2,
+          "prompt": "What happens when an anchor-based model encounters an object with an aspect ratio it has never seen?",
+          "options": [
+            {
+              "id": "a",
+              "text": "It struggles to detect the object accurately because none of its stencils fit well",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "It crashes the model and stops the program",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "It automatically creates a new stencil on the fly",
+              "correct": false
+            }
+          ],
+          "explain": "Correct! Anchor-based models are limited by their preset templates."
+        }
+      ]
+    },
+    {
+      "type": "boss",
+      "exercises": [
+        {
+          "id": "b1",
+          "type": "multiple_choice",
+          "xp": 5,
+          "prompt": "You are deploying a model to detect weirdly shaped microscopic cells that stretch and fold. Why should you avoid an anchor-based detector here?",
+          "options": [
+            {
+              "id": "a",
+              "text": "The cells have highly variable and irregular aspect ratios that cannot be easily captured by a few rigid template box shapes.",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "Anchor-based models cannot run on microscopic images.",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "Microscopic cells do not have center points.",
+              "correct": false
+            },
+            {
+              "id": "d",
+              "text": "Anchor-based models are only designed for cars and dogs.",
+              "correct": false
+            }
+          ],
+          "explain": "Exactly! Irregular, shifting shapes are extremely difficult to model with fixed anchor templates."
+        }
+      ]
+    }
+  ]
+}

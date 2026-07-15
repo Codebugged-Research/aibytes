@@ -1,0 +1,222 @@
+{
+  "id": "u190-l5",
+  "unit": 190,
+  "day": 955,
+  "tier": "Video & Temporal Vision",
+  "tierIcon": "\ud83c\udfac",
+  "title": "Frame-by-Frame Processing Limitations",
+  "icon": "\u26a0\ufe0f",
+  "concept": "Analyzing video by running 2D image models frame-by-frame is computationally inefficient and fails to capture motion or temporal dependencies.",
+  "xp": 15,
+  "hearts": 3,
+  "estMinutes": 7,
+  "segments": [
+    {
+      "type": "warmup",
+      "exercises": [
+        {
+          "id": "w1",
+          "type": "multiple_choice",
+          "xp": 1,
+          "prompt": "Recap: What is the typical shape order of a video tensor in deep learning?",
+          "options": [
+            {
+              "id": "a",
+              "text": "(Frames, Channels, Height, Width)",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "(Height, Width, Channels)",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "(Batch, Epochs, Loss)",
+              "correct": false
+            }
+          ],
+          "explain": "Yes! (Frames, Channels, Height, Width) is the standard format."
+        }
+      ]
+    },
+    {
+      "type": "teach",
+      "cards": [
+        {
+          "kind": "hook",
+          "icon": "\ud83c\udfc3",
+          "title": "The memoryless detective",
+          "body": "Imagine a detective trying to solve a crime by looking at photos, but they are forced to forget the previous photo every time they pick up a new one. They could never solve a crime that involves sequence or change! That is exactly what happens when you process a video frame-by-frame."
+        },
+        {
+          "kind": "definition",
+          "icon": "\u26a0\ufe0f",
+          "title": "Frame-by-Frame Processing",
+          "body": "<strong>Frame-by-frame processing</strong> is the naive method of analyzing a video by running a 2D CNN model on each frame individually. While simple, it completely ignores the **temporal relationship** between consecutive frames."
+        },
+        {
+          "kind": "analogy",
+          "icon": "\ud83c\udf9e\ufe0f",
+          "title": "A movie with the audio cut up",
+          "body": "Analyzing a video frame-by-frame is like trying to enjoy a movie by looking at random printed screenshots out of order. You might identify the characters (spatial), but you lose the plot, the pacing, and the actions (temporal)."
+        },
+        {
+          "kind": "example",
+          "icon": "\ud83e\udd38",
+          "title": "The backflip test",
+          "body": "If you show a 2D frame-by-frame model a video of a backflip, it will see a person standing, then upside down, then standing. Because it has no memory of the order, it can't tell if the person did a backflip, a handstand, or fell over!"
+        },
+        {
+          "kind": "mythbust",
+          "icon": "\ud83d\udeab",
+          "title": "Flicker and Instability",
+          "body": "You might think running a fast 2D detector is fine for video object detection. However, because it treats each frame as independent, predictions can flicker wildly \u2014 an object might be detected in frame 1, missed in frame 2, and detected again in frame 3."
+        },
+        {
+          "kind": "visual",
+          "icon": "\u2696\ufe0f",
+          "title": "Frame-by-Frame vs. Temporal Models",
+          "body": "Comparing frame-by-frame analysis with spatiotemporal models:",
+          "compare": {
+            "left": {
+              "emoji": "\ud83e\udea8",
+              "tag": "Frame-by-Frame",
+              "text": "Runs 2D CNN on each frame<br>Fails to capture motion<br>High prediction flicker"
+            },
+            "right": {
+              "emoji": "\ud83c\udf0a",
+              "tag": "Spatiotemporal Models",
+              "text": "Processes frames together<br>Learns motion and order<br>Stable, consistent predictions"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "type": "practice",
+      "exercises": [
+        {
+          "id": "p1",
+          "type": "multiple_choice",
+          "xp": 2,
+          "prompt": "What is the primary limitation of frame-by-frame video processing?",
+          "options": [
+            {
+              "id": "a",
+              "text": "It ignores temporal connections and motion",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "It cannot run on RGB images",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "It increases the spatial resolution of frames",
+              "correct": false
+            },
+            {
+              "id": "d",
+              "text": "It only works on video files under 5 seconds",
+              "correct": false
+            }
+          ],
+          "explain": "Correct! Treating frames independently leaves the model blind to time-based relationships and motion."
+        },
+        {
+          "id": "p2",
+          "type": "true_false",
+          "xp": 2,
+          "prompt": "True or false: Running a 2D image classification model on individual frames can lead to flickering class predictions over time.",
+          "options": [
+            {
+              "id": "t",
+              "text": "True",
+              "correct": true
+            },
+            {
+              "id": "f",
+              "text": "False",
+              "correct": false
+            }
+          ],
+          "explain": "True. Minor pixel variations between frames can cause independent 2D CNNs to change their mind frame-by-frame, causing flicker."
+        },
+        {
+          "id": "p3",
+          "type": "fill_blank",
+          "xp": 2,
+          "prompt": "Complete the sentence:",
+          "sentence": "Frame-by-frame models struggle with action recognition because they do not capture ___ features.",
+          "blank": "temporal",
+          "words": [
+            "temporal",
+            "spatial",
+            "channel"
+          ],
+          "explain": "Actions occur over time, which requires extracting temporal features across sequences of frames."
+        },
+        {
+          "id": "p4",
+          "type": "spot_the_ai",
+          "xp": 2,
+          "prompt": "Which task is LEAST suited for frame-by-frame processing?",
+          "options": [
+            {
+              "id": "a",
+              "text": "Classifying a video of a person performing a high jump",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "Detecting a red apple on a kitchen table",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "Finding the boundaries of a parked car",
+              "correct": false
+            }
+          ],
+          "explain": "Classifying a high jump requires tracking motion over time, whereas finding a parked car or table object can be done from a single frame."
+        }
+      ]
+    },
+    {
+      "type": "boss",
+      "exercises": [
+        {
+          "id": "b1",
+          "type": "multiple_choice",
+          "xp": 5,
+          "prompt": "You are building a security system to detect if a glass window is shattered by a rock. Why is frame-by-frame analysis insufficient here?",
+          "options": [
+            {
+              "id": "a",
+              "text": "It cannot link the sequence of events: the rock flying, striking the window, and the glass breaking.",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "It cannot run on high-resolution cameras.",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "It can only detect rocks but not glass.",
+              "correct": false
+            },
+            {
+              "id": "d",
+              "text": "It runs too fast for the CPU to register the alarm.",
+              "correct": false
+            }
+          ],
+          "explain": "Exactly! The shattered glass alone might look like ice or water in a single frame. The context of a flying rock followed by impact is a temporal sequence. To solve this, we must learn to blend space and time! Next: how do we run convolutions on video volumes? Next up: 3D Convolutions for Spatiotemporal Learning."
+        }
+      ]
+    }
+  ]
+}

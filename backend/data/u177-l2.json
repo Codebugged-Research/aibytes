@@ -1,0 +1,222 @@
+{
+  "id": "u177-l2",
+  "unit": 177,
+  "day": 887,
+  "tier": "Vision Transformers & Modern Approaches",
+  "tierIcon": "\ud83d\udc41\ufe0f",
+  "title": "Linear Projection",
+  "icon": "\ud83d\udcd0",
+  "concept": "Linear projection maps flattened pixel vectors of patches into a target embedding dimension using a trainable weight matrix or a convolutional layer.",
+  "xp": 15,
+  "hearts": 3,
+  "estMinutes": 7,
+  "segments": [
+    {
+      "type": "warmup",
+      "exercises": [
+        {
+          "id": "w1",
+          "type": "multiple_choice",
+          "xp": 1,
+          "prompt": "Recap: What is the shape of a patch sequence prior to classification?",
+          "options": [
+            {
+              "id": "a",
+              "text": "A sequence of non-overlapping square vectors.",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "A 3D grid of convolutional activation maps.",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "A single averaged color channel scalar.",
+              "correct": false
+            }
+          ],
+          "explain": "Correct! Sliced patches are flattened into vectors to form the sequence."
+        }
+      ]
+    },
+    {
+      "type": "teach",
+      "cards": [
+        {
+          "kind": "hook",
+          "icon": "\ud83d\udcd0",
+          "title": "The translator",
+          "body": "Once you chop an image into patches, you have a bunch of raw pixel values. But the transformer doesn't want raw pixels \u2014 it wants high-level mathematical concepts. We need a 'translator' to turn pixels into embeddings."
+        },
+        {
+          "kind": "definition",
+          "icon": "\u2699\ufe0f",
+          "title": "Linear Projection",
+          "body": "<strong>Linear projection</strong> is the mathematical operation that multiplies a flattened patch vector by a weight matrix to map it into a target embedding dimension <code>D</code>. This serves as the initial embedding layer for the transformer."
+        },
+        {
+          "kind": "analogy",
+          "icon": "\ud83d\uddc4\ufe0f",
+          "title": "Encoding catalog numbers",
+          "body": "Imagine a library where books are stored as heavy boxes of loose pages (pixels). A clerk looks at each box and assigns a single, compact catalog number (embedding vector) that summarizes what the book is about, making it much easier to catalog and sort."
+        },
+        {
+          "kind": "example",
+          "icon": "\ud83d\udcbb",
+          "title": "Convolutional implementation",
+          "body": "In PyTorch, linear projection is often implemented as a single 2D convolutional layer! By setting the kernel size and stride equal to the patch size (e.g. 16x16), the convolution automatically slices and embeds the patches in one step."
+        },
+        {
+          "kind": "mythbust",
+          "icon": "\u26a0\ufe0f",
+          "title": "Not hand-made weights",
+          "body": "You might think the projection matrix uses hardcoded formulas (like JPEG compression) to compress patches. In reality, the weight matrix is a set of **learnable parameters** that adapt during training to extract the best possible features."
+        },
+        {
+          "kind": "visual",
+          "icon": "\u2696\ufe0f",
+          "title": "Raw Pixels vs. Embedded Vectors",
+          "body": "Comparing features before and after projection:",
+          "compare": {
+            "left": {
+              "emoji": "\ud83d\udfe5",
+              "tag": "Raw Patch Vector",
+              "text": "Size: 16x16x3 = 768 elements<br>Raw RGB intensity values<br>No semantic meaning"
+            },
+            "right": {
+              "emoji": "\ud83e\uddec",
+              "tag": "Embedded Vector",
+              "text": "Size: D (e.g. 768 or 1024)<br>Learned feature representation<br>Contains semantic concepts"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "type": "practice",
+      "exercises": [
+        {
+          "id": "p1",
+          "type": "multiple_choice",
+          "xp": 2,
+          "prompt": "What is the primary output of the Linear Projection layer in ViT?",
+          "explain": "The linear projection maps raw patch vectors into embedding vectors of size D, ready for the transformer encoder.",
+          "options": [
+            {
+              "id": "a",
+              "text": "A sequence of patch embeddings of dimension D",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "A classification label",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "A resized 2D image matrix",
+              "correct": false
+            },
+            {
+              "id": "d",
+              "text": "An attention weight matrix",
+              "correct": false
+            }
+          ]
+        },
+        {
+          "id": "p2",
+          "type": "true_false",
+          "xp": 2,
+          "prompt": "True or false: The weight matrix of the Linear Projection layer remains frozen and never changes.",
+          "explain": "False. It contains learnable weights that are updated through backpropagation to learn the best patch embeddings.",
+          "options": [
+            {
+              "id": "t",
+              "text": "True",
+              "correct": false
+            },
+            {
+              "id": "f",
+              "text": "False",
+              "correct": true
+            }
+          ]
+        },
+        {
+          "id": "p3",
+          "type": "fill_blank",
+          "xp": 2,
+          "prompt": "Complete the sentence:",
+          "explain": "A 2D convolution with kernel size and stride equal to the patch size performs slicing and projection simultaneously.",
+          "sentence": "In practice, linear projection can be efficiently implemented using a ___ convolutional layer.",
+          "blank": "2D",
+          "words": [
+            "2D",
+            "1D",
+            "3D"
+          ]
+        },
+        {
+          "id": "p4",
+          "type": "spot_the_ai",
+          "xp": 2,
+          "prompt": "Which of these captures the size transformation done by linear projection?",
+          "explain": "Linear projection maps the flattened patch pixels (16x16x3) to the transformer's hidden dimension D.",
+          "options": [
+            {
+              "id": "a",
+              "text": "Mapping a (16x16x3) vector to a vector of size 768",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "Compressing an image from 1MB to 100KB",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "Downsampling an image from 224x224 to 112x112",
+              "correct": false
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "boss",
+      "exercises": [
+        {
+          "id": "b1",
+          "type": "multiple_choice",
+          "xp": 5,
+          "prompt": "Why is it beneficial to learn the projection weights instead of using fixed filters?",
+          "options": [
+            {
+              "id": "a",
+              "text": "It allows the model to customize the projection to extract the most useful visual patterns for the specific training dataset.",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "It guarantees that the model will run faster during training.",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "It prevents the model from ever overfitting.",
+              "correct": false
+            },
+            {
+              "id": "d",
+              "text": "It forces the model to ignore color channels.",
+              "correct": false
+            }
+          ],
+          "explain": "Exactly! Learning the weights allows the projection layer to act as a custom feature extractor, tailoring embeddings to downstream tasks. Next: how patch size choice affects performance!"
+        }
+      ]
+    }
+  ]
+}

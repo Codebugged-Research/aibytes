@@ -1,0 +1,222 @@
+{
+  "id": "u194-l2",
+  "unit": 194,
+  "day": 972,
+  "tier": "Video & Temporal Vision",
+  "tierIcon": "\ud83c\udfac",
+  "title": "Temporal Consistency in Detection",
+  "icon": "\ud83d\udd04",
+  "concept": "Temporal consistency techniques prevent bounding boxes from flickering or disappearing between adjacent video frames.",
+  "xp": 15,
+  "hearts": 3,
+  "estMinutes": 7,
+  "segments": [
+    {
+      "type": "warmup",
+      "exercises": [
+        {
+          "id": "w1",
+          "type": "multiple_choice",
+          "xp": 1,
+          "prompt": "Recap: What is a primary benefit of using temporal context in video object detection?",
+          "options": [
+            {
+              "id": "a",
+              "text": "It helps detect objects that are blurry or partially occluded",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "It doubles the resolution of the camera sensor",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "It speeds up training times on massive datasets",
+              "correct": false
+            }
+          ],
+          "explain": "Yes! Features from surrounding frames fill in details for blurry or blocked objects."
+        }
+      ]
+    },
+    {
+      "type": "teach",
+      "cards": [
+        {
+          "kind": "hook",
+          "icon": "\ud83d\udd04",
+          "title": "The blinking boxes",
+          "body": "Have you ever seen an AI video demo where the bounding boxes keep blinking, resizing, or disappearing for a split second? That is called detector jitter. It looks unprofessional and makes tracking objects in real-world systems unreliable."
+        },
+        {
+          "kind": "definition",
+          "icon": "\ud83d\udd04",
+          "title": "Temporal Consistency",
+          "body": "<strong>Temporal consistency</strong> refers to the smoothness of predictions across consecutive frames. In video object detection, it means bounding boxes should have stable sizes, positions, and class labels, preventing **flicker** and jitter."
+        },
+        {
+          "kind": "analogy",
+          "icon": "\ud83e\uddfc",
+          "title": "Smoothing out the bumps",
+          "body": "Imagine drawing a circle on a flipbook. If your hand shakes slightly on each page, the circle will look bumpy when you play it back. Temporal consistency is like smoothing the circle coordinates mathematically so the animation flows perfectly."
+        },
+        {
+          "kind": "example",
+          "icon": "\ud83d\udcca",
+          "title": "Feature aggregation",
+          "body": "To achieve consistency, models use <strong>feature aggregation</strong>: they merge the feature maps of the current frame with feature maps from the last 3 frames using weightings, which averages out transient detection errors."
+        },
+        {
+          "kind": "mythbust",
+          "icon": "\ud83d\udeab",
+          "title": "Not just post-processing",
+          "body": "You might think we can fix jitter by just averaging box coordinates at the end. While helpful, that doesn't fix a complete miss! If the model fails to detect a car in frame 5, post-processing filters can't easily recover it. We must build consistency directly into the neural network layers."
+        },
+        {
+          "kind": "visual",
+          "icon": "\u2696\ufe0f",
+          "title": "Jittery vs. Consistent Detection",
+          "body": "Comparing raw independent detections with temporally consistent detections:",
+          "compare": {
+            "left": {
+              "emoji": "\u26a1",
+              "tag": "Jittery Detection",
+              "text": "Boxes flicker and resize wildly<br>Objects disappear for single frames<br>Poor tracking quality"
+            },
+            "right": {
+              "emoji": "\ud83d\udd04",
+              "tag": "Consistent Detection",
+              "text": "Boxes slide smoothly along paths<br>Stable sizes and labels<br>Excellent tracking and stability"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "type": "practice",
+      "exercises": [
+        {
+          "id": "p1",
+          "type": "multiple_choice",
+          "xp": 2,
+          "prompt": "What does 'temporal consistency' prevent in video object detection?",
+          "options": [
+            {
+              "id": "a",
+              "text": "Flickering and jittery bounding boxes across frames",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "The camera from running out of battery",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "Changing the color channels to grayscale",
+              "correct": false
+            },
+            {
+              "id": "d",
+              "text": "Increasing the video's file size",
+              "correct": false
+            }
+          ],
+          "explain": "Correct! Temporal consistency ensures predictions are smooth and stable from frame to frame."
+        },
+        {
+          "id": "p2",
+          "type": "true_false",
+          "xp": 2,
+          "prompt": "True or false: Post-processing coordinate filters are the only way to achieve temporal consistency.",
+          "options": [
+            {
+              "id": "t",
+              "text": "True",
+              "correct": false
+            },
+            {
+              "id": "f",
+              "text": "False",
+              "correct": true
+            }
+          ],
+          "explain": "False. While post-processing helps, state-of-the-art methods aggregate feature maps inside the network to prevent misses."
+        },
+        {
+          "id": "p3",
+          "type": "fill_blank",
+          "xp": 2,
+          "prompt": "Complete the sentence:",
+          "sentence": "Merging feature maps from nearby frames to stabilize predictions is known as feature ___.",
+          "blank": "aggregation",
+          "words": [
+            "aggregation",
+            "stride",
+            "extraction"
+          ],
+          "explain": "Feature aggregation blends representations across frames to stabilize predictions and reduce flicker."
+        },
+        {
+          "id": "p4",
+          "type": "spot_the_ai",
+          "xp": 2,
+          "prompt": "Which of these is a symptom of POOR temporal consistency?",
+          "options": [
+            {
+              "id": "a",
+              "text": "A bounding box around a pedestrian blinks off and on in consecutive frames",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "The bounding box is colored red instead of blue",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "The model detects a dog instead of a cat",
+              "correct": false
+            }
+          ],
+          "explain": "Flickering boxes (blinking on and off) are a classic indicator of poor temporal consistency."
+        }
+      ]
+    },
+    {
+      "type": "boss",
+      "exercises": [
+        {
+          "id": "b1",
+          "type": "multiple_choice",
+          "xp": 5,
+          "prompt": "You are deploying a pedestrian detector for a self-driving car. Why is temporal consistency a safety-critical requirement?",
+          "options": [
+            {
+              "id": "a",
+              "text": "Because a flickering box can cause the brake system to toggle rapidly, creating dangerous vehicle instability.",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "Because consistent boxes automatically make the car drive faster.",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "Because pedestrians will refuse to walk in front of jittery AI systems.",
+              "correct": false
+            },
+            {
+              "id": "d",
+              "text": "Because it converts 3D coordinates into analog signals.",
+              "correct": false
+            }
+          ],
+          "explain": "Exactly! If the model misses a pedestrian for just one frame, the safety planner might think the path is clear and stop braking. Smooth, consistent detection is crucial for safe, stable controls. Next: how do we track objects and assign them unique IDs?"
+        }
+      ]
+    }
+  ]
+}

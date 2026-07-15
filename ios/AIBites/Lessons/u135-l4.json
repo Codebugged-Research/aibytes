@@ -1,0 +1,222 @@
+{
+  "id": "u135-l4",
+  "unit": 135,
+  "day": 679,
+  "tier": "Image Classification in Depth",
+  "tierIcon": "🏷️",
+  "title": "Conditional Probability Chains",
+  "icon": "🔗",
+  "concept": "Conditional probability chains compute child node probabilities by multiplying predictions along the tree path.",
+  "xp": 15,
+  "hearts": 3,
+  "estMinutes": 7,
+  "segments": [
+    {
+      "type": "warmup",
+      "exercises": [
+        {
+          "id": "w1",
+          "type": "multiple_choice",
+          "xp": 1,
+          "prompt": "Recap: What is the purpose of using distance weights in classification loss?",
+          "options": [
+            {
+              "id": "a",
+              "text": "To penalize semantically distant mistakes more heavily than near-misses.",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "To reduce the computational time of the forward pass.",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "To force the model to only predict parent classes.",
+              "correct": false
+            }
+          ],
+          "explain": "Correct! Distance weighting ensures the model is penalized logically according to the class taxonomy."
+        }
+      ]
+    },
+    {
+      "type": "teach",
+      "cards": [
+        {
+          "kind": "hook",
+          "icon": "🔗",
+          "title": "A sequence of checkpoints",
+          "body": "If you want to enter a highly secure vault, you must pass through the front gate, then the lobby, then the vault door. If you fail to pass the front gate, you cannot possibly be inside the vault. Hierarchical paths work the same way."
+        },
+        {
+          "kind": "definition",
+          "icon": "🔗",
+          "title": "Conditional Chains",
+          "body": "In hierarchical classification, the probability of a child class <code>P(Child)</code> is calculated as the product of conditional probabilities along its path: <code>P(Child) = P(Child | Parent) * P(Parent)</code>. This ensures child confidence never exceeds parent confidence."
+        },
+        {
+          "kind": "analogy",
+          "icon": "🗺️",
+          "title": "Branches on a path tree",
+          "body": "Think of walking down a path in the woods. To reach a specific campsite, you must first take the 'North Trail' (probability 0.9 of choosing correctly), then take the 'East Fork' (probability 0.8). Your total probability of reaching the camp is <code>0.9 * 0.8 = 0.72</code>."
+        },
+        {
+          "kind": "example",
+          "icon": "🚗",
+          "title": "Computing path probabilities",
+          "body": "For class path: Vehicle -> Car -> Sedan:<br>- Model predicts <code>P(Vehicle) = 0.90</code>.<br>- Model predicts <code>P(Car | Vehicle) = 0.80</code>.<br>- Model predicts <code>P(Sedan | Car) = 0.50</code>.<br>- Final <code>P(Sedan) = 0.90 * 0.80 * 0.50 = 0.36</code>."
+        },
+        {
+          "kind": "mythbust",
+          "icon": "⚠️",
+          "title": "Independent outputs violate logic",
+          "body": "You might think you can just output independent sigmoid probabilities for Parent and Child. But this can lead to logical contradictions: predicting a 90% chance of 'Husky' but only a 10% chance of 'Dog'. Using conditional chains mathematically prevents this."
+        },
+        {
+          "kind": "visual",
+          "icon": "⚖️",
+          "title": "Path Multiplications",
+          "body": "How probabilities decay down the tree:",
+          "compare": {
+            "left": {
+              "emoji": "🦁",
+              "tag": "Parent: Feline",
+              "text": "P(Feline) = 0.80<br>High confidence at general level<br>Starting point of path"
+            },
+            "right": {
+              "emoji": "🐅",
+              "tag": "Child: Tiger",
+              "text": "P(Tiger | Feline) = 0.90<br>Final P(Tiger) = 0.80 * 0.90 = 0.72<br>Child confidence is bounded"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "type": "practice",
+      "exercises": [
+        {
+          "id": "p1",
+          "type": "multiple_choice",
+          "xp": 2,
+          "prompt": "If a model predicts P(Bird) = 0.80 and P(Raptor | Bird) = 0.50, what is the final absolute probability of the Raptor class?",
+          "explain": "The probability of a child node is the product of parent probability and child conditional probability (0.80 * 0.50 = 0.40).",
+          "options": [
+            {
+              "id": "a",
+              "text": "0.40 (0.80 * 0.50)",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "1.30 (0.80 + 0.50)",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "0.30 (0.80 - 0.50)",
+              "correct": false
+            },
+            {
+              "id": "d",
+              "text": "0.80",
+              "correct": false
+            }
+          ]
+        },
+        {
+          "id": "p2",
+          "type": "true_false",
+          "xp": 2,
+          "prompt": "True or false: Under a conditional probability chain, a child class can have a higher final probability than its parent class.",
+          "explain": "False. Multiplying by probabilities (which are <= 1.0) means the child probability is mathematically bounded by the parent probability.",
+          "options": [
+            {
+              "id": "t",
+              "text": "True",
+              "correct": false
+            },
+            {
+              "id": "f",
+              "text": "False",
+              "correct": true
+            }
+          ]
+        },
+        {
+          "id": "p3",
+          "type": "fill_blank",
+          "xp": 2,
+          "prompt": "Complete the sentence:",
+          "explain": "We multiply conditional probabilities along the hierarchy tree branches to get the joint probability.",
+          "sentence": "The probability of a child class is computed by ___ the probabilities along the path.",
+          "blank": "multiplying",
+          "words": [
+            "multiplying",
+            "adding",
+            "subtracting"
+          ]
+        },
+        {
+          "id": "p4",
+          "type": "spot_the_ai",
+          "xp": 2,
+          "prompt": "Which of these probability states violates hierarchical logic?",
+          "explain": "A specific child class (Dog) cannot have higher confidence than its parent class (Mammal), which is a logical contradiction.",
+          "options": [
+            {
+              "id": "a",
+              "text": "P(Mammal) = 0.20; P(Dog) = 0.80",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "P(Mammal) = 0.80; P(Dog) = 0.20",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "P(Mammal) = 0.50; P(Dog) = 0.50",
+              "correct": false
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "boss",
+      "exercises": [
+        {
+          "id": "b1",
+          "type": "multiple_choice",
+          "xp": 5,
+          "prompt": "You are building a classification system for an autonomous drone. It must identify 'Obstacles' and sub-classes like 'Power Line'. The model outputs P(Obstacle) = 0.10 and P(Power Line | Obstacle) = 0.95. If you do not use a conditional chain and just check the local sigmoid outputs, the drone might detect a Power Line. What is the risk?",
+          "options": [
+            {
+              "id": "a",
+              "text": "The drone might try to avoid a power line even though it is 90% sure there is no obstacle present, causing a flight error.",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "The drone will run out of battery twice as fast.",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "The power line will disappear from the camera feed.",
+              "correct": false
+            },
+            {
+              "id": "d",
+              "text": "The drone will automatically land.",
+              "correct": false
+            }
+          ],
+          "explain": "Exactly! Without a conditional chain, the local node might confidently predict 'Power Line' based on a texture, ignoring the parent node's correct assessment that there is nothing there. Bounding the prediction to P(Power Line) = 0.10 * 0.95 ≈ 0.095 keeps the drone safe. Next, let's see how we handle objects we've never seen before!"
+        }
+      ]
+    }
+  ]
+}

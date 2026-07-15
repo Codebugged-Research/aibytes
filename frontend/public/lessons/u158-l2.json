@@ -1,0 +1,222 @@
+{
+  "id": "u158-l2",
+  "unit": 158,
+  "day": 792,
+  "tier": "DeepLab and ASPP",
+  "tierIcon": "🪐",
+  "title": "ASPP: Multi-Scale Pools",
+  "icon": "🪐",
+  "concept": "Atrous Spatial Pyramid Pooling (ASPP) uses parallel dilated convolutions at different rates to capture multi-scale context.",
+  "xp": 15,
+  "hearts": 3,
+  "estMinutes": 7,
+  "segments": [
+    {
+      "type": "warmup",
+      "exercises": [
+        {
+          "id": "w1",
+          "type": "multiple_choice",
+          "xp": 1,
+          "prompt": "Recap: What does the dilation rate represent in a convolution?",
+          "options": [
+            {
+              "id": "a",
+              "text": "The spacing between weights in the kernel",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "The number of layers in the decoder",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "The threshold for binary classification",
+              "correct": false
+            }
+          ],
+          "explain": "Correct! Dilation rate determines how much a filter is stretched."
+        }
+      ]
+    },
+    {
+      "type": "teach",
+      "cards": [
+        {
+          "kind": "hook",
+          "icon": "🔍",
+          "title": "Seeing objects of all sizes",
+          "body": "In a real scene, a car can be right in front of you (huge) or far down the street (tiny). A segmentation model must recognize both. If we only use one dilation rate, we might capture the far-away car but miss the close-up one. How do we design a filter that looks at multiple scales at once?"
+        },
+        {
+          "kind": "definition",
+          "icon": "🪐",
+          "title": "ASPP",
+          "body": "<strong>Atrous Spatial Pyramid Pooling</strong> (ASPP) is a module introduced in DeepLab. It processes input features using multiple parallel atrous convolutions with different dilation rates (e.g. 6, 12, 18) and a pooling layer, concatenating their outputs."
+        },
+        {
+          "kind": "analogy",
+          "icon": "📷",
+          "title": "Looking through multiple lenses",
+          "body": "Imagine a photographer wearing three cameras: one with a zoom lens, one with a mid-range lens, and one with a wide-angle lens. By taking a photo with all three at once, they capture the scene at every scale."
+        },
+        {
+          "kind": "example",
+          "icon": "📐",
+          "title": "DeepLab ASPP rates",
+          "body": "In DeepLab v3, the ASPP module runs: <br>1. A 1x1 convolution<br>2. Three 3x3 convolutions with rates of 6, 12, and 18<br>3. Image pooling.<br>These parallel paths are merged to form a multi-scale representation."
+        },
+        {
+          "kind": "mythbust",
+          "icon": "⚠️",
+          "title": "Not just for large resolutions",
+          "body": "You might think ASPP only helps with large images. In fact, it is critical for any image with scale variation, allowing the network to use the same weights to segment a close-up cell and a distant cell."
+        },
+        {
+          "kind": "visual",
+          "icon": "⚖️",
+          "title": "ASPP Module Layout",
+          "body": "How ASPP processes features in parallel:",
+          "compare": {
+            "left": {
+              "emoji": "⏹️",
+              "tag": "Input Feature Map",
+              "text": "Low-res, high-channel bottleneck"
+            },
+            "right": {
+              "emoji": "🪐",
+              "tag": "ASPP Output (Parallel Streams)",
+              "text": "Rate 6 (small objects) + Rate 12 (mid-sized) + Rate 18 (large objects)<br>Merged via concatenation"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "type": "practice",
+      "exercises": [
+        {
+          "id": "p1",
+          "type": "multiple_choice",
+          "xp": 2,
+          "prompt": "What is the core idea of Atrous Spatial Pyramid Pooling (ASPP)?",
+          "options": [
+            {
+              "id": "a",
+              "text": "Running parallel dilated convolutions with different rates to capture multi-scale context",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "Running serial pooling layers to compress the image size",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "Using bounding boxes to crop objects of different sizes",
+              "correct": false
+            },
+            {
+              "id": "d",
+              "text": "Using different learning rates for the encoder and decoder",
+              "correct": false
+            }
+          ],
+          "explain": "Correct! ASPP captures features at multiple scales concurrently."
+        },
+        {
+          "id": "p2",
+          "type": "true_false",
+          "xp": 2,
+          "prompt": "True or False: ASPP outputs are combined by adding the feature maps together element-wise.",
+          "options": [
+            {
+              "id": "t",
+              "text": "True",
+              "correct": false
+            },
+            {
+              "id": "f",
+              "text": "False",
+              "correct": false
+            }
+          ],
+          "explain": "False. The parallel feature maps are combined via concatenation (channel stacking)."
+        },
+        {
+          "id": "p3",
+          "type": "fill_blank",
+          "xp": 2,
+          "prompt": "Complete the sentence:",
+          "sentence": "ASPP uses parallel convolutions with different ___ rates.",
+          "blank": "dilation",
+          "words": [
+            "dilation",
+            "learning",
+            "dropout"
+          ],
+          "explain": "Varying dilation rates allow the filters to capture different scales."
+        },
+        {
+          "id": "p4",
+          "type": "spot_the_ai",
+          "xp": 2,
+          "prompt": "Which of these is a key component of the ASPP module?",
+          "options": [
+            {
+              "id": "a",
+              "text": "A 1x1 convolution running in parallel with dilated convolutions",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "A flattening layer that outputs a class vector",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "A dense classifier head",
+              "correct": false
+            }
+          ],
+          "explain": "A 1x1 convolution is used as one of the parallel paths to preserve local features."
+        }
+      ]
+    },
+    {
+      "type": "boss",
+      "exercises": [
+        {
+          "id": "b1",
+          "type": "multiple_choice",
+          "xp": 5,
+          "prompt": "You are building a pedestrian detector for a self-driving shuttle. Pedestrians appear close (huge) and far (tiny). Why is ASPP highly useful here?",
+          "options": [
+            {
+              "id": "a",
+              "text": "The parallel dilated convolutions allow the network to detect and segment pedestrians regardless of their distance or size in the image.",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "ASPP automatically converts the image to black and white, reducing noise.",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "ASPP runs only on edge processors, avoiding cloud latency.",
+              "correct": false
+            },
+            {
+              "id": "d",
+              "text": "ASPP removes all background objects like roads and buildings.",
+              "correct": false
+            }
+          ],
+          "explain": "Perfect! ASPP's multi-scale capability makes it highly robust to objects of varying sizes. Next: how do we sharpen boundaries using classical math?"
+        }
+      ]
+    }
+  ]
+}

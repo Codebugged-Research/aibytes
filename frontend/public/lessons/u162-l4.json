@@ -1,0 +1,222 @@
+{
+  "id": "u162-l4",
+  "unit": 162,
+  "day": 814,
+  "tier": "Image Segmentation Capstone",
+  "tierIcon": "🏆",
+  "title": "Common Segmentation Failure Modes",
+  "icon": "🏆",
+  "concept": "Segmentation models suffer from common failures like boundary bleeding, missed instances, and checkerboard artifacts, requiring targeted architectural fixes.",
+  "xp": 15,
+  "hearts": 3,
+  "estMinutes": 7,
+  "segments": [
+    {
+      "type": "warmup",
+      "exercises": [
+        {
+          "id": "w1",
+          "type": "multiple_choice",
+          "xp": 1,
+          "prompt": "Recap: What is the main benefit of INT8 quantization?",
+          "options": [
+            {
+              "id": "a",
+              "text": "It reduces model size by 75% and speeds up inference on edge CPUs",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "It increases the boundary precision of 3D medical scans",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "It eliminates the need for training labels",
+              "correct": false
+            }
+          ],
+          "explain": "Correct! Quantization shrinks size and accelerates edge execution."
+        }
+      ]
+    },
+    {
+      "type": "teach",
+      "cards": [
+        {
+          "kind": "hook",
+          "icon": "🩺",
+          "title": "When AI paints outside the lines",
+          "body": "Even if a model trains successfully, it can make weird mistakes in production. It might paint a mask that 'bleeds' across a sharp boundary, or it might output a mask full of blocky grid patterns. To fix these issues, we must learn to diagnose these common failure modes just by looking at the output."
+        },
+        {
+          "kind": "definition",
+          "icon": "❌",
+          "title": "Failure Modes",
+          "body": "Common segmentation failures include: <br>1. **Boundary Bleeding** (mask spills over weak visual edges).<br>2. **Checkerboard Artifacts** (uneven grid patterns from transposed convolutions).<br>3. **Instance Merging** (semantic models grouping separate objects)."
+        },
+        {
+          "kind": "analogy",
+          "icon": "🚰",
+          "title": "A leaky water pipe",
+          "body": "Boundary bleeding is like a leaky pipe. If the physical wall (visual edge) is weak or low-contrast, the water (the mask) spills right through it into the adjacent yard (background)."
+        },
+        {
+          "kind": "example",
+          "icon": "📐",
+          "title": "Diagnosing checkerboard",
+          "body": "A model outputs a clean mask of a car, but looking closely, the mask has a faint grid-like pattern of alternating light and dark pixels. This is a checkerboard artifact, caused by transposed convolutions overlap issues."
+        },
+        {
+          "kind": "mythbust",
+          "icon": "⚠️",
+          "title": "Don't just add more epochs",
+          "body": "You might think any failure can be fixed by training longer. If your model suffers from checkerboard artifacts or boundary bleeding, training longer won't help! These are architectural flaws that require swapping upsampling layers or adding edge-aware losses."
+        },
+        {
+          "kind": "visual",
+          "icon": "⚖️",
+          "title": "Segmentation Failures",
+          "body": "Visual symptoms of model issues:",
+          "compare": {
+            "left": {
+              "emoji": "❌",
+              "tag": "Boundary Bleeding",
+              "text": "Mask spills across low-contrast borders<br>Fix: Use hybrid Dice/Focal loss or CRFs"
+            },
+            "right": {
+              "emoji": "🏁",
+              "tag": "Checkerboard Artifacts",
+              "text": "Mask contains grid-like pixel patterns<br>Fix: Swap transposed convs for Resize-Conv"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "type": "practice",
+      "exercises": [
+        {
+          "id": "p1",
+          "type": "multiple_choice",
+          "xp": 2,
+          "prompt": "What is boundary bleeding in image segmentation?",
+          "options": [
+            {
+              "id": "a",
+              "text": "When a predicted mask spills over low-contrast edges into the background",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "When the model's loss score increases to infinity",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "When the model outputs rectangular boxes instead of masks",
+              "correct": false
+            },
+            {
+              "id": "d",
+              "text": "When the GPU runs out of memory during evaluation",
+              "correct": false
+            }
+          ],
+          "explain": "Correct! Bleeding happens when the model fails to detect weak visual boundaries."
+        },
+        {
+          "id": "p2",
+          "type": "true_false",
+          "xp": 2,
+          "prompt": "True or False: Checkerboard artifacts are caused by a lack of training data.",
+          "options": [
+            {
+              "id": "t",
+              "text": "True",
+              "correct": false
+            },
+            {
+              "id": "f",
+              "text": "False",
+              "correct": false
+            }
+          ],
+          "explain": "False. They are architectural artifacts caused by uneven overlaps in transposed convolutions."
+        },
+        {
+          "id": "p3",
+          "type": "fill_blank",
+          "xp": 2,
+          "prompt": "Complete the sentence:",
+          "sentence": "To fix checkerboard artifacts, developers swap transposed convolutions for Resize-___ upsampling.",
+          "blank": "Conv",
+          "words": [
+            "Conv",
+            "Pool",
+            "Loss"
+          ],
+          "explain": "Resize-Conv (resizing with bilinear interpolation followed by a standard conv) avoids overlap artifacts."
+        },
+        {
+          "id": "p4",
+          "type": "spot_the_ai",
+          "xp": 2,
+          "prompt": "How does a hybrid loss like Dice + Focal help prevent boundary bleeding?",
+          "options": [
+            {
+              "id": "a",
+              "text": "By heavily penalizing boundary errors and focusing gradients on hard edge pixels",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "By reducing the image size during training",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "By locking the weights of the encoder path",
+              "correct": false
+            }
+          ],
+          "explain": "It forces the model to pay extra attention to tricky, low-contrast boundaries."
+        }
+      ]
+    },
+    {
+      "type": "boss",
+      "exercises": [
+        {
+          "id": "b1",
+          "type": "multiple_choice",
+          "xp": 5,
+          "prompt": "You are reviewing a model that segments retail products. The masks have a faint grid-like texture on their surface. What structural change should you make to the decoder?",
+          "options": [
+            {
+              "id": "a",
+              "text": "Replace the transposed convolutions with bilinear upsampling followed by a standard convolution (Resize-Conv).",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "Increase the stride of the max pooling layers in the encoder.",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "Switch the loss function from Dice loss to standard cross-entropy.",
+              "correct": false
+            },
+            {
+              "id": "d",
+              "text": "Add a flattening layer before the output to remove the grid.",
+              "correct": false
+            }
+          ],
+          "explain": "Perfect! Swapping transposed convolutions for Resize-Conv is the classic fix for checkerboard artifacts, as it ensures smooth, artifact-free upsampling. Next: the Phase 9 Capstone Review!"
+        }
+      ]
+    }
+  ]
+}

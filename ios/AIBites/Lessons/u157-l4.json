@@ -1,0 +1,222 @@
+{
+  "id": "u157-l4",
+  "unit": 157,
+  "day": 789,
+  "tier": "Mask R-CNN",
+  "tierIcon": "🎭",
+  "title": "Multi-Task Loss Functions",
+  "icon": "🎭",
+  "concept": "Mask R-CNN uses a multi-task loss function that combines classification, bounding box localization, and pixel-level mask losses.",
+  "xp": 15,
+  "hearts": 3,
+  "estMinutes": 7,
+  "segments": [
+    {
+      "type": "warmup",
+      "exercises": [
+        {
+          "id": "w1",
+          "type": "multiple_choice",
+          "xp": 1,
+          "prompt": "Recap: What is the benefit of using sigmoid instead of softmax in the mask branch?",
+          "options": [
+            {
+              "id": "a",
+              "text": "It decouples mask prediction from class prediction, avoiding class competition",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "It speeds up inference on edge devices by using integers",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "It eliminates the need for bounding boxes",
+              "correct": false
+            }
+          ],
+          "explain": "Correct! Sigmoid allows independent pixel prediction per class."
+        }
+      ]
+    },
+    {
+      "type": "teach",
+      "cards": [
+        {
+          "kind": "hook",
+          "icon": "📝",
+          "title": "Balancing the grades",
+          "body": "Mask R-CNN does three things at once: classifies, draws boxes, and paints masks. When training, the model makes mistakes in all three. How do we grade a model that has three different homework assignments? We combine all three grades into a single, multi-task loss score."
+        },
+        {
+          "kind": "definition",
+          "icon": "📉",
+          "title": "Multi-Task Loss",
+          "body": "The total loss of Mask R-CNN is defined as: $$L = L_{cls} + L_{box} + L_{mask}$$ where $L_{cls}$ is classification loss, $L_{box}$ is bounding box loss, and $L_{mask}$ is the average binary cross-entropy loss for the mask branch."
+        },
+        {
+          "kind": "analogy",
+          "icon": "🏃",
+          "title": "Three-legged race",
+          "body": "Imagine a team in a three-legged race. To win, all members must move together. The multi-task loss is like a score that penalizes the team if the runner, the jumper, or the navigator falls behind, keeping them aligned."
+        },
+        {
+          "kind": "example",
+          "icon": "🐕",
+          "title": "Loss calculation",
+          "body": "During training, if the model predicts the correct class ('dog') and box, but gets the tail mask wrong, $L_{cls}$ and $L_{box}$ will be low, but $L_{mask}$ will be high, forcing the optimizer to adjust the mask weights."
+        },
+        {
+          "kind": "mythbust",
+          "icon": "⚠️",
+          "title": "Only the ground truth mask counts",
+          "body": "You might think we calculate mask loss for all $K$ classes. We don't! $L_{mask}$ is only calculated on the mask corresponding to the **ground truth class**. The other class masks are ignored during that step to avoid confusing the network."
+        },
+        {
+          "kind": "visual",
+          "icon": "⚖️",
+          "title": "Mask R-CNN Loss Components",
+          "body": "The breakdown of multi-task loss:",
+          "compare": {
+            "left": {
+              "emoji": "🎯",
+              "tag": "L_cls + L_box",
+              "text": "Classification & Box Regression<br>Identical to Faster R-CNN loss"
+            },
+            "right": {
+              "emoji": "🎭",
+              "tag": "L_mask",
+              "text": "Binary Cross-Entropy per pixel<br>Only computed for the true class mask"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "type": "practice",
+      "exercises": [
+        {
+          "id": "p1",
+          "type": "multiple_choice",
+          "xp": 2,
+          "prompt": "What is the formula for the multi-task loss in Mask R-CNN?",
+          "options": [
+            {
+              "id": "a",
+              "text": "L = L_cls + L_box + L_mask",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "L = L_cls * L_box * L_mask",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "L = L_cls - L_box - L_mask",
+              "correct": false
+            },
+            {
+              "id": "d",
+              "text": "L = L_mask only",
+              "correct": false
+            }
+          ],
+          "explain": "Correct! The losses are summed together to optimize all tasks simultaneously."
+        },
+        {
+          "id": "p2",
+          "type": "true_false",
+          "xp": 2,
+          "prompt": "True or False: Mask loss is calculated for all classes during every forward pass.",
+          "options": [
+            {
+              "id": "t",
+              "text": "True",
+              "correct": false
+            },
+            {
+              "id": "f",
+              "text": "False",
+              "correct": false
+            }
+          ],
+          "explain": "False. Mask loss is only computed for the ground truth class mask."
+        },
+        {
+          "id": "p3",
+          "type": "fill_blank",
+          "xp": 2,
+          "prompt": "Complete the sentence:",
+          "sentence": "The mask loss component uses binary ___ entropy for each pixel.",
+          "blank": "cross",
+          "words": [
+            "cross",
+            "square",
+            "relative"
+          ],
+          "explain": "Binary cross-entropy is used to classify each pixel as foreground or background."
+        },
+        {
+          "id": "p4",
+          "type": "spot_the_ai",
+          "xp": 2,
+          "prompt": "What does a high L_mask value indicate during training?",
+          "options": [
+            {
+              "id": "a",
+              "text": "The predicted pixel mask is not aligned with the true mask contour",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "The bounding box coordinates are completely wrong",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "The class label prediction is incorrect",
+              "correct": false
+            }
+          ],
+          "explain": "A high mask loss means the pixel-level mask needs refinement."
+        }
+      ]
+    },
+    {
+      "type": "boss",
+      "exercises": [
+        {
+          "id": "b1",
+          "type": "multiple_choice",
+          "xp": 5,
+          "prompt": "If a Mask R-CNN model predicts the correct bounding box and class label, but the mask loss is extremely high, how will the weights update?",
+          "options": [
+            {
+              "id": "a",
+              "text": "The optimizer will primarily update the weights of the mask branch, as the classification and box weights are already producing low loss.",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "The entire model will freeze and stop updating.",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "The optimizer will increase the learning rate of the backbone only.",
+              "correct": false
+            },
+            {
+              "id": "d",
+              "text": "The box regression branch weights will be reset to zero.",
+              "correct": false
+            }
+          ],
+          "explain": "Exactly! The multi-task loss allows different parts of the network to focus on their respective errors, updating the mask branch when masks are bad. Next: let's see Mask R-CNN in practice!"
+        }
+      ]
+    }
+  ]
+}

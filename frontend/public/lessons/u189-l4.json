@@ -1,0 +1,222 @@
+{
+  "id": "u189-l4",
+  "unit": 189,
+  "day": 949,
+  "tier": "Model Explainability",
+  "tierIcon": "📊",
+  "title": "Grad-CAM in Action",
+  "icon": "🎯",
+  "concept": "Interpreting Grad-CAM maps helps detect shortcut learning, where models rely on spurious correlations rather than true features.",
+  "xp": 15,
+  "hearts": 3,
+  "estMinutes": 7,
+  "segments": [
+    {
+      "type": "warmup",
+      "exercises": [
+        {
+          "id": "w1",
+          "type": "multiple_choice",
+          "xp": 1,
+          "prompt": "Recap: Why is the ReLU function applied at the end of Grad-CAM?",
+          "options": [
+            {
+              "id": "a",
+              "text": "To keep only the features that positively contribute to the predicted class score",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "To compress the output heatmap to 8-bit integers",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "To calculate the final validation accuracy",
+              "correct": false
+            }
+          ],
+          "explain": "ReLU filters out features that negatively impact the class score, highlighting only positive support areas."
+        }
+      ]
+    },
+    {
+      "type": "teach",
+      "cards": [
+        {
+          "kind": "hook",
+          "icon": "🎯",
+          "title": "Catching the Cheat in the Act",
+          "body": "Imagine training a medical AI to detect tuberculosis on chest scans. It has 98% accuracy. But when you look at the Grad-CAM maps, the red hotspot isn't on the lungs—it's on a metal pen that doctors placed on patients during the scan. The model simply learned to detect the pen! Grad-CAM caught the cheat."
+        },
+        {
+          "kind": "definition",
+          "icon": "🎯",
+          "title": "Shortcut Learning",
+          "body": "<strong>Shortcut Learning</strong> is a phenomenon where deep models solve training problems by exploiting spurious patterns (shortcuts) instead of learning actual causal concepts. Grad-CAM exposes shortcuts by visualizing where the model focuses."
+        },
+        {
+          "kind": "analogy",
+          "icon": "📖",
+          "title": "The Lazy Student",
+          "body": "Imagine a student who notices that all the paragraphs about World War II in their history textbook contain the word 'tank'. Instead of reading the history, they just scan for 'tank' to answer questions. If given a paragraph about water tanks, they write 'WWII'. Grad-CAM is the teacher checking the student's scratch paper."
+        },
+        {
+          "kind": "example",
+          "icon": "📐",
+          "title": "Spurious Hospital Tags",
+          "body": "X-ray machines embed text tags like 'PORTABLE' or 'AP' on films. Models often associate 'PORTABLE' with sick patients (since portable machines go to bedsides). Grad-CAM will show a bright hotspot on the word 'PORTABLE', signaling that the model is predicting based on machine type, not anatomy."
+        },
+        {
+          "kind": "mythbust",
+          "icon": "⚠️",
+          "title": "Focus is not understanding",
+          "body": "You might think if Grad-CAM highlights the dog's face, the model understands dogs. In reality, it just means those features had high activation. The model doesn't understand 'eyes' or 'ears' conceptually; it's still matching math patterns."
+        },
+        {
+          "kind": "visual",
+          "icon": "⚖️",
+          "title": "Spurious vs. Causal Features",
+          "body": "Using Grad-CAM to audit model reasoning:",
+          "compare": {
+            "left": {
+              "emoji": "🚨",
+              "tag": "Spurious Focus (Cheat)",
+              "text": "Hotspot on water/snow background.<br>Model relies on style shortcuts.<br>Result: Will fail in new environments."
+            },
+            "right": {
+              "emoji": "🎯",
+              "tag": "Causal Focus (Correct)",
+              "text": "Hotspot on boat/wolf contour.<br>Model relies on physical features.<br>Result: Generals well to new domains."
+            }
+          }
+        }
+      ]
+    },
+    {
+      "type": "practice",
+      "exercises": [
+        {
+          "id": "p1",
+          "type": "multiple_choice",
+          "xp": 2,
+          "prompt": "What is shortcut learning in machine learning?",
+          "explain": "Shortcut learning happens when models capitalize on superficial, non-general correlations in the training data.",
+          "options": [
+            {
+              "id": "a",
+              "text": "When a model exploits spurious background cues or text markers to solve a task instead of learning the true concept",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "When a model skips the backward pass during training to save time",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "When a developer uses a pretrained backbone instead of training from scratch",
+              "correct": false
+            },
+            {
+              "id": "d",
+              "text": "When the learning rate is set to drop to zero instantly",
+              "correct": false
+            }
+          ]
+        },
+        {
+          "id": "p2",
+          "type": "true_false",
+          "xp": 2,
+          "prompt": "True or False: If a Grad-CAM heatmap highlights a text tag like 'PORTABLE' on an X-ray, the model is likely relying on machine type rather than clinical features.",
+          "explain": "True. Focus on metal tags or machine labels indicates the model is exploiting institutional shortcuts.",
+          "options": [
+            {
+              "id": "t",
+              "text": "True",
+              "correct": true
+            },
+            {
+              "id": "f",
+              "text": "False",
+              "correct": false
+            }
+          ]
+        },
+        {
+          "id": "p3",
+          "type": "fill_blank",
+          "xp": 2,
+          "prompt": "Complete the sentence:",
+          "explain": "Spurious correlations (like background attributes) act as cheats that models exploit.",
+          "sentence": "Grad-CAM reveals shortcut learning by showing that a model's focus is on a spurious ___ rather than the object.",
+          "blank": "correlation",
+          "words": [
+            "correlation",
+            "activation",
+            "gradient"
+          ]
+        },
+        {
+          "id": "p4",
+          "type": "spot_the_ai",
+          "xp": 2,
+          "prompt": "Which of these is a direct application of Grad-CAM in model development?",
+          "explain": "Grad-CAM overlays visualize model focus, helping developers verify if it has learned valid features.",
+          "options": [
+            {
+              "id": "a",
+              "text": "Auditing a model's focus to verify that it is looking at the actual object and not the background",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "Quantizing model weights to 8-bit integers",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "Converting bounding boxes to segmentation polygons",
+              "correct": false
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "boss",
+      "exercises": [
+        {
+          "id": "b1",
+          "type": "multiple_choice",
+          "xp": 5,
+          "prompt": "You train a wolf classifier. Grad-CAM shows that the model focuses entirely on the background snow. What dataset intervention is best?",
+          "options": [
+            {
+              "id": "a",
+              "text": "Collect and add images of wolves in forests/deserts and dogs in snow to force the model to decouple the animals from the weather backgrounds.",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "Deploy the model only in snowy cities.",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "Increase the training batch size to 1024.",
+              "correct": false
+            },
+            {
+              "id": "d",
+              "text": "Convert all training images to binary black-and-white silhouettes.",
+              "correct": false
+            }
+          ],
+          "explain": "Adding diverse backgrounds breaks the spurious correlation, forcing the network parameters to lock onto wolf shapes instead of snow pixels."
+        }
+      ]
+    }
+  ]
+}

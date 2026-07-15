@@ -1,0 +1,222 @@
+{
+  "id": "u156-l2",
+  "unit": 156,
+  "day": 782,
+  "tier": "U-Net Architecture",
+  "tierIcon": "🧬",
+  "title": "The Expanding Path",
+  "icon": "🧬",
+  "concept": "The expanding path (decoder) of U-Net uses transposed convolutions and regular convolutions to restore spatial resolution and project features back to pixel space.",
+  "xp": 15,
+  "hearts": 3,
+  "estMinutes": 7,
+  "segments": [
+    {
+      "type": "warmup",
+      "exercises": [
+        {
+          "id": "w1",
+          "type": "multiple_choice",
+          "xp": 1,
+          "prompt": "Recap: What is the main structural trend as features move down the contracting path?",
+          "options": [
+            {
+              "id": "a",
+              "text": "Spatial resolution decreases while channel depth increases",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "Spatial resolution increases while channel depth decreases",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "Both spatial resolution and channel depth decrease",
+              "correct": false
+            }
+          ],
+          "explain": "Correct! The contracting path shrinks space and grows channels."
+        }
+      ]
+    },
+    {
+      "type": "teach",
+      "cards": [
+        {
+          "kind": "hook",
+          "icon": "🧗",
+          "title": "Climbing back up",
+          "body": "Now that we've reached the bottom of the 'U' (the bottleneck), we have a compact, 512-channel map full of abstract ideas. Now, we must climb the right side: the expanding path. How do we turn these abstract ideas back into a pixel-precise mask?"
+        },
+        {
+          "kind": "definition",
+          "icon": "📈",
+          "title": "The Expanding Path",
+          "body": "The <strong>Expanding Path</strong> (or Decoder) is the right side of the U-Net. It uses transposed convolutions to double the spatial resolution and halve the channels at each step, followed by regular 3x3 convolutions to refine the upsampled features."
+        },
+        {
+          "kind": "analogy",
+          "icon": "🎈",
+          "title": "Blowing up a balloon",
+          "body": "Imagine the expanding path as carefully inflating a collapsed, decorated balloon. As it grows, the details stretch back out, and we use local brushes (convolutions) to paint the sharp borders back in."
+        },
+        {
+          "kind": "example",
+          "icon": "📐",
+          "title": "Channel halving",
+          "body": "Starting at the bottleneck with 512 channels, the expanding path upsamples to 256 channels, then to 128, then to 64, and finally uses a 1x1 convolution to output a mask with classes matching the target."
+        },
+        {
+          "kind": "mythbust",
+          "icon": "⚠️",
+          "title": "No dense layers in the decoder",
+          "body": "You might think the decoder needs dense layers to make the final class decision. It doesn't! The final layer of the expanding path is a simple 1x1 convolution that maps each pixel's channels to the class probabilities."
+        },
+        {
+          "kind": "visual",
+          "icon": "⚖️",
+          "title": "Expanding Path Layout",
+          "body": "How the right side of the U-Net works:",
+          "compare": {
+            "left": {
+              "emoji": "🧠",
+              "tag": "Bottleneck (Low Res)",
+              "text": "Resolution: 16x16, Channels: 512<br>Deep abstract features"
+            },
+            "right": {
+              "emoji": "🖼️",
+              "tag": "Output Mask (High Res)",
+              "text": "Resolution: 256x256, Channels: Class Count<br>Pixel-level segmentation mask"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "type": "practice",
+      "exercises": [
+        {
+          "id": "p1",
+          "type": "multiple_choice",
+          "xp": 2,
+          "prompt": "What layer does the expanding path use to double the spatial resolution?",
+          "options": [
+            {
+              "id": "a",
+              "text": "Transposed convolution",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "Max pooling",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "Flattening",
+              "correct": false
+            },
+            {
+              "id": "d",
+              "text": "Dense layer",
+              "correct": false
+            }
+          ],
+          "explain": "Correct! Transposed convolutions are used for learnable upsampling in the decoder."
+        },
+        {
+          "id": "p2",
+          "type": "true_false",
+          "xp": 2,
+          "prompt": "True or False: The final layer of U-Net is a 1x1 convolution that maps features to the target class count.",
+          "options": [
+            {
+              "id": "t",
+              "text": "True",
+              "correct": false
+            },
+            {
+              "id": "f",
+              "text": "False",
+              "correct": false
+            }
+          ],
+          "explain": "True. The final 1x1 convolution produces the class probability map for every pixel."
+        },
+        {
+          "id": "p3",
+          "type": "fill_blank",
+          "xp": 2,
+          "prompt": "Complete the sentence:",
+          "sentence": "The expanding path halves the channel depth and ___ the spatial resolution at each block.",
+          "blank": "doubles",
+          "words": [
+            "doubles",
+            "halves",
+            "flattens"
+          ],
+          "explain": "The expanding path restores spatial dimensions by doubling the resolution."
+        },
+        {
+          "id": "p4",
+          "type": "spot_the_ai",
+          "xp": 2,
+          "prompt": "What is the primary goal of the expanding path?",
+          "options": [
+            {
+              "id": "a",
+              "text": "To restore spatial resolution and localize features precisely",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "To compress feature maps to save memory",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "To extract global classification categories",
+              "correct": false
+            }
+          ],
+          "explain": "It maps abstract features back to pixel coordinates to create the mask."
+        }
+      ]
+    },
+    {
+      "type": "boss",
+      "exercises": [
+        {
+          "id": "b1",
+          "type": "multiple_choice",
+          "xp": 5,
+          "prompt": "Why does the expanding path have convolutions after every transposed convolution upsampling step?",
+          "options": [
+            {
+              "id": "a",
+              "text": "To help the network learn how to smooth out upsampling artifacts and blend the merged features.",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "To reduce the spatial resolution back to the bottleneck size.",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "To classify the overall category of the image.",
+              "correct": false
+            },
+            {
+              "id": "d",
+              "text": "To freeze the weights so they cannot be trained.",
+              "correct": false
+            }
+          ],
+          "explain": "Exactly! Upsampling alone can create rough or blocky features; subsequent convolutions help smooth and refine the mask. Next: how do we connect the left and right sides of the U?"
+        }
+      ]
+    }
+  ]
+}

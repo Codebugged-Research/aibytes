@@ -1,0 +1,222 @@
+{
+  "id": "u164-l5",
+  "unit": 164,
+  "day": 825,
+  "tier": "Advanced Vision Applications",
+  "tierIcon": "👁️",
+  "title": "Real-World Verification Pipelines",
+  "icon": "⚙️",
+  "concept": "Designing and deploying secure 1:1 facial verification pipelines involves integrating detection, alignment, embedding extraction, and similarity matching.",
+  "xp": 15,
+  "hearts": 3,
+  "estMinutes": 7,
+  "segments": [
+    {
+      "type": "warmup",
+      "exercises": [
+        {
+          "id": "w1",
+          "type": "multiple_choice",
+          "xp": 1,
+          "prompt": "Recap: What is the difference between active and passive liveness checks?",
+          "options": [
+            {
+              "id": "a",
+              "text": "Active requires user interaction; passive runs silently in the background.",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "Active uses infrared light; passive only uses RGB.",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "Active is less secure than passive.",
+              "correct": false
+            }
+          ],
+          "explain": "Correct! Active checks require actions like blinking, while passive checks analyze data from static frames or sensors without user prompts."
+        }
+      ]
+    },
+    {
+      "type": "teach",
+      "cards": [
+        {
+          "kind": "hook",
+          "icon": "⚙️",
+          "title": "Putting it all together",
+          "body": "We have explored detection, alignment, embedding extraction, distance metrics, and anti-spoofing. In production, these individual models must be connected into a seamless, fast, and secure pipeline that executes end-to-end in less than a second."
+        },
+        {
+          "kind": "definition",
+          "icon": "⛓️",
+          "title": "The End-to-End Pipeline",
+          "body": "A complete facial verification pipeline executes these steps in order:<br>1. <strong>Capture & Liveness</strong> (anti-spoofing check).<br>2. <strong>Face Detection</strong> (crop the face box).<br>3. <strong>Alignment</strong> (rotate using landmarks).<br>4. <strong>Embedding Extraction</strong> (generate the vector).<br>5. <strong>Similarity Matching</strong> (compare to database threshold)."
+        },
+        {
+          "kind": "analogy",
+          "icon": "🚪",
+          "title": "An airport security line",
+          "body": "Think of the pipeline as airport security. First, they check if your passport is real (liveness). Then, they point to you (detection). Next, you step onto the yellow footprints and face the camera (alignment). They scan your barcode (embedding), and match it to the flight list (similarity)."
+        },
+        {
+          "kind": "example",
+          "icon": "🚀",
+          "title": "Optimization bottlenecks",
+          "body": "In production, running five separate deep neural networks would be too slow. To achieve low latency, developers compile models using tools like TensorRT, run preprocessing (resizing/alignment) on the GPU, and execute steps in parallel streams."
+        },
+        {
+          "kind": "mythbust",
+          "icon": "⚠️",
+          "title": "Accuracy depends on the weakest link",
+          "body": "You might think having a state-of-the-art recognition model guarantees a perfect system. But if your face detector is low-quality, it will output bad crops, leading to alignment failures, which causes the recognition model to reject valid users."
+        },
+        {
+          "kind": "visual",
+          "icon": "⚖",
+          "title": "Pipeline architecture",
+          "body": "The flow of data through a verification system:",
+          "compare": {
+            "left": {
+              "emoji": "📸",
+              "tag": "Inference Ingestion",
+              "text": "1. Camera Frame -> Liveness check<br>2. Detect Face Box -> Crop<br>3. Align eyes horizontally"
+            },
+            "right": {
+              "emoji": "🛡️",
+              "tag": "Verification Output",
+              "text": "4. Extract 512D Embedding<br>5. Compare to Database Vector<br>6. Threshold match -> Unlock!"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "type": "practice",
+      "exercises": [
+        {
+          "id": "p1",
+          "type": "multiple_choice",
+          "xp": 2,
+          "prompt": "What is the correct execution order of steps in a facial verification pipeline?",
+          "options": [
+            {
+              "id": "a",
+              "text": "Detect face -> Align landmarks -> Extract embedding -> Compute similarity",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "Extract embedding -> Compute similarity -> Detect face -> Align landmarks",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "Align landmarks -> Compute similarity -> Extract embedding -> Detect face",
+              "correct": false
+            },
+            {
+              "id": "d",
+              "text": "Compute similarity -> Extract embedding -> Align landmarks -> Detect face",
+              "correct": false
+            }
+          ],
+          "explain": "You must first locate the face, align it to standard format, convert it to a feature vector, and finally calculate the similarity match."
+        },
+        {
+          "id": "p2",
+          "type": "true_false",
+          "xp": 2,
+          "prompt": "True or False: If you improve the embedding model's parameters, the overall pipeline accuracy will increase even if the face detector is failing.",
+          "options": [
+            {
+              "id": "t",
+              "text": "True",
+              "correct": false
+            },
+            {
+              "id": "f",
+              "text": "False",
+              "correct": true
+            }
+          ],
+          "explain": "False. A verification pipeline is sequential. If the detector fails to crop the face properly, the embedding model will receive low-quality inputs and fail."
+        },
+        {
+          "id": "p3",
+          "type": "fill_blank",
+          "xp": 2,
+          "prompt": "Complete the sentence:",
+          "sentence": "To achieve low latency in real-time pipelines, developers often compile models using compilers like ___.",
+          "blank": "TensorRT",
+          "words": [
+            "TensorRT",
+            "Matplotlib",
+            "PyTest"
+          ],
+          "explain": "Compilers like TensorRT optimize neural network graphs to run with maximum speed on target hardware."
+        },
+        {
+          "id": "p4",
+          "type": "spot_the_ai",
+          "xp": 2,
+          "prompt": "Which scenario represents a failure in the alignment step of the verification pipeline?",
+          "options": [
+            {
+              "id": "a",
+              "text": "The user tilted their head, and the system failed to rotate the face crop level, causing embedding mismatch",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "The camera feed had no light, so the detector found zero faces",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "A photo of the owner successfully bypassed the system because liveness checks were disabled",
+              "correct": false
+            }
+          ],
+          "explain": "Failure to rotate and align a tilted face crop leads directly to poor embedding comparisons."
+        }
+      ]
+    },
+    {
+      "type": "boss",
+      "exercises": [
+        {
+          "id": "b1",
+          "type": "multiple_choice",
+          "xp": 5,
+          "prompt": "You are deploying a passport eGate at a busy terminal. The gate takes 5 seconds to process each passenger, causing long lines. Profiling shows that the embedding model is fast, but copying the face crops back and forth between CPU memory and GPU memory is slow. How should you optimize the system?",
+          "options": [
+            {
+              "id": "a",
+              "text": "Keep the cropped face frames on GPU memory after detection, and run the alignment and embedding models directly on the GPU without memory copies.",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "Lower the matching threshold to 0.1 to skip the embedding step entirely.",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "Replace the high-speed GPU with a slow CPU server.",
+              "correct": false
+            },
+            {
+              "id": "d",
+              "text": "Disable the face detector and guess passenger names randomly.",
+              "correct": false
+            }
+          ],
+          "explain": "Exactly! Eliminating CPU-GPU memory copy overhead by keeping data on the GPU across the entire pipeline dramatically reduces latency. Outstanding job! You have completed Unit 164. Next up: Human Pose Estimation Basics."
+        }
+      ]
+    }
+  ]
+}

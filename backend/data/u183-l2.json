@@ -1,0 +1,222 @@
+{
+  "id": "u183-l2",
+  "unit": 183,
+  "day": 917,
+  "tier": "Vision Transformers & Modern Approaches",
+  "tierIcon": "\ud83d\udc41\ufe0f",
+  "title": "Dual Encoder Architecture",
+  "icon": "\ud83d\udd17",
+  "concept": "CLIP uses a dual-encoder architecture: an image encoder (ViT or CNN) and a text encoder (Transformer) that map inputs to a shared embedding space.",
+  "xp": 15,
+  "hearts": 3,
+  "estMinutes": 7,
+  "segments": [
+    {
+      "type": "warmup",
+      "exercises": [
+        {
+          "id": "w1",
+          "type": "multiple_choice",
+          "xp": 1,
+          "prompt": "Recap: What is the shared space called where CLIP compares images and text?",
+          "options": [
+            {
+              "id": "a",
+              "text": "Shared embedding (vector) space.",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "Multi-layer perceptron head.",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "Convolutional feature map.",
+              "correct": false
+            }
+          ],
+          "explain": "Correct! CLIP projects both modalities into a shared vector space to measure similarity."
+        }
+      ]
+    },
+    {
+      "type": "teach",
+      "cards": [
+        {
+          "kind": "hook",
+          "icon": "\ud83d\udd17",
+          "title": "Two heads are better than one",
+          "body": "How do you process both an image and a sentence at the same time? You can't use a single encoder. CLIP solves this by deploying two separate 'heads': an image encoder to read pixels, and a text encoder to read words. Let's see how they work together."
+        },
+        {
+          "kind": "definition",
+          "icon": "\u2699\ufe0f",
+          "title": "Dual Encoder",
+          "body": "The <strong>Dual Encoder</strong> architecture consists of: <br>1. An <strong>Image Encoder</strong> (typically a ViT or ResNet) that maps images to vectors.<br>2. A <strong>Text Encoder</strong> (a standard NLP Transformer) that maps text sentences to vectors.<br>Both vectors are projected to the same dimension <code>D</code> for similarity comparison."
+        },
+        {
+          "kind": "analogy",
+          "icon": "\ud83e\udd1d",
+          "title": "A translator panel",
+          "body": "Imagine a Spanish speaker (image encoder) and a Chinese speaker (text encoder) trying to collaborate. They don't speak each other's languages. To collaborate, they both translate their thoughts into English (shared embedding space). Now, they can easily compare their ideas."
+        },
+        {
+          "kind": "example",
+          "icon": "\ud83d\udcbb",
+          "title": "Embedding outputs",
+          "body": "If you pass a photo to the image encoder, it outputs a vector of shape [512]. If you pass the text to the text encoder, it also outputs a vector of shape [512]. We then compute the dot product between these two vectors to measure similarity."
+        },
+        {
+          "kind": "mythbust",
+          "icon": "\u26a0\ufe0f",
+          "title": "They don't share parameters",
+          "body": "You might think the image and text encoders share some weights or layers. In CLIP, they are **completely independent networks** with separate parameters. They only interact during the loss calculation at the very end of the pipeline."
+        },
+        {
+          "kind": "visual",
+          "icon": "\u2696\ufe0f",
+          "title": "Dual Encoder Mapping",
+          "body": "How inputs map to the shared space:",
+          "compare": {
+            "left": {
+              "emoji": "\ud83d\uddbc\ufe0f",
+              "tag": "Image Encoder (ViT)",
+              "text": "Input: Pixels (e.g. 224x224)<br>Extracts: Visual features<br>Output: Vector of size D"
+            },
+            "right": {
+              "emoji": "\ud83d\udcdd",
+              "tag": "Text Encoder (Transformer)",
+              "text": "Input: Caption (tokens)<br>Extracts: Language semantics<br>Output: Vector of size D"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "type": "practice",
+      "exercises": [
+        {
+          "id": "p1",
+          "type": "multiple_choice",
+          "xp": 2,
+          "prompt": "What are the two encoders used in CLIP's dual architecture?",
+          "explain": "CLIP uses an image encoder for pixels and a text encoder for captions, mapping both to a common size.",
+          "options": [
+            {
+              "id": "a",
+              "text": "An image encoder (ViT/CNN) and a text encoder (Transformer)",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "A convolutional encoder and a recurrent decoder",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "A position embedding generator and an MLP classifier head",
+              "correct": false
+            },
+            {
+              "id": "d",
+              "text": "Two identical convolutional backbones",
+              "correct": false
+            }
+          ]
+        },
+        {
+          "id": "p2",
+          "type": "true_false",
+          "xp": 2,
+          "prompt": "True or false: The image encoder and text encoder in CLIP share weights during training.",
+          "explain": "False. They are separate networks with independent parameters that map features to a shared space.",
+          "options": [
+            {
+              "id": "t",
+              "text": "True",
+              "correct": false
+            },
+            {
+              "id": "f",
+              "text": "False",
+              "correct": true
+            }
+          ]
+        },
+        {
+          "id": "p3",
+          "type": "fill_blank",
+          "xp": 2,
+          "prompt": "Complete the sentence:",
+          "explain": "Computing similarity (like dot product) requires both vectors to have identical lengths.",
+          "sentence": "To compare outputs from both encoders, their vectors must be projected to the ___ dimension.",
+          "blank": "same",
+          "words": [
+            "same",
+            "inverse",
+            "random"
+          ]
+        },
+        {
+          "id": "p4",
+          "type": "spot_the_ai",
+          "xp": 2,
+          "prompt": "If the image vector is [1x512] and the text vector is [1x512], which mathematical operation measures their similarity?",
+          "explain": "Correct! Cosine similarity (dot product of normalized vectors) measures how closely the directions of the vectors align.",
+          "options": [
+            {
+              "id": "a",
+              "text": "The dot product (cosine similarity) between the two vectors",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "The sum of all elements in the image vector",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "A 2D convolution over the vectors",
+              "correct": false
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "boss",
+      "exercises": [
+        {
+          "id": "b1",
+          "type": "multiple_choice",
+          "xp": 5,
+          "prompt": "Why is the dual encoder design highly efficient for searching huge databases of images compared to early fusion models?",
+          "options": [
+            {
+              "id": "a",
+              "text": "We can pre-compute and save all image vectors once, and then simply compute fast dot products with the query text vector at search time.",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "Because the dual encoder requires no math during inference.",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "Because it discards the text encoder after training.",
+              "correct": false
+            },
+            {
+              "id": "d",
+              "text": "Because it forces the database to shrink by 90%.",
+              "correct": false
+            }
+          ],
+          "explain": "Phenomenal! Pre-computing image vectors makes searches near-instant, allowing CLIP to power high-speed semantic search engines. Next: how CLIP classifies images without training \u2014 zero-shot classification!"
+        }
+      ]
+    }
+  ]
+}

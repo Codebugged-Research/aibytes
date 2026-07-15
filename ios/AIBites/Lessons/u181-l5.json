@@ -1,0 +1,222 @@
+{
+  "id": "u181-l5",
+  "unit": 181,
+  "day": 910,
+  "tier": "Vision Transformers & Modern Approaches",
+  "tierIcon": "\ud83d\udc41\ufe0f",
+  "title": "SSL in Production",
+  "icon": "\ud83c\udfe2",
+  "concept": "Self-supervised backbones are valuable in production because they can be fine-tuned on small labeled datasets to achieve high accuracy, saving annotation costs.",
+  "xp": 15,
+  "hearts": 3,
+  "estMinutes": 7,
+  "segments": [
+    {
+      "type": "warmup",
+      "exercises": [
+        {
+          "id": "w1",
+          "type": "multiple_choice",
+          "xp": 1,
+          "prompt": "Recap: What is the main characteristic of emergent segmentation in DINO?",
+          "options": [
+            {
+              "id": "a",
+              "text": "The final layer self-attention maps naturally outline the silhouettes of main objects.",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "The model automatically splits images into a grid of 1x1 pixels.",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "It requires manual target category labels.",
+              "correct": false
+            }
+          ],
+          "explain": "Correct! DINO's attention maps naturally isolate objects without label training."
+        }
+      ]
+    },
+    {
+      "type": "teach",
+      "cards": [
+        {
+          "kind": "hook",
+          "icon": "\ud83c\udfe2",
+          "title": "Saving money",
+          "body": "Imagine starting a medical startup. You need specialized radiologists to annotate 100,000 X-ray scans. It will cost millions of dollars! But with SSL, you can pre-train on millions of *unlabeled* scans for free, and then fine-tune on just 100 labeled scans. Let's see why this is a production game-changer."
+        },
+        {
+          "kind": "definition",
+          "icon": "\u2699\ufe0f",
+          "title": "SSL Production Pipeline",
+          "body": "In production, the <strong>SSL pipeline</strong> involves: downloading a large vision backbone pre-trained on unlabeled data (like DINO or MoCo), attaching a lightweight classification head, and training (fine-tuning) only that head or the last few layers on a small, labeled target dataset."
+        },
+        {
+          "kind": "analogy",
+          "icon": "\ud83c\udf93",
+          "title": "Hiring a college graduate",
+          "body": "Imagine hiring for an accounting firm. You don't hire someone who has never seen a number and teach them math from scratch. You hire a college graduate (pre-trained backbone) who already understands language, logic, and numbers. You just spend a few days teaching them your company's specific spreadsheet templates (fine-tuning)."
+        },
+        {
+          "kind": "example",
+          "icon": "\ud83c\udfe5",
+          "title": "Rare diseases",
+          "body": "For rare medical conditions, it might be impossible to collect more than 50 patient images. Fine-tuning a self-supervised backbone on these 50 images yields high accuracy because the backbone already knows how organs look from unlabeled scans."
+        },
+        {
+          "kind": "mythbust",
+          "icon": "\u26a0\ufe0f",
+          "title": "Fine-tuning isn't training from scratch",
+          "body": "Don't confuse fine-tuning with full training. During fine-tuning, we use a **very low learning rate** (e.g. 10x smaller) to prevent destroying the rich, pre-trained feature weights. We want to nudge them, not scramble them."
+        },
+        {
+          "kind": "visual",
+          "icon": "\u2696\ufe0f",
+          "title": "Scratch Training vs. SSL Fine-Tuning",
+          "body": "Comparing setups for a small target task:",
+          "compare": {
+            "left": {
+              "emoji": "\ud83c\udfd7\ufe0f",
+              "tag": "Training From Scratch",
+              "text": "Initialize weights randomly<br>Requires 50k+ labeled images<br>High risk of overfitting"
+            },
+            "right": {
+              "emoji": "\ud83c\udfe2",
+              "tag": "SSL Fine-Tuning",
+              "text": "Initialize with pre-trained weights<br>Requires 100+ labeled images<br>Highly stable & accurate"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "type": "practice",
+      "exercises": [
+        {
+          "id": "p1",
+          "type": "multiple_choice",
+          "xp": 2,
+          "prompt": "Why is SSL highly valued in real-world production systems?",
+          "explain": "By leveraging unlabeled data, SSL allows teams to build high-performance systems with tiny labeled datasets.",
+          "options": [
+            {
+              "id": "a",
+              "text": "It enables models to learn high-quality features from unlabeled data, dramatically reducing the cost of human data annotation",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "It removes the need for GPUs during deployment",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "It allows models to predict classes that do not exist",
+              "correct": false
+            },
+            {
+              "id": "d",
+              "text": "It increases the inference time by 10x",
+              "correct": false
+            }
+          ]
+        },
+        {
+          "id": "p2",
+          "type": "true_false",
+          "xp": 2,
+          "prompt": "True or false: During fine-tuning, we should use a very high learning rate to speed up convergence.",
+          "explain": "False. High learning rates will scramble the pre-trained weights (catastrophic forgetting). A low learning rate keeps features stable.",
+          "options": [
+            {
+              "id": "t",
+              "text": "True",
+              "correct": false
+            },
+            {
+              "id": "f",
+              "text": "False",
+              "correct": true
+            }
+          ]
+        },
+        {
+          "id": "p3",
+          "type": "fill_blank",
+          "xp": 2,
+          "prompt": "Complete the sentence:",
+          "explain": "Transfer learning moves knowledge learned on a large dataset (unlabeled source) to a smaller target task.",
+          "sentence": "SSL pre-training followed by target fine-tuning is an example of ___ learning.",
+          "blank": "transfer",
+          "words": [
+            "transfer",
+            "recurrent",
+            "unsupervised"
+          ]
+        },
+        {
+          "id": "p4",
+          "type": "spot_the_ai",
+          "xp": 2,
+          "prompt": "Which of these represents a fine-tuning configuration for a pre-trained DINO model?",
+          "explain": "A common strategy (linear probing) freezes the pre-trained backbone and trains only a simple classifier head on top.",
+          "options": [
+            {
+              "id": "a",
+              "text": "Freezing the backbone layers and training only a newly added linear classification head",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "Randomly shuffling the weights of all projection layers",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "Training the entire model from scratch with random weights",
+              "correct": false
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "boss",
+      "exercises": [
+        {
+          "id": "b1",
+          "type": "multiple_choice",
+          "xp": 5,
+          "prompt": "You are building a custom weed-detection app for farming. You have 1 million unlabeled field photos and only 200 labeled weed photos. What is your best development path?",
+          "options": [
+            {
+              "id": "a",
+              "text": "Pre-train a ViT backbone on the 1 million unlabeled photos using DINO, then fine-tune it on the 200 labeled weed photos.",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "Discard the 1 million photos and train a model from scratch on only the 200 weed photos.",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "Manually label all 1 million photos before training a CNN.",
+              "correct": false
+            },
+            {
+              "id": "d",
+              "text": "Use a random number generator since 200 photos is not enough for any AI.",
+              "correct": false
+            }
+          ],
+          "explain": "Outstanding! Pre-training on the unlabeled photos teaches the model to understand crops, soil, and leaves, making fine-tuning on the 200 weed labels highly successful. Next: what if we mask out portions of the image instead? Let's check out Masked Autoencoders!"
+        }
+      ]
+    }
+  ]
+}

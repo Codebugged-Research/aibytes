@@ -1,0 +1,222 @@
+{
+  "id": "u142-l4",
+  "unit": 142,
+  "day": 714,
+  "tier": "Object Detection Foundations",
+  "tierIcon": "🎯",
+  "title": "Speed and Efficiency of Proposals",
+  "icon": "🐌",
+  "concept": "Selective Search is computationally slow because it runs on the CPU, creating a massive latency bottleneck in early object detection pipelines.",
+  "xp": 15,
+  "hearts": 3,
+  "estMinutes": 7,
+  "segments": [
+    {
+      "type": "warmup",
+      "exercises": [
+        {
+          "id": "w1",
+          "type": "multiple_choice",
+          "xp": 1,
+          "prompt": "Recap: How many proposals does Selective Search usually output?",
+          "options": [
+            {
+              "id": "a",
+              "text": "Around 2,000",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "Exactly 100",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "Millions",
+              "correct": false
+            }
+          ],
+          "explain": "Selective Search typically yields about 2,000 intermediate proposals."
+        }
+      ]
+    },
+    {
+      "type": "teach",
+      "cards": [
+        {
+          "kind": "hook",
+          "icon": "🐌",
+          "title": "The Bottleneck",
+          "body": "Imagine building a ultra-fast sports car, but installing a speed governor that caps the speed at 15 miles per hour. No matter how powerful the engine is, the car remains slow. In early deep learning object detection, the CPU region proposal step was that speed governor."
+        },
+        {
+          "kind": "definition",
+          "icon": "🐌",
+          "title": "The Latency Bottleneck",
+          "body": "<strong>Selective Search Latency</strong> is high because it is a complex CPU-bound algorithm. It takes about <strong>2.0 seconds</strong> per image. Even if the subsequent neural network classifier runs in milliseconds, the overall system cannot reach real-time speeds."
+        },
+        {
+          "kind": "analogy",
+          "icon": "🎟️",
+          "title": "The Ticket Line",
+          "body": "Imagine a theme park with high-speed rollercoasters (GPU classification). But to get in, visitors must wait in a slow, single-file line where a clerk hand-writes tickets (CPU Selective Search). The high speed of the rides doesn't matter if the entrance is blocked!"
+        },
+        {
+          "kind": "example",
+          "icon": "⏳",
+          "title": "Breaking Down the Seconds",
+          "body": "In a classic R-CNN setup: <strong>Selective Search</strong> on CPU takes <code>2.0s</code>. <strong>CNN forward passes</strong> on GPU for 2,000 crops take <code>45.0s</code>. The proposal step is slow, but the repeated CNN passes make it even worse!"
+        },
+        {
+          "kind": "mythbust",
+          "icon": "⚠️",
+          "title": "CPU limits cannot be bypassed easily",
+          "body": "You might think we can just run Selective Search on a GPU. However, because it relies on sequential pixel comparisons and hierarchical loops, it does not parallelize well on GPU architectures, remaining stuck on the CPU."
+        },
+        {
+          "kind": "visual",
+          "icon": "⚖️",
+          "title": "Hardware Split",
+          "body": "Visualizing where computations occur in early detection pipelines:",
+          "compare": {
+            "left": {
+              "emoji": "🖥️",
+              "tag": "CPU Task (Selective Search)",
+              "text": "Sequential pixel logic.<br>Takes ~2.0 seconds."
+            },
+            "right": {
+              "emoji": "🎮",
+              "tag": "GPU Task (CNN Classifier)",
+              "text": "Parallel matrix math.<br>Takes milliseconds."
+            }
+          }
+        }
+      ]
+    },
+    {
+      "type": "practice",
+      "exercises": [
+        {
+          "id": "p1",
+          "type": "multiple_choice",
+          "xp": 2,
+          "prompt": "Why is Selective Search a bottleneck for real-time object detection?",
+          "explain": "Selective Search runs sequentially on the CPU, introducing a 2-second delay that blocks real-time speeds (which require 0.03 seconds or less).",
+          "options": [
+            {
+              "id": "a",
+              "text": "It runs on the CPU and takes around 2 seconds per image, preventing real-time framerates",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "It uses too many convolutional layers",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "It converts all images to binary black and white",
+              "correct": false
+            },
+            {
+              "id": "d",
+              "text": "It requires expensive server licenses",
+              "correct": false
+            }
+          ]
+        },
+        {
+          "id": "p2",
+          "type": "true_false",
+          "xp": 2,
+          "prompt": "True or False: Selective Search runs much faster on standard GPUs than CPUs.",
+          "explain": "False. Selective Search is a classical heuristic algorithm with nested branches that cannot leverage parallel GPU cores effectively.",
+          "options": [
+            {
+              "id": "t",
+              "text": "True",
+              "correct": false
+            },
+            {
+              "id": "f",
+              "text": "False",
+              "correct": true
+            }
+          ]
+        },
+        {
+          "id": "p3",
+          "type": "fill_blank",
+          "xp": 2,
+          "prompt": "Complete the sentence:",
+          "explain": "Generating proposals using Selective Search typically takes around 2 seconds per image.",
+          "sentence": "Selective Search takes about ___ seconds to process a single image on CPU.",
+          "blank": "2",
+          "words": [
+            "2",
+            "0.02",
+            "60"
+          ]
+        },
+        {
+          "id": "p4",
+          "type": "spot_the_ai",
+          "xp": 2,
+          "prompt": "Which latency figure represents a real-time object detection requirement?",
+          "explain": "Real-time processing requires low latency (around 30ms or less) to handle live video feeds.",
+          "options": [
+            {
+              "id": "a",
+              "text": "Latency: 30 milliseconds (33 frames per second)",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "Latency: 2.0 seconds (0.5 frames per second)",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "Latency: 47 seconds per image",
+              "correct": false
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "boss",
+      "exercises": [
+        {
+          "id": "b1",
+          "type": "multiple_choice",
+          "xp": 5,
+          "prompt": "You are designing an object detection system for a drone that must fly autonomously. The system must process camera input at 30 frames per second. Can you use Selective Search as the region proposal step?",
+          "options": [
+            {
+              "id": "a",
+              "text": "No, because Selective Search takes 2 seconds per image, which limits the system to 0.5 frames per second, causing the drone to crash.",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "Yes, because CPU processing is always more reliable than GPU processing in flight.",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "Yes, but only if we use data augmentation to resize the images to 1x1 pixels.",
+              "correct": false
+            },
+            {
+              "id": "d",
+              "text": "No, because Selective Search only works on static medical scans.",
+              "correct": false
+            }
+          ],
+          "explain": "Exactly! The 2-second CPU delay makes Selective Search completely unusable for real-time systems like drones. Next: let's see how researchers bridged this gap to deep learning!"
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,222 @@
+{
+  "id": "u170-l3",
+  "unit": 170,
+  "day": 853,
+  "tier": "Advanced Vision Applications",
+  "tierIcon": "👁️",
+  "title": "Data Association: Matching Detections Across Frames",
+  "icon": "🧩",
+  "concept": "Data association solves the matching problem: deciding which detection in the current frame corresponds to which existing track, typically using a combination of predicted motion and appearance similarity.",
+  "xp": 15,
+  "hearts": 3,
+  "estMinutes": 7,
+  "segments": [
+    {
+      "type": "warmup",
+      "exercises": [
+        {
+          "id": "w1",
+          "type": "multiple_choice",
+          "xp": 1,
+          "prompt": "Recap: What can happen to a track ID if the detector misses an object for one frame due to occlusion?",
+          "options": [
+            {
+              "id": "a",
+              "text": "The association stage may assign a new track ID, breaking that object's tracking continuity",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "The detector automatically fixes the gap with zero errors",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "Nothing changes; track IDs are permanent regardless of missed detections",
+              "correct": false
+            }
+          ],
+          "explain": "Yes! Missed frames can break track continuity without a re-identification step."
+        }
+      ]
+    },
+    {
+      "type": "teach",
+      "cards": [
+        {
+          "kind": "hook",
+          "icon": "🧩",
+          "title": "The matching puzzle",
+          "body": "You have 5 tracked objects from the last frame and 5 new detections in this frame. Which new detection belongs to which existing track? This matching decision, repeated every single frame, is the heart of tracking."
+        },
+        {
+          "kind": "definition",
+          "icon": "🧩",
+          "title": "Data Association",
+          "body": "<strong>Data association</strong> matches new detections to existing tracks using a cost function — typically combining predicted position (via motion models like a <strong>Kalman filter</strong>) and appearance similarity (via feature embeddings), then solving an optimal assignment problem."
+        },
+        {
+          "kind": "analogy",
+          "icon": "🎫",
+          "title": "Matching lost tickets to owners",
+          "body": "Imagine 5 people dropped numbered tickets, and you find 5 tickets on the ground. To match tickets to owners, you'd use clues: who was standing closest to which ticket (motion/position), and whose clothing color matches best (appearance). Data association combines exactly these kinds of clues mathematically."
+        },
+        {
+          "kind": "example",
+          "icon": "📐",
+          "title": "Kalman filter position prediction",
+          "body": "If Car #3 was moving right at a steady speed, a Kalman filter predicts where Car #3 SHOULD be in the next frame. The detection closest to that predicted position is very likely a match, even if there are several other detections nearby."
+        },
+        {
+          "kind": "mythbust",
+          "icon": "⚠️",
+          "title": "Nearest position isn't always the right match",
+          "body": "It's tempting to always assign the closest detection to a track. But in crowded scenes, two people can cross paths, making 'closest' ambiguous or wrong. Robust trackers combine position AND appearance (like clothing color or a learned embedding) to avoid these identity swaps."
+        },
+        {
+          "kind": "visual",
+          "icon": "⚖️",
+          "title": "Motion-Only vs. Motion + Appearance Matching",
+          "body": "Two levels of matching sophistication:",
+          "compare": {
+            "left": {
+              "emoji": "📍",
+              "tag": "Motion-Only Matching",
+              "text": "Uses only predicted position<br>Fast but easily confused in crowds<br>Prone to ID switches on crossing paths"
+            },
+            "right": {
+              "emoji": "🧬",
+              "tag": "Motion + Appearance Matching",
+              "text": "Adds learned appearance features<br>More robust to crossing/occlusion<br>Fewer identity switches"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "type": "practice",
+      "exercises": [
+        {
+          "id": "p1",
+          "type": "multiple_choice",
+          "xp": 2,
+          "prompt": "What two main cues does robust data association typically combine?",
+          "options": [
+            {
+              "id": "a",
+              "text": "Predicted motion (position) and appearance similarity",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "File size and image resolution",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "Color depth and compression ratio",
+              "correct": false
+            },
+            {
+              "id": "d",
+              "text": "Frame rate and video codec",
+              "correct": false
+            }
+          ],
+          "explain": "Correct! Motion and appearance are the two standard matching cues."
+        },
+        {
+          "id": "p2",
+          "type": "true_false",
+          "xp": 2,
+          "prompt": "True or false: Using only position-based matching is robust to two people crossing paths in a crowd.",
+          "options": [
+            {
+              "id": "t",
+              "text": "True",
+              "correct": false
+            },
+            {
+              "id": "f",
+              "text": "False",
+              "correct": true
+            }
+          ],
+          "explain": "False. Position-only matching is easily confused when two objects cross paths closely, risking identity swaps."
+        },
+        {
+          "id": "p3",
+          "type": "fill_blank",
+          "xp": 2,
+          "prompt": "Complete the sentence:",
+          "sentence": "A ___ filter is commonly used to predict an object's expected position in the next frame based on its motion.",
+          "blank": "Kalman",
+          "words": [
+            "Kalman",
+            "Gaussian",
+            "Sobel"
+          ],
+          "explain": "The Kalman filter predicts future position from an object's motion history."
+        },
+        {
+          "id": "p4",
+          "type": "spot_the_ai",
+          "xp": 2,
+          "prompt": "Why do robust trackers combine appearance features with motion prediction instead of using motion alone?",
+          "options": [
+            {
+              "id": "a",
+              "text": "Appearance features help disambiguate identity when motion prediction alone is ambiguous, like during crowded crossings",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "Appearance features make the video file smaller",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "Motion prediction alone is always sufficient and appearance is unnecessary",
+              "correct": false
+            }
+          ],
+          "explain": "Correct! Appearance provides a second, independent signal that resolves motion-based ambiguity."
+        }
+      ]
+    },
+    {
+      "type": "boss",
+      "exercises": [
+        {
+          "id": "b1",
+          "type": "multiple_choice",
+          "xp": 5,
+          "prompt": "Two pedestrians wearing very similar-colored jackets walk toward each other, briefly overlap, then continue in their original directions. A tracker using only appearance-based matching (ignoring motion) is likely to:",
+          "options": [
+            {
+              "id": "a",
+              "text": "Swap their track IDs after the crossing, since their appearance features look nearly identical and can't distinguish them",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "Track them perfectly with zero risk, since appearance alone is always sufficient",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "Automatically merge them into a single track permanently",
+              "correct": false
+            },
+            {
+              "id": "d",
+              "text": "Immediately stop detecting both pedestrians entirely",
+              "correct": false
+            }
+          ],
+          "explain": "Exactly! Similar appearance without motion context risks ID swaps. Next: the broader challenges that make multi-object tracking genuinely hard."
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,222 @@
+{
+  "id": "u152-l3",
+  "unit": 152,
+  "day": 763,
+  "tier": "Modern Object Detection",
+  "tierIcon": "🎯",
+  "title": "Bipartite Matching Loss",
+  "icon": "🔀",
+  "concept": "DETR uses the Hungarian algorithm for one-to-one bipartite matching, training the model to predict exactly one box per object.",
+  "xp": 15,
+  "hearts": 3,
+  "estMinutes": 7,
+  "segments": [
+    {
+      "type": "warmup",
+      "exercises": [
+        {
+          "id": "w3",
+          "type": "multiple_choice",
+          "xp": 1,
+          "prompt": "Recap: What is the hard limit of detections in a DETR model with N object queries?",
+          "options": [
+            {
+              "id": "a",
+              "text": "N objects",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "N squared objects",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "1 object",
+              "correct": false
+            }
+          ],
+          "explain": "Correct! The model can detect at most N objects, where N is the number of object queries."
+        }
+      ]
+    },
+    {
+      "type": "teach",
+      "cards": [
+        {
+          "kind": "hook",
+          "icon": "🔀",
+          "title": "Matching Partners",
+          "body": "During training, DETR outputs 100 boxes. But our ground truth image might only have 2 objects (like a cat and a dog). how do we calculate the loss? How do we match the 100 predictions to the 2 real objects?"
+        },
+        {
+          "kind": "definition",
+          "icon": "🔀",
+          "title": "Bipartite Matching Loss",
+          "body": "DETR uses <strong>Bipartite Matching Loss</strong>. It uses the <strong>Hungarian Algorithm</strong> to find a unique, one-to-one pairing between predicted boxes and ground-truth boxes. This forces the model to predict exactly one box per object and penalizes duplicate predictions."
+        },
+        {
+          "kind": "analogy",
+          "icon": "💃",
+          "title": "Dance Partners",
+          "body": "Imagine a dance floor with 3 guests (ground truth) and 100 volunteers (predictions). To start the dance, you must pair each guest with their best-matching volunteer. The Hungarian algorithm does this matching, and tells the other 97 volunteers to stand on the side (no-object)."
+        },
+        {
+          "kind": "example",
+          "icon": "🐕",
+          "title": "Unique Pairing",
+          "body": "If DETR predicts Box 1 (dog, 95% confidence) and Box 2 (dog, 80% confidence), bipartite matching assigns Box 1 to the real dog. Box 2 is not matched to the dog, so it is penalized for predicting an object, teaching it to output 'empty' next time."
+        },
+        {
+          "kind": "mythbust",
+          "icon": "⚠️",
+          "title": "Speed of Matching",
+          "body": "You might think matching is fast. Fact: The Hungarian algorithm is a non-differentiable matching step run on CPU/GPU during training. It can become a major training speed bottleneck as the number of queries increases."
+        },
+        {
+          "kind": "visual",
+          "icon": "⚖️",
+          "title": "One-to-Many vs. One-to-One Matching",
+          "body": "How matching strategies affect predictions:",
+          "compare": {
+            "left": {
+              "emoji": "🕸️",
+              "tag": "One-to-Many (YOLOv8 training)",
+              "text": "Multiple anchor boxes match 1 object<br>Ensures stable gradients<br>Requires NMS to clean duplicates"
+            },
+            "right": {
+              "emoji": "🎯",
+              "tag": "One-to-One (DETR matching)",
+              "text": "Exactly 1 query matches 1 object<br>Penalizes duplicate predictions<br>Eliminates NMS completely"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "type": "practice",
+      "exercises": [
+        {
+          "id": "p1",
+          "type": "multiple_choice",
+          "xp": 2,
+          "prompt": "What algorithm does DETR use to perform bipartite matching during training?",
+          "options": [
+            {
+              "id": "a",
+              "text": "The Hungarian Algorithm",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "The Dijkstra Algorithm",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "The K-Means Clustering Algorithm",
+              "correct": false
+            },
+            {
+              "id": "d",
+              "text": "The Gradient Descent Algorithm",
+              "correct": false
+            }
+          ],
+          "explain": "Correct! The Hungarian algorithm solves the linear assignment problem to match predictions to ground truth."
+        },
+        {
+          "id": "p2",
+          "type": "true_false",
+          "xp": 2,
+          "prompt": "True or False: Bipartite matching allows multiple predicted bounding boxes to match the same ground-truth object during loss calculation.",
+          "options": [
+            {
+              "id": "t",
+              "text": "True",
+              "correct": false
+            },
+            {
+              "id": "f",
+              "text": "False",
+              "correct": true
+            }
+          ],
+          "explain": "False. Bipartite matching enforces a strict one-to-one matching, ensuring each real object gets exactly one predicted box."
+        },
+        {
+          "id": "p3",
+          "type": "fill_blank",
+          "xp": 2,
+          "prompt": "Complete the sentence:",
+          "sentence": "DETR training matches predictions to ground truth using a strict ___ matching strategy to eliminate duplicate boxes.",
+          "blank": "one-to-one",
+          "words": [
+            "one-to-one",
+            "one-to-many",
+            "many-to-many"
+          ],
+          "explain": "One-to-one matching guarantees that only one prediction is rewarded for finding a specific object."
+        },
+        {
+          "id": "p4",
+          "type": "spot_the_ai",
+          "xp": 2,
+          "prompt": "What happens to queries that are not matched to any ground-truth object during training?",
+          "options": [
+            {
+              "id": "a",
+              "text": "They are trained to predict the 'no object' background class",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "They are deleted from the model permanently",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "They are forced to predict coordinate values of zero",
+              "correct": false
+            }
+          ],
+          "explain": "Correct! Unmatched queries are trained to output background classifications."
+        }
+      ]
+    },
+    {
+      "type": "boss",
+      "exercises": [
+        {
+          "id": "b1",
+          "type": "multiple_choice",
+          "xp": 5,
+          "prompt": "During training, your transformer detector outputs two separate, high-confidence bounding boxes for a single cat. Why does the Hungarian matching loss penalize one of these boxes?",
+          "options": [
+            {
+              "id": "a",
+              "text": "Bipartite matching assigns only the best box to the cat; the second box is treated as a false positive, forcing the model to suppress duplicates.",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "Transformers cannot detect cats twice.",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "Bipartite loss converts one of the boxes into a segmentation mask.",
+              "correct": false
+            },
+            {
+              "id": "d",
+              "text": "The model backbone ran out of memory.",
+              "correct": false
+            }
+          ],
+          "explain": "Exactly! One-to-one matching penalizes duplicate predictions for the same object, which is how DETR avoids needing NMS. Phase 8: Modern Object Detection is complete. Next up: Image Segmentation."
+        }
+      ]
+    }
+  ]
+}

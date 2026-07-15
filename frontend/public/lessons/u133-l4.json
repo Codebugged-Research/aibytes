@@ -1,0 +1,222 @@
+{
+  "id": "u133-l4",
+  "unit": 133,
+  "day": 669,
+  "tier": "Image Classification in Depth",
+  "tierIcon": "🏷️",
+  "title": "Thresholding Predictions",
+  "icon": "📊",
+  "concept": "Thresholding converts continuous sigmoid probabilities into final binary yes/no predictions.",
+  "xp": 15,
+  "hearts": 3,
+  "estMinutes": 7,
+  "segments": [
+    {
+      "type": "warmup",
+      "exercises": [
+        {
+          "id": "w1",
+          "type": "multiple_choice",
+          "xp": 1,
+          "prompt": "Recap: What is the output range of the Sigmoid activation function for each class?",
+          "options": [
+            {
+              "id": "a",
+              "text": "Between 0.0 and 1.0",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "Between -1.0 and 1.0",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "Any positive or negative real number",
+              "correct": false
+            }
+          ],
+          "explain": "Correct! Sigmoid outputs represent probabilities between 0 and 1."
+        }
+      ]
+    },
+    {
+      "type": "teach",
+      "cards": [
+        {
+          "kind": "hook",
+          "icon": "🚪",
+          "title": "The height requirement",
+          "body": "If you want to ride a roller coaster, you must be taller than a certain limit (like 48 inches). A height of 47.9 inches is a 'no', and 48.0 is a 'yes'. We need a similar line to turn model probabilities into definitive decisions."
+        },
+        {
+          "kind": "definition",
+          "icon": "📊",
+          "title": "What is Thresholding?",
+          "body": "<strong>Thresholding</strong> is the process of converting a continuous probability output (from Sigmoid) into a binary decision (0 or 1). Any output probability greater than or equal to the threshold (usually <code>0.5</code>) is classified as 1 (present), and anything below is 0 (absent)."
+        },
+        {
+          "kind": "analogy",
+          "icon": "⚖️",
+          "title": "A pass/fail grading limit",
+          "body": "Think of a test where a score of 60% or higher is a passing grade. It doesn't matter if you got 61% or 99%, they both mean 'Pass'. 59% means 'Fail'. The 60% limit is the threshold."
+        },
+        {
+          "kind": "example",
+          "icon": "🔍",
+          "title": "Adjusting the dial",
+          "body": "For a medical scan, a model outputs P(Tumor) = 0.3. If we use a standard threshold of 0.5, we classify this as 'No Tumor'. But in medicine, we might lower the threshold to 0.1 to make sure we don't miss any potential tumor, prioritizing safety."
+        },
+        {
+          "kind": "mythbust",
+          "icon": "⚠️",
+          "title": "0.5 is not always the best threshold",
+          "body": "You might think you should always use 0.5 as your threshold. However, if a class is very rare, or if the cost of missing it is very high, you should optimize the threshold per class based on your business goals."
+        },
+        {
+          "kind": "visual",
+          "icon": "⚖️",
+          "title": "Adjusting the Threshold",
+          "body": "How changing the threshold affects predictions on P(Dog) = 0.4:",
+          "compare": {
+            "left": {
+              "emoji": "📉",
+              "tag": "Threshold = 0.5",
+              "text": "0.4 < 0.5<br>Prediction: 'No Dog'<br>Reduces false alarms"
+            },
+            "right": {
+              "emoji": "📈",
+              "tag": "Threshold = 0.3",
+              "text": "0.4 >= 0.3<br>Prediction: 'Dog'<br>Catches more dogs"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "type": "practice",
+      "exercises": [
+        {
+          "id": "p1",
+          "type": "multiple_choice",
+          "xp": 2,
+          "prompt": "If a multi-label model predicts P(Cat) = 0.65 and we apply a threshold of 0.70, what is the final prediction for the Cat class?",
+          "explain": "Since the predicted probability (0.65) is below the threshold (0.70), it is rounded down to 0.",
+          "options": [
+            {
+              "id": "a",
+              "text": "0 (Cat is absent)",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "1 (Cat is present)",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "0.65",
+              "correct": false
+            },
+            {
+              "id": "d",
+              "text": "0.05",
+              "correct": false
+            }
+          ]
+        },
+        {
+          "id": "p2",
+          "type": "true_false",
+          "xp": 2,
+          "prompt": "True or false: Lowering the threshold makes the model predict the presence of a class more easily.",
+          "explain": "True. A lower threshold requires less confidence from the model to trigger a positive prediction.",
+          "options": [
+            {
+              "id": "t",
+              "text": "True",
+              "correct": true
+            },
+            {
+              "id": "f",
+              "text": "False",
+              "correct": false
+            }
+          ]
+        },
+        {
+          "id": "p3",
+          "type": "fill_blank",
+          "xp": 2,
+          "prompt": "Complete the sentence:",
+          "explain": "By default, any probability of 50% (0.5) or greater is considered positive.",
+          "sentence": "The default threshold used in classification is ___.",
+          "blank": "0.5",
+          "words": [
+            "0.5",
+            "1.0",
+            "0.0"
+          ]
+        },
+        {
+          "id": "p4",
+          "type": "spot_the_ai",
+          "xp": 2,
+          "prompt": "Which of these scenarios represents a custom threshold optimized for safety?",
+          "explain": "A low threshold of 0.1 is highly sensitive, catching unsafe content even with low model confidence.",
+          "options": [
+            {
+              "id": "a",
+              "text": "Flagging unsafe content if P(unsafe) >= 0.1",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "Flagging unsafe content only if P(unsafe) >= 0.9",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "Flagging unsafe content if P(unsafe) == 0.5",
+              "correct": false
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "boss",
+      "exercises": [
+        {
+          "id": "b1",
+          "type": "multiple_choice",
+          "xp": 5,
+          "prompt": "You are building a security camera model to detect 'Intruders'. The cost of missing an intruder is extremely high, while a false alarm is just a minor annoyance. How should you set the threshold?",
+          "options": [
+            {
+              "id": "a",
+              "text": "Lower the threshold (e.g. to 0.15) to catch almost all intruders, accepting more false alarms.",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "Raise the threshold (e.g. to 0.85) to ensure we only trigger alarms when we are absolutely certain.",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "Keep it at exactly 0.5 because math demands it.",
+              "correct": false
+            },
+            {
+              "id": "d",
+              "text": "Set the threshold to 0.0 so the alarm sounds constantly.",
+              "correct": false
+            }
+          ],
+          "explain": "Exactly! By lowering the threshold, you prioritize high recall (catching intruders) over high precision (avoiding false alarms). This is standard practice in safety-critical applications. Next, let's look at how we measure multi-label model success!"
+        }
+      ]
+    }
+  ]
+}

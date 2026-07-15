@@ -1,0 +1,222 @@
+{
+  "id": "u159-l1",
+  "unit": 159,
+  "day": 796,
+  "tier": "Segmentation Loss Functions",
+  "tierIcon": "🎯",
+  "title": "Pixel-wise Cross-Entropy",
+  "icon": "🎯",
+  "concept": "Pixel-wise cross-entropy evaluates loss for each pixel independently, but suffers from class imbalance in typical segmentation masks.",
+  "xp": 15,
+  "hearts": 3,
+  "estMinutes": 7,
+  "segments": [
+    {
+      "type": "warmup",
+      "exercises": [
+        {
+          "id": "w1",
+          "type": "multiple_choice",
+          "xp": 1,
+          "prompt": "Recap: How do we optimize DeepLab for mobile devices?",
+          "options": [
+            {
+              "id": "a",
+              "text": "By swapping a heavy backbone (like ResNet) with a lightweight one (like MobileNet)",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "By adding a Conditional Random Field (CRF) post-processor",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "By removing all convolutional layers",
+              "correct": false
+            }
+          ],
+          "explain": "Correct! Lightweight backbones are essential for mobile devices."
+        }
+      ]
+    },
+    {
+      "type": "teach",
+      "cards": [
+        {
+          "kind": "hook",
+          "icon": "🎯",
+          "title": "The background bias",
+          "body": "Imagine an image where 99% of pixels are black background and 1% is a tiny tumor. If a model predicts 'background' for every single pixel, it gets 99% accuracy! A standard classification loss function would consider this a perfect score, even though the model completely missed the tumor. We need to look at pixel loss differently."
+        },
+        {
+          "kind": "definition",
+          "icon": "📉",
+          "title": "Pixel-wise Cross-Entropy",
+          "body": "<strong>Pixel-wise Cross-Entropy Loss</strong> evaluates the cross-entropy loss for each pixel independently and averages them over the image. It treats every pixel as an independent classification task, regardless of class size."
+        },
+        {
+          "kind": "analogy",
+          "icon": "📝",
+          "title": "Grading a spelling test",
+          "body": "Imagine a spelling test with 99 easy words and 1 hard word. If you grade by just counting correct words, a student who skips the hard word still gets a 99%. Pixel-wise cross-entropy suffers from this same bias toward the easy background pixels."
+        },
+        {
+          "kind": "example",
+          "icon": "🚗",
+          "title": "Class imbalance failure",
+          "body": "In road segmentation, the road might cover 10% of the pixels, and buildings cover 90%. A model trained with standard cross-entropy might struggle to detect the road boundary because the buildings dominate the loss score."
+        },
+        {
+          "kind": "mythbust",
+          "icon": "⚠️",
+          "title": "Weighted CE is a partial fix",
+          "body": "You might think we can't use cross-entropy at all. We can, by using **Weighted Pixel-wise Cross-Entropy**, which multiplies the loss of rare classes (like the road or tumor) by a scaling factor to force the model to pay attention."
+        },
+        {
+          "kind": "visual",
+          "icon": "⚖️",
+          "title": "Standard vs. Weighted Cross-Entropy",
+          "body": "How class weights shift model focus:",
+          "compare": {
+            "left": {
+              "emoji": "❌",
+              "tag": "Standard Cross-Entropy",
+              "text": "Rare class pixels have low impact on loss<br>Model predicts background easily<br>Poor segmentation on small details"
+            },
+            "right": {
+              "emoji": "⚖️",
+              "tag": "Weighted Cross-Entropy",
+              "text": "Rare pixels are multiplied by weight (e.g. 10x)<br>High penalty for missing small objects<br>Better class balance"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "type": "practice",
+      "exercises": [
+        {
+          "id": "p1",
+          "type": "multiple_choice",
+          "xp": 2,
+          "prompt": "What is the main limitation of standard pixel-wise cross-entropy loss?",
+          "options": [
+            {
+              "id": "a",
+              "text": "It suffers from bias when there is extreme class imbalance",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "It cannot be computed on GPUs",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "It is only compatible with binary segmentation",
+              "correct": false
+            },
+            {
+              "id": "d",
+              "text": "It requires fixed-resolution input images",
+              "correct": false
+            }
+          ],
+          "explain": "Correct! When one class dominates, standard cross-entropy ignores rare classes."
+        },
+        {
+          "id": "p2",
+          "type": "true_false",
+          "xp": 2,
+          "prompt": "True or False: Weighted cross-entropy gives more importance to common background pixels.",
+          "options": [
+            {
+              "id": "t",
+              "text": "True",
+              "correct": false
+            },
+            {
+              "id": "f",
+              "text": "False",
+              "correct": false
+            }
+          ],
+          "explain": "False. It scales up the loss of rare classes to balance their impact."
+        },
+        {
+          "id": "p3",
+          "type": "fill_blank",
+          "xp": 2,
+          "prompt": "Complete the sentence:",
+          "sentence": "Pixel-wise cross-entropy treats each ___ as an independent classification task.",
+          "blank": "pixel",
+          "words": [
+            "pixel",
+            "bounding box",
+            "channel"
+          ],
+          "explain": "It calculates loss pixel-by-pixel, ignoring neighbor context directly in the math."
+        },
+        {
+          "id": "p4",
+          "type": "spot_the_ai",
+          "xp": 2,
+          "prompt": "Why does a model trained on a highly imbalanced dataset with standard cross-entropy output empty masks?",
+          "options": [
+            {
+              "id": "a",
+              "text": "Because predicting all background pixels yields a very low loss value",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "Because the learning rate is set to zero",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "Because the model has too many skip connections",
+              "correct": false
+            }
+          ],
+          "explain": "Since background pixels dominate, the model learns the lazy trick of predicting background everywhere."
+        }
+      ]
+    },
+    {
+      "type": "boss",
+      "exercises": [
+        {
+          "id": "b1",
+          "type": "multiple_choice",
+          "xp": 5,
+          "prompt": "You are segmenting thin crack lines on concrete walls. The cracks cover 0.5% of the image. What will happen if you train using standard pixel-wise cross-entropy?",
+          "options": [
+            {
+              "id": "a",
+              "text": "The model will likely predict no cracks at all, as it can achieve 99.5% accuracy by classifying every pixel as wall background.",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "The model will predict cracks everywhere, coloring the entire wall.",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "The training speed will drop to zero frames per second.",
+              "correct": false
+            },
+            {
+              "id": "d",
+              "text": "The model will automatically convert the image to 3D volumetric data.",
+              "correct": false
+            }
+          ],
+          "explain": "Perfect! This is the classic class imbalance trap. Standard loss fails because the background wall pixels overwhelm the small crack pixels. Next: let's look at an overlap-based loss function!"
+        }
+      ]
+    }
+  ]
+}

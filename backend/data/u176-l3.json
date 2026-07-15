@@ -1,0 +1,222 @@
+{
+  "id": "u176-l3",
+  "unit": 176,
+  "day": 883,
+  "tier": "Vision Transformers & Modern Approaches",
+  "tierIcon": "\ud83d\udc41\ufe0f",
+  "title": "The CLS Token",
+  "icon": "\ud83d\udd11",
+  "concept": "The CLS (classification) token is a learnable vector prepended to the patch sequence that aggregates global image information for classification.",
+  "xp": 15,
+  "hearts": 3,
+  "estMinutes": 7,
+  "segments": [
+    {
+      "type": "warmup",
+      "exercises": [
+        {
+          "id": "w1",
+          "type": "multiple_choice",
+          "xp": 1,
+          "prompt": "Recap: What is the sequence of blocks inside a single ViT Encoder block?",
+          "options": [
+            {
+              "id": "a",
+              "text": "LayerNorm -> Self-Attention -> LayerNorm -> Feed-Forward (MLP)",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "Conv -> MaxPool -> Conv -> AvgPool",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "Linear -> Activation -> Dropout -> Softmax",
+              "correct": false
+            }
+          ],
+          "explain": "Correct! Layer normalization precedes self-attention and MLP blocks, wrapped in residual connections."
+        }
+      ]
+    },
+    {
+      "type": "teach",
+      "cards": [
+        {
+          "kind": "hook",
+          "icon": "\ud83d\udd11",
+          "title": "The spokesperson",
+          "body": "If you have a hundred patch tokens, each representing a tiny square of the image, which one gets to speak for the entire image at the classification head? Instead of choosing one patch, we invite a special 'spokesperson' token to join the sequence."
+        },
+        {
+          "kind": "definition",
+          "icon": "\ud83c\udf9f\ufe0f",
+          "title": "The CLS Token",
+          "body": "The <strong>CLS (classification) token</strong> is a learnable vector added to the beginning of the patch sequence before entering the Transformer. As it passes through the encoder blocks, self-attention allows it to aggregate representation information from all other patches."
+        },
+        {
+          "kind": "analogy",
+          "icon": "\ud83d\udcdd",
+          "title": "The class representative",
+          "body": "Imagine a room of specialists (patch tokens) discussing an image. We insert a blank notepad (the CLS token) at the start. During the discussion (self-attention), every specialist writes summary notes onto the notepad. At the end, we read only this notepad to make our final decision."
+        },
+        {
+          "kind": "example",
+          "icon": "\ud83d\udcc8",
+          "title": "From sequence to class",
+          "body": "If an image is divided into 196 patches, we prepend 1 CLS token, making the sequence length 197. After 12 encoder blocks, we discard the 196 patch outputs and feed only the single 1-dimensional CLS token output into the classifier."
+        },
+        {
+          "kind": "mythbust",
+          "icon": "\u26a0\ufe0f",
+          "title": "Not the only way",
+          "body": "You might think a CLS token is mandatory for ViT. While popular, alternative methods like **Global Average Pooling** (averaging all final patch token vectors) work just as well and don't require an extra token."
+        },
+        {
+          "kind": "visual",
+          "icon": "\u2696\ufe0f",
+          "title": "CLS Token vs. Average Pooling",
+          "body": "Comparing classification representations in transformers:",
+          "compare": {
+            "left": {
+              "emoji": "\ud83c\udf9f\ufe0f",
+              "tag": "CLS Token Approach",
+              "text": "1 extra learnable token prepended<br>Aggregates info via attention<br>Classifier reads only this token"
+            },
+            "right": {
+              "emoji": "\ud83d\udcca",
+              "tag": "Global Average Pooling",
+              "text": "No extra tokens prepended<br>Averages final patch vectors<br>Classifier reads mean representation"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "type": "practice",
+      "exercises": [
+        {
+          "id": "p1",
+          "type": "multiple_choice",
+          "xp": 2,
+          "prompt": "Why is the CLS token prepended to the sequence of patch embeddings?",
+          "explain": "The CLS token's job is to gather global representations from all patches via self-attention for the final classification task.",
+          "options": [
+            {
+              "id": "a",
+              "text": "To serve as a global representation aggregator that the classifier can read",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "To double the spatial resolution of the input image",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "To apply convolutional filters to the inputs",
+              "correct": false
+            },
+            {
+              "id": "d",
+              "text": "To store the coordinates of each patch",
+              "correct": false
+            }
+          ]
+        },
+        {
+          "id": "p2",
+          "type": "true_false",
+          "xp": 2,
+          "prompt": "True or false: The values inside the CLS token are fixed and never change during training.",
+          "explain": "False. The CLS token starts as a learnable parameter that is optimized during training along with the rest of the model weights.",
+          "options": [
+            {
+              "id": "t",
+              "text": "True",
+              "correct": false
+            },
+            {
+              "id": "f",
+              "text": "False",
+              "correct": true
+            }
+          ]
+        },
+        {
+          "id": "p3",
+          "type": "fill_blank",
+          "xp": 2,
+          "prompt": "Complete the sentence:",
+          "explain": "Global Average Pooling averages the features of all patches to form the final image representation.",
+          "sentence": "Instead of using a CLS token, some models use Global Average ___ across all final patch embeddings.",
+          "blank": "Pooling",
+          "words": [
+            "Pooling",
+            "Convolution",
+            "Attention"
+          ]
+        },
+        {
+          "id": "p4",
+          "type": "spot_the_ai",
+          "xp": 2,
+          "prompt": "If a model splits an image into 256 patches and prepends a CLS token, what is the sequence length input to the Transformer?",
+          "explain": "Adding the 1 CLS token to the 256 image patches yields a sequence of 257 tokens.",
+          "options": [
+            {
+              "id": "a",
+              "text": "257 tokens",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "256 tokens",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "512 tokens",
+              "correct": false
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "boss",
+      "exercises": [
+        {
+          "id": "b1",
+          "type": "multiple_choice",
+          "xp": 5,
+          "prompt": "How does self-attention enable the CLS token to represent the entire image?",
+          "options": [
+            {
+              "id": "a",
+              "text": "Because the CLS token computes attention weights with respect to all patch tokens, letting it pull in features from every location.",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "Because the CLS token is forced to copy the middle patch of the image.",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "Because it applies a pooling operation over the raw image pixels directly.",
+              "correct": false
+            },
+            {
+              "id": "d",
+              "text": "Because the CLS token acts as a high-pass spatial frequency filter.",
+              "correct": false
+            }
+          ],
+          "explain": "Brilliant! Through self-attention layers, the CLS token computes relationships with every other patch in the sequence, gradually accumulating global representations. Next: how the model knows which patch is where!"
+        }
+      ]
+    }
+  ]
+}

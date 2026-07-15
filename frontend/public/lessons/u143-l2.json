@@ -1,0 +1,222 @@
+{
+  "id": "u143-l2",
+  "unit": 143,
+  "day": 717,
+  "tier": "Object Detection Foundations",
+  "tierIcon": "🎯",
+  "title": "Pipeline Steps of R-CNN",
+  "icon": "⛓️",
+  "concept": "The R-CNN pipeline consists of four distinct steps: Region Proposal, Feature Extraction (CNN), Classification (SVMs), and Bounding Box Regression.",
+  "xp": 15,
+  "hearts": 3,
+  "estMinutes": 7,
+  "segments": [
+    {
+      "type": "warmup",
+      "exercises": [
+        {
+          "id": "w1",
+          "type": "multiple_choice",
+          "xp": 1,
+          "prompt": "Recap: What is the main role of the CNN in R-CNN?",
+          "options": [
+            {
+              "id": "a",
+              "text": "To extract a feature vector from each cropped region proposal",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "To draw the final bounding boxes on the screen",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "To split pixels into color regions",
+              "correct": false
+            }
+          ],
+          "explain": "The CNN functions as a feature extractor, outputting a numeric feature vector for each crop."
+        }
+      ]
+    },
+    {
+      "type": "teach",
+      "cards": [
+        {
+          "kind": "hook",
+          "icon": "⛓️",
+          "title": "Assembly Line",
+          "body": "In a car factory, one robot stamps the metal, a second welds the frame, a third paints the body, and a fourth installs the engine. Each step is separate. The original R-CNN works like this: it is a pipeline of separate modules chained together."
+        },
+        {
+          "kind": "definition",
+          "icon": "⛓️",
+          "title": "The Four Pipeline Steps",
+          "body": "The R-CNN architecture is split into 4 distinct phases: 1) <strong>Region Proposal</strong> (finding crops), 2) <strong>Feature Extraction</strong> (CNN runs), 3) <strong>Classification</strong> (linear Support Vector Machines classify the features), and 4) <strong>Bounding Box Regression</strong> (fine-tuning coordinates)."
+        },
+        {
+          "kind": "analogy",
+          "icon": "🎭",
+          "title": "Casting, Costume, and Acting",
+          "body": "First, you cast 2,000 actors (proposals). Second, you dress them in a standard uniform (warping to 224x224). Third, a panel of specialist judges grades each actor on specific skills (SVMs). Fourth, you adjust their standing positions on stage (box regression)."
+        },
+        {
+          "kind": "example",
+          "icon": "⛓️",
+          "title": "Chaining the Modules",
+          "body": "For each of the 2,000 crops, a pre-trained CNN (like AlexNet) extracts a <code>4096-dimensional</code> feature vector. This vector is saved to disk and then fed to multiple linear SVMs (one for each class) for final labeling."
+        },
+        {
+          "kind": "mythbust",
+          "icon": "⚠️",
+          "title": "Softmax was not used at first",
+          "body": "You might think the CNN classified objects directly using a Softmax layer. In the original R-CNN, researchers actually replaced the network's Softmax layer with separate linear SVMs because SVMs gave slightly higher accuracy on the datasets of that era."
+        },
+        {
+          "kind": "visual",
+          "icon": "⚖️",
+          "title": "R-CNN Block Diagram",
+          "body": "Visualizing the pipeline sequence of original R-CNN:",
+          "compare": {
+            "left": {
+              "emoji": "1️⃣",
+              "tag": "Step 1 & 2",
+              "text": "Selective Search proposals -> Warping -> CNN Feature extraction."
+            },
+            "right": {
+              "emoji": "2️⃣",
+              "tag": "Step 3 & 4",
+              "text": "Feature vector -> SVM Classifiers -> Bounding Box Regressor."
+            }
+          }
+        }
+      ]
+    },
+    {
+      "type": "practice",
+      "exercises": [
+        {
+          "id": "p1",
+          "type": "multiple_choice",
+          "xp": 2,
+          "prompt": "What classifier did the original R-CNN use to label features extracted by the CNN?",
+          "explain": "The original R-CNN used linear SVMs trained on extracted CNN features to perform classification.",
+          "options": [
+            {
+              "id": "a",
+              "text": "Linear Support Vector Machines (SVMs)",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "A Softmax output layer",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "K-Nearest Neighbors",
+              "correct": false
+            },
+            {
+              "id": "d",
+              "text": "Decision Trees",
+              "correct": false
+            }
+          ]
+        },
+        {
+          "id": "p2",
+          "type": "true_false",
+          "xp": 2,
+          "prompt": "True or False: Bounding box regression in R-CNN is used to adjust the coordinate offsets of the proposed regions.",
+          "explain": "True. The final stage uses a regression model to correct minor offsets in the proposed region coordinates.",
+          "options": [
+            {
+              "id": "t",
+              "text": "True",
+              "correct": true
+            },
+            {
+              "id": "f",
+              "text": "False",
+              "correct": false
+            }
+          ]
+        },
+        {
+          "id": "p3",
+          "type": "fill_blank",
+          "xp": 2,
+          "prompt": "Complete the sentence:",
+          "explain": "The R-CNN pipeline features four discrete modules: proposals, CNN features, SVMs, and regression.",
+          "sentence": "The original R-CNN pipeline contains ___ distinct steps that must be trained separately.",
+          "blank": "four",
+          "words": [
+            "four",
+            "two",
+            "ten"
+          ]
+        },
+        {
+          "id": "p4",
+          "type": "spot_the_ai",
+          "xp": 2,
+          "prompt": "Which of the following is NOT a step in the R-CNN pipeline?",
+          "explain": "The Region Proposal Network (RPN) was introduced later in Faster R-CNN, not the original R-CNN.",
+          "options": [
+            {
+              "id": "a",
+              "text": "A Region Proposal Network (RPN) predicting anchors",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "Selective Search generating regions of interest",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "Linear SVMs classifying feature maps",
+              "correct": false
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "boss",
+      "exercises": [
+        {
+          "id": "b1",
+          "type": "multiple_choice",
+          "xp": 5,
+          "prompt": "You are building a pipeline using the original R-CNN framework. Which of the following is a major training headache of this architecture?",
+          "options": [
+            {
+              "id": "a",
+              "text": "You must train and store features for the CNN, SVMs, and regressors separately, which takes massive disk space and time.",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "It requires all training images to be in grayscale.",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "It can only train on images that have exactly one object.",
+              "correct": false
+            },
+            {
+              "id": "d",
+              "text": "You cannot run the CNN on a GPU during training.",
+              "correct": false
+            }
+          ],
+          "explain": "Exactly! R-CNN's multi-stage pipeline is not trained jointly (end-to-end), requiring separate training runs for each module and massive disk storage for extracted features. Next: let's learn how R-CNN feeds rectangular regions into square networks!"
+        }
+      ]
+    }
+  ]
+}

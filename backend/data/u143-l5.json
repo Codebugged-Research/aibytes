@@ -1,0 +1,222 @@
+{
+  "id": "u143-l5",
+  "unit": 143,
+  "day": 720,
+  "tier": "Object Detection Foundations",
+  "tierIcon": "🎯",
+  "title": "The Slowdown of R-CNN",
+  "icon": "⏳",
+  "concept": "R-CNN is too slow for real-time applications because it runs 2,000 separate CNN passes per image and duplicates feature computation.",
+  "xp": 15,
+  "hearts": 3,
+  "estMinutes": 7,
+  "segments": [
+    {
+      "type": "warmup",
+      "exercises": [
+        {
+          "id": "w1",
+          "type": "multiple_choice",
+          "xp": 1,
+          "prompt": "Recap: Why does R-CNN train multiple SVMs?",
+          "options": [
+            {
+              "id": "a",
+              "text": "Because it trains a separate binary classifier for each object class",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "To calculate bounding box regression offsets",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "To resize the proposed region crops",
+              "correct": false
+            }
+          ],
+          "explain": "R-CNN trains a separate one-vs-all binary SVM for each target category."
+        }
+      ]
+    },
+    {
+      "type": "teach",
+      "cards": [
+        {
+          "kind": "hook",
+          "icon": "⏳",
+          "title": "Waiting for Results",
+          "body": "If you are reading a book, and you look up every single word in a heavy paper dictionary, it will take you hours to finish a page. You are wasting massive time because you lookup overlapping letters and prefixes repeatedly. This is how R-CNN wastes time."
+        },
+        {
+          "kind": "definition",
+          "icon": "⏳",
+          "title": "R-CNN Latency",
+          "body": "Original <strong>R-CNN Latency</strong> is extremely high. Processing a single image takes about <strong>47 seconds</strong> on a GPU. This is far too slow for real-time applications like self-driving cars, which require processing 30 frames per second."
+        },
+        {
+          "kind": "analogy",
+          "icon": "⏳",
+          "title": "Reading one word at a time",
+          "body": "Instead of reading a sentence as a single unit, you cut it into 2,000 separate words and analyze each word in a different room. You spend all your energy walking between rooms rather than understanding the text!"
+        },
+        {
+          "kind": "example",
+          "icon": "💾",
+          "title": "Disk Space Nightmare",
+          "body": "Because R-CNN trains modules separately, researchers had to run the CNN on all training images, extract feature vectors for 2,000 crops per image, and save them to disk! This required <strong>hundreds of gigabytes</strong> of storage for small datasets."
+        },
+        {
+          "kind": "mythbust",
+          "icon": "⚠️",
+          "title": "Not just Selective Search's fault",
+          "body": "You might think the CPU proposal step is the only reason R-CNN is slow. While Selective Search takes 2 seconds, the 2,000 separate CNN forward passes take 45 seconds! The primary bottleneck is the repeated neural network computation."
+        },
+        {
+          "kind": "visual",
+          "icon": "⚖️",
+          "title": "Redundant Computations",
+          "body": "Visualizing how R-CNN duplicates features for overlapping crops:",
+          "compare": {
+            "left": {
+              "emoji": "⏹️",
+              "tag": "Overlapping Crops",
+              "text": "Many proposals overlap by 90%:<br><code>Crops share the same pixels.</code>"
+            },
+            "right": {
+              "emoji": "🧠",
+              "tag": "Duplicate CNN Passes",
+              "text": "R-CNN runs CNN on both:<br><code>Calculates same features twice.</code>"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "type": "practice",
+      "exercises": [
+        {
+          "id": "p1",
+          "type": "multiple_choice",
+          "xp": 2,
+          "prompt": "What is the primary cause of R-CNN's massive latency?",
+          "explain": "The main bottleneck is executing 2,000 separate forward passes through the CNN for each image's proposed crops.",
+          "options": [
+            {
+              "id": "a",
+              "text": "It runs the CNN feature extractor 2,000 separate times for 2,000 crops per image",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "It can only process grayscale images",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "Linear SVMs require complex gradient descent",
+              "correct": false
+            },
+            {
+              "id": "d",
+              "text": "It does not support data augmentation",
+              "correct": false
+            }
+          ]
+        },
+        {
+          "id": "p2",
+          "type": "true_false",
+          "xp": 2,
+          "prompt": "True or False: Original R-CNN requires storing hundreds of gigabytes of intermediate feature vectors on disk during training.",
+          "explain": "True. Because the modules are separate, R-CNN extracts and saves feature vectors for every region proposal to disk before training the SVMs.",
+          "options": [
+            {
+              "id": "t",
+              "text": "True",
+              "correct": true
+            },
+            {
+              "id": "f",
+              "text": "False",
+              "correct": false
+            }
+          ]
+        },
+        {
+          "id": "p3",
+          "type": "fill_blank",
+          "xp": 2,
+          "prompt": "Complete the sentence:",
+          "explain": "R-CNN takes nearly 47 seconds per image, making it highly impractical for production.",
+          "sentence": "R-CNN takes about ___ seconds to process a single image on a GPU.",
+          "blank": "47",
+          "words": [
+            "47",
+            "0.03",
+            "2"
+          ]
+        },
+        {
+          "id": "p4",
+          "type": "spot_the_ai",
+          "xp": 2,
+          "prompt": "Which aspect of R-CNN represents a redundant calculation?",
+          "explain": "Processing overlapping crops independently forces the CNN to compute the same visual features multiple times.",
+          "options": [
+            {
+              "id": "a",
+              "text": "Running the CNN independently on multiple crops that overlap by 95%",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "Using a single shared backbone for features",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "Running NMS post-processing to clean up boxes",
+              "correct": false
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "boss",
+      "exercises": [
+        {
+          "id": "b1",
+          "type": "multiple_choice",
+          "xp": 5,
+          "prompt": "You want to design a new network to replace R-CNN. To solve the speed bottleneck, what core change should you make to feature extraction?",
+          "options": [
+            {
+              "id": "a",
+              "text": "Run the CNN once on the entire image to generate a shared feature map, and project the proposals onto it.",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "Use a smaller CNN backbone that takes 10x10 pixel inputs.",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "Run the Selective Search algorithm on a GPU instead of CPU.",
+              "correct": false
+            },
+            {
+              "id": "d",
+              "text": "Bypass feature extraction entirely and use raw pixels.",
+              "correct": false
+            }
+          ],
+          "explain": "Exactly! Processing the entire image once and sharing the feature map eliminates the redundant 2,000 CNN runs. Next: let's study the network that implemented this exact fix: Fast R-CNN!"
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,222 @@
+{
+  "id": "u180-l4",
+  "unit": 180,
+  "day": 904,
+  "tier": "Vision Transformers & Modern Approaches",
+  "tierIcon": "\ud83d\udc41\ufe0f",
+  "title": "Hierarchical Feature Maps",
+  "icon": "\u26f0\ufe0f",
+  "concept": "Swin Transformer uses patch merging to gradually downsample feature maps, creating a hierarchical pyramid representation suitable for multi-scale dense predictions.",
+  "xp": 15,
+  "hearts": 3,
+  "estMinutes": 7,
+  "segments": [
+    {
+      "type": "warmup",
+      "exercises": [
+        {
+          "id": "w1",
+          "type": "multiple_choice",
+          "xp": 1,
+          "prompt": "Recap: What is the main role of shifted windows in Swin?",
+          "options": [
+            {
+              "id": "a",
+              "text": "To allow communication across adjacent local window boundaries.",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "To speed up the MLP layers.",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "To downsample the input resolution.",
+              "correct": false
+            }
+          ],
+          "explain": "Correct! Shifting grid lines mixes representations across window boundaries."
+        }
+      ]
+    },
+    {
+      "type": "teach",
+      "cards": [
+        {
+          "kind": "hook",
+          "icon": "\u26f0\ufe0f",
+          "title": "The feature pyramid",
+          "body": "Standard ViT keeps the same number of tokens from start to finish. But CNNs get their power by gradually pooling features, creating a pyramid: sharp details early, broad concepts late. Can we build a transformer that does the same thing? Yes, using patch merging!"
+        },
+        {
+          "kind": "definition",
+          "icon": "\u26f0\ufe0f",
+          "title": "Hierarchical Pyramids",
+          "body": "Swin Transformer constructs <strong>hierarchical feature maps</strong>. It starts with small patches and gradually groups adjacent patches together in deeper layers using a <strong>patch merging</strong> layer. This produces feature maps of resolutions H/4, H/8, H/16, and H/32, mirroring ResNet structures."
+        },
+        {
+          "kind": "analogy",
+          "icon": "\ud83d\uddfa\ufe0f",
+          "title": "Google Maps zoom levels",
+          "body": "Imagine zooming out on Google Maps. In stage 1 (close-up), you see individual houses (pixels). In stage 2, you group houses into neighborhoods (H/8). In stage 3, neighborhoods become cities (H/16). In stage 4 (zoomed out), you just see states (H/32). Swin does this zoom-out step systematically."
+        },
+        {
+          "kind": "example",
+          "icon": "\u2699\ufe0f",
+          "title": "Patch Merging Layer",
+          "body": "To downsample by 2x, patch merging concatenates the features of each 2x2 group of neighboring patches (turning 4 tokens into 1 token with 4x channels), and then applies a linear layer to reduce the channel dimension by half."
+        },
+        {
+          "kind": "mythbust",
+          "icon": "\u26a0\ufe0f",
+          "title": "Not the same as pooling",
+          "body": "You might think patch merging is just max pooling. Unlike pooling which discards information to shrink size, patch merging **concatenates all features** first, allowing the linear layer to decide how to combine the channel information without losing details."
+        },
+        {
+          "kind": "visual",
+          "icon": "\u2696\ufe0f",
+          "title": "Standard ViT vs. Swin Pyramid",
+          "body": "Comparing spatial feature resolutions:",
+          "compare": {
+            "left": {
+              "emoji": "\ud83e\udea8",
+              "tag": "Standard ViT (Columnar)",
+              "text": "Token count constant (e.g. 196)<br>Resolution stays H/16 throughout<br>Struggles with multi-scale objects"
+            },
+            "right": {
+              "emoji": "\u26f0\ufe0f",
+              "tag": "Swin (Hierarchical Pyramid)",
+              "text": "Token count shrinks: H/4 -> H/32<br>Resolution matches ResNet stages<br>Excellent for multi-scale objects"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "type": "practice",
+      "exercises": [
+        {
+          "id": "p1",
+          "type": "multiple_choice",
+          "xp": 2,
+          "prompt": "How does Swin Transformer downsample feature maps in deeper layers?",
+          "explain": "Patch merging concatenates 2x2 groups of patches and applies a linear layer to reduce spatial dimensions while doubling channel depth.",
+          "options": [
+            {
+              "id": "a",
+              "text": "Using patch merging layers to group neighboring patches and project them",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "By deleting half the rows of the image",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "By scaling down the projection weight values",
+              "correct": false
+            },
+            {
+              "id": "d",
+              "text": "Using a fixed-size Gaussian blur kernel",
+              "correct": false
+            }
+          ]
+        },
+        {
+          "id": "p2",
+          "type": "true_false",
+          "xp": 2,
+          "prompt": "True or false: Standard ViT maintains a constant sequence length, whereas Swin's sequence length shrinks as it gets deeper.",
+          "explain": "True. Swin downsamples features at each stage, reducing token count to form a hierarchical representation.",
+          "options": [
+            {
+              "id": "t",
+              "text": "True",
+              "correct": true
+            },
+            {
+              "id": "f",
+              "text": "False",
+              "correct": false
+            }
+          ]
+        },
+        {
+          "id": "p3",
+          "type": "fill_blank",
+          "xp": 2,
+          "prompt": "Complete the sentence:",
+          "explain": "U-Net and FPN rely on hierarchical feature grids to detect objects at different scales, which Swin fits perfectly.",
+          "sentence": "Swin's multi-resolution pyramid design makes it easy to integrate with architectures like FPN and ___ for object detection.",
+          "blank": "U-Net",
+          "words": [
+            "U-Net",
+            "AlexNet",
+            "MLP"
+          ]
+        },
+        {
+          "id": "p4",
+          "type": "spot_the_ai",
+          "xp": 2,
+          "prompt": "Which of these describes the outputs of the four stages in a Swin Transformer?",
+          "explain": "Swin's stages progressively reduce resolution from H/4 down to H/32, creating the hierarchical pyramid.",
+          "options": [
+            {
+              "id": "a",
+              "text": "Feature maps at H/4, H/8, H/16, and H/32 resolutions",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "Four identical copies of the classification token",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "A list of bounding box coordinates",
+              "correct": false
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "boss",
+      "exercises": [
+        {
+          "id": "b1",
+          "type": "multiple_choice",
+          "xp": 5,
+          "prompt": "Why is a hierarchical feature map layout superior for object detection tasks?",
+          "options": [
+            {
+              "id": "a",
+              "text": "Because it allows the model to detect large objects in the low-resolution stages and tiny objects in the high-resolution stages.",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "Because it prevents the model from using memory.",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "Because it forces all bounding boxes to be the same size.",
+              "correct": false
+            },
+            {
+              "id": "d",
+              "text": "Because it removes the need for self-attention.",
+              "correct": false
+            }
+          ],
+          "explain": "Superb! Multi-scale features allow the detector to capture objects of all sizes, from a tiny bird in the distance to a massive truck nearby. Next: Swin in practice!"
+        }
+      ]
+    }
+  ]
+}

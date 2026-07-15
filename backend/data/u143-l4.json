@@ -1,0 +1,222 @@
+{
+  "id": "u143-l4",
+  "unit": 143,
+  "day": 719,
+  "tier": "Object Detection Foundations",
+  "tierIcon": "🎯",
+  "title": "Support Vector Machines (SVMs)",
+  "icon": "⚖️",
+  "concept": "Support Vector Machines (SVMs) in R-CNN are binary classifiers that determine if a CNN feature vector contains a specific class of object.",
+  "xp": 15,
+  "hearts": 3,
+  "estMinutes": 7,
+  "segments": [
+    {
+      "type": "warmup",
+      "exercises": [
+        {
+          "id": "w1",
+          "type": "multiple_choice",
+          "xp": 1,
+          "prompt": "Recap: What fixed input dimensions are proposals warped to in R-CNN?",
+          "options": [
+            {
+              "id": "a",
+              "text": "224x224 pixels",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "1000x1000 pixels",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "50x50 pixels",
+              "correct": false
+            }
+          ],
+          "explain": "Proposals are scaled to a standard 224x224 pixels to match the CNN input layer."
+        }
+      ]
+    },
+    {
+      "type": "teach",
+      "cards": [
+        {
+          "kind": "hook",
+          "icon": "⚖️",
+          "title": "Drawing a Line",
+          "body": "If you are sorting white balls and black balls on a table, you can take a ruler and draw a straight line to separate them. Any ball on the left of the ruler is white, and any on the right is black. That straight boundary is what a linear Support Vector Machine creates."
+        },
+        {
+          "kind": "definition",
+          "icon": "⚖️",
+          "title": "Support Vector Machines",
+          "body": "A <strong>Support Vector Machine (SVM)</strong> is a linear machine learning model trained to classify data points into categories by finding the optimal hyperplane (boundary line) that maximizes the margin between classes."
+        },
+        {
+          "kind": "analogy",
+          "icon": "⚖️",
+          "title": "Border Guard",
+          "body": "Imagine a border guard separating citizens of two countries. The guard places a fence (hyperplane) exactly halfway between the nearest houses of both countries (the support vectors), creating the widest possible buffer zone (margin) to prevent disputes."
+        },
+        {
+          "kind": "example",
+          "icon": "⚖️",
+          "title": "Binary Classifiers",
+          "body": "R-CNN trains one binary SVM for each class. If you have 20 classes (cat, dog, etc.), you train 20 separate SVMs. The feature vector from the CNN is passed to all 20 SVMs to output classification scores."
+        },
+        {
+          "kind": "mythbust",
+          "icon": "⚠️",
+          "title": "SVMs vs. Softmax",
+          "body": "You might think modern networks always use Softmax. While Softmax classifies everything in one joint layer, SVMs were trained post-hoc in R-CNN because they handled small, imbalanced datasets better at the time."
+        },
+        {
+          "kind": "visual",
+          "icon": "⚖️",
+          "title": "Maximizing the Margin",
+          "body": "Visualizing how an SVM splits feature points:",
+          "compare": {
+            "left": {
+              "emoji": "🔵",
+              "tag": "Class A Points",
+              "text": "Features on one side.<br>e.g. \"Cat\" vector."
+            },
+            "right": {
+              "emoji": "🔴",
+              "tag": "Class B Points",
+              "text": "Features on the other side.<br>e.g. \"Not Cat\" vector."
+            }
+          }
+        }
+      ]
+    },
+    {
+      "type": "practice",
+      "exercises": [
+        {
+          "id": "p1",
+          "type": "multiple_choice",
+          "xp": 2,
+          "prompt": "How does a linear SVM classify an extracted feature vector?",
+          "explain": "A linear SVM classifies feature points by placing a decision boundary that divides classes.",
+          "options": [
+            {
+              "id": "a",
+              "text": "By checking which side of a decision boundary (hyperplane) the vector falls on",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "By calculating the average pixel color of the coordinates",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "By running data augmentation in real-time",
+              "correct": false
+            },
+            {
+              "id": "d",
+              "text": "By converting the vector back to an image",
+              "correct": false
+            }
+          ]
+        },
+        {
+          "id": "p2",
+          "type": "true_false",
+          "xp": 2,
+          "prompt": "True or False: If a dataset has 80 object classes, R-CNN trains 80 separate binary SVM classifiers.",
+          "explain": "True. R-CNN trains a separate binary classifier (one-vs-all SVM) for each target object category in the dataset.",
+          "options": [
+            {
+              "id": "t",
+              "text": "True",
+              "correct": true
+            },
+            {
+              "id": "f",
+              "text": "False",
+              "correct": false
+            }
+          ]
+        },
+        {
+          "id": "p3",
+          "type": "fill_blank",
+          "xp": 2,
+          "prompt": "Complete the sentence:",
+          "explain": "The margin is the distance between the decision boundary and the nearest training data points of any class.",
+          "sentence": "SVMs split data by finding a boundary line that maximizes the ___ between classes.",
+          "blank": "margin",
+          "words": [
+            "margin",
+            "overlap",
+            "activation"
+          ]
+        },
+        {
+          "id": "p4",
+          "type": "spot_the_ai",
+          "xp": 2,
+          "prompt": "Which mathematical concept is central to linear SVM classification?",
+          "explain": "Maximizing the margin of a separating hyperplane is the core optimization target of SVMs.",
+          "options": [
+            {
+              "id": "a",
+              "text": "A separating hyperplane that maximizes the margin",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "A max pooling kernel with a stride of 2",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "A learning rate cosine scheduler",
+              "correct": false
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "boss",
+      "exercises": [
+        {
+          "id": "b1",
+          "type": "multiple_choice",
+          "xp": 5,
+          "prompt": "You are building an R-CNN model with 20 object classes. When an image proposal is evaluated, the CNN extracts features and passes them to the SVMs. How is the final object class decided?",
+          "options": [
+            {
+              "id": "a",
+              "text": "All 20 SVMs run on the feature vector, and the class associated with the highest scoring positive SVM is selected.",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "The SVMs vote randomly.",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "The Softmax head automatically averages the scores.",
+              "correct": false
+            },
+            {
+              "id": "d",
+              "text": "The regression head chooses the class based on box size.",
+              "correct": false
+            }
+          ],
+          "explain": "Exactly! The feature vector is evaluated by all binary SVMs, and the one with the highest confidence score determines the class. Next: let's study the critical speed limitations of this entire pipeline!"
+        }
+      ]
+    }
+  ]
+}

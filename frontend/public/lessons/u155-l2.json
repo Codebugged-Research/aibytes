@@ -1,0 +1,222 @@
+{
+  "id": "u155-l2",
+  "unit": 155,
+  "day": 777,
+  "tier": "Fully Convolutional Networks (FCNs)",
+  "tierIcon": "🕸️",
+  "title": "The Encoder-Decoder Pipeline",
+  "icon": "🕸️",
+  "concept": "The encoder-decoder pipeline downsamples images to extract high-level semantic meaning, then upsamples them to restore spatial resolution.",
+  "xp": 15,
+  "hearts": 3,
+  "estMinutes": 7,
+  "segments": [
+    {
+      "type": "warmup",
+      "exercises": [
+        {
+          "id": "w1",
+          "type": "multiple_choice",
+          "xp": 1,
+          "prompt": "Recap: What is a major advantage of FCNs over classification networks?",
+          "options": [
+            {
+              "id": "a",
+              "text": "They can accept input images of any size and preserve spatial layout",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "They do not use backpropagation during training",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "They are strictly limited to binary segmentation",
+              "correct": false
+            }
+          ],
+          "explain": "Correct! FCNs are size-agnostic and preserve spatial information."
+        }
+      ]
+    },
+    {
+      "type": "teach",
+      "cards": [
+        {
+          "kind": "hook",
+          "icon": "🔍",
+          "title": "The shrink and stretch",
+          "body": "When convolutions and pooling layers process an image, they shrink its width and height to extract abstract concepts (like 'car hood' or 'wheel'). But for segmentation, we need to output a mask that is the exact same size as the input. How do we get our spatial resolution back?"
+        },
+        {
+          "kind": "definition",
+          "icon": "🔄",
+          "title": "Encoder-Decoder",
+          "body": "The <strong>Encoder-Decoder</strong> design is the standard layout for segmentation. The <strong>Encoder</strong> downsamples the image to capture context ('what' is in the image). The <strong>Decoder</strong> upsamples the feature maps to restore precise spatial resolution ('where' it is)."
+        },
+        {
+          "kind": "analogy",
+          "icon": "📦",
+          "title": "Compressing and unpacking",
+          "body": "Think of the encoder as summarizing a book into bullet points (context). The decoder is like taking those bullet points and writing a detailed scene description (resolution) back onto the canvas."
+        },
+        {
+          "kind": "example",
+          "icon": "📐",
+          "title": "Resolution changes",
+          "body": "An input image of 256x256 is compressed by the encoder down to 8x8 (capturing high-level features). The decoder then takes this 8x8 representation and upsamples it step-by-step back to 256x256."
+        },
+        {
+          "kind": "mythbust",
+          "icon": "⚠️",
+          "title": "Not just zooming in",
+          "body": "You might think the decoder is just a simple zoom tool. It's not! Simple zooming (interpolation) makes things blurry. The decoder actually learns how to rebuild sharp details using trained convolutional filters."
+        },
+        {
+          "kind": "visual",
+          "icon": "⚖️",
+          "title": "Encoder-Decoder Flow",
+          "body": "The down-and-up shape of segmentation networks:",
+          "compare": {
+            "left": {
+              "emoji": "📉",
+              "tag": "Encoder (Downsampling)",
+              "text": "Convolutions & Pooling<br>Decreases resolution (e.g. 256 -> 8)<br>Extracts semantic features ('what')"
+            },
+            "right": {
+              "emoji": "📈",
+              "tag": "Decoder (Upsampling)",
+              "text": "Transposed Convolutions<br>Increases resolution (e.g. 8 -> 256)<br>Restores spatial details ('where')"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "type": "practice",
+      "exercises": [
+        {
+          "id": "p1",
+          "type": "multiple_choice",
+          "xp": 2,
+          "prompt": "What is the primary role of the decoder in an encoder-decoder network?",
+          "options": [
+            {
+              "id": "a",
+              "text": "To restore spatial resolution and localize features",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "To classify the overall scene category",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "To downsample the input to save memory",
+              "correct": false
+            },
+            {
+              "id": "d",
+              "text": "To flatten the features into a single class vector",
+              "correct": false
+            }
+          ],
+          "explain": "Correct! The decoder upsamples the feature maps to the original image size."
+        },
+        {
+          "id": "p2",
+          "type": "true_false",
+          "xp": 2,
+          "prompt": "True or False: The encoder is responsible for understanding 'what' is in the image.",
+          "options": [
+            {
+              "id": "t",
+              "text": "True",
+              "correct": false
+            },
+            {
+              "id": "f",
+              "text": "False",
+              "correct": false
+            }
+          ],
+          "explain": "True. The encoder extracts abstract, high-level features that identify objects."
+        },
+        {
+          "id": "p3",
+          "type": "fill_blank",
+          "xp": 2,
+          "prompt": "Complete the sentence:",
+          "sentence": "While the encoder downsamples the image, the decoder ___ it back to the original size.",
+          "blank": "upsamples",
+          "words": [
+            "upsamples",
+            "flattens",
+            "compresses"
+          ],
+          "explain": "Upsampling is the process of increasing spatial resolution."
+        },
+        {
+          "id": "p4",
+          "type": "spot_the_ai",
+          "xp": 2,
+          "prompt": "What problem does the encoder-decoder structure solve in image segmentation?",
+          "options": [
+            {
+              "id": "a",
+              "text": "The loss of spatial resolution caused by convolutions and pooling",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "The lack of training datasets",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "Slow GPU speed during inference",
+              "correct": false
+            }
+          ],
+          "explain": "It restores the spatial dimensions lost during downsampling."
+        }
+      ]
+    },
+    {
+      "type": "boss",
+      "exercises": [
+        {
+          "id": "b1",
+          "type": "multiple_choice",
+          "xp": 5,
+          "prompt": "Why can't we just use the encoder's deep features directly to create a high-resolution segmentation mask?",
+          "options": [
+            {
+              "id": "a",
+              "text": "The deep features in the encoder have very low spatial resolution (e.g. 8x8), which makes it impossible to draw sharp, detailed boundaries.",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "The encoder features do not contain any color information.",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "Encoder features are stored in a format that cannot be read by GPUs.",
+              "correct": false
+            },
+            {
+              "id": "d",
+              "text": "The encoder only outputs text labels, not feature maps.",
+              "correct": false
+            }
+          ],
+          "explain": "Exactly! Downsampling destroys high-resolution boundaries, which is why the decoder is essential to upsample them back. Next: how does the decoder learn to upsample?"
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,222 @@
+{
+  "id": "u158-l5",
+  "unit": 158,
+  "day": 795,
+  "tier": "DeepLab and ASPP",
+  "tierIcon": "🪐",
+  "title": "Real-Time DeepLab Tradeoffs",
+  "icon": "🪐",
+  "concept": "Deploying DeepLab in real-world systems requires balancing the computational cost of ASPP against accuracy by choosing light backbones.",
+  "xp": 15,
+  "hearts": 3,
+  "estMinutes": 7,
+  "segments": [
+    {
+      "type": "warmup",
+      "exercises": [
+        {
+          "id": "w1",
+          "type": "multiple_choice",
+          "xp": 1,
+          "prompt": "Recap: What is the main structural improvement in DeepLab v3+?",
+          "options": [
+            {
+              "id": "a",
+              "text": "Adding a decoder module to refine upsampled boundaries",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "Removing all dilated convolutions to save speed",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "Replacing the encoder with a simple dense linear layer",
+              "correct": false
+            }
+          ],
+          "explain": "Correct! DeepLab v3+ uses an encoder-decoder architecture."
+        }
+      ]
+    },
+    {
+      "type": "teach",
+      "cards": [
+        {
+          "kind": "hook",
+          "icon": "🔋",
+          "title": "The resource hurdle",
+          "body": "DeepLab v3+ is incredibly accurate, winning many vision competitions. But its accuracy comes from a heavy backbone (like ResNet-101) and complex ASPP convolutions. If you run this on a mobile phone or a robot, the battery will drain in minutes. How do we tune DeepLab for real-time systems?"
+        },
+        {
+          "kind": "definition",
+          "icon": "⚖️",
+          "title": "DeepLab Tradeoffs",
+          "body": "To use DeepLab in real-time systems, developers trade off backbone depth. Swapping a heavy ResNet backbone for <strong>MobileNetv2</strong> or <strong>MobileNetv3</strong> reduces parameters by up to 90%, enabling execution on edge hardware with minimal accuracy loss."
+        },
+        {
+          "kind": "analogy",
+          "icon": "🚗",
+          "title": "Putting a small engine in a truck",
+          "body": "Running DeepLab with ResNet-101 is like putting a massive V8 engine in a truck — powerful but uses lots of fuel (energy). Swapping in MobileNet is like installing a hybrid engine: it gets you where you need to go while saving gas."
+        },
+        {
+          "kind": "example",
+          "icon": "📱",
+          "title": "Mobile DeepLab",
+          "body": "Google's portrait mode on Pixel phones uses a MobileNet-backed DeepLab model. It runs in milliseconds to blur your photo background without making your phone hot."
+        },
+        {
+          "kind": "mythbust",
+          "icon": "⚠️",
+          "title": "ASPP is not free",
+          "body": "You might think ASPP is fast because it uses dilated filters. However, running five parallel convolution paths (as in ASPP) requires significant memory bandwidth, which can bottleneck mobile processors."
+        },
+        {
+          "kind": "visual",
+          "icon": "⚖️",
+          "title": "DeepLab Configurations",
+          "body": "Comparing backbones for production deployment:",
+          "compare": {
+            "left": {
+              "emoji": "🏭",
+              "tag": "DeepLab + ResNet-101",
+              "text": "Best for: Servers, medical analysis<br>Highest accuracy<br>Slow (10 FPS on edge)"
+            },
+            "right": {
+              "emoji": "📱",
+              "tag": "DeepLab + MobileNet",
+              "text": "Best for: Smartphones, drones<br>Good accuracy<br>Real-time (30+ FPS on edge)"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "type": "practice",
+      "exercises": [
+        {
+          "id": "p1",
+          "type": "multiple_choice",
+          "xp": 2,
+          "prompt": "Which backbone is best for deploying DeepLab on a mobile device?",
+          "options": [
+            {
+              "id": "a",
+              "text": "MobileNet",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "ResNet-101",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "VGG-19",
+              "correct": false
+            },
+            {
+              "id": "d",
+              "text": "AlexNet",
+              "correct": false
+            }
+          ],
+          "explain": "Correct! MobileNet is lightweight and optimized for mobile processors."
+        },
+        {
+          "id": "p2",
+          "type": "true_false",
+          "xp": 2,
+          "prompt": "True or False: The ASPP module has low memory bandwidth requirements due to dilation.",
+          "options": [
+            {
+              "id": "t",
+              "text": "True",
+              "correct": false
+            },
+            {
+              "id": "f",
+              "text": "False",
+              "correct": false
+            }
+          ],
+          "explain": "False. Running parallel conv paths in ASPP is memory-heavy and can bottleneck mobile chips."
+        },
+        {
+          "id": "p3",
+          "type": "fill_blank",
+          "xp": 2,
+          "prompt": "Complete the sentence:",
+          "sentence": "Swapping a heavy backbone for MobileNet reduces the number of model ___ by up to 90%.",
+          "blank": "parameters",
+          "words": [
+            "parameters",
+            "pixels",
+            "classes"
+          ],
+          "explain": "It decreases parameters and compute, enabling edge deployment."
+        },
+        {
+          "id": "p4",
+          "type": "spot_the_ai",
+          "xp": 2,
+          "prompt": "What real-world smartphone feature often uses optimized DeepLab models?",
+          "options": [
+            {
+              "id": "a",
+              "text": "Portrait mode background blurring",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "Predicting when the battery will die",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "Connecting to Wi-Fi networks",
+              "correct": false
+            }
+          ],
+          "explain": "Portrait mode requires fast, precise segmentation of the subject."
+        }
+      ]
+    },
+    {
+      "type": "boss",
+      "exercises": [
+        {
+          "id": "b1",
+          "type": "multiple_choice",
+          "xp": 5,
+          "prompt": "You are building a live camera filter app for old smartphones. The filter needs to segment hair to color it. Which setup should you choose?",
+          "options": [
+            {
+              "id": "a",
+              "text": "DeepLab with a MobileNet backbone, to ensure the model runs in real-time without lagging the phone.",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "DeepLab with a ResNet-101 backbone, to get the absolute highest resolution.",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "A standard classification network, because hair does not need a mask.",
+              "correct": false
+            },
+            {
+              "id": "d",
+              "text": "DeepLab v1 with a CRF post-processor, to get sharp edges.",
+              "correct": false
+            }
+          ],
+          "explain": "Perfect! MobileNet-backed DeepLab is the industry standard for mobile real-time segmentation. Next, let's explore loss functions! Phase 9: Image Segmentation is complete. Next up: Advanced Vision Applications."
+        }
+      ]
+    }
+  ]
+}

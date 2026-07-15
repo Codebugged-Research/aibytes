@@ -1,0 +1,222 @@
+{
+  "id": "u136-l3",
+  "unit": 136,
+  "day": 683,
+  "tier": "Image Classification in Depth",
+  "tierIcon": "🏷️",
+  "title": "Platt Scaling and Temperature Scaling",
+  "icon": "🌡️",
+  "concept": "Temperature scaling is a simple post-processing method that calibrates model confidence without changing accuracy.",
+  "xp": 15,
+  "hearts": 3,
+  "estMinutes": 7,
+  "segments": [
+    {
+      "type": "warmup",
+      "exercises": [
+        {
+          "id": "w1",
+          "type": "multiple_choice",
+          "xp": 1,
+          "prompt": "Recap: What is the main cause of overconfidence in deep neural networks?",
+          "options": [
+            {
+              "id": "a",
+              "text": "Training to minimize Cross-Entropy loss combined with high network capacity.",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "Using too many training images.",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "Having a learning rate that is too high.",
+              "correct": false
+            }
+          ],
+          "explain": "Correct! Cross-Entropy loss pushes logits to extremes, creating overconfidence."
+        }
+      ]
+    },
+    {
+      "type": "teach",
+      "cards": [
+        {
+          "kind": "hook",
+          "icon": "🌡️",
+          "title": "Cooling down the hot soup",
+          "body": "If you are served a bowl of soup that is boiling hot, you can't eat it safely. You need to let it cool down. Similarly, when a network outputs logits that are too extreme, we need a 'temperature' parameter to cool them down before Softmax."
+        },
+        {
+          "kind": "definition",
+          "icon": "🌡️",
+          "title": "Temperature Scaling",
+          "body": "<strong>Temperature Scaling</strong> is a post-processing technique where raw logits are divided by a single learned scalar <code>T > 0</code> (the temperature) before applying Softmax: <code>P = Softmax(Logits / T)</code>. <code>T</code> is optimized on a validation set."
+        },
+        {
+          "kind": "analogy",
+          "icon": "🎛️",
+          "title": "A volume knob on logits",
+          "body": "Think of <code>T</code> as a volume knob. If the model is overconfident, we turn the volume down (setting <code>T > 1</code>). This pushes the logits closer together, smoothing the Softmax output and lowering the predicted confidence."
+        },
+        {
+          "kind": "example",
+          "icon": "📊",
+          "title": "Temperature math",
+          "body": "If logits are <code>[4.0, 2.0]</code>, standard Softmax gives <code>[0.88, 0.12]</code>. If we apply temperature scaling with <code>T = 2.0</code>, scaled logits become <code>[2.0, 1.0]</code>. Softmax of these is <code>[0.73, 0.27]</code>. Accuracy rank is identical, but confidence is calibrated."
+        },
+        {
+          "kind": "mythbust",
+          "icon": "⚠️",
+          "title": "No effect on accuracy",
+          "body": "You might think dividing logits by a number changes the model's predictions and lowers accuracy. In reality, because dividing by <code>T</code> preserves the order of logits, the highest score stays the highest score. Accuracy remains exactly the same!"
+        },
+        {
+          "kind": "visual",
+          "icon": "🔄",
+          "title": "Logit Softening",
+          "body": "How temperature (T = 2.0) smooths probabilities:",
+          "compare": {
+            "left": {
+              "emoji": "🔥",
+              "tag": "Unscaled Logits (T=1.0)",
+              "text": "Logits: [4.0, 0.0]<br>Softmax: [0.98, 0.02]<br>Highly confident prediction"
+            },
+            "right": {
+              "emoji": "❄️",
+              "tag": "Scaled Logits (T=2.0)",
+              "text": "Logits: [2.0, 0.0]<br>Softmax: [0.88, 0.12]<br>Smoothed, calibrated confidence"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "type": "practice",
+      "exercises": [
+        {
+          "id": "p1",
+          "type": "multiple_choice",
+          "xp": 2,
+          "prompt": "How does Temperature Scaling affect the final accuracy of a classification model?",
+          "explain": "Dividing logits by a constant does not change which logit is the largest, meaning the chosen class (and accuracy) remains unchanged.",
+          "options": [
+            {
+              "id": "a",
+              "text": "It has absolutely no effect on accuracy because it preserves the relative order of logits.",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "It decreases accuracy because it lowers the confidence scores.",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "It doubles the accuracy by correcting errors.",
+              "correct": false
+            },
+            {
+              "id": "d",
+              "text": "It only improves validation accuracy.",
+              "correct": false
+            }
+          ]
+        },
+        {
+          "id": "p2",
+          "type": "true_false",
+          "xp": 2,
+          "prompt": "True or false: To calibrate an overconfident model, the learned temperature parameter T should be greater than 1.0.",
+          "explain": "True. Setting T > 1.0 scales down extreme logits, bringing them closer to zero and softening the resulting probabilities.",
+          "options": [
+            {
+              "id": "t",
+              "text": "True",
+              "correct": true
+            },
+            {
+              "id": "f",
+              "text": "False",
+              "correct": false
+            }
+          ]
+        },
+        {
+          "id": "p3",
+          "type": "fill_blank",
+          "xp": 2,
+          "prompt": "Complete the sentence:",
+          "explain": "Logits are divided by T, which is optimized using a validation dataset.",
+          "sentence": "Temperature scaling divides raw ___ by a learned scalar T before Softmax.",
+          "blank": "logits",
+          "words": [
+            "logits",
+            "probabilities",
+            "losses"
+          ]
+        },
+        {
+          "id": "p4",
+          "type": "spot_the_ai",
+          "xp": 2,
+          "prompt": "Which parameter value of T will soften model predictions the most?",
+          "explain": "A higher temperature value (T = 3.0) divides logits the most, bringing probabilities closest to a uniform distribution.",
+          "options": [
+            {
+              "id": "a",
+              "text": "T = 3.0",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "T = 1.0",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "T = 0.5",
+              "correct": false
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "boss",
+      "exercises": [
+        {
+          "id": "b1",
+          "type": "multiple_choice",
+          "xp": 5,
+          "prompt": "You are writing a post-processing calibration script. You have raw logits on a validation set. How do you find the optimal temperature T?",
+          "options": [
+            {
+              "id": "a",
+              "text": "Run optimization (like L-BFGS) to find the value of T that minimizes Cross-Entropy loss on the validation logits.",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "Set T equal to the validation accuracy score.",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "Increase T manually by 0.1 every epoch during training.",
+              "correct": false
+            },
+            {
+              "id": "d",
+              "text": "Optimal T is always exactly 2.0.",
+              "correct": false
+            }
+          ],
+          "explain": "Exactly! You freeze the model weights, extract validation logits, and optimize the single parameter T to minimize validation loss. Once found, you apply this T to all future test/production logits. Next, let's look at how we measure calibration error!"
+        }
+      ]
+    }
+  ]
+}

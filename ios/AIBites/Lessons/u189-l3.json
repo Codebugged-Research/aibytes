@@ -1,0 +1,222 @@
+{
+  "id": "u189-l3",
+  "unit": 189,
+  "day": 948,
+  "tier": "Model Explainability",
+  "tierIcon": "📊",
+  "title": "CAM & Grad-CAM",
+  "icon": "🧬",
+  "concept": "Grad-CAM uses gradients flowing into the final convolutional layer to produce a coarse localization map of important regions.",
+  "xp": 15,
+  "hearts": 3,
+  "estMinutes": 7,
+  "segments": [
+    {
+      "type": "warmup",
+      "exercises": [
+        {
+          "id": "w1",
+          "type": "multiple_choice",
+          "xp": 1,
+          "prompt": "Recap: What math operation is used to build a vanilla saliency map?",
+          "options": [
+            {
+              "id": "a",
+              "text": "Calculating the gradient of output scores with respect to input pixels",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "Averaging the values of all activation functions",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "Dividing the training loss by the learning rate",
+              "correct": false
+            }
+          ],
+          "explain": "Vanilla saliency maps use backward gradients on input pixels to quantify pixel importance."
+        }
+      ]
+    },
+    {
+      "type": "teach",
+      "cards": [
+        {
+          "kind": "hook",
+          "icon": "🧬",
+          "title": "Focusing on concepts, not noise",
+          "body": "Vanilla saliency maps look at individual pixels, which is why they are so noisy. But deep convolutional layers don't look at single pixels—they look at high-level concepts (like ears, tires, or text). By looking at the activations of these final CNN layers, we get a much cleaner map of model focus."
+        },
+        {
+          "kind": "definition",
+          "icon": "🧬",
+          "title": "Grad-CAM",
+          "body": "<strong>Grad-CAM</strong> (Gradient-weighted Class Activation Mapping) is an explainability technique. It uses the gradients of a target class flowing into the <strong>final convolutional layer</strong> to calculate weights for each feature map, producing a coarse heatmap of important regions."
+        },
+        {
+          "kind": "analogy",
+          "icon": "🔍",
+          "title": "Zooming out on the map",
+          "body": "Vanilla saliency is like looking at a city map through a straw, seeing only individual blades of grass. Grad-CAM is like looking at a weather radar: it zooms out and shows broad zones of storm activity (features like 'dog face' or 'car wheel'), which is much easier to read."
+        },
+        {
+          "kind": "example",
+          "icon": "📐",
+          "title": "Grad-CAM Calculation",
+          "body": "To build a Grad-CAM map: 1. Run forward pass. 2. Calculate gradients of class score with respect to final conv feature maps. 3. Global average pool the gradients to get channel weights. 4. Compute weighted sum of feature maps and apply ReLU to keep positive influence."
+        },
+        {
+          "kind": "mythbust",
+          "icon": "⚠️",
+          "title": "Coarse, not pixel-perfect",
+          "body": "You might think Grad-CAM gives you a pixel-precise boundary of the object. Because it uses the final convolutional layer (which has been downsampled by pooling layers), the heatmap is **coarse and blurry** (e.g., 7x7 or 14x14 pixels stretched over the image)."
+        },
+        {
+          "kind": "visual",
+          "icon": "⚖️",
+          "title": "Saliency vs. Grad-CAM",
+          "body": "Comparing visualization fidelity and clarity:",
+          "compare": {
+            "left": {
+              "emoji": "🗺️",
+              "tag": "Vanilla Saliency",
+              "text": "Pixel-level resolution.<br>Very noisy and scattered.<br>Highlights raw edge pixels."
+            },
+            "right": {
+              "emoji": "🧬",
+              "tag": "Grad-CAM",
+              "text": "Feature-level resolution.<br>Clean, coarse blobs.<br>Highlights semantic regions (e.g., faces)."
+            }
+          }
+        }
+      ]
+    },
+    {
+      "type": "practice",
+      "exercises": [
+        {
+          "id": "p1",
+          "type": "multiple_choice",
+          "xp": 2,
+          "prompt": "What does Grad-CAM stand for?",
+          "explain": "Grad-CAM stands for Gradient-weighted Class Activation Mapping, visualizing final CNN activations.",
+          "options": [
+            {
+              "id": "a",
+              "text": "Gradient-weighted Class Activation Mapping",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "Grid-based Convolutional Activation Matrix",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "Global Resize and Contrast Augmentation Map",
+              "correct": false
+            },
+            {
+              "id": "d",
+              "text": "Graphical Representation of Attention Metrics",
+              "correct": false
+            }
+          ]
+        },
+        {
+          "id": "p2",
+          "type": "true_false",
+          "xp": 2,
+          "prompt": "True or False: Grad-CAM heatmaps are computed using the early, high-resolution convolutional layers near the input.",
+          "explain": "False. Grad-CAM target the final convolutional layer because it contains the most abstract, semantic feature maps.",
+          "options": [
+            {
+              "id": "t",
+              "text": "True",
+              "correct": false
+            },
+            {
+              "id": "f",
+              "text": "False",
+              "correct": true
+            }
+          ]
+        },
+        {
+          "id": "p3",
+          "type": "fill_blank",
+          "xp": 2,
+          "prompt": "Complete the sentence:",
+          "explain": "A ReLU layer is applied to the weighted sum to isolate features that positively contribute to the target class.",
+          "sentence": "Grad-CAM applies a ___ activation function to keep only the features that have a positive influence on the target class score.",
+          "blank": "ReLU",
+          "words": [
+            "ReLU",
+            "Sigmoid",
+            "Softmax"
+          ]
+        },
+        {
+          "id": "p4",
+          "type": "spot_the_ai",
+          "xp": 2,
+          "prompt": "Why is Grad-CAM's heatmap visualization coarse and blurry rather than pixel-sharp?",
+          "explain": "Pooling and strides shrink feature maps in deep layers, so expanding them back to source size creates coarse heatmaps.",
+          "options": [
+            {
+              "id": "a",
+              "text": "Because the final convolutional feature maps are highly downsampled compared to the input image size",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "Because the model weights are quantized to 8-bit integers",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "Because the image was loaded in grayscale mode",
+              "correct": false
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "boss",
+      "exercises": [
+        {
+          "id": "b1",
+          "type": "multiple_choice",
+          "xp": 5,
+          "prompt": "You want to explain a model's prediction on a ResNet architecture. Why is Grad-CAM preferred over vanilla saliency mapping here?",
+          "options": [
+            {
+              "id": "a",
+              "text": "It targets semantic feature maps in the final conv layer, providing a clean, interpretable heatmap of object regions rather than noisy pixel scatter.",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "It speeds up the forward pass of the model.",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "It automatically corrects annotation errors in the test set.",
+              "correct": false
+            },
+            {
+              "id": "d",
+              "text": "It converts ResNet layers into self-attention layers.",
+              "correct": false
+            }
+          ],
+          "explain": "Grad-CAM isolates high-level conceptual activation maps, removing high-frequency pixel noise to deliver clean, interpretable overlays for developers and users."
+        }
+      ]
+    }
+  ]
+}

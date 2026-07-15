@@ -1,0 +1,222 @@
+{
+  "id": "u161-l4",
+  "unit": 161,
+  "day": 809,
+  "tier": "Evaluating Image Segmentations",
+  "tierIcon": "📏",
+  "title": "Pixel Confusion Matrices",
+  "icon": "📏",
+  "concept": "Pixel-level confusion matrices calculate True Positives, False Positives, and False Negatives for every pixel to diagnose segmentation errors.",
+  "xp": 15,
+  "hearts": 3,
+  "estMinutes": 7,
+  "segments": [
+    {
+      "type": "warmup",
+      "exercises": [
+        {
+          "id": "w1",
+          "type": "multiple_choice",
+          "xp": 1,
+          "prompt": "Recap: What is the formula for the Dice score?",
+          "options": [
+            {
+              "id": "a",
+              "text": "2TP / (2TP + FP + FN)",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "TP / (TP + FP + FN)",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "(TP + TN) / Total",
+              "correct": false
+            }
+          ],
+          "explain": "Correct! Dice weights True Positives twice."
+        }
+      ]
+    },
+    {
+      "type": "teach",
+      "cards": [
+        {
+          "kind": "hook",
+          "icon": "📊",
+          "title": "Pixels as data points",
+          "body": "In classification, a confusion matrix compares predicted class labels to true labels. In segmentation, we do the exact same thing, but we treat **every single pixel** as an independent data point. By building a pixel confusion matrix, we can see if our model is over-predicting (FP) or under-predicting (FN) the masks."
+        },
+        {
+          "kind": "definition",
+          "icon": "📉",
+          "title": "Pixel Confusion Matrix",
+          "body": "A <strong>Pixel Confusion Matrix</strong> counts: <br>- **True Positive (TP)**: pixels correctly classified as target.<br>- **False Positive (FP)**: background pixels incorrectly painted as target.<br>- **False Negative (FN)**: target pixels missed by the model."
+        },
+        {
+          "kind": "analogy",
+          "icon": "🎨",
+          "title": "A feedback report from a paint inspector",
+          "body": "Imagine a supervisor checking your painting. They count: 1. Where you painted correctly inside the lines (TP). 2. Where you painted outside the lines (FP). 3. Where you forgot to paint inside the lines (FN). This breakdown tells you exactly how to adjust your brush."
+        },
+        {
+          "kind": "example",
+          "icon": "🩻",
+          "title": "Diagnostic analysis",
+          "body": "If your model segments liver scans and has high FN but low FP, it means the model is too conservative: it is drawing masks that are too small, missing parts of the liver. You might need to decrease the sigmoid threshold from 0.5 to 0.4."
+        },
+        {
+          "kind": "mythbust",
+          "icon": "⚠️",
+          "title": "True Negatives are huge",
+          "body": "You might think True Negatives (TN) are the most important part of the matrix. In segmentation, TN (correctly identifying background) is usually so massive that it drowns out the other counts. That's why we focus almost exclusively on TP, FP, and FN."
+        },
+        {
+          "kind": "visual",
+          "icon": "⚖️",
+          "title": "Pixel Confusion Matrix Map",
+          "body": "Visualizing pixel classification categories:",
+          "compare": {
+            "left": {
+              "emoji": "🟢",
+              "tag": "True Positive (TP) & True Neg (TN)",
+              "text": "TP: Correctly painted target pixels<br>TN: Correctly left background empty"
+            },
+            "right": {
+              "emoji": "❌",
+              "tag": "False Positive (FP) & False Neg (FN)",
+              "text": "FP: Over-painted pixels (outside boundaries)<br>FN: Missed target pixels (under-painted)"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "type": "practice",
+      "exercises": [
+        {
+          "id": "p1",
+          "type": "multiple_choice",
+          "xp": 2,
+          "prompt": "What does a False Positive (FP) pixel represent in segmentation?",
+          "options": [
+            {
+              "id": "a",
+              "text": "A background pixel that the model incorrectly classified as the target object",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "A target pixel that the model completely missed",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "A pixel that was correctly identified as background",
+              "correct": false
+            },
+            {
+              "id": "d",
+              "text": "A pixel that was cropped out by RoIAlign",
+              "correct": false
+            }
+          ],
+          "explain": "Correct! FP pixels represent 'over-segmentation' (painting outside the lines)."
+        },
+        {
+          "id": "p2",
+          "type": "true_false",
+          "xp": 2,
+          "prompt": "True or False: In a pixel confusion matrix, True Negatives (TN) represent background pixels that the model correctly left unpainted.",
+          "options": [
+            {
+              "id": "t",
+              "text": "True",
+              "correct": false
+            },
+            {
+              "id": "f",
+              "text": "False",
+              "correct": false
+            }
+          ],
+          "explain": "True. TNs are the correct background predictions."
+        },
+        {
+          "id": "p3",
+          "type": "fill_blank",
+          "xp": 2,
+          "prompt": "Complete the sentence:",
+          "sentence": "If a model misses a target pixel, that pixel is classified as a False ___.",
+          "blank": "Negative",
+          "words": [
+            "Negative",
+            "Positive",
+            "True"
+          ],
+          "explain": "Missed target pixels are False Negatives (FN)."
+        },
+        {
+          "id": "p4",
+          "type": "spot_the_ai",
+          "xp": 2,
+          "prompt": "How can a pixel confusion matrix help you tune a model's prediction threshold?",
+          "options": [
+            {
+              "id": "a",
+              "text": "By showing whether the model is biased toward over-painting (FP) or under-painting (FN)",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "By automatically updating the weights without training",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "By reducing the spatial resolution of the input images",
+              "correct": false
+            }
+          ],
+          "explain": "Analyzing the ratio of FP to FN helps you shift the threshold to balance precision and recall."
+        }
+      ]
+    },
+    {
+      "type": "boss",
+      "exercises": [
+        {
+          "id": "b1",
+          "type": "multiple_choice",
+          "xp": 5,
+          "prompt": "Your autonomous car model has high False Positive pixels on pedestrian masks (it paints pedestrian masks on empty sidewalks). What is the safety risk?",
+          "options": [
+            {
+              "id": "a",
+              "text": "The car will brake unnecessarily for 'ghost' pedestrians, creating a hazard for traffic behind it.",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "The car will run over pedestrians because it cannot see them.",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "The model will run out of GPU memory and crash the engine.",
+              "correct": false
+            },
+            {
+              "id": "d",
+              "text": "The steering wheel will freeze and prevent the car from turning.",
+              "correct": false
+            }
+          ],
+          "explain": "Perfect! False Positives lead to unnecessary actions (like ghost braking). False Negatives would mean hitting a pedestrian. A pixel confusion matrix helps you balance these critical safety trade-offs. Next: let's look at boundary distance metrics!"
+        }
+      ]
+    }
+  ]
+}

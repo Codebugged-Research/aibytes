@@ -1,0 +1,222 @@
+{
+  "id": "u151-l1",
+  "unit": 151,
+  "day": 756,
+  "tier": "Modern Object Detection",
+  "tierIcon": "🎯",
+  "title": "The Multi-Scale Dilemma",
+  "icon": "🚁",
+  "concept": "Deep networks struggle with small objects because spatial details are lost in deep semantic layers.",
+  "xp": 15,
+  "hearts": 3,
+  "estMinutes": 7,
+  "segments": [
+    {
+      "type": "warmup",
+      "exercises": [
+        {
+          "id": "w1",
+          "type": "multiple_choice",
+          "xp": 1,
+          "prompt": "Recap: What is a key advantage of anchor-free object detectors?",
+          "options": [
+            {
+              "id": "a",
+              "text": "They eliminate the need to manually configure preset template boxes",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "They do not require any input images",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "They only run on black and white security cameras",
+              "correct": false
+            }
+          ],
+          "explain": "Correct! Anchor-free models regress boundaries directly, removing manual anchor tuning."
+        }
+      ]
+    },
+    {
+      "type": "teach",
+      "cards": [
+        {
+          "kind": "hook",
+          "icon": "🚁",
+          "title": "The Detail Loss",
+          "body": "As an image passes deeper into a convolutional network, the feature maps shrink. Deeper layers see the big picture (strong semantics) but lose fine details. Early layers see small details (high resolution) but don't understand what they are. How do we keep both?"
+        },
+        {
+          "kind": "definition",
+          "icon": "🚁",
+          "title": "The Multi-Scale Dilemma",
+          "body": "The <strong>Multi-Scale Dilemma</strong> describes the difficulty deep networks face when detecting small objects. Deep layers contain rich semantic features (what the object is) but poor spatial resolution. Early layers contain rich spatial features (where objects are) but poor semantic meaning."
+        },
+        {
+          "kind": "analogy",
+          "icon": "🔍",
+          "title": "Helicopter vs. Magnifying Glass",
+          "body": "Imagine a detective trying to solve a crime. Looking from a helicopter (deep layers) gives you the big picture but you miss small items on the ground. A magnifying glass (early layers) shows small items but you lack the context of the whole city. You need both together!"
+        },
+        {
+          "kind": "example",
+          "icon": "🚶",
+          "title": "Missing Small Pedestrians",
+          "body": "A standard CNN backbone processes a photo. A large truck is easily detected in the final 7x7 feature map. However, a tiny distant pedestrian is missed because their feature pixels were shrunk to a single pixel point, losing all spatial detail."
+        },
+        {
+          "kind": "mythbust",
+          "icon": "⚠️",
+          "title": "Scale Up the Image?",
+          "body": "You might think increasing the input resolution (e.g. from 300x300 to 1000x1000) solves this. Fact: While it helps, it multiplies computational cost by nearly 10x and does not prevent deep layers from discarding small details during pooling."
+        },
+        {
+          "kind": "visual",
+          "icon": "⚖️",
+          "title": "Early vs. Deep Features",
+          "body": "How features differ at opposite ends of a CNN:",
+          "compare": {
+            "left": {
+              "emoji": "🔍",
+              "tag": "Early Layers",
+              "text": "High spatial resolution (e.g. 112x112)<br>Detects raw edges, corners, colors<br>Weak semantic meaning (no class context)"
+            },
+            "right": {
+              "emoji": "🧠",
+              "tag": "Deep Layers",
+              "text": "Low spatial resolution (e.g. 7x7)<br>Detects abstract parts (wheels, faces)<br>Strong semantic meaning (knows the class)"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "type": "practice",
+      "exercises": [
+        {
+          "id": "p1",
+          "type": "multiple_choice",
+          "xp": 2,
+          "prompt": "What is the multi-scale dilemma in deep convolutional networks?",
+          "options": [
+            {
+              "id": "a",
+              "text": "Deep layers lose fine spatial details of small objects, while early layers lack classification context",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "The model cannot run on color images",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "The loss function becomes zero when images are resized",
+              "correct": false
+            },
+            {
+              "id": "d",
+              "text": "Gradient descent fails to update weights at small scales",
+              "correct": false
+            }
+          ],
+          "explain": "Correct! High layers have semantics but poor resolution; early layers have resolution but lack semantics."
+        },
+        {
+          "id": "p2",
+          "type": "true_false",
+          "xp": 2,
+          "prompt": "True or False: As an image goes deeper into a standard CNN, the feature map resolution decreases while the semantic depth increases.",
+          "options": [
+            {
+              "id": "t",
+              "text": "True",
+              "correct": true
+            },
+            {
+              "id": "f",
+              "text": "False",
+              "correct": false
+            }
+          ],
+          "explain": "True. Spatial dimensions shrink due to stride and pooling, while feature channels capture more abstract concepts."
+        },
+        {
+          "id": "p3",
+          "type": "fill_blank",
+          "xp": 2,
+          "prompt": "Complete the sentence:",
+          "sentence": "Deep network layers have strong ___ features but poor spatial resolution.",
+          "blank": "semantic",
+          "words": [
+            "semantic",
+            "spatial",
+            "pooling"
+          ],
+          "explain": "Deep layers capture abstract semantic context (meanings/classes) rather than fine spatial details."
+        },
+        {
+          "id": "p4",
+          "type": "spot_the_ai",
+          "xp": 2,
+          "prompt": "Why do standard CNN backbones struggle to detect tiny distant objects?",
+          "options": [
+            {
+              "id": "a",
+              "text": "Pooling and strides shrink tiny features down to a single pixel, losing their shape details",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "Tiny objects do not have color channels",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "Convolutional kernels are always larger than tiny objects",
+              "correct": false
+            }
+          ],
+          "explain": "Correct! Repeated downsampling discards fine-grained spatial information before it reaches the final prediction layers."
+        }
+      ]
+    },
+    {
+      "type": "boss",
+      "exercises": [
+        {
+          "id": "b1",
+          "type": "multiple_choice",
+          "xp": 5,
+          "prompt": "You are building a satellite imaging system to count small solar panels. The base ResNet-50 backbone is missing 80% of the panels. What is the root cause?",
+          "options": [
+            {
+              "id": "a",
+              "text": "The solar panels are small, and their spatial features are washed out in the deep layers of the backbone before they reach the classification head.",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "ResNet-50 is only designed to detect dogs.",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "Satellite images do not contain semantic features.",
+              "correct": false
+            },
+            {
+              "id": "d",
+              "text": "Solar panels are too shiny for neural networks to process.",
+              "correct": false
+            }
+          ],
+          "explain": "Exactly! Deep convolutional backbones naturally discard fine spatial details, which is fatal for detecting small objects."
+        }
+      ]
+    }
+  ]
+}

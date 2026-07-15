@@ -1,0 +1,222 @@
+{
+  "id": "u142-l3",
+  "unit": 142,
+  "day": 713,
+  "tier": "Object Detection Foundations",
+  "tierIcon": "🎯",
+  "title": "Hierarchical Grouping",
+  "icon": "🌳",
+  "concept": "Hierarchical grouping is the bottom-up process of iteratively merging small pixel regions into larger candidate boxes until the entire image is merged.",
+  "xp": 15,
+  "hearts": 3,
+  "estMinutes": 7,
+  "segments": [
+    {
+      "type": "warmup",
+      "exercises": [
+        {
+          "id": "w1",
+          "type": "multiple_choice",
+          "xp": 1,
+          "prompt": "Recap: Is Selective Search a neural network algorithm?",
+          "options": [
+            {
+              "id": "a",
+              "text": "No, it is a classical CPU-based algorithm with fixed rules",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "Yes, it uses backpropagation",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "Yes, it requires training on GPUs",
+              "correct": false
+            }
+          ],
+          "explain": "Selective Search is a classical algorithm that relies on hand-crafted pixel rules."
+        }
+      ]
+    },
+    {
+      "type": "teach",
+      "cards": [
+        {
+          "kind": "hook",
+          "icon": "🌳",
+          "title": "Zooming Out",
+          "body": "If you look closely at a digital photo, you see individual pixels. Zoom out a bit, and they form a leaf. Zoom out more, and they form a tree branch. Zoom out all the way, and you see the entire forest. This bottom-up hierarchy is how grouping builds object boundaries."
+        },
+        {
+          "kind": "definition",
+          "icon": "🌳",
+          "title": "Hierarchical Grouping",
+          "body": "<strong>Hierarchical Grouping</strong> is the bottom-up pipeline where Selective Search starts with thousands of small, over-segmented regions. In each iteration, it merges the two most similar adjacent regions, recording the bounding box of the merged shape at each step."
+        },
+        {
+          "kind": "analogy",
+          "icon": "🌊",
+          "title": "Streams to Oceans",
+          "body": "Think of tiny rain droplets forming small streams. The streams flow together to form rivers, and the rivers merge to form a single massive ocean. The hierarchy captures every level of structure along the way."
+        },
+        {
+          "kind": "example",
+          "icon": "🌳",
+          "title": "The Proposal Tree",
+          "body": "Selective Search doesn't just output the final merged image. It outputs the bounding boxes of <i>every intermediate region</i> created during the merging process. This typically yields about <strong>2,000 candidate boxes</strong> per image."
+        },
+        {
+          "kind": "mythbust",
+          "icon": "⚠️",
+          "title": "Not infinite regions",
+          "body": "You might think merging every step would create an infinite loop or millions of boxes. In reality, it stops when the entire image is merged into a single region, keeping the total candidates capped at a manageable number (like 2,000)."
+        },
+        {
+          "kind": "visual",
+          "icon": "⚖️",
+          "title": "Bottom-Up Hierarchy",
+          "body": "Visualizing the levels of hierarchical region merging:",
+          "compare": {
+            "left": {
+              "emoji": "🌱",
+              "tag": "Level 1: Small Blobs",
+              "text": "Over-segmented clusters:<br><code>Leaves, tires, windows.</code>"
+            },
+            "right": {
+              "emoji": "🌳",
+              "tag": "Level N: Large Objects",
+              "text": "Merged macro regions:<br><code>Trees, cars, houses.</code>"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "type": "practice",
+      "exercises": [
+        {
+          "id": "p1",
+          "type": "multiple_choice",
+          "xp": 2,
+          "prompt": "What does Selective Search output as region proposals?",
+          "explain": "Selective Search records and outputs bounding boxes for every intermediate merged shape throughout the hierarchy, catching objects at multiple scales.",
+          "options": [
+            {
+              "id": "a",
+              "text": "The bounding boxes of all intermediate merged regions in the hierarchy",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "Only the final box containing the whole image",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "A set of random crop coordinates",
+              "correct": false
+            },
+            {
+              "id": "d",
+              "text": "The class labels predicted by the backbone",
+              "correct": false
+            }
+          ]
+        },
+        {
+          "id": "p2",
+          "type": "true_false",
+          "xp": 2,
+          "prompt": "True or False: Hierarchical grouping starts with large candidate boxes and cuts them into smaller pieces.",
+          "explain": "False. It is a bottom-up algorithm: it starts with tiny pixel segments and merges them into larger regions.",
+          "options": [
+            {
+              "id": "t",
+              "text": "True",
+              "correct": false
+            },
+            {
+              "id": "f",
+              "text": "False",
+              "correct": true
+            }
+          ]
+        },
+        {
+          "id": "p3",
+          "type": "fill_blank",
+          "xp": 2,
+          "prompt": "Complete the sentence:",
+          "explain": "The process moves bottom-up, growing regions by merging smaller neighbors.",
+          "sentence": "Hierarchical grouping is a ___ process, starting with pixels and ending with the whole image.",
+          "blank": "bottom-up",
+          "words": [
+            "bottom-up",
+            "top-down",
+            "random"
+          ]
+        },
+        {
+          "id": "p4",
+          "type": "spot_the_ai",
+          "xp": 2,
+          "prompt": "Which output size represents the typical number of proposals from Selective Search?",
+          "explain": "Selective Search is typically configured to generate around 2,000 candidate proposals per image.",
+          "options": [
+            {
+              "id": "a",
+              "text": "About 2,000 region proposals",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "Exactly 1 region proposal",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "Over 1,000,000 region proposals",
+              "correct": false
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "boss",
+      "exercises": [
+        {
+          "id": "b1",
+          "type": "multiple_choice",
+          "xp": 5,
+          "prompt": "Why is hierarchical merging crucial for detecting both a 'wheel' and the 'car' it belongs to in the same image?",
+          "options": [
+            {
+              "id": "a",
+              "text": "Early steps in the hierarchy capture small parts (like the wheel); later steps capture the whole object (the car). Both are recorded.",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "Because the wheel and the car are the same color.",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "To reduce the feature map size by half.",
+              "correct": false
+            },
+            {
+              "id": "d",
+              "text": "It isn't; the model only cares about the largest object.",
+              "correct": false
+            }
+          ],
+          "explain": "Exactly! By saving bounding boxes at all levels of the merge hierarchy, the model can propose candidate locations for nested objects (wheels, windows) and macro objects (cars, buildings) simultaneously. Next: let's look at the speed performance of this classical method!"
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,222 @@
+{
+  "id": "u159-l5",
+  "unit": 159,
+  "day": 800,
+  "tier": "Segmentation Loss Functions",
+  "tierIcon": "🎯",
+  "title": "Mixing Hybrid Losses",
+  "icon": "🎯",
+  "concept": "Hybrid loss functions combine pixel-wise losses (like Cross-Entropy) with overlap-based losses (like Dice) to guide segmentation training.",
+  "xp": 15,
+  "hearts": 3,
+  "estMinutes": 7,
+  "segments": [
+    {
+      "type": "warmup",
+      "exercises": [
+        {
+          "id": "w1",
+          "type": "multiple_choice",
+          "xp": 1,
+          "prompt": "Recap: What is the main purpose of the gamma parameter in Focal Loss?",
+          "options": [
+            {
+              "id": "a",
+              "text": "It controls how aggressively easy pixels are down-weighted",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "It sets the learning rate of the convolutional layers",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "It determines the spatial resolution of the upsampled masks",
+              "correct": false
+            }
+          ],
+          "explain": "Correct! Gamma determines the suppression strength for easy examples."
+        }
+      ]
+    },
+    {
+      "type": "teach",
+      "cards": [
+        {
+          "kind": "hook",
+          "icon": "🧪",
+          "title": "The best of both worlds",
+          "body": "Pixel-wise Cross-Entropy is stable but struggles with class imbalance. Dice Loss handles imbalance but has unstable gradients during early training. What if we didn't have to choose? In modern segmentation, we often combine them into a hybrid loss function, using the strengths of one to cover the flaws of the other."
+        },
+        {
+          "kind": "definition",
+          "icon": "📉",
+          "title": "Hybrid Loss Functions",
+          "body": "A <strong>Hybrid Loss</strong> combines multiple loss functions. A classic example is **BCE + Dice Loss**: $$L_{total} = L_{BCE} + L_{Dice}$$ where Binary Cross-Entropy (BCE) provides smooth gradients, and Dice Loss ensures robust overlap optimization."
+        },
+        {
+          "kind": "analogy",
+          "icon": "🏃",
+          "title": "A coach and a judge",
+          "body": "BCE is like a supportive coach, giving you feedback on every single step you take (each pixel). Dice is like a strict judge who only grades your final performance (mask overlap). By combining them, you get step-by-step guidance AND a clear final goal."
+        },
+        {
+          "kind": "example",
+          "icon": "📐",
+          "title": "Combating early instability",
+          "body": "In the first few epochs of training, Dice Loss can be erratic because the predicted mask is empty. However, the BCE component provides stable, pixel-level gradients that guide the model to start making rough shapes, allowing the Dice component to take over later."
+        },
+        {
+          "kind": "mythbust",
+          "icon": "⚠️",
+          "title": "Weights aren't always 1:1",
+          "body": "You might think you should always add losses with a 50/50 split. In practice, developers weight them: $L = \u0007lpha L_{CE} + \beta L_{Dice}$. If boundaries are the priority, you might increase $\beta$. If training is unstable, you increase $\u0007lpha$."
+        },
+        {
+          "kind": "visual",
+          "icon": "⚖️",
+          "title": "BCE vs. Dice vs. Hybrid",
+          "body": "Comparing loss behaviors:",
+          "compare": {
+            "left": {
+              "emoji": "⏹️",
+              "tag": "BCE Loss (Pixel-level)",
+              "text": "Stable training gradients<br>Weak to class imbalance<br>Fuzzy boundaries"
+            },
+            "right": {
+              "emoji": "🧪",
+              "tag": "Hybrid Loss (BCE + Dice)",
+              "text": "Stable gradients + Imbalance protection<br>Sharp, overlapping masks<br>The modern production standard"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "type": "practice",
+      "exercises": [
+        {
+          "id": "p1",
+          "type": "multiple_choice",
+          "xp": 2,
+          "prompt": "What is a hybrid loss function in image segmentation?",
+          "options": [
+            {
+              "id": "a",
+              "text": "A combination of pixel-wise (like Cross-Entropy) and overlap-based (like Dice) losses",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "A loss function that runs only on CPU threads",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "A method that eliminates backpropagation entirely",
+              "correct": false
+            },
+            {
+              "id": "d",
+              "text": "A model that outputs both bounding boxes and text descriptions",
+              "correct": false
+            }
+          ],
+          "explain": "Correct! Hybrid losses combine different loss types to optimize multiple aspects of the mask."
+        },
+        {
+          "id": "p2",
+          "type": "true_false",
+          "xp": 2,
+          "prompt": "True or False: Combining BCE and Dice loss can help stabilize early training stages.",
+          "options": [
+            {
+              "id": "t",
+              "text": "True",
+              "correct": false
+            },
+            {
+              "id": "f",
+              "text": "False",
+              "correct": false
+            }
+          ],
+          "explain": "True. BCE provides steady gradients when the overlap-based Dice loss is unstable."
+        },
+        {
+          "id": "p3",
+          "type": "fill_blank",
+          "xp": 2,
+          "prompt": "Complete the sentence:",
+          "sentence": "A common hybrid loss combines BCE loss and ___ loss.",
+          "blank": "Dice",
+          "words": [
+            "Dice",
+            "Jaccard",
+            "Focal"
+          ],
+          "explain": "BCE + Dice is a very popular hybrid loss in segmentation networks."
+        },
+        {
+          "id": "p4",
+          "type": "spot_the_ai",
+          "xp": 2,
+          "prompt": "Why do developers weight the components of a hybrid loss function?",
+          "options": [
+            {
+              "id": "a",
+              "text": "To tune the relative importance of pixel-level accuracy vs. mask overlap",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "To force the model to train in fewer epochs",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "To reduce the spatial size of the input images",
+              "correct": false
+            }
+          ],
+          "explain": "Weighting coefficients (alpha and beta) let developers balance gradient stability with overlap precision."
+        }
+      ]
+    },
+    {
+      "type": "boss",
+      "exercises": [
+        {
+          "id": "b1",
+          "type": "multiple_choice",
+          "xp": 5,
+          "prompt": "You are training a U-Net to segment liver boundaries in CT scans. The training is highly unstable and keeps crashing in epoch 1 when using pure Dice loss. What should you do?",
+          "options": [
+            {
+              "id": "a",
+              "text": "Switch to a hybrid loss like BCE + Dice, using the stable pixel-level gradients of BCE to guide the early epochs.",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "Remove the decoder and use only the contracting path features.",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "Switch to standard classification accuracy as your loss function.",
+              "correct": false
+            },
+            {
+              "id": "d",
+              "text": "Increase the learning rate by 100 times to skip the crash.",
+              "correct": false
+            }
+          ],
+          "explain": "Perfect! The BCE component acts as a stabilizer, preventing the training from crashing when the predicted masks are blank in early steps. Phase 9: Image Segmentation is complete. Next up: Advanced Vision Applications."
+        }
+      ]
+    }
+  ]
+}

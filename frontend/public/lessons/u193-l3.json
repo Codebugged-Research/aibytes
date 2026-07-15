@@ -1,0 +1,222 @@
+{
+  "id": "u193-l3",
+  "unit": 193,
+  "day": 968,
+  "tier": "Video & Temporal Vision",
+  "tierIcon": "\ud83c\udfac",
+  "title": "Two-Stream Networks",
+  "icon": "\ud83c\udf0a",
+  "concept": "Two-Stream networks process appearance (using static frames) and motion (using optical flow) in separate, parallel 2D CNN streams.",
+  "xp": 15,
+  "hearts": 3,
+  "estMinutes": 7,
+  "segments": [
+    {
+      "type": "warmup",
+      "exercises": [
+        {
+          "id": "w1",
+          "type": "multiple_choice",
+          "xp": 1,
+          "prompt": "Recap: What standard kernel size does C3D use?",
+          "options": [
+            {
+              "id": "a",
+              "text": "3x3x3",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "1x1x1",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "5x5x5",
+              "correct": false
+            }
+          ],
+          "explain": "Yes! C3D uses uniform 3x3x3 kernels for spatiotemporal convolutions."
+        }
+      ]
+    },
+    {
+      "type": "teach",
+      "cards": [
+        {
+          "kind": "hook",
+          "icon": "\ud83c\udf0a",
+          "title": "Dividing and conquering",
+          "body": "If you want to read a comic book, you look at the pictures to see who is there, and you read the action lines to see who is punching. Why not split our neural network into two specialists? One looking at objects (space) and one looking at motion (time)!"
+        },
+        {
+          "kind": "definition",
+          "icon": "\ud83c\udf0a",
+          "title": "Two-Stream Architecture",
+          "body": "A <strong>Two-Stream Network</strong> splits video classification into two parallel 2D CNN streams: <br>1. <strong>Spatial Stream</strong>: Processes single raw video frames to capture static appearance.<br>2. <strong>Temporal Stream</strong>: Processes stacked **optical flow** frames to capture motion. Their outputs are fused at the end."
+        },
+        {
+          "kind": "analogy",
+          "icon": "\ud83e\udde0",
+          "title": "Left brain vs. Right brain",
+          "body": "Think of the spatial stream as your eyes looking at a photo: you see a basketball court. Think of the temporal stream as your brain detecting motion vectors: you see a fast upward arc. Combining them tells you someone is shooting a hoop."
+        },
+        {
+          "kind": "example",
+          "icon": "\ud83d\udcca",
+          "title": "Fusion methods",
+          "body": "In a Two-Stream network, the two streams run independently. At the very end, we combine their predictions (late fusion) using methods like **averaging** the class scores or training a small classifier on their concatenated features."
+        },
+        {
+          "kind": "mythbust",
+          "icon": "\ud83d\udeab",
+          "title": "No 3D convolutions needed!",
+          "body": "You might think video analysis requires 3D convolutions. Two-Stream networks prove otherwise! They use standard **2D convolutions** in both streams. By converting video frames into 2D optical flow fields, we bypass the need for expensive 3D convolutional math entirely."
+        },
+        {
+          "kind": "visual",
+          "icon": "\u2696\ufe0f",
+          "title": "Spatial vs. Temporal Stream",
+          "body": "Comparing the two streams of a Two-Stream network:",
+          "compare": {
+            "left": {
+              "emoji": "\ud83d\uddbc\ufe0f",
+              "tag": "Spatial Stream",
+              "text": "Input: Single RGB frame<br>Network: Standard 2D CNN<br>Learns: Objects, scene, textures"
+            },
+            "right": {
+              "emoji": "\ud83d\udca8",
+              "tag": "Temporal Stream",
+              "text": "Input: Stack of 10 optical flows<br>Network: Standard 2D CNN<br>Learns: Motion, speed, vectors"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "type": "practice",
+      "exercises": [
+        {
+          "id": "p1",
+          "type": "multiple_choice",
+          "xp": 2,
+          "prompt": "What are the two streams in a Two-Stream network?",
+          "options": [
+            {
+              "id": "a",
+              "text": "Spatial (appearance) and Temporal (motion)",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "Red channel and Blue channel",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "Audio stream and Video stream",
+              "correct": false
+            },
+            {
+              "id": "d",
+              "text": "Input layer and Output layer",
+              "correct": false
+            }
+          ],
+          "explain": "Correct! The two streams process spatial appearance and temporal motion (optical flow) in parallel."
+        },
+        {
+          "id": "p2",
+          "type": "true_false",
+          "xp": 2,
+          "prompt": "True or false: Two-Stream networks require 3D convolutions to extract motion features.",
+          "options": [
+            {
+              "id": "t",
+              "text": "True",
+              "correct": false
+            },
+            {
+              "id": "f",
+              "text": "False",
+              "correct": true
+            }
+          ],
+          "explain": "False. They use 2D convolutions on both raw frames and pre-computed 2D optical flow fields."
+        },
+        {
+          "id": "p3",
+          "type": "fill_blank",
+          "xp": 2,
+          "prompt": "Complete the sentence:",
+          "sentence": "The temporal stream in a Two-Stream network takes a stack of ___ frames as input.",
+          "blank": "optical flow",
+          "words": [
+            "optical flow",
+            "RGB",
+            "grayscale"
+          ],
+          "explain": "The temporal stream processes pre-calculated optical flow vector fields representing motion."
+        },
+        {
+          "id": "p4",
+          "type": "spot_the_ai",
+          "xp": 2,
+          "prompt": "Which input represents the spatial stream's domain?",
+          "options": [
+            {
+              "id": "a",
+              "text": "A single RGB frame of a soccer player",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "A series of 10 stacked optical flow vector grids",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "A 3D tensor of voxels",
+              "correct": false
+            }
+          ],
+          "explain": "The spatial stream extracts object details from single RGB frame inputs."
+        }
+      ]
+    },
+    {
+      "type": "boss",
+      "exercises": [
+        {
+          "id": "b1",
+          "type": "multiple_choice",
+          "xp": 5,
+          "prompt": "Why does a Two-Stream network perform better than a single spatial 2D CNN when classifying a video of someone 'juggling'?",
+          "options": [
+            {
+              "id": "a",
+              "text": "Because the temporal stream tracks the motion of the balls flying up and down, which a single image cannot show.",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "Because Two-Stream networks run faster than a single stream.",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "Because balls can only be detected by optical flow fields.",
+              "correct": false
+            },
+            {
+              "id": "d",
+              "text": "Because spatial streams ignore all colors.",
+              "correct": false
+            }
+          ],
+          "explain": "Exactly! A single photo of a person holding balls looks like static posing. The motion of the balls moving through the air (captured by the optical flow temporal stream) is what defines juggling. Next: how do we inflate successful 2D models into 3D? Next up: I3D!"
+        }
+      ]
+    }
+  ]
+}

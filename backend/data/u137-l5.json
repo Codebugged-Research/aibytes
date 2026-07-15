@@ -1,0 +1,222 @@
+{
+  "id": "u137-l5",
+  "unit": 137,
+  "day": 690,
+  "tier": "Image Classification in Depth",
+  "tierIcon": "🏷️",
+  "title": "Choosing the Right Evaluation Metric",
+  "icon": "⚖️",
+  "concept": "Selecting classification metrics requires aligning model thresholds and values with real-world business costs.",
+  "xp": 15,
+  "hearts": 3,
+  "estMinutes": 7,
+  "segments": [
+    {
+      "type": "warmup",
+      "exercises": [
+        {
+          "id": "w1",
+          "type": "multiple_choice",
+          "xp": 1,
+          "prompt": "Recap: Why does a large number of True Negatives skew the ROC curve but not the PR curve?",
+          "options": [
+            {
+              "id": "a",
+              "text": "ROC uses False Positive Rate (which divides by True Negatives); PR ignores True Negatives entirely.",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "PR curves are calculated using logits directly.",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "ROC curves only work on balanced training data.",
+              "correct": false
+            }
+          ],
+          "explain": "Correct! PR curves only use TP, FP, and FN, shielding them from being skewed by dominant negative classes."
+        }
+      ]
+    },
+    {
+      "type": "teach",
+      "cards": [
+        {
+          "kind": "hook",
+          "icon": "⚖️",
+          "title": "The cost of mistake types",
+          "body": "In a factory, sorting a good apple into the trash bin costs 10 cents (False Positive). Leaving a rotten apple in the box ruins the entire batch, costing 50 dollars (False Negative). Because the costs are unequal, the metric we optimize must reflect this balance."
+        },
+        {
+          "kind": "definition",
+          "icon": "⚖️",
+          "title": "Metric Selection",
+          "body": "Choosing the right metric means aligning machine learning goals with <strong>business costs</strong>. If False Negatives are costly, optimize for <strong>Recall</strong>. If False Positives are costly, optimize for <strong>Precision</strong>. If both matter, use F1-Score or Weighted F-beta."
+        },
+        {
+          "kind": "analogy",
+          "icon": "🛡️",
+          "title": "A security guard vs. a customer filter",
+          "body": "A high-security facility uses a guard who stops everyone, demanding multiple IDs (prioritizes Recall: catches all intruders, accepts high delay). A luxury store filter welcomes everyone, only checking suspicious bags (prioritizes Precision: avoids annoying shoppers, accepts some risk)."
+        },
+        {
+          "kind": "example",
+          "icon": "🤖",
+          "title": "Factory quality inspection",
+          "body": "An aerospace engine part classifier uses a threshold optimized for Recall. If a part has even a tiny scratch, it must be flagged for manual review, because a part failure in flight is catastrophic."
+        },
+        {
+          "kind": "mythbust",
+          "icon": "⚠️",
+          "title": "Models don't run in a vacuum",
+          "body": "You might think the goal of ML is always to maximize F1-score or AUC. In reality, a model is part of a larger business pipeline. A model with lower overall F1 but custom thresholding that minimizes the most expensive type of error is far more valuable."
+        },
+        {
+          "kind": "visual",
+          "icon": "⚖️",
+          "title": "Metric Choices",
+          "body": "Aligning task type to primary metric:",
+          "compare": {
+            "left": {
+              "emoji": "🏥",
+              "tag": "High-Cost Miss (FN)",
+              "text": "Task: Cancer detection / Airport security<br>Primary Metric: Recall<br>Accepts: False alarms to prevent misses"
+            },
+            "right": {
+              "emoji": "📧",
+              "tag": "High-Cost Alarm (FP)",
+              "text": "Task: Spam filtering / Auto-blocking accounts<br>Primary Metric: Precision<br>Accepts: Misses to prevent false alarms"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "type": "practice",
+      "exercises": [
+        {
+          "id": "p1",
+          "type": "multiple_choice",
+          "xp": 2,
+          "prompt": "If a business goal is to minimize 'false alarms' at all costs, which metric should the AI team optimize?",
+          "explain": "Precision measures the percentage of positive alarms that are correct, so maximizing precision minimizes false alarms (False Positives).",
+          "options": [
+            {
+              "id": "a",
+              "text": "Precision",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "Recall",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "Simple accuracy",
+              "correct": false
+            },
+            {
+              "id": "d",
+              "text": "Latency",
+              "correct": false
+            }
+          ]
+        },
+        {
+          "id": "p2",
+          "type": "true_false",
+          "xp": 2,
+          "prompt": "True or false: An F1-score is the best metric to optimize when a False Positive is ten times more expensive than a False Negative.",
+          "explain": "False. F1-score treats precision and recall equally. When costs are highly unequal, a weighted F-beta score or custom cost-based thresholding is required.",
+          "options": [
+            {
+              "id": "t",
+              "text": "True",
+              "correct": false
+            },
+            {
+              "id": "f",
+              "text": "False",
+              "correct": true
+            }
+          ]
+        },
+        {
+          "id": "p3",
+          "type": "fill_blank",
+          "xp": 2,
+          "prompt": "Complete the sentence:",
+          "explain": "Recall measures found items, so maximizing recall minimizes missed items (False Negatives).",
+          "sentence": "Optimizing for high recall reduces the number of False ___.",
+          "blank": "negatives",
+          "words": [
+            "negatives",
+            "positives",
+            "predictions"
+          ]
+        },
+        {
+          "id": "p4",
+          "type": "spot_the_ai",
+          "xp": 2,
+          "prompt": "Which setup demonstrates correct metric selection for a security entry system?",
+          "explain": "Security systems prioritize recall to eliminate false negatives (unauthorized entries).",
+          "options": [
+            {
+              "id": "a",
+              "text": "Optimizing for Recall to ensure no intruders enter, even if it creates long lines of false alarms",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "Optimizing for Precision to ensure lines move fast, allowing some unchecked intruders",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "Optimizing for simple accuracy to balance the training epochs",
+              "correct": false
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "boss",
+      "exercises": [
+        {
+          "id": "b1",
+          "type": "multiple_choice",
+          "xp": 5,
+          "prompt": "You are deploying an automated copyrighted-music detector for video uploads. If the system makes a false positive (flags clean video), users get angry and leave. If it makes a false negative (misses copyright), the company gets fined $1,000. How do you set the policy?",
+          "options": [
+            {
+              "id": "a",
+              "text": "Calculate the exact cost ratio of a user leaving vs. a fine, and set a cost-optimal decision threshold on the calibrated probabilities.",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "Optimize for F1-score at a default threshold of 0.5.",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "Only flag videos that have 100% confidence to eliminate all user complaints.",
+              "correct": false
+            },
+            {
+              "id": "d",
+              "text": "Disable the model and let users upload anything.",
+              "correct": false
+            }
+          ],
+          "explain": "Exactly! When real-world costs are concrete, you shouldn't rely on arbitrary metric averages like F1 at 0.5. Calibrating the probabilities and optimizing the threshold to minimize total financial risk is the mark of a senior ML engineer. Fantastic job completing the Evaluating Image Classifiers unit!"
+        }
+      ]
+    }
+  ]
+}

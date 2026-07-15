@@ -1,0 +1,222 @@
+{
+  "id": "u165-l3",
+  "unit": 165,
+  "day": 828,
+  "tier": "Advanced Vision Applications",
+  "tierIcon": "👁️",
+  "title": "Heatmap Regression for Keypoints",
+  "icon": "🔥",
+  "concept": "Neural networks detect keypoint locations by predicting heatmaps containing 2D Gaussian distributions centered on the joint coordinates.",
+  "xp": 15,
+  "hearts": 3,
+  "estMinutes": 7,
+  "segments": [
+    {
+      "type": "warmup",
+      "exercises": [
+        {
+          "id": "w1",
+          "type": "multiple_choice",
+          "xp": 1,
+          "prompt": "Recap: What is the main drawback of top-down pose estimation?",
+          "options": [
+            {
+              "id": "a",
+              "text": "Its inference time increases with the number of people in the image.",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "It is less accurate than bottom-up.",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "It cannot detect knees or ankles.",
+              "correct": false
+            }
+          ],
+          "explain": "Correct! Because it detects and processes each person sequentially, top-down models slow down as the crowd size increases."
+        }
+      ]
+    },
+    {
+      "type": "teach",
+      "cards": [
+        {
+          "kind": "hook",
+          "icon": "🎯",
+          "title": "Coordinates are hard",
+          "body": "If you ask a neural network to directly output raw (x,y) numbers for a joint (e.g. `Knee: [243.5, 512.2]`), the network struggles. Deep CNNs are great at spatial features, but poor at outputting raw numbers. To make it easy, we transform the target into a picture."
+        },
+        {
+          "kind": "definition",
+          "icon": "🔥",
+          "title": "What is Heatmap Regression?",
+          "body": "Instead of predicting coordinates directly, networks predict a <strong>heatmap</strong> for each keypoint. A heatmap is a grid (like a tiny grayscale image) where the pixel values represent probability. We place a <strong>2D Gaussian distribution</strong> (a smooth peak) centered on the joint's true location."
+        },
+        {
+          "kind": "analogy",
+          "icon": "🌡️",
+          "title": "Weather radar",
+          "body": "Think of a heatmap like a weather radar map showing rain. The radar doesn't output a single coordinate of 'the storm center'. It shows a colorful blob that is red-hot in the middle and fades out. The peak of that temperature corresponds to the center of the joint."
+        },
+        {
+          "kind": "example",
+          "icon": "👁️",
+          "title": "Hourglass Networks",
+          "body": "Architectures like the <strong>Stacked Hourglass Network</strong> take an image and output a stack of heatmaps (e.g., one heatmap for the left shoulder, one for the right knee). The post-processing step simply finds the pixel index with the **maximum value** (the peak) to get the final coordinate."
+        },
+        {
+          "kind": "mythbust",
+          "icon": "⚠️",
+          "title": "Not just direct regression",
+          "body": "A common myth is that models always predict joint coordinates directly. In reality, training a model to predict heatmaps is much more stable and accurate, as it allows convolutional layers to preserve spatial context rather than collapsing features into raw coordinates."
+        },
+        {
+          "kind": "visual",
+          "icon": "⚖️",
+          "title": "Direct Output vs. Heatmaps",
+          "body": "Comparing target formats for keypoint training:",
+          "compare": {
+            "left": {
+              "emoji": "🔢",
+              "tag": "Direct Coordinate (x, y)",
+              "text": "Outputs raw decimals<br>Hard for CNNs to optimize<br>Unstable predictions"
+            },
+            "right": {
+              "emoji": "🔥",
+              "tag": "Heatmap Regression",
+              "text": "Outputs 2D grid image<br>Smooth Gaussian peak at joint<br>Highly stable, standard choice"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "type": "practice",
+      "exercises": [
+        {
+          "id": "p1",
+          "type": "multiple_choice",
+          "xp": 2,
+          "prompt": "How does a heatmap regression model represent the location of a joint in training?",
+          "options": [
+            {
+              "id": "a",
+              "text": "As a 2D Gaussian distribution peak centered on the joint coordinate",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "As a single bounding box around the whole limb",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "As an ASCII character representing the joint name",
+              "correct": false
+            },
+            {
+              "id": "d",
+              "text": "As a 512D embedding vector",
+              "correct": false
+            }
+          ],
+          "explain": "In heatmap regression, targets are represented as 2D Gaussian probability distributions on a grid."
+        },
+        {
+          "id": "p2",
+          "type": "true_false",
+          "xp": 2,
+          "prompt": "True or False: To extract the final (x,y) coordinates from a predicted heatmap, we find the location of the maximum probability value (the peak).",
+          "options": [
+            {
+              "id": "t",
+              "text": "True",
+              "correct": true
+            },
+            {
+              "id": "f",
+              "text": "False",
+              "correct": false
+            }
+          ],
+          "explain": "True. Finding the maximum value (argmax) in the predicted heatmap grid gives the localized keypoint coordinates."
+        },
+        {
+          "id": "p3",
+          "type": "fill_blank",
+          "xp": 2,
+          "prompt": "Complete the sentence:",
+          "sentence": "Predicting a probability grid for joints is called heatmap ___.",
+          "blank": "regression",
+          "words": [
+            "regression",
+            "classification",
+            "alignment"
+          ],
+          "explain": "Heatmap regression is the standard term for training networks to output spatial probability maps of keypoints."
+        },
+        {
+          "id": "p4",
+          "type": "spot_the_ai",
+          "xp": 2,
+          "prompt": "Which description represents heatmap regression output?",
+          "options": [
+            {
+              "id": "a",
+              "text": "A 64x64 grid where pixel intensities fade out from a bright spot at the elbow location",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "A string output saying 'Right Elbow'",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "A crop box showing only the elbow image",
+              "correct": false
+            }
+          ],
+          "explain": "A grid containing a fading intensity peak is a visual description of a heatmap."
+        }
+      ]
+    },
+    {
+      "type": "boss",
+      "exercises": [
+        {
+          "id": "b1",
+          "type": "multiple_choice",
+          "xp": 5,
+          "prompt": "You are training a model to detect hand knuckles. The model outputs joint coordinates that jump around wildly between consecutive video frames. What adjustment should you make to the training targets?",
+          "options": [
+            {
+              "id": "a",
+              "text": "Replace the direct coordinate output with heatmap regression using a tight Gaussian peak centered on each knuckle.",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "Remove the convolutional layers and use a single dense layer to output raw coordinates.",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "Increase the learning rate to make the outputs jump faster.",
+              "correct": false
+            },
+            {
+              "id": "d",
+              "text": "Convert the hand photos to 1-pixel resolution images.",
+              "correct": false
+            }
+          ],
+          "explain": "Exactly! Heatmaps preserve spatial gradients, helping the network learn smooth, stable spatial representations and avoiding the instabilities of direct coordinate regression. Outstanding! Next: connecting joints into bodies."
+        }
+      ]
+    }
+  ]
+}

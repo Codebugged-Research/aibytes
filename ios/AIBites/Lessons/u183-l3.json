@@ -1,0 +1,222 @@
+{
+  "id": "u183-l3",
+  "unit": 183,
+  "day": 918,
+  "tier": "Vision Transformers & Modern Approaches",
+  "tierIcon": "\ud83d\udc41\ufe0f",
+  "title": "Zero-Shot Classification",
+  "icon": "\u2728",
+  "concept": "Zero-shot classification allows CLIP to categorize images by comparing their embeddings to text prompt embeddings representing classes, without task-specific training.",
+  "xp": 15,
+  "hearts": 3,
+  "estMinutes": 7,
+  "segments": [
+    {
+      "type": "warmup",
+      "exercises": [
+        {
+          "id": "w1",
+          "type": "multiple_choice",
+          "xp": 1,
+          "prompt": "Recap: What makes up the two branches of CLIP's dual encoder?",
+          "options": [
+            {
+              "id": "a",
+              "text": "An image encoder (ViT/CNN) and a text encoder (Transformer).",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "A convolutional backbone and an MLP head.",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "An encoder and a decoder stack.",
+              "correct": false
+            }
+          ],
+          "explain": "Correct! CLIP maps pixels and words using two separate encoders."
+        }
+      ]
+    },
+    {
+      "type": "teach",
+      "cards": [
+        {
+          "kind": "hook",
+          "icon": "\u2728",
+          "title": "No training required",
+          "body": "If you want a standard model to classify dog breeds, you must gather hundreds of labeled breeding photos and train a new classifier head. CLIP can classify them immediately, without seeing a single training image for this task! Let's explore the magic of zero-shot classification."
+        },
+        {
+          "kind": "definition",
+          "icon": "\u2699\ufe0f",
+          "title": "Zero-Shot Classification",
+          "body": "<strong>Zero-shot classification</strong> is the ability to categorize images into arbitrary classes without retraining. We write class labels as text prompts (e.g. 'a photo of a [class]'), generate their text embeddings, and select the class whose text vector is **closest** to the input image vector."
+        },
+        {
+          "kind": "analogy",
+          "icon": "\ud83c\udff7\ufe0f",
+          "title": "Label matching",
+          "body": "Imagine you have an unlabeled photo of a tropical bird. You are handed three stickers: 'a photo of a seagull', 'a photo of a parrot', and 'a photo of a penguin'. You read the stickers and stick the one that describes the photo best. You didn't need to train a model; you just matched description to image."
+        },
+        {
+          "kind": "example",
+          "icon": "\ud83d\udcdd",
+          "title": "Prompt templates",
+          "body": "Instead of passing raw words like 'dog', we get better results using templates like <code>'a photo of a dog, a type of pet'</code>. This matches the full-sentence context CLIP saw during pre-training."
+        },
+        {
+          "kind": "mythbust",
+          "icon": "\u26a0\ufe0f",
+          "title": "Not always perfect",
+          "body": "You might think CLIP can classify anything. While excellent at general categories, CLIP struggles with **fine-grained tasks** (like counting objects or distinguishing between highly similar industrial parts) compared to custom-trained models."
+        },
+        {
+          "kind": "visual",
+          "icon": "\u2696\ufe0f",
+          "title": "Zero-Shot vs. Supervised Classification",
+          "body": "Comparing classification pipelines:",
+          "compare": {
+            "left": {
+              "emoji": "\ud83c\udfd7\ufe0f",
+              "tag": "Supervised Classifier",
+              "text": "Add new head -> Collect labels<br>Re-train weights with loss<br>Locked into set training classes"
+            },
+            "right": {
+              "emoji": "\u2728",
+              "tag": "Zero-Shot (CLIP)",
+              "text": "Feed class text prompts<br>Compare vector distances<br>Flexible: change classes instantly"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "type": "practice",
+      "exercises": [
+        {
+          "id": "p1",
+          "type": "multiple_choice",
+          "xp": 2,
+          "prompt": "How does CLIP perform zero-shot classification?",
+          "explain": "CLIP finds the class prompt vector that shares the highest cosine similarity with the input image vector.",
+          "options": [
+            {
+              "id": "a",
+              "text": "By comparing the image embedding vector to text embedding vectors of candidate class prompts",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "By retraining its image encoder on validation labels",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "By converting the input image to a text document directly",
+              "correct": false
+            },
+            {
+              "id": "d",
+              "text": "By ignoring the image encoder during prediction",
+              "correct": false
+            }
+          ]
+        },
+        {
+          "id": "p2",
+          "type": "true_false",
+          "xp": 2,
+          "prompt": "True or false: CLIP requires retraining its weights whenever you want to add a new category.",
+          "explain": "False. You can add new category prompts at any time; CLIP simply computes their vector similarity on the fly.",
+          "options": [
+            {
+              "id": "t",
+              "text": "True",
+              "correct": false
+            },
+            {
+              "id": "f",
+              "text": "False",
+              "correct": true
+            }
+          ]
+        },
+        {
+          "id": "p3",
+          "type": "fill_blank",
+          "xp": 2,
+          "prompt": "Complete the sentence:",
+          "explain": "Prompt templates convert raw labels into complete sentences, matching the caption format of the pre-training dataset.",
+          "sentence": "To match CLIP's training context, class labels are typically wrapped in prompt ___ like 'a photo of a [class]'.",
+          "blank": "templates",
+          "words": [
+            "templates",
+            "convolutions",
+            "kernels"
+          ]
+        },
+        {
+          "id": "p4",
+          "type": "spot_the_ai",
+          "xp": 2,
+          "prompt": "Which of these is a typical zero-shot prompt template for classifying satellite photos?",
+          "explain": "Tailoring prompt templates to the target domain (satellite photos) helps CLIP extract more relevant vector representations.",
+          "options": [
+            {
+              "id": "a",
+              "text": "'a satellite photo of a [class]'",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "'[class]'",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "'a drawing of a [class] in a comic book'",
+              "correct": false
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "boss",
+      "exercises": [
+        {
+          "id": "b1",
+          "type": "multiple_choice",
+          "xp": 5,
+          "prompt": "Why does wrapping a class label in a template like 'a photo of a [class]' perform better than using the raw word (e.g. 'cat')?",
+          "options": [
+            {
+              "id": "a",
+              "text": "Because CLIP was pre-trained on full sentences from the web; a single word is out-of-distribution and has weaker embedding representation.",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "Because single words contain too many characters.",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "Because templates disable position embeddings.",
+              "correct": false
+            },
+            {
+              "id": "d",
+              "text": "Because it forces the model to ignore color channels.",
+              "correct": false
+            }
+          ],
+          "explain": "Spot on! Matching the sentence format CLIP saw during training guarantees cleaner, more reliable vector comparisons. Next: how CLIP is trained using contrastive loss!"
+        }
+      ]
+    }
+  ]
+}

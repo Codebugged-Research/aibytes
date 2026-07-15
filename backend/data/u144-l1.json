@@ -1,0 +1,222 @@
+{
+  "id": "u144-l1",
+  "unit": 144,
+  "day": 721,
+  "tier": "Object Detection Foundations",
+  "tierIcon": "🎯",
+  "title": "Why Fast R-CNN?",
+  "icon": "⚡",
+  "concept": "Fast R-CNN accelerates detection by processing the entire image through the CNN backbone once to generate a shared feature map.",
+  "xp": 15,
+  "hearts": 3,
+  "estMinutes": 7,
+  "segments": [
+    {
+      "type": "warmup",
+      "exercises": [
+        {
+          "id": "w1",
+          "type": "multiple_choice",
+          "xp": 1,
+          "prompt": "Recap: What is the main speed bottleneck in the original R-CNN?",
+          "options": [
+            {
+              "id": "a",
+              "text": "Running the CNN 2,000 times per image on cropped regions",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "Using too many color channels",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "Applying NMS on the CPU",
+              "correct": false
+            }
+          ],
+          "explain": "Evaluating the CNN 2,000 times for each proposed crop is R-CNN's main bottleneck."
+        }
+      ]
+    },
+    {
+      "type": "teach",
+      "cards": [
+        {
+          "kind": "hook",
+          "icon": "⚡",
+          "title": "Sharing the Workload",
+          "body": "If 10 classmates want to write down notes from a whiteboard, they don't take turns copying the board one by one. One student takes a photo of the board and shares it with the group, so everyone can extract the parts they need. That is the philosophy of Fast R-CNN."
+        },
+        {
+          "kind": "definition",
+          "icon": "⚡",
+          "title": "Fast R-CNN",
+          "body": "<strong>Fast R-CNN</strong> is an upgraded object detection network. Instead of cropping the image and running the CNN 2,000 times, it passes the <strong>entire image</strong> through the CNN backbone once to produce a shared feature map, significantly reducing computation."
+        },
+        {
+          "kind": "analogy",
+          "icon": "⚡",
+          "title": "One Large Map vs. 2000 Snippets",
+          "body": "Think of drawing a large, detailed map of a city once. Anyone looking for specific neighborhoods just looks at their section of the shared map, rather than asking 2,000 separate cartographers to draw individual sketches of each street."
+        },
+        {
+          "kind": "example",
+          "icon": "⚡",
+          "title": "Speedup Stats",
+          "body": "Fast R-CNN processes images <strong>100 times faster</strong> than R-CNN during inference, and trains <strong>9 times faster</strong>, eliminating the need to store gigabytes of features on disk."
+        },
+        {
+          "kind": "mythbust",
+          "icon": "⚠️",
+          "title": "Still uses Selective Search",
+          "body": "It's a myth that Fast R-CNN does not use Selective Search. It still relies on Selective Search to generate region proposals; it just projects those proposals onto the shared feature map instead of cropping the raw image."
+        },
+        {
+          "kind": "visual",
+          "icon": "⚖️",
+          "title": "R-CNN vs. Fast R-CNN",
+          "body": "Comparing feature extraction between R-CNN and Fast R-CNN:",
+          "compare": {
+            "left": {
+              "emoji": "🐌",
+              "tag": "R-CNN",
+              "text": "2,000 crops -> 2,000 CNN runs.<br>Takes 47 seconds."
+            },
+            "right": {
+              "emoji": "⚡",
+              "tag": "Fast R-CNN",
+              "text": "Entire image -> 1 CNN run -> Shared map.<br>Takes 0.3 seconds (excluding proposals)."
+            }
+          }
+        }
+      ]
+    },
+    {
+      "type": "practice",
+      "exercises": [
+        {
+          "id": "p1",
+          "type": "multiple_choice",
+          "xp": 2,
+          "prompt": "How does Fast R-CNN solve R-CNN's speed problem?",
+          "explain": "Fast R-CNN extracts features from the entire image once, allowing multiple regions to share the computation.",
+          "options": [
+            {
+              "id": "a",
+              "text": "By running the CNN backbone once on the entire image to generate a shared feature map",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "By removing the CNN backbone entirely",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "By running Selective Search on a GPU",
+              "correct": false
+            },
+            {
+              "id": "d",
+              "text": "By using smaller anchor boxes",
+              "correct": false
+            }
+          ]
+        },
+        {
+          "id": "p2",
+          "type": "true_false",
+          "xp": 2,
+          "prompt": "True or False: Fast R-CNN requires storing extracted feature vectors on disk during training.",
+          "explain": "False. Fast R-CNN is trained end-to-end in a single stage, meaning features do not need to be saved to disk.",
+          "options": [
+            {
+              "id": "t",
+              "text": "True",
+              "correct": false
+            },
+            {
+              "id": "f",
+              "text": "False",
+              "correct": true
+            }
+          ]
+        },
+        {
+          "id": "p3",
+          "type": "fill_blank",
+          "xp": 2,
+          "prompt": "Complete the sentence:",
+          "explain": "Only one forward pass is run on the whole image to extract the shared feature map.",
+          "sentence": "Fast R-CNN passes the entire image through the CNN ___ time(s) to create a shared feature map.",
+          "blank": "one",
+          "words": [
+            "one",
+            "2,000",
+            "twenty"
+          ]
+        },
+        {
+          "id": "p4",
+          "type": "spot_the_ai",
+          "xp": 2,
+          "prompt": "Which feature is associated with Fast R-CNN?",
+          "explain": "Sharing the feature map across all proposals is Fast R-CNN's primary feature.",
+          "options": [
+            {
+              "id": "a",
+              "text": "Using a shared convolutional feature map to evaluate region proposals",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "Training 2,000 separate binary SVM classifiers",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "Removing the region proposal step entirely",
+              "correct": false
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "boss",
+      "exercises": [
+        {
+          "id": "b1",
+          "type": "multiple_choice",
+          "xp": 5,
+          "prompt": "You are upgrading an old object detection service from R-CNN to Fast R-CNN. How does this impact your storage and hardware costs during training?",
+          "options": [
+            {
+              "id": "a",
+              "text": "It reduces storage costs, because you no longer need to save 2,000 feature vectors per image to disk, and reduces compute costs by sharing features.",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "It increases storage costs, because shared feature maps are larger than raw images.",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "It has no impact on training.",
+              "correct": false
+            },
+            {
+              "id": "d",
+              "text": "It requires buying expensive CPU licenses.",
+              "correct": false
+            }
+          ],
+          "explain": "Exactly! The shared feature map and end-to-end training pipeline eliminate both the storage nightmare and redundant GPU runs. Next: let's learn how we project proposals onto these shared feature maps!"
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,222 @@
+{
+  "id": "u164-l3",
+  "unit": 164,
+  "day": 823,
+  "tier": "Advanced Vision Applications",
+  "tierIcon": "👁️",
+  "title": "Triplet Loss & Contrastive Loss",
+  "icon": "🧲",
+  "concept": "Face embedders are trained using loss functions that push embeddings of different people apart and pull embeddings of the same person together.",
+  "xp": 15,
+  "hearts": 3,
+  "estMinutes": 7,
+  "segments": [
+    {
+      "type": "warmup",
+      "exercises": [
+        {
+          "id": "w1",
+          "type": "multiple_choice",
+          "xp": 1,
+          "prompt": "Recap: What is the main difference between L2 distance and Cosine Similarity?",
+          "options": [
+            {
+              "id": "a",
+              "text": "L2 measures spatial gap; Cosine measures vector angle.",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "L2 is used for classification; Cosine is used for detection.",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "Cosine is always larger than L2.",
+              "correct": false
+            }
+          ],
+          "explain": "Correct! Euclidean (L2) distance measures the straight-line gap between coordinates, while Cosine similarity measures the angle between vector directions."
+        }
+      ]
+    },
+    {
+      "type": "teach",
+      "cards": [
+        {
+          "kind": "hook",
+          "icon": "🧲",
+          "title": "Clustering faces",
+          "body": "How do we teach a neural network to output similar vectors for you and completely different vectors for someone else? Standard classification loss (Cross-Entropy) doesn't work well when there are millions of identities. Instead, we train the network using forces that pull and push."
+        },
+        {
+          "kind": "definition",
+          "icon": "📉",
+          "title": "What is Triplet Loss?",
+          "body": "<strong>Triplet Loss</strong> is a loss function that trains networks by comparing three images at once: an <strong>Anchor</strong> (reference face), a <strong>Positive</strong> (another photo of the anchor person), and a <strong>Negative</strong> (a photo of a different person). The loss minimizes Anchor-Positive distance while maximizing Anchor-Negative distance."
+        },
+        {
+          "kind": "analogy",
+          "icon": "🧲",
+          "title": "Magnetic force",
+          "body": "Think of training with Triplet Loss like applying magnetic forces. Photos of the same person behave like opposite poles: they attract and pull together. Photos of different people behave like similar poles: they push each other away, creating a protective margin."
+        },
+        {
+          "kind": "example",
+          "icon": "🧬",
+          "title": "Training FaceNet",
+          "body": "During training, FaceNet feeds triplets into the model. If the anchor embedding is close to the positive and far from the negative, the loss is zero. If the negative is too close, the network's weights are adjusted to push it away by a minimum distance called the <strong>margin</strong>."
+        },
+        {
+          "kind": "mythbust",
+          "icon": "⚠️",
+          "title": "Not classifying names",
+          "body": "You might think the model is trained to classify names (e.g. 'Class 42: Bob'). But if you added a new employee, you would have to retrain the entire network. Triplet loss trains the network to learn **relationships** (similarity), allowing it to work on new faces without retraining."
+        },
+        {
+          "kind": "visual",
+          "icon": "⚖️",
+          "title": "Triplet Loss training",
+          "body": "How embeddings shift during backpropagation:",
+          "compare": {
+            "left": {
+              "emoji": "🧩",
+              "tag": "Before Training",
+              "text": "Anchor, Positive, and Negative<br>randomly scattered in face space.<br>Negative is closer than Positive."
+            },
+            "right": {
+              "emoji": "🧲",
+              "tag": "After Training",
+              "text": "Anchor and Positive pulled close.<br>Negative pushed far away.<br>Margin boundary established."
+            }
+          }
+        }
+      ]
+    },
+    {
+      "type": "practice",
+      "exercises": [
+        {
+          "id": "p1",
+          "type": "multiple_choice",
+          "xp": 2,
+          "prompt": "What are the three inputs required for Triplet Loss?",
+          "options": [
+            {
+              "id": "a",
+              "text": "Anchor, Positive (same person), and Negative (different person)",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "Input image, bounding box, and class label",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "RGB values, grayscale values, and depth maps",
+              "correct": false
+            },
+            {
+              "id": "d",
+              "text": "True positive, False positive, and Precision",
+              "correct": false
+            }
+          ],
+          "explain": "Triplet Loss compares an Anchor face to a Positive (matching) face and a Negative (non-matching) face."
+        },
+        {
+          "id": "p2",
+          "type": "true_false",
+          "xp": 2,
+          "prompt": "True or False: Contrastive Loss compares triplets of images, while Triplet Loss only compares pairs of images.",
+          "options": [
+            {
+              "id": "t",
+              "text": "True",
+              "correct": false
+            },
+            {
+              "id": "f",
+              "text": "False",
+              "correct": true
+            }
+          ],
+          "explain": "False. Contrastive Loss typically compares pairs (matching or non-matching), whereas Triplet Loss compares triplets (Anchor, Positive, Negative)."
+        },
+        {
+          "id": "p3",
+          "type": "fill_blank",
+          "xp": 2,
+          "prompt": "Complete the sentence:",
+          "sentence": "Triplet loss enforces that the distance to the negative example is larger than the distance to the positive example by a set ___.",
+          "blank": "margin",
+          "words": [
+            "margin",
+            "kernel",
+            "stride"
+          ],
+          "explain": "The margin is a constant hyperparameter that defines the minimum required separation between positive and negative pairs."
+        },
+        {
+          "id": "p4",
+          "type": "spot_the_ai",
+          "xp": 2,
+          "prompt": "Which of these describes a triplet selection strategy used to speed up training?",
+          "options": [
+            {
+              "id": "a",
+              "text": "Active mining of 'hard negatives' — different people's faces that look highly similar to the anchor",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "Choosing completely random pixels from the background",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "Always selecting identical duplicate images for the negative face",
+              "correct": false
+            }
+          ],
+          "explain": "Mining hard negatives forces the model to resolve difficult, similar-looking faces, speeding up training convergence."
+        }
+      ]
+    },
+    {
+      "type": "boss",
+      "exercises": [
+        {
+          "id": "b1",
+          "type": "multiple_choice",
+          "xp": 5,
+          "prompt": "You are training a face verification model, but it is taking days to converge because the negative examples you select at random are too easy (they look nothing like the anchor). How should you modify the training pipeline?",
+          "options": [
+            {
+              "id": "a",
+              "text": "Implement 'Hard Negative Mining' to search batches for negative faces that have embeddings very close to the anchor, forcing the model to learn fine distinctions.",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "Only train the model using identical images to make the loss zero.",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "Increase the size of the face crop to include more background distractors.",
+              "correct": false
+            },
+            {
+              "id": "d",
+              "text": "Disable the positive loss term and only push the negatives.",
+              "correct": false
+            }
+          ],
+          "explain": "Exactly! Hard negative mining selects the most challenging examples (lookalikes), which drives the model to adjust its weights for maximum discrimination. Phenomenal job! Next: how to defend against fake faces."
+        }
+      ]
+    }
+  ]
+}

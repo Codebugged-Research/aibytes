@@ -1,0 +1,222 @@
+{
+  "id": "u152-l1",
+  "unit": 152,
+  "day": 761,
+  "tier": "Modern Object Detection",
+  "tierIcon": "🎯",
+  "title": "What is DETR?",
+  "icon": "🤖",
+  "concept": "DETR uses a Transformer encoder-decoder to predict a direct set of bounding boxes, removing manual anchor and NMS components.",
+  "xp": 15,
+  "hearts": 3,
+  "estMinutes": 7,
+  "segments": [
+    {
+      "type": "warmup",
+      "exercises": [
+        {
+          "id": "w1",
+          "type": "multiple_choice",
+          "xp": 1,
+          "prompt": "Recap: What is the main benefit of Feature Pyramid Networks (FPNs)?",
+          "options": [
+            {
+              "id": "a",
+              "text": "They merge low-level spatial details with high-level semantic context to improve multi-scale detection",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "They convert the model into a classification-only network",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "They remove the need for a CNN backbone",
+              "correct": false
+            }
+          ],
+          "explain": "Correct! FPNs create a pyramid of feature maps of different resolutions to capture objects of all sizes."
+        }
+      ]
+    },
+    {
+      "type": "teach",
+      "cards": [
+        {
+          "kind": "hook",
+          "icon": "🤖",
+          "title": "Throwing Away the Rules",
+          "body": "For years, object detection was dominated by CNNs, anchor boxes, grids, and NMS cleanup. In 2020, researchers asked a crazy question: What if we threw all of those manual tricks away and used a Transformer instead? enter DETR."
+        },
+        {
+          "kind": "definition",
+          "icon": "🤖",
+          "title": "What is DETR?",
+          "body": "<strong>DETR</strong> (DEtection TRansformer) is an object detection model that uses a Transformer encoder-decoder architecture. It treats object detection as a <strong>direct set prediction</strong> problem, completely removing manual components like anchor boxes and Non-Maximum Suppression (NMS)."
+        },
+        {
+          "kind": "analogy",
+          "icon": "📋",
+          "title": "The Executive Assistant",
+          "body": "Traditional detectors are like a manager drawing a grid and having 100 workers check and cleanup overlapping boxes. DETR is like hiring an executive assistant: they look at the scene once, identify all objects, and list them directly (e.g. '1. Car, 2. Dog, 3. Empty')."
+        },
+        {
+          "kind": "example",
+          "icon": "🚕",
+          "title": "Direct Set Output",
+          "body": "When given a street image, DETR directly outputs a fixed set of 100 predictions. If the image has only 2 cars, the model matches the 2 cars to the best 2 predictions and sets the remaining 98 predictions to the class 'no object'."
+        },
+        {
+          "kind": "mythbust",
+          "icon": "⚠️",
+          "title": "Backbone Myth",
+          "body": "You might think DETR does not use a CNN at all since it is a Transformer. Fact: DETR still uses a standard CNN backbone (like ResNet) to extract raw feature maps first, which are then flattened into tokens for the Transformer."
+        },
+        {
+          "kind": "visual",
+          "icon": "⚖️",
+          "title": "Traditional vs. DETR Pipeline",
+          "body": "How the detection workflow changes with Transformers:",
+          "compare": {
+            "left": {
+              "emoji": "📦",
+              "tag": "Traditional (YOLO/SSD)",
+              "text": "CNN -> Grid/Anchors -> Hundreds of raw predictions -> NMS cleanup -> Final boxes"
+            },
+            "right": {
+              "emoji": "🤖",
+              "tag": "DETR (Transformer)",
+              "text": "CNN -> Transformer Encoder/Decoder -> Direct set of 100 predictions -> 1-to-1 matching -> Final boxes"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "type": "practice",
+      "exercises": [
+        {
+          "id": "p1",
+          "type": "multiple_choice",
+          "xp": 2,
+          "prompt": "What is the core conceptual change introduced by DETR?",
+          "options": [
+            {
+              "id": "a",
+              "text": "Treating object detection as a direct set prediction problem using a Transformer",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "Using a recursive CNN to upscale images",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "Classifying the image color palette first",
+              "correct": false
+            },
+            {
+              "id": "d",
+              "text": "Removing the CNN backbone entirely",
+              "correct": false
+            }
+          ],
+          "explain": "Correct! DETR uses a Transformer to predict a direct set of bounding boxes without anchors or NMS."
+        },
+        {
+          "id": "p2",
+          "type": "true_false",
+          "xp": 2,
+          "prompt": "True or False: DETR completely eliminates the need for Non-Maximum Suppression (NMS) during post-processing.",
+          "options": [
+            {
+              "id": "t",
+              "text": "True",
+              "correct": true
+            },
+            {
+              "id": "f",
+              "text": "False",
+              "correct": false
+            }
+          ],
+          "explain": "True. Because DETR is trained to predict exactly one box per object, it has no duplicate boxes and skips NMS entirely."
+        },
+        {
+          "id": "p3",
+          "type": "fill_blank",
+          "xp": 2,
+          "prompt": "Complete the sentence:",
+          "sentence": "DETR stands for DEtection ___.",
+          "blank": "Transformer",
+          "words": [
+            "Transformer",
+            "Tensor",
+            "Tracker"
+          ],
+          "explain": "DETR stands for DEtection TRansformer."
+        },
+        {
+          "id": "p4",
+          "type": "spot_the_ai",
+          "xp": 2,
+          "prompt": "Why does DETR still require a CNN backbone like ResNet?",
+          "options": [
+            {
+              "id": "a",
+              "text": "To extract initial 2D feature maps from the raw image pixels",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "To perform the final classification step",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "To run the Hungarian matching algorithm",
+              "correct": false
+            }
+          ],
+          "explain": "Correct! CNNs are highly efficient at extracting low-level 2D features, which are then passed to the Transformer."
+        }
+      ]
+    },
+    {
+      "type": "boss",
+      "exercises": [
+        {
+          "id": "b1",
+          "type": "multiple_choice",
+          "xp": 5,
+          "prompt": "You are building a real-time system where any latency spikes are dangerous. Why is DETR's NMS-free design attractive for this application?",
+          "options": [
+            {
+              "id": "a",
+              "text": "Because NMS speed depends on the number of predicted boxes, which varies. DETR has a fixed prediction pipeline, giving highly predictable latency.",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "Transformers do not use mathematical calculations.",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "DETR does not use GPU memory.",
+              "correct": false
+            },
+            {
+              "id": "d",
+              "text": "NMS-free models have higher resolution.",
+              "correct": false
+            }
+          ],
+          "explain": "Exactly! Eliminating NMS removes a variable-time post-processing bottleneck, which stabilizes inference latency."
+        }
+      ]
+    }
+  ]
+}

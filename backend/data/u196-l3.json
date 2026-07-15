@@ -1,0 +1,222 @@
+{
+  "id": "u196-l3",
+  "unit": 196,
+  "day": 983,
+  "tier": "Edge Deployment & Quantization",
+  "tierIcon": "📱",
+  "title": "PTQ vs. QAT",
+  "icon": "🏋️",
+  "concept": "Post-Training Quantization (PTQ) rounds weights after training, while Quantization-Aware Training (QAT) models rounding errors during training to maintain high accuracy.",
+  "xp": 15,
+  "hearts": 3,
+  "estMinutes": 7,
+  "segments": [
+    {
+      "type": "warmup",
+      "exercises": [
+        {
+          "id": "w1",
+          "type": "multiple_choice",
+          "xp": 1,
+          "prompt": "Recap: Why does quantizing a model to INT8 speed up inference?",
+          "options": [
+            {
+              "id": "a",
+              "text": "Integers are smaller to store and faster for hardware to compute than 32-bit floats",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "It removes layers from the neural network entirely",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "It increases the number of activation maps",
+              "correct": false
+            }
+          ],
+          "explain": "Integer calculations require less memory bandwidth and fewer hardware clock cycles than floating-point math."
+        }
+      ]
+    },
+    {
+      "type": "teach",
+      "cards": [
+        {
+          "kind": "hook",
+          "title": "Adapting to the rules",
+          "body": "If you train a singer in a perfect studio, and then make them sing through a cheap walkie-talkie, they might sound terrible. But if they practice singing through the walkie-talkie, they will adjust their voice to sound great. Quantization-Aware Training does exactly this!",
+          "icon": "🏋️"
+        },
+        {
+          "kind": "definition",
+          "title": "PTQ vs. QAT",
+          "body": "<strong>Post-Training Quantization (PTQ)</strong> quantizes a fully trained FP32 model using a small calibration dataset. <strong>Quantization-Aware Training (QAT)</strong> simulates quantization noise during the forward pass of training, allowing the model to adapt and minimize accuracy loss.",
+          "icon": "📱"
+        },
+        {
+          "kind": "analogy",
+          "title": "Closed-book vs. practice test",
+          "body": "PTQ is like taking a test in a loud room without warning (no adaptation). QAT is like studying for the test in a loud room (practice under the target constraints), so you are prepared for the noise.",
+          "icon": "🧠"
+        },
+        {
+          "kind": "example",
+          "title": "Recovering lost accuracy",
+          "body": "A medical image classifier loses 5% accuracy when converted via PTQ. The team retrains it with QAT for 3 epochs; the model learns to adapt to 8-bit constraints, recovering 4.8% of the lost accuracy.",
+          "icon": "🔍"
+        },
+        {
+          "kind": "mythbust",
+          "title": "QAT is not always necessary",
+          "body": "You might think you should always use QAT because it yields higher accuracy. However, PTQ requires no training time and is often sufficient for simple models, whereas QAT requires source datasets and active retraining.",
+          "icon": "⚠️"
+        },
+        {
+          "kind": "visual",
+          "title": "Quantization Strategies",
+          "body": "Comparing Post-Training and Training-Time quantization:",
+          "icon": "🏋️",
+          "compare": {
+            "left": {
+              "emoji": "⏱️",
+              "tag": "PTQ",
+              "text": "Done after training<br>Fast (takes minutes)<br>Requires calibration data only<br>Slightly lower accuracy"
+            },
+            "right": {
+              "emoji": "🏋️",
+              "tag": "QAT",
+              "text": "Done during training<br>Slower (needs training loops)<br>Requires full training setup<br>Best accuracy retention"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "type": "practice",
+      "exercises": [
+        {
+          "id": "p1",
+          "type": "multiple_choice",
+          "xp": 2,
+          "prompt": "Which quantization technique simulates 8-bit rounding noise during model training?",
+          "options": [
+            {
+              "id": "a",
+              "text": "Quantization-Aware Training (QAT)",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "Post-Training Quantization (PTQ)",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "Linear Regression Calibration",
+              "correct": false
+            },
+            {
+              "id": "d",
+              "text": "Data Preprocessing Fusion",
+              "correct": false
+            }
+          ],
+          "explain": "QAT inserts simulated quantization operations during training so the network adjusts its weights accordingly."
+        },
+        {
+          "id": "p2",
+          "type": "true_false",
+          "xp": 2,
+          "prompt": "True or False: PTQ requires retraining the entire model from scratch using the original training set.",
+          "options": [
+            {
+              "id": "t",
+              "text": "True",
+              "correct": false
+            },
+            {
+              "id": "f",
+              "text": "False",
+              "correct": true
+            }
+          ],
+          "explain": "False. PTQ only requires a pre-trained model and a small calibration set to adjust scale parameters, no retraining needed."
+        },
+        {
+          "id": "p3",
+          "type": "fill_blank",
+          "xp": 2,
+          "prompt": "Complete the sentence:",
+          "sentence": "If your model's accuracy drops heavily after simple quantization, you should apply ___ to recover accuracy.",
+          "blank": "qat",
+          "words": [
+            "qat",
+            "ptq",
+            "nms"
+          ],
+          "explain": "Quantization-Aware Training (QAT) helps recover accuracy lost due to low-precision rounding errors."
+        },
+        {
+          "id": "p4",
+          "type": "spot_the_ai",
+          "xp": 2,
+          "prompt": "What is a main drawback of QAT compared to PTQ?",
+          "options": [
+            {
+              "id": "a",
+              "text": "It requires more compute time, training scripts, and labeled data",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "It yields much lower accuracy on edge devices",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "It increases the model size on disk compared to PTQ",
+              "correct": false
+            }
+          ],
+          "explain": "QAT is a training-time process, meaning it takes more time, hardware resources, and access to training data."
+        }
+      ]
+    },
+    {
+      "type": "boss",
+      "exercises": [
+        {
+          "id": "b1",
+          "type": "multiple_choice",
+          "xp": 5,
+          "prompt": "You are deploying a safety critical lung-nodule detection model. Direct PTQ drops the classification sensitivity below the regulatory minimum. You have access to the original training infrastructure. What should you do?",
+          "options": [
+            {
+              "id": "a",
+              "text": "Use Quantization-Aware Training (QAT) to retrain the model and recover sensitivity.",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "Deploy the unquantized FP32 model on the phone and ignore memory constraints.",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "Use PTQ anyway and hope patients do not notice the missed nodules.",
+              "correct": false
+            },
+            {
+              "id": "d",
+              "text": "Switch to a non-neural rule-based system.",
+              "correct": false
+            }
+          ],
+          "explain": "When accuracy is critical and PTQ falls short, QAT is the standard industry method to adapt weights to 8-bit precision while maintaining high safety levels."
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,222 @@
+{
+  "id": "u183-l4",
+  "unit": 183,
+  "day": 919,
+  "tier": "Vision Transformers & Modern Approaches",
+  "tierIcon": "\ud83d\udc41\ufe0f",
+  "title": "Training CLIP",
+  "icon": "\ud83d\udcd0",
+  "concept": "CLIP is trained using a symmetric cross-entropy loss that maximizes the cosine similarity of matching image-text pairs along the matrix diagonal.",
+  "xp": 15,
+  "hearts": 3,
+  "estMinutes": 7,
+  "segments": [
+    {
+      "type": "warmup",
+      "exercises": [
+        {
+          "id": "w1",
+          "type": "multiple_choice",
+          "xp": 1,
+          "prompt": "Recap: What is the benefit of prompt templates in zero-shot classification?",
+          "options": [
+            {
+              "id": "a",
+              "text": "They match the full-sentence context CLIP saw during pre-training.",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "They compress the image patches to save memory.",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "They bypass the text encoder entirely.",
+              "correct": false
+            }
+          ],
+          "explain": "Correct! Sentence context helps CLIP extract cleaner embeddings than isolated keywords."
+        }
+      ]
+    },
+    {
+      "type": "teach",
+      "cards": [
+        {
+          "kind": "hook",
+          "icon": "\ud83d\udcd0",
+          "title": "Aligning the diagonal",
+          "body": "If you have a batch of 100 images and 100 captions, how do you mathematically train the model to link them correctly? You construct a massive grid of similarity scores. We want the correct matches along the diagonal to glow bright, while the incorrect matches everywhere else stay dark. Let's see how."
+        },
+        {
+          "kind": "definition",
+          "icon": "\ud83d\udcd0",
+          "title": "Symmetric Cross-Entropy Loss",
+          "body": "CLIP is trained in batches of size <code>N</code>. We compute a similarity matrix of size <code>N x N</code> containing pairwise cosine similarities. The model is optimized using a <strong>symmetric cross-entropy loss</strong>: we treat the diagonal (matching pairs) as target labels, computing cross-entropy loss along both the rows and the columns."
+        },
+        {
+          "kind": "analogy",
+          "icon": "\ud83d\uddc4\ufe0f",
+          "title": "A seating chart",
+          "body": "Imagine a wedding with 50 couples. You draw a grid of seats. Row 1 belongs to Groom 1, Column 1 belongs to Bride 1. You want Groom 1 to sit next to Bride 1 (diagonal). You want to maximize the connection score along this diagonal, while keeping Groom 1 as far away as possible from all other brides."
+        },
+        {
+          "kind": "example",
+          "icon": "\ud83d\udcc8",
+          "title": "Matrix visualization",
+          "body": "In a batch of 3: <br>Images: [Img1, Img2, Img3]<br>Texts: [Txt1, Txt2, Txt3]<br>The loss forces the similarity of (Img1, Txt1), (Img2, Txt2), and (Img3, Txt3) to reach 1.0, while (Img1, Txt2) and other combinations push to 0.0."
+        },
+        {
+          "kind": "mythbust",
+          "icon": "\u26a0\ufe0f",
+          "title": "No pixel reconstruction",
+          "body": "You might think CLIP must decode images or translate text. In reality, CLIP **never generates pixels or text** during training. It only computes similarity scores between vectors, which makes it extremely fast to train compared to generative models."
+        },
+        {
+          "kind": "visual",
+          "icon": "\u2696\ufe0f",
+          "title": "CLIP Similarity Matrix",
+          "body": "How similarity matrix gradients are optimized:",
+          "compare": {
+            "left": {
+              "emoji": "\u2705",
+              "tag": "Diagonal Cells (Img_i, Txt_i)",
+              "text": "Matching pairs (positives)<br>Cosine similarity -> Maximised<br>Target score: 1.0"
+            },
+            "right": {
+              "emoji": "\u274c",
+              "tag": "Off-Diagonal Cells (Img_i, Txt_j)",
+              "text": "Mismatching pairs (negatives)<br>Cosine similarity -> Minimised<br>Target score: 0.0"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "type": "practice",
+      "exercises": [
+        {
+          "id": "p1",
+          "type": "multiple_choice",
+          "xp": 2,
+          "prompt": "How does CLIP calculate its training loss for a batch of size N?",
+          "explain": "Symmetric cross-entropy optimizes the rows and columns of the similarity matrix to maximize diagonal alignments.",
+          "options": [
+            {
+              "id": "a",
+              "text": "Using symmetric cross-entropy loss over an N x N similarity matrix of image-text pairs",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "By calculating the MSE between original and predicted pixels",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "By adding the weights of the two encoders directly",
+              "correct": false
+            },
+            {
+              "id": "d",
+              "text": "By running K-means clustering on the text tokens",
+              "correct": false
+            }
+          ]
+        },
+        {
+          "id": "p2",
+          "type": "true_false",
+          "xp": 2,
+          "prompt": "True or false: Off-diagonal cells in the CLIP similarity matrix represent negative training pairs.",
+          "explain": "True. Off-diagonal cells mismatch images and texts in the batch, representing negative targets to push apart.",
+          "options": [
+            {
+              "id": "t",
+              "text": "True",
+              "correct": true
+            },
+            {
+              "id": "f",
+              "text": "False",
+              "correct": false
+            }
+          ]
+        },
+        {
+          "id": "p3",
+          "type": "fill_blank",
+          "xp": 2,
+          "prompt": "Complete the sentence:",
+          "explain": "The diagonal cells link matching image-text pairs, which are the positive samples.",
+          "sentence": "CLIP's symmetric loss maximizes similarity scores along the ___ of the image-text similarity matrix.",
+          "blank": "diagonal",
+          "words": [
+            "diagonal",
+            "borders",
+            "columns"
+          ]
+        },
+        {
+          "id": "p4",
+          "type": "spot_the_ai",
+          "xp": 2,
+          "prompt": "Why does CLIP compute cross-entropy loss along both the rows and the columns?",
+          "explain": "Symmetric loss ensures that we optimize both for finding the right text given an image, and the right image given a text.",
+          "options": [
+            {
+              "id": "a",
+              "text": "To make the classification loss symmetric: matching text-to-image and image-to-text simultaneously",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "To double the speed of the GPU calculations",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "To normalise the absolute coordinate positions",
+              "correct": false
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "boss",
+      "exercises": [
+        {
+          "id": "b1",
+          "type": "multiple_choice",
+          "xp": 5,
+          "prompt": "What would happen if the temperature parameter scaling the cosine similarities in CLIP was kept too high during training?",
+          "options": [
+            {
+              "id": "a",
+              "text": "The similarity scores would become too uniform, preventing the cross-entropy loss from identifying and sharpening the diagonal matches.",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "The model would automatically convert into a generative GAN.",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "The sequence length would shrink to zero.",
+              "correct": false
+            },
+            {
+              "id": "d",
+              "text": "The GPU would crash due to arithmetic overflow.",
+              "correct": false
+            }
+          ],
+          "explain": "Excellent! A learnable temperature scales the dot products, ensuring matching pairs stand out clearly. Next: CLIP applications and our Phase 11 capstone review!"
+        }
+      ]
+    }
+  ]
+}

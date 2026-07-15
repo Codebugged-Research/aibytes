@@ -1,0 +1,222 @@
+{
+  "id": "u159-l4",
+  "unit": 159,
+  "day": 799,
+  "tier": "Segmentation Loss Functions",
+  "tierIcon": "🎯",
+  "title": "Focal Loss for Pixels",
+  "icon": "🎯",
+  "concept": "Focal loss down-weights easy background pixels to force the model to focus on hard, misclassified boundaries and small objects.",
+  "xp": 15,
+  "hearts": 3,
+  "estMinutes": 7,
+  "segments": [
+    {
+      "type": "warmup",
+      "exercises": [
+        {
+          "id": "w1",
+          "type": "multiple_choice",
+          "xp": 1,
+          "prompt": "Recap: What is Jaccard Loss?",
+          "options": [
+            {
+              "id": "a",
+              "text": "1 minus the Intersection over Union (IoU)",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "1 minus the Dice Coefficient",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "The classification loss of the RPN",
+              "correct": false
+            }
+          ],
+          "explain": "Correct! Jaccard Loss is 1 - IoU."
+        }
+      ]
+    },
+    {
+      "type": "teach",
+      "cards": [
+        {
+          "kind": "hook",
+          "icon": "🎯",
+          "title": "Focusing on the hard parts",
+          "body": "In segmentation, the center of a large object is usually easy to classify. The background sky is also easy. The hard parts are the boundaries — the thin lines where the object meets the background. How do we force our model to stop wasting time on the easy pixels and focus its learning on these tricky borders?"
+        },
+        {
+          "kind": "definition",
+          "icon": "📉",
+          "title": "Focal Loss for Segmentation",
+          "body": "<strong>Focal Loss</strong> is a modified cross-entropy loss. It adds a modulating factor $(1 - p_t)^\\gamma$ that dynamically scales down the loss of easy, well-classified pixels, focusing the model's gradients on hard, misclassified pixels."
+        },
+        {
+          "kind": "analogy",
+          "icon": "🗂️",
+          "title": "Studying only the questions you got wrong",
+          "body": "If you keep reviewing flashcards you already know, you waste time. Focal loss is like a study system that automatically hides the cards you get right (easy pixels) and forces you to spend 99% of your energy on the cards you miss (hard borders)."
+        },
+        {
+          "kind": "example",
+          "icon": "🏢",
+          "title": "Focusing on edges",
+          "body": "During training, pixels in the middle of a large building have high confidence ($p_t = 0.99$). Focal loss shrinks their loss score to near 0. Pixels on the building's edge have low confidence ($p_t = 0.5$), keeping their loss value high and driving the optimization."
+        },
+        {
+          "kind": "mythbust",
+          "icon": "⚠️",
+          "title": "Gamma parameter tuning",
+          "body": "You might think the default settings of Focal Loss work for every task. The power parameter $\\gamma$ (gamma) must be tuned. Setting $\\gamma=2$ is common, but if the dataset is extremely noisy, setting it too high can force the model to over-focus on outliers and fail."
+        },
+        {
+          "kind": "visual",
+          "icon": "⚖️",
+          "title": "Standard CE vs. Focal Loss",
+          "body": "How loss behaves as confidence increases:",
+          "compare": {
+            "left": {
+              "emoji": "⏹️",
+              "tag": "Standard Cross-Entropy",
+              "text": "Easy pixels still accumulate minor loss<br>Large background zones overwhelm the loss<br>Slow learning on tricky borders"
+            },
+            "right": {
+              "emoji": "🎯",
+              "tag": "Focal Loss",
+              "text": "Easy pixel loss drops to absolute zero<br>Loss is dominated by misclassified pixels<br>Sharp learning on edges & borders"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "type": "practice",
+      "exercises": [
+        {
+          "id": "p1",
+          "type": "multiple_choice",
+          "xp": 2,
+          "prompt": "What is the primary mechanism of Focal Loss?",
+          "options": [
+            {
+              "id": "a",
+              "text": "It dynamically down-weights the loss of easy, well-classified pixels",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "It increases the weights of all classes equally",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "It flattens the feature maps into a single vector",
+              "correct": false
+            },
+            {
+              "id": "d",
+              "text": "It converts 2D convolutions into 1D convolutions",
+              "correct": false
+            }
+          ],
+          "explain": "Correct! Focal loss focuses attention on hard-to-segment pixels by suppressing easy ones."
+        },
+        {
+          "id": "p2",
+          "type": "true_false",
+          "xp": 2,
+          "prompt": "True or False: Focal loss is only useful for classification and cannot be applied pixel-wise in segmentation.",
+          "options": [
+            {
+              "id": "t",
+              "text": "True",
+              "correct": false
+            },
+            {
+              "id": "f",
+              "text": "False",
+              "correct": false
+            }
+          ],
+          "explain": "False. Focal loss is highly effective when applied to every pixel independently in segmentation."
+        },
+        {
+          "id": "p3",
+          "type": "fill_blank",
+          "xp": 2,
+          "prompt": "Complete the sentence:",
+          "sentence": "Focal loss uses a modulating factor based on a parameter named ___ (gamma).",
+          "blank": "gamma",
+          "words": [
+            "gamma",
+            "beta",
+            "alpha"
+          ],
+          "explain": "The exponent gamma controls how sharply the loss of easy pixels is suppressed."
+        },
+        {
+          "id": "p4",
+          "type": "spot_the_ai",
+          "xp": 2,
+          "prompt": "Which of these pixels is likely to have its loss reduced to near zero by Focal Loss?",
+          "options": [
+            {
+              "id": "a",
+              "text": "A background sky pixel that the model is 99% confident about",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "An edge pixel where the model is highly uncertain",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "A rare target pixel that the model has misclassified",
+              "correct": false
+            }
+          ],
+          "explain": "Easy, high-confidence pixels are down-weighted by Focal Loss."
+        }
+      ]
+    },
+    {
+      "type": "boss",
+      "exercises": [
+        {
+          "id": "b1",
+          "type": "multiple_choice",
+          "xp": 5,
+          "prompt": "You are segmenting thin street signs. The model is struggling to get the borders sharp, as it gets distracted by the easy-to-classify road and sky pixels. Which loss parameter adjustments would help?",
+          "options": [
+            {
+              "id": "a",
+              "text": "Use Focal Loss with a gamma greater than 0 to suppress the road and sky pixels, forcing the model to focus on the sign borders.",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "Use standard cross-entropy with class weights set to zero.",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "Increase the pooling stride in the encoder to blur the signs.",
+              "correct": false
+            },
+            {
+              "id": "d",
+              "text": "Remove the decoder branch and use only the bottleneck features.",
+              "correct": false
+            }
+          ],
+          "explain": "Perfect! Focal loss is designed exactly for this task — it silences the loud, easy pixels (road and sky) so the model can hear the quiet, hard pixels (the borders of the sign). Next: how do we mix losses?"
+        }
+      ]
+    }
+  ]
+}

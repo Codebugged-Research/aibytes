@@ -1,0 +1,222 @@
+{
+  "id": "u188-l2",
+  "unit": 188,
+  "day": 942,
+  "tier": "Environmental Variations",
+  "tierIcon": "📊",
+  "title": "Lighting and Shadows",
+  "icon": "🌗",
+  "concept": "Lighting changes can alter pixel values drastically, making identical objects look completely different to a model.",
+  "xp": 15,
+  "hearts": 3,
+  "estMinutes": 7,
+  "segments": [
+    {
+      "type": "warmup",
+      "exercises": [
+        {
+          "id": "w1",
+          "type": "multiple_choice",
+          "xp": 1,
+          "prompt": "Recap: What is the main challenge of environmental variations?",
+          "options": [
+            {
+              "id": "a",
+              "text": "They alter input pixels in ways the model has not seen during clean lab training",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "They double the size of the neural network parameters",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "They force the annotations to be re-written in JSON",
+              "correct": false
+            }
+          ],
+          "explain": "Physical distortions change visual data statistics, confusing models trained on clean lab data."
+        }
+      ]
+    },
+    {
+      "type": "teach",
+      "cards": [
+        {
+          "kind": "hook",
+          "icon": "🌗",
+          "title": "Chasing the Sun",
+          "body": "To a human, a red apple is red, whether it sits in a dark room or under bright direct sunlight. But to a computer, the raw pixel numbers of that apple change from low values (e.g., 20) in the dark to saturated values (e.g., 255) under glare. The model sees two different inputs."
+        },
+        {
+          "kind": "definition",
+          "icon": "🌗",
+          "title": "Lighting Variation",
+          "body": "<strong>Lighting Variation</strong> refers to changes in illumination intensity, direction, and color temperature. It causes <strong>overexposure</strong> (washed-out highlights), <strong>underexposure</strong> (lost details in dark areas), and <strong>shadows</strong> (which create false edges)."
+        },
+        {
+          "kind": "analogy",
+          "icon": "🎭",
+          "title": "Shadow Puppets",
+          "body": "Imagine playing shadow puppets. By placing your hand in front of a light, you create a dog shape on the wall. A naive model looking at the wall will classify the shadow as a real dog. Shadows create fake outlines that fool edge detectors."
+        },
+        {
+          "kind": "example",
+          "icon": "📐",
+          "title": "Time of Day Shift",
+          "body": "Traffic cameras monitor a highway. At noon, lighting is uniform. At 6 PM, the low sun casts long, dark shadows across lanes. The model starts drawing boxes around the shadows of trucks instead of the trucks themselves."
+        },
+        {
+          "kind": "mythbust",
+          "icon": "⚠️",
+          "title": "Color normalization isn't enough",
+          "body": "You might think simple global color normalization (like subtracting the mean) solves lighting issues. While it helps, it cannot recover information lost in totally black shadows (underexposed) or pure white glare (overexposed)."
+        },
+        {
+          "kind": "visual",
+          "icon": "⚖️",
+          "title": "Illumination Extremes",
+          "body": "How lighting extremes affect pixel data:",
+          "compare": {
+            "left": {
+              "emoji": "☀️",
+              "tag": "Overexposure (Glare)",
+              "text": "Pixels clip to max value (255).<br>Texture and color details are lost.<br>Analogy: Blinded by high beams."
+            },
+            "right": {
+              "emoji": "🌑",
+              "tag": "Underexposure (Shadow)",
+              "text": "Pixels drop near zero (0).<br>Object details blend into background.<br>Analogy: Searching in the dark."
+            }
+          }
+        }
+      ]
+    },
+    {
+      "type": "practice",
+      "exercises": [
+        {
+          "id": "p1",
+          "type": "multiple_choice",
+          "xp": 2,
+          "prompt": "Why do shadows pose a problem for convolutional neural networks?",
+          "explain": "Shadow borders look like strong structural edges, leading the model to predict false object boundaries.",
+          "options": [
+            {
+              "id": "a",
+              "text": "They create high-contrast edges and outlines that the model misinterprets as real object boundaries",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "They physically slow down the speed of light entering the camera",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "They delete the class annotations from the image metadata",
+              "correct": false
+            },
+            {
+              "id": "d",
+              "text": "They double the number of color channels in the image file",
+              "correct": false
+            }
+          ]
+        },
+        {
+          "id": "p2",
+          "type": "true_false",
+          "xp": 2,
+          "prompt": "True or False: Saturated pixels (value 255) from overexposure retain all original texture details that can be recovered by training longer.",
+          "explain": "False. Clipping to 255 destroys the underlying texture information; it cannot be recovered mathematically from the image file.",
+          "options": [
+            {
+              "id": "t",
+              "text": "True",
+              "correct": false
+            },
+            {
+              "id": "f",
+              "text": "False",
+              "correct": true
+            }
+          ]
+        },
+        {
+          "id": "p3",
+          "type": "fill_blank",
+          "xp": 2,
+          "prompt": "Complete the sentence:",
+          "explain": "Underexposure occurs when insufficient light reaches the sensor, losing details in the dark range.",
+          "sentence": "When an image is too dark and details are lost in black pixels, it is ___.",
+          "blank": "underexposed",
+          "words": [
+            "underexposed",
+            "overexposed",
+            "normalized"
+          ]
+        },
+        {
+          "id": "p4",
+          "type": "spot_the_ai",
+          "xp": 2,
+          "prompt": "Which of these is a direct consequence of lighting shift in computer vision?",
+          "explain": "Dusk conditions change contrast and color temperature, which confuses models trained on bright daylight.",
+          "options": [
+            {
+              "id": "a",
+              "text": "A model trained on daylight photos failing to detect objects at dusk due to low contrast",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "The model automatically changing its convolutional kernel sizes",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "An increase in the classification labels from 20 to 100",
+              "correct": false
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "boss",
+      "exercises": [
+        {
+          "id": "b1",
+          "type": "multiple_choice",
+          "xp": 5,
+          "prompt": "You are building a face scanner for an outdoor ATM. Direct morning sunlight splits users' faces into half-bright, half-shadow, causing the model to fail. What is the most robust engineering solution?",
+          "options": [
+            {
+              "id": "a",
+              "text": "Apply color jitter and random shadow augmentations during training, and use histogram equalization to balance contrast in preprocessing.",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "Write code to reject all transactions before 11:00 AM.",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "Switch the neural network model's activation function to Sigmoid.",
+              "correct": false
+            },
+            {
+              "id": "d",
+              "text": "Increase the image size to 4K to make the shadow vanish.",
+              "correct": false
+            }
+          ],
+          "explain": "Simulating shadows in training forces the model to ignore lighting contours, while histogram equalization balances the high contrast before inference."
+        }
+      ]
+    }
+  ]
+}

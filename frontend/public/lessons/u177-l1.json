@@ -1,0 +1,222 @@
+{
+  "id": "u177-l1",
+  "unit": 177,
+  "day": 886,
+  "tier": "Vision Transformers & Modern Approaches",
+  "tierIcon": "\ud83d\udc41\ufe0f",
+  "title": "Slicing the Image",
+  "icon": "\u2702\ufe0f",
+  "concept": "Before feeding an image to a Vision Transformer, it must be chopped into a grid of non-overlapping square patches, which act as the 'words' of the image.",
+  "xp": 15,
+  "hearts": 3,
+  "estMinutes": 7,
+  "segments": [
+    {
+      "type": "warmup",
+      "exercises": [
+        {
+          "id": "w1",
+          "type": "multiple_choice",
+          "xp": 1,
+          "prompt": "Recap: What is the main role of the CLS token in a Vision Transformer?",
+          "options": [
+            {
+              "id": "a",
+              "text": "To aggregate representation information from all other patches via self-attention.",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "To slice the raw image into non-overlapping grids.",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "To serve as a dropout regularizer.",
+              "correct": false
+            }
+          ],
+          "explain": "Correct! The CLS token acts as the central spokesperson, collecting context from all other patches for the final classifier."
+        }
+      ]
+    },
+    {
+      "type": "teach",
+      "cards": [
+        {
+          "kind": "hook",
+          "icon": "\u2702\ufe0f",
+          "title": "Chop it up",
+          "body": "If you feed a raw image into a transformer pixel-by-pixel, the sequence would be too long. For a 224x224 image, that's 50,176 pixels! To fix this, we chop the image into a grid of square patches, treating each patch as a single unit."
+        },
+        {
+          "kind": "definition",
+          "icon": "\ud83d\uddbc\ufe0f",
+          "title": "Image Slicing",
+          "body": "<strong>Image slicing</strong> is the process of dividing a 2D image of size <code>H x W</code> into a grid of smaller, non-overlapping square patches of size <code>P x P</code>. These patches are then flattened into vectors to form a 1D sequence."
+        },
+        {
+          "kind": "analogy",
+          "icon": "\ud83d\udcd6",
+          "title": "Comic strip panels",
+          "body": "Think of an image as a comic strip. If you read it page-by-page, it's too much info at once. If you look at every individual ink dot, you get lost. But if you look panel-by-panel, you can read the story in a sequence of manageable, meaningful scenes."
+        },
+        {
+          "kind": "example",
+          "icon": "\ud83d\udcd0",
+          "title": "16x16 Grid",
+          "body": "A standard ViT takes a 224x224 pixel image and chops it into 16x16 patches. This creates a grid of 14x14 patches, resulting in a sequence of exactly 196 patches."
+        },
+        {
+          "kind": "mythbust",
+          "icon": "\u26a0\ufe0f",
+          "title": "No overlap!",
+          "body": "You might think the patches should overlap like sliding convolutional windows to capture edges. In standard ViT, patches are strictly <strong>non-overlapping</strong>. They touch at the borders but never double-count pixels."
+        },
+        {
+          "kind": "visual",
+          "icon": "\u2696\ufe0f",
+          "title": "Pixels vs. Patches",
+          "body": "Comparing sequence lengths of pixels and patches:",
+          "compare": {
+            "left": {
+              "emoji": "\ud83d\udd35",
+              "tag": "Pixel Sequence",
+              "text": "224x224 = 50,176 inputs<br>Too long for self-attention<br>Extremely high memory footprint"
+            },
+            "right": {
+              "emoji": "\ud83d\udfe9",
+              "tag": "Patch Sequence",
+              "text": "14x14 grid = 196 inputs<br>Perfect size for transformers<br>Computes fast and efficiently"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "type": "practice",
+      "exercises": [
+        {
+          "id": "p1",
+          "type": "multiple_choice",
+          "xp": 2,
+          "prompt": "Why do we slice images into patches in Vision Transformers?",
+          "explain": "Processing pixels directly makes the sequence too long. Slicing it into patches keeps the sequence length manageable.",
+          "options": [
+            {
+              "id": "a",
+              "text": "To reduce the input sequence length so the transformer can handle it efficiently",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "To remove the background noise from the image",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "To increase the spatial resolution of the color space",
+              "correct": false
+            },
+            {
+              "id": "d",
+              "text": "To convert the image to black-and-white format",
+              "correct": false
+            }
+          ]
+        },
+        {
+          "id": "p2",
+          "type": "true_false",
+          "xp": 2,
+          "prompt": "True or false: Image patches in a standard ViT overlap with each other by default.",
+          "explain": "False. Patches in standard ViTs are non-overlapping squares that cover the image like a checkerboard.",
+          "options": [
+            {
+              "id": "t",
+              "text": "True",
+              "correct": false
+            },
+            {
+              "id": "f",
+              "text": "False",
+              "correct": true
+            }
+          ]
+        },
+        {
+          "id": "p3",
+          "type": "fill_blank",
+          "xp": 2,
+          "prompt": "Complete the sentence:",
+          "explain": "224 / 16 = 14 patches per side. 14 x 14 = 196 total patches.",
+          "sentence": "If you slice a 224x224 image using a patch size of 16x16, you will get a grid of ___ patches.",
+          "blank": "196",
+          "words": [
+            "196",
+            "256",
+            "14"
+          ]
+        },
+        {
+          "id": "p4",
+          "type": "spot_the_ai",
+          "xp": 2,
+          "prompt": "Which of the following represents the flattening of a 16x16 patch with 3 color channels (RGB)?",
+          "explain": "Correct! Flatting multiplies the dimensions: 16 pixels high by 16 pixels wide by 3 color channels equals a 768-element vector.",
+          "options": [
+            {
+              "id": "a",
+              "text": "A 1D vector of length 768 (16 x 16 x 3)",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "A 2D matrix of shape 16x16",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "A 3D tensor of shape 16x16x3",
+              "correct": false
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "boss",
+      "exercises": [
+        {
+          "id": "b1",
+          "type": "multiple_choice",
+          "xp": 5,
+          "prompt": "If you reduce the patch size from 16x16 to 8x8 on the same size image, what happens to the sequence length?",
+          "options": [
+            {
+              "id": "a",
+              "text": "It quadruples, because you get four times as many patches.",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "It is cut in half, because the patches are smaller.",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "It stays exactly the same.",
+              "correct": false
+            },
+            {
+              "id": "d",
+              "text": "It becomes zero because the patches are too small to count.",
+              "correct": false
+            }
+          ],
+          "explain": "Superb! Halving the dimensions of the patch squares quadruples the total count of patches. Let's see how these patches are converted into vectors next!"
+        }
+      ]
+    }
+  ]
+}

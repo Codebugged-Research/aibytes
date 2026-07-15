@@ -1,0 +1,222 @@
+{
+  "id": "u179-l4",
+  "unit": 179,
+  "day": 899,
+  "tier": "Vision Transformers & Modern Approaches",
+  "tierIcon": "\ud83d\udc41\ufe0f",
+  "title": "LeViT and ConViT",
+  "icon": "\ud83d\ude80",
+  "concept": "LeViT and ConViT are optimized hybrid models designed for fast edge-device inference by combining lightweight convolutions with gated attention mechanisms.",
+  "xp": 15,
+  "hearts": 3,
+  "estMinutes": 7,
+  "segments": [
+    {
+      "type": "warmup",
+      "exercises": [
+        {
+          "id": "w1",
+          "type": "multiple_choice",
+          "xp": 1,
+          "prompt": "Recap: What is the main design advantage of placing convolutions early and attention late?",
+          "options": [
+            {
+              "id": "a",
+              "text": "It handles high-resolution features locally and avoids running self-attention on long sequences.",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "It removes the need for residual skip connections.",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "It doubles the parameters of the MLP head.",
+              "correct": false
+            }
+          ],
+          "explain": "Correct! Early convolutions downsample the spatial dimensions, keeping the late attention sequence short."
+        }
+      ]
+    },
+    {
+      "type": "teach",
+      "cards": [
+        {
+          "kind": "hook",
+          "icon": "\ud83d\ude80",
+          "title": "Transformers on your phone",
+          "body": "A standard Vision Transformer is too heavy to run smoothly on a smartwatch or smartphone. To bring transformer power to edge devices, researchers designed special speed-optimized hybrids like LeViT and ConViT. Let's see how they achieved speed without losing accuracy."
+        },
+        {
+          "kind": "definition",
+          "icon": "\u2699\ufe0f",
+          "title": "LeViT and ConViT",
+          "body": "<strong>LeViT</strong> is a hybrid model that uses a fast convolutional pyramid to downsample images quickly, combined with attention blocks that use linear projections instead of expensive dot-products. <strong>ConViT</strong> uses a gated self-attention mechanism that mimics convolutions, letting the model decide whether to look locally or globally."
+        },
+        {
+          "kind": "analogy",
+          "icon": "\ud83d\udeb4",
+          "title": "A hybrid commuter bike",
+          "body": "Imagine a heavy mountain bike (ViT) and a fragile road racer (CNN). LeViT is like a hybrid commuter bike: it has a light frame (convolutions) to handle speed bumps and narrow paths, but has gears (attention) to zoom down open straights. It's built specifically for efficient daily travel."
+        },
+        {
+          "kind": "example",
+          "icon": "\ud83d\udcca",
+          "title": "Speed benchmarks",
+          "body": "On standard mobile processors, LeViT-256 runs up to **5 times faster** than standard ViT-Base, while achieving similar accuracy on ImageNet, making it a viable option for real-time mobile app deployment."
+        },
+        {
+          "kind": "mythbust",
+          "icon": "\u26a0\ufe0f",
+          "title": "Not just scaling down parameters",
+          "body": "You might think LeViT is fast simply because it is small. In reality, it uses structural changes: it removes the CLS token in favor of average pooling, uses batch normalization instead of layer normalization, and replaces position embeddings with attention biases."
+        },
+        {
+          "kind": "visual",
+          "icon": "\u2696\ufe0f",
+          "title": "ViT-Base vs. LeViT",
+          "body": "Comparing structural differences for efficiency:",
+          "compare": {
+            "left": {
+              "emoji": "\ud83e\udea8",
+              "tag": "ViT-Base (Standard)",
+              "text": "LayerNorm throughout<br>Position embeddings at start<br>Heavy computation; slow on edge"
+            },
+            "right": {
+              "emoji": "\ud83d\ude80",
+              "tag": "LeViT (Optimized Hybrid)",
+              "text": "BatchNorm for faster speed<br>Relative attention bias positional info<br>Lightweight; designed for edge devices"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "type": "practice",
+      "exercises": [
+        {
+          "id": "p1",
+          "type": "multiple_choice",
+          "xp": 2,
+          "prompt": "What is the primary design goal of the LeViT architecture?",
+          "explain": "LeViT combines fast convolutional downsampling with optimized attention blocks to speed up mobile and edge inference.",
+          "options": [
+            {
+              "id": "a",
+              "text": "To achieve high-speed, lightweight transformer inference on edge devices",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "To increase the depth of the network to 1000 layers",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "To train without using any backward propagation",
+              "correct": false
+            },
+            {
+              "id": "d",
+              "text": "To eliminate the use of color channels in the input",
+              "correct": false
+            }
+          ]
+        },
+        {
+          "id": "p2",
+          "type": "true_false",
+          "xp": 2,
+          "prompt": "True or false: LeViT uses Layer Normalization just like standard Vision Transformers.",
+          "explain": "False. LeViT replaces Layer Normalization with Batch Normalization because BN can be fused with adjacent convs during inference, saving compute.",
+          "options": [
+            {
+              "id": "t",
+              "text": "True",
+              "correct": false
+            },
+            {
+              "id": "f",
+              "text": "False",
+              "correct": true
+            }
+          ]
+        },
+        {
+          "id": "p3",
+          "type": "fill_blank",
+          "xp": 2,
+          "prompt": "Complete the sentence:",
+          "explain": "Global average pooling computes the mean vector of features, which is faster than routing an extra CLS token.",
+          "sentence": "To optimize speed, LeViT replaces the standard CLS token with global average ___ before the classifier.",
+          "blank": "pooling",
+          "words": [
+            "pooling",
+            "convolution",
+            "attention"
+          ]
+        },
+        {
+          "id": "p4",
+          "type": "spot_the_ai",
+          "xp": 2,
+          "prompt": "Which efficiency feature is found in LeViT to replace standard absolute position embeddings?",
+          "explain": "LeViT uses relative position biases within the attention calculation, which is more robust to changes in resolution.",
+          "options": [
+            {
+              "id": "a",
+              "text": "Relative position bias injected directly into the attention blocks",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "Hardcoded 2D coordinate matrices",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "Removing all spatial position tracking completely",
+              "correct": false
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "boss",
+      "exercises": [
+        {
+          "id": "b1",
+          "type": "multiple_choice",
+          "xp": 5,
+          "prompt": "How does ConViT's gated self-attention mechanism behave during the start of training?",
+          "options": [
+            {
+              "id": "a",
+              "text": "It uses a gating parameter initialized to mimic local convolutions, which the model can gradually open up to capture global relationships as it learns.",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "It randomly deletes half the attention heads in each epoch.",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "It forces all tokens to look only at the first patch.",
+              "correct": false
+            },
+            {
+              "id": "d",
+              "text": "It locks the attention weights to prevent them from updating.",
+              "correct": false
+            }
+          ],
+          "explain": "Incredible! ConViT initializes attention to behave like local convolutions, then lets backpropagation slowly expand the attention field as training progresses. Next: convolutional projection within attention blocks!"
+        }
+      ]
+    }
+  ]
+}

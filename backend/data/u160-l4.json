@@ -1,0 +1,222 @@
+{
+  "id": "u160-l4",
+  "unit": 160,
+  "day": 804,
+  "tier": "Medical Image Segmentation",
+  "tierIcon": "🩻",
+  "title": "Medical Annotation Consensus",
+  "icon": "🩻",
+  "concept": "Medical image annotation suffers from high inter-observer variability, requiring consensus methods to establish reliable ground truths.",
+  "xp": 15,
+  "hearts": 3,
+  "estMinutes": 7,
+  "segments": [
+    {
+      "type": "warmup",
+      "exercises": [
+        {
+          "id": "w1",
+          "type": "multiple_choice",
+          "xp": 1,
+          "prompt": "Recap: What is target-biased patch sampling?",
+          "options": [
+            {
+              "id": "a",
+              "text": "Selecting training crops that are guaranteed to contain the target class",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "Selecting only background crops to simplify features",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "Training the model on different GPU devices in parallel",
+              "correct": false
+            }
+          ],
+          "explain": "Correct! It ensures the model sees the rare class often during training."
+        }
+      ]
+    },
+    {
+      "type": "teach",
+      "cards": [
+        {
+          "kind": "hook",
+          "icon": "🩺",
+          "title": "When experts disagree",
+          "body": "In medical imaging, drawing the ground truth mask is hard. If you ask three different radiologists to outline a blurry liver tumor on the same MRI, they will draw three different shapes. One might be conservative, another aggressive. If the experts don't agree, what is the 'correct' label for the AI to learn?"
+        },
+        {
+          "kind": "definition",
+          "icon": "📊",
+          "title": "Annotation Consensus",
+          "body": "Medical vision suffers from <strong>inter-observer variability</strong> (differences between annotators). To build a reliable ground truth, datasets use consensus methods like **majority voting**, **STAPLE algorithms** (which weight annotators by reliability), or average masks."
+        },
+        {
+          "kind": "analogy",
+          "icon": "🗳️",
+          "title": "A jury verdict",
+          "body": "Imagine a trial. You don't just ask one juror for the verdict. You ask twelve jurors, discuss, and take a vote. Annotation consensus is voting on every single pixel to decide if it is truly part of the object."
+        },
+        {
+          "kind": "example",
+          "icon": "🩻",
+          "title": "Radiologist consensus",
+          "body": "Three radiologists outline a tumor. For a specific pixel: Radiologist A says 'tumor', B says 'tumor', C says 'healthy'. Using majority voting, the final ground truth label for that pixel is set to 'tumor' (2 vs 1)."
+        },
+        {
+          "kind": "mythbust",
+          "icon": "⚠️",
+          "title": "No 'perfect' ground truth",
+          "body": "A common myth is that medical datasets have perfect, error-free labels. In reality, medical ground truth is always an estimate. Label noise is high, which is why models must be evaluated against multiple independent expert annotations."
+        },
+        {
+          "kind": "visual",
+          "icon": "⚖️",
+          "title": "Inter-Observer Variability",
+          "body": "How different expert annotations overlap:",
+          "compare": {
+            "left": {
+              "emoji": "🔴",
+              "tag": "Expert 1 vs Expert 2",
+              "text": "Slightly different boundary outlines<br>Due to low-contrast edges<br>Creates boundary noise"
+            },
+            "right": {
+              "emoji": "🟢",
+              "tag": "Consensus Mask",
+              "text": "Intersection or majority vote area<br>Smooths out individual errors<br>Creates stable training target"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "type": "practice",
+      "exercises": [
+        {
+          "id": "p1",
+          "type": "multiple_choice",
+          "xp": 2,
+          "prompt": "What is inter-observer variability in medical imaging?",
+          "options": [
+            {
+              "id": "a",
+              "text": "The differences in annotations drawn by different medical experts",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "The difference in resolution between MRI and CT scans",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "The speed difference between CPUs and GPUs",
+              "correct": false
+            },
+            {
+              "id": "d",
+              "text": "The rate at which models drop out during training",
+              "correct": false
+            }
+          ],
+          "explain": "Correct! Different experts draw different boundaries for the same scan."
+        },
+        {
+          "id": "p2",
+          "type": "true_false",
+          "xp": 2,
+          "prompt": "True or False: Majority voting sets a pixel as positive only if all annotators agree it is positive.",
+          "options": [
+            {
+              "id": "t",
+              "text": "True",
+              "correct": false
+            },
+            {
+              "id": "f",
+              "text": "False",
+              "correct": false
+            }
+          ],
+          "explain": "False. Majority voting requires a simple majority (e.g. 2 out of 3), not unanimous agreement."
+        },
+        {
+          "id": "p3",
+          "type": "fill_blank",
+          "xp": 2,
+          "prompt": "Complete the sentence:",
+          "sentence": "The STAPLE algorithm estimates annotator ___ to compute a weighted consensus map.",
+          "blank": "reliability",
+          "words": [
+            "reliability",
+            "speed",
+            "height"
+          ],
+          "explain": "STAPLE weights annotators based on their past accuracy and bias."
+        },
+        {
+          "id": "p4",
+          "type": "spot_the_ai",
+          "xp": 2,
+          "prompt": "Why is consensus labeling important for training medical AI?",
+          "options": [
+            {
+              "id": "a",
+              "text": "It reduces individual bias and noise in the training masks",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "It automatically increases the size of the images",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "It allows the model to run without backpropagation",
+              "correct": false
+            }
+          ],
+          "explain": "Consensus labels create a more stable, average target for the model to learn."
+        }
+      ]
+    },
+    {
+      "type": "boss",
+      "exercises": [
+        {
+          "id": "b1",
+          "type": "multiple_choice",
+          "xp": 5,
+          "prompt": "You are building a database to train a skin cancer model. You have annotations from 5 junior residents and 1 world-class expert dermatologist. How should you create the ground truth masks?",
+          "options": [
+            {
+              "id": "a",
+              "text": "Use a weighted consensus algorithm like STAPLE that gives higher weight to the expert's annotations while incorporating resident inputs.",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "Average all annotations equally, treating the residents and expert identically.",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "Discard the expert's masks and use only the residents' masks to save space.",
+              "correct": false
+            },
+            {
+              "id": "d",
+              "text": "Let the junior residents vote and ignore the dermatologist if they disagree.",
+              "correct": false
+            }
+          ],
+          "explain": "Perfect! Weighted consensus algorithms like STAPLE are designed exactly for this: they learn who the experts are and weight their pixels higher, producing a much safer ground truth. Next: clinical safety and domain shifts!"
+        }
+      ]
+    }
+  ]
+}

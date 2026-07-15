@@ -1,0 +1,222 @@
+{
+  "id": "u176-l5",
+  "unit": 176,
+  "day": 885,
+  "tier": "Vision Transformers & Modern Approaches",
+  "tierIcon": "\ud83d\udc41\ufe0f",
+  "title": "Multi-Head Self-Attention in Vision",
+  "icon": "\ud83e\udde0",
+  "concept": "Multi-head self-attention enables patch tokens to interact across multiple representation subspaces, capturing both fine details and global relationships.",
+  "xp": 15,
+  "hearts": 3,
+  "estMinutes": 7,
+  "segments": [
+    {
+      "type": "warmup",
+      "exercises": [
+        {
+          "id": "w1",
+          "type": "multiple_choice",
+          "xp": 1,
+          "prompt": "Recap: Why are position embeddings element-wise added to patch embeddings?",
+          "options": [
+            {
+              "id": "a",
+              "text": "To inject spatial coordinate details into the permutation-invariant transformer.",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "To downsample the resolution of the patch.",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "To normalize the contrast of the input pixels.",
+              "correct": false
+            }
+          ],
+          "explain": "Correct! Adding position embeddings ensures the model knows the physical layout of the patches."
+        }
+      ]
+    },
+    {
+      "type": "teach",
+      "cards": [
+        {
+          "kind": "hook",
+          "icon": "\ud83e\udde0",
+          "title": "Looking everywhere",
+          "body": "When you look at an image of a dog chasing a ball, you don't just see a dog and a ball. You immediately link them together. Multi-Head Self-Attention is the mechanism that allows every single patch in the image to look at every other patch, determining what relationship they share."
+        },
+        {
+          "kind": "definition",
+          "icon": "\ud83e\udde0",
+          "title": "Multi-Head Self-Attention (MHSA)",
+          "body": "<strong>Multi-Head Self-Attention</strong> splits patch embeddings into multiple projections, computes attention weights between all patch pairs in each subspace, and combines the results. This allows the model to simultaneously focus on different features (like texture, edges, or semantic objects) across the image."
+        },
+        {
+          "kind": "analogy",
+          "icon": "\ud83d\udea6",
+          "title": "A panel of commentators",
+          "body": "Imagine an art critique panel. Instead of one person analyzing the whole painting, we have multiple experts. One looks at color contrast, another at brush strokes, another at object symmetry. By combining their reports, we get a much deeper understanding of the artwork."
+        },
+        {
+          "kind": "example",
+          "icon": "\ud83d\udd0d",
+          "title": "Attention maps",
+          "body": "By visualizing the attention weights of the CLS token in a trained ViT, we can see exactly which patches the model focused on. For a bird classifier, the attention map highlights the beak, wings, and feet while ignoring the background."
+        },
+        {
+          "kind": "mythbust",
+          "icon": "\u26a0\ufe0f",
+          "title": "Attention isn't explanation",
+          "body": "It's easy to assume attention maps show exactly what the model thinks. While they highlight where information is routing, attention is not always a perfect explanation of the model's logic \u2014 some blocks route background info for normalization."
+        },
+        {
+          "kind": "visual",
+          "icon": "\u2696\ufe0f",
+          "title": "Single-Head vs. Multi-Head",
+          "body": "Comparing attention head capacities:",
+          "compare": {
+            "left": {
+              "emoji": "\ud83d\udd26",
+              "tag": "Single-Head",
+              "text": "1 set of Query/Key/Value matrices<br>Learns only one type of relationship<br>Can easily miss secondary details"
+            },
+            "right": {
+              "emoji": "\ud83d\udca1",
+              "tag": "Multi-Head",
+              "text": "N sets of Q/K/V matrices in parallel<br>Tracks multiple relations (e.g. shapes & colors)<br>Rich, robust feature representations"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "type": "practice",
+      "exercises": [
+        {
+          "id": "p1",
+          "type": "multiple_choice",
+          "xp": 2,
+          "prompt": "What does 'multi-head' refer to in Multi-Head Self-Attention?",
+          "explain": "Multi-head attention routes tokens through multiple independent attention operations in parallel, helping the model learn diverse features.",
+          "options": [
+            {
+              "id": "a",
+              "text": "Running multiple attention operations in parallel on different projections of the tokens",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "Stacking convolutional heads on top of the transformer",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "Using multiple GPUs to process different images",
+              "correct": false
+            },
+            {
+              "id": "d",
+              "text": "Averaging the weights of multiple trained classifiers",
+              "correct": false
+            }
+          ]
+        },
+        {
+          "id": "p2",
+          "type": "true_false",
+          "xp": 2,
+          "prompt": "True or false: An attention map can show us which visual patches the model prioritized for its prediction.",
+          "explain": "True. Visualizing attention weights (especially from the CLS token) highlights where the model routes its representations.",
+          "options": [
+            {
+              "id": "t",
+              "text": "True",
+              "correct": true
+            },
+            {
+              "id": "f",
+              "text": "False",
+              "correct": false
+            }
+          ]
+        },
+        {
+          "id": "p3",
+          "type": "fill_blank",
+          "xp": 2,
+          "prompt": "Complete the sentence:",
+          "explain": "Query, Key, and Value vectors are the three components used in self-attention dot-product scaling.",
+          "sentence": "Self-attention determines the relationship between patches by computing queries, keys, and ___ vectors.",
+          "blank": "values",
+          "words": [
+            "values",
+            "biases",
+            "convolutions"
+          ]
+        },
+        {
+          "id": "p4",
+          "type": "spot_the_ai",
+          "xp": 2,
+          "prompt": "Which of the following describes the output of the attention dot-product matrix calculation?",
+          "explain": "The attention calculation yields a matrix of pairwise weights, dictating how information is shared across all token positions.",
+          "options": [
+            {
+              "id": "a",
+              "text": "A matrix of weights representing how much attention each patch token should pay to every other patch token",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "A vector of class probabilities for the classification task",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "A single average color channel representational vector",
+              "correct": false
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "boss",
+      "exercises": [
+        {
+          "id": "b1",
+          "type": "multiple_choice",
+          "xp": 5,
+          "prompt": "How does Multi-Head Self-Attention help a Vision Transformer learn textures versus global structures?",
+          "options": [
+            {
+              "id": "a",
+              "text": "Different attention heads can specialize: some focus on local patch relationships (textures) while others focus on distant patches (global structure).",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "By applying pooling layers to separate texture maps.",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "By ignoring position embeddings in the early heads.",
+              "correct": false
+            },
+            {
+              "id": "d",
+              "text": "By forcing all heads to calculate the exact same attention weights.",
+              "correct": false
+            }
+          ],
+          "explain": "Fantastic! The multi-head design enables different attention projections to capture distinct visual relationships, from tiny local details to overall layout. Phase 11: Vision Transformers & Modern Approaches is complete. Next up: Vision Data & Evaluation Deep Dive."
+        }
+      ]
+    }
+  ]
+}

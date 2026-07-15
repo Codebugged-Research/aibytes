@@ -1,0 +1,222 @@
+{
+  "id": "u144-l3",
+  "unit": 144,
+  "day": 723,
+  "tier": "Object Detection Foundations",
+  "tierIcon": "🎯",
+  "title": "RoI Pooling Layer",
+  "icon": "🍪",
+  "concept": "Region of Interest (RoI) Pooling extracts a fixed-size feature vector from any arbitrary rectangular section of the shared feature map.",
+  "xp": 15,
+  "hearts": 3,
+  "estMinutes": 7,
+  "segments": [
+    {
+      "type": "warmup",
+      "exercises": [
+        {
+          "id": "w1",
+          "type": "multiple_choice",
+          "xp": 1,
+          "prompt": "Recap: How do we project original coordinates onto a shared feature map?",
+          "options": [
+            {
+              "id": "a",
+              "text": "By dividing them by the backbone's downsampling factor",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "By multiplying them by the learning rate",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "By applying data augmentation",
+              "correct": false
+            }
+          ],
+          "explain": "Scaling coordinates by the downsampling factor maps them onto the feature map."
+        }
+      ]
+    },
+    {
+      "type": "teach",
+      "cards": [
+        {
+          "kind": "hook",
+          "icon": "🍪",
+          "title": "The Cookie Cutter",
+          "body": "If you have scraps of dough of all different shapes — some long, some wide, some tiny — and you want to bake identical cookies, you use a standard cookie cutter. It shapes any arbitrary piece of dough into a uniform grid size. That is what RoI Pooling does to feature regions."
+        },
+        {
+          "kind": "definition",
+          "icon": "🍪",
+          "title": "RoI Pooling",
+          "body": "<strong>RoI Pooling</strong> (Region of Interest Pooling) is a layer that downsamples any projected rectangular feature region of size $H \times W$ into a fixed, uniform output dimension (typically $7 \times 7$). It divides the region into a grid of sub-sections and performs max pooling in each."
+        },
+        {
+          "kind": "analogy",
+          "icon": "🍪",
+          "title": "Splitting a Cake",
+          "body": "Imagine you have cakes of different rectangular sizes. You want to serve exactly 9 slices (a 3x3 grid) from each cake. If the cake is large, you make large slices. If the cake is small, you make tiny slices. Each slice represents a pooled grid cell!"
+        },
+        {
+          "kind": "example",
+          "icon": "📊",
+          "title": "Max Pooling a Grid",
+          "body": "A projected region has size 14x21. We want a 7x7 output. RoI Pooling divides the region into 7x7 sub-grids, where each sub-grid is 2x3 features. It calculates the <strong>maximum value</strong> inside each 2x3 block, outputting a 7x7 grid."
+        },
+        {
+          "kind": "mythbust",
+          "icon": "⚠️",
+          "title": "Not standard image resizing",
+          "body": "You might think RoI Pooling is just stretching pixels like resizing a photo. It actually operates on the feature activations directly, partitioning the math into grids and selecting the strongest signals (max values), preserving spatial activations."
+        },
+        {
+          "kind": "visual",
+          "icon": "⚖️",
+          "title": "RoI Pooling Action",
+          "body": "Visualizing how a variable region is pooled into a uniform output:",
+          "compare": {
+            "left": {
+              "emoji": "📐",
+              "tag": "Variable Region",
+              "text": "Proposed crops have different sizes:<br><code>e.g. 14x21 or 8x8 or 20x10</code>"
+            },
+            "right": {
+              "emoji": "⏹️",
+              "tag": "RoI Pooled Output",
+              "text": "Always outputs a fixed grid size:<br><code>e.g. 7x7 features</code>"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "type": "practice",
+      "exercises": [
+        {
+          "id": "p1",
+          "type": "multiple_choice",
+          "xp": 2,
+          "prompt": "What is the primary function of the RoI Pooling layer?",
+          "explain": "RoI Pooling takes rectangular regions of any dimensions and downsamples them to a fixed grid size (like 7x7) so they can feed into fully connected layers.",
+          "options": [
+            {
+              "id": "a",
+              "text": "To convert arbitrary-sized region proposals on the feature map into a fixed-size vector",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "To generate 2,000 candidate proposals on the CPU",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "To classify the objects into binary SVM categories",
+              "correct": false
+            },
+            {
+              "id": "d",
+              "text": "To filter out weak background noise",
+              "correct": false
+            }
+          ]
+        },
+        {
+          "id": "p2",
+          "type": "true_false",
+          "xp": 2,
+          "prompt": "True or False: RoI Pooling uses the average value of each sub-grid division to normalize features.",
+          "explain": "False. RoI Pooling uses max pooling, which selects the maximum (strongest) feature value inside each grid cell division.",
+          "options": [
+            {
+              "id": "t",
+              "text": "True",
+              "correct": false
+            },
+            {
+              "id": "f",
+              "text": "False",
+              "correct": true
+            }
+          ]
+        },
+        {
+          "id": "p3",
+          "type": "fill_blank",
+          "xp": 2,
+          "prompt": "Complete the sentence:",
+          "explain": "RoI Pooling uses max pooling to extract the strongest features from each grid section.",
+          "sentence": "RoI Pooling divides a region into a grid and outputs the ___ activation in each grid section.",
+          "blank": "maximum",
+          "words": [
+            "maximum",
+            "average",
+            "minimum"
+          ]
+        },
+        {
+          "id": "p4",
+          "type": "spot_the_ai",
+          "xp": 2,
+          "prompt": "Which output format represents the result of a RoI Pooling layer?",
+          "explain": "RoI Pooling outputs a standardized tensor (usually 7x7) for each proposed region.",
+          "options": [
+            {
+              "id": "a",
+              "text": "A fixed-size feature activation map of shape [batch_size, channels, 7, 7]",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "A set of four corner pixel coordinates [xmin, ymin, xmax, ymax]",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "A list of 20 classification names",
+              "correct": false
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "boss",
+      "exercises": [
+        {
+          "id": "b1",
+          "type": "multiple_choice",
+          "xp": 5,
+          "prompt": "A projected region of interest on the feature map has a height of 21 and a width of 14. You apply a RoI Pooling layer configured to output a 7x7 grid. What are the dimensions of each grid cell (sub-section) that is max-pooled?",
+          "options": [
+            {
+              "id": "a",
+              "text": "height = 3, width = 2",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "height = 7, width = 7",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "height = 14, width = 21",
+              "correct": false
+            },
+            {
+              "id": "d",
+              "text": "height = 1.5, width = 1.0",
+              "correct": false
+            }
+          ],
+          "explain": "Exactly! To divide a 21x14 region into 7x7 cells, you divide height by 7 (21 / 7 = 3) and width by 7 (14 / 7 = 2). Each cell is 3x2. Next: let's learn how Fast R-CNN trains classification and regression together!"
+        }
+      ]
+    }
+  ]
+}

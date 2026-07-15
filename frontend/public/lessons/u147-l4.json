@@ -1,0 +1,222 @@
+{
+  "id": "u147-l4",
+  "unit": 147,
+  "day": 739,
+  "tier": "Modern Object Detection",
+  "tierIcon": "🎯",
+  "title": "The YOLO Loss Function",
+  "icon": "📈",
+  "concept": "YOLO's loss function balances bounding box coordinates, object confidence, and class probabilities in a single training signal.",
+  "xp": 15,
+  "hearts": 3,
+  "estMinutes": 7,
+  "segments": [
+    {
+      "type": "warmup",
+      "exercises": [
+        {
+          "id": "w4",
+          "type": "multiple_choice",
+          "xp": 1,
+          "prompt": "Recap: What metric does NMS use to measure how much two boxes overlap?",
+          "options": [
+            {
+              "id": "a",
+              "text": "Intersection over Union (IoU)",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "Mean Squared Error (MSE)",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "Cross-Entropy",
+              "correct": false
+            }
+          ],
+          "explain": "Correct! IoU measures the ratio of the intersection area to the union area of the boxes."
+        }
+      ]
+    },
+    {
+      "type": "teach",
+      "cards": [
+        {
+          "kind": "hook",
+          "icon": "🎛️",
+          "title": "A Multi-Task Balance",
+          "body": "YOLO needs to output coordinates, check if an object is present, and identify what the object is. How do we train a single neural network to learn all three different things at once?"
+        },
+        {
+          "kind": "definition",
+          "icon": "📈",
+          "title": "YOLO Loss Function",
+          "body": "The <strong>YOLO Loss Function</strong> is a multi-part loss. It calculates three distinct errors: <strong>localization loss</strong> (box coordinate error), <strong>confidence loss</strong> (object presence error), and <strong>classification loss</strong> (class label error)."
+        },
+        {
+          "kind": "analogy",
+          "icon": "🏃",
+          "title": "The Triathlete's Training",
+          "body": "Imagine training for a triathlon. You can't just practice swimming; you must balance swimming, cycling, and running. YOLO loss is like a triathlete's training score, combining errors from all three disciplines into one final number."
+        },
+        {
+          "kind": "example",
+          "icon": "🚕",
+          "title": "Locating vs. Classifying",
+          "body": "If YOLO draws a perfect box around a taxi, but calls it a 'dog', the localization loss is 0, but the classification loss is very high. The model updates its weights to get the class right next time."
+        },
+        {
+          "kind": "mythbust",
+          "icon": "⚠️",
+          "title": "Equal Error Weights?",
+          "body": "You might think coordinate errors and class errors are treated equally. In reality, YOLO uses loss weights (like lambda_coord) to penalize coordinate errors more heavily, ensuring the model prioritizes drawing accurate boxes."
+        },
+        {
+          "kind": "visual",
+          "icon": "⚖️",
+          "title": "The Three Losses",
+          "body": "How YOLO breaks down its training signals:",
+          "compare": {
+            "left": {
+              "emoji": "📦",
+              "tag": "Localization Loss",
+              "text": "Measures coordinate errors (x, y, w, h)<br>Penalizes small box errors more<br>Ensures box shape is correct"
+            },
+            "right": {
+              "emoji": "🏷️",
+              "tag": "Confidence & Class Loss",
+              "text": "Measures if box contains an object<br>Measures classification accuracy<br>Ensures correct labels"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "type": "practice",
+      "exercises": [
+        {
+          "id": "p1",
+          "type": "multiple_choice",
+          "xp": 2,
+          "prompt": "Which of the following is NOT a component of the YOLO loss function?",
+          "options": [
+            {
+              "id": "a",
+              "text": "Image resolution scaling loss",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "Localization loss (bounding box coordinates)",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "Confidence loss (object presence)",
+              "correct": false
+            },
+            {
+              "id": "d",
+              "text": "Classification loss (object class)",
+              "correct": false
+            }
+          ],
+          "explain": "Correct! Scaling loss is not a component of the YOLO loss function."
+        },
+        {
+          "id": "p2",
+          "type": "true_false",
+          "xp": 2,
+          "prompt": "True or False: Localization loss measures the difference between predicted bounding box coordinates and ground truth coordinates.",
+          "options": [
+            {
+              "id": "t",
+              "text": "True",
+              "correct": true
+            },
+            {
+              "id": "f",
+              "text": "False",
+              "correct": false
+            }
+          ],
+          "explain": "True. It penalizes errors in the predicted center coordinates, width, and height."
+        },
+        {
+          "id": "p3",
+          "type": "fill_blank",
+          "xp": 2,
+          "prompt": "Complete the sentence:",
+          "sentence": "YOLO uses loss weight parameters like lambda_coord to make coordinate errors count ___ than class errors during training.",
+          "blank": "more",
+          "words": [
+            "more",
+            "less",
+            "equal"
+          ],
+          "explain": "YOLO prioritizes localization by weighting coordinate errors more heavily."
+        },
+        {
+          "id": "p4",
+          "type": "spot_the_ai",
+          "xp": 2,
+          "prompt": "Why does YOLO loss use the square root of width and height when calculating localization loss?",
+          "options": [
+            {
+              "id": "a",
+              "text": "To penalize errors in small boxes more than errors in large boxes",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "To convert coordinates into integer pixels",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "To make the loss run faster on CPU",
+              "correct": false
+            }
+          ],
+          "explain": "Correct! A small error in a small box is much more noticeable than the same error in a large box, so square roots help normalize this scale."
+        }
+      ]
+    },
+    {
+      "type": "boss",
+      "exercises": [
+        {
+          "id": "b1",
+          "type": "multiple_choice",
+          "xp": 5,
+          "prompt": "During training, your YOLO model is finding objects but the bounding boxes are consistently slightly off-center. Which part of the loss function is responsible for guiding the model to correct this?",
+          "options": [
+            {
+              "id": "a",
+              "text": "Localization loss, which compares predicted centers (x, y) with the ground truth centers.",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "Confidence loss, which checks if any object exists there.",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "Classification loss, which checks if the class label matches.",
+              "correct": false
+            },
+            {
+              "id": "d",
+              "text": "Hard negative mining loss, which handles background pixels.",
+              "correct": false
+            }
+          ],
+          "explain": "Exactly! Bounding box alignment is managed by the localization loss component."
+        }
+      ]
+    }
+  ]
+}

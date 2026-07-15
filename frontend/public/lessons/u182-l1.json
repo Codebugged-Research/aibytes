@@ -1,0 +1,222 @@
+{
+  "id": "u182-l1",
+  "unit": 182,
+  "day": 911,
+  "tier": "Vision Transformers & Modern Approaches",
+  "tierIcon": "\ud83d\udc41\ufe0f",
+  "title": "Masking the Image",
+  "icon": "\ud83c\udfad",
+  "concept": "Masked Autoencoders (MAE) pre-train models by hiding a massive percentage (e.g. 75%) of image patches, leaving only a few visible patches for the encoder to process.",
+  "xp": 15,
+  "hearts": 3,
+  "estMinutes": 7,
+  "segments": [
+    {
+      "type": "warmup",
+      "exercises": [
+        {
+          "id": "w1",
+          "type": "multiple_choice",
+          "xp": 1,
+          "prompt": "Recap: In self-supervised learning, how do you prevent point representation collapse without negative pairs in DINO?",
+          "options": [
+            {
+              "id": "a",
+              "text": "By balancing the teacher's outputs using centering and sharpening.",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "By freezing the learning rate to absolute zero.",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "By deleting all position embeddings.",
+              "correct": false
+            }
+          ],
+          "explain": "Correct! DINO uses centering and sharpening to stabilize outputs without needing negatives."
+        }
+      ]
+    },
+    {
+      "type": "teach",
+      "cards": [
+        {
+          "kind": "hook",
+          "icon": "\ud83c\udfad",
+          "title": "Fill in the blanks",
+          "body": "In natural language, models like BERT learn by masking words in a sentence and guessing the missing words (e.g. 'The ___ sat on the mat'). Can we do the same for vision? Yes! In Masked Autoencoders, we hide 75% of the image behind black squares and ask the model to paint in the missing details."
+        },
+        {
+          "kind": "definition",
+          "icon": "\ud83c\udfad",
+          "title": "Patch Masking",
+          "body": "In <strong>Masked Autoencoders</strong> (MAE), we split an image into patches and randomly **mask (hide)** a high ratio (typically 75% to 80%) of them. The remaining 25% of visible patches are sent to a transformer encoder to extract features."
+        },
+        {
+          "kind": "analogy",
+          "icon": "\u270f\ufe0f",
+          "title": "Drawing from a stencil",
+          "body": "Imagine someone hands you a sketch where 3 out of every 4 squares are erased. If you only look at local pixels, you can't fill it in. You must look at the remaining outlines (visible patches) and use your knowledge of the world (e.g., 'that curve looks like a wheel, so this blank space is a car door') to draw it."
+        },
+        {
+          "kind": "example",
+          "icon": "\ud83d\udcca",
+          "title": "High masking ratio",
+          "body": "If an image has 196 patches, MAE masks 147 of them, leaving only 49 patches visible. This high ratio is crucial: if we only masked 10%, the model could just copy-paste adjacent pixels rather than learning actual semantic objects."
+        },
+        {
+          "kind": "mythbust",
+          "icon": "\u26a0\ufe0f",
+          "title": "Not like standard dropout",
+          "body": "You might think masking patches is just like spatial dropout. Unlike dropout which sets activations to zero inside the model layers, MAE **completely removes** the masked tokens from the input sequence entering the encoder, saving massive compute."
+        },
+        {
+          "kind": "visual",
+          "icon": "\u2696\ufe0f",
+          "title": "NLP Masking vs. Vision Masking",
+          "body": "Comparing masking ratios across modalities:",
+          "compare": {
+            "left": {
+              "emoji": "\ud83d\udcdd",
+              "tag": "NLP Masking (BERT)",
+              "text": "Masking ratio: 15%<br>Words contain high density information<br>Small masks are enough to learn grammar"
+            },
+            "right": {
+              "emoji": "\ud83d\uddbc\ufe0f",
+              "tag": "Vision Masking (MAE)",
+              "text": "Masking ratio: 75% - 80%<br>Pixels contain redundant info<br>High masks force semantic learning"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "type": "practice",
+      "exercises": [
+        {
+          "id": "p1",
+          "type": "multiple_choice",
+          "xp": 2,
+          "prompt": "What is the typical percentage of patches hidden (masked) during MAE pre-training?",
+          "explain": "MAE hides a massive 75-80% of patches to prevent the model from trivially copy-pasting adjacent pixel colors.",
+          "options": [
+            {
+              "id": "a",
+              "text": "75% to 80%",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "10% to 15%",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "50% exactly",
+              "correct": false
+            },
+            {
+              "id": "d",
+              "text": "0% (none are masked)",
+              "correct": false
+            }
+          ]
+        },
+        {
+          "id": "p2",
+          "type": "true_false",
+          "xp": 2,
+          "prompt": "True or false: Masked patches are still passed through the encoder as zero vectors.",
+          "explain": "False. MAE completely discards masked patches from the sequence entering the encoder, significantly saving compute.",
+          "options": [
+            {
+              "id": "t",
+              "text": "True",
+              "correct": false
+            },
+            {
+              "id": "f",
+              "text": "False",
+              "correct": true
+            }
+          ]
+        },
+        {
+          "id": "p3",
+          "type": "fill_blank",
+          "xp": 2,
+          "prompt": "Complete the sentence:",
+          "explain": "Since neighboring pixels are highly redundant, we must hide a much higher ratio of patches to force semantic learning.",
+          "sentence": "Vision models require a ___ masking ratio than language models because image pixels contain redundant spatial information.",
+          "blank": "higher",
+          "words": [
+            "higher",
+            "lower",
+            "equal"
+          ]
+        },
+        {
+          "id": "p4",
+          "type": "spot_the_ai",
+          "xp": 2,
+          "prompt": "If a model processes a 196-patch image with 75% masking, how many patches actually enter the encoder block?",
+          "explain": "Correct! 75% are discarded, leaving only the 25% (49 patches) of unmasked tokens for the encoder.",
+          "options": [
+            {
+              "id": "a",
+              "text": "49 patches (25% of 196)",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "147 patches (75% of 196)",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "196 patches (all of them)",
+              "correct": false
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "boss",
+      "exercises": [
+        {
+          "id": "b1",
+          "type": "multiple_choice",
+          "xp": 5,
+          "prompt": "Why does a low masking ratio (like 15%) fail to teach a vision model useful semantic representations?",
+          "options": [
+            {
+              "id": "a",
+              "text": "Because the model can easily interpolate the missing pixels from adjacent boundary pixels without understanding what object is in the image.",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "Because low masking ratios cause the GPU to run out of memory.",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "Because it forces the model to use convolutions.",
+              "correct": false
+            },
+            {
+              "id": "d",
+              "text": "Because position embeddings become invalid.",
+              "correct": false
+            }
+          ],
+          "explain": "Excellent! High redundancy in images means a model can cheat by interpolating borders. A massive mask ratio forces it to learn concepts. Next: how MAE reconstructs the missing pixels!"
+        }
+      ]
+    }
+  ]
+}

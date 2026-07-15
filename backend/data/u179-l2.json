@@ -1,0 +1,222 @@
+{
+  "id": "u179-l2",
+  "unit": 179,
+  "day": 897,
+  "tier": "Vision Transformers & Modern Approaches",
+  "tierIcon": "\ud83d\udc41\ufe0f",
+  "title": "CNN Backbone as Feature Extractor",
+  "icon": "\ud83e\uddb4",
+  "concept": "A pre-trained CNN (like ResNet) can act as a backbone feature extractor, generating feature maps that are flattened and projected into patch tokens for a Transformer.",
+  "xp": 15,
+  "hearts": 3,
+  "estMinutes": 7,
+  "segments": [
+    {
+      "type": "warmup",
+      "exercises": [
+        {
+          "id": "w1",
+          "type": "multiple_choice",
+          "xp": 1,
+          "prompt": "Recap: What is the primary benefit of hybrid architectures over pure ViTs?",
+          "options": [
+            {
+              "id": "a",
+              "text": "They combine local feature extraction with global self-attention for faster, stable training.",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "They run twice as fast on basic mobile CPUs.",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "They completely remove the MLP head.",
+              "correct": false
+            }
+          ],
+          "explain": "Correct! Hybrids merge the strengths of CNNs and Transformers, improving data efficiency."
+        }
+      ]
+    },
+    {
+      "type": "teach",
+      "cards": [
+        {
+          "kind": "hook",
+          "icon": "\ud83e\uddb4",
+          "title": "The skeleton backbone",
+          "body": "If you already have a highly optimized ResNet that is great at seeing details, why throw it away? Instead, we can use it as a 'backbone' skeleton to process raw pixels, and then pass its feature outputs directly into a transformer."
+        },
+        {
+          "kind": "definition",
+          "icon": "\u2699\ufe0f",
+          "title": "Backbone Feature Extractor",
+          "body": "In a backbone-hybrid setup, a raw image is passed through a convolutional network (the <strong>backbone</strong>). The output spatial feature map is reshaped by treating each grid cell as a patch token, which is then projected to dimension <code>D</code> and fed into the <strong>Transformer Encoder</strong>."
+        },
+        {
+          "kind": "analogy",
+          "icon": "\ud83c\udfed",
+          "title": "An assembly line handoff",
+          "body": "Think of a car factory. The fabrication department (CNN backbone) stamps raw steel sheets into doors and hoods (features). They hand these parts to the assembly team (Transformer), who bolts them together to build the final car. The assembly team doesn't need to know how to melt steel; they just handle the parts."
+        },
+        {
+          "kind": "example",
+          "icon": "\ud83d\udee0\ufe0f",
+          "title": "DETR (DEtection TRansformer)",
+          "body": "Facebook's DETR model uses a ResNet-50 backbone to extract a 2D feature map from a 1080p image. It then flattens this feature map into a sequence of tokens and feeds them to a transformer to predict bounding boxes."
+        },
+        {
+          "kind": "mythbust",
+          "icon": "\u26a0\ufe0f",
+          "title": "No patch slicing needed!",
+          "body": "In this hybrid design, we do not perform manual square patch slicing on the raw image. The CNN backbone automatically downsamples the image, and the cells of the resulting feature maps naturally act as our patches!"
+        },
+        {
+          "kind": "visual",
+          "icon": "\u2696\ufe0f",
+          "title": "Standard ViT vs. Backbone Hybrid",
+          "body": "Comparing how tokens are created:",
+          "compare": {
+            "left": {
+              "emoji": "\u2702\ufe0f",
+              "tag": "Standard ViT Tokenizer",
+              "text": "Raw image -> Slice grid<br>Flatten raw pixel values<br>No feature extraction before projection"
+            },
+            "right": {
+              "emoji": "\ud83e\uddb4",
+              "tag": "Backbone Tokenizer",
+              "text": "Raw image -> CNN Backbone<br>Feature map cells -> Tokens<br>Tokens contain rich local features"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "type": "practice",
+      "exercises": [
+        {
+          "id": "p1",
+          "type": "multiple_choice",
+          "xp": 2,
+          "prompt": "What does a CNN backbone do in a hybrid vision network?",
+          "explain": "The CNN backbone extracts spatial features from pixels, converting them into high-level vectors that represent tokens.",
+          "options": [
+            {
+              "id": "a",
+              "text": "Processes raw pixels to generate a spatial feature map used as inputs for the transformer",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "Outputs the final classification category directly",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "Calculates the attention dot-product matrix",
+              "correct": false
+            },
+            {
+              "id": "d",
+              "text": "Decays the learning rate during validation",
+              "correct": false
+            }
+          ]
+        },
+        {
+          "id": "p2",
+          "type": "true_false",
+          "xp": 2,
+          "prompt": "True or false: A backbone hybrid model still requires slicing raw pixels into non-overlapping patches.",
+          "explain": "False. The spatial grid cells of the CNN's output feature map are flattened directly, bypassing manual patch slicing.",
+          "options": [
+            {
+              "id": "t",
+              "text": "True",
+              "correct": false
+            },
+            {
+              "id": "f",
+              "text": "False",
+              "correct": true
+            }
+          ]
+        },
+        {
+          "id": "p3",
+          "type": "fill_blank",
+          "xp": 2,
+          "prompt": "Complete the sentence:",
+          "explain": "The backbone is the initial convolutional block that extracts base features from the raw input.",
+          "sentence": "In models like DETR, a ResNet-50 serves as the convolutional ___ to extract feature maps.",
+          "blank": "backbone",
+          "words": [
+            "backbone",
+            "decoder",
+            "head"
+          ]
+        },
+        {
+          "id": "p4",
+          "type": "spot_the_ai",
+          "xp": 2,
+          "prompt": "If a CNN backbone outputs a feature map of shape 7x7 with 2048 channels, how many tokens enter the transformer?",
+          "explain": "The spatial grid is 7x7, which equals 49 cells (tokens), each containing a 2048-dimensional feature representation.",
+          "options": [
+            {
+              "id": "a",
+              "text": "49 tokens (each of vector size 2048)",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "2048 tokens (each of vector size 49)",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "14 tokens (each of vector size 7)",
+              "correct": false
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "boss",
+      "exercises": [
+        {
+          "id": "b1",
+          "type": "multiple_choice",
+          "xp": 5,
+          "prompt": "Why is a pre-trained backbone particularly useful when you have very limited labeled data for your final task?",
+          "options": [
+            {
+              "id": "a",
+              "text": "Because the backbone already knows how to detect basic edges, shapes, and textures from its previous training, reducing what the transformer has to learn.",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "Because pre-trained backbones don't use weights.",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "Because they shrink the classification head to one parameter.",
+              "correct": false
+            },
+            {
+              "id": "d",
+              "text": "Because it forces the transformer to ignore global relationships.",
+              "correct": false
+            }
+          ],
+          "explain": "Fantastic! Leveraging pre-trained features (transfer learning) saves massive amounts of label data and training time. Next: how early convolutions stabilize training!"
+        }
+      ]
+    }
+  ]
+}

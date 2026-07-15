@@ -1,0 +1,222 @@
+{
+  "id": "u152-l2",
+  "unit": 152,
+  "day": 762,
+  "tier": "Modern Object Detection",
+  "tierIcon": "🎯",
+  "title": "Object Queries",
+  "icon": "❓",
+  "concept": "Object queries are learnable embeddings that query the decoder to locate and classify objects across the image using attention.",
+  "xp": 15,
+  "hearts": 3,
+  "estMinutes": 7,
+  "segments": [
+    {
+      "type": "warmup",
+      "exercises": [
+        {
+          "id": "w2",
+          "type": "multiple_choice",
+          "xp": 1,
+          "prompt": "Recap: Why does DETR not require Non-Maximum Suppression (NMS)?",
+          "options": [
+            {
+              "id": "a",
+              "text": "It predicts exactly one box per object natively, avoiding duplicates",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "It only works on images containing one object",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "It operates only in the frequency domain",
+              "correct": false
+            }
+          ],
+          "explain": "Correct! NMS is skipped because DETR is trained to output a single clean box per object."
+        }
+      ]
+    },
+    {
+      "type": "teach",
+      "cards": [
+        {
+          "kind": "hook",
+          "icon": "❓",
+          "title": "Asking the Right Questions",
+          "body": "How does a Transformer query an image to find objects? It doesn't use grids or anchors. Instead, it uses a set of learnable vectors called 'object queries.' Let's see how these queries act as scouts."
+        },
+        {
+          "kind": "definition",
+          "icon": "❓",
+          "title": "Object Queries",
+          "body": "<strong>Object Queries</strong> are a fixed set of learnable positional embeddings (typically 100) passed into the Transformer decoder. Each query is responsible for asking the feature map: 'Is there an object in my specialized region/scale, and what is its shape?'"
+        },
+        {
+          "kind": "analogy",
+          "icon": "🙋",
+          "title": "The Roster of Scouts",
+          "body": "Imagine a panel of 100 scouts. Scout 1 is trained to look for large objects in the center. Scout 2 looks for tall objects on the left. Scout 100 looks for tiny items in the corners. They all look at the image together and report back what they find."
+        },
+        {
+          "kind": "example",
+          "icon": "🚕",
+          "title": "Query Attention",
+          "body": "A street photo contains a car in the center. Object Query 45 (specialized in center-horizontal shapes) pays attention to the center features and outputs: 'Car found at coordinates [x, y, w, h]'. Other queries find nothing and output 'empty'."
+        },
+        {
+          "kind": "mythbust",
+          "icon": "⚠️",
+          "title": "Fixed Locations?",
+          "body": "You might think each query only looks at a fixed pixel coordinate. Fact: Object queries are highly dynamic; they can look anywhere in the image using attention, though they naturally learn to specialize in specific areas and sizes during training."
+        },
+        {
+          "kind": "visual",
+          "icon": "⚖️",
+          "title": "Object Queries in Decoder",
+          "body": "How object queries interact with image features:",
+          "compare": {
+            "left": {
+              "emoji": "🙋",
+              "tag": "100 Object Queries",
+              "text": "Learnable vectors entering decoder<br>No pre-defined grid shapes<br>Queries the image globally"
+            },
+            "right": {
+              "emoji": "🧠",
+              "tag": "Cross-Attention Output",
+              "text": "Queries search CNN feature map<br>Outputs box coordinates + class<br>Outputs 'no object' if empty"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "type": "practice",
+      "exercises": [
+        {
+          "id": "p1",
+          "type": "multiple_choice",
+          "xp": 2,
+          "prompt": "What are object queries in DETR?",
+          "options": [
+            {
+              "id": "a",
+              "text": "A fixed set of learnable vectors that query the decoder for object features",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "Text prompts typed by the user to search the image",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "Filters that crop the input image scale",
+              "correct": false
+            },
+            {
+              "id": "d",
+              "text": "Weights used in the loss function calculation",
+              "correct": false
+            }
+          ],
+          "explain": "Correct! Object queries are learnable positional embeddings that scan the feature map for objects."
+        },
+        {
+          "id": "p2",
+          "type": "true_false",
+          "xp": 2,
+          "prompt": "True or False: DETR typically uses a fixed number of object queries (like 100), meaning it can detect at most that many objects in a single image.",
+          "options": [
+            {
+              "id": "t",
+              "text": "True",
+              "correct": true
+            },
+            {
+              "id": "f",
+              "text": "False",
+              "correct": false
+            }
+          ],
+          "explain": "True. The number of queries sets the maximum limit of detected objects (usually 100, which is plenty for most scenes)."
+        },
+        {
+          "id": "p3",
+          "type": "fill_blank",
+          "xp": 2,
+          "prompt": "Complete the sentence:",
+          "sentence": "Object queries scan the image features inside the Transformer ___ using cross-attention.",
+          "blank": "decoder",
+          "words": [
+            "decoder",
+            "encoder",
+            "backbone"
+          ],
+          "explain": "Object queries enter the decoder and query the features extracted by the encoder."
+        },
+        {
+          "id": "p4",
+          "type": "spot_the_ai",
+          "xp": 2,
+          "prompt": "What does an object query output if it finds no object in its region of focus?",
+          "options": [
+            {
+              "id": "a",
+              "text": "A special 'no object' class label",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "A coordinate of [0, 0, 0, 0]",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "It stops the forward pass of the model",
+              "correct": false
+            }
+          ],
+          "explain": "Correct! Empty queries output a 'no object' background class label, which is ignored during final display."
+        }
+      ]
+    },
+    {
+      "type": "boss",
+      "exercises": [
+        {
+          "id": "b1",
+          "type": "multiple_choice",
+          "xp": 5,
+          "prompt": "You are detecting a flock of 150 sheep using a standard DETR model configured with 100 object queries. What will happen?",
+          "options": [
+            {
+              "id": "a",
+              "text": "The model will detect at most 100 sheep and miss the remaining 50, because the number of queries sets a hard limit on detections.",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "The model will automatically scale up to 150 queries.",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "The model will crash with a memory error.",
+              "correct": false
+            },
+            {
+              "id": "d",
+              "text": "The sheep will be grouped into boxes of 5.",
+              "correct": false
+            }
+          ],
+          "explain": "Exactly! The number of object queries is a fixed hyperparameter that limits the maximum number of objects the model can find in one frame."
+        }
+      ]
+    }
+  ]
+}

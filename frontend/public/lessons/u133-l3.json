@@ -1,0 +1,222 @@
+{
+  "id": "u133-l3",
+  "unit": 133,
+  "day": 668,
+  "tier": "Image Classification in Depth",
+  "tierIcon": "🏷️",
+  "title": "Binary Cross-Entropy Loss",
+  "icon": "📉",
+  "concept": "Binary Cross-Entropy Loss measures the error of multi-label classifiers by treating each class as an independent binary classification task.",
+  "xp": 15,
+  "hearts": 3,
+  "estMinutes": 7,
+  "segments": [
+    {
+      "type": "warmup",
+      "exercises": [
+        {
+          "id": "w1",
+          "type": "multiple_choice",
+          "xp": 1,
+          "prompt": "Recap: Why does standard Cross-Entropy Loss fail for multi-label classification tasks?",
+          "options": [
+            {
+              "id": "a",
+              "text": "It assumes the target classes are mutually exclusive.",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "It cannot handle negative logits.",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "It only works with binary images.",
+              "correct": false
+            }
+          ],
+          "explain": "Correct! Standard Cross-Entropy uses Softmax, which assumes only one target label is correct per image."
+        }
+      ]
+    },
+    {
+      "type": "teach",
+      "cards": [
+        {
+          "kind": "hook",
+          "icon": "📝",
+          "title": "Multiple mini-tests",
+          "body": "If you take a test with ten independent true/false questions, your score isn't 'all or nothing'. Each question is graded separately, and your final mark is the average. Binary Cross-Entropy grades models the same way."
+        },
+        {
+          "kind": "definition",
+          "icon": "📉",
+          "title": "What is BCE Loss?",
+          "body": "<strong>Binary Cross-Entropy (BCE) Loss</strong> computes the standard binary classification loss for each class node independently and then averages them. For each class, the model is penalized based on how far its Sigmoid probability is from the target (0 or 1)."
+        },
+        {
+          "kind": "analogy",
+          "icon": "🎯",
+          "title": "A panel of binary experts",
+          "body": "Think of BCE Loss as having a separate judge for each class. The 'Dog' judge only cares if there is a dog. The 'Cat' judge only cares if there is a cat. They calculate their own scores, which are then combined."
+        },
+        {
+          "kind": "example",
+          "icon": "💻",
+          "title": "Loss calculation",
+          "body": "For targets <code>[1, 0, 1]</code> (Cat, no Dog, Tree) and model probabilities <code>[0.9, 0.1, 0.2]</code>, BCE computes binary loss for each: <code>-log(0.9)</code> for Cat (small), <code>-log(1-0.1)</code> for Dog (small), and <code>-log(0.2)</code> for Tree (large). The final loss is the average of these three."
+        },
+        {
+          "kind": "mythbust",
+          "icon": "⚠️",
+          "title": "BCE is not just for two-class datasets",
+          "body": "You might think Binary Cross-Entropy is only for datasets with two classes. In reality, BCE is the primary loss function for multi-class multi-label problems, treating an N-class problem as N independent binary problems."
+        },
+        {
+          "kind": "visual",
+          "icon": "🎛️",
+          "title": "Cross-Entropy vs. BCE Loss",
+          "body": "How the losses evaluate a 3-class prediction:",
+          "compare": {
+            "left": {
+              "emoji": "📉",
+              "tag": "Cross-Entropy Loss",
+              "text": "Evaluates a single probability distribution<br>Checks: Did the correct class win?<br>Used for single-label classification"
+            },
+            "right": {
+              "emoji": "📊",
+              "tag": "Binary Cross-Entropy",
+              "text": "Evaluates multiple binary decisions<br>Checks: Was each class correctly yes/no?<br>Used for multi-label classification"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "type": "practice",
+      "exercises": [
+        {
+          "id": "p1",
+          "type": "multiple_choice",
+          "xp": 2,
+          "prompt": "How does Binary Cross-Entropy (BCE) loss calculate the total loss for a multi-label image?",
+          "explain": "BCE loss treats each label as an independent binary task, summing or averaging their individual losses.",
+          "options": [
+            {
+              "id": "a",
+              "text": "It computes binary classification loss for each class node independently and averages them.",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "It takes the maximum loss of all classes and discards the rest.",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "It multiplies the probabilities of all target classes together.",
+              "correct": false
+            },
+            {
+              "id": "d",
+              "text": "It uses the mean squared error of the logits.",
+              "correct": false
+            }
+          ]
+        },
+        {
+          "id": "p2",
+          "type": "true_false",
+          "xp": 2,
+          "prompt": "True or false: To train a multi-label model, you must use standard Cross-Entropy Loss with Sigmoid activation.",
+          "explain": "False. You must combine Sigmoid activation with Binary Cross-Entropy (BCE) Loss, not standard Cross-Entropy.",
+          "options": [
+            {
+              "id": "t",
+              "text": "True",
+              "correct": false
+            },
+            {
+              "id": "f",
+              "text": "False",
+              "correct": true
+            }
+          ]
+        },
+        {
+          "id": "p3",
+          "type": "fill_blank",
+          "xp": 2,
+          "prompt": "Complete the sentence:",
+          "explain": "Each node is evaluated as a binary 'present or absent' (1 or 0) task.",
+          "sentence": "BCE loss evaluates each output node as an independent ___ classification task.",
+          "blank": "binary",
+          "words": [
+            "binary",
+            "multiclass",
+            "continuous"
+          ]
+        },
+        {
+          "id": "p4",
+          "type": "spot_the_ai",
+          "xp": 2,
+          "prompt": "Which PyTorch code setup is correct for multi-label classification training?",
+          "explain": "BCEWithLogitsLoss combines Sigmoid and BCE loss into one stable layer, which is correct for multi-label tasks.",
+          "options": [
+            {
+              "id": "a",
+              "text": "loss_fn = nn.BCEWithLogitsLoss(); loss = loss_fn(logits, multi_hot_targets)",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "loss_fn = nn.CrossEntropyLoss(); loss = loss_fn(logits, single_targets)",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "loss_fn = nn.MSELoss(); loss = loss_fn(logits, targets)",
+              "correct": false
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "boss",
+      "exercises": [
+        {
+          "id": "b1",
+          "type": "multiple_choice",
+          "xp": 5,
+          "prompt": "In PyTorch, BCEWithLogitsLoss is preferred over BCELoss. What is the difference and why is it preferred?",
+          "options": [
+            {
+              "id": "a",
+              "text": "BCEWithLogitsLoss takes raw logits and applies Sigmoid internally, preventing numerical underflow/overflow.",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "BCELoss is faster because it does not use logarithms.",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "BCEWithLogitsLoss is only for single-label tasks.",
+              "correct": false
+            },
+            {
+              "id": "d",
+              "text": "BCELoss automatically handles class imbalance.",
+              "correct": false
+            }
+          ],
+          "explain": "Exactly! BCELoss requires manual Sigmoid outputs as inputs, which can suffer from numerical precision errors during loss computation. BCEWithLogitsLoss is mathematically optimized and stable. Next, let's see how we turn these soft probabilities into hard final predictions!"
+        }
+      ]
+    }
+  ]
+}

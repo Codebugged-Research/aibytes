@@ -1,0 +1,222 @@
+{
+  "id": "u162-l2",
+  "unit": 162,
+  "day": 812,
+  "tier": "Image Segmentation Capstone",
+  "tierIcon": "🏆",
+  "title": "Handling Mask Imbalance",
+  "icon": "🏆",
+  "concept": "Solving mask imbalance requires combining photometric augmentations, patch-based sampling, and overlap-based loss functions.",
+  "xp": 15,
+  "hearts": 3,
+  "estMinutes": 7,
+  "segments": [
+    {
+      "type": "warmup",
+      "exercises": [
+        {
+          "id": "w1",
+          "type": "multiple_choice",
+          "xp": 1,
+          "prompt": "Recap: What does the thresholding step do at the end of a segmentation pipeline?",
+          "options": [
+            {
+              "id": "a",
+              "text": "It converts pixel probability scores into a binary 0 or 1 mask",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "It reduces the number of channels in the convolutional layers",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "It calculates the average IoU score across classes",
+              "correct": false
+            }
+          ],
+          "explain": "Correct! Thresholding maps probabilities (e.g., >0.5) to binary masks."
+        }
+      ]
+    },
+    {
+      "type": "teach",
+      "cards": [
+        {
+          "kind": "hook",
+          "icon": "🛰️",
+          "title": "Imbalance in the wild",
+          "body": "You are segmenting solar panels on roofs using satellite images. 98% of the pixels in your dataset are grass, trees, and roads. Only 2% are solar panels. Your model keeps outputting empty masks, ignoring the panels. We need to implement our imbalance strategies. How do we tune the pipeline to fix this?"
+        },
+        {
+          "kind": "definition",
+          "icon": "⚖️",
+          "title": "Imbalance Mitigation",
+          "body": "To handle <strong>Mask Imbalance</strong> in production: <br>1. **Data level**: Use target-biased patch sampling.<br>2. **Augmentation level**: Apply elastic transforms and random crops around targets.<br>3. **Loss level**: Use Focal + Dice hybrid loss."
+        },
+        {
+          "kind": "analogy",
+          "icon": "⚽",
+          "title": "A specialized training camp",
+          "body": "If a soccer player is bad at penalty kicks, you don't make them run laps all day (random background data). You set up a drill where they practice only penalty kicks over and over (biased sampling) until they master it."
+        },
+        {
+          "kind": "example",
+          "icon": "🏠",
+          "title": "Solar panel pipeline adjustments",
+          "body": "We filter our satellite images. During training, we ensure that every batch contains at least 50% images with solar panels, and we crop them directly around the roofs. We train using Dice loss, ignoring the background size."
+        },
+        {
+          "kind": "mythbust",
+          "icon": "⚠️",
+          "title": "Augmenting masks is different",
+          "body": "You might think you can augment the input image and leave the mask alone. That's a huge error! If you rotate or crop the image, you must apply the **exact same geometric transformation** to the ground truth mask, or the labels will be misaligned."
+        },
+        {
+          "kind": "visual",
+          "icon": "⚖️",
+          "title": "Imbalance Solutions",
+          "body": "How to fight class imbalance at multiple levels:",
+          "compare": {
+            "left": {
+              "emoji": "📊",
+              "tag": "Data & Augmentation",
+              "text": "Filter dataset for target classes<br>Crop and zoom around target boundaries<br>Apply identical transforms to image and mask"
+            },
+            "right": {
+              "emoji": "🎯",
+              "tag": "Loss Optimization",
+              "text": "Switch to Focal Loss (suppress background)<br>Use Dice Loss (directly optimize overlap)<br>Combine as Hybrid Loss"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "type": "practice",
+      "exercises": [
+        {
+          "id": "p1",
+          "type": "multiple_choice",
+          "xp": 2,
+          "prompt": "If you rotate a training image by 45 degrees, what must you do to the ground truth mask?",
+          "options": [
+            {
+              "id": "a",
+              "text": "Rotate it by the exact same 45 degrees",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "Leave it unchanged",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "Crop it by 50%",
+              "correct": false
+            },
+            {
+              "id": "d",
+              "text": "Convert it to a bounding box",
+              "correct": false
+            }
+          ],
+          "explain": "Correct! Geometric transforms must be applied identically to both image and mask to maintain alignment."
+        },
+        {
+          "id": "p2",
+          "type": "true_false",
+          "xp": 2,
+          "prompt": "True or False: Using Dice loss is a data-level strategy for handling mask imbalance.",
+          "options": [
+            {
+              "id": "t",
+              "text": "True",
+              "correct": false
+            },
+            {
+              "id": "f",
+              "text": "False",
+              "correct": false
+            }
+          ],
+          "explain": "False. Dice loss is a loss-level strategy; biased sampling is a data-level strategy."
+        },
+        {
+          "id": "p3",
+          "type": "fill_blank",
+          "xp": 2,
+          "prompt": "Complete the sentence:",
+          "sentence": "Target-biased patch sampling forces the model to train on crops containing the ___ class.",
+          "blank": "target",
+          "words": [
+            "target",
+            "background",
+            "empty"
+          ],
+          "explain": "It ensures the model frequently observes the rare target class features."
+        },
+        {
+          "id": "p4",
+          "type": "spot_the_ai",
+          "xp": 2,
+          "prompt": "Which loss combination is highly recommended for training on extremely small target masks?",
+          "options": [
+            {
+              "id": "a",
+              "text": "Focal Loss + Dice Loss",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "Standard Cross-Entropy + Mean Squared Error",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "Classification Loss + L1 Loss",
+              "correct": false
+            }
+          ],
+          "explain": "Focal + Dice is the industry standard hybrid loss for imbalanced masks."
+        }
+      ]
+    },
+    {
+      "type": "boss",
+      "exercises": [
+        {
+          "id": "b1",
+          "type": "multiple_choice",
+          "xp": 5,
+          "prompt": "You are training a model to segment wildfire smoke plumes in satellite photos. The smoke is rare. The model is predicting no smoke at all. Which combination of changes should you apply?",
+          "options": [
+            {
+              "id": "a",
+              "text": "Implement target-biased patch sampling to feed smoke-filled crops, and switch the loss function to Dice + Focal loss.",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "Use random crops, standard cross-entropy loss, and increase the image resolution.",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "Flatten the images and use a simple classification network with mean squared error.",
+              "correct": false
+            },
+            {
+              "id": "d",
+              "text": "Apply rotation to the image only, keeping the mask completely unrotated.",
+              "correct": false
+            }
+          ],
+          "explain": "Perfect! Combining target-biased sampling with a robust hybrid loss is the standard recipe for forcing models to learn rare, sparse classes like smoke. Next: compressing models for real-time edge use!"
+        }
+      ]
+    }
+  ]
+}

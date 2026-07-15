@@ -1,0 +1,222 @@
+{
+  "id": "u144-l4",
+  "unit": 144,
+  "day": 724,
+  "tier": "Object Detection Foundations",
+  "tierIcon": "🎯",
+  "title": "Multi-task Loss",
+  "icon": "🎯",
+  "concept": "Multi-task Loss combines classification loss and bounding box regression loss into a single function, enabling joint end-to-end training.",
+  "xp": 15,
+  "hearts": 3,
+  "estMinutes": 7,
+  "segments": [
+    {
+      "type": "warmup",
+      "exercises": [
+        {
+          "id": "w1",
+          "type": "multiple_choice",
+          "xp": 1,
+          "prompt": "Recap: What type of pooling is used in the RoI Pooling layer?",
+          "options": [
+            {
+              "id": "a",
+              "text": "Max pooling",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "Average pooling",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "Global pooling",
+              "correct": false
+            }
+          ],
+          "explain": "RoI Pooling divides regions into sub-sections and applies max pooling."
+        }
+      ]
+    },
+    {
+      "type": "teach",
+      "cards": [
+        {
+          "kind": "hook",
+          "icon": "🎯",
+          "title": "Joint Learning",
+          "body": "If you are studying to be a pilot, you don't attend one school for takeoff, graduate, then go to a second school for landing. You practice both skills in the same flight simulator, and you are graded on both together. Multi-task loss allows the network to practice both tasks together."
+        },
+        {
+          "kind": "definition",
+          "icon": "🎯",
+          "title": "Multi-task Loss",
+          "body": "<strong>Multi-task Loss</strong> combines classification loss (like log loss over classes) and bounding box regression loss (smooth L1 loss over coordinates) into a single unified loss function: $L = L_{cls} + \\lambda L_{loc}$, where $\\lambda$ scales the balance."
+        },
+        {
+          "kind": "analogy",
+          "icon": "🏫",
+          "title": "The Combined Grade",
+          "body": "Think of a student's final grade in a science class. It's a combination of their lab report score (accuracy of classification) and their math calculation score (accuracy of location coordinates). The teacher averages them to give one grade."
+        },
+        {
+          "kind": "example",
+          "icon": "📐",
+          "title": "Smooth L1 Loss",
+          "body": "Fast R-CNN uses <strong>smooth L1 loss</strong> for box regression because it is less sensitive to outliers than L2 loss. If the offset error is small, it acts like L2; if the error is large, it acts like L1, preventing exploding gradients."
+        },
+        {
+          "kind": "mythbust",
+          "icon": "⚠️",
+          "title": "No separate training stages",
+          "body": "It's a myth that classification and localization models must be trained in separate phases. By combining them in a single loss function, gradients flow back through the shared layers, improving both tasks simultaneously."
+        },
+        {
+          "kind": "visual",
+          "icon": "⚖️",
+          "title": "Split Output Heads",
+          "body": "Visualizing how two output heads share a single backpropagation pass:",
+          "compare": {
+            "left": {
+              "emoji": "🏷️",
+              "tag": "Classification Loss",
+              "text": "Log loss / Softmax cross-entropy.<br>Graded on category name."
+            },
+            "right": {
+              "emoji": "📐",
+              "tag": "Localization Loss",
+              "text": "Smooth L1 loss.<br>Graded on coordinate offsets."
+            }
+          }
+        }
+      ]
+    },
+    {
+      "type": "practice",
+      "exercises": [
+        {
+          "id": "p1",
+          "type": "multiple_choice",
+          "xp": 2,
+          "prompt": "What does Fast R-CNN use to train both classification and localization together?",
+          "explain": "Fast R-CNN combines classification loss and regression loss into a single Multi-task Loss function for joint training.",
+          "options": [
+            {
+              "id": "a",
+              "text": "A Multi-task Loss function that combines classification and regression costs",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "Two separate backpropagation passes on different GPUs",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "An external CPU scheduler",
+              "correct": false
+            },
+            {
+              "id": "d",
+              "text": "Data augmentation to combine coordinates",
+              "correct": false
+            }
+          ]
+        },
+        {
+          "id": "p2",
+          "type": "true_false",
+          "xp": 2,
+          "prompt": "True or False: Smooth L1 loss is used for the classification head in Fast R-CNN.",
+          "explain": "False. Smooth L1 loss is used for the localization (bounding box regression) head. Classification uses standard log loss (cross-entropy).",
+          "options": [
+            {
+              "id": "t",
+              "text": "True",
+              "correct": false
+            },
+            {
+              "id": "f",
+              "text": "False",
+              "correct": true
+            }
+          ]
+        },
+        {
+          "id": "p3",
+          "type": "fill_blank",
+          "xp": 2,
+          "prompt": "Complete the sentence:",
+          "explain": "Smooth L1 loss prevents extreme gradient updates from outlier coordinate predictions during training.",
+          "sentence": "Fast R-CNN uses ___ loss for bounding box regression because it is robust to coordinate outliers.",
+          "blank": "smooth L1",
+          "words": [
+            "smooth L1",
+            "cross-entropy",
+            "L2"
+          ]
+        },
+        {
+          "id": "p4",
+          "type": "spot_the_ai",
+          "xp": 2,
+          "prompt": "Which formula represents a multi-task loss function for detection?",
+          "explain": "Combining classification and localization losses with a balancing weight (lambda) is the multi-task loss formula.",
+          "options": [
+            {
+              "id": "a",
+              "text": "Loss = Class_Loss + lambda * Box_Loss",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "Loss = Input_Size * Channels / Stride",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "Loss = precision / recall",
+              "correct": false
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "boss",
+      "exercises": [
+        {
+          "id": "b1",
+          "type": "multiple_choice",
+          "xp": 5,
+          "prompt": "You are training a Fast R-CNN model. If the localization loss has a balancing weight (lambda) set to 0, what will happen to the network during backpropagation?",
+          "options": [
+            {
+              "id": "a",
+              "text": "The network will only optimize for classification, and the bounding box coordinate outputs will not improve.",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "The network will train twice as fast with no accuracy drop.",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "The network will stop classifying background pixels.",
+              "correct": false
+            },
+            {
+              "id": "d",
+              "text": "The weights of the backbone will freeze.",
+              "correct": false
+            }
+          ],
+          "explain": "Exactly! Setting lambda to 0 completely zeroes out the localization loss gradient, meaning the model will only learn to classify and ignore bounding box accuracy. Next: let's look at the remaining speed bottleneck in Fast R-CNN!"
+        }
+      ]
+    }
+  ]
+}

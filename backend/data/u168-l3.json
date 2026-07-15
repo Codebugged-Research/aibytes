@@ -1,0 +1,222 @@
+{
+  "id": "u168-l3",
+  "unit": 168,
+  "day": 843,
+  "tier": "Advanced Vision Applications",
+  "tierIcon": "👁️",
+  "title": "The Style Transfer Optimization Loop",
+  "icon": "🔁",
+  "concept": "Style transfer starts from a random or content-based image and iteratively adjusts its pixels — not the network's weights — to minimize a combined content loss and style loss.",
+  "xp": 15,
+  "hearts": 3,
+  "estMinutes": 7,
+  "segments": [
+    {
+      "type": "warmup",
+      "exercises": [
+        {
+          "id": "w1",
+          "type": "multiple_choice",
+          "xp": 1,
+          "prompt": "Recap: Why does the Gram matrix ignore exact spatial position?",
+          "options": [
+            {
+              "id": "a",
+              "text": "Because it measures correlations between filters across the whole image, not per-location",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "Because it only looks at the top-left corner of the image",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "Because it deletes half the pixels before computing",
+              "correct": false
+            }
+          ],
+          "explain": "Yes! Correlations are pooled across the whole spatial map."
+        }
+      ]
+    },
+    {
+      "type": "teach",
+      "cards": [
+        {
+          "kind": "hook",
+          "icon": "🔁",
+          "title": "Not training a network — training an image",
+          "body": "Normally, we adjust a network's weights to fit data. In style transfer, the weights stay frozen! Instead, we adjust the pixels of the output image itself, treating them as the trainable parameters."
+        },
+        {
+          "kind": "definition",
+          "icon": "🔁",
+          "title": "The Optimization Loop",
+          "body": "<strong>Style transfer optimization</strong> starts with a copy of the content image (or random noise), then repeatedly: (1) passes it through the frozen CNN, (2) computes content loss + style loss vs targets, (3) backpropagates gradients onto the <em>pixels</em> themselves, nudging them closer to the target look."
+        },
+        {
+          "kind": "analogy",
+          "icon": "🖌️",
+          "title": "A sculptor chiseling stone",
+          "body": "A sculptor starts with a rough stone block (the initial image) and repeatedly chips away, checking against a reference statue (content + style targets), refining a little each pass. The chisel here is gradient descent — but on pixels, not weights."
+        },
+        {
+          "kind": "example",
+          "icon": "📉",
+          "title": "Combined Loss",
+          "body": "The total loss is: <code>Loss = α × ContentLoss + β × StyleLoss</code>. ContentLoss compares deep-layer activations to the content image's activations. StyleLoss compares Gram matrices to the style image's Gram matrices. Weights α and β control the content/style balance."
+        },
+        {
+          "kind": "mythbust",
+          "icon": "⚠️",
+          "title": "It's not instant",
+          "body": "A myth is that style transfer happens in one forward pass like classification. Classic style transfer requires hundreds of optimization steps per image, which is slow (though later 'fast style transfer' networks solve this by training a dedicated feed-forward generator, covered next)."
+        },
+        {
+          "kind": "visual",
+          "icon": "⚖️",
+          "title": "Weight Training vs. Pixel Optimization",
+          "body": "What's actually being updated:",
+          "compare": {
+            "left": {
+              "emoji": "🧠",
+              "tag": "Normal CNN Training",
+              "text": "Updates network WEIGHTS<br>Fixed input images<br>Goal: generalize to new data"
+            },
+            "right": {
+              "emoji": "🖼️",
+              "tag": "Style Transfer Optimization",
+              "text": "Updates IMAGE PIXELS<br>Fixed, frozen network weights<br>Goal: match one specific target look"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "type": "practice",
+      "exercises": [
+        {
+          "id": "p1",
+          "type": "multiple_choice",
+          "xp": 2,
+          "prompt": "In classic Neural Style Transfer, what gets updated during optimization?",
+          "options": [
+            {
+              "id": "a",
+              "text": "The pixels of the output image itself",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "The weights of the CNN",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "The learning rate scheduler",
+              "correct": false
+            },
+            {
+              "id": "d",
+              "text": "The batch size",
+              "correct": false
+            }
+          ],
+          "explain": "Correct! The image pixels are the trainable parameters; the network stays frozen."
+        },
+        {
+          "id": "p2",
+          "type": "true_false",
+          "xp": 2,
+          "prompt": "True or false: Classic style transfer produces a result in a single forward pass, just like image classification.",
+          "options": [
+            {
+              "id": "t",
+              "text": "True",
+              "correct": false
+            },
+            {
+              "id": "f",
+              "text": "False",
+              "correct": true
+            }
+          ],
+          "explain": "False. It requires many iterative optimization steps to converge on pixels."
+        },
+        {
+          "id": "p3",
+          "type": "fill_blank",
+          "xp": 2,
+          "prompt": "Complete the sentence:",
+          "sentence": "The total loss in style transfer combines a weighted content loss and a weighted ___ loss.",
+          "blank": "style",
+          "words": [
+            "style",
+            "detection",
+            "pooling"
+          ],
+          "explain": "Total loss = α × content loss + β × style loss."
+        },
+        {
+          "id": "p4",
+          "type": "spot_the_ai",
+          "xp": 2,
+          "prompt": "Why does style transfer optimization resemble a sculptor chiseling stone rather than a single quick action?",
+          "options": [
+            {
+              "id": "a",
+              "text": "Because it repeatedly refines the image over many iterations toward the target content and style",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "Because it deletes and regenerates the entire image every step",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "Because it only touches one pixel per iteration",
+              "correct": false
+            }
+          ],
+          "explain": "Correct! Iterative refinement, not one-shot generation."
+        }
+      ]
+    },
+    {
+      "type": "boss",
+      "exercises": [
+        {
+          "id": "b1",
+          "type": "multiple_choice",
+          "xp": 5,
+          "prompt": "You increase β (style weight) far above α (content weight) in the loss function. What happens to the output image?",
+          "options": [
+            {
+              "id": "a",
+              "text": "The output leans heavily toward the style image's textures/colors, potentially losing recognizable content structure",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "The output becomes an exact pixel copy of the content image",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "The network weights get retrained from scratch",
+              "correct": false
+            },
+            {
+              "id": "d",
+              "text": "The image resolution automatically doubles",
+              "correct": false
+            }
+          ],
+          "explain": "Exactly! Cranking style weight sacrifices content fidelity for stronger stylization. Next: making this process instant with fast style transfer networks."
+        }
+      ]
+    }
+  ]
+}

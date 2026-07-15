@@ -1,0 +1,222 @@
+{
+  "id": "u155-l3",
+  "unit": 155,
+  "day": 778,
+  "tier": "Fully Convolutional Networks (FCNs)",
+  "tierIcon": "🕸️",
+  "title": "Transposed Convolutions",
+  "icon": "🕸️",
+  "concept": "Transposed convolutions are learnable upsampling layers that allow the network to reconstruct spatial dimensions and details.",
+  "xp": 15,
+  "hearts": 3,
+  "estMinutes": 7,
+  "segments": [
+    {
+      "type": "warmup",
+      "exercises": [
+        {
+          "id": "w1",
+          "type": "multiple_choice",
+          "xp": 1,
+          "prompt": "Recap: What is the main purpose of the decoder in segmentation?",
+          "options": [
+            {
+              "id": "a",
+              "text": "To upsample the low-resolution features back to the original image size",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "To reduce the number of channels in the network",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "To run classifier headers in parallel",
+              "correct": false
+            }
+          ],
+          "explain": "Correct! Decoders restore the spatial resolution."
+        }
+      ]
+    },
+    {
+      "type": "teach",
+      "cards": [
+        {
+          "kind": "hook",
+          "icon": "🔍",
+          "title": "Learnable zoom",
+          "body": "We know the decoder needs to upsample feature maps. We could use basic math like bilinear interpolation (averaging nearby pixels) to resize. But that's a fixed formula. Wouldn't it be better if the model could learn the best way to fill in the missing details? That's what transposed convolutions do."
+        },
+        {
+          "kind": "definition",
+          "icon": "🔄",
+          "title": "Transposed Convolution",
+          "body": "A <strong>Transposed Convolution</strong> (sometimes called deconvolution) is a learnable upsampling layer. Unlike normal convolutions which reduce size, a transposed convolution uses weights to expand the spatial dimensions of feature maps."
+        },
+        {
+          "kind": "analogy",
+          "icon": "📽️",
+          "title": "Projector lens",
+          "body": "Imagine a slide projector. A small slide (input feature map) has light shined through a lens (convolutional weights), projecting a much larger and detailed image onto a wall (upsampled output map)."
+        },
+        {
+          "kind": "example",
+          "icon": "📐",
+          "title": "Fractional stride",
+          "body": "By inserting zeros between pixels in a small feature map (e.g., 2x2) and then applying a standard convolution filter, we output a larger map (e.g., 4x4). The filter weights are updated during training."
+        },
+        {
+          "kind": "mythbust",
+          "icon": "⚠️",
+          "title": "Not 'deconvolution'",
+          "body": "Many papers call transposed convolutions 'deconvolution'. Mathematically, this is incorrect. A deconvolution reverses the effects of a convolution. Transposed convolution just performs a forward conv in a way that increases size; it does not undo the original math."
+        },
+        {
+          "kind": "visual",
+          "icon": "⚖️",
+          "title": "Bilinear Interpolation vs. Transposed Conv",
+          "body": "Comparing upsampling methods:",
+          "compare": {
+            "left": {
+              "emoji": "📏",
+              "tag": "Bilinear Interpolation",
+              "text": "Fixed mathematical formula<br>Fast, no weights to learn<br>Outputs blurry, soft edges"
+            },
+            "right": {
+              "emoji": "🎨",
+              "tag": "Transposed Conv",
+              "text": "Learnable weights & filters<br>Slower, consumes memory<br>Outputs sharp, learned patterns"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "type": "practice",
+      "exercises": [
+        {
+          "id": "p1",
+          "type": "multiple_choice",
+          "xp": 2,
+          "prompt": "Why are transposed convolutions preferred over bilinear interpolation in complex decoders?",
+          "options": [
+            {
+              "id": "a",
+              "text": "They have learnable parameters that adapt to the dataset during training",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "They are mathematically simpler and run faster on CPUs",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "They decrease the spatial dimensions of the image",
+              "correct": false
+            },
+            {
+              "id": "d",
+              "text": "They do not require activation functions",
+              "correct": false
+            }
+          ],
+          "explain": "Correct! Transposed convolutions learn how to upsample features effectively."
+        },
+        {
+          "id": "p2",
+          "type": "true_false",
+          "xp": 2,
+          "prompt": "True or False: A transposed convolution mathematically reverses a standard convolution's operations.",
+          "options": [
+            {
+              "id": "t",
+              "text": "True",
+              "correct": false
+            },
+            {
+              "id": "f",
+              "text": "False",
+              "correct": false
+            }
+          ],
+          "explain": "False. It only matches the shape change; it does not reverse the mathematical values of a prior convolution."
+        },
+        {
+          "id": "p3",
+          "type": "fill_blank",
+          "xp": 2,
+          "prompt": "Complete the sentence:",
+          "sentence": "Transposed convolutions are often referred to as fractionally ___ convolutions.",
+          "blank": "strided",
+          "words": [
+            "strided",
+            "padded",
+            "pooled"
+          ],
+          "explain": "They are also called fractionally strided convolutions because the stride acts as a fraction to increase size."
+        },
+        {
+          "id": "p4",
+          "type": "spot_the_ai",
+          "xp": 2,
+          "prompt": "What does a transposed convolution do to a 2x2 input map?",
+          "options": [
+            {
+              "id": "a",
+              "text": "It increases the spatial size (e.g. to 4x4)",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "It flattens it to a 1x4 vector",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "It reduces it to a 1x1 map",
+              "correct": false
+            }
+          ],
+          "explain": "It upsamples the input to a larger spatial dimension."
+        }
+      ]
+    },
+    {
+      "type": "boss",
+      "exercises": [
+        {
+          "id": "b1",
+          "type": "multiple_choice",
+          "xp": 5,
+          "prompt": "A common artifact of transposed convolutions is the 'checkerboard artifact' (uneven pixel intensities). What causes this?",
+          "options": [
+            {
+              "id": "a",
+              "text": "When the kernel size is not divisible by the stride, causing unequal overlap of the filters during upsampling.",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "Using too many epochs during training.",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "A lack of training data in the target classes.",
+              "correct": false
+            },
+            {
+              "id": "d",
+              "text": "Running the model on an incompatible GPU architecture.",
+              "correct": false
+            }
+          ],
+          "explain": "Exactly! If the kernel size doesn't divide evenly by the stride, the overlaps create a checkerboard pattern. Next: how do we fix the loss of fine boundaries using skips?"
+        }
+      ]
+    }
+  ]
+}

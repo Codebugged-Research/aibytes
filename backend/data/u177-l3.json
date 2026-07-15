@@ -1,0 +1,222 @@
+{
+  "id": "u177-l3",
+  "unit": 177,
+  "day": 888,
+  "tier": "Vision Transformers & Modern Approaches",
+  "tierIcon": "\ud83d\udc41\ufe0f",
+  "title": "Choosing Patch Size",
+  "icon": "\ud83d\udccf",
+  "concept": "The patch size determines the token resolution and sequence length, balancing classification accuracy with computational cost.",
+  "xp": 15,
+  "hearts": 3,
+  "estMinutes": 7,
+  "segments": [
+    {
+      "type": "warmup",
+      "exercises": [
+        {
+          "id": "w1",
+          "type": "multiple_choice",
+          "xp": 1,
+          "prompt": "Recap: Which layer maps flattened patch pixels into the transformer dimension?",
+          "options": [
+            {
+              "id": "a",
+              "text": "Linear Projection layer",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "Classification MLP head",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "Layer Normalization",
+              "correct": false
+            }
+          ],
+          "explain": "Correct! Linear projection maps the raw patch pixels into embedding vectors of size D."
+        }
+      ]
+    },
+    {
+      "type": "teach",
+      "cards": [
+        {
+          "kind": "hook",
+          "icon": "\ud83d\udccf",
+          "title": "Size matters",
+          "body": "Should we slice our image into large chunks or tiny details? In ViT, choosing patch size is one of the most critical decisions you make. It determines how smart the model is, and how much compute power it drains."
+        },
+        {
+          "kind": "definition",
+          "icon": "\ud83d\udccf",
+          "title": "Patch Size Tradeoffs",
+          "body": "<strong>Patch size</strong> (denoted as <code>P</code>) is the height and width of the square patches. Smaller patches (e.g. 8x8) capture finer details but increase sequence length, while larger patches (e.g. 32x32) run faster but lose spatial precision."
+        },
+        {
+          "kind": "analogy",
+          "icon": "\ud83d\udd0d",
+          "title": "Tile size in a mosaic",
+          "body": "Think of patch size as the tile size in a mosaic. If you use tiny tiles, you can make a highly detailed portrait, but it takes forever to assemble. If you use huge tiles, you can finish the mosaic in a few minutes, but the portrait will look blocky."
+        },
+        {
+          "kind": "example",
+          "icon": "\ud83c\udfce\ufe0f",
+          "title": "ViT-H/14 vs. ViT-B/32",
+          "body": "A ViT-H/14 model uses a patch size of 14x14, capturing excellent detail but demanding extreme GPU power. A ViT-B/32 model uses a patch size of 32x32, allowing it to run extremely fast on smaller servers with lower accuracy."
+        },
+        {
+          "kind": "mythbust",
+          "icon": "\u26a0\ufe0f",
+          "title": "Smaller isn't always better",
+          "body": "You might think we should always use 4x4 or 2x2 patches to get the best accuracy. However, because self-attention computation scales quadratically with sequence length, choosing very small patches will quickly freeze your GPU due to memory overload."
+        },
+        {
+          "kind": "visual",
+          "icon": "\u2696\ufe0f",
+          "title": "16x16 vs. 32x32 Patches",
+          "body": "Comparing patch sizes on a 224x224 image:",
+          "compare": {
+            "left": {
+              "emoji": "\ud83e\udde9",
+              "tag": "16x16 Patches",
+              "text": "196 tokens (Sequence length)<br>High detail resolution<br>Higher computational cost"
+            },
+            "right": {
+              "emoji": "\ud83e\uddf1",
+              "tag": "32x32 Patches",
+              "text": "49 tokens (Sequence length)<br>Coarse resolution<br>4x faster execution"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "type": "practice",
+      "exercises": [
+        {
+          "id": "p1",
+          "type": "multiple_choice",
+          "xp": 2,
+          "prompt": "What is a major tradeoff when choosing a smaller patch size (like 8x8 instead of 16x16)?",
+          "explain": "Smaller patches double the grid resolution, which quadruples the patch count and significantly increases computation.",
+          "options": [
+            {
+              "id": "a",
+              "text": "Increased detail resolution vs. quadrupled computational and memory costs",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "Fewer channels vs. shorter sequence lengths",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "Loss of spatial coordination vs. faster training",
+              "correct": false
+            },
+            {
+              "id": "d",
+              "text": "Fewer parameters in the MLP head vs. higher loss",
+              "correct": false
+            }
+          ]
+        },
+        {
+          "id": "p2",
+          "type": "true_false",
+          "xp": 2,
+          "prompt": "True or false: Computational cost in self-attention scales linearly with the number of patches.",
+          "explain": "False. Self-attention scales quadratically, meaning doubling the patch count quadruples the attention compute cost.",
+          "options": [
+            {
+              "id": "t",
+              "text": "True",
+              "correct": false
+            },
+            {
+              "id": "f",
+              "text": "False",
+              "correct": true
+            }
+          ]
+        },
+        {
+          "id": "p3",
+          "type": "fill_blank",
+          "xp": 2,
+          "prompt": "Complete the sentence:",
+          "explain": "Larger patches cover more pixels, resulting in fewer total patches and a shorter sequence length.",
+          "sentence": "A patch size of 32x32 yields a ___ sequence length than a patch size of 16x16 on the same image.",
+          "blank": "shorter",
+          "words": [
+            "shorter",
+            "longer",
+            "equal"
+          ]
+        },
+        {
+          "id": "p4",
+          "type": "spot_the_ai",
+          "xp": 2,
+          "prompt": "Which model setup is most suitable for a fast inference task on a low-end phone?",
+          "explain": "ViT-B/32 has fewer tokens, making it much faster and lighter for resource-constrained devices.",
+          "options": [
+            {
+              "id": "a",
+              "text": "ViT-B/32 (larger patch size, shorter sequence)",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "ViT-L/8 (smaller patch size, longer sequence)",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "ViT-H/14 (massive model with fine resolution)",
+              "correct": false
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "boss",
+      "exercises": [
+        {
+          "id": "b1",
+          "type": "multiple_choice",
+          "xp": 5,
+          "prompt": "If you double the image height and width but keep the patch size constant, what happens to the sequence length?",
+          "options": [
+            {
+              "id": "a",
+              "text": "It quadruples, because the total image area increases four times.",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "It doubles, because height and width doubled.",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "It remains unchanged.",
+              "correct": false
+            },
+            {
+              "id": "d",
+              "text": "It is cut in half.",
+              "correct": false
+            }
+          ],
+          "explain": "Excellent! Doubling both height and width increases the 2D area by a factor of 4, quadrupling the number of patches. Next: what the projection layers actually learn to look at!"
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,222 @@
+{
+  "id": "u193-l5",
+  "unit": 193,
+  "day": 970,
+  "tier": "Video & Temporal Vision",
+  "tierIcon": "\ud83c\udfac",
+  "title": "Comparing Video Models",
+  "icon": "\u2696\ufe0f",
+  "concept": "Different video architectures trade off speed, accuracy, and computational requirements depending on the application.",
+  "xp": 15,
+  "hearts": 3,
+  "estMinutes": 7,
+  "segments": [
+    {
+      "type": "warmup",
+      "exercises": [
+        {
+          "id": "w1",
+          "type": "multiple_choice",
+          "xp": 1,
+          "prompt": "Recap: What is the core mechanism of I3D?",
+          "options": [
+            {
+              "id": "a",
+              "text": "Inflating 2D network layers and weights into 3D",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "Running two parallel 2D streams on a CPU",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "Compressing video files into smaller formats",
+              "correct": false
+            }
+          ],
+          "explain": "Yes! I3D inflates successful 2D models into 3D to reuse learned image weights."
+        }
+      ]
+    },
+    {
+      "type": "teach",
+      "cards": [
+        {
+          "kind": "hook",
+          "icon": "\u2696\ufe0f",
+          "title": "Choosing the right tool",
+          "body": "If you are building an AI application to label soccer highlights, should you use C3D, a Two-Stream network, or I3D? There is no single best model. Each has massive tradeoffs in speed, accuracy, and ease of training."
+        },
+        {
+          "kind": "definition",
+          "icon": "\u2696\ufe0f",
+          "title": "Model Tradeoffs",
+          "body": "\u2022 <strong>C3D</strong>: Simple uniform baseline, but parameter-heavy and hard to train from scratch.<br>\u2022 <strong>Two-Stream</strong>: Strong accuracy by separating static detail from optical flow, but requires expensive flow pre-computation.<br>\u2022 <strong>I3D</strong>: State-of-the-art accuracy by reusing 2D pre-trained weights, but requires high GPU memory."
+        },
+        {
+          "kind": "analogy",
+          "icon": "\ud83d\udeb2",
+          "title": "Bikes vs. Trucks",
+          "body": "C3D is like a sturdy heavy truck: reliable but massive. Two-Stream is like a bicycle pulling a cart: fast, but you have to manually load the optical flow cart first. I3D is like a modern sports car: ultra-high performance but expensive to run."
+        },
+        {
+          "kind": "example",
+          "icon": "\u23f1\ufe0f",
+          "title": "The optical flow bottleneck",
+          "body": "If a Two-Stream network needs to run in real-time, calculating dense optical flow (Farneback) on the fly becomes a major bottleneck. For edge devices, engineers might choose a lightweight 3D CNN instead."
+        },
+        {
+          "kind": "mythbust",
+          "icon": "\ud83d\udeab",
+          "title": "Optical flow is not dead",
+          "body": "You might think 3D CNNs make optical flow obsolete. In fact, combining them yields the best results! The top-performing I3D models actually run as a Two-Stream network, with one 3D CNN for RGB frames and another 3D CNN for optical flow!"
+        },
+        {
+          "kind": "visual",
+          "icon": "\u2696\ufe0f",
+          "title": "Video Model Scorecard",
+          "body": "Comparing the performance profile of major video models:",
+          "compare": {
+            "left": {
+              "emoji": "\ud83c\udf0a",
+              "tag": "Two-Stream Networks",
+              "text": "Accuracy: High<br>Computation: High (requires pre-flow)<br>Transfer Learning: Yes (2D CNNs)"
+            },
+            "right": {
+              "emoji": "\ud83c\udf88",
+              "tag": "I3D (Inflated 3D)",
+              "text": "Accuracy: Very High<br>Computation: High (3D activations)<br>Transfer Learning: Yes (Inflated 2D)"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "type": "practice",
+      "exercises": [
+        {
+          "id": "p1",
+          "type": "multiple_choice",
+          "xp": 2,
+          "prompt": "What is a major bottleneck when deploying Two-Stream networks in real-time?",
+          "options": [
+            {
+              "id": "a",
+              "text": "Computing optical flow on the fly",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "The size of the output class labels",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "Converting the video to black and white",
+              "correct": false
+            },
+            {
+              "id": "d",
+              "text": "Running out of 2D convolutional layers",
+              "correct": false
+            }
+          ],
+          "explain": "Correct! Calculating dense optical flow at high frame rates requires massive processing power."
+        },
+        {
+          "id": "p2",
+          "type": "true_false",
+          "xp": 2,
+          "prompt": "True or false: The best performing video classifiers often combine 3D CNNs with Two-Stream setups.",
+          "options": [
+            {
+              "id": "t",
+              "text": "True",
+              "correct": true
+            },
+            {
+              "id": "f",
+              "text": "False",
+              "correct": false
+            }
+          ],
+          "explain": "True. Running an inflated 3D CNN on raw frames and another on optical flow captures features robustly."
+        },
+        {
+          "id": "p3",
+          "type": "fill_blank",
+          "xp": 2,
+          "prompt": "Complete the sentence:",
+          "sentence": "While C3D is trained from scratch, I3D improves accuracy by bootstrapping weights from ___.",
+          "blank": "ImageNet",
+          "words": [
+            "ImageNet",
+            "Kinetics",
+            "YouTube"
+          ],
+          "explain": "I3D leverages 2D pre-trained weights from ImageNet to bootstrap spatiotemporal representations."
+        },
+        {
+          "id": "p4",
+          "type": "spot_the_ai",
+          "xp": 2,
+          "prompt": "Which model is the most parameter-heavy and computationally expensive to train from scratch?",
+          "options": [
+            {
+              "id": "a",
+              "text": "C3D",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "Standard 2D VGG",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "Lucas-Kanade keypoint tracker",
+              "correct": false
+            }
+          ],
+          "explain": "C3D uses massive 3D convolutional layers and fully connected layers, making it highly resource-intensive."
+        }
+      ]
+    },
+    {
+      "type": "boss",
+      "exercises": [
+        {
+          "id": "b1",
+          "type": "multiple_choice",
+          "xp": 5,
+          "prompt": "You are building a real-time gesture recognition model for a smart home device with a tiny processor. Which design choice is best?",
+          "options": [
+            {
+              "id": "a",
+              "text": "A lightweight 3D CNN with spatial downsampling and no optical flow calculation.",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "A full double-stream I3D model with dense Farneback optical flow.",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "An image classification network running at 1000 FPS.",
+              "correct": false
+            },
+            {
+              "id": "d",
+              "text": "None, smart home devices cannot run computer vision.",
+              "correct": false
+            }
+          ],
+          "explain": "Exactly! Edge devices have limited compute. Calculating optical flow is too heavy. A lightweight, optimized 3D CNN is the most sensible choice. Next: how do we detect and track individual moving objects? Next up: Video Object Detection and Tracking. Phase 8: Modern Object Detection is complete. Next up: Image Segmentation."
+        }
+      ]
+    }
+  ]
+}

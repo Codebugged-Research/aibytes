@@ -1,0 +1,222 @@
+{
+  "id": "u160-l3",
+  "unit": 160,
+  "day": 803,
+  "tier": "Medical Image Segmentation",
+  "tierIcon": "🩻",
+  "title": "Severe Medical Imbalances",
+  "icon": "🩻",
+  "concept": "Medical segmentation tasks suffer from extreme class imbalance, requiring specialized sampling and loss strategies to detect tiny targets.",
+  "xp": 15,
+  "hearts": 3,
+  "estMinutes": 7,
+  "segments": [
+    {
+      "type": "warmup",
+      "exercises": [
+        {
+          "id": "w1",
+          "type": "multiple_choice",
+          "xp": 1,
+          "prompt": "Recap: What is a voxel?",
+          "options": [
+            {
+              "id": "a",
+              "text": "A three-dimensional pixel representing volume data",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "A type of learning rate scheduler",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "A loss function for bounding boxes",
+              "correct": false
+            }
+          ],
+          "explain": "Correct! Voxels are the volumetric equivalent of pixels."
+        }
+      ]
+    },
+    {
+      "type": "teach",
+      "cards": [
+        {
+          "kind": "hook",
+          "icon": "🩺",
+          "title": "The needle in the haystack",
+          "body": "Consider a chest CT scan of a patient with early-stage lung cancer. The scan contains millions of pixels. The cancer nodule is only a tiny speck of 50 pixels. If the model misses this speck, the patient goes untreated. This is the extreme class imbalance problem: the background is massive, and the target is tiny."
+        },
+        {
+          "kind": "definition",
+          "icon": "⚖️",
+          "title": "Severe Medical Imbalance",
+          "body": "Medical segmentation datasets often have target classes that represent less than 0.1% of the total pixels. Resolving this requires **patch-based sampling** (forcing the model to train on crops containing the target) and **hybrid loss functions** (like Focal + Dice)."
+        },
+        {
+          "kind": "analogy",
+          "icon": "🎣",
+          "title": "Fishing in a swimming pool",
+          "body": "If there is only one tiny fish in a massive pool, swimming around randomly (random cropping) means you rarely find it. You need to focus your net (sampling bias) directly on the corner where the fish is located to learn how to catch it."
+        },
+        {
+          "kind": "example",
+          "icon": "📐",
+          "title": "Nodule detection patch sampling",
+          "body": "Instead of feeding a whole 512x512 CT scan to the network, we train on 64x64 patches. We ensure that 50% of the training patches contain the cancer nodule, forcing the model to learn its features."
+        },
+        {
+          "kind": "mythbust",
+          "icon": "⚠️",
+          "title": "Accuracy is a useless metric",
+          "body": "You might think an accuracy of 99.9% is great for a tumor model. In medical imaging, this is a dangerous myth! A model that predicts 'healthy' for every pixel gets 99.9% accuracy but has a 100% failure rate for sick patients."
+        },
+        {
+          "kind": "visual",
+          "icon": "⚖️",
+          "title": "Random vs. Target-biased Sampling",
+          "body": "Comparing training patch selection:",
+          "compare": {
+            "left": {
+              "emoji": "⏹️",
+              "tag": "Random Sampling",
+              "text": "Most crops contain only background healthy tissue<br>Model rarely sees the tumor<br>Learns to predict background"
+            },
+            "right": {
+              "emoji": "🎯",
+              "tag": "Target-biased Sampling",
+              "text": "Crops are centered on tumor locations<br>Model frequently sees the tumor features<br>Learns to segment boundaries"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "type": "practice",
+      "exercises": [
+        {
+          "id": "p1",
+          "type": "multiple_choice",
+          "xp": 2,
+          "prompt": "Why is pixel accuracy a dangerous metric in medical image segmentation?",
+          "options": [
+            {
+              "id": "a",
+              "text": "It hides failures on small targets because background pixels dominate the score",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "It is mathematically slow to compute on GPUs",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "It only works on color photos",
+              "correct": false
+            },
+            {
+              "id": "d",
+              "text": "It requires the labels to be bounding boxes",
+              "correct": false
+            }
+          ],
+          "explain": "Correct! Accuracy can be near-perfect even if the model misses the tumor entirely."
+        },
+        {
+          "id": "p2",
+          "type": "true_false",
+          "xp": 2,
+          "prompt": "True or False: In patch-based sampling, we ensure that a significant portion of training crops contain the target object.",
+          "options": [
+            {
+              "id": "t",
+              "text": "True",
+              "correct": false
+            },
+            {
+              "id": "f",
+              "text": "False",
+              "correct": false
+            }
+          ],
+          "explain": "True. This prevents the model from only learning background features."
+        },
+        {
+          "id": "p3",
+          "type": "fill_blank",
+          "xp": 2,
+          "prompt": "Complete the sentence:",
+          "sentence": "To train models on rare structures, we combine patch-based sampling with ___ loss functions.",
+          "blank": "hybrid",
+          "words": [
+            "hybrid",
+            "simple",
+            "linear"
+          ],
+          "explain": "Hybrid losses like Focal + Dice are crucial for handling extreme imbalances."
+        },
+        {
+          "id": "p4",
+          "type": "spot_the_ai",
+          "xp": 2,
+          "prompt": "Which of these strategies helps a model learn to segment a tiny heart valve abnormality?",
+          "options": [
+            {
+              "id": "a",
+              "text": "Using target-biased crop sampling to show the valve frequently during training",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "Decreasing the training dataset size",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "Using standard cross-entropy without weights",
+              "correct": false
+            }
+          ],
+          "explain": "Biased sampling ensures the model sees enough examples of the rare valve class."
+        }
+      ]
+    },
+    {
+      "type": "boss",
+      "exercises": [
+        {
+          "id": "b1",
+          "type": "multiple_choice",
+          "xp": 5,
+          "prompt": "You are training a model to segment tiny micro-calcifications in mammograms. The calcifications are very small. How should you structure your training pipeline?",
+          "options": [
+            {
+              "id": "a",
+              "text": "Use target-biased patch sampling to feed crops containing calcifications, combined with a Dice + Focal loss.",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "Use random cropping and standard cross-entropy loss without class weights.",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "Flatten the scans into a single class classification vector.",
+              "correct": false
+            },
+            {
+              "id": "d",
+              "text": "Train the model on downsampled low-resolution images to speed up training.",
+              "correct": false
+            }
+          ],
+          "explain": "Perfect! Biased sampling forces the model to look at the targets, and Dice + Focal loss prevents the background from dominating the gradient updates. Next: how do we get clean medical labels?"
+        }
+      ]
+    }
+  ]
+}

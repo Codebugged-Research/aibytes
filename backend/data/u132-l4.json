@@ -1,0 +1,222 @@
+{
+  "id": "u132-l4",
+  "unit": 132,
+  "day": 664,
+  "tier": "Image Classification in Depth",
+  "tierIcon": "🏷️",
+  "title": "Mutual Exclusivity Assumption",
+  "icon": "🚫",
+  "concept": "The mutual exclusivity assumption asserts that an image can belong to only one class, causing issues when multiple classes co-occur.",
+  "xp": 15,
+  "hearts": 3,
+  "estMinutes": 7,
+  "segments": [
+    {
+      "type": "warmup",
+      "exercises": [
+        {
+          "id": "w1",
+          "type": "multiple_choice",
+          "xp": 1,
+          "prompt": "Recap: What is the core assumption of single-label classification regarding class labels?",
+          "options": [
+            {
+              "id": "a",
+              "text": "They are mutually exclusive.",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "They are completely independent.",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "They must always occur together.",
+              "correct": false
+            }
+          ],
+          "explain": "Correct! Single-label models assume categories are mutually exclusive — only one can be true."
+        }
+      ]
+    },
+    {
+      "type": "teach",
+      "cards": [
+        {
+          "kind": "hook",
+          "icon": "📦",
+          "title": "The truck carrying a car",
+          "body": "If you show a single-label vehicle classifier a photo of a flatbed truck carrying a sedan, the model must choose: is it a 'truck' or a 'car'? It cannot say both, forcing an artificial choice."
+        },
+        {
+          "kind": "definition",
+          "icon": "🚫",
+          "title": "What is Mutual Exclusivity?",
+          "body": "The <strong>mutual exclusivity assumption</strong> is the logical constraint that an input image can belong to exactly one class. Mathematically, this is enforced by Softmax, which makes classes compete for probability."
+        },
+        {
+          "kind": "analogy",
+          "icon": "🏁",
+          "title": "A single winner race",
+          "body": "Think of a race where only one runner can take first place. Even if two runners cross the finish line milliseconds apart, the rules demand only one winner. The runner-up gets nothing."
+        },
+        {
+          "kind": "example",
+          "icon": "🏥",
+          "title": "Medical imaging conflict",
+          "body": "In chest X-rays, a patient might have both pneumonia and cardiomegaly. A single-label classifier would fail to capture both diagnoses, potentially missing a life-threatening condition."
+        },
+        {
+          "kind": "mythbust",
+          "icon": "⚠️",
+          "title": "Overlapping objects are common",
+          "body": "You might think most real-world scenes are simple enough for single labels. In reality, almost all natural images contain multiple objects (e.g., a dog sitting on a couch near a window)."
+        },
+        {
+          "kind": "visual",
+          "icon": "⚖️",
+          "title": "Enforced Competition",
+          "body": "How Softmax forces competition between classes:",
+          "compare": {
+            "left": {
+              "emoji": "🚗",
+              "tag": "Class: Car",
+              "text": "Logit: 5.0<br>P(Car) = 0.88<br>Wins the prediction"
+            },
+            "right": {
+              "emoji": "🚚",
+              "tag": "Class: Truck",
+              "text": "Logit: 3.0<br>P(Truck) = 0.12<br>Suppressed by Softmax"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "type": "practice",
+      "exercises": [
+        {
+          "id": "p1",
+          "type": "multiple_choice",
+          "xp": 2,
+          "prompt": "What occurs when you train a single-label classifier on images that actually contain multiple valid classes?",
+          "explain": "Because Softmax forces the outputs to sum to 1, the model must suppress all but the highest score, even if multiple are correct.",
+          "options": [
+            {
+              "id": "a",
+              "text": "The model gets confused and is forced to pick one class, suppressing the others",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "The model automatically switches to multi-label mode",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "The loss function automatically becomes zero",
+              "correct": false
+            },
+            {
+              "id": "d",
+              "text": "The logits sum to infinity",
+              "correct": false
+            }
+          ]
+        },
+        {
+          "id": "p2",
+          "type": "true_false",
+          "xp": 2,
+          "prompt": "True or false: An image showing a cat sleeping on a dog violates the mutual exclusivity assumption of single-label classification.",
+          "explain": "True. Both cat and dog are present, so a single label cannot fully describe the image correctly.",
+          "options": [
+            {
+              "id": "t",
+              "text": "True",
+              "correct": true
+            },
+            {
+              "id": "f",
+              "text": "False",
+              "correct": false
+            }
+          ]
+        },
+        {
+          "id": "p3",
+          "type": "fill_blank",
+          "xp": 2,
+          "prompt": "Complete the sentence:",
+          "explain": "Softmax normalizes outputs globally, making the probability of each class depend on all others.",
+          "sentence": "The mutual exclusivity assumption is mathematically enforced by the ___ function.",
+          "blank": "softmax",
+          "words": [
+            "softmax",
+            "sigmoid",
+            "relu"
+          ]
+        },
+        {
+          "id": "p4",
+          "type": "spot_the_ai",
+          "xp": 2,
+          "prompt": "In which of these scenarios is the mutual exclusivity assumption violated?",
+          "explain": "Having both a tree and a house means the image has multiple valid categories, violating single-label assumptions.",
+          "options": [
+            {
+              "id": "a",
+              "text": "An image contains both a tree and a house, labeled as just 'house'",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "A handwritten digit photo containing only the number '7'",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "A close-up photo of a clean red apple labeled 'apple'",
+              "correct": false
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "boss",
+      "exercises": [
+        {
+          "id": "b1",
+          "type": "multiple_choice",
+          "xp": 5,
+          "prompt": "If you are designing a system to classify satellite images for land cover (forest, urban, water, agriculture) and many images contain both forest and agriculture, what is the best architectural decision?",
+          "options": [
+            {
+              "id": "a",
+              "text": "Reject the single-label assumption and use multi-label classification.",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "Use Softmax but double the number of training epochs.",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "Crop the images so only one land type is visible in each crop.",
+              "correct": false
+            },
+            {
+              "id": "d",
+              "text": "Convert the input images to grayscale to simplify features.",
+              "correct": false
+            }
+          ],
+          "explain": "Exactly! If classes naturally co-occur in the same image, forcing a single-label assumption is bad design. Switching to multi-label classification is the correct architectural choice. Next, let's look at best practices for single-label training!"
+        }
+      ]
+    }
+  ]
+}

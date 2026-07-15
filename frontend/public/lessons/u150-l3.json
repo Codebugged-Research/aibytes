@@ -1,0 +1,222 @@
+{
+  "id": "u150-l3",
+  "unit": 150,
+  "day": 753,
+  "tier": "Modern Object Detection",
+  "tierIcon": "🎯",
+  "title": "Center-Based Detection (CenterNet)",
+  "icon": "🎯",
+  "concept": "CenterNet represents objects by their center points, regressing bounding box dimensions directly from the center pixel.",
+  "xp": 15,
+  "hearts": 3,
+  "estMinutes": 7,
+  "segments": [
+    {
+      "type": "warmup",
+      "exercises": [
+        {
+          "id": "w3",
+          "type": "multiple_choice",
+          "xp": 1,
+          "prompt": "Recap: What is the role of associative embedding in CornerNet?",
+          "options": [
+            {
+              "id": "a",
+              "text": "To group matching top-left and bottom-right corners of the same object",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "To scale the color channels of the image",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "To calculate the loss of the bounding box width",
+              "correct": false
+            }
+          ],
+          "explain": "Correct! Embeddings ensure that corners belonging to the same object are grouped together."
+        }
+      ]
+    },
+    {
+      "type": "teach",
+      "cards": [
+        {
+          "kind": "hook",
+          "icon": "🎯",
+          "title": "Aiming for the Bullseye",
+          "body": "If corners are often empty background space, why not look at the actual heart of the object? CenterNet did exactly this, simplifying anchor-free detection by representing every object as a single central point."
+        },
+        {
+          "kind": "definition",
+          "icon": "🎯",
+          "title": "Center-Based Detection (CenterNet)",
+          "body": "<strong>CenterNet</strong> represents an object by its single <strong>center point</strong>. The network predicts a heatmap of center points, and regresses the object's <strong>width, height, and local offset</strong> directly from the center pixel features."
+        },
+        {
+          "kind": "analogy",
+          "icon": "🎯",
+          "title": "Darts Bullseye",
+          "body": "Imagine playing darts. Instead of trying to find the outer borders of the dartboard first, you aim straight for the bullseye (center). Once you hit it, you just measure how far the board extends in all directions. That is CenterNet!"
+        },
+        {
+          "kind": "example",
+          "icon": "🚕",
+          "title": "Center Point Detection",
+          "body": "CenterNet processes a street image. It finds a center point peak on a car. At that exact pixel location, the network's regression heads output: width = 120 pixels, height = 45 pixels. No corner matching is needed!"
+        },
+        {
+          "kind": "mythbust",
+          "icon": "⚠️",
+          "title": "Is CenterNet Slow?",
+          "body": "You might think predicting heatmaps and offsets is slow. Fact: CenterNet is often faster and simpler than corner-based detectors because it avoids the complex matching step, predicting boxes directly from single center features."
+        },
+        {
+          "kind": "visual",
+          "icon": "⚖️",
+          "title": "CenterNet Detection Flow",
+          "body": "How center-point regression simplifies box drawing:",
+          "compare": {
+            "left": {
+              "emoji": "🎯",
+              "tag": "Center Heatmap",
+              "text": "Finds center point of object<br>Heatmap peaks represent objects<br>No duplicate proposals"
+            },
+            "right": {
+              "emoji": "📏",
+              "tag": "Size Regression",
+              "text": "Outputs width & height directly<br>Reads values at center pixel<br>Constructs final bounding box"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "type": "practice",
+      "exercises": [
+        {
+          "id": "p1",
+          "type": "multiple_choice",
+          "xp": 2,
+          "prompt": "How does CenterNet represent an object in its prediction pipeline?",
+          "options": [
+            {
+              "id": "a",
+              "text": "As a single center point with regressed width and height",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "As four corner points grouped by a neural network",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "As a semantic segmentation mask only",
+              "correct": false
+            },
+            {
+              "id": "d",
+              "text": "As a grid of 100 anchor points",
+              "correct": false
+            }
+          ],
+          "explain": "Correct! CenterNet represents each object as a single center point with size regression."
+        },
+        {
+          "id": "p2",
+          "type": "true_false",
+          "xp": 2,
+          "prompt": "True or False: Unlike CornerNet, CenterNet does not require a grouping step (like associative embedding) because it predicts objects from single points.",
+          "options": [
+            {
+              "id": "t",
+              "text": "True",
+              "correct": true
+            },
+            {
+              "id": "f",
+              "text": "False",
+              "correct": false
+            }
+          ],
+          "explain": "True. CenterNet avoids keypoint matching completely by predicting size coordinates directly at the center pixel."
+        },
+        {
+          "id": "p3",
+          "type": "fill_blank",
+          "xp": 2,
+          "prompt": "Complete the sentence:",
+          "sentence": "CenterNet finds the center of objects using a peak in its predicted ___.",
+          "blank": "heatmap",
+          "words": [
+            "heatmap",
+            "convolution",
+            "gradient"
+          ],
+          "explain": "CenterNet uses a heatmap prediction to locate object centers."
+        },
+        {
+          "id": "p4",
+          "type": "spot_the_ai",
+          "xp": 2,
+          "prompt": "What size parameters are regressed directly from the center point in CenterNet?",
+          "options": [
+            {
+              "id": "a",
+              "text": "Width and height of the object's bounding box",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "The total pixel count of the object",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "The number of color channels in the box",
+              "correct": false
+            }
+          ],
+          "explain": "Correct! CenterNet predicts width and height directly at the center point pixel location."
+        }
+      ]
+    },
+    {
+      "type": "boss",
+      "exercises": [
+        {
+          "id": "b1",
+          "type": "multiple_choice",
+          "xp": 5,
+          "prompt": "You are running CenterNet to detect dogs. The model successfully detects a dog's center point, but the drawn box is twice as large as the dog. Which branch of CenterNet needs further training?",
+          "options": [
+            {
+              "id": "a",
+              "text": "The size regression branch (width and height), which is responsible for scaling the box around the center point.",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "The center point heatmap branch, which found the center.",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "The NMS post-processing branch.",
+              "correct": false
+            },
+            {
+              "id": "d",
+              "text": "The input cropping branch.",
+              "correct": false
+            }
+          ],
+          "explain": "Exactly! The size regression branch is responsible for predicting the width and height offsets from the center point."
+        }
+      ]
+    }
+  ]
+}

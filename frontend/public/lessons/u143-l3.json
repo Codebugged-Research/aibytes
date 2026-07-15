@@ -1,0 +1,222 @@
+{
+  "id": "u143-l3",
+  "unit": 143,
+  "day": 718,
+  "tier": "Object Detection Foundations",
+  "tierIcon": "🎯",
+  "title": "Warping and Cropping",
+  "icon": "📐",
+  "concept": "Warping is the process of stretching and resizing rectangular region proposals to fit the fixed square dimensions required by the CNN backbone.",
+  "xp": 15,
+  "hearts": 3,
+  "estMinutes": 7,
+  "segments": [
+    {
+      "type": "warmup",
+      "exercises": [
+        {
+          "id": "w1",
+          "type": "multiple_choice",
+          "xp": 1,
+          "prompt": "Recap: What classifier was used in original R-CNN instead of Softmax?",
+          "options": [
+            {
+              "id": "a",
+              "text": "Linear SVMs",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "Decision Forests",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "Logistic Regression",
+              "correct": false
+            }
+          ],
+          "explain": "Linear Support Vector Machines (SVMs) were used for final classification in R-CNN."
+        }
+      ]
+    },
+    {
+      "type": "teach",
+      "cards": [
+        {
+          "kind": "hook",
+          "icon": "📐",
+          "title": "Fitting a Square Peg",
+          "body": "If you have a square photo frame, and a tall, narrow photo of a person, you can't fit it inside without doing something: you must either crop off the top and bottom, or squash the photo sideways to warp it. Since CNN backbones require fixed square inputs, R-CNN must warp every region."
+        },
+        {
+          "kind": "definition",
+          "icon": "📐",
+          "title": "What is Warping?",
+          "body": "<strong>Warping</strong> is the process of scaling, stretching, or squishing a cropped rectangular image region of arbitrary size into a fixed square resolution (typically <code>224x224</code> pixels) to match the input layer of the CNN backbone."
+        },
+        {
+          "kind": "analogy",
+          "icon": "📐",
+          "title": "Funhouse Mirrors",
+          "body": "Imagine walking past a funhouse mirror. A wide car looks squashed into a square shape, or a tall pedestrian looks stretched. The CNN still recognizes them because the overall features (colors, edges) are preserved despite the distortion."
+        },
+        {
+          "kind": "example",
+          "icon": "📐",
+          "title": "Processing a Proposal",
+          "body": "Selective Search proposes a rectangular region around a bus with size 400x150. R-CNN crops this region, adds a small padding of 16 pixels, and warps (stretches) it directly to a <code>224x224</code> square before feeding it to AlexNet."
+        },
+        {
+          "kind": "mythbust",
+          "icon": "⚠️",
+          "title": "Warping doesn't break CNNs",
+          "body": "You might think distorting the aspect ratio would completely confuse the CNN. In reality, deep neural networks are remarkably robust to geometric distortion, and they learn to classify warped objects effectively."
+        },
+        {
+          "kind": "visual",
+          "icon": "⚖️",
+          "title": "Rectangle to Square",
+          "body": "Comparing a raw rectangular crop and its warped square CNN input:",
+          "compare": {
+            "left": {
+              "emoji": "🚌",
+              "tag": "Original Crop",
+              "text": "Rectangular aspect ratio:<br><code>[width=400, height=150]</code>"
+            },
+            "right": {
+              "emoji": "⏹️",
+              "tag": "Warped Crop",
+              "text": "Distorted square input:<br><code>[width=224, height=224]</code>"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "type": "practice",
+      "exercises": [
+        {
+          "id": "p1",
+          "type": "multiple_choice",
+          "xp": 2,
+          "prompt": "Why does R-CNN warp region proposal crops before passing them to the CNN?",
+          "explain": "Fully connected layers in CNN backbones require fixed-size input vectors, necessitating resizing and warping of crops to a uniform square size.",
+          "options": [
+            {
+              "id": "a",
+              "text": "CNN backbones require a fixed square input size (e.g. 224x224)",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "Warping increases the resolution of the image",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "Warping automatically deletes background pixels",
+              "correct": false
+            },
+            {
+              "id": "d",
+              "text": "Warping converts the images to grayscale",
+              "correct": false
+            }
+          ]
+        },
+        {
+          "id": "p2",
+          "type": "true_false",
+          "xp": 2,
+          "prompt": "True or False: Warping is done by adding black pixels (letterboxing) to keep the aspect ratio identical.",
+          "explain": "False. In original R-CNN, warping refers to anisotropically scaling (stretching/squishing) the image directly to the target square, regardless of aspect ratio.",
+          "options": [
+            {
+              "id": "t",
+              "text": "True",
+              "correct": false
+            },
+            {
+              "id": "f",
+              "text": "False",
+              "correct": true
+            }
+          ]
+        },
+        {
+          "id": "p3",
+          "type": "fill_blank",
+          "xp": 2,
+          "prompt": "Complete the sentence:",
+          "explain": "Most classic CNNs (like AlexNet or VGG) take 224x224 pixel inputs.",
+          "sentence": "Warping stretches or squishes a crop to a uniform fixed size, typically ___ pixels square.",
+          "blank": "224x224",
+          "words": [
+            "224x224",
+            "100x100",
+            "512x512"
+          ]
+        },
+        {
+          "id": "p4",
+          "type": "spot_the_ai",
+          "xp": 2,
+          "prompt": "Which image operation represents warping a crop?",
+          "explain": "Stretching a rectangular dimension into a square target shape represents warping.",
+          "options": [
+            {
+              "id": "a",
+              "text": "Resizing a 300x100 rectangle into a 224x224 square by stretching it vertically",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "Converting a color image to black and white",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "Running a 3x3 convolution filter",
+              "correct": false
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "boss",
+      "exercises": [
+        {
+          "id": "b1",
+          "type": "multiple_choice",
+          "xp": 5,
+          "prompt": "You are training R-CNN on images of long, thin snakes. If warping distorts the snake shape significantly, how does it affect the CNN feature extractor?",
+          "options": [
+            {
+              "id": "a",
+              "text": "The CNN can still learn to recognize the snakes, because it adapts to the warped feature shapes during training.",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "The CNN will crash, because it cannot run on distorted images.",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "The CNN will automatically un-warp the image back to its original aspect ratio.",
+              "correct": false
+            },
+            {
+              "id": "d",
+              "text": "The snake coordinates will be lost.",
+              "correct": false
+            }
+          ],
+          "explain": "Exactly! The network is trained on the warped images, so it learns feature representations of the distorted shapes directly. Next: let's learn how SVM classifiers process these extracted features!"
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,222 @@
+{
+  "id": "u194-l1",
+  "unit": 194,
+  "day": 971,
+  "tier": "Video & Temporal Vision",
+  "tierIcon": "\ud83c\udfac",
+  "title": "Detecting Objects in Video",
+  "icon": "\ud83c\udfaf",
+  "concept": "Video object detection localizes objects in every frame of a video, leveraging temporal context to handle motion blur and occlusions.",
+  "xp": 15,
+  "hearts": 3,
+  "estMinutes": 7,
+  "segments": [
+    {
+      "type": "warmup",
+      "exercises": [
+        {
+          "id": "w1",
+          "type": "multiple_choice",
+          "xp": 1,
+          "prompt": "Recap: What is the main drawback of Two-Stream networks in real-time deployment?",
+          "options": [
+            {
+              "id": "a",
+              "text": "They require expensive real-time optical flow computation",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "They can only output classification labels for static pictures",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "They cannot use transfer learning features",
+              "correct": false
+            }
+          ],
+          "explain": "Correct! Calculating optical flow on the fly is extremely CPU/GPU intensive, hindering real-time performance."
+        }
+      ]
+    },
+    {
+      "type": "teach",
+      "cards": [
+        {
+          "kind": "hook",
+          "icon": "\ud83c\udfaf",
+          "title": "Spotting the blur",
+          "body": "When you pause a video of a racing car, the image is often a blurry streak of color. A standard 2D object detector might completely miss it because it doesn't look like a normal car. But because we know it was a car in the previous frames, we can use history to solve the blur!"
+        },
+        {
+          "kind": "definition",
+          "icon": "\ud83c\udfaf",
+          "title": "Video Object Detection",
+          "body": "<strong>Video Object Detection</strong> is the task of identifying and localizing (with bounding boxes) objects in every frame of a video. Unlike static image detection, video detectors use <strong>temporal context</strong> from nearby frames to improve accuracy."
+        },
+        {
+          "kind": "analogy",
+          "icon": "\ud83d\udd75\ufe0f",
+          "title": "An attentive security guard",
+          "body": "Imagine a guard watching a gate. A visitor walks behind a pillar. A static image detector forgets the person exists the moment they are hidden. A temporal video detector remembers the person walked behind the pillar and expects them to emerge on the other side."
+        },
+        {
+          "kind": "example",
+          "icon": "\ud83d\ude97",
+          "title": "Handling occlusion",
+          "body": "In self-driving cars, a pedestrian might be temporarily blocked by a trash can. By leveraging memory of the pedestrian's previous position and velocity vector, the detector maintains a bounding box over them even while blocked."
+        },
+        {
+          "kind": "mythbust",
+          "icon": "\ud83d\udeab",
+          "title": "Not just 2D detector loop",
+          "body": "You might think video detection is just running YOLO on every frame in a loop. While simple, that ignores temporal context! Real video detectors link feature maps across time, using past frames to help classify blurry or partially blocked objects."
+        },
+        {
+          "kind": "visual",
+          "icon": "\u2696\ufe0f",
+          "title": "2D vs. Video Object Detection",
+          "body": "Comparing static and temporal object detection methods:",
+          "compare": {
+            "left": {
+              "emoji": "\ud83d\uddbc\ufe0f",
+              "tag": "2D Object Detection",
+              "text": "Detects on independent frames<br>Struggles with blur and occlusion<br>No historical context"
+            },
+            "right": {
+              "emoji": "\ud83c\udf9e\ufe0f",
+              "tag": "Video Object Detection",
+              "text": "Links features across frames<br>Handles blur using temporal context<br>Tracks objects across occlusions"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "type": "practice",
+      "exercises": [
+        {
+          "id": "p1",
+          "type": "multiple_choice",
+          "xp": 2,
+          "prompt": "How does video object detection handle motion blur?",
+          "options": [
+            {
+              "id": "a",
+              "text": "By using temporal context and features from surrounding clear frames",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "By increasing the contrast of the blur manually",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "By converting all video frames to vectors",
+              "correct": false
+            },
+            {
+              "id": "d",
+              "text": "By ignoring all moving objects completely",
+              "correct": false
+            }
+          ],
+          "explain": "Correct! Temporal context from adjacent frames helps resolve details that are blurry in a single frame."
+        },
+        {
+          "id": "p2",
+          "type": "true_false",
+          "xp": 2,
+          "prompt": "True or false: An object detector that operates on individual frames without memory is vulnerable to occlusion.",
+          "options": [
+            {
+              "id": "t",
+              "text": "True",
+              "correct": true
+            },
+            {
+              "id": "f",
+              "text": "False",
+              "correct": false
+            }
+          ],
+          "explain": "True. If an object is hidden behind a wall, a memoryless detector cannot detect it, whereas a video detector can use history."
+        },
+        {
+          "id": "p3",
+          "type": "fill_blank",
+          "xp": 2,
+          "prompt": "Complete the sentence:",
+          "sentence": "Video object detectors improve robustness by using temporal ___ from adjacent frames.",
+          "blank": "context",
+          "words": [
+            "context",
+            "stride",
+            "pooling"
+          ],
+          "explain": "Temporal context allows information from previous and future frames to support the current frame's prediction."
+        },
+        {
+          "id": "p4",
+          "type": "spot_the_ai",
+          "xp": 2,
+          "prompt": "Which of these is a typical challenge that temporal video detectors solve?",
+          "options": [
+            {
+              "id": "a",
+              "text": "Temporary occlusion (objects blocking each other)",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "Low audio volume in the recording",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "Files having incorrect file extensions",
+              "correct": false
+            }
+          ],
+          "explain": "Temporal detection helps maintain object localization even during temporary occlusion."
+        }
+      ]
+    },
+    {
+      "type": "boss",
+      "exercises": [
+        {
+          "id": "b1",
+          "type": "multiple_choice",
+          "xp": 5,
+          "prompt": "Why is running a standard 2D YOLO model frame-by-frame on a video suboptimal for a security system?",
+          "options": [
+            {
+              "id": "a",
+              "text": "Because it fails to utilize temporal links, causing bounding boxes to flicker or disappear when objects are partially blocked.",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "Because YOLO only works on static images and cannot open video files.",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "Because 2D detectors cannot detect human shapes.",
+              "correct": false
+            },
+            {
+              "id": "d",
+              "text": "Because it requires decompressing the video to analog tapes.",
+              "correct": false
+            }
+          ],
+          "explain": "Exactly! Without temporal memory, if a person walks behind a lamp post, the box disappears and reappears, causing flicker. Next: how do we enforce consistency over time?"
+        }
+      ]
+    }
+  ]
+}

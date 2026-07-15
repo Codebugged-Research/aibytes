@@ -1,0 +1,222 @@
+{
+  "id": "u155-l4",
+  "unit": 155,
+  "day": 779,
+  "tier": "Fully Convolutional Networks (FCNs)",
+  "tierIcon": "🕸️",
+  "title": "Skip Connections in FCNs",
+  "icon": "🕸️",
+  "concept": "Skip connections fuse fine spatial details from early encoder layers with high-level semantic features from deep decoder layers.",
+  "xp": 15,
+  "hearts": 3,
+  "estMinutes": 7,
+  "segments": [
+    {
+      "type": "warmup",
+      "exercises": [
+        {
+          "id": "w1",
+          "type": "multiple_choice",
+          "xp": 1,
+          "prompt": "Recap: What is a key feature of transposed convolutions?",
+          "options": [
+            {
+              "id": "a",
+              "text": "They are learnable layers that increase spatial resolution",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "They flatten 2D features into 1D vectors",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "They only work on black and white images",
+              "correct": false
+            }
+          ],
+          "explain": "Correct! Transposed convolutions allow learnable upsampling."
+        }
+      ]
+    },
+    {
+      "type": "teach",
+      "cards": [
+        {
+          "kind": "hook",
+          "icon": "🗺️",
+          "title": "Where did the border go?",
+          "body": "Even with transposed convolutions, a decoder upsampling from an 8x8 bottleneck has a hard time. The encoder destroyed the fine spatial details (like sharp borders and small lines) during downsampling. The decoder is just guessing where the borders were. What if we could send a copy of the high-resolution borders directly from the start of the network?"
+        },
+        {
+          "kind": "definition",
+          "icon": "🔗",
+          "title": "FCN Skip Connections",
+          "body": "<strong>Skip Connections</strong> in FCNs bypass intermediate layers to pass high-resolution feature maps from early encoder layers directly to later decoder layers, fusing low-level spatial details with high-level semantic info."
+        },
+        {
+          "kind": "analogy",
+          "icon": "🏢",
+          "title": "Looking at the blueprint",
+          "body": "Building a house using only memory is hard. A skip connection is like a worker in the attic dropping the original blueprint (early layers) down to the builders on the ground floor so they can check the exact measurements."
+        },
+        {
+          "kind": "example",
+          "icon": "📐",
+          "title": "Feature fusion",
+          "body": "In an FCN-8s network, the model combines the 8x upsampled output of the deepest layer with the spatial features of Pool 4 and Pool 3, creating a highly detailed final segmentation mask."
+        },
+        {
+          "kind": "mythbust",
+          "icon": "⚠️",
+          "title": "Not just copying",
+          "body": "You might think skip connections just copy pixels. Actually, we combine them (either by adding them together or concatenating their channels) and then run a convolution layer so the network learns how to combine them best."
+        },
+        {
+          "kind": "visual",
+          "icon": "⚖️",
+          "title": "FCN Skip Connection Fusion",
+          "body": "Visualizing feature merging:",
+          "compare": {
+            "left": {
+              "emoji": "🧠",
+              "tag": "Deep Semantic Features",
+              "text": "Low resolution (8x8)<br>Strong category info (e.g. 'Cat')<br>Blurry boundaries"
+            },
+            "right": {
+              "emoji": "🔗",
+              "tag": "Fused Features",
+              "text": "Combined via Skip Connection<br>High resolution + Strong category info<br>Sharp boundaries & exact contours"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "type": "practice",
+      "exercises": [
+        {
+          "id": "p1",
+          "type": "multiple_choice",
+          "xp": 2,
+          "prompt": "What is the primary function of skip connections in FCNs?",
+          "options": [
+            {
+              "id": "a",
+              "text": "To recover fine spatial details by fusing early and late layer features",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "To speed up training by skipping forward passes",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "To classify the overall category of the image",
+              "correct": false
+            },
+            {
+              "id": "d",
+              "text": "To reduce the number of channels to save memory",
+              "correct": false
+            }
+          ],
+          "explain": "Correct! Skip connections restore the details lost during downsampling."
+        },
+        {
+          "id": "p2",
+          "type": "true_false",
+          "xp": 2,
+          "prompt": "True or False: Skip connections in FCNs pass features from the decoder back to the encoder.",
+          "options": [
+            {
+              "id": "t",
+              "text": "True",
+              "correct": false
+            },
+            {
+              "id": "f",
+              "text": "False",
+              "correct": false
+            }
+          ],
+          "explain": "False. Skip connections pass features forward from the encoder layers to the decoder layers."
+        },
+        {
+          "id": "p3",
+          "type": "fill_blank",
+          "xp": 2,
+          "prompt": "Complete the sentence:",
+          "sentence": "Skip connections combine coarse, semantic features with fine, ___ features.",
+          "blank": "spatial",
+          "words": [
+            "spatial",
+            "random",
+            "flattened"
+          ],
+          "explain": "Skip connections merge semantic information with spatial details."
+        },
+        {
+          "id": "p4",
+          "type": "spot_the_ai",
+          "xp": 2,
+          "prompt": "What happens to the quality of segmentation boundaries when skip connections are added?",
+          "options": [
+            {
+              "id": "a",
+              "text": "They become sharper and more accurate",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "They become blurrier",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "They disappear entirely",
+              "correct": false
+            }
+          ],
+          "explain": "By using high-resolution spatial maps from earlier layers, borders become much sharper."
+        }
+      ]
+    },
+    {
+      "type": "boss",
+      "exercises": [
+        {
+          "id": "b1",
+          "type": "multiple_choice",
+          "xp": 5,
+          "prompt": "You are training an FCN. Without skip connections, the masks look like round blobs. With skip connections, they match the sharp contours of the objects. Why?",
+          "options": [
+            {
+              "id": "a",
+              "text": "Early layers contain high-resolution edge details that bypass the downsampling layers, providing exact spatial boundaries to the decoder.",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "Skip connections automatically increase the batch size during training.",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "Skip connections change the loss function to focal loss.",
+              "correct": false
+            },
+            {
+              "id": "d",
+              "text": "The early layers contain the final classification labels.",
+              "correct": false
+            }
+          ],
+          "explain": "Perfect! Those early layers hold the precise spatial coordinates that get washed out during deep downsampling. Next: let's compare different FCN models!"
+        }
+      ]
+    }
+  ]
+}

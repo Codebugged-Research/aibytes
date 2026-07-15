@@ -1,0 +1,222 @@
+{
+  "id": "u152-l4",
+  "unit": 152,
+  "day": 764,
+  "tier": "Modern Object Detection",
+  "tierIcon": "🎯",
+  "title": "DETR Architecture",
+  "icon": "🏗️",
+  "concept": "DETR pipelines images through a CNN backbone, a Transformer encoder-decoder, and MLP prediction heads.",
+  "xp": 15,
+  "hearts": 3,
+  "estMinutes": 7,
+  "segments": [
+    {
+      "type": "warmup",
+      "exercises": [
+        {
+          "id": "w4",
+          "type": "multiple_choice",
+          "xp": 1,
+          "prompt": "Recap: What is the main outcome of one-to-one matching in DETR?",
+          "options": [
+            {
+              "id": "a",
+              "text": "It trains the network to output exactly one box per object, removing NMS",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "It speeds up the convolution speed by 2x",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "It makes the backbone layers redundant",
+              "correct": false
+            }
+          ],
+          "explain": "Correct! Strict one-to-one matching ensures the model natively predicts a single box per object."
+        }
+      ]
+    },
+    {
+      "type": "teach",
+      "cards": [
+        {
+          "kind": "hook",
+          "icon": "🏗️",
+          "title": "The Transformer Pipeline",
+          "body": "Let's trace a photo step-by-step through the entire DETR architecture. How do CNN backbones, encoders, decoders, and prediction heads connect to form the pipeline?"
+        },
+        {
+          "kind": "definition",
+          "icon": "🏗️",
+          "title": "DETR Architecture Blocks",
+          "body": "DETR consists of: 1) a <strong>CNN backbone</strong> (features), 2) a <strong>Transformer Encoder</strong> (pixel relation modeling), 3) a <strong>Transformer Decoder</strong> (cross-attention with object queries), and 4) a <strong>Feed-Forward Network</strong> (MLP heads predicting class and coordinates)."
+        },
+        {
+          "kind": "analogy",
+          "icon": "🏢",
+          "title": "The Publishing House",
+          "body": "Think of DETR like a publishing house: the photographer takes a photo (CNN backbone), the editor relates all parts of the photo together (Encoder self-attention), the writer drafts stories using specific questions (Decoder queries), and the printer formats the final layout (Prediction heads)."
+        },
+        {
+          "kind": "example",
+          "icon": "🖼️",
+          "title": "DETR Feature Processing",
+          "body": "ResNet outputs a 14x14 feature map (196 pixels). The encoder flattens these into 196 tokens and applies self-attention. The decoder takes 100 object queries, relates them to the 196 tokens using cross-attention, and outputs 100 vectors to the classification and box heads."
+        },
+        {
+          "kind": "mythbust",
+          "icon": "⚠️",
+          "title": "No Self-Attention on Pixels?",
+          "body": "You might think self-attention is only for NLP. Fact: DETR's encoder uses self-attention to relate every pixel token to every other pixel token. This allows the model to capture global context (e.g. realizing a boat is a boat because it's surrounded by water features)."
+        },
+        {
+          "kind": "visual",
+          "icon": "🏗️",
+          "title": "DETR Architecture Flow",
+          "body": "Step-by-step path from image to predictions:",
+          "compare": {
+            "left": {
+              "emoji": "📷",
+              "tag": "CNN & Encoder",
+              "text": "CNN extracts 2D features<br>Encoder applies self-attention<br>Captures global image context"
+            },
+            "right": {
+              "emoji": "🤖",
+              "tag": "Decoder & Heads",
+              "text": "Decoder matches queries to features<br>Cross-attention finds objects<br>MLP predicts coordinates & class"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "type": "practice",
+      "exercises": [
+        {
+          "id": "p1",
+          "type": "multiple_choice",
+          "xp": 2,
+          "prompt": "What does the Transformer Encoder in DETR do?",
+          "options": [
+            {
+              "id": "a",
+              "text": "It applies self-attention to model global relationships between all pixel features",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "It performs max pooling to shrink the image",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "It matches predicted boxes to ground truth labels",
+              "correct": false
+            },
+            {
+              "id": "d",
+              "text": "It crops the image into 100 patches",
+              "correct": false
+            }
+          ],
+          "explain": "Correct! The encoder uses self-attention to model relationships across the entire image features globally."
+        },
+        {
+          "id": "p2",
+          "type": "true_false",
+          "xp": 2,
+          "prompt": "True or False: DETR uses Feed-Forward Networks (MLPs) as prediction heads to output class probabilities and bounding box coordinates.",
+          "options": [
+            {
+              "id": "t",
+              "text": "True",
+              "correct": true
+            },
+            {
+              "id": "f",
+              "text": "False",
+              "correct": false
+            }
+          ],
+          "explain": "True. The decoder outputs are passed to separate linear projection layers (MLPs) to generate classes and coordinates."
+        },
+        {
+          "id": "p3",
+          "type": "fill_blank",
+          "xp": 2,
+          "prompt": "Complete the sentence:",
+          "sentence": "The encoder uses self-attention on pixels, while the decoder uses ___ attention to relate object queries to image features.",
+          "blank": "cross",
+          "words": [
+            "cross",
+            "self",
+            "local"
+          ],
+          "explain": "Cross-attention matches the decoder's learnable queries with the encoder's feature representations."
+        },
+        {
+          "id": "p4",
+          "type": "spot_the_ai",
+          "xp": 2,
+          "prompt": "How does global self-attention in the encoder help detect partially hidden objects?",
+          "options": [
+            {
+              "id": "a",
+              "text": "By using context from surrounding pixels (like water around a boat) to assist classification",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "By filling in the missing pixels with white color",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "By scaling the image resolution up",
+              "correct": false
+            }
+          ],
+          "explain": "Correct! Global context allows the model to reason about object relationships (e.g. a cup is likely near a plate)."
+        }
+      ]
+    },
+    {
+      "type": "boss",
+      "exercises": [
+        {
+          "id": "b1",
+          "type": "multiple_choice",
+          "xp": 5,
+          "prompt": "You are building a DETR model. You notice that the Transformer Encoder is using 90% of the memory. Why does the encoder have such a massive memory footprint?",
+          "options": [
+            {
+              "id": "a",
+              "text": "Self-attention calculates relations between all pairs of pixel tokens, resulting in quadratic complexity relative to the feature map size.",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "The encoder is storing all training images.",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "The base ResNet backbone is running backward.",
+              "correct": false
+            },
+            {
+              "id": "d",
+              "text": "The decoder queries are copying themselves.",
+              "correct": false
+            }
+          ],
+          "explain": "Exactly! Standard self-attention has O(N^2) complexity, making high-resolution encoder processing extremely memory-intensive. Phase 8: Modern Object Detection is complete. Next up: Image Segmentation."
+        }
+      ]
+    }
+  ]
+}

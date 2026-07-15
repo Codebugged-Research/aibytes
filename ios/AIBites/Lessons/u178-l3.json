@@ -1,0 +1,222 @@
+{
+  "id": "u178-l3",
+  "unit": 178,
+  "day": 893,
+  "tier": "Vision Transformers & Modern Approaches",
+  "tierIcon": "\ud83d\udc41\ufe0f",
+  "title": "Computational Efficiency",
+  "icon": "\u26a1",
+  "concept": "The computational complexity of self-attention scales quadratically with resolution, making ViT slower for high-resolution images but highly parallelizable on hardware.",
+  "xp": 15,
+  "hearts": 3,
+  "estMinutes": 7,
+  "segments": [
+    {
+      "type": "warmup",
+      "exercises": [
+        {
+          "id": "w1",
+          "type": "multiple_choice",
+          "xp": 1,
+          "prompt": "Recap: What is the main pre-training requirement for Vision Transformers to beat CNNs?",
+          "options": [
+            {
+              "id": "a",
+              "text": "They must be pre-trained on massive datasets (millions of images).",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "They must use a frozen linear projection weight matrix.",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "They must be trained without any position embeddings.",
+              "correct": false
+            }
+          ],
+          "explain": "Correct! Because of weak inductive bias, ViTs require massive pre-training data to learn spatial relationships."
+        }
+      ]
+    },
+    {
+      "type": "teach",
+      "cards": [
+        {
+          "kind": "hook",
+          "icon": "\u26a1",
+          "title": "The GPU race",
+          "body": "Why does a transformer run so fast on a modern GPU compared to a CNN of similar size? It comes down to how operations are laid out. While CNNs do a lot of small sequential steps, ViTs do massive, parallel matrix multiplications that GPUs love."
+        },
+        {
+          "kind": "definition",
+          "icon": "\u2699\ufe0f",
+          "title": "Hardware Efficiency",
+          "body": "<strong>Computational efficiency</strong> in ViTs is highly hardware-friendly. Because self-attention relies on large matrix multiplications, it can be heavily parallelized. However, because its complexity is <code>O(N\u00b2)</code>, memory demands grow quadratically with image resolution, unlike CNN's linear <code>O(N)</code> scaling."
+        },
+        {
+          "kind": "analogy",
+          "icon": "\ud83c\udfc3",
+          "title": "Chaining tasks vs. a group project",
+          "body": "A CNN is like building a house brick-by-brick (each layer relies on the previous local result; very sequential). A ViT is like a massive group project: all members (patches) work in parallel at their desks, and then send their work to a central compiler. It's faster if you have enough desks (GPU cores)!"
+        },
+        {
+          "kind": "example",
+          "icon": "\ud83d\udcca",
+          "title": "FLOP comparison",
+          "body": "For a standard 224x224 input, a ViT-Base model requires roughly 18 billion floating-point operations (FLOPs) to run a single image, similar to a ResNet-152, but it often processes faster on hardware because the calculations are less sequential."
+        },
+        {
+          "kind": "mythbust",
+          "icon": "\u26a0\ufe0f",
+          "title": "Not always memory efficient",
+          "body": "You might think ViTs are always faster than CNNs. However, if you input a high-resolution 1024x1024 image, a CNN's compute cost increases 20 times, while a standard ViT's cost explodes by **400 times** due to quadratic attention!"
+        },
+        {
+          "kind": "visual",
+          "icon": "\u2696\ufe0f",
+          "title": "CNN vs. ViT Complexity Scaling",
+          "body": "How image resolution scales computing cost:",
+          "compare": {
+            "left": {
+              "emoji": "\ud83d\udcc8",
+              "tag": "CNN Scaling (Linear)",
+              "text": "Complexity: O(Resolution)<br>Double resolution -> 4x compute<br>Highly efficient for large images"
+            },
+            "right": {
+              "emoji": "\ud83d\udca5",
+              "tag": "ViT Scaling (Quadratic)",
+              "text": "Complexity: O(Resolution\u00b2)<br>Double resolution -> 16x compute<br>Explodes for large images"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "type": "practice",
+      "exercises": [
+        {
+          "id": "p1",
+          "type": "multiple_choice",
+          "xp": 2,
+          "prompt": "Why do ViT models run efficiently on modern GPUs despite their size?",
+          "explain": "GPUs are specifically designed for massive parallel matrix multiplications, which make up the bulk of self-attention calculations.",
+          "options": [
+            {
+              "id": "a",
+              "text": "Their operations consist of large, parallelisable matrix multiplications that hardware is optimized for",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "They automatically bypass the GPU and run on the CPU",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "They do not perform any mathematical calculations",
+              "correct": false
+            },
+            {
+              "id": "d",
+              "text": "They shrink the image to 1x1 before processing",
+              "correct": false
+            }
+          ]
+        },
+        {
+          "id": "p2",
+          "type": "true_false",
+          "xp": 2,
+          "prompt": "True or false: As image resolution increases, a CNN's compute cost grows slower than a standard ViT's compute cost.",
+          "explain": "True. CNNs scale linearly with resolution, whereas standard self-attention in ViTs scales quadratically.",
+          "options": [
+            {
+              "id": "t",
+              "text": "True",
+              "correct": true
+            },
+            {
+              "id": "f",
+              "text": "False",
+              "correct": false
+            }
+          ]
+        },
+        {
+          "id": "p3",
+          "type": "fill_blank",
+          "xp": 2,
+          "prompt": "Complete the sentence:",
+          "explain": "Attention compares every patch to every other patch, leading to quadratic (O(N\u00b2)) complexity.",
+          "sentence": "While CNN computation scales linearly, standard ViT self-attention scales ___ with the number of image patches.",
+          "blank": "quadratically",
+          "words": [
+            "quadratically",
+            "linearly",
+            "logarithmically"
+          ]
+        },
+        {
+          "id": "p4",
+          "type": "spot_the_ai",
+          "xp": 2,
+          "prompt": "Which of these tasks is standard ViT least suited for due to its quadratic scaling?",
+          "explain": "Standard ViT's quadratic complexity makes high-resolution images extremely expensive, causing memory overload.",
+          "options": [
+            {
+              "id": "a",
+              "text": "Processing high-resolution 4K images for pixel-perfect segmentation",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "Classifying low-resolution 32x32 thumbnails",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "Detecting objects in standard 224x224 video frames",
+              "correct": false
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "boss",
+      "exercises": [
+        {
+          "id": "b1",
+          "type": "multiple_choice",
+          "xp": 5,
+          "prompt": "If standard ViT struggles with high resolutions, how do we deploy them for high-resolution tasks in practice?",
+          "options": [
+            {
+              "id": "a",
+              "text": "By using local window attention variants (like Swin) or downsampling the inputs with early convolutions.",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "By deleting the self-attention layers entirely.",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "By training the model on a CPU instead of a GPU.",
+              "correct": false
+            },
+            {
+              "id": "d",
+              "text": "By forcing the patches to overlap by 99%.",
+              "correct": false
+            }
+          ],
+          "explain": "Incredible! Researchers use clever modifications (like Swin Transformer's local windows) to bring the complexity down to linear scaling. Next: receptive fields comparison!"
+        }
+      ]
+    }
+  ]
+}

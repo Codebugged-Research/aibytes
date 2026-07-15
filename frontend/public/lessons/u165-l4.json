@@ -1,0 +1,222 @@
+{
+  "id": "u165-l4",
+  "unit": 165,
+  "day": 829,
+  "tier": "Advanced Vision Applications",
+  "tierIcon": "👁️",
+  "title": "Connecting Skeletons: Part Affinity Fields",
+  "icon": "🔗",
+  "concept": "OpenPose and Part Affinity Fields (PAFs) associate detected keypoints with the correct individuals by predicting the direction and connection of limbs.",
+  "xp": 15,
+  "hearts": 3,
+  "estMinutes": 7,
+  "segments": [
+    {
+      "type": "warmup",
+      "exercises": [
+        {
+          "id": "w1",
+          "type": "multiple_choice",
+          "xp": 1,
+          "prompt": "Recap: What is a heatmap in pose estimation?",
+          "options": [
+            {
+              "id": "a",
+              "text": "A probability grid where the highest value indicates the joint's location.",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "A thermal camera image showing body heat.",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "A color format similar to RGB.",
+              "correct": false
+            }
+          ],
+          "explain": "Correct! A heatmap represents the spatial probability distribution of a joint, with its peak at the estimated joint coordinate."
+        }
+      ]
+    },
+    {
+      "type": "teach",
+      "cards": [
+        {
+          "kind": "hook",
+          "icon": "🔗",
+          "title": "Whose elbow is this?",
+          "body": "Imagine a bottom-up model detects 10 shoulders and 10 elbows in a photo. How does it know which shoulder connects to which elbow? If two friends are standing close to each other, simply connecting the closest points would result in a messy skeleton with crossed limbs. We need to predict the limbs themselves."
+        },
+        {
+          "kind": "definition",
+          "icon": "🔗",
+          "title": "What are Part Affinity Fields?",
+          "body": "<strong>Part Affinity Fields (PAFs)</strong> are 2D vector fields predicted by the model that represent the <strong>direction and association</strong> of limbs. For every pixel between two joints (like a shoulder and elbow), the PAF output provides a vector pointing from the shoulder to the elbow, indicating a connection."
+        },
+        {
+          "kind": "analogy",
+          "icon": "🌊",
+          "title": "Flowing water",
+          "body": "Think of Part Affinity Fields like current vectors in a river. If you place a leaf in the water, it floats along the current. Similarly, the PAF vectors guide the grouping algorithm, showing if a line drawn between a shoulder and an elbow matches the 'flow' of the arm."
+        },
+        {
+          "kind": "example",
+          "icon": "⚙️",
+          "title": "Bipartite Matching",
+          "body": "OpenPose uses PAFs to score connection candidates. If you draw a candidate line between Shoulder A and Elbow B, the algorithm calculates how well the line aligns with the predicted PAF vectors. The optimal connection is solved using <strong>greedy bipartite matching</strong>."
+        },
+        {
+          "kind": "mythbust",
+          "icon": "⚠️",
+          "title": "Limbs are not just lines",
+          "body": "A common myth is that we can associate joints by looking at the physical distance between them. In reality, if two people hug or overlap, their joints are close. Without PAFs to model limb direction and flow, the skeletons would scramble."
+        },
+        {
+          "kind": "visual",
+          "icon": "⚖️",
+          "title": "Distance vs. PAF Matching",
+          "body": "How PAFs resolve overlapping skeletons:",
+          "compare": {
+            "left": {
+              "emoji": "❌",
+              "tag": "Nearest-Neighbor Connect",
+              "text": "Connects closest joints<br>Crosses arms of adjacent people<br>Incorrect skeletal mapping"
+            },
+            "right": {
+              "emoji": "✅",
+              "tag": "PAF Vector Matching",
+              "text": "Follows predicted limb vectors<br>Traces actual body flow<br>Accurate skeleton assembly"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "type": "practice",
+      "exercises": [
+        {
+          "id": "p1",
+          "type": "multiple_choice",
+          "xp": 2,
+          "prompt": "What do Part Affinity Fields (PAFs) predict to help group joints into skeletons?",
+          "options": [
+            {
+              "id": "a",
+              "text": "Vector directions showing the association and alignment of limbs",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "The names of the people in the image",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "The depth coordinates of the background scenery",
+              "correct": false
+            },
+            {
+              "id": "d",
+              "text": "The bounding box of the entire group",
+              "correct": false
+            }
+          ],
+          "explain": "PAFs predict 2D vector fields that represent the position and orientation of limbs, guiding joint association."
+        },
+        {
+          "id": "p2",
+          "type": "true_false",
+          "xp": 2,
+          "prompt": "True or False: Simply connecting each shoulder to the nearest detected elbow is sufficient to handle complex multi-person occlusion.",
+          "options": [
+            {
+              "id": "t",
+              "text": "True",
+              "correct": false
+            },
+            {
+              "id": "f",
+              "text": "False",
+              "correct": true
+            }
+          ],
+          "explain": "False. Nearest-neighbor matching fails when people overlap. PAFs are required to follow the continuous flow of limbs."
+        },
+        {
+          "id": "p3",
+          "type": "fill_blank",
+          "xp": 2,
+          "prompt": "Complete the sentence:",
+          "sentence": "OpenPose groups joints using Part Affinity Fields and greedy ___ matching.",
+          "blank": "bipartite",
+          "words": [
+            "bipartite",
+            "random",
+            "softmax"
+          ],
+          "explain": "Greedy bipartite matching is the algorithm used to pair joints based on PAF similarity scores."
+        },
+        {
+          "id": "p4",
+          "type": "spot_the_ai",
+          "xp": 2,
+          "prompt": "Which of these describes the role of PAFs during model prediction?",
+          "options": [
+            {
+              "id": "a",
+              "text": "Providing direction vectors that tell the model whether a specific shoulder and elbow belong to the same arm",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "Outputting bounding boxes around each person",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "Predicting the absolute weight of the user in kilograms",
+              "correct": false
+            }
+          ],
+          "explain": "PAFs encode the probability and direction of body connections, enabling correct joint groupings."
+        }
+      ]
+    },
+    {
+      "type": "boss",
+      "exercises": [
+        {
+          "id": "b1",
+          "type": "multiple_choice",
+          "xp": 5,
+          "prompt": "You are building a soccer analytics tracker. When players tackle each other, their bodies collide, causing your bottom-up pose estimator to scramble their skeletons (e.g. connecting Player A's knee to Player B's ankle). What component should you inspect?",
+          "options": [
+            {
+              "id": "a",
+              "text": "The Part Affinity Fields (PAFs) and bipartite matching step, to ensure the limb direction vectors are correctly scoring player boundaries.",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "The face alignment step, to straighten the players' eyes.",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "The learning rate of the convolutional encoder.",
+              "correct": false
+            },
+            {
+              "id": "d",
+              "text": "The image file format, switching from PNG to JPEG.",
+              "correct": false
+            }
+          ],
+          "explain": "Exactly! When skeletons scramble during close interaction, the joint-association logic is failing. Optimizing PAF predictions or bipartite matching weights solves this. Excellent! Next: how we use pose estimation in the real world."
+        }
+      ]
+    }
+  ]
+}

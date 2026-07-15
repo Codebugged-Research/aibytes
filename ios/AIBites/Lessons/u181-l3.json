@@ -1,0 +1,222 @@
+{
+  "id": "u181-l3",
+  "unit": 181,
+  "day": 908,
+  "tier": "Vision Transformers & Modern Approaches",
+  "tierIcon": "\ud83d\udc41\ufe0f",
+  "title": "Self-Distillation",
+  "icon": "\ud83e\uddd1\u200d\ud83c\udfeb",
+  "concept": "DINO uses self-distillation, where a student network predicts a teacher network's output, using centering and sharpening to prevent representation collapse.",
+  "xp": 15,
+  "hearts": 3,
+  "estMinutes": 7,
+  "segments": [
+    {
+      "type": "warmup",
+      "exercises": [
+        {
+          "id": "w1",
+          "type": "multiple_choice",
+          "xp": 1,
+          "prompt": "Recap: What is representation collapse in contrastive learning?",
+          "options": [
+            {
+              "id": "a",
+              "text": "The model outputs the same constant vector for all inputs, cheating the loss.",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "The convolutional layers shrink to zero parameters.",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "The validation loss curves go to infinity.",
+              "correct": false
+            }
+          ],
+          "explain": "Correct! Collapse occurs when the model maps all inputs to a single point to minimize distance."
+        }
+      ]
+    },
+    {
+      "type": "teach",
+      "cards": [
+        {
+          "kind": "hook",
+          "icon": "\ud83e\uddd1\u200d\ud83c\udfeb",
+          "title": "The student and the teacher",
+          "body": "If you don't want to use negative pairs, how do you prevent representation collapse? In DINO, we create a student network and a teacher network. The teacher guides the student, but they are actually copies of the same network! Let's see how this self-distillation works."
+        },
+        {
+          "kind": "definition",
+          "icon": "\u2699\ufe0f",
+          "title": "Self-Distillation (DINO)",
+          "body": "<strong>DINO</strong> (self-distillation with no labels) trains by passing a global view to a teacher network and a local view to a student network. The student is trained to match the teacher's output probability distribution. To prevent representation collapse, the teacher's output is adjusted using <strong>centering</strong> and <strong>sharpening</strong>."
+        },
+        {
+          "kind": "analogy",
+          "icon": "\ud83d\udc65",
+          "title": "Whispering down the lane",
+          "body": "Imagine a student trying to copy a teacher's drawing. If the teacher draws too softly (blurry), the student draws a blank (collapse). If the teacher draws too aggressively, the student gets confused. Centering and sharpening act like adjusting the contrast: keeping the teacher's drawing clear and distinct so the student can copy it."
+        },
+        {
+          "kind": "example",
+          "icon": "\ud83e\uddea",
+          "title": "Centering and Sharpening",
+          "body": "Centering adds a bias to the teacher's outputs to pull them toward a uniform distribution (preventing one dominant coordinate). Sharpening divides the outputs by a temperature parameter (T < 1) to make the peaks sharper, preventing uniform blur. Together, they balance each other."
+        },
+        {
+          "kind": "mythbust",
+          "icon": "\u26a0\ufe0f",
+          "title": "No gradients for the teacher",
+          "body": "You might think both networks train with backpropagation. In DINO, only the student is updated via gradient descent. The teacher's weights are updated as an exponential moving average of the student's weights, ensuring stability."
+        },
+        {
+          "kind": "visual",
+          "icon": "\u2696\ufe0f",
+          "title": "Centering vs. Sharpening",
+          "body": "How DINO prevents vector collapse:",
+          "compare": {
+            "left": {
+              "emoji": "\u2696\ufe0f",
+              "tag": "Centering Bias",
+              "text": "Pulls outputs toward uniform<br>Prevents 1 coordinate dominance<br>Avoids point representation collapse"
+            },
+            "right": {
+              "emoji": "\ud83c\udf36\ufe0f",
+              "tag": "Sharpening (Low Temp)",
+              "text": "Pushes outputs toward argmax<br>Prevents uniform blur collapse<br>Encourages crisp representations"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "type": "practice",
+      "exercises": [
+        {
+          "id": "p1",
+          "type": "multiple_choice",
+          "xp": 2,
+          "prompt": "In the DINO framework, how are the teacher network's weights updated?",
+          "explain": "Only the student is trained via backpropagation; the teacher tracks the student's parameters slowly via a moving average.",
+          "options": [
+            {
+              "id": "a",
+              "text": "As an exponential moving average of the student network's weights",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "Directly using backpropagation gradients from validation loss",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "They remain completely frozen from initialization",
+              "correct": false
+            },
+            {
+              "id": "d",
+              "text": "By copy-pasting weights from a ResNet backbone",
+              "correct": false
+            }
+          ]
+        },
+        {
+          "id": "p2",
+          "type": "true_false",
+          "xp": 2,
+          "prompt": "True or false: DINO requires negative image pairs to prevent representation collapse.",
+          "explain": "False. DINO avoids negative pairs entirely by using centering and sharpening to stabilize outputs.",
+          "options": [
+            {
+              "id": "t",
+              "text": "True",
+              "correct": false
+            },
+            {
+              "id": "f",
+              "text": "False",
+              "correct": true
+            }
+          ]
+        },
+        {
+          "id": "p3",
+          "type": "fill_blank",
+          "xp": 2,
+          "prompt": "Complete the sentence:",
+          "explain": "Sharpening scales outputs by a small temperature parameter to keep the distribution peaky.",
+          "sentence": "DINO utilizes centering to prevent single-coordinate dominance, and ___ to prevent uniform blur collapse.",
+          "blank": "sharpening",
+          "words": [
+            "sharpening",
+            "pooling",
+            "convolutions"
+          ]
+        },
+        {
+          "id": "p4",
+          "type": "spot_the_ai",
+          "xp": 2,
+          "prompt": "What views are fed to the student and teacher networks in DINO?",
+          "explain": "DINO feeds global views to the teacher and smaller local crops to the student, forcing the student to learn local-to-global representation maps.",
+          "options": [
+            {
+              "id": "a",
+              "text": "Teacher gets global crops (large view); Student gets local crops (small view)",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "Teacher gets raw pixels; Student gets position embeddings only",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "Both get identical cropped templates",
+              "correct": false
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "boss",
+      "exercises": [
+        {
+          "id": "b1",
+          "type": "multiple_choice",
+          "xp": 5,
+          "prompt": "How does DINO's local-to-global crop mapping force the student network to learn semantic features?",
+          "options": [
+            {
+              "id": "a",
+              "text": "The student must predict the global representation (teacher's output) from only a tiny local crop, forcing it to infer the broader object structure.",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "By forcing the student to downsample the resolution to 1x1.",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "By matching color channel histograms directly.",
+              "correct": false
+            },
+            {
+              "id": "d",
+              "text": "By using hardcoded coordinates in the MLP head.",
+              "correct": false
+            }
+          ],
+          "explain": "Phenomenal! To match the global view prediction from just a tiny leaf or beak crop, the student must learn to recognize the rest of the tree or bird. Next: the beautiful self-attention maps this creates!"
+        }
+      ]
+    }
+  ]
+}

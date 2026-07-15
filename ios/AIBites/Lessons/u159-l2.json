@@ -1,0 +1,222 @@
+{
+  "id": "u159-l2",
+  "unit": 159,
+  "day": 797,
+  "tier": "Segmentation Loss Functions",
+  "tierIcon": "🎯",
+  "title": "Dice Loss & Coefficient",
+  "icon": "🎯",
+  "concept": "Dice loss is an overlap-based loss function that directly optimizes the overlap between predicted and true masks, making it highly robust to class imbalance.",
+  "xp": 15,
+  "hearts": 3,
+  "estMinutes": 7,
+  "segments": [
+    {
+      "type": "warmup",
+      "exercises": [
+        {
+          "id": "w1",
+          "type": "multiple_choice",
+          "xp": 1,
+          "prompt": "Recap: What is the purpose of using weighted cross-entropy loss?",
+          "options": [
+            {
+              "id": "a",
+              "text": "To increase the penalty for misclassifying rare class pixels",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "To reduce the spatial resolution of the final masks",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "To force the model to output rectangular bounding boxes",
+              "correct": false
+            }
+          ],
+          "explain": "Correct! Weighting scales up the loss of rare classes to combat imbalance."
+        }
+      ]
+    },
+    {
+      "type": "teach",
+      "cards": [
+        {
+          "kind": "hook",
+          "icon": "🎯",
+          "title": "Measuring the overlap",
+          "body": "Instead of evaluating each pixel like a separate test question, what if we graded the model based on how well its painted mask overlaps with the true mask? If the overlap is high, the score is good. This approach is called Dice loss, and it completely changes how we handle imbalanced classes."
+        },
+        {
+          "kind": "definition",
+          "icon": "📉",
+          "title": "Dice Coefficient and Loss",
+          "body": "The <strong>Dice Coefficient</strong> measures the overlap between two sets: $$Dice = \\frac{2 |A \\cap B|}{|A| + |B|}$$ where $A$ is the predicted mask and $B$ is the ground truth. <strong>Dice Loss</strong> is simply $1 - Dice$. It directly optimizes for mask overlap."
+        },
+        {
+          "kind": "analogy",
+          "icon": "📋",
+          "title": "Stencils overlapping",
+          "body": "Imagine tracing a shape. If you place your drawing (A) over the stencil (B), the Dice coefficient is the ratio of the overlapping region to the total area of both shapes. If they line up perfectly, the coefficient is 1, and Dice loss is 0."
+        },
+        {
+          "kind": "example",
+          "icon": "🩻",
+          "title": "Imbalance immunity",
+          "body": "If a tumor is 10 pixels, and the model predicts 8 of them correctly, the Dice score is high (around 0.8), even though there are millions of background pixels. The background pixels do not appear in the formula, protecting the model from imbalance."
+        },
+        {
+          "kind": "mythbust",
+          "icon": "⚠️",
+          "title": "Not always stable",
+          "body": "You might think Dice loss is always better than cross-entropy. However, because its gradients are based on overlap ratios, it can be highly unstable during early training when masks are small or empty, leading to training crashes."
+        },
+        {
+          "kind": "visual",
+          "icon": "⚖️",
+          "title": "Dice Coefficient Calculation",
+          "body": "How overlap determines the loss score:",
+          "compare": {
+            "left": {
+              "emoji": "❌",
+              "tag": "Low Overlap",
+              "text": "Small intersection relative to total area<br>Dice Coefficient near 0<br>Dice Loss near 1 (High penalty)"
+            },
+            "right": {
+              "emoji": "🟢",
+              "tag": "High Overlap",
+              "text": "Large intersection, matching boundaries<br>Dice Coefficient near 1<br>Dice Loss near 0 (Low penalty)"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "type": "practice",
+      "exercises": [
+        {
+          "id": "p1",
+          "type": "multiple_choice",
+          "xp": 2,
+          "prompt": "What is the range of the Dice Coefficient?",
+          "options": [
+            {
+              "id": "a",
+              "text": "0 to 1",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "-1 to 1",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "0 to infinity",
+              "correct": false
+            },
+            {
+              "id": "d",
+              "text": "0 to 100",
+              "correct": false
+            }
+          ],
+          "explain": "Correct! The Dice coefficient ranges from 0 (no overlap) to 1 (perfect overlap)."
+        },
+        {
+          "id": "p2",
+          "type": "true_false",
+          "xp": 2,
+          "prompt": "True or False: Dice loss is highly sensitive to the size of the background class.",
+          "options": [
+            {
+              "id": "t",
+              "text": "True",
+              "correct": false
+            },
+            {
+              "id": "f",
+              "text": "False",
+              "correct": false
+            }
+          ],
+          "explain": "False. The Dice formula focuses on the overlap of the target class, ignoring the background pixel count."
+        },
+        {
+          "id": "p3",
+          "type": "fill_blank",
+          "xp": 2,
+          "prompt": "Complete the sentence:",
+          "sentence": "Dice Loss is calculated as 1 minus the Dice ___.",
+          "blank": "coefficient",
+          "words": [
+            "coefficient",
+            "entropy",
+            "gradient"
+          ],
+          "explain": "Dice Loss is the complement of the Dice coefficient (1 - Dice)."
+        },
+        {
+          "id": "p4",
+          "type": "spot_the_ai",
+          "xp": 2,
+          "prompt": "Why is Dice loss popular in medical image segmentation?",
+          "options": [
+            {
+              "id": "a",
+              "text": "It is robust against extreme class imbalance (e.g. tiny tumors in large scans)",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "It is much faster to calculate on CPUs than cross-entropy",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "It eliminates the need for activation functions in the decoder",
+              "correct": false
+            }
+          ],
+          "explain": "Since medical scans are mostly background, Dice loss protects the model from ignoring the small target organs."
+        }
+      ]
+    },
+    {
+      "type": "boss",
+      "exercises": [
+        {
+          "id": "b1",
+          "type": "multiple_choice",
+          "xp": 5,
+          "prompt": "You are training a model to segment blood vessels in eye scans. The vessels are extremely thin. Standard cross-entropy fails, but Dice loss succeeds. Why?",
+          "options": [
+            {
+              "id": "a",
+              "text": "Dice loss measures the relative overlap of the vessel masks, ignoring the massive amount of healthy eye tissue background pixels.",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "Dice loss automatically makes the vessel masks wider so they are easier to see.",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "Dice loss does not require the model to calculate gradients.",
+              "correct": false
+            },
+            {
+              "id": "d",
+              "text": "Dice loss is only calculated on grayscale images, reducing computation.",
+              "correct": false
+            }
+          ],
+          "explain": "Perfect! Dice loss is immune to the background size because it only cares about the intersection of the foreground shapes. Next: let's explore IoU and Jaccard loss!"
+        }
+      ]
+    }
+  ]
+}

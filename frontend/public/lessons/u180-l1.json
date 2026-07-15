@@ -1,0 +1,222 @@
+{
+  "id": "u180-l1",
+  "unit": 180,
+  "day": 901,
+  "tier": "Vision Transformers & Modern Approaches",
+  "tierIcon": "\ud83d\udc41\ufe0f",
+  "title": "The Challenge of High Resolution",
+  "icon": "\ud83d\udda5\ufe0f",
+  "concept": "Standard Vision Transformers are too computationally expensive for dense prediction tasks like detection and segmentation due to quadratic self-attention scaling on high-resolution images.",
+  "xp": 15,
+  "hearts": 3,
+  "estMinutes": 7,
+  "segments": [
+    {
+      "type": "warmup",
+      "exercises": [
+        {
+          "id": "w1",
+          "type": "multiple_choice",
+          "xp": 1,
+          "prompt": "Recap: How does convolutional projection generate Q, K, and V vectors inside CvT?",
+          "options": [
+            {
+              "id": "a",
+              "text": "Using depthwise convolutions instead of standard linear layers.",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "By deleting the query matrix.",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "By running random pooling operations.",
+              "correct": false
+            }
+          ],
+          "explain": "Correct! Depthwise convolutions project vectors while preserving spatial locality."
+        }
+      ]
+    },
+    {
+      "type": "teach",
+      "cards": [
+        {
+          "kind": "hook",
+          "icon": "\ud83d\udda5\ufe0f",
+          "title": "The resolution wall",
+          "body": "If you want to classify a 224x224 thumbnail, standard ViT works great. But what if you want to label every pixel in a high-resolution 4K medical scan? Standard self-attention hits a computational 'wall' \u2014 the calculations become so massive that even the world's best supercomputers run out of memory."
+        },
+        {
+          "kind": "definition",
+          "icon": "\u2699\ufe0f",
+          "title": "Dense Prediction Challenge",
+          "body": "<strong>Dense prediction</strong> tasks (like object detection and semantic segmentation) require outputting predictions at a high spatial resolution. Standard ViT uses global self-attention, meaning its compute cost scales as <code>O(Resolution\u00b2)</code>, making high-resolution processing virtually impossible."
+        },
+        {
+          "kind": "analogy",
+          "icon": "\ud83c\udfdf\ufe0f",
+          "title": "A stadium roll call",
+          "body": "Imagine a stadium with 50,000 people. If you ask everyone to stand up and shout their name one-by-one, it takes a few hours (linear time). If you ask every single person to walk around and shake hands with every other person in the stadium individually, the stadium will grind to a halt for weeks (quadratic time). Global attention is that stadium handshake."
+        },
+        {
+          "kind": "example",
+          "icon": "\ud83d\udcc8",
+          "title": "Quadratic memory leak",
+          "body": "For a 224x224 image, we have 196 patches. For an 896x896 image, the patch count scales to 3,136. The self-attention matrix size grows from 38,416 entries to **9,834,496 entries** \u2014 a 256x increase in memory!"
+        },
+        {
+          "kind": "mythbust",
+          "icon": "\u26a0\ufe0f",
+          "title": "Not just a parameter problem",
+          "body": "You might think we can fix this by shrinking the model's layers. However, the bottleneck isn't the number of weights in the layers; it is the size of the attention map generated during the forward pass. Shrinking parameters doesn't stop the attention matrix from exploding."
+        },
+        {
+          "kind": "visual",
+          "icon": "\u2696\ufe0f",
+          "title": "Classification vs. Dense Prediction",
+          "body": "Comparing spatial output requirements:",
+          "compare": {
+            "left": {
+              "emoji": "\ud83c\udff7\ufe0f",
+              "tag": "Image Classification",
+              "text": "Output: 1 label per image<br>Low resolution (224x224)<br>Global context is key"
+            },
+            "right": {
+              "emoji": "\ud83d\uddfa\ufe0f",
+              "tag": "Dense Prediction",
+              "text": "Output: Mask/Boxes per pixel<br>High resolution (896x896+)<br>Requires local details & speed"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "type": "practice",
+      "exercises": [
+        {
+          "id": "p1",
+          "type": "multiple_choice",
+          "xp": 2,
+          "prompt": "Why are standard Vision Transformers impractical for high-resolution dense prediction tasks?",
+          "explain": "Comparing every pixel patch to every other patch causes memory and computation to explode on high resolutions.",
+          "options": [
+            {
+              "id": "a",
+              "text": "Their self-attention complexity scales quadratically (O(N\u00b2)) with the image resolution",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "They cannot process color images",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "They do not support loss calculation",
+              "correct": false
+            },
+            {
+              "id": "d",
+              "text": "They are restricted to 10 layers max",
+              "correct": false
+            }
+          ]
+        },
+        {
+          "id": "p2",
+          "type": "true_false",
+          "xp": 2,
+          "prompt": "True or false: Shrinking the model parameter count solves the quadratic memory bottleneck of global attention.",
+          "explain": "False. The bottleneck is the size of the attention activation matrix, which is determined by image resolution, not weight counts.",
+          "options": [
+            {
+              "id": "t",
+              "text": "True",
+              "correct": false
+            },
+            {
+              "id": "f",
+              "text": "False",
+              "correct": true
+            }
+          ]
+        },
+        {
+          "id": "p3",
+          "type": "fill_blank",
+          "xp": 2,
+          "prompt": "Complete the sentence:",
+          "explain": "Dense prediction tasks output bounding boxes or pixel labels across the entire spatial layout of the image.",
+          "sentence": "Object detection and semantic segmentation are examples of ___ prediction tasks that require high-resolution outputs.",
+          "blank": "dense",
+          "words": [
+            "dense",
+            "sparse",
+            "global"
+          ]
+        },
+        {
+          "id": "p4",
+          "type": "spot_the_ai",
+          "xp": 2,
+          "prompt": "Which of these resolutions would cause a standard ViT-Base model to run out of memory on a typical GPU?",
+          "explain": "Correct! 2048x2048 creates a sequence of 16,384 tokens, resulting in a massive 268-million-element attention matrix.",
+          "options": [
+            {
+              "id": "a",
+              "text": "2048 x 2048 pixels",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "224 x 224 pixels",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "32 x 32 pixels",
+              "correct": false
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "boss",
+      "exercises": [
+        {
+          "id": "b1",
+          "type": "multiple_choice",
+          "xp": 5,
+          "prompt": "How can we design a transformer to bypass this quadratic scaling wall?",
+          "options": [
+            {
+              "id": "a",
+              "text": "By restricting self-attention to local, non-overlapping windows of patches, reducing complexity to linear.",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "By training the model on low-resolution data and never testing it.",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "By using random dropout on 99% of the attention matrix.",
+              "correct": false
+            },
+            {
+              "id": "d",
+              "text": "By converting the transformer into a simple linear regression line.",
+              "correct": false
+            }
+          ],
+          "explain": "Fantastic! Restricting attention to local grids (like Swin does) prevents the quadratic explosion. Next: how local window attention works!"
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,222 @@
+{
+  "id": "u161-l5",
+  "unit": 161,
+  "day": 810,
+  "tier": "Evaluating Image Segmentations",
+  "tierIcon": "📏",
+  "title": "Boundary Distance Metrics",
+  "icon": "📏",
+  "concept": "Boundary-based metrics like Hausdorff distance measure the physical distance between predicted and true contour curves, focusing on edge alignment.",
+  "xp": 15,
+  "hearts": 3,
+  "estMinutes": 7,
+  "segments": [
+    {
+      "type": "warmup",
+      "exercises": [
+        {
+          "id": "w1",
+          "type": "multiple_choice",
+          "xp": 1,
+          "prompt": "Recap: What is a False Negative (FN) pixel in segmentation?",
+          "options": [
+            {
+              "id": "a",
+              "text": "A target pixel that the model failed to paint",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "A background pixel that the model painted by mistake",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "A pixel located exactly in the center of the target",
+              "correct": false
+            }
+          ],
+          "explain": "Correct! FN pixels are missed target areas."
+        }
+      ]
+    },
+    {
+      "type": "teach",
+      "cards": [
+        {
+          "kind": "hook",
+          "icon": "📏",
+          "title": "The boundary error",
+          "body": "IoU and Dice measure the general overlap area. But what if the model gets the area right but has a single 'spike' where the mask boundary shoots far out into a healthy organ? In medical surgery, that spike is a major hazard. Area metrics won't notice it much. To catch these errors, we need to measure the physical distance between borders."
+        },
+        {
+          "kind": "definition",
+          "icon": "📐",
+          "title": "Hausdorff Distance",
+          "body": "The <strong>Hausdorff Distance</strong> measures the maximum distance from a point on the predicted boundary to the nearest point on the true boundary. It evaluates the worst-case boundary error, penalizing outliers heavily."
+        },
+        {
+          "kind": "analogy",
+          "icon": "🚧",
+          "title": "Two fences",
+          "body": "Imagine building a fence (prediction) next to the property line (target). IoU measures the total area difference between the yards. Hausdorff distance is like finding the single spot where the fence is furthest from the line — the biggest localized error."
+        },
+        {
+          "kind": "example",
+          "icon": "🩻",
+          "title": "Prostate boundary safety",
+          "body": "A model segments the prostate. The IoU is a great 90%. But at one spot, the predicted mask bleeds 8mm into the rectum. The Hausdorff distance detects this 8mm maximum error, warning doctors that the radiation beam might damage the rectum."
+        },
+        {
+          "kind": "mythbust",
+          "icon": "⚠️",
+          "title": "Lower is better",
+          "body": "For Dice and IoU, higher is better (1 is perfect). For Hausdorff distance, **lower is better** (0 is perfect, meaning the boundaries match exactly). It is measured in physical units (like millimeters or pixels), not percentages."
+        },
+        {
+          "kind": "visual",
+          "icon": "⚖️",
+          "title": "Area Overlap vs. Boundary Distance",
+          "body": "Comparing evaluation focus:",
+          "compare": {
+            "left": {
+              "emoji": "📊",
+              "tag": "Area Metrics (IoU / Dice)",
+              "text": "Measures total overlapping mass<br>Ignores small boundary spikes<br>Values: 0 to 1 (Higher is better)"
+            },
+            "right": {
+              "emoji": "📏",
+              "tag": "Boundary Metrics (Hausdorff)",
+              "text": "Measures maximum contour distance<br>Highly sensitive to boundary spikes<br>Values: 0 to Infinity (Lower is better)"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "type": "practice",
+      "exercises": [
+        {
+          "id": "p1",
+          "type": "multiple_choice",
+          "xp": 2,
+          "prompt": "What does the Hausdorff distance measure?",
+          "options": [
+            {
+              "id": "a",
+              "text": "The maximum distance between the predicted boundary and the true boundary",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "The average overlap area of the masks",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "The number of parameters in the decoder",
+              "correct": false
+            },
+            {
+              "id": "d",
+              "text": "The classification confidence of the backbone",
+              "correct": false
+            }
+          ],
+          "explain": "Correct! Hausdorff distance identifies the worst-case contour misalignment."
+        },
+        {
+          "id": "p2",
+          "type": "true_false",
+          "xp": 2,
+          "prompt": "True or False: A Hausdorff distance of 0 indicates that the predicted boundary matches the true boundary perfectly.",
+          "options": [
+            {
+              "id": "t",
+              "text": "True",
+              "correct": false
+            },
+            {
+              "id": "f",
+              "text": "False",
+              "correct": false
+            }
+          ],
+          "explain": "True. Zero distance means there is no deviation between the contours."
+        },
+        {
+          "id": "p3",
+          "type": "fill_blank",
+          "xp": 2,
+          "prompt": "Complete the sentence:",
+          "sentence": "Unlike IoU where higher is better, for Hausdorff distance, ___ is better.",
+          "blank": "lower",
+          "words": [
+            "lower",
+            "higher",
+            "constant"
+          ],
+          "explain": "Since it measures error distance, a lower value means a closer match."
+        },
+        {
+          "id": "p4",
+          "type": "spot_the_ai",
+          "xp": 2,
+          "prompt": "Why is the Hausdorff distance critical in surgical planning models?",
+          "options": [
+            {
+              "id": "a",
+              "text": "Because even a small localized boundary spike can lead to cutting healthy tissue",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "Because it runs much faster than Dice score calculations",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "Because it automatically draws bounding boxes around organs",
+              "correct": false
+            }
+          ],
+          "explain": "Area overlap metrics don't capture local spikes, but Hausdorff does, preventing surgical accidents."
+        }
+      ]
+    },
+    {
+      "type": "boss",
+      "exercises": [
+        {
+          "id": "b1",
+          "type": "multiple_choice",
+          "xp": 5,
+          "prompt": "You are evaluating two brain tumor segmentations. Both have a Dice score of 0.90. Model A has a Hausdorff distance of 2mm. Model B has a Hausdorff distance of 15mm. Which model is safer for surgical guidance and why?",
+          "options": [
+            {
+              "id": "a",
+              "text": "Model A, because its low Hausdorff distance indicates that its boundary contours are uniformly close to the true tumor boundary, with no dangerous spikes.",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "Model B, because a higher Hausdorff distance means the tumor mask is larger and easier to see.",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "Both are equally safe because their Dice scores are identical.",
+              "correct": false
+            },
+            {
+              "id": "d",
+              "text": "Model B, because 15mm is larger than 2mm, indicating higher precision.",
+              "correct": false
+            }
+          ],
+          "explain": "Perfect! Model B has a huge 15mm boundary spike somewhere that the Dice score missed. Model A is far safer because its worst-case boundary error is only 2mm. Next: let's build our segmentation capstone! Phase 9: Image Segmentation is complete. Next up: Advanced Vision Applications."
+        }
+      ]
+    }
+  ]
+}

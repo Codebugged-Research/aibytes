@@ -1,0 +1,222 @@
+{
+  "id": "u195-l4",
+  "unit": 195,
+  "day": 979,
+  "tier": "Real-Time Inference Optimization",
+  "tierIcon": "⚡",
+  "title": "Model Graph Fusion",
+  "icon": "🧩",
+  "concept": "Graph fusion merges adjacent layers in a neural network to reduce memory transfers and speed up execution.",
+  "xp": 15,
+  "hearts": 3,
+  "estMinutes": 7,
+  "segments": [
+    {
+      "type": "warmup",
+      "exercises": [
+        {
+          "id": "w1",
+          "type": "multiple_choice",
+          "xp": 1,
+          "prompt": "Recap: What is one key optimization technique that TensorRT performs?",
+          "options": [
+            {
+              "id": "a",
+              "text": "Layer fusion and GPU-specific kernel selection",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "Collecting new training images from edge devices",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "Randomly dropping weights during model inference",
+              "correct": false
+            }
+          ],
+          "explain": "TensorRT fuses layers and chooses highly optimized math kernels for the specific GPU architecture."
+        }
+      ]
+    },
+    {
+      "type": "teach",
+      "cards": [
+        {
+          "kind": "hook",
+          "title": "Cutting down on trips",
+          "body": "Imagine baking a cake where you walk to the pantry for flour, walk back, then walk to the pantry for sugar, then walk back. It's exhausting! Neural networks do this with memory. Graph fusion groups operations together so the GPU does everything in a single trip.",
+          "icon": "🧩"
+        },
+        {
+          "kind": "definition",
+          "title": "What is Graph Fusion?",
+          "body": "<strong>Graph Fusion</strong> is an optimization that combines multiple nodes of a computation graph into a single node. Common types include <strong>vertical fusion</strong> (combining Conv, Bias, and ReLU) and <strong>horizontal fusion</strong> (combining parallel operations).",
+          "icon": "⚡"
+        },
+        {
+          "kind": "analogy",
+          "title": "Combining steps on an assembly line",
+          "body": "Instead of passing a car down the line to have the tire placed, then to another station to tighten the bolts, and another to paint the wheel rim, a single station does all three tasks at once, saving transfer time.",
+          "icon": "🧠"
+        },
+        {
+          "kind": "example",
+          "title": "Conv-Bias-Activation fusion",
+          "body": "A standard ResNet has hundreds of Convolution, Bias, and ReLU steps. By fusing them, the model loads the weights into the GPU cache once, computes the conv, adds bias, applies ReLU, and saves the output, saving memory bandwidth.",
+          "icon": "🔍"
+        },
+        {
+          "kind": "mythbust",
+          "title": "Fusing doesn't change model predictions",
+          "body": "You might worry that fusing layers changes the mathematical outputs of the model. In reality, graph fusion is mathematically equivalent (or extremely close) to the original sequence; it just runs much faster.",
+          "icon": "⚠️"
+        },
+        {
+          "kind": "visual",
+          "title": "Vertical vs. Horizontal Fusion",
+          "body": "How compilers fuse graph operations:",
+          "icon": "🧩",
+          "compare": {
+            "left": {
+              "emoji": "🔽",
+              "tag": "Vertical Fusion",
+              "text": "Fuses sequential layers<br>e.g., Conv -> Bias -> ReLU<br>Eliminates intermediate memory writes"
+            },
+            "right": {
+              "emoji": "▶️",
+              "tag": "Horizontal Fusion",
+              "text": "Fuses parallel operations<br>e.g., multiple identical convolutions<br>Processes parallel paths in one go"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "type": "practice",
+      "exercises": [
+        {
+          "id": "p1",
+          "type": "multiple_choice",
+          "xp": 2,
+          "prompt": "What is the primary bottleneck that graph fusion helps resolve?",
+          "options": [
+            {
+              "id": "a",
+              "text": "Memory bandwidth and transfer overhead",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "Model accuracy on validation sets",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "Label noise in the training set",
+              "correct": false
+            },
+            {
+              "id": "d",
+              "text": "The learning rate of the optimizer",
+              "correct": false
+            }
+          ],
+          "explain": "In modern GPUs, moving data to and from memory is often slower than the math itself. Fusion reduces memory roundtrips."
+        },
+        {
+          "id": "p2",
+          "type": "true_false",
+          "xp": 2,
+          "prompt": "True or False: Horizontal fusion combines sequential operations like Conv and ReLU.",
+          "options": [
+            {
+              "id": "t",
+              "text": "True",
+              "correct": false
+            },
+            {
+              "id": "f",
+              "text": "False",
+              "correct": true
+            }
+          ],
+          "explain": "False. Vertical fusion combines sequential operations. Horizontal fusion combines parallel operations at the same level."
+        },
+        {
+          "id": "p3",
+          "type": "fill_blank",
+          "xp": 2,
+          "prompt": "Complete the sentence:",
+          "sentence": "Combining Conv, Bias, and ReLU into a single GPU instruction is an example of ___ fusion.",
+          "blank": "vertical",
+          "words": [
+            "vertical",
+            "horizontal",
+            "diagonal"
+          ],
+          "explain": "Sequential merging along the depth of the graph is vertical fusion."
+        },
+        {
+          "id": "p4",
+          "type": "spot_the_ai",
+          "xp": 2,
+          "prompt": "How does graph fusion affect model accuracy?",
+          "options": [
+            {
+              "id": "a",
+              "text": "It keeps accuracy virtually identical while increasing speed",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "It significantly degrades accuracy in exchange for speed",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "It increases accuracy by training the weights further",
+              "correct": false
+            }
+          ],
+          "explain": "Graph fusion only rearranges math execution blocks; it does not change the model weights or training structure."
+        }
+      ]
+    },
+    {
+      "type": "boss",
+      "exercises": [
+        {
+          "id": "b1",
+          "type": "multiple_choice",
+          "xp": 5,
+          "prompt": "You observe that your model spends 40% of its run-time writing activation maps back to main memory between convolution and activation layers. How can you address this?",
+          "options": [
+            {
+              "id": "a",
+              "text": "Apply vertical graph fusion to merge the Conv, Bias, and Activation layers.",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "Add more channels to the convolution to increase computation size.",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "Run the activation layer on the CPU and the convolution on the GPU.",
+              "correct": false
+            },
+            {
+              "id": "d",
+              "text": "Disable the activation function entirely to avoid memory transfers.",
+              "correct": false
+            }
+          ],
+          "explain": "Fusing sequential layers keeps intermediate computations in the fast local registers of the GPU, avoiding expensive memory transfers."
+        }
+      ]
+    }
+  ]
+}

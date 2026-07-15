@@ -1,0 +1,222 @@
+{
+  "id": "u182-l5",
+  "unit": 182,
+  "day": 915,
+  "tier": "Vision Transformers & Modern Approaches",
+  "tierIcon": "\ud83d\udc41\ufe0f",
+  "title": "Fine-tuning MAE",
+  "icon": "\ud83c\udfaf",
+  "concept": "Pre-trained MAE encoders are highly adaptable and can be fine-tuned on downstream classification, detection, and segmentation tasks.",
+  "xp": 15,
+  "hearts": 3,
+  "estMinutes": 7,
+  "segments": [
+    {
+      "type": "warmup",
+      "exercises": [
+        {
+          "id": "w1",
+          "type": "multiple_choice",
+          "xp": 1,
+          "prompt": "Recap: What is the main representational benefit of high masking ratios in MAE?",
+          "options": [
+            {
+              "id": "a",
+              "text": "It forces the model to learn deep semantic structures instead of local shortcuts.",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "It speeds up the decoder by removing all tokens.",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "It eliminates the need for MSE loss.",
+              "correct": false
+            }
+          ],
+          "explain": "Correct! Hiding most pixels forces the network to understand the semantic layout of objects."
+        }
+      ]
+    },
+    {
+      "type": "teach",
+      "cards": [
+        {
+          "kind": "hook",
+          "icon": "\ud83c\udfaf",
+          "title": "Deploying the restorer",
+          "body": "Once our encoder is a master at reading visual grammar and restoring images, how do we use it in the real world? We can plug it into our custom classification, detection, or segmentation tasks. Let's see how we fine-tune an MAE model for production."
+        },
+        {
+          "kind": "definition",
+          "icon": "\u2699\ufe0f",
+          "title": "MAE Downstream Transfer",
+          "body": "To transfer a pre-trained MAE, we discard the decoder, take the pre-trained encoder, and add a task-specific head. We then perform <strong>end-to-end fine-tuning</strong> (updating all layers with a low learning rate) or <strong>linear probing</strong> (training only the head) on the target dataset."
+        },
+        {
+          "kind": "analogy",
+          "icon": "\ud83c\udfce\ufe0f",
+          "title": "Tuning a race car engine",
+          "body": "Imagine buying a high-performance racing engine (pre-trained encoder) that was tested on a track. To use it in a rally car, you don't rebuild the engine cylinders. You just adjust the exhaust system and tires (fine-tuning) to match the dirt track."
+        },
+        {
+          "kind": "example",
+          "icon": "\ud83d\udcca",
+          "title": "Downstream gains",
+          "body": "On the ImageNet classification benchmark, an MAE-pretrained ViT-Huge achieves **87.8% accuracy** when fine-tuned, outperforming models trained from scratch while using significantly less training epochs."
+        },
+        {
+          "kind": "mythbust",
+          "icon": "\u26a0\ufe0f",
+          "title": "Gradients should flow!",
+          "body": "You might think freezing the encoder (linear probing) is always the best path. For MAE, because the pre-training task is reconstruction, performing **end-to-end fine-tuning** (letting gradients update the encoder) usually yields much higher classification accuracy than freezing it."
+        },
+        {
+          "kind": "visual",
+          "icon": "\u2696\ufe0f",
+          "title": "Linear Probing vs. End-to-End Fine-Tuning",
+          "body": "Comparing transfer strategies for MAE:",
+          "compare": {
+            "left": {
+              "emoji": "\ud83d\udd12",
+              "tag": "Linear Probing (Frozen)",
+              "text": "Backbone weights locked<br>Train only classifier head<br>Slightly lower accuracy for MAE"
+            },
+            "right": {
+              "emoji": "\ud83d\udd13",
+              "tag": "End-to-End Fine-Tuning",
+              "text": "All weights updated slowly<br>Backbone adapts to new task<br>Optimal accuracy for MAE"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "type": "practice",
+      "exercises": [
+        {
+          "id": "p1",
+          "type": "multiple_choice",
+          "xp": 2,
+          "prompt": "What do we do with the MAE decoder when transferring the model to a downstream task?",
+          "explain": "The decoder is only needed for the reconstruction pretext task and is discarded before fine-tuning on downstream applications.",
+          "options": [
+            {
+              "id": "a",
+              "text": "We discard it entirely and keep only the encoder",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "We double its layers to increase resolution",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "We use it as the classification classifier head",
+              "correct": false
+            },
+            {
+              "id": "d",
+              "text": "We copy its weights into a CNN backbone",
+              "correct": false
+            }
+          ]
+        },
+        {
+          "id": "p2",
+          "type": "true_false",
+          "xp": 2,
+          "prompt": "True or false: End-to-end fine-tuning of MAE models typically yields higher accuracy than linear probing.",
+          "explain": "True. Because MAE was trained on reconstruction, updating the encoder weights slightly helps it adapt better to classification tasks.",
+          "options": [
+            {
+              "id": "t",
+              "text": "True",
+              "correct": true
+            },
+            {
+              "id": "f",
+              "text": "False",
+              "correct": false
+            }
+          ]
+        },
+        {
+          "id": "p3",
+          "type": "fill_blank",
+          "xp": 2,
+          "prompt": "Complete the sentence:",
+          "explain": "Feature Pyramid Networks (FPN) can use the spatial features of the fine-tuned encoder to locate bounding boxes.",
+          "sentence": "MAE-pretrained encoders plug easily into object detection frameworks like ___ for dense task predictions.",
+          "blank": "FPN",
+          "words": [
+            "FPN",
+            "LeNet",
+            "Sobel"
+          ]
+        },
+        {
+          "id": "p4",
+          "type": "spot_the_ai",
+          "xp": 2,
+          "prompt": "Which configuration represents end-to-end fine-tuning of a pre-trained MAE encoder?",
+          "explain": "End-to-end fine-tuning allows gradients to backpropagate through all layers of the model, adjusting the feature extractor.",
+          "options": [
+            {
+              "id": "a",
+              "text": "Updating all layers of the encoder and task head using a low learning rate",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "Freezing the encoder weights and updating only the classifier head",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "Initializing all weights randomly and training from scratch",
+              "correct": false
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "boss",
+      "exercises": [
+        {
+          "id": "b1",
+          "type": "multiple_choice",
+          "xp": 5,
+          "prompt": "You are deploying a model to classify crop diseases on a smartphone. You have a pre-trained MAE encoder. Why should you choose to fine-tune it instead of training from scratch?",
+          "options": [
+            {
+              "id": "a",
+              "text": "Fine-tuning a pre-trained encoder converges faster, requires significantly fewer labeled images, and yields higher final accuracy.",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "Because fine-tuning completely removes the need for backpropagation.",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "Because it forces the model to ignore color channels.",
+              "correct": false
+            },
+            {
+              "id": "d",
+              "text": "Because it is impossible to train a ViT from scratch on any computer.",
+              "correct": false
+            }
+          ],
+          "explain": "Incredible! Fine-tuning transfers the rich visual understanding of the pre-trained encoder to your crop dataset, saving massive time and labels. Next: how can we connect images directly to text descriptions? Let's check out CLIP!"
+        }
+      ]
+    }
+  ]
+}

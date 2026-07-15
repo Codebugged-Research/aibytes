@@ -1,0 +1,222 @@
+{
+  "id": "u162-l3",
+  "unit": 162,
+  "day": 813,
+  "tier": "Image Segmentation Capstone",
+  "tierIcon": "🏆",
+  "title": "Inference Speed & Model Compression",
+  "icon": "🏆",
+  "concept": "Running segmentation models on edge devices requires model compression techniques like pruning, quantization, and lightweight backbones.",
+  "xp": 15,
+  "hearts": 3,
+  "estMinutes": 7,
+  "segments": [
+    {
+      "type": "warmup",
+      "exercises": [
+        {
+          "id": "w1",
+          "type": "multiple_choice",
+          "xp": 1,
+          "prompt": "Recap: What is a critical rule when applying geometric augmentations in segmentation?",
+          "options": [
+            {
+              "id": "a",
+              "text": "You must apply the exact same transformation to both the image and the mask",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "You must only augment the background pixels",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "You must downsample the mask to 1x1 before transforming",
+              "correct": false
+            }
+          ],
+          "explain": "Correct! Image and mask must stay aligned, so they must receive the identical geometric transforms."
+        }
+      ]
+    },
+    {
+      "type": "teach",
+      "cards": [
+        {
+          "kind": "hook",
+          "icon": "🔋",
+          "title": "Fitting a giant in a smartwatch",
+          "body": "A high-quality U-Net with a ResNet backbone can be 100 megabytes in size and take 200 milliseconds to run on a powerful GPU. But what if you need to run it on a smartphone to segment faces in real-time at 30 FPS, or on a smart glass device? It will lag and drain the battery. How do we compress the model without losing the mask quality?"
+        },
+        {
+          "kind": "definition",
+          "icon": "⚡",
+          "title": "Model Compression",
+          "body": "To run segmentation on edge hardware, we use: <br>1. **Lightweight Backbones** (MobileNet, ShuffleNet).<br>2. **Pruning** (deleting inactive neurons).<br>3. **Quantization** (converting weights from 32-bit float to 8-bit integer, reducing size by 75% and speeding up inference)."
+        },
+        {
+          "kind": "analogy",
+          "icon": "🧳",
+          "title": "Packing a suitcase",
+          "body": "Running a raw model on a phone is like trying to fit a fully assembled bike into a suitcase. Compression is like taking the bike apart, folding the frame (pruning/quantization), and packing it efficiently. It takes up a fraction of the space but still functions when unpacked."
+        },
+        {
+          "kind": "example",
+          "icon": "📐",
+          "title": "FP32 to INT8 conversion",
+          "body": "A U-Net model is 120MB. By applying INT8 quantization, we convert the weight values to 8-bit integers. The model size shrinks to 30MB, and it runs 4x faster on a mobile CPU with almost no visible loss in mask accuracy."
+        },
+        {
+          "kind": "mythbust",
+          "icon": "⚠️",
+          "title": "Quantization is not lossless",
+          "body": "You might think quantization has no downside. In reality, converting floats to integers rounds off values. While general shapes are preserved, extreme quantization can cause fine, single-pixel boundaries to blur or break apart, which is risky for medical scans."
+        },
+        {
+          "kind": "visual",
+          "icon": "⚖️",
+          "title": "Model Compression Tradeoffs",
+          "body": "Comparing compression stages:",
+          "compare": {
+            "left": {
+              "emoji": "🏭",
+              "tag": "Raw U-Net (FP32)",
+              "text": "Size: 120MB, Speed: Slow (5 FPS on phone)<br>Highest boundary precision<br>Consumes high power"
+            },
+            "right": {
+              "emoji": "⚡",
+              "tag": "Quantized U-Net (INT8)",
+              "text": "Size: 30MB, Speed: Fast (30 FPS on phone)<br>Minor loss in fine borders<br>Low power consumption"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "type": "practice",
+      "exercises": [
+        {
+          "id": "p1",
+          "type": "multiple_choice",
+          "xp": 2,
+          "prompt": "What is quantization in model compression?",
+          "options": [
+            {
+              "id": "a",
+              "text": "Converting weights from 32-bit floating points to 8-bit integers",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "Deleting the decoder branch of the network",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "Increasing the number of channels in the encoder",
+              "correct": false
+            },
+            {
+              "id": "d",
+              "text": "Averaging the predictions of multiple networks",
+              "correct": false
+            }
+          ],
+          "explain": "Correct! Quantization reduces memory size and speeds up integer math on edge chips."
+        },
+        {
+          "id": "p2",
+          "type": "true_false",
+          "xp": 2,
+          "prompt": "True or False: Pruning speeds up models by removing weak or inactive weights from the network.",
+          "options": [
+            {
+              "id": "t",
+              "text": "True",
+              "correct": false
+            },
+            {
+              "id": "f",
+              "text": "False",
+              "correct": false
+            }
+          ],
+          "explain": "True. Pruning trims out unimportant connections, making the model sparser and faster."
+        },
+        {
+          "id": "p3",
+          "type": "fill_blank",
+          "xp": 2,
+          "prompt": "Complete the sentence:",
+          "sentence": "Quantizing a model from FP32 to INT8 typically reduces its file size by ___ percent.",
+          "blank": "75",
+          "words": [
+            "25",
+            "50",
+            "75"
+          ],
+          "explain": "Since it goes from 32 bits to 8 bits (1/4th the size), the file size drops by 75%."
+        },
+        {
+          "id": "p4",
+          "type": "spot_the_ai",
+          "xp": 2,
+          "prompt": "What is a potential downside of extreme quantization in segmentation?",
+          "options": [
+            {
+              "id": "a",
+              "text": "Very fine boundaries and micro-structures might become blurry or lose precision",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "The model will automatically convert to an object detector",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "The learning rate will increase to infinity",
+              "correct": false
+            }
+          ],
+          "explain": "Rounding errors from quantization can degrade the precision of fine boundaries."
+        }
+      ]
+    },
+    {
+      "type": "boss",
+      "exercises": [
+        {
+          "id": "b1",
+          "type": "multiple_choice",
+          "xp": 5,
+          "prompt": "You are deploying a face-segmentation model for a mobile video chat app. It must run on old phones at 30 FPS. Which optimization strategy is best?",
+          "options": [
+            {
+              "id": "a",
+              "text": "Use a MobileNet backbone, apply pruning, and quantize the model to INT8 format.",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "Use a ResNet-101 backbone, disable skip connections, and keep weights in FP32 format.",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "Run a CRF post-processor on the CPU after every frame.",
+              "correct": false
+            },
+            {
+              "id": "d",
+              "text": "Remove the decoder and predict masks using a single dense layer.",
+              "correct": false
+            }
+          ],
+          "explain": "Perfect! Swapping to MobileNet, pruning, and INT8 quantization is the industry standard recipe for running real-time segmentation on mobile hardware. Next: diagnosing boundary bleeding!"
+        }
+      ]
+    }
+  ]
+}

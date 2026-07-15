@@ -1,0 +1,222 @@
+{
+  "id": "u180-l2",
+  "unit": 180,
+  "day": 902,
+  "tier": "Vision Transformers & Modern Approaches",
+  "tierIcon": "\ud83d\udc41\ufe0f",
+  "title": "Local Window Attention",
+  "icon": "\ud83e\ude9f",
+  "concept": "Swin Transformer restricts self-attention computation to local, non-overlapping windows, achieving linear complexity with respect to image size.",
+  "xp": 15,
+  "hearts": 3,
+  "estMinutes": 7,
+  "segments": [
+    {
+      "type": "warmup",
+      "exercises": [
+        {
+          "id": "w1",
+          "type": "multiple_choice",
+          "xp": 1,
+          "prompt": "Recap: Why is dense prediction harder than image classification for standard ViTs?",
+          "options": [
+            {
+              "id": "a",
+              "text": "It requires high-resolution spatial outputs, which causes global attention complexity to explode.",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "It only works with black-and-white datasets.",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "It does not allow residual skip connections.",
+              "correct": false
+            }
+          ],
+          "explain": "Correct! Bounding boxes and segmentation masks demand high-res maps, crashing global attention."
+        }
+      ]
+    },
+    {
+      "type": "teach",
+      "cards": [
+        {
+          "kind": "hook",
+          "icon": "\ud83e\ude9f",
+          "title": "The window grid",
+          "body": "If you can't have everyone shake hands in a stadium, how do you manage introductions? You divide the stadium into small sections, and only let people shake hands within their own section. This is the core secret of the Swin Transformer."
+        },
+        {
+          "kind": "definition",
+          "icon": "\ud83e\ude9f",
+          "title": "Local Window Attention",
+          "body": "Swin Transformer divides the image patches into a grid of non-overlapping local <strong>windows</strong> (usually of size <code>7x7</code> patches). Self-attention is computed strictly <strong>within each window</strong>, which makes the computational complexity scale **linearly** (<code>O(N)</code>) with the image size."
+        },
+        {
+          "kind": "analogy",
+          "icon": "\ud83c\udfe2",
+          "title": "Office cubicles",
+          "body": "Imagine a corporate building. Instead of allowing all 1,000 employees to talk to each other simultaneously, we place them in cubicles (local windows) of 10 people. Employees only talk to others in their cubicle. This keeps noise low and work efficient."
+        },
+        {
+          "kind": "example",
+          "icon": "\ud83d\udcd0",
+          "title": "Linear complexity scaling",
+          "body": "For a 7x7 window, we have exactly 49 patches. The attention matrix size per window is 2,401. If we double the image size, we don't increase the window size; we just create more windows. Thus, memory scales linearly, not quadratically."
+        },
+        {
+          "kind": "mythbust",
+          "icon": "\u26a0\ufe0f",
+          "title": "No overlap, initially",
+          "body": "You might think the local windows should slide across the image like conv kernels. In Swin, windows are strictly **static grids** with no overlap. However, this raises a new problem: how do adjacent windows talk to each other? We'll solve that next!"
+        },
+        {
+          "kind": "visual",
+          "icon": "\u2696\ufe0f",
+          "title": "Global vs. Local Window Attention",
+          "body": "Comparing attention boundaries:",
+          "compare": {
+            "left": {
+              "emoji": "\ud83c\udf10",
+              "tag": "Global Attention (ViT)",
+              "text": "Every patch queries every patch<br>Complexity: O(Resolution\u00b2)<br>Very slow on high-res scans"
+            },
+            "right": {
+              "emoji": "\ud83e\ude9f",
+              "tag": "Local Window Attention (Swin)",
+              "text": "Patches query within window<br>Complexity: O(Resolution)<br>Highly efficient for dense tasks"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "type": "practice",
+      "exercises": [
+        {
+          "id": "p1",
+          "type": "multiple_choice",
+          "xp": 2,
+          "prompt": "What is the typical window size (in patches) used in a Swin Transformer?",
+          "explain": "Swin typically divides patches into local windows of 7x7 to compute attention efficiently.",
+          "options": [
+            {
+              "id": "a",
+              "text": "7x7 patches",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "1x1 patches",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "100x100 patches",
+              "correct": false
+            },
+            {
+              "id": "d",
+              "text": "224x224 patches",
+              "correct": false
+            }
+          ]
+        },
+        {
+          "id": "p2",
+          "type": "true_false",
+          "xp": 2,
+          "prompt": "True or false: Local window attention scales linearly with the total number of image patches.",
+          "explain": "True. Because attention is restricted to fixed-size windows, the compute scales linearly with the count of windows.",
+          "options": [
+            {
+              "id": "t",
+              "text": "True",
+              "correct": true
+            },
+            {
+              "id": "f",
+              "text": "False",
+              "correct": false
+            }
+          ]
+        },
+        {
+          "id": "p3",
+          "type": "fill_blank",
+          "xp": 2,
+          "prompt": "Complete the sentence:",
+          "explain": "Restricting attention bounds limits comparisons, changing complexity from O(N\u00b2) to O(N) (linear).",
+          "sentence": "By restricting self-attention to local windows, Swin achieves a complexity of ___ with respect to resolution.",
+          "blank": "linear",
+          "words": [
+            "linear",
+            "quadratic",
+            "exponential"
+          ]
+        },
+        {
+          "id": "p4",
+          "type": "spot_the_ai",
+          "xp": 2,
+          "prompt": "If an image has 1000 patches, and we split them into 20 windows of 50 patches each, how many attention comparisons occur in total?",
+          "explain": "Correct! Each window performs 50x50 calculations. Doing this for 20 windows yields 50,000 comparisons, far fewer than global attention's 1 million.",
+          "options": [
+            {
+              "id": "a",
+              "text": "50,000 (20 windows x 50 x 50)",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "1,000,000 (1000 x 1000)",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "100 (20 x 5)",
+              "correct": false
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "boss",
+      "exercises": [
+        {
+          "id": "b1",
+          "type": "multiple_choice",
+          "xp": 5,
+          "prompt": "If patches only pay attention to other patches within their local window, how can the model learn relationships across the entire image?",
+          "options": [
+            {
+              "id": "a",
+              "text": "By shifting the window partition grid in successive layers to create overlapping communication boundaries.",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "By relying on the classification head to average everything.",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "By ignoring position embeddings in the late stages.",
+              "correct": false
+            },
+            {
+              "id": "d",
+              "text": "By adding convolutional layers inside the classification head.",
+              "correct": false
+            }
+          ],
+          "explain": "Excellent! Swin solves the isolation problem by shifting the window grids in every other layer. Let's see how shifted windows work next!"
+        }
+      ]
+    }
+  ]
+}

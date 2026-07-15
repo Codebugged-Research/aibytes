@@ -1,0 +1,222 @@
+{
+  "id": "u135-l5",
+  "unit": 135,
+  "day": 680,
+  "tier": "Image Classification in Depth",
+  "tierIcon": "🏷️",
+  "title": "Handling Out-of-Vocabulary Classes",
+  "icon": "⚖️",
+  "concept": "Hierarchical classification handles unseen classes by falling back to confident parent nodes.",
+  "xp": 15,
+  "hearts": 3,
+  "estMinutes": 7,
+  "segments": [
+    {
+      "type": "warmup",
+      "exercises": [
+        {
+          "id": "w1",
+          "type": "multiple_choice",
+          "xp": 1,
+          "prompt": "Recap: How do conditional probability chains prevent logical contradictions in hierarchical models?",
+          "options": [
+            {
+              "id": "a",
+              "text": "By forcing the child probability to be mathematically bounded by its parent's probability.",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "By deleting low-probability nodes from memory.",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "By training the model on twice as many images.",
+              "correct": false
+            }
+          ],
+          "explain": "Correct! Because child probability is parent probability multiplied by conditional probability, it can never exceed parent probability."
+        }
+      ]
+    },
+    {
+      "type": "teach",
+      "cards": [
+        {
+          "kind": "hook",
+          "icon": "🦉",
+          "title": "It's a bird of some kind",
+          "body": "Imagine walking through a zoo and seeing a strange, exotic bird you've never heard of. You don't have a label for it in your brain. But you don't say 'it's a car' or 'it's a banana'. You confidently say: 'That is some kind of bird'. Models can do this too."
+        },
+        {
+          "kind": "definition",
+          "icon": "⚖️",
+          "title": "Semantic Fallback",
+          "body": "<strong>Out-of-Vocabulary (OOV)</strong> handling in hierarchical models allows a classifier to stop making predictions down the tree when confidence drops below a threshold. Instead of guessing a specific child label, the model outputs a confident parent label (e.g., 'Bird' instead of guessing a specific species)."
+        },
+        {
+          "kind": "analogy",
+          "icon": "⚖️",
+          "title": "A cautious student",
+          "body": "Think of a student taking a multiple choice exam. If they are unsure of the specific species of a plant, they write down 'Fern family' rather than guessing a specific genus and risking a massive penalty for a confidently wrong answer."
+        },
+        {
+          "kind": "example",
+          "icon": "🤖",
+          "title": "Industrial sorting fallback",
+          "body": "A recycling robot sorts plastic items. It encounters a newly designed bottle it has never seen. Instead of misclassifying it as a 'milk jug', the model stops at the parent node and outputs <code>'Plastic Container'</code>, routing it to the correct recycling bin."
+        },
+        {
+          "kind": "mythbust",
+          "icon": "⚠️",
+          "title": "Unseen does not mean unclassifiable",
+          "body": "You might think a model is completely useless if it encounters a class it wasn't trained on. In hierarchical setups, as long as the unseen class belongs to a known parent branch, the model can still provide highly useful general classifications."
+        },
+        {
+          "kind": "visual",
+          "icon": "⚖️",
+          "title": "Fallback Decisions",
+          "body": "How the model stops predicting when confidence drops:",
+          "compare": {
+            "left": {
+              "emoji": "🦁",
+              "tag": "Standard Fallback",
+              "text": "P(Feline) = 0.92 (Pass)<br>P(Lion | Feline) = 0.30 (Fail)<br>Output: 'Feline' (Safe)"
+            },
+            "right": {
+              "emoji": "🤔",
+              "tag": "Dangerous Flat Model",
+              "text": "No fallback available<br>Forces choice: 'Lion' vs. 'House Cat'<br>Guesses wrong confidently"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "type": "practice",
+      "exercises": [
+        {
+          "id": "p1",
+          "type": "multiple_choice",
+          "xp": 2,
+          "prompt": "What does a hierarchical classifier do when it is unsure of the specific sub-class but confident in the general category?",
+          "explain": "Semantic fallback allows models to safely output a general parent category when child confidence is low.",
+          "options": [
+            {
+              "id": "a",
+              "text": "It stops descending the tree and outputs a confident parent class label.",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "It throws a runtime error and crashes.",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "It outputs a random child class with 100% confidence.",
+              "correct": false
+            },
+            {
+              "id": "d",
+              "text": "It deletes the input image.",
+              "correct": false
+            }
+          ]
+        },
+        {
+          "id": "p2",
+          "type": "true_false",
+          "xp": 2,
+          "prompt": "True or false: An out-of-vocabulary class can still be partially classified correctly if the model identifies its parent category.",
+          "explain": "True. Even if the model has never seen a specific breed, it can still label it as a 'Dog' if the parent node activates.",
+          "options": [
+            {
+              "id": "t",
+              "text": "True",
+              "correct": true
+            },
+            {
+              "id": "f",
+              "text": "False",
+              "correct": false
+            }
+          ]
+        },
+        {
+          "id": "p3",
+          "type": "fill_blank",
+          "xp": 2,
+          "prompt": "Complete the sentence:",
+          "explain": "Semantic fallback is the strategy of retreating up the hierarchy tree to a safe, general parent category.",
+          "sentence": "Outputting a general parent label when child confidence is low is called semantic ___.",
+          "blank": "fallback",
+          "words": [
+            "fallback",
+            "overfitting",
+            "regularization"
+          ]
+        },
+        {
+          "id": "p4",
+          "type": "spot_the_ai",
+          "xp": 2,
+          "prompt": "Which of these model outputs shows semantic fallback in action?",
+          "explain": "Choosing to output the confident parent category (Dog) instead of the low-confidence child (Poodle) is fallback.",
+          "options": [
+            {
+              "id": "a",
+              "text": "Output: 'Poodle' (Confidence: 20%) -> fallback to 'Dog' (Confidence: 85%)",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "Output: 'Poodle' (Confidence: 20%)",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "Output: 'Poodle' (Confidence: 99%)",
+              "correct": false
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "boss",
+      "exercises": [
+        {
+          "id": "b1",
+          "type": "multiple_choice",
+          "xp": 5,
+          "prompt": "You are building a wild animal alert system for hikers. If the model sees a rare, dangerous bear species that wasn't in the training set, how should you configure the hierarchical prediction?",
+          "options": [
+            {
+              "id": "a",
+              "text": "Configure a confidence threshold on child nodes. If none pass, fall back to outputting the confident parent 'Bear', keeping hikers alert.",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "Force the model to predict 'Teddy Bear' as a default child class.",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "Disable the parent nodes so the model is forced to choose 'Wolf' or 'Cougar'.",
+              "correct": false
+            },
+            {
+              "id": "d",
+              "text": "Ignore the image if bear confidence is below 99%.",
+              "correct": false
+            }
+          ],
+          "explain": "Exactly! By falling back to 'Bear', hikers are still alerted to the danger, whereas a flat model might have guessed 'Dog' or 'Squirrel', leading to a dangerous situation. Hierarchical fallback is a powerful tool. Fantastic job completing the Hierarchical Classification unit!"
+        }
+      ]
+    }
+  ]
+}

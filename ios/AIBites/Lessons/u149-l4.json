@@ -1,0 +1,222 @@
+{
+  "id": "u149-l4",
+  "unit": 149,
+  "day": 749,
+  "tier": "Modern Object Detection",
+  "tierIcon": "🎯",
+  "title": "Hard Negative Mining",
+  "icon": "⚖️",
+  "concept": "Hard negative mining balances positive objects and background clutter by training only on the most confusing negatives.",
+  "xp": 15,
+  "hearts": 3,
+  "estMinutes": 7,
+  "segments": [
+    {
+      "type": "warmup",
+      "exercises": [
+        {
+          "id": "w4",
+          "type": "multiple_choice",
+          "xp": 1,
+          "prompt": "Recap: What is the benefit of the shrinking pyramid structure in SSD's extra feature layers?",
+          "options": [
+            {
+              "id": "a",
+              "text": "It naturally creates multiple resolution scales for detection",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "It decreases the classification loss automatically",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "It removes the need for data augmentation",
+              "correct": false
+            }
+          ],
+          "explain": "Correct! The shrinking layers provide a range of scales for detecting objects of all sizes."
+        }
+      ]
+    },
+    {
+      "type": "teach",
+      "cards": [
+        {
+          "kind": "hook",
+          "icon": "⚖️",
+          "title": "The Background Problem",
+          "body": "In a typical photo, almost all the space is just empty background. If we train our model on every single background patch, 99.9% of the training data is just 'empty space'. How do we prevent the model from getting lazy and predicting 'background' for everything?"
+        },
+        {
+          "kind": "definition",
+          "icon": "⛏️",
+          "title": "Hard Negative Mining",
+          "body": "<strong>Hard Negative Mining</strong> is a training technique. Since there are thousands of negative (background) boxes and only a few positive objects, SSD sorts the negative boxes by loss, selects only the <strong>most difficult negatives</strong> (where the model is most confused), and trains on a strict ratio (usually <strong>3:1</strong> negatives to positives)."
+        },
+        {
+          "kind": "analogy",
+          "icon": "📝",
+          "title": "Studying the Hard Questions",
+          "body": "Imagine studying for an exam. If you read 10,000 flashcards of easy questions you already know, you waste time. Instead, you filter out the easy cards and study only the 30 hardest questions you keep failing. That is hard negative mining!"
+        },
+        {
+          "kind": "example",
+          "icon": "🚕",
+          "title": "Filtering the background",
+          "body": "An image has 2 cars (positives) and 8,000 background boxes (negatives). SSD calculates the loss for all boxes. It discards 7,994 easy background boxes and only trains on the 6 hardest background boxes, keeping a clean 3:1 ratio."
+        },
+        {
+          "kind": "mythbust",
+          "icon": "⚠️",
+          "title": "Train on Everything?",
+          "body": "You might think training on all background pixels makes the model robust. Actually, the positive objects get completely drowned out by the background noise, causing the model to learn to output empty predictions."
+        },
+        {
+          "kind": "visual",
+          "icon": "⚖️",
+          "title": "With vs. Without Hard Negative Mining",
+          "body": "How training data balance affects learning:",
+          "compare": {
+            "left": {
+              "emoji": "🕸️",
+              "tag": "No Mining (Unbalanced)",
+              "text": "10,000 backgrounds vs. 2 objects<br>Model learns to predict 'nothing'<br>Drowns out the real object signal"
+            },
+            "right": {
+              "emoji": "⚖️",
+              "tag": "Hard Negative Mining (3:1)",
+              "text": "6 hard backgrounds vs. 2 objects<br>Model focuses on confusing details<br>Balanced and robust training"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "type": "practice",
+      "exercises": [
+        {
+          "id": "p1",
+          "type": "multiple_choice",
+          "xp": 2,
+          "prompt": "What is the main goal of Hard Negative Mining during SSD training?",
+          "options": [
+            {
+              "id": "a",
+              "text": "To address class imbalance by training only on the most difficult background boxes",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "To mine positive objects from unlabeled datasets",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "To increase the speed of the forward pass",
+              "correct": false
+            },
+            {
+              "id": "d",
+              "text": "To automatically draw bounding boxes around cars",
+              "correct": false
+            }
+          ],
+          "explain": "Correct! Hard negative mining balances the training dataset by selecting the hardest background samples."
+        },
+        {
+          "id": "p2",
+          "type": "true_false",
+          "xp": 2,
+          "prompt": "True or False: In SSD, the ratio of selected hard negative boxes to positive object boxes during training is typically set to 3:1.",
+          "options": [
+            {
+              "id": "t",
+              "text": "True",
+              "correct": true
+            },
+            {
+              "id": "f",
+              "text": "False",
+              "correct": false
+            }
+          ],
+          "explain": "True. A 3:1 ratio is the standard setting to maintain training stability without drowning out positive classes."
+        },
+        {
+          "id": "p3",
+          "type": "fill_blank",
+          "xp": 2,
+          "prompt": "Complete the sentence:",
+          "sentence": "Hard negative mining selects background boxes with the highest ___ values to train the model.",
+          "blank": "loss",
+          "words": [
+            "loss",
+            "accuracy",
+            "resolution"
+          ],
+          "explain": "Negatives with the highest loss represent the samples where the model is most confused."
+        },
+        {
+          "id": "p4",
+          "type": "spot_the_ai",
+          "xp": 2,
+          "prompt": "Why is empty space considered a 'negative' box in object detection?",
+          "options": [
+            {
+              "id": "a",
+              "text": "Because it does not contain any of the target object classes",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "Because it has a negative coordinate value",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "Because it slows down the training speed",
+              "correct": false
+            }
+          ],
+          "explain": "Correct! A negative box is a sample containing background pixels rather than an object of interest."
+        }
+      ]
+    },
+    {
+      "type": "boss",
+      "exercises": [
+        {
+          "id": "b1",
+          "type": "multiple_choice",
+          "xp": 5,
+          "prompt": "During training, your SSD model is predicting 'background' for every part of the image, completely ignoring the objects. What went wrong?",
+          "options": [
+            {
+              "id": "a",
+              "text": "Hard negative mining was disabled, and the massive amount of background data drowned out the positive object signals.",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "The model backbone was trained on color images only.",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "The bounding box coordinates were calculated in square roots.",
+              "correct": false
+            },
+            {
+              "id": "d",
+              "text": "The input resolution was too high.",
+              "correct": false
+            }
+          ],
+          "explain": "Exactly! Without hard negative mining, the class imbalance makes the network learn to always predict the background class."
+        }
+      ]
+    }
+  ]
+}

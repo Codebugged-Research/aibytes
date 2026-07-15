@@ -1,0 +1,222 @@
+{
+  "id": "u157-l2",
+  "unit": 157,
+  "day": 787,
+  "tier": "Mask R-CNN",
+  "tierIcon": "🎭",
+  "title": "Aligning the Pixels",
+  "icon": "🎭",
+  "concept": "RoIAlign replaces RoIPool in Mask R-CNN, using bilinear interpolation to extract feature maps without spatial quantization offsets.",
+  "xp": 15,
+  "hearts": 3,
+  "estMinutes": 7,
+  "segments": [
+    {
+      "type": "warmup",
+      "exercises": [
+        {
+          "id": "w1",
+          "type": "multiple_choice",
+          "xp": 1,
+          "prompt": "Recap: What are the three parallel outputs of Mask R-CNN?",
+          "options": [
+            {
+              "id": "a",
+              "text": "Class labels, bounding boxes, and pixel-level masks",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "Class labels, feature maps, and image resolutions",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "Bounding boxes, strides, and pool dimensions",
+              "correct": false
+            }
+          ],
+          "explain": "Correct! Mask R-CNN predicts classes, boxes, and masks in parallel."
+        }
+      ]
+    },
+    {
+      "type": "teach",
+      "cards": [
+        {
+          "kind": "hook",
+          "icon": "📐",
+          "title": "The misalignment problem",
+          "body": "In Faster R-CNN, RoIPool crops features of different sizes and forces them into a fixed grid (like 7x7) by rounding coordinates. Rounding (quantization) is fine for classification. But if a coordinate is rounded from 15.3 to 15, the mask shifts by 0.3 pixels. In deep features, a 0.3 pixel shift can mean a 10-pixel error on the original image! How do we fix this misalignment?"
+        },
+        {
+          "kind": "definition",
+          "icon": "🎯",
+          "title": "RoIAlign",
+          "body": "<strong>RoIAlign</strong> is a feature extraction layer that avoids quantization. Instead of rounding coordinates, it uses **bilinear interpolation** to calculate the exact feature values at continuous coordinates, aligning features with the input pixels."
+        },
+        {
+          "kind": "analogy",
+          "icon": "📏",
+          "title": "Drawing on graph paper",
+          "body": "RoIPool is like drawing a circle on graph paper but only being allowed to color entire grid squares — the edges get blocky. RoIAlign is like using a ruler to draw the circle smoothly across the grid lines, calculating the exact fractions."
+        },
+        {
+          "kind": "example",
+          "icon": "📐",
+          "title": "Quantization offset",
+          "body": "If an RoI box has a width of 15.3 pixels, RoIPool rounds it to 15, introducing a spatial offset. RoIAlign splits the box into equal continuous sub-regions and samples values using math, preserving the exact 15.3 width."
+        },
+        {
+          "kind": "mythbust",
+          "icon": "⚠️",
+          "title": "It matters for masks, not boxes",
+          "body": "You might think RoIAlign is needed for bounding boxes. Actually, a small coordinate shift doesn't affect box classification much. But it completely ruins segmentation masks, which require pixel-perfect alignment to trace contours."
+        },
+        {
+          "kind": "visual",
+          "icon": "⚖️",
+          "title": "RoIPool vs. RoIAlign",
+          "body": "How coordinates are mapped to grids:",
+          "compare": {
+            "left": {
+              "emoji": "🟧",
+              "tag": "RoIPool (Quantized)",
+              "text": "Rounds coordinates (e.g., 2.7 -> 3)<br>Creates spatial misalignment<br>Blurry or shifted masks"
+            },
+            "right": {
+              "emoji": "🎯",
+              "tag": "RoIAlign (Aligned)",
+              "text": "Uses bilinear interpolation (keeps 2.7)<br>Zero rounding error<br>Pixel-perfect mask alignment"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "type": "practice",
+      "exercises": [
+        {
+          "id": "p1",
+          "type": "multiple_choice",
+          "xp": 2,
+          "prompt": "What is the primary difference between RoIAlign and RoIPool?",
+          "options": [
+            {
+              "id": "a",
+              "text": "RoIAlign uses bilinear interpolation to avoid coordinate rounding errors",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "RoIAlign flattens features into dense vectors",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "RoIAlign is designed only for CPU architectures",
+              "correct": false
+            },
+            {
+              "id": "d",
+              "text": "RoIAlign downsamples features using max pooling",
+              "correct": false
+            }
+          ],
+          "explain": "Correct! RoIAlign preserves continuous coordinates without rounding."
+        },
+        {
+          "id": "p2",
+          "type": "true_false",
+          "xp": 2,
+          "prompt": "True or False: Coordinate rounding in RoIPool is called spatial quantization.",
+          "options": [
+            {
+              "id": "t",
+              "text": "True",
+              "correct": false
+            },
+            {
+              "id": "f",
+              "text": "False",
+              "correct": false
+            }
+          ],
+          "explain": "True. Quantization refers to mapping continuous values to discrete integers."
+        },
+        {
+          "id": "p3",
+          "type": "fill_blank",
+          "xp": 2,
+          "prompt": "Complete the sentence:",
+          "sentence": "RoIAlign uses bilinear ___ to calculate feature values at continuous points.",
+          "blank": "interpolation",
+          "words": [
+            "interpolation",
+            "pooling",
+            "convolutions"
+          ],
+          "explain": "Bilinear interpolation allows sampling features at fractional locations."
+        },
+        {
+          "id": "p4",
+          "type": "spot_the_ai",
+          "xp": 2,
+          "prompt": "Why is RoIAlign crucial for Mask R-CNN?",
+          "options": [
+            {
+              "id": "a",
+              "text": "Because segmentation masks require pixel-level alignment to be accurate",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "Because it reduces the file size of the model",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "Because it generates the initial region proposals",
+              "correct": false
+            }
+          ],
+          "explain": "Pixel-level precision is mandatory for high-quality segmentation masks."
+        }
+      ]
+    },
+    {
+      "type": "boss",
+      "exercises": [
+        {
+          "id": "b1",
+          "type": "multiple_choice",
+          "xp": 5,
+          "prompt": "You are training Mask R-CNN. The bounding boxes are highly accurate, but the masks look slightly shifted and do not line up with the object borders. What is the likely cause?",
+          "options": [
+            {
+              "id": "a",
+              "text": "The architecture is using RoIPool instead of RoIAlign, causing quantization offsets that misalign the masks.",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "The learning rate is set too low for the mask branch.",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "The input images are stored in a compressed format.",
+              "correct": false
+            },
+            {
+              "id": "d",
+              "text": "The model has too many skip connections in the encoder.",
+              "correct": false
+            }
+          ],
+          "explain": "Perfect! Those pixel-level shifts are the classic symptom of RoIPool's rounding errors. Switching to RoIAlign solves this immediately. Next: how does the mask branch output masks?"
+        }
+      ]
+    }
+  ]
+}

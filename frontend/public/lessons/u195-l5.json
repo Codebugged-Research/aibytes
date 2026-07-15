@@ -1,0 +1,222 @@
+{
+  "id": "u195-l5",
+  "unit": 195,
+  "day": 980,
+  "tier": "Real-Time Inference Optimization",
+  "tierIcon": "⚡",
+  "title": "Optimizing Real-Time Video",
+  "icon": "🎥",
+  "concept": "Real-time video inference requires optimizing the entire pipeline: frame decoding, model prediction, and output rendering.",
+  "xp": 15,
+  "hearts": 3,
+  "estMinutes": 7,
+  "segments": [
+    {
+      "type": "warmup",
+      "exercises": [
+        {
+          "id": "w1",
+          "type": "multiple_choice",
+          "xp": 1,
+          "prompt": "Recap: What is the difference between vertical and horizontal graph fusion?",
+          "options": [
+            {
+              "id": "a",
+              "text": "Vertical fuses sequential steps; horizontal fuses parallel steps",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "Vertical is only for CPUs; horizontal is only for GPUs",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "Vertical changes model weights; horizontal changes data labels",
+              "correct": false
+            }
+          ],
+          "explain": "Vertical fusion combines stacked layers (sequence), whereas horizontal fusion merges parallel branches."
+        }
+      ]
+    },
+    {
+      "type": "teach",
+      "cards": [
+        {
+          "kind": "hook",
+          "title": "The video pipeline bottleneck",
+          "body": "It doesn't matter if your AI model runs in 1 millisecond if it takes 50 milliseconds just to decode a video frame from the camera. To achieve true real-time performance, you have to optimize the whole pipeline — from raw pixels to final prediction!",
+          "icon": "🎥"
+        },
+        {
+          "kind": "definition",
+          "title": "End-to-End Inference Pipelines",
+          "body": "An <strong>inference pipeline</strong> includes: <strong>Decoding</strong> (loading and decompressing video frames), <strong>Preprocessing</strong> (resizing and normalizing on GPU), <strong>Inference</strong> (running the compiled model), and <strong>Postprocessing</strong> (NMS or rendering overlays).",
+          "icon": "⚡"
+        },
+        {
+          "kind": "analogy",
+          "title": "A kitchen line",
+          "body": "Imagine a chef who cooks food instantly, but the prep cook takes 10 minutes to wash vegetables, and the waiter takes 10 minutes to deliver plates. The kitchen is still slow. You need every step of the process optimized to serve hot food.",
+          "icon": "🧠"
+        },
+        {
+          "kind": "example",
+          "title": "GPU decoding with NVIDIA DALI",
+          "body": "Instead of decoding video frames using CPU-based libraries and copying pixels to GPU memory, engineers use hardware decoding on the GPU itself. This removes the CPU-GPU communication bottleneck entirely.",
+          "icon": "🔍"
+        },
+        {
+          "kind": "mythbust",
+          "title": "Model speed is not the only limit",
+          "body": "You might think optimizing the neural network is the only thing that speeds up a video application. In reality, image loading, scaling, and copying data between CPU and GPU memory often take up more time than the neural math itself!",
+          "icon": "⚠️"
+        },
+        {
+          "kind": "visual",
+          "title": "Unoptimized vs. Optimized Video Pipeline",
+          "body": "Removing bottlenecks across the video pipeline:",
+          "icon": "🎥",
+          "compare": {
+            "left": {
+              "emoji": "🐌",
+              "tag": "CPU-Bound Pipeline",
+              "text": "CPU decodes video frame<br>Copy pixels CPU -> GPU<br>GPU runs model math<br>Copy output GPU -> CPU"
+            },
+            "right": {
+              "emoji": "🚀",
+              "tag": "GPU-Bound Pipeline",
+              "text": "GPU hardware decoding<br>Zero copy (pixels stay on GPU)<br>GPU runs model math<br>Direct video overlay render"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "type": "practice",
+      "exercises": [
+        {
+          "id": "p1",
+          "type": "multiple_choice",
+          "xp": 2,
+          "prompt": "Which step in a video processing pipeline decodes compressed video streams into raw pixel arrays?",
+          "options": [
+            {
+              "id": "a",
+              "text": "Video Decoding",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "Non-Maximum Suppression",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "Model Graph Fusion",
+              "correct": false
+            },
+            {
+              "id": "d",
+              "text": "Quantization Calibration",
+              "correct": false
+            }
+          ],
+          "explain": "Video decoding decompresses the H.264 or MP4 stream into raw RGB frames that models can read."
+        },
+        {
+          "id": "p2",
+          "type": "true_false",
+          "xp": 2,
+          "prompt": "True or False: Preprocessing operations like resizing and normalizations should run on the CPU to save GPU memory for inference.",
+          "options": [
+            {
+              "id": "t",
+              "text": "True",
+              "correct": false
+            },
+            {
+              "id": "f",
+              "text": "False",
+              "correct": true
+            }
+          ],
+          "explain": "False. Running preprocessing on the GPU avoids expensive memory transfers between the CPU and GPU, making the pipeline much faster."
+        },
+        {
+          "id": "p3",
+          "type": "fill_blank",
+          "xp": 2,
+          "prompt": "Complete the sentence:",
+          "sentence": "Moving data back and forth between CPU memory and GPU memory creates a major system ___.",
+          "blank": "bottleneck",
+          "words": [
+            "bottleneck",
+            "accelerator",
+            "checkpoint"
+          ],
+          "explain": "CPU-GPU data transfer is relatively slow and can stall the pipeline if not minimized."
+        },
+        {
+          "id": "p4",
+          "type": "spot_the_ai",
+          "xp": 2,
+          "prompt": "Which optimization would best speed up a system processing multiple high-resolution camera streams?",
+          "options": [
+            {
+              "id": "a",
+              "text": "Decode video directly on GPU hardware accelerators",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "Train the model for more epochs on training data",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "Save every frame as a JPEG to disk before running inference",
+              "correct": false
+            }
+          ],
+          "explain": "GPU hardware decoding decompresses streams directly in GPU memory, keeping the pipeline efficient."
+        }
+      ]
+    },
+    {
+      "type": "boss",
+      "exercises": [
+        {
+          "id": "b1",
+          "type": "multiple_choice",
+          "xp": 5,
+          "prompt": "You are building a live traffic surveillance system. The detector runs at 100 FPS, but the system only processes 10 FPS because of slow video loading. What should you do?",
+          "options": [
+            {
+              "id": "a",
+              "text": "Profile the data loading pipeline and move video decoding and resizing onto GPU hardware.",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "Spend weeks optimizing the model's layers to run at 200 FPS.",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "Switch to a smaller model with lower accuracy to see if it fixes the loader.",
+              "correct": false
+            },
+            {
+              "id": "d",
+              "text": "Reduce the camera stream resolution to 10x10 pixels.",
+              "correct": false
+            }
+          ],
+          "explain": "When data ingestion is the bottleneck, optimizing the model math does not help. You must optimize the decoding and preprocessing steps. Next up: Edge Deployment & Quantization."
+        }
+      ]
+    }
+  ]
+}

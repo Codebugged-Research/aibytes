@@ -1,0 +1,222 @@
+{
+  "id": "u178-l4",
+  "unit": 178,
+  "day": 894,
+  "tier": "Vision Transformers & Modern Approaches",
+  "tierIcon": "\ud83d\udc41\ufe0f",
+  "title": "Global vs. Local Receptive Fields",
+  "icon": "\ud83c\udf10",
+  "concept": "CNNs build receptive fields locally and expand them gradually, whereas ViTs have a global receptive field from the very first layer.",
+  "xp": 15,
+  "hearts": 3,
+  "estMinutes": 7,
+  "segments": [
+    {
+      "type": "warmup",
+      "exercises": [
+        {
+          "id": "w1",
+          "type": "multiple_choice",
+          "xp": 1,
+          "prompt": "Recap: What is the main complexity limitation of standard self-attention in ViT?",
+          "options": [
+            {
+              "id": "a",
+              "text": "It scales quadratically (O(N\u00b2)) with the sequence length.",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "It requires recurrent loops that cannot be parallelized.",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "It only works on monochrome images.",
+              "correct": false
+            }
+          ],
+          "explain": "Correct! dot-product self-attention scales quadratically, making high resolutions computationally heavy."
+        }
+      ]
+    },
+    {
+      "type": "teach",
+      "cards": [
+        {
+          "kind": "hook",
+          "icon": "\ud83c\udf10",
+          "title": "The bird's eye view",
+          "body": "If you look at a painting from one inch away, you only see a single brush stroke. You must step back to see the whole image. CNNs start one inch away and slowly step back layer-by-step. ViTs start with a bird's eye view, seeing the entire canvas in their very first step."
+        },
+        {
+          "kind": "definition",
+          "icon": "\ud83d\udc41\ufe0f",
+          "title": "Receptive Fields",
+          "body": "The <strong>receptive field</strong> is the region of the input image that influences a particular feature activation. In CNNs, the receptive field is restricted by the kernel size (local) and only grows as you stack more layers. In ViTs, self-attention allows a token to interact with <strong>every other token in the image immediately</strong> (global receptive field)."
+        },
+        {
+          "kind": "analogy",
+          "icon": "\ud83d\udde3\ufe0f",
+          "title": "Telephone game vs. group chat",
+          "body": "A CNN is like a game of telephone: information is passed from neighbor to neighbor, slowly spreading across the room. A ViT is like a group chat: anyone can send a message that everyone reads instantly, regardless of where they are sitting."
+        },
+        {
+          "kind": "example",
+          "icon": "\ud83d\udd2c",
+          "title": "Looking across the frame",
+          "body": "In a CNN, a neuron in layer 2 can only compare pixels within a 5x5 area. In a ViT, a token in block 1 representing a dog's head in the top-left can compute attention scores with the dog's tail in the bottom-right immediately."
+        },
+        {
+          "kind": "mythbust",
+          "icon": "\u26a0\ufe0f",
+          "title": "Global isn't always best",
+          "body": "You might think a global view is always superior. However, in early layers, local details (like edges and textures) are often more important than global relations. Because ViTs lack a local constraint, they can waste compute looking for relation patterns that don't exist."
+        },
+        {
+          "kind": "visual",
+          "icon": "\u2696\ufe0f",
+          "title": "Local vs. Global Receptive Fields",
+          "body": "How information flows in early layers:",
+          "compare": {
+            "left": {
+              "emoji": "\ud83d\udd0d",
+              "tag": "CNN Early Layers",
+              "text": "Receptive field: Local (e.g., 3x3)<br>Extracts sharp local features<br>No global context yet"
+            },
+            "right": {
+              "emoji": "\ud83c\udf10",
+              "tag": "ViT Early Layers",
+              "text": "Receptive field: Global (image-wide)<br>Extracts relationships immediately<br>Higher memory footprint"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "type": "practice",
+      "exercises": [
+        {
+          "id": "p1",
+          "type": "multiple_choice",
+          "xp": 2,
+          "prompt": "How does the receptive field of a ViT differ from a standard CNN in early layers?",
+          "explain": "Self-attention allows ViT tokens to query all other tokens in the first layer, granting an immediate global receptive field.",
+          "options": [
+            {
+              "id": "a",
+              "text": "ViT has a global receptive field immediately, while CNN is restricted to local kernels",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "CNN has a global receptive field immediately, while ViT only looks at the center patch",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "Both have identical receptive fields at all depths",
+              "correct": false
+            },
+            {
+              "id": "d",
+              "text": "ViTs have no receptive field because they do not use pixels",
+              "correct": false
+            }
+          ]
+        },
+        {
+          "id": "p2",
+          "type": "true_false",
+          "xp": 2,
+          "prompt": "True or false: A CNN's receptive field gets larger as you go deeper into the network.",
+          "explain": "True. As layers are stacked, neurons pool info from larger regions of the previous layer, expanding the receptive field.",
+          "options": [
+            {
+              "id": "t",
+              "text": "True",
+              "correct": true
+            },
+            {
+              "id": "f",
+              "text": "False",
+              "correct": false
+            }
+          ]
+        },
+        {
+          "id": "p3",
+          "type": "fill_blank",
+          "xp": 2,
+          "prompt": "Complete the sentence:",
+          "explain": "Self-attention enables immediate global communication across all token positions.",
+          "sentence": "While CNNs rely on local sliding kernels, ViTs use ___ to establish global connections in early layers.",
+          "blank": "self-attention",
+          "words": [
+            "self-attention",
+            "pooling",
+            "convolutions"
+          ]
+        },
+        {
+          "id": "p4",
+          "type": "spot_the_ai",
+          "xp": 2,
+          "prompt": "Which of these visual tasks benefits most from an immediate global receptive field?",
+          "explain": "Connecting distant components across the frame requires global context, which ViTs extract in one step.",
+          "options": [
+            {
+              "id": "a",
+              "text": "Determining if a hand in the bottom-left is holding a cup in the top-right of a portrait",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "Finding a sharp black horizontal edge in a close-up texture",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "Smoothing out pixel noise in a blurry background",
+              "correct": false
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "boss",
+      "exercises": [
+        {
+          "id": "b1",
+          "type": "multiple_choice",
+          "xp": 5,
+          "prompt": "If early layers of ViT have global attention, do they still learn to focus on local features?",
+          "options": [
+            {
+              "id": "a",
+              "text": "Yes \u2014 during training, the model learns to set high attention weights on adjacent patches, effectively 'learning' local fields where needed.",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "No \u2014 they are mathematically blocked from focusing on close patches.",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "Yes \u2014 but only if we delete the position embeddings.",
+              "correct": false
+            },
+            {
+              "id": "d",
+              "text": "No \u2014 they only look at the border patches of the image.",
+              "correct": false
+            }
+          ],
+          "explain": "Phenomenal! Because ViT is flexible, it learns to specialize some attention heads to focus locally, mimicking convolutions, while others look globally. Next: robustness and interpretability!"
+        }
+      ]
+    }
+  ]
+}

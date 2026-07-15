@@ -1,0 +1,222 @@
+{
+  "id": "u177-l5",
+  "unit": 177,
+  "day": 890,
+  "tier": "Vision Transformers & Modern Approaches",
+  "tierIcon": "\ud83d\udc41\ufe0f",
+  "title": "Patch Sequence Length",
+  "icon": "\ud83d\udd22",
+  "concept": "Calculating sequence length N is crucial because self-attention memory usage scales quadratically, making it sensitive to image and patch size.",
+  "xp": 15,
+  "hearts": 3,
+  "estMinutes": 7,
+  "segments": [
+    {
+      "type": "warmup",
+      "exercises": [
+        {
+          "id": "w1",
+          "type": "multiple_choice",
+          "xp": 1,
+          "prompt": "Recap: What patterns do we observe when visualizing early ViT projection weights?",
+          "options": [
+            {
+              "id": "a",
+              "text": "Structured filters that detect edges, gradients, and textures.",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "Classification labels for the model classes.",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "Perfect copies of the output classes.",
+              "correct": false
+            }
+          ],
+          "explain": "Correct! Trained ViT projection weights represent structured edge and frequency detectors."
+        }
+      ]
+    },
+    {
+      "type": "teach",
+      "cards": [
+        {
+          "kind": "hook",
+          "icon": "\ud83d\udd22",
+          "title": "The quadratic threat",
+          "body": "Before building a transformer, you must answer one math question: how long is the sequence? If it is too long, the computer runs out of memory. If it is too short, the model is blind. Let's learn how to calculate and balance sequence length."
+        },
+        {
+          "kind": "definition",
+          "icon": "\ud83e\uddee",
+          "title": "Sequence Length Formula",
+          "body": "The patch sequence length <code>N</code> is calculated as: <br><code>N = (H * W) / (P * P)</code><br>where <code>H</code> and <code>W</code> are the image height and width, and <code>P</code> is the patch size. The computational complexity of self-attention is <code>O(N\u00b2)</code>, scaling quadratically with the number of patches."
+        },
+        {
+          "kind": "analogy",
+          "icon": "\u2696\ufe0f",
+          "title": "Party invitations",
+          "body": "Imagine hosting a party where every guest must talk to every other guest individually (self-attention). If you have 10 guests, that's 100 conversations. If you have 100 guests, that's 10,000 conversations! Sequence length is the number of guests; a small increase makes the party run out of hand."
+        },
+        {
+          "kind": "example",
+          "icon": "\ud83d\udcca",
+          "title": "Memory growth",
+          "body": "If you double the image resolution from 224x224 to 448x448 while keeping patch size at 16, the sequence length leaps from 196 to 784 patches. Consequently, the attention matrix size increases 16 times!"
+        },
+        {
+          "kind": "mythbust",
+          "icon": "\u26a0\ufe0f",
+          "title": "Sequence length doesn't include channels",
+          "body": "You might think the number of color channels (like 3 for RGB) increases the sequence length. In fact, channels are handled inside the embedding dimension <code>D</code>. Sequence length <code>N</code> is strictly determined by spatial resolution and patch size."
+        },
+        {
+          "kind": "visual",
+          "icon": "\u2696\ufe0f",
+          "title": "Resolution vs. Attention Memory",
+          "body": "How resolution scaling impacts attention metrics:",
+          "compare": {
+            "left": {
+              "emoji": "\ud83d\uddbc\ufe0f",
+              "tag": "224x224 Image (P=16)",
+              "text": "N = 196 patches<br>Attention matrix: 196 x 196<br>Memory footprint: 38.4k weights"
+            },
+            "right": {
+              "emoji": "\ud83d\uddbc\ufe0f",
+              "tag": "448x448 Image (P=16)",
+              "text": "N = 784 patches<br>Attention matrix: 784 x 784<br>Memory footprint: 614.6k weights (16x!)"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "type": "practice",
+      "exercises": [
+        {
+          "id": "p1",
+          "type": "multiple_choice",
+          "xp": 2,
+          "prompt": "What is the formula to calculate the sequence length N of patch tokens in ViT?",
+          "explain": "The sequence length is the total number of patches, which equals the total image area divided by the single patch area.",
+          "options": [
+            {
+              "id": "a",
+              "text": "N = (H * W) / (P * P)",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "N = H * W * C",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "N = P * P * C",
+              "correct": false
+            },
+            {
+              "id": "d",
+              "text": "N = (H / P) + (W / P)",
+              "correct": false
+            }
+          ]
+        },
+        {
+          "id": "p2",
+          "type": "true_false",
+          "xp": 2,
+          "prompt": "True or false: Computational complexity of standard self-attention scales quadratically (O(N\u00b2)) with the sequence length.",
+          "explain": "True. The dot-product calculation compares every patch to every other patch, resulting in a quadratic complexity.",
+          "options": [
+            {
+              "id": "t",
+              "text": "True",
+              "correct": true
+            },
+            {
+              "id": "f",
+              "text": "False",
+              "correct": false
+            }
+          ]
+        },
+        {
+          "id": "p3",
+          "type": "fill_blank",
+          "xp": 2,
+          "prompt": "Complete the sentence:",
+          "explain": "Doubling height and width increases patch count by 4. Because attention complexity is quadratic, memory scales by 4\u00b2 = 16.",
+          "sentence": "If you double the image height and width, the self-attention memory footprint increases by a factor of ___.",
+          "blank": "16",
+          "words": [
+            "4",
+            "8",
+            "16"
+          ]
+        },
+        {
+          "id": "p4",
+          "type": "spot_the_ai",
+          "xp": 2,
+          "prompt": "For an image of size 384x384 and a patch size of 16x16, what is the patch sequence length N?",
+          "explain": "384 / 16 = 24 patches per side. 24 x 24 = 576 total patches.",
+          "options": [
+            {
+              "id": "a",
+              "text": "576 patches",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "24 patches",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "96 patches",
+              "correct": false
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "boss",
+      "exercises": [
+        {
+          "id": "b1",
+          "type": "multiple_choice",
+          "xp": 5,
+          "prompt": "You are designing a model to process high-resolution satellite imagery (2048x2048). What problem will you face if you use a standard ViT with patch size 16?",
+          "options": [
+            {
+              "id": "a",
+              "text": "The sequence length (16,384 tokens) will cause the self-attention memory demands to explode, crashing typical GPUs.",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "The sequence length will be too short to extract any details.",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "The model will be forced to use 3D convolution layers.",
+              "correct": false
+            },
+            {
+              "id": "d",
+              "text": "Position embeddings will become impossible to add.",
+              "correct": false
+            }
+          ],
+          "explain": "Outstanding! A sequence length of 16,384 requires an attention matrix of 268 million elements per head, which is highly impractical. Let's see how ViTs and CNNs differ in their tradeoffs next!"
+        }
+      ]
+    }
+  ]
+}

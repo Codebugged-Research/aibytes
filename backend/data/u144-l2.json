@@ -1,0 +1,222 @@
+{
+  "id": "u144-l2",
+  "unit": 144,
+  "day": 722,
+  "tier": "Object Detection Foundations",
+  "tierIcon": "🎯",
+  "title": "Shared Feature Maps",
+  "icon": "🗺️",
+  "concept": "A shared feature map holds convolutional features for the whole image, allowing proposal coordinates to be projected directly onto it.",
+  "xp": 15,
+  "hearts": 3,
+  "estMinutes": 7,
+  "segments": [
+    {
+      "type": "warmup",
+      "exercises": [
+        {
+          "id": "w1",
+          "type": "multiple_choice",
+          "xp": 1,
+          "prompt": "Recap: What is the main innovation of Fast R-CNN over R-CNN?",
+          "options": [
+            {
+              "id": "a",
+              "text": "Using a shared feature map for the entire image",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "Bypassing the region proposal step",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "Replacing regression with classification",
+              "correct": false
+            }
+          ],
+          "explain": "Fast R-CNN processes the whole image once to create a shared feature map."
+        }
+      ]
+    },
+    {
+      "type": "teach",
+      "cards": [
+        {
+          "kind": "hook",
+          "icon": "🗺️",
+          "title": "A Community Garden",
+          "body": "If you want to plant flowers, you don't buy 100 individual plastic pots, fill them with soil, and water them separately. You dig one large soil bed in the garden, and let everyone plant their seeds in their own section of the shared bed. That is how shared feature maps work."
+        },
+        {
+          "kind": "definition",
+          "icon": "🗺️",
+          "title": "Shared Feature Map Projection",
+          "body": "A <strong>Shared Feature Map</strong> is the activation map outputted by the final convolutional layer of the backbone. Because convolutional layers preserve spatial layout, region proposal coordinates from the original image can be projected directly onto the feature map by scaling them down by the network's downsampling ratio (e.g. 1/16th)."
+        },
+        {
+          "kind": "analogy",
+          "icon": "🗺️",
+          "title": "The Projection Blueprint",
+          "body": "Imagine drawing a blueprint of a house that is 100 times smaller than the real house. If a sofa is 2 meters from the door in the real house, you know it must be 2 centimeters from the door on the blueprint. You scale the coordinates to match the smaller map!"
+        },
+        {
+          "kind": "example",
+          "icon": "📏",
+          "title": "Scaling coordinates",
+          "body": "If an image of size 800x800 is downsampled by a VGG backbone by a factor of 16, the feature map size is 50x50. A region proposal at coordinates <code>[x=160, y=320, w=80, h=80]</code> is projected onto the feature map as <code>[x=10, y=20, w=5, h=5]</code> by dividing by 16."
+        },
+        {
+          "kind": "mythbust",
+          "icon": "⚠️",
+          "title": "Spatial layout is not lost",
+          "body": "You might think passing an image through many convolutional layers scrambles the location of objects. In reality, while fully connected layers lose spatial information, convolutional layers maintain the relative layout, allowing coordinates to map perfectly."
+        },
+        {
+          "kind": "visual",
+          "icon": "⚖️",
+          "title": "Proposal Projection",
+          "body": "Visualizing how a proposal is scaled down to the feature map:",
+          "compare": {
+            "left": {
+              "emoji": "🖼️",
+              "tag": "Original Image (e.g. 800x800)",
+              "text": "Proposal: [160, 320, 80, 80]<br>Raw pixels."
+            },
+            "right": {
+              "emoji": "🗺️",
+              "tag": "Feature Map (e.g. 50x50)",
+              "text": "Projected: [10, 20, 5, 5]<br>Scaled down by 16."
+            }
+          }
+        }
+      ]
+    },
+    {
+      "type": "practice",
+      "exercises": [
+        {
+          "id": "p1",
+          "type": "multiple_choice",
+          "xp": 2,
+          "prompt": "How does Fast R-CNN find where a region proposal lies on the shared feature map?",
+          "explain": "Because convolutional layers preserve spatial relationships, proposal coordinates are scaled down by the network's downsampling factor to project them onto the feature map.",
+          "options": [
+            {
+              "id": "a",
+              "text": "By dividing the original coordinates by the backbone's downsampling factor",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "By running Selective Search directly on the feature map",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "By keeping the coordinates exactly the same",
+              "correct": false
+            },
+            {
+              "id": "d",
+              "text": "By converting coordinates to RGB color values",
+              "correct": false
+            }
+          ]
+        },
+        {
+          "id": "p2",
+          "type": "true_false",
+          "xp": 2,
+          "prompt": "True or False: Convolutional layers discard spatial layout, meaning we cannot map coordinates from the image to the features.",
+          "explain": "False. Convolutional layers maintain spatial layout. Fully connected layers are the ones that discard spatial relationships.",
+          "options": [
+            {
+              "id": "t",
+              "text": "True",
+              "correct": false
+            },
+            {
+              "id": "f",
+              "text": "False",
+              "correct": true
+            }
+          ]
+        },
+        {
+          "id": "p3",
+          "type": "fill_blank",
+          "xp": 2,
+          "prompt": "Complete the sentence:",
+          "explain": "Dividing the original coordinate of 80 by the factor of 8 yields 10 on the feature map.",
+          "sentence": "If the backbone downsamples the image by a factor of 8, a coordinate at x=80 projects to x=___ on the feature map.",
+          "blank": "10",
+          "words": [
+            "10",
+            "80",
+            "640"
+          ]
+        },
+        {
+          "id": "p4",
+          "type": "spot_the_ai",
+          "xp": 2,
+          "prompt": "Which component contains the shared spatial features extracted from the entire image?",
+          "explain": "The shared convolutional feature map contains the spatial features extracted in a single pass.",
+          "options": [
+            {
+              "id": "a",
+              "text": "The shared convolutional feature map",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "The fully connected classification head",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "The Selective Search algorithm CPU output",
+              "correct": false
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "boss",
+      "exercises": [
+        {
+          "id": "b1",
+          "type": "multiple_choice",
+          "xp": 5,
+          "prompt": "You are building a custom Fast R-CNN backbone. The input image size is 512x512 pixels. The network downsamples the image dimensions by a factor of 16. If Selective Search outputs a proposal crop with width = 128 and height = 64, what are the dimensions of this projected region on the feature map?",
+          "options": [
+            {
+              "id": "a",
+              "text": "width = 8, height = 4",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "width = 128, height = 64",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "width = 16, height = 8",
+              "correct": false
+            },
+            {
+              "id": "d",
+              "text": "width = 2048, height = 1024",
+              "correct": false
+            }
+          ],
+          "explain": "Exactly! The dimensions must be divided by the downsampling factor, so 128 / 16 = 8, and 64 / 16 = 4. Next: let's learn how we convert these variable-size projected regions into fixed-size inputs for the classifier!"
+        }
+      ]
+    }
+  ]
+}

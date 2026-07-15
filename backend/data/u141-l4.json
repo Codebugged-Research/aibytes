@@ -1,0 +1,222 @@
+{
+  "id": "u141-l4",
+  "unit": 141,
+  "day": 709,
+  "tier": "Object Detection Foundations",
+  "tierIcon": "🎯",
+  "title": "Non-Maximum Suppression (NMS)",
+  "icon": "🧹",
+  "concept": "Non-Maximum Suppression (NMS) is an algorithm that filters duplicate boxes by keeping the one with the highest confidence and discarding overlapping boxes.",
+  "xp": 15,
+  "hearts": 3,
+  "estMinutes": 7,
+  "segments": [
+    {
+      "type": "warmup",
+      "exercises": [
+        {
+          "id": "w1",
+          "type": "multiple_choice",
+          "xp": 1,
+          "prompt": "Recap: Why does the multiple detections problem occur?",
+          "options": [
+            {
+              "id": "a",
+              "text": "Because the model scans the image grid densely, leading to multiple hits",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "Because the image is too small",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "Because of class imbalance",
+              "correct": false
+            }
+          ],
+          "explain": "Dense grid scanning triggers multiple nearby anchors to predict the same object."
+        }
+      ]
+    },
+    {
+      "type": "teach",
+      "cards": [
+        {
+          "kind": "hook",
+          "icon": "🧹",
+          "title": "Cleaning up the Clutter",
+          "body": "If you have 10 messy sketches of a box on top of each other, you want to trace the cleanest, boldest line (highest confidence) and erase all the other faint duplicate lines. That is what Non-Maximum Suppression does."
+        },
+        {
+          "kind": "definition",
+          "icon": "🧹",
+          "title": "What is NMS?",
+          "body": "<strong>Non-Maximum Suppression (NMS)</strong> is a post-processing algorithm. It sorts predicted boxes by confidence score, keeps the box with the highest score (maximum), and discards any neighboring boxes of the same class that overlap with it (have high IoU)."
+        },
+        {
+          "kind": "analogy",
+          "icon": "👑",
+          "title": "The Audition",
+          "body": "Imagine casting a role. Ten actors audition. You pick the best one (highest confidence). If any other actors have a very similar style (high overlap/IoU), you tell them they aren't needed. You repeat this for other unique actor styles!"
+        },
+        {
+          "kind": "example",
+          "icon": "🧹",
+          "title": "NMS Step-by-Step",
+          "body": "Suppose we have 3 boxes for a dog: Box A (95% conf), Box B (80% conf, IoU with A = 0.70), and Box C (45% conf, IoU with A = 0.10). NMS keeps Box A. It deletes Box B because it overlaps heavily. It keeps Box C for now because it doesn't overlap."
+        },
+        {
+          "kind": "mythbust",
+          "icon": "⚠️",
+          "title": "NMS doesn't delete everything",
+          "body": "It's a myth that NMS deletes all low-confidence boxes. It only deletes boxes that overlap with a higher-confidence box. If a low-confidence box is on a completely different part of the screen (low IoU), NMS will leave it alone."
+        },
+        {
+          "kind": "visual",
+          "icon": "⚖️",
+          "title": "The NMS Loop",
+          "body": "Step-by-step filtering of overlapping duplicates:",
+          "compare": {
+            "left": {
+              "emoji": "🗂️",
+              "tag": "1. Sort & Select",
+              "text": "Sort boxes by confidence.<br>Select highest score."
+            },
+            "right": {
+              "emoji": "🧹",
+              "tag": "2. Suppress Overlaps",
+              "text": "Calculate IoU.<br>Delete boxes with IoU >= threshold."
+            }
+          }
+        }
+      ]
+    },
+    {
+      "type": "practice",
+      "exercises": [
+        {
+          "id": "p1",
+          "type": "multiple_choice",
+          "xp": 2,
+          "prompt": "What does Non-Maximum Suppression (NMS) use to decide if a duplicate box should be deleted?",
+          "explain": "NMS calculates IoU overlap between boxes; neighbors that exceed an IoU threshold with the best box are suppressed (deleted).",
+          "options": [
+            {
+              "id": "a",
+              "text": "The IoU overlap with the highest-confidence box",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "The average color values inside the box",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "The time it took the model to run on CPU",
+              "correct": false
+            },
+            {
+              "id": "d",
+              "text": "The image orientation metadata",
+              "correct": false
+            }
+          ]
+        },
+        {
+          "id": "p2",
+          "type": "true_false",
+          "xp": 2,
+          "prompt": "True or False: NMS will delete a box representing a cat if it overlaps with a higher-confidence box representing a car.",
+          "explain": "False. NMS is applied class-by-class. It only suppresses overlapping boxes of the *same* class (e.g. cat vs. cat, not cat vs. car).",
+          "options": [
+            {
+              "id": "t",
+              "text": "True",
+              "correct": false
+            },
+            {
+              "id": "f",
+              "text": "False",
+              "correct": true
+            }
+          ]
+        },
+        {
+          "id": "p3",
+          "type": "fill_blank",
+          "xp": 2,
+          "prompt": "Complete the sentence:",
+          "explain": "NMS sorts predictions from highest to lowest confidence to process the most certain detections first.",
+          "sentence": "NMS first sorts all predicted bounding boxes by their ___ score.",
+          "blank": "confidence",
+          "words": [
+            "confidence",
+            "IoU",
+            "pixel"
+          ]
+        },
+        {
+          "id": "p4",
+          "type": "spot_the_ai",
+          "xp": 2,
+          "prompt": "Which operation describes the action of Non-Maximum Suppression?",
+          "explain": "Filtering out overlapping duplicate boxes using confidence values is the NMS process.",
+          "options": [
+            {
+              "id": "a",
+              "text": "Scanning an image with sliding convolutional filters",
+              "correct": false
+            },
+            {
+              "id": "b",
+              "text": "Discarding overlapping duplicate boxes, keeping the one with 98% confidence",
+              "correct": true
+            },
+            {
+              "id": "c",
+              "text": "Multiplying the coordinates by image width and height",
+              "correct": false
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "boss",
+      "exercises": [
+        {
+          "id": "b1",
+          "type": "multiple_choice",
+          "xp": 5,
+          "prompt": "You have three overlapping boxes representing a coffee cup: Box A (90% confidence), Box B (85% confidence, IoU with A = 0.65), and Box C (40% confidence, IoU with A = 0.75). The NMS IoU threshold is set to 0.50. Which boxes will remain after NMS?",
+          "options": [
+            {
+              "id": "a",
+              "text": "Only Box A",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "Box A and Box B",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "Box A and Box C",
+              "correct": false
+            },
+            {
+              "id": "d",
+              "text": "All three boxes",
+              "correct": false
+            }
+          ],
+          "explain": "Exactly! Box A has the highest confidence (90%) and is kept. Box B (IoU 0.65) and Box C (IoU 0.75) both overlap with Box A above the threshold of 0.50, so both are suppressed (deleted). Next: let's learn how we select NMS thresholds!"
+        }
+      ]
+    }
+  ]
+}

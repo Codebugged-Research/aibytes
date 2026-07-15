@@ -1,0 +1,222 @@
+{
+  "id": "u158-l3",
+  "unit": 158,
+  "day": 793,
+  "tier": "DeepLab and ASPP",
+  "tierIcon": "🪐",
+  "title": "Refining with CRFs",
+  "icon": "🪐",
+  "concept": "Conditional Random Fields (CRFs) are post-processing steps used in early DeepLab models to sharpen boundaries and align masks with image edges.",
+  "xp": 15,
+  "hearts": 3,
+  "estMinutes": 7,
+  "segments": [
+    {
+      "type": "warmup",
+      "exercises": [
+        {
+          "id": "w1",
+          "type": "multiple_choice",
+          "xp": 1,
+          "prompt": "Recap: What does ASPP stand for?",
+          "options": [
+            {
+              "id": "a",
+              "text": "Atrous Spatial Pyramid Pooling",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "Active Spatial Pixel Prediction",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "Asymmetric Parallel Pooling",
+              "correct": false
+            }
+          ],
+          "explain": "Correct! ASPP uses parallel dilated convolutions for multi-scale pooling."
+        }
+      ]
+    },
+    {
+      "type": "teach",
+      "cards": [
+        {
+          "kind": "hook",
+          "icon": "✂️",
+          "title": "Fuzzy edges",
+          "body": "Deep neural networks are great at recognizing objects, but because of downsampling, they are bad at finding exact edges. They output smooth, rounded boundaries that 'bleed' into the background. In early DeepLab versions, researchers fixed this by borrowing a classical probability technique to sharpen the edges."
+        },
+        {
+          "kind": "definition",
+          "icon": "🧪",
+          "title": "Conditional Random Field",
+          "body": "A <strong>Conditional Random Field</strong> (CRF) is a post-processing algorithm. It looks at the model's raw probability map and the original image pixels, grouping pixels with similar colors and positions to snap the mask boundaries to the actual edges."
+        },
+        {
+          "kind": "analogy",
+          "icon": "🧲",
+          "title": "Magnetic boundaries",
+          "body": "Imagine the model's output mask is a loose rubber band. A CRF acts like magnets placed along the sharp color changes in the original photo, pulling the rubber band to snap perfectly onto the edge of the object."
+        },
+        {
+          "kind": "example",
+          "icon": "🐕",
+          "title": "DeepLab v1 refinement",
+          "body": "A model segments a dog, but the mask overlaps into the background grass. The CRF compares pixel colors: grass is green, dog is brown. It shifts the mask boundary so all green pixels are background and brown are dog."
+        },
+        {
+          "kind": "mythbust",
+          "icon": "⚠️",
+          "title": "No longer mandatory",
+          "body": "You might think CRFs are always used in modern segmentation. Today, they are mostly obsolete! Upgraded architectures like DeepLab v3+ use advanced neural decoders that learn to output sharp borders, removing the need for slow CRF post-processing."
+        },
+        {
+          "kind": "visual",
+          "icon": "⚖️",
+          "title": "Before vs. After CRF",
+          "body": "How CRFs sharpen segmentation masks:",
+          "compare": {
+            "left": {
+              "emoji": "🔴",
+              "tag": "Raw DeepLab Output",
+              "text": "Rounded, blob-like boundaries<br>Mask bleeds into background<br>Low edge detail"
+            },
+            "right": {
+              "emoji": "🟢",
+              "tag": "After CRF Post-processing",
+              "text": "Sharp, crisp edges<br>Mask matches actual color boundaries<br>High spatial precision"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "type": "practice",
+      "exercises": [
+        {
+          "id": "p1",
+          "type": "multiple_choice",
+          "xp": 2,
+          "prompt": "What is the primary role of a Conditional Random Field (CRF) in segmentation?",
+          "options": [
+            {
+              "id": "a",
+              "text": "To refine and sharpen mask boundaries by comparing pixel colors and positions",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "To extract high-level feature maps from the backbone",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "To downsample the input image to save GPU memory",
+              "correct": false
+            },
+            {
+              "id": "d",
+              "text": "To replace the convolutional layers entirely",
+              "correct": false
+            }
+          ],
+          "explain": "Correct! CRFs align mask boundaries with the actual edges in the image."
+        },
+        {
+          "id": "p2",
+          "type": "true_false",
+          "xp": 2,
+          "prompt": "True or False: CRFs are trained using backpropagation alongside the neural network weights.",
+          "options": [
+            {
+              "id": "t",
+              "text": "True",
+              "correct": false
+            },
+            {
+              "id": "f",
+              "text": "False",
+              "correct": false
+            }
+          ],
+          "explain": "False. CRFs are typically applied as a separate post-processing step after the network runs."
+        },
+        {
+          "id": "p3",
+          "type": "fill_blank",
+          "xp": 2,
+          "prompt": "Complete the sentence:",
+          "sentence": "CRFs look at pixel ___ and positions to group pixels together.",
+          "blank": "colors",
+          "words": [
+            "colors",
+            "names",
+            "strides"
+          ],
+          "explain": "CRFs group pixels that are close together and have similar colors."
+        },
+        {
+          "id": "p4",
+          "type": "spot_the_ai",
+          "xp": 2,
+          "prompt": "Why are CRFs less common in modern (e.g. DeepLab v3+) segmentation pipelines?",
+          "options": [
+            {
+              "id": "a",
+              "text": "Modern neural decoders are good enough to output sharp borders without post-processing",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "CRFs are incompatible with modern GPUs",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "CRFs only work on grayscale medical scans",
+              "correct": false
+            }
+          ],
+          "explain": "Advanced decoders learn edge details, rendering CRFs obsolete and saving runtime latency."
+        }
+      ]
+    },
+    {
+      "type": "boss",
+      "exercises": [
+        {
+          "id": "b1",
+          "type": "multiple_choice",
+          "xp": 5,
+          "prompt": "You are deploying an older DeepLab model. The mask boundaries are blurry, but you cannot afford any extra post-processing time. Should you use a CRF?",
+          "options": [
+            {
+              "id": "a",
+              "text": "No — CRFs are computationally slow and add latency, which may violate real-time execution constraints.",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "Yes — because CRFs actually speed up model execution times.",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "Yes — because CRFs are mandatory for any neural network to run.",
+              "correct": false
+            },
+            {
+              "id": "d",
+              "text": "No — because CRFs only work on medical MRI scans.",
+              "correct": false
+            }
+          ],
+          "explain": "Exactly! CRFs are slow because they run a complex optimization algorithm on the CPU. For real-time applications, we prefer advanced neural decoders. Next: let's look at the evolution of DeepLab!"
+        }
+      ]
+    }
+  ]
+}

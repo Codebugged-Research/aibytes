@@ -1,0 +1,222 @@
+{
+  "id": "u182-l4",
+  "unit": 182,
+  "day": 914,
+  "tier": "Vision Transformers & Modern Approaches",
+  "tierIcon": "\ud83d\udc41\ufe0f",
+  "title": "MAE Representation Quality",
+  "icon": "\ud83d\udca1",
+  "concept": "High masking ratios force MAE to learn deep, robust semantic features rather than low-level pixel correlations, yielding high-quality transfer representations.",
+  "xp": 15,
+  "hearts": 3,
+  "estMinutes": 7,
+  "segments": [
+    {
+      "type": "warmup",
+      "exercises": [
+        {
+          "id": "w1",
+          "type": "multiple_choice",
+          "xp": 1,
+          "prompt": "Recap: Why is the MAE architecture called asymmetric?",
+          "options": [
+            {
+              "id": "a",
+              "text": "It uses a heavy encoder for visible patches and a lightweight decoder for all tokens.",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "It only processes rectangular images.",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "It ignores the classification head completely.",
+              "correct": false
+            }
+          ],
+          "explain": "Correct! The heavy encoder processes only a fraction of the sequence, making it highly efficient."
+        }
+      ]
+    },
+    {
+      "type": "teach",
+      "cards": [
+        {
+          "kind": "hook",
+          "icon": "\ud83d\udca1",
+          "title": "Forces to think",
+          "body": "If you give a student an easy exam, they don't study. If you give a model an easy puzzle (like hiding only 10% of pixels), it doesn't learn much. By hiding 75% of the image, we force the model to study the deeper structure of the visual world. Let's see what features this creates."
+        },
+        {
+          "kind": "definition",
+          "icon": "\ud83d\udca1",
+          "title": "Representation Quality",
+          "body": "<strong>Representation quality</strong> refers to how well the learned features capture semantic concepts. In MAE, the high masking ratio prevents shortcut learning, forcing the encoder to learn abstract representations of objects (like shapes, parts, and layouts) rather than local texture patterns."
+        },
+        {
+          "kind": "analogy",
+          "icon": "\ud83d\udcd6",
+          "title": "Reading a heavily redacted document",
+          "body": "Imagine reading a letter where 75% of the words are blacked out. If you only look at letter fragments, you are lost. To fill in the blanks, you must understand the grammar, context, and topic of the letter. MAE forces the encoder to learn visual grammar."
+        },
+        {
+          "kind": "example",
+          "icon": "\ud83d\udd2c",
+          "title": "Reconstructing a human face",
+          "body": "When pre-training on faces with 80% masking, the model might only see one eye and a chin. The decoder successfully reconstructs the nose, mouth, and second eye. This proves the model has learned the concept of 'face structure'!"
+        },
+        {
+          "kind": "mythbust",
+          "icon": "\u26a0\ufe0f",
+          "title": "Blurs are normal",
+          "body": "You might look at MAE reconstructions and think they look a bit blurry compared to GANs. This is normal! Since MSE loss averages potential pixel values, it outputs a blur. However, the *encoder* still learns crisp semantic features."
+        },
+        {
+          "kind": "visual",
+          "icon": "\u2696\ufe0f",
+          "title": "Low vs. High Mask Ratio Features",
+          "body": "How masking ratio affects feature depth:",
+          "compare": {
+            "left": {
+              "emoji": "\ud83e\udde9",
+              "tag": "Low Masking (15%)",
+              "text": "Model interpolates local pixels<br>Learns texture and edge shortcuts<br>Weak transfer representation"
+            },
+            "right": {
+              "emoji": "\ud83d\udca1",
+              "tag": "High Masking (75%)",
+              "text": "Model must infer entire objects<br>Learns shape and structure concepts<br>Strong transfer representation"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "type": "practice",
+      "exercises": [
+        {
+          "id": "p1",
+          "type": "multiple_choice",
+          "xp": 2,
+          "prompt": "Why does a high masking ratio force the encoder to learn semantic concepts?",
+          "explain": "Hiding most of the image blocks local shortcuts, forcing the model to understand the global layout of objects.",
+          "options": [
+            {
+              "id": "a",
+              "text": "It prevents the model from using simple local pixel interpolation as a shortcut to solve the puzzle",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "It forces the model to run only on CPUs",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "It disables position embeddings",
+              "correct": false
+            },
+            {
+              "id": "d",
+              "text": "It reduces the model parameter count to zero",
+              "correct": false
+            }
+          ]
+        },
+        {
+          "id": "p2",
+          "type": "true_false",
+          "xp": 2,
+          "prompt": "True or false: MAE reconstructions must look photolike and sharp to guarantee high-quality encoder features.",
+          "explain": "False. Reconstructions are often blurry due to MSE loss optimization, yet the encoder still learns excellent features.",
+          "options": [
+            {
+              "id": "t",
+              "text": "True",
+              "correct": false
+            },
+            {
+              "id": "f",
+              "text": "False",
+              "correct": true
+            }
+          ]
+        },
+        {
+          "id": "p3",
+          "type": "fill_blank",
+          "xp": 2,
+          "prompt": "Complete the sentence:",
+          "explain": "Visual grammar represents the semantic rules of how shapes, lighting, and objects fit together in 3D space.",
+          "sentence": "By forcing the model to infer missing structures, MAE teaches the encoder visual ___.",
+          "blank": "grammar",
+          "words": [
+            "grammar",
+            "pooling",
+            "dropout"
+          ]
+        },
+        {
+          "id": "p4",
+          "type": "spot_the_ai",
+          "xp": 2,
+          "prompt": "Which of these outputs proves a model has learned a high-quality semantic representation?",
+          "explain": "Inferring a complex shape (wheel) from a distant clue (windshield) requires high-level semantic understanding.",
+          "options": [
+            {
+              "id": "a",
+              "text": "Predicting the shape of a missing wheel on a car based on seeing only the windshield",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "Copying the gray color of a neighboring pixel directly into a blank slot",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "Outputting random noise values",
+              "correct": false
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "boss",
+      "exercises": [
+        {
+          "id": "b1",
+          "type": "multiple_choice",
+          "xp": 5,
+          "prompt": "How does MAE's pre-training task compare to contrastive learning (like MoCo)?",
+          "options": [
+            {
+              "id": "a",
+              "text": "MAE is a generative task reconstructing pixels, which doesn't require negative pairs. MoCo is a discriminative task comparing views, which requires negatives or normalization to prevent collapse.",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "MAE requires much larger batch sizes than MoCo.",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "MoCo ignores position embeddings while MAE does not.",
+              "correct": false
+            },
+            {
+              "id": "d",
+              "text": "MAE only runs on convolutional networks.",
+              "correct": false
+            }
+          ],
+          "explain": "Incredible! Generative tasks (like MAE) naturally avoid collapse because predicting exact pixels is highly constrained, whereas contrastive learning needs negatives to prevent collapse. Next: fine-tuning MAE for downstream tasks!"
+        }
+      ]
+    }
+  ]
+}

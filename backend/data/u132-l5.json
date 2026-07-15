@@ -1,0 +1,222 @@
+{
+  "id": "u132-l5",
+  "unit": 132,
+  "day": 665,
+  "tier": "Image Classification in Depth",
+  "tierIcon": "🏷️",
+  "title": "Single-Label Best Practices",
+  "icon": "⚖️",
+  "concept": "Best practices for single-label classification include matching Softmax with Cross-Entropy and monitoring class balance.",
+  "xp": 15,
+  "hearts": 3,
+  "estMinutes": 7,
+  "segments": [
+    {
+      "type": "warmup",
+      "exercises": [
+        {
+          "id": "w1",
+          "type": "multiple_choice",
+          "xp": 1,
+          "prompt": "Recap: What is the risk of using single-label classification on data where multiple categories co-occur?",
+          "options": [
+            {
+              "id": "a",
+              "text": "The model is forced to ignore valid classes and gets confused.",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "The learning rate becomes negative.",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "The validation set is deleted.",
+              "correct": false
+            }
+          ],
+          "explain": "Correct! Overlapping classes violate the single-label assumption, causing confusion during training."
+        }
+      ]
+    },
+    {
+      "type": "teach",
+      "cards": [
+        {
+          "kind": "hook",
+          "icon": "🛠️",
+          "title": "Standardizing the tools",
+          "body": "When building a house, standard building codes exist for a reason — they work. In deep learning, the combination of Softmax activation and Cross-Entropy loss is the gold standard for single-label classification."
+        },
+        {
+          "kind": "definition",
+          "icon": "⚖️",
+          "title": "The standard combination",
+          "body": "For <strong>single-label classification</strong>, you should always output raw logits from the final linear layer and feed them directly into a <strong>Cross-Entropy Loss</strong> function (which internally computes Softmax for numerical stability)."
+        },
+        {
+          "kind": "analogy",
+          "icon": "🧩",
+          "title": "Lock and key",
+          "body": "Softmax and Cross-Entropy fit together like a lock and key. Softmax shapes logits into probabilities, and Cross-Entropy calculates error based on those probabilities. They are designed to work together."
+        },
+        {
+          "kind": "example",
+          "icon": "💻",
+          "title": "PyTorch Implementation",
+          "body": "In PyTorch, the <code>nn.CrossEntropyLoss</code> class combines LogSoftmax and NLLLoss (Negative Log-Likelihood Loss) in a single class. This is mathematically more stable than running them separately."
+        },
+        {
+          "kind": "mythbust",
+          "icon": "⚠️",
+          "title": "Do not apply Softmax twice",
+          "body": "You might think you should put a Softmax layer at the end of your model definition, and then pass the output to your loss function. However, if your loss function (like PyTorch's) expects raw logits, applying Softmax twice will ruin your gradients!"
+        },
+        {
+          "kind": "visual",
+          "icon": "🏁",
+          "title": "Correct Pipeline Flow",
+          "body": "The standard pipeline for single-label classification:",
+          "compare": {
+            "left": {
+              "emoji": "🟢",
+              "tag": "Correct Setup",
+              "text": "Model -> Logits -> CrossEntropyLoss<br>Numerical stability preserved<br>Fast and correct gradients"
+            },
+            "right": {
+              "emoji": "🔴",
+              "tag": "Incorrect Setup",
+              "text": "Model -> Softmax -> CrossEntropyLoss<br>Calculations done twice<br>Underflow/overflow risks"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "type": "practice",
+      "exercises": [
+        {
+          "id": "p1",
+          "type": "multiple_choice",
+          "xp": 2,
+          "prompt": "Why do modern deep learning libraries (like PyTorch) combine Softmax and Cross-Entropy into a single loss function?",
+          "explain": "Combining them avoids calculating raw exponentials directly, which can lead to values too large or small for standard computer memory.",
+          "options": [
+            {
+              "id": "a",
+              "text": "For numerical stability to prevent underflow and overflow issues",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "To make the model run ten times faster",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "Because they are written in C++",
+              "correct": false
+            },
+            {
+              "id": "d",
+              "text": "To automatically augment the images",
+              "correct": false
+            }
+          ]
+        },
+        {
+          "id": "p2",
+          "type": "true_false",
+          "xp": 2,
+          "prompt": "True or false: You should add a Softmax activation layer at the very end of your model code if you are using PyTorch's nn.CrossEntropyLoss.",
+          "explain": "False. nn.CrossEntropyLoss expects raw logits, so adding a Softmax layer beforehand will result in incorrect loss computation.",
+          "options": [
+            {
+              "id": "t",
+              "text": "True",
+              "correct": false
+            },
+            {
+              "id": "f",
+              "text": "False",
+              "correct": true
+            }
+          ]
+        },
+        {
+          "id": "p3",
+          "type": "fill_blank",
+          "xp": 2,
+          "prompt": "Complete the sentence:",
+          "explain": "Logits are the raw, unnormalized outputs of the final linear layer.",
+          "sentence": "PyTorch's Cross-Entropy loss expects raw ___ as inputs from the model.",
+          "blank": "logits",
+          "words": [
+            "logits",
+            "probabilities",
+            "labels"
+          ]
+        },
+        {
+          "id": "p4",
+          "type": "spot_the_ai",
+          "xp": 2,
+          "prompt": "Which of these code blocks shows the correct setup for a single-label classification loss in PyTorch?",
+          "explain": "nn.CrossEntropyLoss applied directly to logits and targets is the correct standard setup.",
+          "options": [
+            {
+              "id": "a",
+              "text": "loss_fn = nn.CrossEntropyLoss(); loss = loss_fn(logits, targets)",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "probs = softmax(logits); loss = mse_loss(probs, targets)",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "loss = binary_cross_entropy(logits, targets)",
+              "correct": false
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "boss",
+      "exercises": [
+        {
+          "id": "b1",
+          "type": "multiple_choice",
+          "xp": 5,
+          "prompt": "A junior developer complains that their image classification model is training slowly and the gradients occasionally become 'NaN' (not a number). You look at their code and see: output = Softmax(model(x)) followed by loss = CrossEntropyLoss(output, y). What is your diagnosis?",
+          "options": [
+            {
+              "id": "a",
+              "text": "They applied Softmax twice, causing log(0) numerical underflow inside the loss function. They should remove the Softmax layer from the model output.",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "The learning rate is too low, so they need to increase it.",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "The model has too many layers, and they should switch to LeNet.",
+              "correct": false
+            },
+            {
+              "id": "d",
+              "text": "The dataset is corrupt, and they need to re-download it.",
+              "correct": false
+            }
+          ],
+          "explain": "Exactly! nn.CrossEntropyLoss computes log-softmax internally. By passing it probabilities (from their manual Softmax), the loss function took logs of small numbers near 0, leading to -infinity or NaN values. Removing the manual Softmax layer solves it! Fantastic job completing the Single-Label Classification unit!"
+        }
+      ]
+    }
+  ]
+}

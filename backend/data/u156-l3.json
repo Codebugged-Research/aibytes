@@ -1,0 +1,222 @@
+{
+  "id": "u156-l3",
+  "unit": 156,
+  "day": 783,
+  "tier": "U-Net Architecture",
+  "tierIcon": "🧬",
+  "title": "U-Net Skip Connections",
+  "icon": "🧬",
+  "concept": "U-Net skip connections copy high-resolution features from the contracting path and concatenate them with the expanding path.",
+  "xp": 15,
+  "hearts": 3,
+  "estMinutes": 7,
+  "segments": [
+    {
+      "type": "warmup",
+      "exercises": [
+        {
+          "id": "w1",
+          "type": "multiple_choice",
+          "xp": 1,
+          "prompt": "Recap: What is the main function of the expanding path in U-Net?",
+          "options": [
+            {
+              "id": "a",
+              "text": "To upsample features back to the original image size",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "To downsample the input to extract context",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "To flatten the network into a dense classifier",
+              "correct": false
+            }
+          ],
+          "explain": "Correct! The expanding path upsamples the features."
+        }
+      ]
+    },
+    {
+      "type": "teach",
+      "cards": [
+        {
+          "kind": "hook",
+          "icon": "🦿",
+          "title": "Bridging the U",
+          "body": "The left and right sides of the U-Net are symmetric. This symmetry is the secret to its success. We can draw horizontal lines across the U, copying high-resolution spatial maps from the encoder and pasting them directly into the decoder. Let's see why this is so powerful."
+        },
+        {
+          "kind": "definition",
+          "icon": "🔗",
+          "title": "U-Net Skip Connections",
+          "body": "In U-Net, <strong>Skip Connections</strong> copy the feature maps from a block in the contracting path, crop them if needed, and **concatenate** (append) them along the channel dimension with the corresponding block in the expanding path."
+        },
+        {
+          "kind": "analogy",
+          "icon": "📋",
+          "title": "Copy-paste helper",
+          "body": "Imagine you are drawing a complex drawing. Instead of drawing it from memory, you copy the detailed outline you drew earlier (encoder) and paste it directly onto your new canvas (decoder) to keep your lines clean."
+        },
+        {
+          "kind": "example",
+          "icon": "📐",
+          "title": "Concatenation math",
+          "body": "A decoder block upsamples to a shape of 32x32 with 128 channels. The skip connection copies the 32x32 feature map with 128 channels from the encoder. We concatenate them to get 32x32 with 256 channels."
+        },
+        {
+          "kind": "mythbust",
+          "icon": "⚠️",
+          "title": "Addition vs. Concatenation",
+          "body": "In ResNet, skip connections **add** feature maps together. In U-Net, skip connections **concatenate** (stack) them. This preserves both the raw spatial edges and the deep semantic features as separate channels for the next conv layer."
+        },
+        {
+          "kind": "visual",
+          "icon": "⚖️",
+          "title": "U-Net Concatenation",
+          "body": "Stacking encoder and decoder features:",
+          "compare": {
+            "left": {
+              "emoji": "⬇️",
+              "tag": "Encoder Feature Map",
+              "text": "128 channels of sharp spatial details (e.g., borders)"
+            },
+            "right": {
+              "emoji": "🔗",
+              "tag": "Concatenated Map (256 channels)",
+              "text": "128 channels (Encoder) + 128 channels (Decoder) stacked side-by-side"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "type": "practice",
+      "exercises": [
+        {
+          "id": "p1",
+          "type": "multiple_choice",
+          "xp": 2,
+          "prompt": "How are encoder and decoder features combined in U-Net skip connections?",
+          "options": [
+            {
+              "id": "a",
+              "text": "They are concatenated along the channel dimension",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "They are added together element-wise",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "They are multiplied together",
+              "correct": false
+            },
+            {
+              "id": "d",
+              "text": "They are averaged together",
+              "correct": false
+            }
+          ],
+          "explain": "Correct! U-Net stacks them side-by-side rather than adding them."
+        },
+        {
+          "id": "p2",
+          "type": "true_false",
+          "xp": 2,
+          "prompt": "True or False: U-Net skip connections require features to be the same spatial resolution before merging.",
+          "options": [
+            {
+              "id": "t",
+              "text": "True",
+              "correct": false
+            },
+            {
+              "id": "f",
+              "text": "False",
+              "correct": false
+            }
+          ],
+          "explain": "True. The feature maps must match in width and height to be concatenated."
+        },
+        {
+          "id": "p3",
+          "type": "fill_blank",
+          "xp": 2,
+          "prompt": "Complete the sentence:",
+          "sentence": "Unlike ResNet which adds features, U-Net ___ them along the channel axis.",
+          "blank": "concatenates",
+          "words": [
+            "concatenates",
+            "adds",
+            "subtracts"
+          ],
+          "explain": "U-Net concatenates features to keep spatial and semantic info separate."
+        },
+        {
+          "id": "p4",
+          "type": "spot_the_ai",
+          "xp": 2,
+          "prompt": "What detail does a U-Net skip connection help the decoder preserve?",
+          "options": [
+            {
+              "id": "a",
+              "text": "High-frequency spatial boundaries and edges",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "Global batch normalization variables",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "The learning rate scheduler plateau",
+              "correct": false
+            }
+          ],
+          "explain": "It sends sharp borders directly to the decoder."
+        }
+      ]
+    },
+    {
+      "type": "boss",
+      "exercises": [
+        {
+          "id": "b1",
+          "type": "multiple_choice",
+          "xp": 5,
+          "prompt": "If we remove all skip connections from a U-Net, what happens to the output masks?",
+          "options": [
+            {
+              "id": "a",
+              "text": "They will look very blurry and lose the exact borders of the objects.",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "The network will run much slower and consume more memory.",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "The output masks will become perfectly sharp.",
+              "correct": false
+            },
+            {
+              "id": "d",
+              "text": "The network will only output bounding boxes instead of masks.",
+              "correct": false
+            }
+          ],
+          "explain": "Exactly! Without the skip connections, the decoder has to reconstruct borders purely from the low-resolution bottleneck, resulting in fuzzy, blobby masks. Next: where is U-Net used?"
+        }
+      ]
+    }
+  ]
+}

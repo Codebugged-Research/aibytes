@@ -1,0 +1,222 @@
+{
+  "id": "u151-l2",
+  "unit": 151,
+  "day": 757,
+  "tier": "Modern Object Detection",
+  "tierIcon": "🎯",
+  "title": "FPN Architecture",
+  "icon": "🪜",
+  "concept": "FPN combines bottom-up feature extraction with a top-down upsampling pathway, linked by lateral 1x1 convolutions.",
+  "xp": 15,
+  "hearts": 3,
+  "estMinutes": 7,
+  "segments": [
+    {
+      "type": "warmup",
+      "exercises": [
+        {
+          "id": "w2",
+          "type": "multiple_choice",
+          "xp": 1,
+          "prompt": "Recap: What is the main limitation of early CNN layers for object detection?",
+          "options": [
+            {
+              "id": "a",
+              "text": "They contain fine details but lack the semantic context to classify objects",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "They are too slow to calculate on GPU",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "They only output binary coordinates",
+              "correct": false
+            }
+          ],
+          "explain": "Correct! Early layers capture raw edges and textures but lack the high-level semantic meaning needed for classification."
+        }
+      ]
+    },
+    {
+      "type": "teach",
+      "cards": [
+        {
+          "kind": "hook",
+          "icon": "🪜",
+          "title": "The Feature Bridge",
+          "body": "How can we build a network that combines the big-picture view with fine spatial details? A Feature Pyramid Network (FPN) does this by building a bridge between early and deep layers. Let's look at its architecture."
+        },
+        {
+          "kind": "definition",
+          "icon": "🪜",
+          "title": "FPN Architecture",
+          "body": "A <strong>Feature Pyramid Network</strong> (FPN) consists of three components: a <strong>bottom-up pathway</strong> (standard CNN backbone), a <strong>top-down pathway</strong> (upsampling semantic features), and <strong>lateral connections</strong> that merge them at every resolution scale."
+        },
+        {
+          "kind": "analogy",
+          "icon": "🪜",
+          "title": "The Double-Sided Ladder",
+          "body": "Think of FPN like a double-sided ladder. One side goes up (bottom-up: extracting features and shrinking size). The other side goes down (top-down: upsampling semantics). Horizontal rungs (lateral connections) connect the two sides to keep features aligned."
+        },
+        {
+          "kind": "example",
+          "icon": "🪜",
+          "title": "Lateral Merging",
+          "body": "FPN takes ResNet's deep 7x7 feature map. It upsamples it to 14x14 to match an earlier layer. It passes the earlier 14x14 layer through a 1x1 convolution (lateral connection) to align channels, and merges them using element-wise addition."
+        },
+        {
+          "kind": "mythbust",
+          "icon": "⚠️",
+          "title": "Simple Pixel Copying?",
+          "body": "You might think lateral connections just copy raw pixels. Fact: Lateral connections use 1x1 convolutions to perform dimension reduction on early features, matching channel depth so they can be merged cleanly with upsampled features."
+        },
+        {
+          "kind": "visual",
+          "icon": "🪜",
+          "title": "FPN Pathway Flow",
+          "body": "How FPN structures information flow:",
+          "compare": {
+            "left": {
+              "emoji": "🏭",
+              "tag": "Bottom-Up & Lateral",
+              "text": "Backbone extracts spatial features<br>Lateral 1x1 conv adjusts channels<br>Preserves clean coordinates"
+            },
+            "right": {
+              "emoji": "🗼",
+              "tag": "Top-Down & Merge",
+              "text": "Upsamples deep semantic maps<br>Adds them to lateral features<br>Outputs multi-scale pyramid"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "type": "practice",
+      "exercises": [
+        {
+          "id": "p1",
+          "type": "multiple_choice",
+          "xp": 2,
+          "prompt": "What are the three core pathways in a Feature Pyramid Network?",
+          "options": [
+            {
+              "id": "a",
+              "text": "Bottom-up pathway, top-down pathway, and lateral connections",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "Input pathway, activation pathway, and dropout connections",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "Forward pathway, backward pathway, and pooling connections",
+              "correct": false
+            },
+            {
+              "id": "d",
+              "text": "Convolution pathway, batchnorm pathway, and residual connections",
+              "correct": false
+            }
+          ],
+          "explain": "Correct! FPN uses bottom-up, top-down, and lateral connections to form the pyramid."
+        },
+        {
+          "id": "p2",
+          "type": "true_false",
+          "xp": 2,
+          "prompt": "True or False: Lateral connections in FPN use 1x1 convolutions to match the channel dimensions of the bottom-up and top-down feature maps.",
+          "options": [
+            {
+              "id": "t",
+              "text": "True",
+              "correct": true
+            },
+            {
+              "id": "f",
+              "text": "False",
+              "correct": false
+            }
+          ],
+          "explain": "True. 1x1 convolutions align the channel sizes so the feature maps can be added together element-wise."
+        },
+        {
+          "id": "p3",
+          "type": "fill_blank",
+          "xp": 2,
+          "prompt": "Complete the sentence:",
+          "sentence": "FPN merges high-level semantics with low-level details by ___ deep feature maps to match earlier sizes.",
+          "blank": "upsampling",
+          "words": [
+            "upsampling",
+            "pooling",
+            "flattening"
+          ],
+          "explain": "Upsampling (or bilinear interpolation) increases the resolution of deep features to match early features."
+        },
+        {
+          "id": "p4",
+          "type": "spot_the_ai",
+          "xp": 2,
+          "prompt": "What is the function of the top-down pathway in FPN?",
+          "options": [
+            {
+              "id": "a",
+              "text": "To pass high-level semantic information down to higher-resolution layers",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "To scale down the input image resolution",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "To classify the background pixels of the image",
+              "correct": false
+            }
+          ],
+          "explain": "Correct! The top-down pathway upsamples deep semantic features to share context with earlier, detailed layers."
+        }
+      ]
+    },
+    {
+      "type": "boss",
+      "exercises": [
+        {
+          "id": "b1",
+          "type": "multiple_choice",
+          "xp": 5,
+          "prompt": "You are looking at an FPN diagram. You notice that features from ResNet are passed through a 1x1 convolution before being added to the upsampled top-down features. Why is this 1x1 convolution necessary?",
+          "options": [
+            {
+              "id": "a",
+              "text": "It reduces the number of channels of the ResNet feature map to match the channel count of the upsampled features exactly.",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "It performs max pooling to shrink the image.",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "It changes the image from RGB to grayscale.",
+              "correct": false
+            },
+            {
+              "id": "d",
+              "text": "It calculates the loss value.",
+              "correct": false
+            }
+          ],
+          "explain": "Exactly! The 1x1 convolution acts as a channel bridge, ensuring different layers have compatible dimensions before merging. Phase 8: Modern Object Detection is complete. Next up: Image Segmentation."
+        }
+      ]
+    }
+  ]
+}

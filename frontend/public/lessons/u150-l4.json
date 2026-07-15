@@ -1,0 +1,222 @@
+{
+  "id": "u150-l4",
+  "unit": 150,
+  "day": 754,
+  "tier": "Modern Object Detection",
+  "tierIcon": "🎯",
+  "title": "FCOS (Fully Convolutional One-Stage)",
+  "icon": "📏",
+  "concept": "FCOS predicts boundary offsets directly from pixels inside objects, using a centerness branch to filter out low-quality predictions.",
+  "xp": 15,
+  "hearts": 3,
+  "estMinutes": 7,
+  "segments": [
+    {
+      "type": "warmup",
+      "exercises": [
+        {
+          "id": "w4",
+          "type": "multiple_choice",
+          "xp": 1,
+          "prompt": "Recap: What is the main advantage of CenterNet over CornerNet?",
+          "options": [
+            {
+              "id": "a",
+              "text": "It eliminates the keypoint matching step, making detection simpler and faster",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "It does not use convolutional layers",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "It runs without using training data",
+              "correct": false
+            }
+          ],
+          "explain": "Correct! Representing objects by a single center point removes the need to group separate keypoints."
+        }
+      ]
+    },
+    {
+      "type": "teach",
+      "cards": [
+        {
+          "kind": "hook",
+          "icon": "🚶",
+          "title": "Pixel-Level Boundaries",
+          "body": "What if we could solve object detection the exact same way we solve semantic segmentation? Instead of predicting boxes from grid cells or center points, can we just make a boundary prediction for every single pixel inside the object?"
+        },
+        {
+          "kind": "definition",
+          "icon": "📏",
+          "title": "FCOS Detector",
+          "body": "<strong>FCOS</strong> (Fully Convolutional One-Stage) is a pixel-level anchor-free detector. For every pixel inside an object, it predicts <strong>4 offsets</strong> (left, right, top, bottom) to the object's boundaries, and uses a <strong>centerness</strong> branch to filter out bad boxes near borders."
+        },
+        {
+          "kind": "analogy",
+          "icon": "📏",
+          "title": "Standing in a Room",
+          "body": "Imagine standing inside a room. To map the room, you measure the distance from where you stand to the left wall, right wall, front wall, and back wall. That is FCOS! Every pixel inside the object's boundaries acts like a person measuring wall distances."
+        },
+        {
+          "kind": "example",
+          "icon": "🚕",
+          "title": "Pixel Regression",
+          "body": "A pixel on a car door predicts: distance to top of car = 20px, bottom = 30px, left = 80px, right = 40px. The model uses these 4 offsets to draw the box. Since many pixels do this, we get multiple boxes, which are then filtered."
+        },
+        {
+          "kind": "mythbust",
+          "icon": "⚠️",
+          "title": "Edge Pixel Noise",
+          "body": "You might think pixels near the outer edge of an object make bad predictions. Fact: FCOS solves this with its 'centerness' branch, which down-weights predictions from pixels far from the true object center, keeping outputs clean."
+        },
+        {
+          "kind": "visual",
+          "icon": "⚖️",
+          "title": "FCOS Outputs",
+          "body": "How FCOS balances boundary regression and quality:",
+          "compare": {
+            "left": {
+              "emoji": "📏",
+              "tag": "Boundary Regression",
+              "text": "Predicts offsets (l, r, t, b) from pixel<br>Runs on all pixels inside object<br>No anchor constraints"
+            },
+            "right": {
+              "emoji": "🎯",
+              "tag": "Centerness Prediction",
+              "text": "Measures how close pixel is to center<br>Suppresses low-quality border boxes<br>Keeps predictions stable"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "type": "practice",
+      "exercises": [
+        {
+          "id": "p1",
+          "type": "multiple_choice",
+          "xp": 2,
+          "prompt": "What four values does FCOS regress for each pixel inside an object?",
+          "options": [
+            {
+              "id": "a",
+              "text": "Distances to the left, right, top, and bottom boundaries of the object",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "The coordinates of the top-left and bottom-right corners",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "The RGB color values of the four outer corners",
+              "correct": false
+            },
+            {
+              "id": "d",
+              "text": "The center point and radius of the object",
+              "correct": false
+            }
+          ],
+          "explain": "Correct! FCOS predicts distances (l, r, t, b) to the object boundaries from the current pixel."
+        },
+        {
+          "id": "p2",
+          "type": "true_false",
+          "xp": 2,
+          "prompt": "True or False: The 'centerness' branch in FCOS is designed to down-weight low-quality bounding boxes predicted by pixels near the borders of objects.",
+          "options": [
+            {
+              "id": "t",
+              "text": "True",
+              "correct": true
+            },
+            {
+              "id": "f",
+              "text": "False",
+              "correct": false
+            }
+          ],
+          "explain": "True. Centerness ensures that only pixels close to the center of the object contribute strongly to the final output."
+        },
+        {
+          "id": "p3",
+          "type": "fill_blank",
+          "xp": 2,
+          "prompt": "Complete the sentence:",
+          "sentence": "FCOS is a fully ___ one-stage object detector that works at the pixel level.",
+          "blank": "convolutional",
+          "words": [
+            "convolutional",
+            "connected",
+            "recurrent"
+          ],
+          "explain": "FCOS stands for Fully Convolutional One-Stage object detector."
+        },
+        {
+          "id": "p4",
+          "type": "spot_the_ai",
+          "xp": 2,
+          "prompt": "How does FCOS determine which pixels are responsible for predicting an object?",
+          "options": [
+            {
+              "id": "a",
+              "text": "Any pixel that falls inside the ground-truth bounding box of the object",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "Only the exact center pixel of the image",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "Only the pixels on the outer border of the object",
+              "correct": false
+            }
+          ],
+          "explain": "Correct! FCOS trains all pixels inside the object's bounding box to regress the boundary distances."
+        }
+      ]
+    },
+    {
+      "type": "boss",
+      "exercises": [
+        {
+          "id": "b1",
+          "type": "multiple_choice",
+          "xp": 5,
+          "prompt": "You are running FCOS to detect trucks. A pixel near the very outer edge of a truck tail-light predicts a bounding box, but its prediction is ignored in the final output. Why?",
+          "options": [
+            {
+              "id": "a",
+              "text": "Its predicted 'centerness' score was extremely low because the pixel is near the border, so the model suppressed the box.",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "FCOS cannot detect tail-lights.",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "The pixel coordinate was negative.",
+              "correct": false
+            },
+            {
+              "id": "d",
+              "text": "NMS deleted it because of high loss.",
+              "correct": false
+            }
+          ],
+          "explain": "Exactly! The centerness branch suppresses low-quality boxes predicted by border pixels to keep detections clean."
+        }
+      ]
+    }
+  ]
+}

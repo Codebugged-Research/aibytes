@@ -1,0 +1,222 @@
+{
+  "id": "u166-l3",
+  "unit": 166,
+  "day": 833,
+  "tier": "Advanced Vision Applications",
+  "tierIcon": "👁️",
+  "title": "Text Recognition: CRNN & CTC Loss",
+  "icon": "⛓️",
+  "concept": "CRNNs combine CNNs for visual features and RNNs for sequence modeling, using Connectionist Temporal Classification (CTC) loss to align outputs without character-level cropping.",
+  "xp": 15,
+  "hearts": 3,
+  "estMinutes": 7,
+  "segments": [
+    {
+      "type": "warmup",
+      "exercises": [
+        {
+          "id": "w1",
+          "type": "multiple_choice",
+          "xp": 1,
+          "prompt": "Recap: What is the main difference between EAST and CRAFT?",
+          "options": [
+            {
+              "id": "a",
+              "text": "EAST outputs word-level boxes; CRAFT outputs character-level affinity maps.",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "EAST is only for handwriting; CRAFT is for printed text.",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "EAST uses recurrent layers; CRAFT does not.",
+              "correct": false
+            }
+          ],
+          "explain": "Correct! EAST detects words as bounding boxes, while CRAFT maps individual characters and connects them."
+        }
+      ]
+    },
+    {
+      "type": "teach",
+      "cards": [
+        {
+          "kind": "hook",
+          "icon": "🧠",
+          "title": "Reading without slicing",
+          "body": "Once you have cropped a word image (like 'apple'), how does the network read it? You might think we need to cut the image into five neat boxes (one for each letter) and run a classifier on each. But letters in cursive overlap, and space spacing varies. We need a model that reads the word as a continuous sequence."
+        },
+        {
+          "kind": "definition",
+          "icon": "🧠",
+          "title": "CRNN & CTC Loss",
+          "body": "A <strong>CRNN</strong> (Convolutional Recurrent Neural Network) combines a <strong>CNN</strong> (to extract visual feature sequences from a cropped text strip) and an <strong>RNN/LSTM</strong> (to model the order of letters). It uses <strong>CTC Loss</strong> (Connectionist Temporal Classification) to align the network's predictions with the true label, handling variable spacing and repeat characters."
+        },
+        {
+          "kind": "analogy",
+          "icon": "🎞️",
+          "title": "Scanning barcode lines",
+          "body": "Think of a CRNN like a supermarket barcode scanner. The scanner sweeps a laser across the barcode horizontally. It doesn't cut the barcode into separate lines; it reads the continuous sequence of dark and light stripes as it scans, outputting the barcode digits."
+        },
+        {
+          "kind": "example",
+          "icon": "💳",
+          "title": "Mobile credit card scanner",
+          "body": "When you scan your credit card with an app, a CNN extracts feature slices along the card numbers, an LSTM decodes the digit sequence, and CTC loss translates the raw predictions (like `5-5---2-2` to `52`) into your card number."
+        },
+        {
+          "kind": "mythbust",
+          "icon": "⚠️",
+          "title": "No manual segmentation needed",
+          "body": "A common myth is that OCR models must crop every single letter to classify it. Thanks to CTC loss, modern models train on whole-word images directly, automatically aligning letters without any human-labeled letter boundaries."
+        },
+        {
+          "kind": "visual",
+          "icon": "⚖️",
+          "title": "The CRNN Pipeline",
+          "body": "How an image of a word is converted to text:",
+          "compare": {
+            "left": {
+              "emoji": "🖼️",
+              "tag": "Visual Feature Slicing",
+              "text": "1. Input image: 'cat'<br>2. CNN extracts vertical slices<br>3. LSTM predicts slice characters"
+            },
+            "right": {
+              "emoji": "🔤",
+              "tag": "CTC Alignment",
+              "text": "4. Raw output: 'c-a--t'<br>5. Collapses repeats and blanks<br>6. Final string: 'cat'"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "type": "practice",
+      "exercises": [
+        {
+          "id": "p1",
+          "type": "multiple_choice",
+          "xp": 2,
+          "prompt": "What does Connectionist Temporal Classification (CTC) loss do in text recognition?",
+          "options": [
+            {
+              "id": "a",
+              "text": "It aligns raw sequence outputs to the true labels, handling variable letter spacing without character crops",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "It calculates the bounding box coordinates of the entire page",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "It calculates the Gram matrix to copy artistic styles",
+              "correct": false
+            },
+            {
+              "id": "d",
+              "text": "It converts color images to grayscale",
+              "correct": false
+            }
+          ],
+          "explain": "CTC loss enables training sequence models on full-word crops by mapping raw predictions (with blanks and repeats) to target labels."
+        },
+        {
+          "id": "p2",
+          "type": "true_false",
+          "xp": 2,
+          "prompt": "True or False: To train a CRNN model, human annotators must label the exact pixel boundaries of every single letter in the training set.",
+          "options": [
+            {
+              "id": "t",
+              "text": "True",
+              "correct": false
+            },
+            {
+              "id": "f",
+              "text": "False",
+              "correct": true
+            }
+          ],
+          "explain": "False. CTC loss aligns the output sequence automatically, meaning only the full word text label (e.g. 'cat') is required."
+        },
+        {
+          "id": "p3",
+          "type": "fill_blank",
+          "xp": 2,
+          "prompt": "Complete the sentence:",
+          "sentence": "CRNN architectures combine a CNN for visual features and an ___ for sequence decoding.",
+          "blank": "RNN",
+          "words": [
+            "RNN",
+            "SVM",
+            "ANN"
+          ],
+          "explain": "The recurrent neural network (RNN, typically LSTM) models the sequential transitions of letters."
+        },
+        {
+          "id": "p4",
+          "type": "spot_the_ai",
+          "xp": 2,
+          "prompt": "Which of these describes the final step of CTC sequence decoding?",
+          "options": [
+            {
+              "id": "a",
+              "text": "Collapsing repeating characters and removing blank tokens (e.g., 'a--p-p-l-e' -> 'apple')",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "Applying an affine transformation to rotate the page",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "Comparing embeddings using cosine similarity",
+              "correct": false
+            }
+          ],
+          "explain": "CTC decoding merges adjacent duplicate predictions and removes dummy blank tokens to build the final text string."
+        }
+      ]
+    },
+    {
+      "type": "boss",
+      "exercises": [
+        {
+          "id": "b1",
+          "type": "multiple_choice",
+          "xp": 5,
+          "prompt": "You are building a license plate scanner. The distance between letters changes depending on the vehicle speed, creating stretched or compressed letters. How should you design the text recognition model?",
+          "options": [
+            {
+              "id": "a",
+              "text": "Use a CRNN trained with CTC loss, which can handle sequence alignment and variable character spacing naturally.",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "Crop every letter manually into 10x10 pixel squares and classify them in isolation.",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "Use simple template matching, hoping characters are always identical.",
+              "correct": false
+            },
+            {
+              "id": "d",
+              "text": "Disable the recurrent layers and use linear regression on pixel values.",
+              "correct": false
+            }
+          ],
+          "explain": "Exactly! The combination of recurrent sequence modeling and CTC loss allows CRNNs to handle variable spacing and speed-induced distortion easily. Outstanding! Next: modern OCR using attention and transformers."
+        }
+      ]
+    }
+  ]
+}

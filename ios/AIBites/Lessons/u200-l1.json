@@ -1,0 +1,222 @@
+{
+  "id": "u200-l1",
+  "unit": 200,
+  "day": 1001,
+  "tier": "Computer Vision Capstone",
+  "tierIcon": "🎓",
+  "title": "Designing Systems at Scale",
+  "icon": "☁️",
+  "concept": "Scaling computer vision in production requires separating image ingestion, model inference, and output storage using a microservice architecture.",
+  "xp": 15,
+  "hearts": 3,
+  "estMinutes": 7,
+  "segments": [
+    {
+      "type": "warmup",
+      "exercises": [
+        {
+          "id": "w1",
+          "type": "multiple_choice",
+          "xp": 1,
+          "prompt": "Recap: What is the purpose of a model card?",
+          "options": [
+            {
+              "id": "a",
+              "text": "To document data sources, limitations, biases, and intended use cases",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "To run model layers 10 times faster on edge devices",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "To convert the model weights to 8-bit integers",
+              "correct": false
+            }
+          ],
+          "explain": "Model cards describe a model's building blocks, performance metrics, and ethical boundaries."
+        }
+      ]
+    },
+    {
+      "type": "teach",
+      "cards": [
+        {
+          "kind": "hook",
+          "title": "Handling millions of streams",
+          "body": "Imagine you are building a security app for a city with 10,000 traffic cameras. If all cameras upload video to a single program, the server will crash instantly. To handle this, we must build a scalable architecture that divides the work among specialized services.",
+          "icon": "☁️"
+        },
+        {
+          "kind": "definition",
+          "title": "Scalable Vision Architectures",
+          "body": "A scalable system uses a <strong>microservice architecture</strong>. Instead of one monolithic program, it separates tasks into: <strong>Ingestion API</strong> (receives images), <strong>Message Queue</strong> (buffers incoming requests), and <strong>Inference Worker</strong> (runs the optimized model).",
+          "icon": "🎓"
+        },
+        {
+          "kind": "analogy",
+          "title": "A busy restaurant kitchen",
+          "body": "If one waiter took the order, walked to the kitchen, cooked the steak, washed the dishes, and delivered the food, the restaurant would serve three tables a night. Scaling is dividing tasks: host greets (ingestion), ticket rack holds order slips (message queue), and cooks make food (inference workers).",
+          "icon": "🧠"
+        },
+        {
+          "kind": "example",
+          "title": "Decoupling with RabbitMQ",
+          "body": "An online retail site processes user-uploaded photos. They place a RabbitMQ queue between the web server and the GPU nodes. If upload traffic spikes, the queue holds the images safely, preventing the GPU workers from running out of memory.",
+          "icon": "🔍"
+        },
+        {
+          "kind": "mythbust",
+          "title": "Bigger GPUs don't solve scaling bottlenecks",
+          "body": "You might think scaling is just about buying the most expensive NVIDIA GPU. In reality, if your network server gets congested decoding images or querying database entries, your fast GPU will sit idle, waiting for data. You must scale the system, not just the math.",
+          "icon": "⚠️"
+        },
+        {
+          "kind": "visual",
+          "title": "Monolithic vs. Microservice Vision",
+          "body": "Designing for high system load:",
+          "icon": "☁️",
+          "compare": {
+            "left": {
+              "emoji": "📦",
+              "tag": "Monolithic System",
+              "text": "One program does everything<br>Image upload -> GPU -> Save DB<br>Single point of failure<br>Impossible to scale parts"
+            },
+            "right": {
+              "emoji": "☁️",
+              "tag": "Microservice System",
+              "text": "Separated service modules<br>Message queue buffers load<br>Scales GPU workers dynamically<br>Fault-tolerant architecture"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "type": "practice",
+      "exercises": [
+        {
+          "id": "p1",
+          "type": "multiple_choice",
+          "xp": 2,
+          "prompt": "Which architecture pattern splits a vision system into separate, independent services for image ingestion, queues, and inference?",
+          "options": [
+            {
+              "id": "a",
+              "text": "Microservice architecture",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "Monolithic architecture",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "Model graph fusion",
+              "correct": false
+            },
+            {
+              "id": "d",
+              "text": "Post-training quantization",
+              "correct": false
+            }
+          ],
+          "explain": "Microservices split tasks into modular, independent services that scale separately."
+        },
+        {
+          "id": "p2",
+          "type": "true_false",
+          "xp": 2,
+          "prompt": "True or False: Using a message queue (like RabbitMQ or Kafka) helps absorb sudden spikes in user image uploads without crashing the GPU inference workers.",
+          "options": [
+            {
+              "id": "t",
+              "text": "True",
+              "correct": true
+            },
+            {
+              "id": "f",
+              "text": "False",
+              "correct": false
+            }
+          ],
+          "explain": "True. Message queues act as shock absorbers, buffering incoming frames so inference workers can process them at a steady speed."
+        },
+        {
+          "id": "p3",
+          "type": "fill_blank",
+          "xp": 2,
+          "prompt": "Complete the sentence:",
+          "sentence": "If your GPU workers sit idle because network decoders cannot load images fast enough, your system has a data ___.",
+          "blank": "bottleneck",
+          "words": [
+            "bottleneck",
+            "quantization",
+            "perturbation"
+          ],
+          "explain": "A bottleneck is any step in the pipeline that slows down subsequent steps."
+        },
+        {
+          "id": "p4",
+          "type": "spot_the_ai",
+          "xp": 2,
+          "prompt": "Why is microservice decoupling beneficial for a production video analytics tool?",
+          "options": [
+            {
+              "id": "a",
+              "text": "If the web interface crashes, the camera ingestion and model workers keep running",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "It automatically increases model accuracy by 5%",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "It eliminates the need for edge deployment",
+              "correct": false
+            }
+          ],
+          "explain": "Decoupling prevents a failure in one module (like user interface) from bringing down critical background operations."
+        }
+      ]
+    },
+    {
+      "type": "boss",
+      "exercises": [
+        {
+          "id": "b1",
+          "type": "multiple_choice",
+          "xp": 5,
+          "prompt": "You are building a cloud-based security platform that analyzes camera streams. Traffic is low during the night but high during the day. What is the most cost-effective architecture?",
+          "options": [
+            {
+              "id": "a",
+              "text": "Use a message queue to buffer frames, and configure auto-scaling to launch more GPU inference workers when the queue size grows.",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "Keep 100 high-power GPU servers running 24/7 regardless of traffic.",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "Delete all night-time video streams without processing them.",
+              "correct": false
+            },
+            {
+              "id": "d",
+              "text": "Train the model on the CPU to avoid using GPUs entirely.",
+              "correct": false
+            }
+          ],
+          "explain": "Combining message queues with dynamically scaling GPU worker groups (auto-scaling) ensures you only pay for the computation resources you need based on traffic spikes."
+        }
+      ]
+    }
+  ]
+}

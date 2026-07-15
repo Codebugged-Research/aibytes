@@ -1,0 +1,222 @@
+{
+  "id": "u141-l3",
+  "unit": 141,
+  "day": 708,
+  "tier": "Object Detection Foundations",
+  "tierIcon": "🎯",
+  "title": "The Problem of Multiple Detections",
+  "icon": "👥",
+  "concept": "Object detectors scan images densely, which often leads to predicting multiple overlapping bounding boxes for a single physical object.",
+  "xp": 15,
+  "hearts": 3,
+  "estMinutes": 7,
+  "segments": [
+    {
+      "type": "warmup",
+      "exercises": [
+        {
+          "id": "w1",
+          "type": "multiple_choice",
+          "xp": 1,
+          "prompt": "Recap: How do we match anchors to objects during training?",
+          "options": [
+            {
+              "id": "a",
+              "text": "By picking the anchor with the highest IoU overlap",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "By sorting them alphabetically",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "By picking the smallest box",
+              "correct": false
+            }
+          ],
+          "explain": "The highest IoU overlap determines which anchor is matched to a ground truth object."
+        }
+      ]
+    },
+    {
+      "type": "teach",
+      "cards": [
+        {
+          "kind": "hook",
+          "icon": "👥",
+          "title": "Seeing Double",
+          "body": "If you ask five children to point to a dog in a room, they will all point at it from slightly different angles. If your neural network slides across an image, several nearby cells might all say: 'I found a dog here!' resulting in a cluttered mess of boxes."
+        },
+        {
+          "kind": "definition",
+          "icon": "👥",
+          "title": "Multiple Detections",
+          "body": "The <strong>Multiple Detections Problem</strong> occurs because networks evaluate anchor boxes at thousands of overlapping grid positions. If an object is large, multiple adjacent anchors will have high confidence, outputting duplicate candidate boxes."
+        },
+        {
+          "kind": "analogy",
+          "icon": "👥",
+          "title": "Too Many Pointing Fingers",
+          "body": "Imagine a dog walks into a classroom. Ten kids raise their hands and point, each drawing a slightly different imaginary rectangle in the air around the dog. You don't have ten dogs — you just have ten different people highlighting the same dog!"
+        },
+        {
+          "kind": "example",
+          "icon": "📱",
+          "title": "Cluttered Face Scan",
+          "body": "Without a cleanup step, a face detection model running on your phone might output 5 overlapping yellow boxes around your single nose and eyes, instead of a clean, single box."
+        },
+        {
+          "kind": "mythbust",
+          "icon": "⚠️",
+          "title": "Not a model failure",
+          "body": "You might think outputting multiple boxes means your network is broken. In fact, it means the network is working well and finds the object from multiple grid perspectives! It's just that we need a cleanup step to keep the best one."
+        },
+        {
+          "kind": "visual",
+          "icon": "⚖️",
+          "title": "Raw Output vs. Cleaned",
+          "body": "Comparing raw predictions vs the desired single detection output:",
+          "compare": {
+            "left": {
+              "emoji": "🔲",
+              "tag": "Raw Detections",
+              "text": "Multiple overlapping boxes:<br><code>5 boxes around 1 cat</code>"
+            },
+            "right": {
+              "emoji": "🎯",
+              "tag": "Cleaned Output",
+              "text": "One optimal box:<br><code>1 box around 1 cat</code>"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "type": "practice",
+      "exercises": [
+        {
+          "id": "p1",
+          "type": "multiple_choice",
+          "xp": 2,
+          "prompt": "Why do object detection networks output multiple overlapping boxes for a single object?",
+          "explain": "Because the network evaluates anchor boxes densely across the entire image, multiple nearby positions will detect the same object.",
+          "options": [
+            {
+              "id": "a",
+              "text": "Adjacent grid cells and anchors detect the same object and output high confidence scores",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "The network layers are duplicating features due to low RAM",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "The image is split into multiple color channels",
+              "correct": false
+            },
+            {
+              "id": "d",
+              "text": "The model is confused by background noise",
+              "correct": false
+            }
+          ]
+        },
+        {
+          "id": "p2",
+          "type": "true_false",
+          "xp": 2,
+          "prompt": "True or False: If a model outputs multiple boxes for one object, it means the classification head failed.",
+          "explain": "False. Multiple detections are a normal side effect of dense anchor-based localization, not a classification failure.",
+          "options": [
+            {
+              "id": "t",
+              "text": "True",
+              "correct": false
+            },
+            {
+              "id": "f",
+              "text": "False",
+              "correct": true
+            }
+          ]
+        },
+        {
+          "id": "p3",
+          "type": "fill_blank",
+          "xp": 2,
+          "prompt": "Complete the sentence:",
+          "explain": "Scanning the image grid densely means multiple overlapping reference anchors detect the same target.",
+          "sentence": "Predicting multiple boxes for a single object is a normal result of evaluating anchors ___ across the image.",
+          "blank": "densely",
+          "words": [
+            "densely",
+            "randomly",
+            "rarely"
+          ]
+        },
+        {
+          "id": "p4",
+          "type": "spot_the_ai",
+          "xp": 2,
+          "prompt": "Which image output demonstrates the multiple detections problem?",
+          "explain": "Having multiple overlapping boxes for a single physical object represents the multiple detections problem.",
+          "options": [
+            {
+              "id": "a",
+              "text": "An image of a car with 8 overlapping bounding boxes, all labeled 'car'",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "An image of a car with no bounding boxes at all",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "An image of a car labeled as 'airplane'",
+              "correct": false
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "boss",
+      "exercises": [
+        {
+          "id": "b1",
+          "type": "multiple_choice",
+          "xp": 5,
+          "prompt": "You run a pedestrian detector on a video frame. The raw output shows 6 boxes around a single pedestrian, with confidences ranging from 60% to 98%. How should you resolve this to show a single clean box to the user?",
+          "options": [
+            {
+              "id": "a",
+              "text": "Use a post-processing algorithm to filter out duplicates, keeping only the highest confidence box and suppressing the rest.",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "Retrain the network from scratch using more data augmentation.",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "Average the pixel values of all 6 boxes to draw a new box.",
+              "correct": false
+            },
+            {
+              "id": "d",
+              "text": "Throw away all 6 boxes and output nothing to be safe.",
+              "correct": false
+            }
+          ],
+          "explain": "Exactly! We need a post-processing algorithm to filter out overlapping duplicates and keep the best detection. Next: let's learn about the standard algorithm for this: Non-Maximum Suppression!"
+        }
+      ]
+    }
+  ]
+}

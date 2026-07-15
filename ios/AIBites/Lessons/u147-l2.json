@@ -1,0 +1,222 @@
+{
+  "id": "u147-l2",
+  "unit": 147,
+  "day": 737,
+  "tier": "Modern Object Detection",
+  "tierIcon": "🎯",
+  "title": "The Grid System & Bounding Boxes",
+  "icon": "🏁",
+  "concept": "YOLO divides the image into a grid, where each cell is responsible for detecting objects whose centers fall within it.",
+  "xp": 15,
+  "hearts": 3,
+  "estMinutes": 7,
+  "segments": [
+    {
+      "type": "warmup",
+      "exercises": [
+        {
+          "id": "w2",
+          "type": "multiple_choice",
+          "xp": 1,
+          "prompt": "Recap: What makes YOLO a 'single-stage' detector?",
+          "options": [
+            {
+              "id": "a",
+              "text": "It predicts bounding boxes and classes directly in a single pass",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "It only works on images containing a single object",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "It can only classify the image without localizing objects",
+              "correct": false
+            }
+          ],
+          "explain": "Correct! YOLO performs detection and classification in one single network pass."
+        }
+      ]
+    },
+    {
+      "type": "teach",
+      "cards": [
+        {
+          "kind": "hook",
+          "icon": "🏁",
+          "title": "The Grid Map",
+          "body": "How does a model look at a whole image once and find many separate objects? YOLO's secret weapon is dividing the image into a grid, just like a chessboard or a map coordinate system."
+        },
+        {
+          "kind": "definition",
+          "icon": "🏁",
+          "title": "Grid Cell Division",
+          "body": "YOLO divides the input image into an <strong>S x S grid</strong> of cells. If the center of an object falls within a grid cell, that specific cell is responsible for predicting that object's bounding box and class."
+        },
+        {
+          "kind": "analogy",
+          "icon": "🗺️",
+          "title": "Dividing the Treasure Map",
+          "body": "Imagine a team searching a large field. If they divide the field into square plots, and assign one scout to be responsible for finding items centered inside their plot, they search much faster than checking the whole field randomly."
+        },
+        {
+          "kind": "example",
+          "icon": "🐕",
+          "title": "Cell Responsibility",
+          "body": "In a 7x7 grid, a dog's center falls in the cell at row 4, column 3. That grid cell predicts the box coordinates (x, y, w, h) around the dog and outputs the class 'dog'."
+        },
+        {
+          "kind": "mythbust",
+          "icon": "⚠️",
+          "title": "One Grid, Multiple Objects",
+          "body": "You might think a grid cell can only detect one object. While simple grids had limits, modern YOLO versions use multiple anchor boxes per cell, allowing a single cell to detect overlapping objects of different classes."
+        },
+        {
+          "kind": "visual",
+          "icon": "🏁",
+          "title": "Grid cells vs. Bounding boxes",
+          "body": "How YOLO maps pixels to object coordinates:",
+          "compare": {
+            "left": {
+              "emoji": "🏁",
+              "tag": "Grid Cell Layer",
+              "text": "Image split into S x S cells<br>Responsible for localized search<br>Finds center point of objects"
+            },
+            "right": {
+              "emoji": "📦",
+              "tag": "Bounding Box Outputs",
+              "text": "Coordinates (x, y, width, height)<br>Extends beyond cell boundaries<br>Predicts exact object boundary"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "type": "practice",
+      "exercises": [
+        {
+          "id": "p1",
+          "type": "multiple_choice",
+          "xp": 2,
+          "prompt": "If an object's center falls inside a specific grid cell, what is that cell responsible for?",
+          "options": [
+            {
+              "id": "a",
+              "text": "Predicting the bounding box and class for that object",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "Deleting that section of the image",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "Changing the image resolution",
+              "correct": false
+            },
+            {
+              "id": "d",
+              "text": "Sending the image back to training",
+              "correct": false
+            }
+          ],
+          "explain": "Correct! The grid cell containing the object's center is responsible for detecting it."
+        },
+        {
+          "id": "p2",
+          "type": "true_false",
+          "xp": 2,
+          "prompt": "True or False: Bounding boxes predicted by a grid cell must stay completely inside that grid cell.",
+          "options": [
+            {
+              "id": "t",
+              "text": "True",
+              "correct": false
+            },
+            {
+              "id": "f",
+              "text": "False",
+              "correct": true
+            }
+          ],
+          "explain": "False. Bounding boxes can be much larger than the grid cell itself; the cell only anchors the object's center."
+        },
+        {
+          "id": "p3",
+          "type": "fill_blank",
+          "xp": 2,
+          "prompt": "Complete the sentence:",
+          "sentence": "YOLO divides the input image into an S x S ___ to distribute object detection responsibility.",
+          "blank": "grid",
+          "words": [
+            "grid",
+            "convolution",
+            "matrix"
+          ],
+          "explain": "YOLO uses a grid system to assign object detection tasks locally."
+        },
+        {
+          "id": "p4",
+          "type": "spot_the_ai",
+          "xp": 2,
+          "prompt": "What coordinates does each bounding box prediction in YOLO contain?",
+          "options": [
+            {
+              "id": "a",
+              "text": "Center coordinates (x, y), width (w), height (h), and a confidence score",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "Only the class label and a single pixel index",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "The RGB color values of the object's border",
+              "correct": false
+            }
+          ],
+          "explain": "Correct! Each predicted box includes spatial dimensions (center, width, height) and a confidence score."
+        }
+      ]
+    },
+    {
+      "type": "boss",
+      "exercises": [
+        {
+          "id": "b1",
+          "type": "multiple_choice",
+          "xp": 5,
+          "prompt": "You are using a 7x7 YOLO grid. A cat is sitting on top of a dog, and their center points fall into the exact same grid cell. How does YOLO handle this?",
+          "options": [
+            {
+              "id": "a",
+              "text": "It uses anchor boxes of different shapes (e.g. tall for human, wide for car) to allow the cell to predict both objects.",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "It can only detect the larger of the two objects and ignores the other.",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "It splits the grid cell into smaller sub-cells dynamically.",
+              "correct": false
+            },
+            {
+              "id": "d",
+              "text": "It crashes because grid cells cannot handle overlapping centers.",
+              "correct": false
+            }
+          ],
+          "explain": "Exactly! Anchor boxes allow a single grid cell to output multiple distinct bounding box predictions simultaneously."
+        }
+      ]
+    }
+  ]
+}

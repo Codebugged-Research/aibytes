@@ -1,0 +1,222 @@
+{
+  "id": "u148-l3",
+  "unit": 148,
+  "day": 743,
+  "tier": "Modern Object Detection",
+  "tierIcon": "🎯",
+  "title": "YOLO v7 & v8",
+  "icon": "🔓",
+  "concept": "YOLOv8 introduced decoupled heads and an anchor-free design, allowing direct offset prediction and improved accuracy.",
+  "xp": 15,
+  "hearts": 3,
+  "estMinutes": 7,
+  "segments": [
+    {
+      "type": "warmup",
+      "exercises": [
+        {
+          "id": "w3",
+          "type": "multiple_choice",
+          "xp": 1,
+          "prompt": "Recap: What is Mosaic Augmentation?",
+          "options": [
+            {
+              "id": "a",
+              "text": "Combining four training images into one to train the model on multi-scale contexts",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "A filter that hides the identity of people in images",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "A method to speed up the convolutional calculations",
+              "correct": false
+            }
+          ],
+          "explain": "Correct! Mosaic stitches 4 training images together to create dense object contexts."
+        }
+      ]
+    },
+    {
+      "type": "teach",
+      "cards": [
+        {
+          "kind": "hook",
+          "icon": "🤯",
+          "title": "Breaking the Anchor Chains",
+          "body": "For years, anchor boxes were the gold standard for object detection. But anchor boxes have a huge problem: you have to manually design their shapes! If your shapes are wrong, your model fails. How did YOLOv8 break free from anchors?"
+        },
+        {
+          "kind": "definition",
+          "icon": "🔓",
+          "title": "YOLOv8 & Decoupled Heads",
+          "body": "Modern versions like <strong>YOLOv8</strong> are <strong>anchor-free</strong>. Instead of predicting coordinates relative to anchor templates, they predict offsets directly from pixels. YOLOv8 also introduced <strong>decoupled heads</strong>, separating classification (what) and regression (where) into different branches."
+        },
+        {
+          "kind": "analogy",
+          "icon": "🧑‍🍳",
+          "title": "The Specialized Kitchen",
+          "body": "Imagine a kitchen where one chef does everything (joint head). It's crowded. If you decouple them, one chef focuses entirely on baking (where the box is) and another focuses entirely on icing (what the object is). They work faster and make fewer mistakes!"
+        },
+        {
+          "kind": "example",
+          "icon": "🏃",
+          "title": "Anchor-Free Regression",
+          "body": "When YOLOv8 detects a runner, it regresses the distance from the cell center to the top, bottom, left, and right borders of the person directly, without needing to select a template box shape first."
+        },
+        {
+          "kind": "mythbust",
+          "icon": "⚠️",
+          "title": "Are Anchors Necessary?",
+          "body": "You might think anchor-free models must be less accurate. In reality, anchor-free designs are more flexible, have fewer hyperparameters to tune, and converge faster during training."
+        },
+        {
+          "kind": "visual",
+          "icon": "⚖️",
+          "title": "Coupled vs. Decoupled Heads",
+          "body": "Comparing detection head architectures:",
+          "compare": {
+            "left": {
+              "emoji": "🔌",
+              "tag": "Coupled Head (Older YOLO)",
+              "text": "Single branch outputs class & box<br>Features conflict with each other<br>More parameters to optimize jointly"
+            },
+            "right": {
+              "emoji": "🧩",
+              "tag": "Decoupled Head (YOLOv8)",
+              "text": "Separate branches for class & box<br>Specialized features for classification vs. localization<br>Higher accuracy, faster training"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "type": "practice",
+      "exercises": [
+        {
+          "id": "p1",
+          "type": "multiple_choice",
+          "xp": 2,
+          "prompt": "What does it mean that YOLOv8 is 'anchor-free'?",
+          "options": [
+            {
+              "id": "a",
+              "text": "It predicts bounding boxes directly from pixel offsets rather than comparing to preset template boxes",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "It does not require any bounding boxes at all",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "It cannot be trained on GPU hardware",
+              "correct": false
+            },
+            {
+              "id": "d",
+              "text": "It does not lock onto objects in video frames",
+              "correct": false
+            }
+          ],
+          "explain": "Correct! Anchor-free models regress coordinates directly from pixels, eliminating the need to tune anchor box sizes."
+        },
+        {
+          "id": "p2",
+          "type": "true_false",
+          "xp": 2,
+          "prompt": "True or False: Decoupled heads split the task of classifying an object and localizing its coordinates into separate network branches.",
+          "options": [
+            {
+              "id": "t",
+              "text": "True",
+              "correct": true
+            },
+            {
+              "id": "f",
+              "text": "False",
+              "correct": false
+            }
+          ],
+          "explain": "True. Splitting classification and box regression branches improves overall model performance."
+        },
+        {
+          "id": "p3",
+          "type": "fill_blank",
+          "xp": 2,
+          "prompt": "Complete the sentence:",
+          "sentence": "By separating classification and localization branches, YOLOv8 uses a ___ head design.",
+          "blank": "decoupled",
+          "words": [
+            "decoupled",
+            "coupled",
+            "lateral"
+          ],
+          "explain": "YOLOv8 uses a decoupled head design to separate classification and localization tasks."
+        },
+        {
+          "id": "p4",
+          "type": "spot_the_ai",
+          "xp": 2,
+          "prompt": "What is a main disadvantage of manual anchor box configuration?",
+          "options": [
+            {
+              "id": "a",
+              "text": "They require manual tuning of box shapes for every specific dataset",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "They make the model run 10x slower on CPU",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "They cause the loss function to become zero",
+              "correct": false
+            }
+          ],
+          "explain": "Correct! Anchor boxes must be custom-sized for your data, which is tedious and prone to errors."
+        }
+      ]
+    },
+    {
+      "type": "boss",
+      "exercises": [
+        {
+          "id": "b1",
+          "type": "multiple_choice",
+          "xp": 5,
+          "prompt": "You are training a model to detect both extremely thin needles and wide pizza boxes. Why is an anchor-free model like YOLOv8 easier to deploy here than an anchor-based model?",
+          "options": [
+            {
+              "id": "a",
+              "text": "Anchor-free models predict boundaries directly from pixels, handling extreme aspect ratios automatically without needing manual anchor tuning.",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "Anchor-based models cannot detect thin objects.",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "YOLOv8 does not use convolutional layers, making it faster.",
+              "correct": false
+            },
+            {
+              "id": "d",
+              "text": "Anchor-free models only work on food objects.",
+              "correct": false
+            }
+          ],
+          "explain": "Exactly! Anchor-free models naturally generalize to highly variable shapes without needing manual bounding box templates."
+        }
+      ]
+    }
+  ]
+}

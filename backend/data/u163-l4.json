@@ -1,0 +1,222 @@
+{
+  "id": "u163-l4",
+  "unit": 163,
+  "day": 819,
+  "tier": "Advanced Vision Applications",
+  "tierIcon": "👁️",
+  "title": "Aligning Faces: Landmarks & Pre-processing",
+  "icon": "📐",
+  "concept": "Facial landmark detection locates key points (like eyes and nose), allowing models to align and normalize faces before recognition.",
+  "xp": 15,
+  "hearts": 3,
+  "estMinutes": 7,
+  "segments": [
+    {
+      "type": "warmup",
+      "exercises": [
+        {
+          "id": "w1",
+          "type": "multiple_choice",
+          "xp": 1,
+          "prompt": "Recap: What is the role of face detection in the face analysis pipeline?",
+          "options": [
+            {
+              "id": "a",
+              "text": "To extract and crop the face region from the image.",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "To classify the face as happy or sad.",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "To measure similarity scores.",
+              "correct": false
+            }
+          ],
+          "explain": "Correct! Detection crops the face region so subsequent models can process it."
+        }
+      ]
+    },
+    {
+      "type": "teach",
+      "cards": [
+        {
+          "kind": "hook",
+          "icon": "📐",
+          "title": "Tilting your head",
+          "body": "If you take a photo with your head tilted or looking slightly away, your eyes and nose appear in different parts of the crop box. A recognition model comparing raw pixel-to-pixel values would get confused. To fix this, we must 'straighten' the face first."
+        },
+        {
+          "kind": "definition",
+          "icon": "📐",
+          "title": "What is Face Alignment?",
+          "body": "<strong>Face Alignment</strong> is the pre-processing step that normalizes the pose, scale, and rotation of a face. It uses <strong>facial landmark detection</strong> (finding coordinates of eyes, nose, mouth) to rotate and scale the face so the eyes are always level and centered."
+        },
+        {
+          "kind": "analogy",
+          "icon": "📐",
+          "title": "School portrait template",
+          "body": "Imagine a photographer who has a grid overlay on their camera screen. They ask students to tilt their heads until their eyes align perfectly with the grid line. Face alignment does this mathematically, rotating and scaling the image so every face fits the same template."
+        },
+        {
+          "kind": "example",
+          "icon": "🔄",
+          "title": "Affine Transformations",
+          "body": "Alignment models find the coordinates of the eyes. They calculate the tilt angle, and apply an <strong>affine transformation</strong> (rotation and scaling) to rotate the image, making the eyes horizontal and scaling the face to a standard size like 112x112 pixels."
+        },
+        {
+          "kind": "mythbust",
+          "icon": "⚠️",
+          "title": "Cropping is not aligning",
+          "body": "A common myth is that cropping a face is enough preprocessing. If the person's head is tilted 45 degrees, the cropped box still contains a tilted face. Without alignment, recognition accuracy drops significantly."
+        },
+        {
+          "kind": "visual",
+          "icon": "⚖️",
+          "title": "Unaligned vs. Aligned Faces",
+          "body": "How alignment prepares faces for neural networks:",
+          "compare": {
+            "left": {
+              "emoji": "🙃",
+              "tag": "Unaligned Crop",
+              "text": "Tilted head, off-center<br>Varying lighting and scale<br>Difficult for embedders"
+            },
+            "right": {
+              "emoji": "🙂",
+              "tag": "Aligned Face",
+              "text": "Eyes horizontal and centered<br>Standard size (e.g. 112x112)<br>Ideal for recognition"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "type": "practice",
+      "exercises": [
+        {
+          "id": "p1",
+          "type": "multiple_choice",
+          "xp": 2,
+          "prompt": "Which technique is used to rotate and scale a tilted face to make the eyes horizontal?",
+          "options": [
+            {
+              "id": "a",
+              "text": "Affine transformation based on landmark points",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "Softmax classification",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "Quantization calibration",
+              "correct": false
+            },
+            {
+              "id": "d",
+              "text": "Non-Maximum Suppression (NMS)",
+              "correct": false
+            }
+          ],
+          "explain": "Affine transformations rotate, scale, and translate the cropped face image using key facial landmarks."
+        },
+        {
+          "id": "p2",
+          "type": "true_false",
+          "xp": 2,
+          "prompt": "True or False: Facial landmarks are only used to verify identity, not to align faces.",
+          "options": [
+            {
+              "id": "t",
+              "text": "True",
+              "correct": false
+            },
+            {
+              "id": "f",
+              "text": "False",
+              "correct": true
+            }
+          ],
+          "explain": "False. Landmarks (like eye centers) are primarily used to align and normalize faces before they are sent to the recognition model."
+        },
+        {
+          "id": "p3",
+          "type": "fill_blank",
+          "xp": 2,
+          "prompt": "Complete the sentence:",
+          "sentence": "Facial landmark detection finds key points like the eyes, nose, and ___ to map the structure of a face.",
+          "blank": "mouth",
+          "words": [
+            "mouth",
+            "hair",
+            "background"
+          ],
+          "explain": "Landmark detection focuses on key facial components like the eyes, nose, mouth, and jawline."
+        },
+        {
+          "id": "p4",
+          "type": "spot_the_ai",
+          "xp": 2,
+          "prompt": "Which process describes the facial alignment step in action?",
+          "options": [
+            {
+              "id": "a",
+              "text": "Finding eye coordinates, rotating the face so they are level, and resizing the crop to 112x112 pixels",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "Matching a signature to a bank document",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "Classifying if an image contains a dog or a cat",
+              "correct": false
+            }
+          ],
+          "explain": "Aligning eyes horizontally and scaling the face is the standard facial alignment process."
+        }
+      ]
+    },
+    {
+      "type": "boss",
+      "exercises": [
+        {
+          "id": "b1",
+          "type": "multiple_choice",
+          "xp": 5,
+          "prompt": "You are building a real-time face verification app for mobile devices. Users hold the camera at different angles. How should you pre-process the cropped faces before sending them to the recognition model?",
+          "options": [
+            {
+              "id": "a",
+              "text": "Detect landmarks like the eyes, apply an affine transformation to align the face horizontally, and resize to the model's target input shape.",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "Directly feed the raw cropped boxes, since modern models do not care about face rotation.",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "Convert the image to grayscale and decrease the contrast to blur the face.",
+              "correct": false
+            },
+            {
+              "id": "d",
+              "text": "Upscale the cropped face to 4K resolution using bilinear interpolation.",
+              "correct": false
+            }
+          ],
+          "explain": "Exactly! Detecting landmarks and aligning the face horizontally makes the input consistent, greatly improving recognition accuracy. Outstanding job! Next, let's explore the crucial ethical considerations of face analysis."
+        }
+      ]
+    }
+  ]
+}

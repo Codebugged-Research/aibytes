@@ -1,0 +1,222 @@
+{
+  "id": "u191-l5",
+  "unit": 191,
+  "day": 960,
+  "tier": "Video & Temporal Vision",
+  "tierIcon": "\ud83c\udfac",
+  "title": "3D CNN Building Blocks",
+  "icon": "\ud83e\uddf1",
+  "concept": "A complete 3D CNN stacks 3D convolutions, activations, normalizations, and 3D pooling layers to build high-level spatiotemporal representations.",
+  "xp": 15,
+  "hearts": 3,
+  "estMinutes": 7,
+  "segments": [
+    {
+      "type": "warmup",
+      "exercises": [
+        {
+          "id": "w1",
+          "type": "multiple_choice",
+          "xp": 1,
+          "prompt": "Recap: What is the main difference between 2x2x2 and 1x2x2 pooling?",
+          "options": [
+            {
+              "id": "a",
+              "text": "1x2x2 pooling leaves the time dimension untouched",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "2x2x2 pooling is faster on CPUs",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "1x2x2 pooling removes the color channels",
+              "correct": false
+            }
+          ],
+          "explain": "Yes! A temporal window of 1 means the frame dimension is not downsampled."
+        }
+      ]
+    },
+    {
+      "type": "teach",
+      "cards": [
+        {
+          "kind": "hook",
+          "icon": "\ud83e\uddf1",
+          "title": "Assembling the machine",
+          "body": "Now that you know how 3D convolutions and 3D pooling work, how do we build a full neural network? Just like building a house out of bricks, we stack these layers together to create a 3D Convolutional Neural Network (3D CNN)!"
+        },
+        {
+          "kind": "definition",
+          "icon": "\ud83e\uddf1",
+          "title": "3D CNN Architectures",
+          "body": "A <strong>3D CNN</strong> is built by stacking: <br>1. <strong>3D Convolutional Layers</strong> to extract features.<br>2. <strong>3D Normalization</strong> (like 3D Batch Norm) to stabilize training.<br>3. <strong>Activation functions</strong> (like ReLU) to introduce non-linearity.<br>4. <strong>3D Pooling</strong> to downsample the tensor volumes."
+        },
+        {
+          "kind": "analogy",
+          "icon": "\ud83d\uddfc",
+          "title": "A multi-floor factory",
+          "body": "Think of a 3D CNN as a factory with multiple floors. Raw video enters the ground floor. Each floor extracts more abstract features: the first floor finds moving edges, the second floor detects moving body parts, and the top floor recognizes the action."
+        },
+        {
+          "kind": "example",
+          "icon": "\ud83d\udee0\ufe0f",
+          "title": "A basic 3D CNN block",
+          "body": "A standard building block in PyTorch might look like:<br>\u2022 <code>Conv3d(in_channels=3, out_channels=64, kernel_size=3)</code><br>\u2022 <code>BatchNorm3d(64)</code><br>\u2022 <code>ReLU()</code><br>\u2022 <code>MaxPool3d(kernel_size=(1, 2, 2))</code>"
+        },
+        {
+          "kind": "mythbust",
+          "icon": "\ud83d\udeab",
+          "title": "Weights are not shared in time",
+          "body": "You might think the 3D filter uses the same weights for each frame in its window. It doesn't! The filter has unique weights for frame 1, frame 2, and frame 3. This is what allows it to learn the **direction** of motion, rather than just averaging the frames."
+        },
+        {
+          "kind": "visual",
+          "icon": "\u2696\ufe0f",
+          "title": "2D CNN Block vs. 3D CNN Block",
+          "body": "Comparing the core components of image and video networks:",
+          "compare": {
+            "left": {
+              "emoji": "\ud83d\uddbc\ufe0f",
+              "tag": "2D CNN Block",
+              "text": "Conv2D + BatchNorm2D + MaxPool2D<br>Inputs: (B, C, H, W)<br>Extracts static spatial features"
+            },
+            "right": {
+              "emoji": "\ud83e\uddca",
+              "tag": "3D CNN Block",
+              "text": "Conv3D + BatchNorm3D + MaxPool3D<br>Inputs: (B, C, F, H, W)<br>Extracts dynamic spatiotemporal features"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "type": "practice",
+      "exercises": [
+        {
+          "id": "p1",
+          "type": "multiple_choice",
+          "xp": 2,
+          "prompt": "Which sequence of layers represents a typical 3D CNN block?",
+          "options": [
+            {
+              "id": "a",
+              "text": "Conv3D -> BatchNorm3D -> ReLU -> MaxPool3D",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "Linear -> Conv2D -> Softmax",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "MaxPool2D -> Reshape -> Conv1D",
+              "correct": false
+            },
+            {
+              "id": "d",
+              "text": "Conv3D -> Softmax -> Conv3D",
+              "correct": false
+            }
+          ],
+          "explain": "Correct! A standard deep learning block consists of convolution, normalization, activation, and pooling."
+        },
+        {
+          "id": "p2",
+          "type": "true_false",
+          "xp": 2,
+          "prompt": "True or false: A 3D convolution kernel uses the exact same weights across all time steps in its temporal window.",
+          "options": [
+            {
+              "id": "t",
+              "text": "True",
+              "correct": false
+            },
+            {
+              "id": "f",
+              "text": "False",
+              "correct": true
+            }
+          ],
+          "explain": "False. The kernel has independent weights along the temporal axis to learn how features change over time."
+        },
+        {
+          "id": "p3",
+          "type": "fill_blank",
+          "xp": 2,
+          "prompt": "Complete the sentence:",
+          "sentence": "To stabilize the training of a 3D CNN, we apply a 3D version of ___ normalization.",
+          "blank": "batch",
+          "words": [
+            "batch",
+            "spatial",
+            "temporal"
+          ],
+          "explain": "3D Batch Normalization normalizes activations across spatiotemporal feature maps."
+        },
+        {
+          "id": "p4",
+          "type": "spot_the_ai",
+          "xp": 2,
+          "prompt": "Which input shape is expected by a PyTorch Conv3d layer?",
+          "options": [
+            {
+              "id": "a",
+              "text": "(Batch, Channels, Frames, Height, Width)",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "(Batch, Height, Width, Channels)",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "(Frames, Height, Width)",
+              "correct": false
+            }
+          ],
+          "explain": "PyTorch's Conv3d layer expects a 5D tensor of shape (Batch, Channels, Frames, Height, Width)."
+        }
+      ]
+    },
+    {
+      "type": "boss",
+      "exercises": [
+        {
+          "id": "b1",
+          "type": "multiple_choice",
+          "xp": 5,
+          "prompt": "Why does a 3D CNN require significantly more GPU memory than a 2D CNN with the same number of layers and filters?",
+          "options": [
+            {
+              "id": "a",
+              "text": "Because it stores multiple frames of activations in memory for every layer during training.",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "Because 3D filters can only be run on solid-state drives.",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "Because 3D CNNs convert all weights into double-precision numbers.",
+              "correct": false
+            },
+            {
+              "id": "d",
+              "text": "Because the color channels are duplicated 10 times.",
+              "correct": false
+            }
+          ],
+          "explain": "Exactly! In a 3D CNN, the feature maps are 3D volumes (Time x Height x Width) instead of 2D planes, which exponentially increases the activation memory stored during forward passes. Next: how do we calculate motion without using expensive 3D convolutions? Next up: Optical Flow Mechanics."
+        }
+      ]
+    }
+  ]
+}

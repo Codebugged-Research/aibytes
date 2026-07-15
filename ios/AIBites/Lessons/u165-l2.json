@@ -1,0 +1,222 @@
+{
+  "id": "u165-l2",
+  "unit": 165,
+  "day": 827,
+  "tier": "Advanced Vision Applications",
+  "tierIcon": "👁️",
+  "title": "Bottom-Up vs. Top-Down Pose Estimation",
+  "icon": "🪜",
+  "concept": "Top-down pose estimation detects individual people first and then estimates their keypoints, whereas bottom-up detects all keypoints first and groups them.",
+  "xp": 15,
+  "hearts": 3,
+  "estMinutes": 7,
+  "segments": [
+    {
+      "type": "warmup",
+      "exercises": [
+        {
+          "id": "w1",
+          "type": "multiple_choice",
+          "xp": 1,
+          "prompt": "Recap: What is a keypoint in pose estimation?",
+          "options": [
+            {
+              "id": "a",
+              "text": "The pixel coordinates of a human joint, like an elbow or knee.",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "The border of the image frame.",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "A class label like 'athlete'.",
+              "correct": false
+            }
+          ],
+          "explain": "Correct! Keypoints represent the coordinate points of key joints across the body."
+        }
+      ]
+    },
+    {
+      "type": "teach",
+      "cards": [
+        {
+          "kind": "hook",
+          "icon": "🕺",
+          "title": "A crowded dance floor",
+          "body": "If you are trying to map the poses of 50 dancers in a club, how do you do it? Do you look for individual people first and find their joints one-by-one? Or do you look at all the elbows and knees on the floor first and then try to connect them to the correct bodies?"
+        },
+        {
+          "kind": "definition",
+          "icon": "🪜",
+          "title": "Two Core Approaches",
+          "body": "<strong>Top-Down Pose Estimation</strong> runs a person detector first, crops each person, and runs keypoint detection on each crop. <strong>Bottom-Up Pose Estimation</strong> detects all joint keypoints in the entire image at once, then groups them into individual skeletons."
+        },
+        {
+          "kind": "analogy",
+          "icon": "🧩",
+          "title": "Sorting boxes vs. Dot-to-dot",
+          "body": "Top-down is like sorting toys: you put each action figure in its own cardboard box first, and then pose its arms inside the box. Bottom-up is like a massive dot-to-dot puzzle: you print all the dots on the page at once, and then draw lines to group them into characters."
+        },
+        {
+          "kind": "example",
+          "icon": "🏃",
+          "title": "AlphaPose vs. OpenPose",
+          "body": "<strong>AlphaPose</strong> uses the top-down approach: if there are three people in the camera, it runs three separate keypoint models. <strong>OpenPose</strong> uses the bottom-up approach: it detects all knees and shoulders in the raw frame in one pass, regardless of how many people are there."
+        },
+        {
+          "kind": "mythbust",
+          "icon": "⚠️",
+          "title": "Top-down is not always faster",
+          "body": "You might assume top-down is faster because it's intuitive. But if you have a crowded image with 100 people, a top-down model has to run keypoint inference 100 times! A bottom-up model runs inference once, making it much faster for dense crowds."
+        },
+        {
+          "kind": "visual",
+          "icon": "⚖️",
+          "title": "Top-Down vs. Bottom-Up pipelines",
+          "body": "How the two architectures handle multi-person images:",
+          "compare": {
+            "left": {
+              "emoji": "📦",
+              "tag": "Top-Down (AlphaPose)",
+              "text": "Detect people -> Crop -> Find joints<br>Accuracy: High (isolated crops)<br>Speed: Slows down as crowd grows"
+            },
+            "right": {
+              "emoji": "⚡",
+              "tag": "Bottom-Up (OpenPose)",
+              "text": "Find all joints -> Group skeletons<br>Accuracy: Moderately high<br>Speed: Constant (independent of crowd)"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "type": "practice",
+      "exercises": [
+        {
+          "id": "p1",
+          "type": "multiple_choice",
+          "xp": 2,
+          "prompt": "Which pose estimation approach first detects person bounding boxes and then estimates keypoints inside those boxes?",
+          "options": [
+            {
+              "id": "a",
+              "text": "Top-Down Pose Estimation",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "Bottom-Up Pose Estimation",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "Single-Shot Triplet Loss",
+              "correct": false
+            },
+            {
+              "id": "d",
+              "text": "Gram Matrix Estimation",
+              "correct": false
+            }
+          ],
+          "explain": "Top-down methods localize individual people first before locating their joints."
+        },
+        {
+          "id": "p2",
+          "type": "true_false",
+          "xp": 2,
+          "prompt": "True or False: Bottom-up pose estimation becomes slower and slower as more people enter the frame.",
+          "options": [
+            {
+              "id": "t",
+              "text": "True",
+              "correct": false
+            },
+            {
+              "id": "f",
+              "text": "False",
+              "correct": true
+            }
+          ],
+          "explain": "False. Bottom-up models detect all keypoints globally in a single forward pass, keeping speed constant regardless of crowd size."
+        },
+        {
+          "id": "p3",
+          "type": "fill_blank",
+          "xp": 2,
+          "prompt": "Complete the sentence:",
+          "sentence": "While top-down starts with person detection, ___ pose estimation starts by detecting all keypoints globally.",
+          "blank": "bottom-up",
+          "words": [
+            "bottom-up",
+            "horizontal",
+            "vertical"
+          ],
+          "explain": "Bottom-up models find all joint keypoints first, then compile them into skeletal structures."
+        },
+        {
+          "id": "p4",
+          "type": "spot_the_ai",
+          "xp": 2,
+          "prompt": "Which scenario represents a top-down pose estimation model at work?",
+          "options": [
+            {
+              "id": "a",
+              "text": "Running YOLO to detect 5 hikers, cropping them, and running a keypoint model on each hiker",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "Predicting all 50 elbows on a marathon track first, then grouping them using limb directions",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "Classifying if a video represents walking or crawling",
+              "correct": false
+            }
+          ],
+          "explain": "Detecting human boundaries first and then running joint models inside those boundaries is top-down."
+        }
+      ]
+    },
+    {
+      "type": "boss",
+      "exercises": [
+        {
+          "id": "b1",
+          "type": "multiple_choice",
+          "xp": 5,
+          "prompt": "You are building a real-time crowd safety monitor for a stadium concourse that handles thousands of people simultaneously. Which pose estimation architecture should you choose and why?",
+          "options": [
+            {
+              "id": "a",
+              "text": "Bottom-up pose estimation, because its processing time is constant, meaning it will not slow down or lag when massive crowds appear.",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "Top-down pose estimation, because running a crop-and-detect loop on 2,000 individuals is faster on standard mobile CPUs.",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "An image classification model, because you do not need coordinates to count people.",
+              "correct": false
+            },
+            {
+              "id": "d",
+              "text": "A facial verification model, to check the ticket ID of every spectator.",
+              "correct": false
+            }
+          ],
+          "explain": "Exactly! In dense crowds, a top-down model would grind to a halt because it scales linearly with the number of people. Bottom-up models maintain constant speed by analyzing the entire frame at once. Great job! Next: how models predict coordinates using heatmaps."
+        }
+      ]
+    }
+  ]
+}

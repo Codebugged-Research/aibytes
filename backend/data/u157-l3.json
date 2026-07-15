@@ -1,0 +1,222 @@
+{
+  "id": "u157-l3",
+  "unit": 157,
+  "day": 788,
+  "tier": "Mask R-CNN",
+  "tierIcon": "🎭",
+  "title": "The Mask Prediction Branch",
+  "icon": "🎭",
+  "concept": "The mask branch in Mask R-CNN is a small Fully Convolutional Network that predicts a binary mask for each class on each region.",
+  "xp": 15,
+  "hearts": 3,
+  "estMinutes": 7,
+  "segments": [
+    {
+      "type": "warmup",
+      "exercises": [
+        {
+          "id": "w1",
+          "type": "multiple_choice",
+          "xp": 1,
+          "prompt": "Recap: What mathematical technique does RoIAlign use to avoid coordinate rounding?",
+          "options": [
+            {
+              "id": "a",
+              "text": "Bilinear interpolation",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "Max pooling",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "Fourier transform",
+              "correct": false
+            }
+          ],
+          "explain": "Correct! Bilinear interpolation allows precise coordinate sampling."
+        }
+      ]
+    },
+    {
+      "type": "teach",
+      "cards": [
+        {
+          "kind": "hook",
+          "icon": "🔍",
+          "title": "Zooming in on the crop",
+          "body": "Once RoIAlign extracts a clean, aligned feature map (like 14x14) for a proposed object box, we need to create the mask. We don't want a dense layer here because we need to preserve the spatial grid. So, how do we process this cropped feature map? We run a mini FCN inside the branch!"
+        },
+        {
+          "kind": "definition",
+          "icon": "🎭",
+          "title": "The Mask Branch",
+          "body": "The <strong>Mask Branch</strong> is a small Fully Convolutional Network applied to each RoI. It uses convolutional layers to process features and outputs a $K \times m \times m$ tensor, where $m \times m$ is the resolution (e.g. 28x28) and $K$ is the number of classes."
+        },
+        {
+          "kind": "analogy",
+          "icon": "🎨",
+          "title": "Painting within the stencil",
+          "body": "The mask branch is like a painter who is handed a small, stencil-aligned board (the RoI). The painter only has to paint one object inside that stencil, outputting a black-and-white mask indicating what is object vs. background."
+        },
+        {
+          "kind": "example",
+          "icon": "🚗",
+          "title": "Class-specific masks",
+          "body": "If there are 80 classes, the mask branch outputs 80 different 28x28 binary masks for a single box. The classification branch decides which class the object is (e.g., 'Car'), and we select the 'Car' mask as the final output."
+        },
+        {
+          "kind": "mythbust",
+          "icon": "⚠️",
+          "title": "No class competition",
+          "body": "Unlike semantic networks that use softmax (where classes compete for each pixel), the mask branch uses a sigmoid function on each pixel. This decouples mask generation from class prediction, making it much easier for the model to train."
+        },
+        {
+          "kind": "visual",
+          "icon": "⚖️",
+          "title": "Mask Branch Resolution",
+          "body": "The output of the mask branch:",
+          "compare": {
+            "left": {
+              "emoji": "⏹️",
+              "tag": "Aligned Features",
+              "text": "Size: 14x14x256<br>Extracted by RoIAlign"
+            },
+            "right": {
+              "emoji": "🎭",
+              "tag": "Mask Output",
+              "text": "Size: 28x28xClass Count<br>Binary masks (0 or 1 per pixel)"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "type": "practice",
+      "exercises": [
+        {
+          "id": "p1",
+          "type": "multiple_choice",
+          "xp": 2,
+          "prompt": "What is the structure of the mask branch in Mask R-CNN?",
+          "options": [
+            {
+              "id": "a",
+              "text": "A small Fully Convolutional Network",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "A single fully connected dense layer",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "A series of max pooling operations",
+              "correct": false
+            },
+            {
+              "id": "d",
+              "text": "A linear regression head",
+              "correct": false
+            }
+          ],
+          "explain": "Correct! The mask branch is a mini FCN to preserve spatial layout."
+        },
+        {
+          "id": "p2",
+          "type": "true_false",
+          "xp": 2,
+          "prompt": "True or False: The mask branch uses softmax to make classes compete for each pixel.",
+          "options": [
+            {
+              "id": "t",
+              "text": "True",
+              "correct": false
+            },
+            {
+              "id": "f",
+              "text": "False",
+              "correct": false
+            }
+          ],
+          "explain": "False. It uses sigmoid per pixel, decoupling class prediction from mask generation."
+        },
+        {
+          "id": "p3",
+          "type": "fill_blank",
+          "xp": 2,
+          "prompt": "Complete the sentence:",
+          "sentence": "The mask branch outputs a binary mask of size m x m for each of the K ___.",
+          "blank": "classes",
+          "words": [
+            "classes",
+            "pixels",
+            "layers"
+          ],
+          "explain": "It outputs one binary mask per class, allowing the classification branch to choose the final mask."
+        },
+        {
+          "id": "p4",
+          "type": "spot_the_ai",
+          "xp": 2,
+          "prompt": "What function is applied to each pixel in the mask branch output to get a binary mask?",
+          "options": [
+            {
+              "id": "a",
+              "text": "Sigmoid",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "Softmax",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "ReLU",
+              "correct": false
+            }
+          ],
+          "explain": "Sigmoid is applied to each pixel to predict object vs. background independently."
+        }
+      ]
+    },
+    {
+      "type": "boss",
+      "exercises": [
+        {
+          "id": "b1",
+          "type": "multiple_choice",
+          "xp": 5,
+          "prompt": "Why does Mask R-CNN output a separate binary mask for each of the K classes, rather than a single combined multi-class mask?",
+          "options": [
+            {
+              "id": "a",
+              "text": "It decouples mask prediction from class prediction, allowing the model to generate high-quality masks without class competition.",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "It reduces the number of parameters in the convolutional layers.",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "It allows the model to run without backpropagation.",
+              "correct": false
+            },
+            {
+              "id": "d",
+              "text": "It makes the model compatible with low-resolution images.",
+              "correct": false
+            }
+          ],
+          "explain": "Exactly! Decoupling class prediction (done by the classification branch) from mask prediction makes learning simpler and much more stable. Next: how do we calculate the loss for all these branches?"
+        }
+      ]
+    }
+  ]
+}

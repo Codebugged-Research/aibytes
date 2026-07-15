@@ -1,0 +1,222 @@
+{
+  "id": "u176-l4",
+  "unit": 176,
+  "day": 884,
+  "tier": "Vision Transformers & Modern Approaches",
+  "tierIcon": "\ud83d\udc41\ufe0f",
+  "title": "Position Embeddings in ViT",
+  "icon": "\ud83d\udccd",
+  "concept": "Position embeddings add spatial coordinate information to patch tokens, resolving the transformer's natural permutation invariance.",
+  "xp": 15,
+  "hearts": 3,
+  "estMinutes": 7,
+  "segments": [
+    {
+      "type": "warmup",
+      "exercises": [
+        {
+          "id": "w1",
+          "type": "multiple_choice",
+          "xp": 1,
+          "prompt": "Recap: What is the purpose of the CLS token in a Vision Transformer?",
+          "options": [
+            {
+              "id": "a",
+              "text": "To aggregate global representation information for classification.",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "To crop the image into patches.",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "To perform learning rate scheduling.",
+              "correct": false
+            }
+          ],
+          "explain": "Correct! The CLS token aggregates features across all patches to yield a final class prediction."
+        }
+      ]
+    },
+    {
+      "type": "teach",
+      "cards": [
+        {
+          "kind": "hook",
+          "icon": "\ud83d\udccd",
+          "title": "The scrambled image",
+          "body": "If you cut up a photo, shuffle the pieces, and feed them into a transformer, it will process them exactly the same way. Why? Because transformers view inputs as set elements, completely unaware of order or location. We need to add 'labels' to tell the model where each piece belongs."
+        },
+        {
+          "kind": "definition",
+          "icon": "\ud83d\udccd",
+          "title": "Position Embeddings",
+          "body": "<strong>Position embeddings</strong> are learnable or fixed vectors added to patch embeddings before they enter the transformer. They provide spatial coordinates so the model can learn and utilize the 2D layout of the image."
+        },
+        {
+          "kind": "analogy",
+          "icon": "\ud83d\uddfa\ufe0f",
+          "title": "Numbered puzzle pieces",
+          "body": "Imagine giving someone puzzle pieces in a box. If you number the back of each piece (e.g., 'Row 1, Col 3'), they immediately know where each piece fits on the board without guessing, even if they draw them in random order."
+        },
+        {
+          "kind": "example",
+          "icon": "\ud83d\udd22",
+          "title": "1D vs. 2D positions",
+          "body": "Standard ViT uses 1D position embeddings (just numbering patches 1 to N). During training, the model learns that patch 1 is close to patch 2, and that patch 1 is also close to patch 15 (which is right below it in 2D space)."
+        },
+        {
+          "kind": "mythbust",
+          "icon": "\u26a0\ufe0f",
+          "title": "They are learned, not hardcoded",
+          "body": "You might think we need complex mathematical formulas to define 2D coordinates. In practice, simple **learnable 1D parameters** work incredibly well \u2014 the model automatically recovers the 2D grid structure purely from data!"
+        },
+        {
+          "kind": "visual",
+          "icon": "\u2696\ufe0f",
+          "title": "With vs. Without Position Info",
+          "body": "Comparing sequence interpretation in transformers:",
+          "compare": {
+            "left": {
+              "emoji": "\ud83c\udf2a\ufe0f",
+              "tag": "Without Positions",
+              "text": "Permutation invariant<br>Shuffling patches changes nothing<br>Model cannot learn spatial layout"
+            },
+            "right": {
+              "emoji": "\ud83d\uddfa\ufe0f",
+              "tag": "With Positions",
+              "text": "Retains spatial order<br>Shuffling patches changes values<br>Model understands layout & structure"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "type": "practice",
+      "exercises": [
+        {
+          "id": "p1",
+          "type": "multiple_choice",
+          "xp": 2,
+          "prompt": "Why are position embeddings necessary in Vision Transformers?",
+          "explain": "Because transformers process tokens as an unordered set, position embeddings are required to inject spatial coordinate context.",
+          "options": [
+            {
+              "id": "a",
+              "text": "Transformers are naturally permutation-invariant and do not know patch locations without them",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "They resize the patches to match the target MLP head",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "They prevent overfitting by injecting random noise into the pixels",
+              "correct": false
+            },
+            {
+              "id": "d",
+              "text": "They replace the self-attention layer completely",
+              "correct": false
+            }
+          ]
+        },
+        {
+          "id": "p2",
+          "type": "true_false",
+          "xp": 2,
+          "prompt": "True or false: Standard ViTs usually learn 1D position embeddings rather than hardcoding complex 2D coordinates.",
+          "explain": "True. Simple learnable 1D vectors are sufficient; the model learns to associate spatial proximity during training.",
+          "options": [
+            {
+              "id": "t",
+              "text": "True",
+              "correct": true
+            },
+            {
+              "id": "f",
+              "text": "False",
+              "correct": false
+            }
+          ]
+        },
+        {
+          "id": "p3",
+          "type": "fill_blank",
+          "xp": 2,
+          "prompt": "Complete the sentence:",
+          "explain": "Position embeddings are element-wise added (summed) to the patch embeddings.",
+          "sentence": "Position embeddings are ___ to patch embeddings before the sequence enters the Transformer Encoder.",
+          "blank": "added",
+          "words": [
+            "added",
+            "multiplied",
+            "concatenated"
+          ]
+        },
+        {
+          "id": "p4",
+          "type": "spot_the_ai",
+          "xp": 2,
+          "prompt": "What would happen if you shuffled the input patch tokens but forgot to shuffle their corresponding position embeddings?",
+          "explain": "Position embeddings dictate where the model thinks a patch is. Mismatching them scrambles the model's understanding of the image layout.",
+          "options": [
+            {
+              "id": "a",
+              "text": "The model would get confused because patches would receive incorrect spatial coordinate tags",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "The model's predictions would be completely unaffected",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "The model would run twice as fast",
+              "correct": false
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "boss",
+      "exercises": [
+        {
+          "id": "b1",
+          "type": "multiple_choice",
+          "xp": 5,
+          "prompt": "How does a Vision Transformer handle images of a different resolution than the one it was trained on?",
+          "options": [
+            {
+              "id": "a",
+              "text": "It must interpolate (resize) the position embedding grid to match the new number of patches.",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "It discards position embeddings and trains from scratch.",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "It automatically pads the image with zero pixels until the patch count matches.",
+              "correct": false
+            },
+            {
+              "id": "d",
+              "text": "It fails because transformers can never change sequence length.",
+              "correct": false
+            }
+          ],
+          "explain": "Spot on! When resolution changes, the patch count changes, requiring us to interpolate the position embedding grid to fit the new sequence length. Next: self-attention in action!"
+        }
+      ]
+    }
+  ]
+}

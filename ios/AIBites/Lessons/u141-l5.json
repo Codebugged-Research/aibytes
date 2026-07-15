@@ -1,0 +1,222 @@
+{
+  "id": "u141-l5",
+  "unit": 141,
+  "day": 710,
+  "tier": "Object Detection Foundations",
+  "tierIcon": "🎯",
+  "title": "NMS Thresholds",
+  "icon": "🎛️",
+  "concept": "NMS relies on two thresholds: a confidence threshold to discard weak boxes, and an IoU threshold to suppress duplicate overlaps.",
+  "xp": 15,
+  "hearts": 3,
+  "estMinutes": 7,
+  "segments": [
+    {
+      "type": "warmup",
+      "exercises": [
+        {
+          "id": "w1",
+          "type": "multiple_choice",
+          "xp": 1,
+          "prompt": "Recap: What is the main action of NMS?",
+          "options": [
+            {
+              "id": "a",
+              "text": "To keep the highest confidence box and suppress overlapping duplicates",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "To calculate the coordinates of anchor boxes",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "To average multiple overlapping boxes",
+              "correct": false
+            }
+          ],
+          "explain": "NMS cleans up duplicate boxes by suppressing overlaps relative to a high-confidence target."
+        }
+      ]
+    },
+    {
+      "type": "teach",
+      "cards": [
+        {
+          "kind": "hook",
+          "icon": "🎛️",
+          "title": "Too Strict vs. Too Loose",
+          "body": "If you are grading homework, setting a threshold of 99% is too strict — almost everyone fails. Setting a threshold of 10% is too loose — everyone passes, even if they wrote nonsense. Choosing NMS thresholds is a similar balancing act."
+        },
+        {
+          "kind": "definition",
+          "icon": "🎛️",
+          "title": "NMS Threshold Parameters",
+          "body": "NMS uses two main thresholds: 1) <strong>Confidence Threshold</strong> (e.g. <code>0.3</code>) to immediately discard weak predictions, and 2) <strong>IoU Threshold</strong> (e.g. <code>0.5</code>) to define how much overlap is allowed before a box is suppressed."
+        },
+        {
+          "kind": "analogy",
+          "icon": "🎟️",
+          "title": "The Concert Entry",
+          "body": "Think of the confidence threshold as the ticket price: you must pay a minimum (e.g., 30% confidence) to enter. Think of the IoU threshold as the seating rules: if two people try to sit in the same seat (high overlap), only the one with the better ticket gets to stay."
+        },
+        {
+          "kind": "example",
+          "icon": "🎛️",
+          "title": "Adjusting the IoU Threshold",
+          "body": "If you set the IoU threshold to <code>0.8</code> (very high), you allow boxes to overlap significantly without suppression. If you set it to <code>0.2</code> (very low), even slight overlaps will cause nearby boxes to get deleted."
+        },
+        {
+          "kind": "mythbust",
+          "icon": "⚠️",
+          "title": "No single perfect value",
+          "body": "It's a myth that there is one perfect threshold set for all datasets. If objects are naturally crowded (like a bag of apples), you need a higher IoU threshold so the model doesn't suppress real, overlapping apples."
+        },
+        {
+          "kind": "visual",
+          "icon": "⚖️",
+          "title": "IoU Threshold Impact",
+          "body": "Comparing different NMS IoU suppression thresholds:",
+          "compare": {
+            "left": {
+              "emoji": "🧹",
+              "tag": "Low Threshold (e.g. 0.3)",
+              "text": "Aggressive suppression.<br>Detections might get deleted."
+            },
+            "right": {
+              "emoji": "🗂️",
+              "tag": "High Threshold (e.g. 0.7)",
+              "text": "Gentle suppression.<br>Allows nearby objects to coexist."
+            }
+          }
+        }
+      ]
+    },
+    {
+      "type": "practice",
+      "exercises": [
+        {
+          "id": "p1",
+          "type": "multiple_choice",
+          "xp": 2,
+          "prompt": "What happens if you set the NMS IoU threshold too low (e.g., 0.1)?",
+          "explain": "A low IoU threshold means even a tiny overlap triggers suppression, causing real, adjacent objects to be mistakenly deleted.",
+          "options": [
+            {
+              "id": "a",
+              "text": "The model will suppress (delete) legitimate nearby objects because of minor overlaps",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "The model will stop classifying objects entirely",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "The model will output millions of duplicate boxes",
+              "correct": false
+            },
+            {
+              "id": "d",
+              "text": "The image colors will change",
+              "correct": false
+            }
+          ]
+        },
+        {
+          "id": "p2",
+          "type": "true_false",
+          "xp": 2,
+          "prompt": "True or False: The confidence threshold is applied AFTER NMS suppresses overlapping boxes.",
+          "explain": "False. We apply the confidence threshold FIRST to filter out weak background noise boxes, leaving only strong candidates for NMS.",
+          "options": [
+            {
+              "id": "t",
+              "text": "True",
+              "correct": false
+            },
+            {
+              "id": "f",
+              "text": "False",
+              "correct": true
+            }
+          ]
+        },
+        {
+          "id": "p3",
+          "type": "fill_blank",
+          "xp": 2,
+          "prompt": "Complete the sentence:",
+          "explain": "Increasing the IoU threshold allows crowded objects to overlap more without suppressing each other.",
+          "sentence": "To prevent suppressing distinct objects in a crowded scene, we should ___ the IoU threshold.",
+          "blank": "increase",
+          "words": [
+            "increase",
+            "decrease",
+            "normalize"
+          ]
+        },
+        {
+          "id": "p4",
+          "type": "spot_the_ai",
+          "xp": 2,
+          "prompt": "Which configuration represents a standard post-processing filter combination for a detector?",
+          "explain": "Confidence and IoU thresholds are the twin parameters configured for NMS post-processing.",
+          "options": [
+            {
+              "id": "a",
+              "text": "Confidence Threshold = 0.25, IoU Threshold = 0.45",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "Learning Rate = 0.001, Batch Size = 32",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "AlexNet Backbone, VGG Classifier",
+              "correct": false
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "boss",
+      "exercises": [
+        {
+          "id": "b1",
+          "type": "multiple_choice",
+          "xp": 5,
+          "prompt": "You are building an object detector for a flock of birds flying closely together. The birds frequently overlap in the camera view. If your default NMS suppresses real birds, what adjustment should you make?",
+          "options": [
+            {
+              "id": "a",
+              "text": "Increase the IoU threshold (e.g. from 0.45 to 0.70) to allow more overlap before boxes are suppressed.",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "Decrease the IoU threshold to 0.1 to clean up more boxes.",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "Lower the confidence threshold to 0.0.",
+              "correct": false
+            },
+            {
+              "id": "d",
+              "text": "Disable the classification head.",
+              "correct": false
+            }
+          ],
+          "explain": "Exactly! Raising the IoU threshold allows the model to keep boxes that overlap tightly, which is common in crowded scenes like flocks. Next up: let's learn how classical computer vision found candidate regions before neural networks!"
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,222 @@
+{
+  "id": "u172-l3",
+  "unit": 172,
+  "day": 863,
+  "tier": "Advanced Vision Applications",
+  "tierIcon": "👁️",
+  "title": "Reconstruction-Based Anomaly Detection",
+  "icon": "🪞",
+  "concept": "Autoencoders trained only on normal images learn to compress and reconstruct normal patterns well, but struggle to reconstruct anomalous inputs accurately — the reconstruction error itself becomes the anomaly signal.",
+  "xp": 15,
+  "hearts": 3,
+  "estMinutes": 7,
+  "segments": [
+    {
+      "type": "warmup",
+      "exercises": [
+        {
+          "id": "w1",
+          "type": "multiple_choice",
+          "xp": 1,
+          "prompt": "Recap: Why can't a one-class model usually explain the specific root cause of a flagged defect?",
+          "options": [
+            {
+              "id": "a",
+              "text": "It only detects that an input falls outside the normal boundary, without inherently identifying the specific type of deviation",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "It has no way to process any images at all",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "It automatically deletes flagged images before analysis",
+              "correct": false
+            }
+          ],
+          "explain": "Yes! Boundary-based flagging alone doesn't explain the specific cause."
+        }
+      ]
+    },
+    {
+      "type": "teach",
+      "cards": [
+        {
+          "kind": "hook",
+          "icon": "🪞",
+          "title": "A forger who's only ever seen genuine bills",
+          "body": "Imagine an art forger trained to reproduce paintings, but who has ONLY ever studied genuine masterpieces. When asked to reproduce a genuine masterpiece, they nail it perfectly. But asked to reproduce a badly forged fake, their reproduction comes out oddly wrong — because they've never learned how to recreate 'wrong' features."
+        },
+        {
+          "kind": "definition",
+          "icon": "🪞",
+          "title": "Reconstruction-Based Detection (Autoencoders)",
+          "body": "An <strong>autoencoder</strong> is trained ONLY on normal images to compress them into a small representation, then reconstruct them back to the original. Trained only on normal data, it becomes excellent at reconstructing normal patterns but POOR at reconstructing anomalies — the <strong>reconstruction error</strong> (how different the output is from the input) becomes the anomaly score."
+        },
+        {
+          "kind": "analogy",
+          "icon": "🎼",
+          "title": "A musician who only learned one song perfectly",
+          "body": "A musician trained to perfectly replay ONE specific song by ear will play it flawlessly. But ask them to replay a completely different, unfamiliar song, and their attempt comes out garbled and wrong — the mismatch between what they tried to play and the real unfamiliar song reveals it wasn't the song they know."
+        },
+        {
+          "kind": "example",
+          "icon": "🧵",
+          "title": "Fabric defect detection",
+          "body": "An autoencoder trained only on images of flawless fabric learns to compress and perfectly reconstruct flawless fabric patterns. Fed a photo of fabric with a tear, it tries to reconstruct 'flawless fabric' from the input, producing a reconstruction that clearly differs from the actual torn input — that difference (reconstruction error) is high exactly where the tear is."
+        },
+        {
+          "kind": "mythbust",
+          "icon": "⚠️",
+          "title": "High reconstruction error doesn't always mean 'defect'",
+          "body": "It's a myth that reconstruction error is a perfect anomaly signal. Sometimes normal-but-rare variations (unusual lighting, an uncommon but valid product angle) can also produce higher reconstruction error, causing false alarms — thresholds must be carefully tuned, and this technique works best alongside human review for borderline cases."
+        },
+        {
+          "kind": "visual",
+          "icon": "⚖️",
+          "title": "Reconstructing Normal vs. Anomalous Input",
+          "body": "What happens when the autoencoder meets each type of input:",
+          "compare": {
+            "left": {
+              "emoji": "✅",
+              "tag": "Normal Input",
+              "text": "Autoencoder reconstructs it accurately<br>LOW reconstruction error<br>Classified as normal"
+            },
+            "right": {
+              "emoji": "🚨",
+              "tag": "Anomalous Input",
+              "text": "Autoencoder struggles to reconstruct it<br>HIGH reconstruction error<br>Classified as anomalous"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "type": "practice",
+      "exercises": [
+        {
+          "id": "p1",
+          "type": "multiple_choice",
+          "xp": 2,
+          "prompt": "What signal does a reconstruction-based autoencoder use to flag anomalies?",
+          "options": [
+            {
+              "id": "a",
+              "text": "The reconstruction error — how different the autoencoder's output is from the original input",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "The exact file size of the input image",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "The number of bounding boxes detected",
+              "correct": false
+            },
+            {
+              "id": "d",
+              "text": "The color histogram alone, ignoring reconstruction entirely",
+              "correct": false
+            }
+          ],
+          "explain": "Correct! High reconstruction error signals the input doesn't match learned normal patterns."
+        },
+        {
+          "id": "p2",
+          "type": "true_false",
+          "xp": 2,
+          "prompt": "True or false: An autoencoder trained only on normal images typically reconstructs anomalous inputs just as accurately as normal ones.",
+          "options": [
+            {
+              "id": "t",
+              "text": "True",
+              "correct": false
+            },
+            {
+              "id": "f",
+              "text": "False",
+              "correct": true
+            }
+          ],
+          "explain": "False. It struggles to accurately reconstruct anomalous inputs precisely because it never learned those patterns, producing high reconstruction error."
+        },
+        {
+          "id": "p3",
+          "type": "fill_blank",
+          "xp": 2,
+          "prompt": "Complete the sentence:",
+          "sentence": "The difference between an autoencoder's output and its original input is called the reconstruction ___.",
+          "blank": "error",
+          "words": [
+            "error",
+            "label",
+            "kernel"
+          ],
+          "explain": "Reconstruction error quantifies how well the autoencoder rebuilt the input, serving as the anomaly score."
+        },
+        {
+          "id": "p4",
+          "type": "spot_the_ai",
+          "xp": 2,
+          "prompt": "Why might an unusual-but-valid lighting condition cause a false alarm in a reconstruction-based anomaly detector?",
+          "options": [
+            {
+              "id": "a",
+              "text": "Rare but normal variations can also produce higher reconstruction error, since the autoencoder saw fewer examples of them during training",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "Lighting conditions are completely ignored by autoencoders",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "False alarms are mathematically impossible in reconstruction-based detection",
+              "correct": false
+            }
+          ],
+          "explain": "Correct! Reconstruction error isn't a perfectly clean signal — rare-but-normal cases can trigger false positives too."
+        }
+      ]
+    },
+    {
+      "type": "boss",
+      "exercises": [
+        {
+          "id": "b1",
+          "type": "multiple_choice",
+          "xp": 5,
+          "prompt": "A factory deploys a reconstruction-based anomaly detector for inspecting glass bottles. It suddenly starts flagging many bottles as anomalous right after the factory switches to a new (but still acceptable) bottle cap color. What is the most likely cause?",
+          "options": [
+            {
+              "id": "a",
+              "text": "The autoencoder was never trained on the new cap color, so it reconstructs it poorly, producing high reconstruction error for a normal-but-unfamiliar variation",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "The new cap color physically breaks the camera sensor",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "Reconstruction-based detectors cannot process colored objects at all",
+              "correct": false
+            },
+            {
+              "id": "d",
+              "text": "This behavior indicates the bottles are genuinely all defective",
+              "correct": false
+            }
+          ],
+          "explain": "Exactly! Unfamiliar-but-valid variations can trigger false positives — a key limitation to plan around. Next: applying this to real manufacturing defect detection workflows."
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,222 @@
+{
+  "id": "u181-l4",
+  "unit": 181,
+  "day": 909,
+  "tier": "Vision Transformers & Modern Approaches",
+  "tierIcon": "\ud83d\udc41\ufe0f",
+  "title": "Self-Attention Visualization in DINO",
+  "icon": "\ud83d\udc41\ufe0f",
+  "concept": "Visualizing self-attention maps in DINO-trained transformers reveals that they naturally segment object boundaries, capturing semantic layout without labels.",
+  "xp": 15,
+  "hearts": 3,
+  "estMinutes": 7,
+  "segments": [
+    {
+      "type": "warmup",
+      "exercises": [
+        {
+          "id": "w1",
+          "type": "multiple_choice",
+          "xp": 1,
+          "prompt": "Recap: What views do DINO's student and teacher networks receive?",
+          "options": [
+            {
+              "id": "a",
+              "text": "Teacher gets global crops; Student gets local crops.",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "Both get identical full resolutions.",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "Student gets labels; Teacher gets raw pixels.",
+              "correct": false
+            }
+          ],
+          "explain": "Correct! DINO feeds global views to the teacher and smaller local crops to the student."
+        }
+      ]
+    },
+    {
+      "type": "teach",
+      "cards": [
+        {
+          "kind": "hook",
+          "icon": "\ud83d\udc41\ufe0f",
+          "title": "Emergent segmentation",
+          "body": "If you train a model without labels, you might expect its internal representation to be a messy soup of math. But when researchers visualized the self-attention maps of DINO, they were shocked: the model had cleanly segmented out the main objects in the image, entirely on its own!"
+        },
+        {
+          "kind": "definition",
+          "icon": "\ud83d\udc41\ufe0f",
+          "title": "Emergent Segmentation",
+          "body": "<strong>Emergent segmentation</strong> is the phenomenon where a self-supervised transformer (like DINO) naturally learns to locate and isolate objects. Because the self-attention maps highlight coherent semantic regions, they serve as high-quality object segmentations without any pixel-level training labels."
+        },
+        {
+          "kind": "analogy",
+          "icon": "\ud83d\udd26",
+          "title": "A theatre spotlight",
+          "body": "Imagine watching a play in the dark. The spotlight naturally tracks the lead actors. DINO's attention maps act as that automatic spotlight: even though nobody told it who the lead actors are, it naturally focuses its attention on the active figures while ignoring the empty stage background."
+        },
+        {
+          "kind": "example",
+          "icon": "\ud83d\udd2c",
+          "title": "Zero-shot segmentation",
+          "body": "By thresholding the attention maps of DINO's last layer, you can segment out dogs, cars, and people with a precision that matches supervised segmentation models, despite the DINO model never seeing a label."
+        },
+        {
+          "kind": "mythbust",
+          "icon": "\u26a0\ufe0f",
+          "title": "Not found in supervised models",
+          "body": "You might think all transformers do this. Supervised ViTs trained on ImageNet classifications do **not** show this clean segmentation. Because they only need to predict the label, their attention maps are messy, focusing only on small predictive features."
+        },
+        {
+          "kind": "visual",
+          "icon": "\u2696\ufe0f",
+          "title": "Supervised vs. DINO Attention Maps",
+          "body": "Comparing attention segmentations:",
+          "compare": {
+            "left": {
+              "emoji": "\ud83d\udcc1",
+              "tag": "Supervised ViT Attention",
+              "text": "Messy, fragmented maps<br>Highlights small clues (e.g. dog collar)<br>Ignores overall shape boundaries"
+            },
+            "right": {
+              "emoji": "\ud83d\udc41\ufe0f",
+              "tag": "DINO ViT Attention",
+              "text": "Clean, sharp boundaries<br>Highlights whole object shape<br>Emergent segmentation mask"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "type": "practice",
+      "exercises": [
+        {
+          "id": "p1",
+          "type": "multiple_choice",
+          "xp": 2,
+          "prompt": "What is 'emergent segmentation' in DINO-trained Vision Transformers?",
+          "explain": "DINO's attention maps naturally isolate entire object boundaries as a side-effect of learning semantic relationships.",
+          "options": [
+            {
+              "id": "a",
+              "text": "The model's natural ability to segment object shapes cleanly without being trained on segmentation labels",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "The automatic splitting of images into square patches in layer 1",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "A bug that causes the validation loss to spike",
+              "correct": false
+            },
+            {
+              "id": "d",
+              "text": "A data augmentation technique that crops images randomly",
+              "correct": false
+            }
+          ]
+        },
+        {
+          "id": "p2",
+          "type": "true_false",
+          "xp": 2,
+          "prompt": "True or false: Supervised ViT classifiers show cleaner emergent segmentation maps than DINO.",
+          "explain": "False. Supervised ViTs focus only on small diagnostic features to predict labels, resulting in messy attention maps.",
+          "options": [
+            {
+              "id": "t",
+              "text": "True",
+              "correct": false
+            },
+            {
+              "id": "f",
+              "text": "False",
+              "correct": true
+            }
+          ]
+        },
+        {
+          "id": "p3",
+          "type": "fill_blank",
+          "xp": 2,
+          "prompt": "Complete the sentence:",
+          "explain": "Thresholding highlights active attention pixels, creating clean binary segmentation masks.",
+          "sentence": "By thresholding the attention maps of the final layers in DINO, we can extract zero-shot object ___.",
+          "blank": "masks",
+          "words": [
+            "masks",
+            "coordinates",
+            "labels"
+          ]
+        },
+        {
+          "id": "p4",
+          "type": "spot_the_ai",
+          "xp": 2,
+          "prompt": "Which visual result is characteristic of DINO's self-attention layers?",
+          "explain": "DINO's attention highlights the entire silhouette of the object, capturing its semantic boundary.",
+          "options": [
+            {
+              "id": "a",
+              "text": "An attention map that outlines a bird's entire body against a blurry sky background",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "A list of predicted text coordinates",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "A random distribution of gray pixels",
+              "correct": false
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "boss",
+      "exercises": [
+        {
+          "id": "b1",
+          "type": "multiple_choice",
+          "xp": 5,
+          "prompt": "Why does self-supervised pre-training (like DINO) encourage the model to capture entire object boundaries, unlike supervised training?",
+          "options": [
+            {
+              "id": "a",
+              "text": "Because matching local crops to global crops forces the model to learn the spatial layout and coherence of the entire object, rather than relying on a single class shortcut.",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "Because DINO forces the model to ignore color channels.",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "Because the teacher network is updated on labels.",
+              "correct": false
+            },
+            {
+              "id": "d",
+              "text": "Because it disables multi-head self-attention.",
+              "correct": false
+            }
+          ],
+          "explain": "Superb! Without labels to cheat with, the model must understand the global shape to solve the crop puzzles, naturally discovering semantic objects. Next: how SSL is used in production!"
+        }
+      ]
+    }
+  ]
+}

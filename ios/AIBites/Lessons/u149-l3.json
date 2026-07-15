@@ -1,0 +1,222 @@
+{
+  "id": "u149-l3",
+  "unit": 149,
+  "day": 748,
+  "tier": "Modern Object Detection",
+  "tierIcon": "🎯",
+  "title": "SSD Architecture",
+  "icon": "🏗️",
+  "concept": "SSD is built by appending extra convolutional feature layers of shrinking size to a standard base classification network.",
+  "xp": 15,
+  "hearts": 3,
+  "estMinutes": 7,
+  "segments": [
+    {
+      "type": "warmup",
+      "exercises": [
+        {
+          "id": "w3",
+          "type": "multiple_choice",
+          "xp": 1,
+          "prompt": "Recap: What is the main benefit of scaling default box sizes across network layers?",
+          "options": [
+            {
+              "id": "a",
+              "text": "It allows earlier layers to focus on small objects and deeper layers to focus on large objects",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "It reduces the memory footprint of the image",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "It speeds up the backpropagation step",
+              "correct": false
+            }
+          ],
+          "explain": "Correct! Scaling box sizes allows different layers to specialize in different object sizes."
+        }
+      ]
+    },
+    {
+      "type": "teach",
+      "cards": [
+        {
+          "kind": "hook",
+          "icon": "🏗️",
+          "title": "Building the Stack",
+          "body": "What does the inside of an SSD network actually look like? Instead of inventing a completely new network from scratch, SSD builds on top of standard classifiers. Let's see how it adds layers to predict boxes."
+        },
+        {
+          "kind": "definition",
+          "icon": "🏗️",
+          "title": "SSD Architecture",
+          "body": "SSD consists of a <strong>base network</strong> (a standard classifier backbone like VGG-16 with classification layers removed) followed by <strong>extra feature layers</strong>. These extra convolutional layers progressively decrease in size, creating a multi-scale pyramid."
+        },
+        {
+          "kind": "analogy",
+          "icon": "🗼",
+          "title": "The Layer Pyramid",
+          "body": "Think of SSD's architecture like a step-pyramid. The bottom steps are large (high resolution, early layers). As you climb up, the steps get smaller and smaller (low resolution, deep layers). SSD places detectors on every step of the pyramid."
+        },
+        {
+          "kind": "example",
+          "icon": "🏗️",
+          "title": "VGG-16 Backbone",
+          "body": "In the classic SSD300 model, VGG-16 processes the image. Predictions are taken from VGG's Conv4_3 layer, Conv7 layer, and four additional convolutional layers added to the end, giving 6 scale levels in total."
+        },
+        {
+          "kind": "mythbust",
+          "icon": "⚠️",
+          "title": "Speed Myth",
+          "body": "You might think adding all these extra prediction layers makes SSD slow. In reality, because these extra layers shrink in size extremely fast (e.g. 19x19 down to 1x1), they add very little computational overhead."
+        },
+        {
+          "kind": "visual",
+          "icon": "⚖️",
+          "title": "Base Network vs. Extra Layers",
+          "body": "How the SSD architecture is divided:",
+          "compare": {
+            "left": {
+              "emoji": "🏭",
+              "tag": "Base Network (VGG-16)",
+              "text": "Extracts fundamental features<br>High resolution earlier layers<br>Classification head removed"
+            },
+            "right": {
+              "emoji": "🗼",
+              "tag": "Extra Feature Layers",
+              "text": "Added to the end of the backbone<br>Feature maps shrink progressively<br>Each layer outputs box coordinates"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "type": "practice",
+      "exercises": [
+        {
+          "id": "p1",
+          "type": "multiple_choice",
+          "xp": 2,
+          "prompt": "What is the role of the 'base network' in the SSD architecture?",
+          "options": [
+            {
+              "id": "a",
+              "text": "To act as a feature extractor backbone (like VGG-16) for the image",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "To perform final non-maximum suppression",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "To resize the input image to a flat vector",
+              "correct": false
+            },
+            {
+              "id": "d",
+              "text": "To calculate the training loss",
+              "correct": false
+            }
+          ],
+          "explain": "Correct! The base network extracts features, which are then passed to the extra prediction layers."
+        },
+        {
+          "id": "p2",
+          "type": "true_false",
+          "xp": 2,
+          "prompt": "True or False: SSD outputs predictions from both intermediate base network layers and the extra layers added at the end.",
+          "options": [
+            {
+              "id": "t",
+              "text": "True",
+              "correct": true
+            },
+            {
+              "id": "f",
+              "text": "False",
+              "correct": false
+            }
+          ],
+          "explain": "True. SSD taps into early base layers (like VGG's Conv4_3) for small objects and deeper layers for large objects."
+        },
+        {
+          "id": "p3",
+          "type": "fill_blank",
+          "xp": 2,
+          "prompt": "Complete the sentence:",
+          "sentence": "The classic SSD architecture uses ___ as its base network feature extractor.",
+          "blank": "VGG-16",
+          "words": [
+            "VGG-16",
+            "ResNet-101",
+            "AlexNet"
+          ],
+          "explain": "The original SSD was built on top of the VGG-16 base network."
+        },
+        {
+          "id": "p4",
+          "type": "spot_the_ai",
+          "xp": 2,
+          "prompt": "How do the extra feature layers in SSD change in size as you go deeper?",
+          "options": [
+            {
+              "id": "a",
+              "text": "They progressively decrease in size (resolution)",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "They increase in size to capture more detail",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "They remain the exact same shape and size",
+              "correct": false
+            }
+          ],
+          "explain": "Correct! The layers shrink, creating a pyramid of multi-scale feature maps."
+        }
+      ]
+    },
+    {
+      "type": "boss",
+      "exercises": [
+        {
+          "id": "b1",
+          "type": "multiple_choice",
+          "xp": 5,
+          "prompt": "You want to replace the VGG-16 base network in an SSD model with ResNet-50. Why is this possible?",
+          "options": [
+            {
+              "id": "a",
+              "text": "SSD is modular: you can swap the backbone network as long as you connect intermediate layers to the prediction heads.",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "ResNet-50 is identical in structure to VGG-16.",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "ResNet-50 does not use convolutional layers, making it compatible.",
+              "correct": false
+            },
+            {
+              "id": "d",
+              "text": "SSD only works with ResNet-50 in production.",
+              "correct": false
+            }
+          ],
+          "explain": "Exactly! SSD is a modular design where the base network backbone can be swapped to balance speed and accuracy."
+        }
+      ]
+    }
+  ]
+}

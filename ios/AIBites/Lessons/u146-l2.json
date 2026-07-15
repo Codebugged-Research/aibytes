@@ -1,0 +1,222 @@
+{
+  "id": "u146-l2",
+  "unit": 146,
+  "day": 732,
+  "tier": "Object Detection Foundations",
+  "tierIcon": "🎯",
+  "title": "Precision and Recall in Detection",
+  "icon": "⚖️",
+  "concept": "Precision measures the percentage of correct predictions, while recall measures the percentage of ground truth objects successfully detected.",
+  "xp": 15,
+  "hearts": 3,
+  "estMinutes": 7,
+  "segments": [
+    {
+      "type": "warmup",
+      "exercises": [
+        {
+          "id": "w1",
+          "type": "multiple_choice",
+          "xp": 1,
+          "prompt": "Recap: What is the IoU requirement for a True Positive in standard evaluations?",
+          "options": [
+            {
+              "id": "a",
+              "text": "IoU >= 0.5",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "IoU == 0.0",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "IoU == 1.0",
+              "correct": false
+            }
+          ],
+          "explain": "A threshold of 0.5 is the standard definition for successful localization."
+        }
+      ]
+    },
+    {
+      "type": "teach",
+      "cards": [
+        {
+          "kind": "hook",
+          "icon": "⚖️",
+          "title": "Quality vs. Quantity",
+          "body": "If you are fishing, precision is like the percentage of fish you catch that are actually edible: you don't want to catch old boots! Recall is like the percentage of all edible fish in the lake that you actually managed to catch. You want both high quality (precision) and high quantity (recall)."
+        },
+        {
+          "kind": "definition",
+          "icon": "⚖️",
+          "title": "Precision and Recall",
+          "body": "<strong>Precision</strong> is $\frac{TP}{TP + FP}$ — the fraction of all predicted boxes that are actually correct. <strong>Recall</strong> is $\frac{TP}{TP + FN}$ — the fraction of all real ground truth objects that were successfully detected by the model."
+        },
+        {
+          "kind": "analogy",
+          "icon": "🔑",
+          "title": "Keys and Locks",
+          "body": "Imagine trying to open a chest with a key ring. Precision is: how many keys you try actually open the lock (few attempts, high success). Recall is: out of all the working keys hidden in the house, how many did you find?"
+        },
+        {
+          "kind": "example",
+          "icon": "⚖️",
+          "title": "Calculating the Scores",
+          "body": "A model predicts 10 boxes (8 are correct, 2 are wrong). Out of 10 real objects in the image, the model found 8. **Precision** is <code>8 / 10 = 80%</code>. **Recall** is <code>8 / 10 = 80%</code>. If it drew 100 extra wrong boxes, precision would crash."
+        },
+        {
+          "kind": "mythbust",
+          "icon": "⚠️",
+          "title": "You can't look at one in isolation",
+          "body": "It's a myth that you can evaluate a detector using only recall. A model can achieve 100% recall by drawing millions of random boxes everywhere — it is guaranteed to cover all objects! But its precision would be near 0% because of all the false positives."
+        },
+        {
+          "kind": "visual",
+          "icon": "⚖️",
+          "title": "Precision vs. Recall Balance",
+          "body": "Understanding how the two metrics balance each other out:",
+          "compare": {
+            "left": {
+              "emoji": "🎯",
+              "tag": "High Precision",
+              "text": "Conservative guesses:<br><code>Few predictions, but all correct.</code>"
+            },
+            "right": {
+              "emoji": "🗂",
+              "tag": "High Recall",
+              "text": "Liberal guesses:<br><code>Many predictions, finds everything.</code>"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "type": "practice",
+      "exercises": [
+        {
+          "id": "p1",
+          "type": "multiple_choice",
+          "xp": 2,
+          "prompt": "What does a model's recall score measure?",
+          "explain": "Recall measures the fraction of all real ground truth objects that were successfully detected.",
+          "options": [
+            {
+              "id": "a",
+              "text": "The percentage of real ground truth objects that the model successfully located",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "The percentage of predicted boxes that were correct",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "The speed of the network forward pass",
+              "correct": false
+            },
+            {
+              "id": "d",
+              "text": "The total number of parameters in the model",
+              "correct": false
+            }
+          ]
+        },
+        {
+          "id": "p2",
+          "type": "true_false",
+          "xp": 2,
+          "prompt": "True or False: If a model draws a bounding box on every single pixel of an image, its precision score will be 100%.",
+          "explain": "False. Drawing boxes everywhere results in millions of False Positives, causing precision to drop to near 0%.",
+          "options": [
+            {
+              "id": "t",
+              "text": "True",
+              "correct": false
+            },
+            {
+              "id": "f",
+              "text": "False",
+              "correct": true
+            }
+          ]
+        },
+        {
+          "id": "p3",
+          "type": "fill_blank",
+          "xp": 2,
+          "prompt": "Complete the sentence:",
+          "explain": "Precision measures the quality of guesses: since all guesses were correct, precision is 1.0 (100%).",
+          "sentence": "If a model predicts 5 boxes and all 5 are correct, its ___ score is 100%.",
+          "blank": "precision",
+          "words": [
+            "precision",
+            "recall",
+            "loss"
+          ]
+        },
+        {
+          "id": "p4",
+          "type": "spot_the_ai",
+          "xp": 2,
+          "prompt": "Which outcome represents a high recall but low precision scenario?",
+          "explain": "Finding all cars (high recall) while outputting many false alarms (low precision) describes this trade-off.",
+          "options": [
+            {
+              "id": "a",
+              "text": "The model detects all 10 cars in the image, but also outputs 90 fake car boxes on empty space",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "The model detects 2 cars perfectly and outputs no other boxes",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "The model outputs 0 boxes",
+              "correct": false
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "boss",
+      "exercises": [
+        {
+          "id": "b1",
+          "type": "multiple_choice",
+          "xp": 5,
+          "prompt": "You are building a face detection app for a camera. If the app has high precision but low recall, how will the user experience it?",
+          "options": [
+            {
+              "id": "a",
+              "text": "Every box drawn on the screen will be a real face (no false boxes), but the app will fail to detect many faces in the room.",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "The app will draw boxes around empty chairs, but will find all faces.",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "The app will run extremely slowly.",
+              "correct": false
+            },
+            {
+              "id": "d",
+              "text": "The app will only detect faces in grayscale.",
+              "correct": false
+            }
+          ],
+          "explain": "Exactly! High precision means no false alarms, but low recall means the model misses many real targets. Next: let's study how we plot this trade-off using a curve!"
+        }
+      ]
+    }
+  ]
+}

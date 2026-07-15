@@ -1,0 +1,222 @@
+{
+  "id": "u136-l4",
+  "unit": 136,
+  "day": 684,
+  "tier": "Image Classification in Depth",
+  "tierIcon": "🏷️",
+  "title": "Expected Calibration Error (ECE)",
+  "icon": "📊",
+  "concept": "Expected Calibration Error (ECE) quantifies model miscalibration by binning predictions and measuring the average confidence-accuracy gap.",
+  "xp": 15,
+  "hearts": 3,
+  "estMinutes": 7,
+  "segments": [
+    {
+      "type": "warmup",
+      "exercises": [
+        {
+          "id": "w1",
+          "type": "multiple_choice",
+          "xp": 1,
+          "prompt": "Recap: Why is Temperature Scaling favored for model calibration over retraining?",
+          "options": [
+            {
+              "id": "a",
+              "text": "It is fast, requires no retraining, and preserves model accuracy.",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "It automatically balances class sizes.",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "It increases the number of features.",
+              "correct": false
+            }
+          ],
+          "explain": "Correct! Temperature scaling is a simple post-processing step that is easy and safe to implement."
+        }
+      ]
+    },
+    {
+      "type": "teach",
+      "cards": [
+        {
+          "kind": "hook",
+          "icon": "📊",
+          "title": "Checking the buckets",
+          "body": "If you want to evaluate a dart player's accuracy, you group their throws by target rings. To evaluate a model's calibration, we group its predictions into confidence 'buckets' (like 80-90% confidence) and check if the accuracy in each bucket matches."
+        },
+        {
+          "kind": "definition",
+          "icon": "📊",
+          "title": "What is ECE?",
+          "body": "<strong>Expected Calibration Error (ECE)</strong> divides predictions into equal-width confidence bins (typically 10 bins from 0 to 1). For each bin, it calculates the absolute difference between average confidence and accuracy. ECE is the weighted average of these differences."
+        },
+        {
+          "kind": "analogy",
+          "icon": "⚖️",
+          "title": "A sorting tray",
+          "body": "Think of a coin sorting tray. You sort coins by size (bins). For the 'Quarters' slot, you expect only quarters. If you find nickels, you calculate the error. ECE sorts predictions by confidence and measures how many 'correct' coins actually landed in each slot."
+        },
+        {
+          "kind": "example",
+          "icon": "📈",
+          "title": "Reliability Diagram",
+          "body": "A reliability diagram plots confidence (X-axis) vs. accuracy (Y-axis) for each bin. For a calibrated model, the bars align perfectly along a diagonal 45-degree line. Overconfident models show bars sagging far below the diagonal."
+        },
+        {
+          "kind": "mythbust",
+          "icon": "⚠️",
+          "title": "You cannot calculate ECE on one image",
+          "body": "You might think ECE is a loss function you run during a forward pass. In reality, ECE is an evaluation metric that requires a collection of predictions to group into bins. It cannot be calculated for a single prediction."
+        },
+        {
+          "kind": "visual",
+          "icon": "📊",
+          "title": "Reliability Diagram Bins",
+          "body": "Visualizing calibration gaps in a bin:",
+          "compare": {
+            "left": {
+              "emoji": "📈",
+              "tag": "Perfect Calibration Bin",
+              "text": "Bin: [0.80 - 0.90] confidence<br>Average confidence = 0.85<br>Accuracy in bin = 85%"
+            },
+            "right": {
+              "emoji": "📉",
+              "tag": "Miscalibrated Bin",
+              "text": "Bin: [0.80 - 0.90] confidence<br>Average confidence = 0.85<br>Accuracy in bin = 55% (Gap: 30%)"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "type": "practice",
+      "exercises": [
+        {
+          "id": "p1",
+          "type": "multiple_choice",
+          "xp": 2,
+          "prompt": "How does Expected Calibration Error (ECE) measure miscalibration?",
+          "explain": "ECE bins predictions by confidence, computes the confidence-accuracy gap in each bin, and weights the average by bin size.",
+          "options": [
+            {
+              "id": "a",
+              "text": "By calculating the weighted average of the absolute differences between confidence and accuracy across confidence bins",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "By checking if the model runs in less than one second",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "By measuring the spatial width of the final convolutional layer",
+              "correct": false
+            },
+            {
+              "id": "d",
+              "text": "By computing the total number of validation parameters",
+              "correct": false
+            }
+          ]
+        },
+        {
+          "id": "p2",
+          "type": "true_false",
+          "xp": 2,
+          "prompt": "True or false: On a Reliability Diagram, a perfectly calibrated model's bars will follow a flat horizontal line.",
+          "explain": "False. Perfectly calibrated models align along the 45-degree diagonal line where confidence equals accuracy.",
+          "options": [
+            {
+              "id": "t",
+              "text": "True",
+              "correct": false
+            },
+            {
+              "id": "f",
+              "text": "False",
+              "correct": true
+            }
+          ]
+        },
+        {
+          "id": "p3",
+          "type": "fill_blank",
+          "xp": 2,
+          "prompt": "Complete the sentence:",
+          "explain": "The diagram maps predicted confidence ranges to actual accuracy rates.",
+          "sentence": "Reliability diagrams plot model accuracy against predicted ___.",
+          "blank": "confidence",
+          "words": [
+            "confidence",
+            "loss",
+            "dimension"
+          ]
+        },
+        {
+          "id": "p4",
+          "type": "spot_the_ai",
+          "xp": 2,
+          "prompt": "Which ECE score indicates the most honest and well-calibrated model?",
+          "explain": "A lower ECE score (like 0.01) means the average gap between confidence and accuracy is extremely small.",
+          "options": [
+            {
+              "id": "a",
+              "text": "ECE = 0.01",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "ECE = 0.25",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "ECE = 0.99",
+              "correct": false
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "boss",
+      "exercises": [
+        {
+          "id": "b1",
+          "type": "multiple_choice",
+          "xp": 5,
+          "prompt": "If a model has an ECE score of 0.15 on a test set, and you apply Temperature Scaling which reduces the ECE to 0.02. What has happened to the model's confidence scores?",
+          "options": [
+            {
+              "id": "a",
+              "text": "The confidence scores were scaled to reflect the true accuracy rates, closing the calibration gap.",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "All confidence scores were set to zero.",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "The model's predictions changed, correcting 13% of the errors.",
+              "correct": false
+            },
+            {
+              "id": "d",
+              "text": "The model became completely uncalibrated.",
+              "correct": false
+            }
+          ],
+          "explain": "Exactly! Temperature scaling shifted the overinflated confidence scores closer to the true accuracy rates (shrinking the average gap from 15% to 2%), without changing which classes the model predicted. Next, let's explore calibration in safety-critical applications!"
+        }
+      ]
+    }
+  ]
+}

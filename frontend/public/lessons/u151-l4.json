@@ -1,0 +1,222 @@
+{
+  "id": "u151-l4",
+  "unit": 151,
+  "day": 759,
+  "tier": "Modern Object Detection",
+  "tierIcon": "🎯",
+  "title": "FPN in Object Detection",
+  "icon": "🗂️",
+  "concept": "FPN routes object predictions to specific pyramid levels based on scale, sharing prediction weights across levels.",
+  "xp": 15,
+  "hearts": 3,
+  "estMinutes": 7,
+  "segments": [
+    {
+      "type": "warmup",
+      "exercises": [
+        {
+          "id": "w4",
+          "type": "multiple_choice",
+          "xp": 1,
+          "prompt": "Recap: How does semantic transfer resolve shape ambiguity in early layers?",
+          "options": [
+            {
+              "id": "a",
+              "text": "By sharing deep context to help identify what the local shape represents",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "By removing the background layers",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "By doubling the channel width of the input",
+              "correct": false
+            }
+          ],
+          "explain": "Correct! Deep context guides early layers to correctly classify ambiguous local textures."
+        }
+      ]
+    },
+    {
+      "type": "teach",
+      "cards": [
+        {
+          "kind": "hook",
+          "icon": "🗂️",
+          "title": "The Split Prediction",
+          "body": "Now that FPN has created a pyramid of multi-scale feature maps, how do we actually use them to predict bounding boxes? Do we combine them back into one layer, or do something smarter?"
+        },
+        {
+          "kind": "definition",
+          "icon": "🗂️",
+          "title": "Pyramid Prediction Heads",
+          "body": "FPN attaches <strong>independent prediction heads</strong> (bounding box regressors and class predictors) to every level of the pyramid (P2, P3, P4, P5, P6). Small objects are predicted at high-res lower levels, and large objects at low-res upper levels."
+        },
+        {
+          "kind": "analogy",
+          "icon": "📦",
+          "title": "The Post Office Sorter",
+          "body": "Imagine sorting mail. You have separate slots: a small slot for envelopes (low level, high-res), a medium slot for packages (mid-level), and a large bin for boxes (high level, low-res). FCOS or Faster R-CNN with FPN does the same with object sizes."
+        },
+        {
+          "kind": "example",
+          "icon": "🚗",
+          "title": "Multi-Level Inference",
+          "body": "A street photo contains a massive bus and a tiny pedestrian. FPN predicts the bus bounding box from the P5 layer (7x7) and the pedestrian bounding box from the P2 layer (56x56) simultaneously."
+        },
+        {
+          "kind": "mythbust",
+          "icon": "⚠️",
+          "title": "Five Times More Weights?",
+          "body": "You might think tapping into 5 layers means we need 5 different sets of weights for the heads, making the model huge. Fact: FPN shares the same prediction head weights across all pyramid levels, keeping parameters low."
+        },
+        {
+          "kind": "visual",
+          "icon": "⚖️",
+          "title": "Pyramid Scale Mapping",
+          "body": "How FPN distributes predictions by scale:",
+          "compare": {
+            "left": {
+              "emoji": "🔍",
+              "tag": "Pyramid Level P2 (High-Res)",
+              "text": "Resolution: e.g. 56x56<br>Responsible for small objects<br>Detects details like keys, birds"
+            },
+            "right": {
+              "emoji": "🧠",
+              "tag": "Pyramid Level P5 (Low-Res)",
+              "text": "Resolution: e.g. 7x7<br>Responsible for large objects<br>Detects objects like trucks, houses"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "type": "practice",
+      "exercises": [
+        {
+          "id": "p1",
+          "type": "multiple_choice",
+          "xp": 2,
+          "prompt": "How are predictions distributed across the levels of an FPN pyramid?",
+          "options": [
+            {
+              "id": "a",
+              "text": "Small objects are predicted at lower, high-resolution levels, while large objects are predicted at upper levels",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "All objects are predicted only from the top level",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "Every object is predicted from all levels simultaneously and averaged",
+              "correct": false
+            },
+            {
+              "id": "d",
+              "text": "The model randomly assigns objects to levels",
+              "correct": false
+            }
+          ],
+          "explain": "Correct! FPN assigns objects to levels based on their size."
+        },
+        {
+          "id": "p2",
+          "type": "true_false",
+          "xp": 2,
+          "prompt": "True or False: To save memory, FPN-based detectors share the same convolutional weight parameters across all prediction heads in the pyramid.",
+          "options": [
+            {
+              "id": "t",
+              "text": "True",
+              "correct": true
+            },
+            {
+              "id": "f",
+              "text": "False",
+              "correct": false
+            }
+          ],
+          "explain": "True. Weight sharing keeps the model parameter count low while enabling multi-scale predictions."
+        },
+        {
+          "id": "p3",
+          "type": "fill_blank",
+          "xp": 2,
+          "prompt": "Complete the sentence:",
+          "sentence": "FPN predicts small objects at the high-resolution ___ levels of the pyramid.",
+          "blank": "lower",
+          "words": [
+            "lower",
+            "upper",
+            "middle"
+          ],
+          "explain": "Lower levels of the FPN pyramid retain high spatial resolution, which is needed to localize small objects."
+        },
+        {
+          "id": "p4",
+          "type": "spot_the_ai",
+          "xp": 2,
+          "prompt": "In a detector using FPN, where are large objects typically predicted?",
+          "options": [
+            {
+              "id": "a",
+              "text": "At the upper, low-resolution levels of the pyramid (like P5)",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "At the lower, high-resolution levels of the pyramid (like P2)",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "Only in the input preprocessing step",
+              "correct": false
+            }
+          ],
+          "explain": "Correct! Large objects don't need high resolution and are best captured by the semantic features in upper levels."
+        }
+      ]
+    },
+    {
+      "type": "boss",
+      "exercises": [
+        {
+          "id": "b1",
+          "type": "multiple_choice",
+          "xp": 5,
+          "prompt": "You are running YOLOv8 with FPN. The model is outputting duplicate boxes for a medium-sized car from both the P3 and P4 levels. How is this resolved?",
+          "options": [
+            {
+              "id": "a",
+              "text": "Non-Maximum Suppression (NMS) gathers predictions from all levels and deletes the overlapping duplicate boxes.",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "The model disables the P3 layer automatically.",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "It averages the weights of P3 and P4 on the fly.",
+              "correct": false
+            },
+            {
+              "id": "d",
+              "text": "FPN deletes the P4 output.",
+              "correct": false
+            }
+          ],
+          "explain": "Exactly! NMS is applied globally across all pyramid level predictions, cleaning up duplicates across scales. Phase 8: Modern Object Detection is complete. Next up: Image Segmentation."
+        }
+      ]
+    }
+  ]
+}

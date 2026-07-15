@@ -1,0 +1,222 @@
+{
+  "id": "u159-l3",
+  "unit": 159,
+  "day": 798,
+  "tier": "Segmentation Loss Functions",
+  "tierIcon": "🎯",
+  "title": "IoU and Jaccard Loss",
+  "icon": "🎯",
+  "concept": "Intersection over Union (IoU) / Jaccard loss directly optimizes the ratio of mask intersection to union, closely matching evaluation metrics.",
+  "xp": 15,
+  "hearts": 3,
+  "estMinutes": 7,
+  "segments": [
+    {
+      "type": "warmup",
+      "exercises": [
+        {
+          "id": "w1",
+          "type": "multiple_choice",
+          "xp": 1,
+          "prompt": "Recap: What is the relationship between the Dice Coefficient and Dice Loss?",
+          "options": [
+            {
+              "id": "a",
+              "text": "Dice Loss is equal to 1 minus the Dice Coefficient",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "Dice Loss is the square of the Dice Coefficient",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "Dice Loss is the log of the Dice Coefficient",
+              "correct": false
+            }
+          ],
+          "explain": "Correct! Dice Loss = 1 - Dice."
+        }
+      ]
+    },
+    {
+      "type": "teach",
+      "cards": [
+        {
+          "kind": "hook",
+          "icon": "📊",
+          "title": "Optimizing what we test",
+          "body": "When we evaluate a segmentation model, the standard metric we report is Intersection over Union (IoU). But historically, we trained models using cross-entropy, then hoped the IoU score would be good. Why not train the model by optimizing IoU directly? That's the idea behind Jaccard loss."
+        },
+        {
+          "kind": "definition",
+          "icon": "📉",
+          "title": "Jaccard Loss / IoU Loss",
+          "body": "The <strong>Jaccard Index</strong> (or IoU) is the ratio of the intersection of two masks to their union: $$IoU = \\frac{|A \\cap B|}{|A \\cup B|}$$. <strong>Jaccard Loss</strong> (or IoU Loss) is $1 - IoU$. It directly aligns the training objective with the evaluation metric."
+        },
+        {
+          "kind": "analogy",
+          "icon": "⭕",
+          "title": "Two overlapping circles",
+          "body": "Imagine drawing two overlapping circles. The intersection is where they overlap (the middle leaf shape). The union is the total space covered by both circles combined. IoU is the leaf shape divided by the entire combined shape."
+        },
+        {
+          "kind": "example",
+          "icon": "📐",
+          "title": "IoU vs. Dice",
+          "body": "While closely related, IoU and Dice are slightly different. If Dice is 0.8, IoU is typically around 0.67. Jaccard loss penalizes mistakes slightly harder than Dice loss, forcing the model to be more conservative."
+        },
+        {
+          "kind": "mythbust",
+          "icon": "⚠️",
+          "title": "Dice and Jaccard are equivalent in rank",
+          "body": "You might think choosing between Dice and Jaccard loss changes which model is better. In reality, they are monotonic: if model A has a better Dice score than model B, it will also have a better IoU score. They are just different ways to write the same concept."
+        },
+        {
+          "kind": "visual",
+          "icon": "⚖️",
+          "title": "Intersection over Union (IoU)",
+          "body": "Visualizing the components of the Jaccard index:",
+          "compare": {
+            "left": {
+              "emoji": "🟩",
+              "tag": "Intersection (A ∩ B)",
+              "text": "Overlapping area between predicted and true masks"
+            },
+            "right": {
+              "emoji": "⭕",
+              "tag": "Union (A ∪ B)",
+              "text": "Total area combined; divisor of the IoU fraction"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "type": "practice",
+      "exercises": [
+        {
+          "id": "p1",
+          "type": "multiple_choice",
+          "xp": 2,
+          "prompt": "What is Jaccard Loss?",
+          "options": [
+            {
+              "id": "a",
+              "text": "1 minus the Intersection over Union (IoU) score",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "The sum of cross-entropy and focal loss",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "The spatial resolution of the decoder output",
+              "correct": false
+            },
+            {
+              "id": "d",
+              "text": "The classification loss of the bounding boxes",
+              "correct": false
+            }
+          ],
+          "explain": "Correct! Jaccard loss is 1 - IoU, optimizing the overlap ratio directly."
+        },
+        {
+          "id": "p2",
+          "type": "true_false",
+          "xp": 2,
+          "prompt": "True or False: The union of two masks is always smaller than or equal to their intersection.",
+          "options": [
+            {
+              "id": "t",
+              "text": "True",
+              "correct": false
+            },
+            {
+              "id": "f",
+              "text": "False",
+              "correct": false
+            }
+          ],
+          "explain": "False. The union is the combined area, which is always larger than or equal to the intersection."
+        },
+        {
+          "id": "p3",
+          "type": "fill_blank",
+          "xp": 2,
+          "prompt": "Complete the sentence:",
+          "sentence": "Jaccard Index is another term for Intersection over ___.",
+          "blank": "Union",
+          "words": [
+            "Union",
+            "Intersection",
+            "Difference"
+          ],
+          "explain": "IoU divides the overlapping area (intersection) by the total combined area (union)."
+        },
+        {
+          "id": "p4",
+          "type": "spot_the_ai",
+          "xp": 2,
+          "prompt": "Why is Jaccard loss useful for training segmentation models?",
+          "options": [
+            {
+              "id": "a",
+              "text": "It directly optimizes the metric (IoU) used to evaluate the model's quality",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "It is mathematically simpler than cross-entropy",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "It prevents the model from downsampling features",
+              "correct": false
+            }
+          ],
+          "explain": "Optimizing the evaluation metric directly during training yields better final results."
+        }
+      ]
+    },
+    {
+      "type": "boss",
+      "exercises": [
+        {
+          "id": "b1",
+          "type": "multiple_choice",
+          "xp": 5,
+          "prompt": "Mathematically, if a model's predicted mask matches the ground truth mask perfectly, what are the values of IoU and Jaccard Loss?",
+          "options": [
+            {
+              "id": "a",
+              "text": "IoU is 1, and Jaccard Loss is 0.",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "IoU is 0, and Jaccard Loss is 1.",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "IoU is 0.5, and Jaccard Loss is 0.5.",
+              "correct": false
+            },
+            {
+              "id": "d",
+              "text": "IoU is infinity, and Jaccard Loss is -1.",
+              "correct": false
+            }
+          ],
+          "explain": "Perfect! Perfect overlap means Intersection equals Union, so IoU = 1. Thus, the loss is 1 - 1 = 0. Next: let's explore Focal Loss for pixels!"
+        }
+      ]
+    }
+  ]
+}

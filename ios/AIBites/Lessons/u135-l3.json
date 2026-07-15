@@ -1,0 +1,222 @@
+{
+  "id": "u135-l3",
+  "unit": 135,
+  "day": 678,
+  "tier": "Image Classification in Depth",
+  "tierIcon": "🏷️",
+  "title": "Hierarchical Loss Functions",
+  "icon": "📉",
+  "concept": "Hierarchical loss functions penalize errors based on semantic distance within the taxonomy graph.",
+  "xp": 15,
+  "hearts": 3,
+  "estMinutes": 7,
+  "segments": [
+    {
+      "type": "warmup",
+      "exercises": [
+        {
+          "id": "w1",
+          "type": "multiple_choice",
+          "xp": 1,
+          "prompt": "Recap: What is the main structural difference between a Tree and a Directed Acyclic Graph (DAG)?",
+          "options": [
+            {
+              "id": "a",
+              "text": "A Tree node has exactly one parent; a DAG node can have multiple parents.",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "A Tree allows circular paths; a DAG does not.",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "A DAG has no parent classes at all.",
+              "correct": false
+            }
+          ],
+          "explain": "Correct! Tree structures limit inheritance to a single parent, while DAGs allow multiple inheritance paths."
+        }
+      ]
+    },
+    {
+      "type": "teach",
+      "cards": [
+        {
+          "kind": "hook",
+          "icon": "📉",
+          "title": "Partial credit on exams",
+          "body": "If you are asked to identify a dog on a biology test, and you write down 'Wolf', you might get half credit because you got the genus right. If you write down 'Bicycle', you get zero. Hierarchical loss works the same way."
+        },
+        {
+          "kind": "definition",
+          "icon": "📉",
+          "title": "Distance-Weighted Loss",
+          "body": "<strong>Hierarchical loss functions</strong> modify the standard cross-entropy loss by incorporating a penalty based on the <strong>distance</strong> between the predicted class and the true class in the taxonomy tree/graph. Mistakes close to the true class are penalized less than distant mistakes."
+        },
+        {
+          "kind": "analogy",
+          "icon": "🎯",
+          "title": "Target practice rings",
+          "body": "Think of target archery. Landing your arrow in the ring next to the bullseye still gives you 9 points. Landing it in the grass far away gives you 0 points. Hierarchical loss creates concentric rings of penalty around the true class."
+        },
+        {
+          "kind": "example",
+          "icon": "📉",
+          "title": "Loss distance calculation",
+          "body": "If target class is 'Husky' (path: Animal -> Mammal -> Dog -> Husky):<br>- Predict 'Poodle': distance = 2 (common parent: Dog). Low penalty.<br>- Predict 'Cat': distance = 4 (common parent: Mammal). Medium penalty.<br>- Predict 'Car': distance = 6 (common parent: Root). Max penalty."
+        },
+        {
+          "kind": "mythbust",
+          "icon": "⚠️",
+          "title": "Hard classification is not always optimal",
+          "body": "You might think treating all wrong answers as equally wrong helps the model converge faster. In fact, utilizing hierarchical distance penalties prevents the model from making nonsensical mistakes, making it safer in production."
+        },
+        {
+          "kind": "visual",
+          "icon": "📈",
+          "title": "Visualizing Hierarchical Penalty",
+          "body": "How penalty scale corresponds to tree distance:",
+          "compare": {
+            "left": {
+              "emoji": "🟢",
+              "tag": "Semantic Near-Miss",
+              "text": "True: Husky | Predict: Wolf<br>Distance: 2 nodes<br>Penalty multiplier: 0.2 (Low)"
+            },
+            "right": {
+              "emoji": "🔴",
+              "tag": "Semantic Far-Miss",
+              "text": "True: Husky | Predict: Banana<br>Distance: 6 nodes<br>Penalty multiplier: 1.0 (High)"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "type": "practice",
+      "exercises": [
+        {
+          "id": "p1",
+          "type": "multiple_choice",
+          "xp": 2,
+          "prompt": "How does a hierarchical loss function calculate its penalty for an incorrect prediction?",
+          "explain": "Hierarchical loss weights the error by measuring how many steps apart the predicted and target classes are in the hierarchy.",
+          "options": [
+            {
+              "id": "a",
+              "text": "It scales the penalty based on the distance between classes in the taxonomy tree.",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "It doubles the loss for every image in the training batch.",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "It only penalizes the model if it predicts 'Vehicle'.",
+              "correct": false
+            },
+            {
+              "id": "d",
+              "text": "It ignores the labels and computes mean squared error on pixels.",
+              "correct": false
+            }
+          ]
+        },
+        {
+          "id": "p2",
+          "type": "true_false",
+          "xp": 2,
+          "prompt": "True or false: Under a hierarchical loss function, predicting 'Lion' for a 'Tiger' photo has the exact same loss value as predicting 'Chair'.",
+          "explain": "False. Lion and Tiger are close in the taxonomy, so the loss penalty is much lower than predicting Chair, which is far away.",
+          "options": [
+            {
+              "id": "t",
+              "text": "True",
+              "correct": false
+            },
+            {
+              "id": "f",
+              "text": "False",
+              "correct": true
+            }
+          ]
+        },
+        {
+          "id": "p3",
+          "type": "fill_blank",
+          "xp": 2,
+          "prompt": "Complete the sentence:",
+          "explain": "Semantic distance refers to the path length between two nodes in the taxonomic graph.",
+          "sentence": "Hierarchical loss uses the semantic ___ between categories to weight classification errors.",
+          "blank": "distance",
+          "words": [
+            "distance",
+            "accuracy",
+            "variance"
+          ]
+        },
+        {
+          "id": "p4",
+          "type": "spot_the_ai",
+          "xp": 2,
+          "prompt": "Which of these errors will be penalized the least by a hierarchical loss function?",
+          "explain": "Predicting the parent category (Feline) is a minor semantic near-miss, yielding the lowest penalty.",
+          "options": [
+            {
+              "id": "a",
+              "text": "Predicting 'Feline' (parent) instead of 'Domestic Cat' (child)",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "Predicting 'Tree' (distant category) instead of 'Domestic Cat'",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "Predicting 'Submarine' (completely unrelated) instead of 'Domestic Cat'",
+              "correct": false
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "boss",
+      "exercises": [
+        {
+          "id": "b1",
+          "type": "multiple_choice",
+          "xp": 5,
+          "prompt": "You are training a medical scan model. The taxonomy splits diseases into 'Infectious', 'Inflammatory', and 'Neoplastic'. A 'Neoplastic' tumor misclassification is catastrophic, while mixing up two types of 'Infectious' lung spots is less severe. How should you design the loss?",
+          "options": [
+            {
+              "id": "a",
+              "text": "Use a hierarchical loss function with custom distance penalties that heavily weight paths crossing between Neoplastic and other branches.",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "Use standard flat cross-entropy because it treats all classes equally.",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "Train a regression model to predict the size of the lung spots instead.",
+              "correct": false
+            },
+            {
+              "id": "d",
+              "text": "Use a Sigmoid layer to ignore the hierarchy entirely.",
+              "correct": false
+            }
+          ],
+          "explain": "Exactly! Hierarchical loss allows you to define custom weights for different paths in the tree. This ensures the model is heavily penalized for dangerous crossover mistakes (like Neoplastic vs. Infectious) while remaining tolerant of minor internal branch mistakes. Next, let's look at how we predict step-by-step using conditional probability chains!"
+        }
+      ]
+    }
+  ]
+}

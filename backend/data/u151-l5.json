@@ -1,0 +1,222 @@
+{
+  "id": "u151-l5",
+  "unit": 151,
+  "day": 760,
+  "tier": "Modern Object Detection",
+  "tierIcon": "🎯",
+  "title": "FPN Variants",
+  "icon": "🔀",
+  "concept": "PANet and BiFPN extend FPN by adding bottom-up spatial pathways and weighted bidirectional feature connections.",
+  "xp": 15,
+  "hearts": 3,
+  "estMinutes": 7,
+  "segments": [
+    {
+      "type": "warmup",
+      "exercises": [
+        {
+          "id": "w5",
+          "type": "multiple_choice",
+          "xp": 1,
+          "prompt": "Recap: Why does FPN share weights across all prediction heads?",
+          "options": [
+            {
+              "id": "a",
+              "text": "To keep parameter size small and prevent overfitting across different scales",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "To increase the input resolution",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "To disable anchor free regression",
+              "correct": false
+            }
+          ],
+          "explain": "Correct! Sharing weights keeps the model size manageable while enabling scale-invariant heads."
+        }
+      ]
+    },
+    {
+      "type": "teach",
+      "cards": [
+        {
+          "kind": "hook",
+          "icon": "🔀",
+          "title": "Beyond FPN",
+          "body": "FPN was a huge hit in 2017, but it had a limitation: information only flows down! What if we want low-level spatial details to flow back up the network? Let's explore modern variants like PANet and BiFPN."
+        },
+        {
+          "kind": "definition",
+          "icon": "🔀",
+          "title": "PANet & BiFPN Variants",
+          "body": "<strong>PANet</strong> adds a second, <strong>bottom-up pathway</strong> after FPN to transfer low-level spatial info back up. <strong>BiFPN</strong> (used in EfficientDet) introduces <strong>bidirectional connections</strong> and weighted feature fusion to allow features to flow dynamically up and down multiple times."
+        },
+        {
+          "kind": "analogy",
+          "icon": "🕸️",
+          "title": "The Two-Way Highway",
+          "body": "FPN is like a one-way street going down. PANet is like a two-way highway: cars can drive down, but a separate ramp allows them to drive back up. BiFPN is a complex multi-lane highway system with overpasses that let traffic cross anywhere."
+        },
+        {
+          "kind": "example",
+          "icon": "🧬",
+          "title": "EfficientDet BiFPN",
+          "body": "EfficientDet uses BiFPN layers. Instead of just adding features, BiFPN assigns learning weights (coefficients) to each layer's input, realizing that some resolutions are more important than others for specific scales."
+        },
+        {
+          "kind": "mythbust",
+          "icon": "⚠️",
+          "title": "Complex is Always Better?",
+          "body": "You might think BiFPN is always the best choice. Fact: Bidirectional layers add significant latency and memory overhead. For real-time applications on edge hardware, a simple FPN or PANet is often preferred for speed."
+        },
+        {
+          "kind": "visual",
+          "icon": "⚖️",
+          "title": "Pyramid Variants Compared",
+          "body": "How pyramid architectures compare in information flow:",
+          "compare": {
+            "left": {
+              "emoji": "🪜",
+              "tag": "FPN vs. PANet",
+              "text": "FPN: Top-down only<br>PANet: Adds bottom-up path<br>PANet preserves corner features better"
+            },
+            "right": {
+              "emoji": "🧬",
+              "tag": "BiFPN (EfficientDet)",
+              "text": "Bidirectional flow loops<br>Weighted feature fusion<br>High accuracy, heavier compute"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "type": "practice",
+      "exercises": [
+        {
+          "id": "p1",
+          "type": "multiple_choice",
+          "xp": 2,
+          "prompt": "What pathway does PANet add to the standard FPN architecture?",
+          "options": [
+            {
+              "id": "a",
+              "text": "A second, bottom-up path to carry low-level spatial details back up the pyramid",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "A recurrent feedback layer to crop the input",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "A classification head in the middle of the backbone",
+              "correct": false
+            },
+            {
+              "id": "d",
+              "text": "A dropout connection to reduce batch size",
+              "correct": false
+            }
+          ],
+          "explain": "Correct! PANet adds a bottom-up pathway to enrich high-level features with precise spatial details."
+        },
+        {
+          "id": "p2",
+          "type": "true_false",
+          "xp": 2,
+          "prompt": "True or False: BiFPN uses weighted feature fusion, which means the network learns weights to decide how much each input layer contributes to the merged result.",
+          "options": [
+            {
+              "id": "t",
+              "text": "True",
+              "correct": true
+            },
+            {
+              "id": "f",
+              "text": "False",
+              "correct": false
+            }
+          ],
+          "explain": "True. Weighted fusion allows BiFPN to balance features of different resolutions dynamically."
+        },
+        {
+          "id": "p3",
+          "type": "fill_blank",
+          "xp": 2,
+          "prompt": "Complete the sentence:",
+          "sentence": "BiFPN introduces bidirectional flow, and is the core feature pyramid component in the ___ model family.",
+          "blank": "EfficientDet",
+          "words": [
+            "EfficientDet",
+            "YOLOv8",
+            "Faster R-CNN"
+          ],
+          "explain": "BiFPN is the signature feature of the EfficientDet model family."
+        },
+        {
+          "id": "p4",
+          "type": "spot_the_ai",
+          "xp": 2,
+          "prompt": "Which feature pyramid variant is generally preferred for ultra-fast, real-time edge devices?",
+          "options": [
+            {
+              "id": "a",
+              "text": "A simple FPN or PANet, due to lower memory and computation overhead",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "A heavy 7-layer BiFPN, due to its maximum complexity",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "No pyramid at all, to keep the backbone linear",
+              "correct": false
+            }
+          ],
+          "explain": "Correct! Simple pyramids have much lower latency, which is crucial for real-time edge applications."
+        }
+      ]
+    },
+    {
+      "type": "boss",
+      "exercises": [
+        {
+          "id": "b1",
+          "type": "multiple_choice",
+          "xp": 5,
+          "prompt": "You are designing a high-precision medical imaging app to find micro-cracks in bones. You have plenty of GPU power and speed is not a concern. Which feature pyramid setup is best?",
+          "options": [
+            {
+              "id": "a",
+              "text": "A model with BiFPN, because its weighted bidirectional feature fusion will maximize detection accuracy for micro-scale details.",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "A standard FPN with all upsampling disabled.",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "A single-scale YOLOv1 backbone with no pyramid.",
+              "correct": false
+            },
+            {
+              "id": "d",
+              "text": "A classification network with no bounding box outputs.",
+              "correct": false
+            }
+          ],
+          "explain": "Exactly! When accuracy is the sole priority, advanced pyramids like BiFPN provide superior multi-scale feature representations. Phase 8: Modern Object Detection is complete. Next up: Image Segmentation."
+        }
+      ]
+    }
+  ]
+}

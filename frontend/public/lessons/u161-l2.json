@@ -1,0 +1,227 @@
+{
+  "id": "u161-l2",
+  "unit": 161,
+  "day": 807,
+  "tier": "Evaluating Image Segmentations",
+  "tierIcon": "📏",
+  "title": "Mean IoU (mIoU)",
+  "icon": "📏",
+  "concept": "Mean Intersection over Union (mIoU) is the gold standard metric for segmentation, measuring the average overlap ratio across all classes.",
+  "xp": 15,
+  "hearts": 3,
+  "estMinutes": 7,
+  "segments": [
+    {
+      "type": "warmup",
+      "exercises": [
+        {
+          "id": "w1",
+          "type": "multiple_choice",
+          "xp": 1,
+          "prompt": "Recap: What is the main weakness of pixel accuracy?",
+          "options": [
+            {
+              "id": "a",
+              "text": "It is inflated by large background classes, hiding failures on small objects",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "It is computationally too slow to run on modern servers",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "It cannot evaluate images with more than two classes",
+              "correct": false
+            }
+          ],
+          "explain": "Correct! Large backgrounds dominate accuracy, rendering it deceptive under imbalance."
+        }
+      ]
+    },
+    {
+      "type": "teach",
+      "cards": [
+        {
+          "kind": "hook",
+          "icon": "📊",
+          "title": "The gold standard",
+          "body": "If pixel accuracy is flawed, what is the metric everyone actually uses? It is Intersection over Union (IoU), also known as the Jaccard Index. By measuring the ratio of overlap to the total area of both shapes, it gives a fair score regardless of how small the object is. Let's see why it's the industry standard."
+        },
+        {
+          "kind": "definition",
+          "icon": "📏",
+          "title": "Mean IoU (mIoU)",
+          "body": "<strong>Intersection over Union</strong> (IoU) is calculated for each class as: $$IoU = \\frac{TP}{TP + FP + FN}$$. <strong>Mean IoU</strong> (mIoU) is the average of the IoU scores across all classes in the dataset. It ignores True Negatives, making it immune to background size."
+        },
+        {
+          "kind": "analogy",
+          "icon": "🏹",
+          "title": "Target practice",
+          "body": "Imagine shooting an arrow at a target. IoU is the overlapping area of your arrow's mark (prediction) and the bullseye (target) divided by the total area covered by both combined. If you miss completely, IoU is 0. If you hit it perfectly, IoU is 1."
+        },
+        {
+          "kind": "example",
+          "icon": "🚗",
+          "title": "Calculating IoU",
+          "body": "A model predicts a mask of 100 pixels for a car. The ground truth car mask is 90 pixels. The overlap (intersection) is 80 pixels. The combined area (union) is $100 + 90 - 80 = 110$ pixels. The IoU for the car class is $80/110 = 0.727$ (or 72.7%)."
+        },
+        {
+          "kind": "mythbust",
+          "icon": "⚠️",
+          "title": "True Negatives are ignored",
+          "body": "A common question is: why isn't True Negative (TN) in the IoU formula? It's omitted on purpose! By leaving out TN (all the background pixels that were correctly left empty), IoU focuses purely on where the action is, preventing background inflation."
+        },
+        {
+          "kind": "visual",
+          "icon": "⚖️",
+          "title": "IoU Calculation Components",
+          "body": "How IoU is built from pixels:",
+          "compare": {
+            "left": {
+              "emoji": "🟩",
+              "tag": "Intersection (TP)",
+              "text": "Pixels where prediction and target overlap<br>The numerator"
+            },
+            "right": {
+              "emoji": "⭕",
+              "tag": "Union (TP + FP + FN)",
+              "text": "Total unique pixels covered by prediction or target<br>The denominator"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "type": "practice",
+      "exercises": [
+        {
+          "id": "p1",
+          "type": "multiple_choice",
+          "xp": 2,
+          "prompt": "What is the formula for IoU in terms of confusion matrix elements?",
+          "options": [
+            {
+              "id": "a",
+              "text": "TP / (TP + FP + FN)",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "(TP + TN) / Total",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "TP / (TP + FP)",
+              "correct": false
+            },
+            {
+              "id": "d",
+              "text": "TN / (TN + FN)",
+              "correct": false
+            }
+          ],
+          "explain": "Correct! IoU is intersection (TP) over union (TP + FP + FN)."
+        },
+        {
+          "id": "p2",
+          "type": "true_false",
+          "xp": 2,
+          "prompt": "True or False: Mean IoU (mIoU) is calculated by averaging IoU scores across all classes.",
+          "options": [
+            {
+              "id": "t",
+              "text": "True",
+              "correct": false
+            },
+            {
+              "id": "f",
+              "text": "False",
+              "correct": false
+            }
+          ],
+          "explain": "True. mIoU gives a single score representing the model's overall class-wide performance."
+        },
+        {
+          "id": "p3",
+          "type": "fill_blank",
+          "xp": 2,
+          "prompt": "Complete the sentence:",
+          "sentence": "Unlike pixel accuracy, IoU completely ignores True ___ in its formula.",
+          "blank": "Negatives",
+          "words": [
+            "Negatives",
+            "Positives",
+            "Errors"
+          ],
+          "explain": "IoU ignores True Negatives to prevent background inflation."
+        },
+        {
+          "id": "p4",
+          "type": "spot_the_ai",
+          "xp": 2,
+          "prompt": "A model predicts a car mask. The intersection with ground truth is 50 pixels, and the union is 100 pixels. What is the IoU?",
+          "options": [
+            {
+              "id": "a",
+              "text": "0.5",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "0.2",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "1.0",
+              "correct": false
+            },
+            {
+              "id": "d",
+              "text": "0.0",
+              "correct": false
+            }
+          ],
+          "explain": "IoU is 50 / 100 = 0.5 (or 50%)."
+        }
+      ]
+    },
+    {
+      "type": "boss",
+      "exercises": [
+        {
+          "id": "b1",
+          "type": "multiple_choice",
+          "xp": 5,
+          "prompt": "You are comparing two road segmentation models. Model A has 98% accuracy and 45% mIoU. Model B has 95% accuracy and 75% mIoU. Which model is better at segmenting the roads?",
+          "options": [
+            {
+              "id": "a",
+              "text": "Model B, because its higher mIoU indicates a much better overlap with the actual road pixels, whereas Model A's high accuracy is just inflated by the background.",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "Model A, because 98% accuracy is mathematically superior to 95%.",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "Neither, because accuracy and mIoU must be identical to evaluate a model.",
+              "correct": false
+            },
+            {
+              "id": "d",
+              "text": "Model A, because a low mIoU means the model runs faster on GPUs.",
+              "correct": false
+            }
+          ],
+          "explain": "Perfect! mIoU is the true indicator of segmentation quality. Model B has far better overlap with the roads, even though its pixel accuracy is slightly lower. Next: let's study the Dice score!"
+        }
+      ]
+    }
+  ]
+}

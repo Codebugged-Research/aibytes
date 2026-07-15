@@ -1,0 +1,222 @@
+{
+  "id": "u158-l1",
+  "unit": 158,
+  "day": 791,
+  "tier": "DeepLab and ASPP",
+  "tierIcon": "🪐",
+  "title": "Atrous Convolutions",
+  "icon": "🪐",
+  "concept": "Atrous (dilated) convolutions expand a filter's receptive field without losing spatial resolution or increasing parameter counts.",
+  "xp": 15,
+  "hearts": 3,
+  "estMinutes": 7,
+  "segments": [
+    {
+      "type": "warmup",
+      "exercises": [
+        {
+          "id": "w1",
+          "type": "multiple_choice",
+          "xp": 1,
+          "prompt": "Recap: What is the main speed-accuracy trade-off in Mask R-CNN?",
+          "options": [
+            {
+              "id": "a",
+              "text": "Heavy backbones like ResNet provide higher accuracy but slower inference speeds",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "Light backbones like MobileNet have slower training but faster inference",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "Mask R-CNN is fast but only works on low-resolution photos",
+              "correct": false
+            }
+          ],
+          "explain": "Correct! Heavy backbones improve masks but increase latency."
+        }
+      ]
+    },
+    {
+      "type": "teach",
+      "cards": [
+        {
+          "kind": "hook",
+          "icon": "🔍",
+          "title": "The resolution trap",
+          "body": "To see large objects, networks use pooling layers to shrink features, expanding the 'receptive field' (how much of the image a filter sees). But downsampling destroys spatial detail! We want a filter that can see a large area *without* shrinking the image. How do we expand our view without losing resolution?"
+        },
+        {
+          "kind": "definition",
+          "icon": "🪐",
+          "title": "Atrous Convolution",
+          "body": "An <strong>Atrous Convolution</strong> (also called dilated convolution) inserts spaces ('holes') inside a convolutional kernel. By spacing out the weights, the filter covers a much larger area without adding any parameters or downsampling the features."
+        },
+        {
+          "kind": "analogy",
+          "icon": "🖐️",
+          "title": "Spreading your fingers",
+          "body": "Imagine placing your hand on a table with your fingers pressed together — you cover a small area. Now, spread your fingers wide. Your hand covers a much larger area, but you still have the same five fingers. That is a dilated convolution."
+        },
+        {
+          "kind": "example",
+          "icon": "📐",
+          "title": "Dilation rate",
+          "body": "A standard 3x3 filter has a dilation rate of $r=1$ and sees a 3x3 area. By setting the dilation rate to $r=2$, we insert spaces between the weights, and the filter now spans a 5x5 area while still using only 9 parameters."
+        },
+        {
+          "kind": "mythbust",
+          "icon": "⚠️",
+          "title": "No extra parameters",
+          "body": "You might think a filter covering a 5x5 area has 25 parameters. In an atrous convolution with $r=2$, it still has exactly 9 weights! The spaces between are just filled with zeros, meaning it has the same computational weight as a 3x3 conv."
+        },
+        {
+          "kind": "visual",
+          "icon": "⚖️",
+          "title": "Standard vs. Atrous Convolution",
+          "body": "Comparing filter coverage at same parameter count:",
+          "compare": {
+            "left": {
+              "emoji": "⏹️",
+              "tag": "Standard Conv (r=1)",
+              "text": "3x3 kernel, tight grid<br>Covers 3x3 pixels<br>Needs pooling to see larger zones"
+            },
+            "right": {
+              "emoji": "🪐",
+              "tag": "Atrous Conv (r=2)",
+              "text": "3x3 kernel, spaced out<br>Covers 5x5 pixels (spaces between weights)<br>Expands field without pooling"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "type": "practice",
+      "exercises": [
+        {
+          "id": "p1",
+          "type": "multiple_choice",
+          "xp": 2,
+          "prompt": "What is the primary benefit of atrous convolutions in image segmentation?",
+          "options": [
+            {
+              "id": "a",
+              "text": "They expand the receptive field without downsampling or adding parameters",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "They speed up training by deleting weights",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "They combine bounding boxes with segmentation masks",
+              "correct": false
+            },
+            {
+              "id": "d",
+              "text": "They flatten 2D features into 1D vectors",
+              "correct": false
+            }
+          ],
+          "explain": "Correct! Dilated convolutions expand receptive field while preserving resolution."
+        },
+        {
+          "id": "p2",
+          "type": "true_false",
+          "xp": 2,
+          "prompt": "True or False: An atrous convolution with a dilation rate of 2 uses more weight parameters than a standard convolution.",
+          "options": [
+            {
+              "id": "t",
+              "text": "True",
+              "correct": false
+            },
+            {
+              "id": "f",
+              "text": "False",
+              "correct": false
+            }
+          ],
+          "explain": "False. It uses the same number of weights; the spaces between are filled with zeros."
+        },
+        {
+          "id": "p3",
+          "type": "fill_blank",
+          "xp": 2,
+          "prompt": "Complete the sentence:",
+          "sentence": "Atrous convolutions insert spaces, or '___', inside the convolutional kernel.",
+          "blank": "holes",
+          "words": [
+            "holes",
+            "strides",
+            "pools"
+          ],
+          "explain": "The word 'atrous' comes from French 'à trous', meaning 'with holes'."
+        },
+        {
+          "id": "p4",
+          "type": "spot_the_ai",
+          "xp": 2,
+          "prompt": "What happens to the receptive field as the dilation rate increases?",
+          "options": [
+            {
+              "id": "a",
+              "text": "It becomes larger",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "It becomes smaller",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "It remains unchanged",
+              "correct": false
+            }
+          ],
+          "explain": "Increasing the dilation rate stretches the filter, expanding the receptive field."
+        }
+      ]
+    },
+    {
+      "type": "boss",
+      "exercises": [
+        {
+          "id": "b1",
+          "type": "multiple_choice",
+          "xp": 5,
+          "prompt": "You are segmenting roads in satellite images. Standard convolutions require deep pooling to see the whole road, resulting in blocky borders. How do atrous convolutions solve this?",
+          "options": [
+            {
+              "id": "a",
+              "text": "They allow the filters to span a wide area to capture the road's context while maintaining high-resolution feature maps for sharp borders.",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "They automatically convert the satellite image to a vector shape.",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "They run only on the background sky pixels, ignoring the road.",
+              "correct": false
+            },
+            {
+              "id": "d",
+              "text": "They use fewer channels in the encoder, speeding up execution.",
+              "correct": false
+            }
+          ],
+          "explain": "Perfect! Atrous convolutions let the model see the big picture (context) and the small details (resolution) simultaneously, without trade-offs. Next: how do we pool features at multiple scales?"
+        }
+      ]
+    }
+  ]
+}

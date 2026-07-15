@@ -1,0 +1,222 @@
+{
+  "id": "u182-l3",
+  "unit": 182,
+  "day": 913,
+  "tier": "Vision Transformers & Modern Approaches",
+  "tierIcon": "\ud83d\udc41\ufe0f",
+  "title": "Asymmetric Encoder-Decoder",
+  "icon": "\u2696\ufe0f",
+  "concept": "MAE uses a large encoder only on visible patches, and a lightweight decoder on all tokens, saving massive computation during pre-training.",
+  "xp": 15,
+  "hearts": 3,
+  "estMinutes": 7,
+  "segments": [
+    {
+      "type": "warmup",
+      "exercises": [
+        {
+          "id": "w1",
+          "type": "multiple_choice",
+          "xp": 1,
+          "prompt": "Recap: What is the pretext task and loss function used in Masked Autoencoders?",
+          "options": [
+            {
+              "id": "a",
+              "text": "Pixel reconstruction optimized via MSE loss.",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "Contrastive matching optimized via InfoNCE loss.",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "Label categorization optimized via cross-entropy.",
+              "correct": false
+            }
+          ],
+          "explain": "Correct! MAE predicts missing pixels and grades itself using MSE loss."
+        }
+      ]
+    },
+    {
+      "type": "teach",
+      "cards": [
+        {
+          "kind": "hook",
+          "icon": "\u2696\ufe0f",
+          "title": "The heavy lifter",
+          "body": "If you mask 75% of an image, you don't want to run a massive, expensive model on all those blank squares. MAE uses a brilliant trick: it uses a heavy model only on the 25% visible patches, and a tiny, lightweight model to paint the rest. Let's explore this asymmetric design."
+        },
+        {
+          "kind": "definition",
+          "icon": "\u2699\ufe0f",
+          "title": "Asymmetric Architecture",
+          "body": "MAE is <strong>asymmetric</strong>. The heavy <strong>encoder</strong> only processes the 25% visible patches. Afterward, we insert learnable, shared 'mask tokens' for the hidden slots, combine them with the encoder outputs, and pass the full sequence (100% of tokens) through a very lightweight <strong>decoder</strong>."
+        },
+        {
+          "kind": "analogy",
+          "icon": "\ud83c\udfd7\ufe0f",
+          "title": "Architect and draftsperson",
+          "body": "Imagine building a house. The senior architect (heavy encoder) only looks at the core structural demands (visible patches) to plan the layout. They hand this plan to a junior draftsperson (lightweight decoder), who does the repetitive work of coloring in the wallpaper and tiles (masked patches)."
+        },
+        {
+          "kind": "example",
+          "icon": "\ud83d\udcca",
+          "title": "Compute savings",
+          "body": "Because the encoder makes up 90% of the model's compute and only processes 25% of the tokens, MAE pre-training runs up to **4 times faster** and consumes significantly less GPU memory than symmetric models."
+        },
+        {
+          "kind": "mythbust",
+          "icon": "\u26a0\ufe0f",
+          "title": "Decoder is discarded!",
+          "body": "You might think the decoder is a permanent part of the model. In reality, once pre-training is complete, **the decoder is discarded entirely**! We only keep the trained encoder to deploy on our target classification or detection tasks."
+        },
+        {
+          "kind": "visual",
+          "icon": "\u2696\ufe0f",
+          "title": "Encoder vs. Decoder Token Sequences",
+          "body": "Comparing sequence inputs in MAE:",
+          "compare": {
+            "left": {
+              "emoji": "\ud83d\udfe9",
+              "tag": "Encoder Input (25%)",
+              "text": "Only visible patches (e.g. 49 tokens)<br>Processed by heavy ViT encoder<br>Extracts rich semantic features"
+            },
+            "right": {
+              "emoji": "\ud83c\udfc1",
+              "tag": "Decoder Input (100%)",
+              "text": "Visible embeddings + Mask tokens<br>Processed by light ViT decoder<br>Reconstructs raw 2D pixel grid"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "type": "practice",
+      "exercises": [
+        {
+          "id": "p1",
+          "type": "multiple_choice",
+          "xp": 2,
+          "prompt": "Why does the MAE encoder only process the unmasked (visible) patches?",
+          "explain": "Processing only 25% of tokens in the heavy encoder reduces pre-training compute demands by roughly 3-4x.",
+          "options": [
+            {
+              "id": "a",
+              "text": "To save massive amounts of computational power and memory during pre-training",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "Because masked patches contain corrupted color channels",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "To prevent the model from using position embeddings",
+              "correct": false
+            },
+            {
+              "id": "d",
+              "text": "Because the encoder can only handle sequences shorter than 50 tokens",
+              "correct": false
+            }
+          ]
+        },
+        {
+          "id": "p2",
+          "type": "true_false",
+          "xp": 2,
+          "prompt": "True or false: Once pre-training is complete, the lightweight decoder is kept and deployed along with the encoder.",
+          "explain": "False. The decoder is discarded after pre-training; downstream tasks only use the pre-trained encoder.",
+          "options": [
+            {
+              "id": "t",
+              "text": "True",
+              "correct": false
+            },
+            {
+              "id": "f",
+              "text": "False",
+              "correct": true
+            }
+          ]
+        },
+        {
+          "id": "p3",
+          "type": "fill_blank",
+          "xp": 2,
+          "prompt": "Complete the sentence:",
+          "explain": "The decoder contains fewer layers and channels, making it computationally light.",
+          "sentence": "The MAE architecture is asymmetric because it uses a heavy encoder and a ___ decoder.",
+          "blank": "lightweight",
+          "words": [
+            "lightweight",
+            "heavyweight",
+            "convolutional"
+          ]
+        },
+        {
+          "id": "p4",
+          "type": "spot_the_ai",
+          "xp": 2,
+          "prompt": "How does the decoder process the missing patches that the encoder ignored?",
+          "explain": "MAE inserts learnable mask tokens as placeholders for the missing slots, allowing the decoder to predict pixels at those coordinates.",
+          "options": [
+            {
+              "id": "a",
+              "text": "By inserting a shared, learnable 'mask token' vector into every missing patch slot",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "By copy-pasting the pixels of the nearest visible patch",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "By bypassing those coordinates completely during reconstruction",
+              "correct": false
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "boss",
+      "exercises": [
+        {
+          "id": "b1",
+          "type": "multiple_choice",
+          "xp": 5,
+          "prompt": "If the decoder is lightweight, can it still produce good reconstructions?",
+          "options": [
+            {
+              "id": "a",
+              "text": "Yes \u2014 because the heavy encoder has already done the hard work of extracting the semantic context, leaving the decoder to handle simple pixel filling.",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "No \u2014 the reconstructions are always completely black.",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "Yes \u2014 but only if we train without position embeddings.",
+              "correct": false
+            },
+            {
+              "id": "d",
+              "text": "No \u2014 it requires convolutional backbones.",
+              "correct": false
+            }
+          ],
+          "explain": "Outstanding! The encoder extracts the deep concepts, so the lightweight decoder just needs to translate those concepts back to pixels. Next: why high mask ratios improve features!"
+        }
+      ]
+    }
+  ]
+}

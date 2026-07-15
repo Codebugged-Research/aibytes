@@ -1,0 +1,222 @@
+{
+  "id": "u191-l4",
+  "unit": 191,
+  "day": 959,
+  "tier": "Video & Temporal Vision",
+  "tierIcon": "\ud83c\udfac",
+  "title": "Pooling across Time and Space",
+  "icon": "\ud83c\udfca",
+  "concept": "3D pooling downsamples features across both spatial (height/width) and temporal (time) dimensions to reduce tensor size and computation.",
+  "xp": 15,
+  "hearts": 3,
+  "estMinutes": 7,
+  "segments": [
+    {
+      "type": "warmup",
+      "exercises": [
+        {
+          "id": "w1",
+          "type": "multiple_choice",
+          "xp": 1,
+          "prompt": "Recap: What is the effect of increasing temporal stride?",
+          "options": [
+            {
+              "id": "a",
+              "text": "It reduces the temporal resolution of the output",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "It increases the spatial resolution of the frames",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "It doubles the number of channels",
+              "correct": false
+            }
+          ],
+          "explain": "Yes! A larger temporal stride reduces the number of output steps along the time dimension."
+        }
+      ]
+    },
+    {
+      "type": "teach",
+      "cards": [
+        {
+          "kind": "hook",
+          "icon": "\ud83c\udfca",
+          "title": "Shrinking the video cube",
+          "body": "Just like images, video tensors can quickly grow too large for a computer's memory. In 2D neural networks, we use pooling to shrink image dimensions. For video, we need to pool in 3D: shrinking height, width, and the stack of frames!"
+        },
+        {
+          "kind": "definition",
+          "icon": "\ud83c\udfca",
+          "title": "3D Pooling",
+          "body": "<strong>3D Pooling</strong> (such as 3D Max Pooling) downsamples spatiotemporal feature maps. It extracts the maximum or average value from a small 3D window ($p_t \times p_h \times p_w$). This reduces size in both space and time."
+        },
+        {
+          "kind": "analogy",
+          "icon": "\u2702\ufe0f",
+          "title": "Summarizing a video clip",
+          "body": "Think of 3D pooling as summarizing a video. Spatial pooling is like turning a high-res page into a small thumbnail. Temporal pooling is like cutting a 10-second clip down to a 2-second highlight. 3D pooling does both at once!"
+        },
+        {
+          "kind": "example",
+          "icon": "\ud83d\udcd0",
+          "title": "Max pooling 2x2x2",
+          "body": "A <strong>2x2x2 Max Pooling</strong> layer takes a cube of 8 values (2 frames, 2 pixels high, 2 pixels wide) and outputs just the single largest value. This halves the height, width, and temporal depth of the tensor."
+        },
+        {
+          "kind": "mythbust",
+          "icon": "\u26a0\ufe0f",
+          "title": "Not always symmetric",
+          "body": "You might assume 3D pooling must always shrink time and space equally (like 2x2x2). But we often use <strong>1x2x2 pooling</strong>! This shrinks spatial dimensions to extract local textures while keeping the full temporal resolution intact."
+        },
+        {
+          "kind": "visual",
+          "icon": "\u2696\ufe0f",
+          "title": "Symmetric vs. Asymmetric Pooling",
+          "body": "Comparing pooling configurations in video networks:",
+          "compare": {
+            "left": {
+              "emoji": "\ud83e\uddca",
+              "tag": "Symmetric Pooling (e.g. 2x2x2)",
+              "text": "Shrinks time and space together<br>Reduces computations quickly<br>Can lose quick temporal details"
+            },
+            "right": {
+              "emoji": "\ud83e\udd5e",
+              "tag": "Asymmetric Pooling (e.g. 1x2x2)",
+              "text": "Shrinks spatial area only<br>Maintains full frame count<br>Preserves temporal resolution"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "type": "practice",
+      "exercises": [
+        {
+          "id": "p1",
+          "type": "multiple_choice",
+          "xp": 2,
+          "prompt": "What does a 3D pooling layer with size 2x2x2 do to a tensor's dimensions?",
+          "options": [
+            {
+              "id": "a",
+              "text": "It halves the temporal length, height, and width",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "It doubles all dimensions",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "It halves the channels while leaving space unchanged",
+              "correct": false
+            },
+            {
+              "id": "d",
+              "text": "It reduces only the temporal length to zero",
+              "correct": false
+            }
+          ],
+          "explain": "Correct! A 2x2x2 pooling layer reduces the size of temporal, height, and width axes by a factor of 2."
+        },
+        {
+          "id": "p2",
+          "type": "true_false",
+          "xp": 2,
+          "prompt": "True or false: An asymmetric 3D pooling layer of size 1x2x2 downsamples spatial dimensions but keeps the temporal size the same.",
+          "options": [
+            {
+              "id": "t",
+              "text": "True",
+              "correct": true
+            },
+            {
+              "id": "f",
+              "text": "False",
+              "correct": false
+            }
+          ],
+          "explain": "True. A temporal pool size of 1 means no downsampling occurs along the frame axis."
+        },
+        {
+          "id": "p3",
+          "type": "fill_blank",
+          "xp": 2,
+          "prompt": "Complete the sentence:",
+          "sentence": "If we want to keep all frame rate detail while shrinking image sizes, we should use a pooling kernel size of ___.",
+          "blank": "1x2x2",
+          "words": [
+            "1x2x2",
+            "2x2x2",
+            "2x1x1"
+          ],
+          "explain": "A temporal kernel size of 1 keeps the time dimension unchanged, while 2x2 downsamples height and width."
+        },
+        {
+          "id": "p4",
+          "type": "spot_the_ai",
+          "xp": 2,
+          "prompt": "Which of these is a valid 3D pooling type commonly used to compress video representations?",
+          "options": [
+            {
+              "id": "a",
+              "text": "3D Max Pooling",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "2D Channel Swapping",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "1D Linear Interpolation",
+              "correct": false
+            }
+          ],
+          "explain": "3D Max Pooling is widely used to downsample spatiotemporal feature tensors."
+        }
+      ]
+    },
+    {
+      "type": "boss",
+      "exercises": [
+        {
+          "id": "b1",
+          "type": "multiple_choice",
+          "xp": 5,
+          "prompt": "Your video model has a bottleneck: it is too slow, but you cannot afford to lose any high-frequency motion details. Which pooling should you apply in the early layers?",
+          "options": [
+            {
+              "id": "a",
+              "text": "1x2x2 pooling, because it reduces spatial calculations while preserving all temporal frames.",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "4x4x4 pooling, to aggressively compress all dimensions.",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "2x1x1 pooling, to compress time and keep spatial resolution.",
+              "correct": false
+            },
+            {
+              "id": "d",
+              "text": "No pooling at all to maximize memory consumption.",
+              "correct": false
+            }
+          ],
+          "explain": "Exactly! 1x2x2 pooling shrinks the spatial dimensions (saving GPU memory) but doesn't downsample the frame axis, keeping all motion details safe. Next: how do we stack these layers into a full 3D CNN?"
+        }
+      ]
+    }
+  ]
+}

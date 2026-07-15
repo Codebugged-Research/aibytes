@@ -1,0 +1,222 @@
+{
+  "id": "u171-l4",
+  "unit": 171,
+  "day": 859,
+  "tier": "Advanced Vision Applications",
+  "tierIcon": "👁️",
+  "title": "Building a Reverse Image Search Engine",
+  "icon": "🏗️",
+  "concept": "A reverse image search engine combines an embedding model, a searchable vector index of the entire database, and a query pipeline that embeds a new image and retrieves its nearest neighbors — the same architecture behind products like Google Lens.",
+  "xp": 15,
+  "hearts": 3,
+  "estMinutes": 7,
+  "segments": [
+    {
+      "type": "warmup",
+      "exercises": [
+        {
+          "id": "w1",
+          "type": "multiple_choice",
+          "xp": 1,
+          "prompt": "Recap: Why might cosine similarity outperform Euclidean distance when comparing image embeddings with varying brightness?",
+          "options": [
+            {
+              "id": "a",
+              "text": "Cosine similarity ignores magnitude/scale differences, focusing on content direction instead",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "Cosine similarity always ignores image content entirely",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "Euclidean distance cannot handle brightness at all",
+              "correct": false
+            }
+          ],
+          "explain": "Yes! Magnitude-independence helps cosine similarity handle brightness variation."
+        }
+      ]
+    },
+    {
+      "type": "teach",
+      "cards": [
+        {
+          "kind": "hook",
+          "icon": "🏗️",
+          "title": "From theory to a working product",
+          "body": "We've covered embeddings and nearest neighbor search separately. Now let's assemble them into an actual working system — the same kind of architecture behind products like Google Lens or Pinterest's visual search."
+        },
+        {
+          "kind": "definition",
+          "icon": "🏗️",
+          "title": "The Reverse Image Search Pipeline",
+          "body": "A complete system has three parts: (1) an <strong>embedding model</strong> (a pretrained CNN) that converts every image into a vector, (2) a <strong>database index</strong> storing all embeddings for the entire image catalog, precomputed once, and (3) a <strong>query pipeline</strong> that embeds a new query photo and searches the index for its nearest neighbors."
+        },
+        {
+          "kind": "analogy",
+          "icon": "📚",
+          "title": "A library's card catalog, built once, searched many times",
+          "body": "Precomputing every catalog item's embedding is like a library building its entire card catalog once, upfront. Every new search request is fast because the librarian just consults the pre-built catalog instead of re-reading every single book from scratch each time."
+        },
+        {
+          "kind": "example",
+          "icon": "🛍️",
+          "title": "An e-commerce catalog pipeline",
+          "body": "Offline: run every one of 10 million product photos through the embedding model once, storing the resulting vectors in a searchable index. Online: when a user uploads a query photo, embed it (one fast forward pass) and search the pre-built index for its nearest neighbors, returning ranked matches in milliseconds."
+        },
+        {
+          "kind": "mythbust",
+          "icon": "⚠️",
+          "title": "You don't re-embed the whole database per query",
+          "body": "It's a common misunderstanding that every search re-processes the entire image database from scratch. In reality, the expensive part (embedding millions of catalog images) happens ONCE, offline. Each live query only needs to embed the ONE new query image, then search the already-built index."
+        },
+        {
+          "kind": "visual",
+          "icon": "⚖️",
+          "title": "Offline Indexing vs. Online Querying",
+          "body": "The two-phase architecture:",
+          "compare": {
+            "left": {
+              "emoji": "🗄️",
+              "tag": "Offline: Build Index",
+              "text": "Embed entire database once<br>Store vectors in a search index<br>Done rarely (e.g. daily/weekly)"
+            },
+            "right": {
+              "emoji": "⚡",
+              "tag": "Online: Handle Query",
+              "text": "Embed the new query image<br>Search the pre-built index<br>Happens on every user request"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "type": "practice",
+      "exercises": [
+        {
+          "id": "p1",
+          "type": "multiple_choice",
+          "xp": 2,
+          "prompt": "What are the three main parts of a reverse image search engine?",
+          "options": [
+            {
+              "id": "a",
+              "text": "An embedding model, a database index of precomputed embeddings, and a query pipeline",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "Only a single CNN classifier and nothing else",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "A video decoder, an audio decoder, and a text tokenizer",
+              "correct": false
+            },
+            {
+              "id": "d",
+              "text": "A bounding box regressor and an NMS module",
+              "correct": false
+            }
+          ],
+          "explain": "Correct! These three components together form the complete retrieval system."
+        },
+        {
+          "id": "p2",
+          "type": "true_false",
+          "xp": 2,
+          "prompt": "True or false: Every user search query re-embeds the entire image database from scratch.",
+          "options": [
+            {
+              "id": "t",
+              "text": "True",
+              "correct": false
+            },
+            {
+              "id": "f",
+              "text": "False",
+              "correct": true
+            }
+          ],
+          "explain": "False. The database is embedded once, offline; each query only embeds the single new query image."
+        },
+        {
+          "id": "p3",
+          "type": "fill_blank",
+          "xp": 2,
+          "prompt": "Complete the sentence:",
+          "sentence": "The database's embeddings are precomputed ___, so live queries only need to embed the new query image.",
+          "blank": "offline",
+          "words": [
+            "offline",
+            "randomly",
+            "manually"
+          ],
+          "explain": "Offline precomputation lets each live query stay fast, only embedding one new image."
+        },
+        {
+          "id": "p4",
+          "type": "spot_the_ai",
+          "xp": 2,
+          "prompt": "Why is it efficient to precompute and index the entire product catalog's embeddings ahead of time?",
+          "options": [
+            {
+              "id": "a",
+              "text": "It avoids re-processing millions of catalog images on every single user search, keeping queries fast",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "It makes the catalog images permanently deleted from storage",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "It has no efficiency benefit compared to processing everything live",
+              "correct": false
+            }
+          ],
+          "explain": "Correct! Offline precomputation is the key to making live search fast at scale."
+        }
+      ]
+    },
+    {
+      "type": "boss",
+      "exercises": [
+        {
+          "id": "b1",
+          "type": "multiple_choice",
+          "xp": 5,
+          "prompt": "An engineering team is designing a visual search feature for 50 million product images. Where should the bulk of the embedding computation happen?",
+          "options": [
+            {
+              "id": "a",
+              "text": "Offline, precomputing embeddings for the entire 50 million image catalog once, then indexing them for fast repeated search",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "Live, re-embedding all 50 million images on every single user query",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "Nowhere; embeddings should never be precomputed under any circumstances",
+              "correct": false
+            },
+            {
+              "id": "d",
+              "text": "Only on the user's device, never on the server",
+              "correct": false
+            }
+          ],
+          "explain": "Exactly! Offline precomputation is essential at this scale. Next: how to search these massive indexes fast using approximate nearest neighbors."
+        }
+      ]
+    }
+  ]
+}

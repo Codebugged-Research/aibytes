@@ -1,0 +1,222 @@
+{
+  "id": "u194-l4",
+  "unit": 194,
+  "day": 974,
+  "tier": "Video & Temporal Vision",
+  "tierIcon": "\ud83c\udfac",
+  "title": "Deep Learning Trackers (DeepSORT)",
+  "icon": "\ud83e\udde0",
+  "concept": "DeepSORT combines motion prediction (Kalman Filters) with deep learning appearance features to track objects through occlusions.",
+  "xp": 15,
+  "hearts": 3,
+  "estMinutes": 7,
+  "segments": [
+    {
+      "type": "warmup",
+      "exercises": [
+        {
+          "id": "w1",
+          "type": "multiple_choice",
+          "xp": 1,
+          "prompt": "Recap: What does a tracker assign to an object to maintain its identity?",
+          "options": [
+            {
+              "id": "a",
+              "text": "A unique identification number (ID)",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "A new color channel stack",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "An audio clip containing their name",
+              "correct": false
+            }
+          ],
+          "explain": "Yes! Trackers assign and maintain unique IDs to track individual objects over time."
+        }
+      ]
+    },
+    {
+      "type": "teach",
+      "cards": [
+        {
+          "kind": "hook",
+          "icon": "\ud83e\udde0",
+          "title": "The crossover problem",
+          "body": "Imagine tracking two soccer players wearing similar uniforms. If they run past each other and cross paths, how does the AI know who is who when they separate? If it only tracks coordinates, the IDs might swap! We need to look at what they look like, not just where they are."
+        },
+        {
+          "kind": "definition",
+          "icon": "\ud83e\udde0",
+          "title": "DeepSORT",
+          "body": "<strong>DeepSORT</strong> (Simple Online and Realtime Tracking with a Deep Association Metric) is a popular tracking algorithm. It combines: <br>1. <strong>Kalman Filter</strong>: Predicts the next coordinate based on speed.<br>2. <strong>Deep Appearance Descriptor</strong>: A CNN that extracts visual features of the object, ensuring the ID stays correct by comparing what they look like."
+        },
+        {
+          "kind": "analogy",
+          "icon": "\ud83d\udc55",
+          "title": "Speed + Uniform matching",
+          "body": "If you lose your friend in a crowd, you predict where they went based on the direction they walked (motion). But you also search the crowd for their bright red jacket (appearance). DeepSORT does both: predicting path, while verifying the visual features."
+        },
+        {
+          "kind": "example",
+          "icon": "\ud83c\udfce\ufe0f",
+          "title": "Tracking past a sign",
+          "body": "When a car passes behind a billboard, the detector loses it. The Kalman filter predicts its path behind the sign. When a car emerges, DeepSORT extracts its appearance features and matches them to the car that entered, successfully restoring <code>ID #5</code>."
+        },
+        {
+          "kind": "mythbust",
+          "icon": "\ud83d\udeab",
+          "title": "Kalman filter is not deep learning",
+          "body": "You might think the entire DeepSORT algorithm is neural networks. In fact, the Kalman filter is classical math! It uses simple physics equations (velocity = distance / time) to predict coordinates, saving massive compute compared to running deep networks for coordinate updates."
+        },
+        {
+          "kind": "visual",
+          "icon": "\u2696\ufe0f",
+          "title": "SORT vs. DeepSORT",
+          "body": "Comparing basic SORT with appearance-based DeepSORT:",
+          "compare": {
+            "left": {
+              "emoji": "\ud83c\udfc3",
+              "tag": "SORT (Motion Only)",
+              "text": "Tracks coordinates and speed<br>Extremely fast computational speed<br>Fails during overlaps/occlusions"
+            },
+            "right": {
+              "emoji": "\ud83e\udde0",
+              "tag": "DeepSORT (Motion + Appearance)",
+              "text": "Tracks speed AND visual features<br>Slightly slower (runs appearance CNN)<br>Maintains IDs through overlaps"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "type": "practice",
+      "exercises": [
+        {
+          "id": "p1",
+          "type": "multiple_choice",
+          "xp": 2,
+          "prompt": "What two strategies does DeepSORT combine to track objects?",
+          "options": [
+            {
+              "id": "a",
+              "text": "Motion prediction (Kalman Filter) and deep appearance features",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "Audio frequencies and color spaces",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "3D convolutions and 1D convolutions",
+              "correct": false
+            },
+            {
+              "id": "d",
+              "text": "Static backgrounds and random noise generators",
+              "correct": false
+            }
+          ],
+          "explain": "Correct! DeepSORT combines classical physics prediction with a deep learning appearance model."
+        },
+        {
+          "id": "p2",
+          "type": "true_false",
+          "xp": 2,
+          "prompt": "True or false: The Kalman filter used in DeepSORT is a type of deep neural network.",
+          "options": [
+            {
+              "id": "t",
+              "text": "True",
+              "correct": false
+            },
+            {
+              "id": "f",
+              "text": "False",
+              "correct": true
+            }
+          ],
+          "explain": "False. The Kalman filter is a classical physics-based algorithm used to predict trajectories."
+        },
+        {
+          "id": "p3",
+          "type": "fill_blank",
+          "xp": 2,
+          "prompt": "Complete the sentence:",
+          "sentence": "DeepSORT uses an appearance descriptor network to extract visual ___ to prevent ID swaps.",
+          "blank": "features",
+          "words": [
+            "features",
+            "strides",
+            "filters"
+          ],
+          "explain": "Appearance features ensure that if two similar objects overlap, their unique visual details keep their IDs correct."
+        },
+        {
+          "id": "p4",
+          "type": "spot_the_ai",
+          "xp": 2,
+          "prompt": "Which algorithm is a predecessor to DeepSORT, relying purely on motion vectors without appearance?",
+          "options": [
+            {
+              "id": "a",
+              "text": "SORT",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "YOLO",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "ResNet",
+              "correct": false
+            }
+          ],
+          "explain": "SORT (Simple Online and Realtime Tracking) relies purely on Kalman filters and box overlap, without appearance matching."
+        }
+      ]
+    },
+    {
+      "type": "boss",
+      "exercises": [
+        {
+          "id": "b1",
+          "type": "multiple_choice",
+          "xp": 5,
+          "prompt": "Two pedestrians wearing different colored shirts cross paths. A motion-only tracker (SORT) swaps their IDs, but DeepSORT does not. Why?",
+          "options": [
+            {
+              "id": "a",
+              "text": "Because DeepSORT compares the visual appearance vectors of their shirts before and after they cross.",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "Because DeepSORT runs at 1000 FPS, making overlaps impossible.",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "Because SORT converts all inputs to binary images.",
+              "correct": false
+            },
+            {
+              "id": "d",
+              "text": "Because DeepSORT automatically stops both people from walking.",
+              "correct": false
+            }
+          ],
+          "explain": "Exactly! SORT only knows their coordinates, so when they overlap, it gets confused. DeepSORT extracts a visual fingerprint of each person. After the overlap, it verifies their shirt colors and features, keeping their IDs correct. Next: let's review everything we've learned in the Phase 13 Capstone!"
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,222 @@
+{
+  "id": "u161-l1",
+  "unit": 161,
+  "day": 806,
+  "tier": "Evaluating Image Segmentations",
+  "tierIcon": "📏",
+  "title": "Pixel Accuracy Limits",
+  "icon": "📏",
+  "concept": "Pixel accuracy is a simple metric that measures the ratio of correctly classified pixels, but is highly misleading under class imbalance.",
+  "xp": 15,
+  "hearts": 3,
+  "estMinutes": 7,
+  "segments": [
+    {
+      "type": "warmup",
+      "exercises": [
+        {
+          "id": "w1",
+          "type": "multiple_choice",
+          "xp": 1,
+          "prompt": "Recap: What is a major cause of domain shift in medical vision?",
+          "options": [
+            {
+              "id": "a",
+              "text": "Scans coming from different scanner manufacturers or manufacturers' settings",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "Using GPUs instead of TPU chips for inference",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "Using 3D volumes instead of 2D slices",
+              "correct": false
+            }
+          ],
+          "explain": "Correct! Different scanners alter contrast and image statistics, causing shift."
+        }
+      ]
+    },
+    {
+      "type": "teach",
+      "cards": [
+        {
+          "kind": "hook",
+          "icon": "🛣️",
+          "title": "The illusion of success",
+          "body": "Suppose you write an AI to detect lane markers on a highway. The lanes cover only 2% of the screen. Your model predicts 'no lane' for every pixel. If you calculate its accuracy, it scores a whopping 98%! You show your boss, but the car crashes because it can't see the lanes. Why did accuracy fail us?"
+        },
+        {
+          "kind": "definition",
+          "icon": "📊",
+          "title": "Pixel Accuracy",
+          "body": "<strong>Pixel Accuracy</strong> is the percentage of correctly classified pixels: $$Accuracy = \\frac{TP + TN}{TP + TN + FP + FN}$$. While simple, it is highly misleading for imbalanced datasets because large background classes dominate the score."
+        },
+        {
+          "kind": "analogy",
+          "icon": "☀️",
+          "title": "A lazy weather reporter",
+          "body": "If you live in a desert where it rains once a year, a reporter who says 'sunny' every day is 99.7% accurate. But they are useless on the one day it actually floods. Pixel accuracy behaves exactly like this lazy reporter."
+        },
+        {
+          "kind": "example",
+          "icon": "⚡",
+          "title": "Sky vs. Powerline",
+          "body": "In a city landscape, the sky covers 95% of pixels, and a thin powerline covers 5%. A model that segments the sky perfectly but misses the powerline completely still gets 95% pixel accuracy, hiding its total failure on the target class."
+        },
+        {
+          "kind": "mythbust",
+          "icon": "⚠️",
+          "title": "Not completely useless",
+          "body": "You might think we should never look at pixel accuracy. Actually, it is fine for balanced tasks where classes cover similar areas, like segmenting an image split evenly between 'Land' and 'Water'. But for target detection, avoid it."
+        },
+        {
+          "kind": "visual",
+          "icon": "⚖️",
+          "title": "Imbalance and Accuracy",
+          "body": "Why high accuracy can equal failure:",
+          "compare": {
+            "left": {
+              "emoji": "❌",
+              "tag": "Model Predicts All Background",
+              "text": "Accuracy: 98% (Background is huge)<br>Lanes Detected: 0%<br>Result: Catastrophic crash"
+            },
+            "right": {
+              "emoji": "⚖️",
+              "tag": "Balanced Metrics Needed",
+              "text": "Requires metrics that ignore True Negatives<br>Evaluates overlap of target class only<br>True performance revealed"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "type": "practice",
+      "exercises": [
+        {
+          "id": "p1",
+          "type": "multiple_choice",
+          "xp": 2,
+          "prompt": "What is the formula for pixel accuracy?",
+          "options": [
+            {
+              "id": "a",
+              "text": "(TP + TN) / (TP + TN + FP + FN)",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "TP / (TP + FP)",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "TN / (TN + FN)",
+              "correct": false
+            },
+            {
+              "id": "d",
+              "text": "TP / TN",
+              "correct": false
+            }
+          ],
+          "explain": "Correct! Pixel accuracy is the ratio of all correct pixels (TP + TN) to the total pixels."
+        },
+        {
+          "id": "p2",
+          "type": "true_false",
+          "xp": 2,
+          "prompt": "True or False: Pixel accuracy is a highly reliable metric for evaluating medical tumor segmentation.",
+          "options": [
+            {
+              "id": "t",
+              "text": "True",
+              "correct": false
+            },
+            {
+              "id": "f",
+              "text": "False",
+              "correct": false
+            }
+          ],
+          "explain": "False. Tumors are tiny; a model can miss them completely and still get 99% accuracy due to healthy background pixels."
+        },
+        {
+          "id": "p3",
+          "type": "fill_blank",
+          "xp": 2,
+          "prompt": "Complete the sentence:",
+          "sentence": "Pixel accuracy becomes misleading when there is a large class ___ in the dataset.",
+          "blank": "imbalance",
+          "words": [
+            "imbalance",
+            "resolution",
+            "dimension"
+          ],
+          "explain": "Class imbalance allows the dominant class to inflate the accuracy score."
+        },
+        {
+          "id": "p4",
+          "type": "spot_the_ai",
+          "xp": 2,
+          "prompt": "Why does predicting all pixels as background yield high pixel accuracy in lane segmentation?",
+          "options": [
+            {
+              "id": "a",
+              "text": "Because lane pixels occupy only a tiny fraction of the total image area",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "Because background pixels are harder to classify",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "Because the model uses a low learning rate",
+              "correct": false
+            }
+          ],
+          "explain": "Since background pixels represent 98% of the image, predicting background everywhere scores 98% accuracy."
+        }
+      ]
+    },
+    {
+      "type": "boss",
+      "exercises": [
+        {
+          "id": "b1",
+          "type": "multiple_choice",
+          "xp": 5,
+          "prompt": "You are pitching a cell-segmentation AI to a pharmaceutical company. The cells cover 1% of the slide. You report a '99% pixel accuracy'. The client's AI expert is skeptical. Why?",
+          "options": [
+            {
+              "id": "a",
+              "text": "They know that a dummy model that predicts 'no cells' everywhere will automatically get 99% accuracy, making your metric meaningless.",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "They know that cell slides are always 3D volumetric scans.",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "They believe that 99% is too low for a pharmaceutical application.",
+              "correct": false
+            },
+            {
+              "id": "d",
+              "text": "They know that accuracy only works on GPU-accelerated cameras.",
+              "correct": false
+            }
+          ],
+          "explain": "Perfect! Experienced engineers know that pixel accuracy is easily inflated by background pixels. To prove your model works, you need an overlap-based metric. Next: let's study mIoU!"
+        }
+      ]
+    }
+  ]
+}

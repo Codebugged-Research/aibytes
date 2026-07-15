@@ -1,0 +1,222 @@
+{
+  "id": "u169-l3",
+  "unit": 169,
+  "day": 848,
+  "tier": "Advanced Vision Applications",
+  "tierIcon": "👁️",
+  "title": "Perceptual Loss vs. Pixel Loss",
+  "icon": "🧠",
+  "concept": "Perceptual loss compares images using deep CNN feature activations instead of raw pixel differences, producing super-resolution results that look sharper and more realistic to human eyes even if pixel values differ slightly.",
+  "xp": 15,
+  "hearts": 3,
+  "estMinutes": 7,
+  "segments": [
+    {
+      "type": "warmup",
+      "exercises": [
+        {
+          "id": "w1",
+          "type": "multiple_choice",
+          "xp": 1,
+          "prompt": "Recap: Why can pixel-wise (MSE) loss make SR outputs look slightly blurry?",
+          "options": [
+            {
+              "id": "a",
+              "text": "MSE rewards safe averages across plausible textures, smoothing out sharp detail",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "MSE always corrupts the color channels",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "MSE can only be used for classification, not regression",
+              "correct": false
+            }
+          ],
+          "explain": "Yes! Averaging plausible outputs under MSE tends to blur fine texture."
+        }
+      ]
+    },
+    {
+      "type": "teach",
+      "cards": [
+        {
+          "kind": "hook",
+          "icon": "🧠",
+          "title": "Pixel-perfect isn't the same as looking good",
+          "body": "Two images can have very different pixel values yet look equally sharp and realistic to a human. Conversely, an image can be pixel-close to the target yet look mushy and blurred. Standard pixel loss doesn't capture what humans actually perceive as 'sharp'."
+        },
+        {
+          "kind": "definition",
+          "icon": "🧠",
+          "title": "Perceptual Loss",
+          "body": "<strong>Perceptual loss</strong> compares images not by raw pixel differences, but by passing both through a pretrained CNN (like VGG) and comparing their <strong>deep feature activations</strong>. This rewards outputs that share high-level texture and structure with the target, even if exact pixels differ."
+        },
+        {
+          "kind": "analogy",
+          "icon": "🎨",
+          "title": "Grading a painting by feel, not by ruler",
+          "body": "Pixel loss is like grading a painting by measuring the exact millimeter position of every brushstroke against a reference. Perceptual loss is like an art critic judging whether the painting FEELS like the same scene — capturing texture and mood rather than exact strokes."
+        },
+        {
+          "kind": "example",
+          "icon": "🖼️",
+          "title": "Blurry-but-close vs. sharp-but-different",
+          "body": "A blurry SR output might have LOWER pixel error (MSE) than a sharp, textured output, because sharp textures introduce small pixel-level disagreements. Perceptual loss correctly rewards the sharp version because its deep features match the target's texture pattern much better."
+        },
+        {
+          "kind": "mythbust",
+          "icon": "⚠️",
+          "title": "Lower pixel error isn't always better",
+          "body": "It's a common misconception that minimizing pixel-wise error always gives the best-looking result. In super-resolution and other generative tasks, the model with the LOWEST MSE is often the BLURRIEST — perceptual loss exists specifically to fix this mismatch between pixel math and human perception."
+        },
+        {
+          "kind": "visual",
+          "icon": "⚖️",
+          "title": "Pixel Loss vs. Perceptual Loss",
+          "body": "How the two loss types judge quality:",
+          "compare": {
+            "left": {
+              "emoji": "🔢",
+              "tag": "Pixel Loss (MSE)",
+              "text": "Compares raw pixel values directly<br>Rewards 'safe' blurry averages<br>Poor match to human perception"
+            },
+            "right": {
+              "emoji": "🧠",
+              "tag": "Perceptual Loss",
+              "text": "Compares deep CNN feature activations<br>Rewards realistic texture/structure<br>Better match to human perception"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "type": "practice",
+      "exercises": [
+        {
+          "id": "p1",
+          "type": "multiple_choice",
+          "xp": 2,
+          "prompt": "How does perceptual loss compare two images?",
+          "options": [
+            {
+              "id": "a",
+              "text": "By comparing their deep CNN feature activations rather than raw pixel values",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "By comparing their file sizes",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "By comparing their exact RGB pixel grids only",
+              "correct": false
+            },
+            {
+              "id": "d",
+              "text": "By comparing bounding box coordinates",
+              "correct": false
+            }
+          ],
+          "explain": "Correct! Perceptual loss compares deep feature activations from a pretrained CNN."
+        },
+        {
+          "id": "p2",
+          "type": "true_false",
+          "xp": 2,
+          "prompt": "True or false: A model with the lowest possible pixel-wise MSE always produces the sharpest, most realistic-looking image.",
+          "options": [
+            {
+              "id": "t",
+              "text": "True",
+              "correct": false
+            },
+            {
+              "id": "f",
+              "text": "False",
+              "correct": true
+            }
+          ],
+          "explain": "False. Minimizing MSE often produces blurry, 'averaged' outputs; perceptual loss better matches human perception of sharpness."
+        },
+        {
+          "id": "p3",
+          "type": "fill_blank",
+          "xp": 2,
+          "prompt": "Complete the sentence:",
+          "sentence": "Perceptual loss uses a pretrained CNN like VGG to compare deep feature ___ instead of raw pixels.",
+          "blank": "activations",
+          "words": [
+            "activations",
+            "filenames",
+            "resolutions"
+          ],
+          "explain": "Perceptual loss compares deep feature activations, capturing texture and structure."
+        },
+        {
+          "id": "p4",
+          "type": "spot_the_ai",
+          "xp": 2,
+          "prompt": "Why might an SR model trained with perceptual loss produce a visually sharper image than one trained with pure pixel loss?",
+          "options": [
+            {
+              "id": "a",
+              "text": "Perceptual loss rewards matching realistic textures in deep feature space, not exact pixel averages",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "Perceptual loss uses larger training images",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "Perceptual loss disables the CNN's pooling layers",
+              "correct": false
+            }
+          ],
+          "explain": "Correct! Feature-space matching better captures visual realism than raw pixel averaging."
+        }
+      ]
+    },
+    {
+      "type": "boss",
+      "exercises": [
+        {
+          "id": "b1",
+          "type": "multiple_choice",
+          "xp": 5,
+          "prompt": "You are building a super-resolution model for medical X-rays, where exact pixel-level measurements matter for diagnosis. Should you rely purely on perceptual loss?",
+          "options": [
+            {
+              "id": "a",
+              "text": "No — perceptual loss optimizes for visual realism, which could hallucinate plausible-looking but medically inaccurate detail; pixel-level fidelity matters more here",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "Yes — perceptual loss always guarantees medically accurate results",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "It doesn't matter; both losses produce identical outputs for medical images",
+              "correct": false
+            },
+            {
+              "id": "d",
+              "text": "Perceptual loss cannot be used on grayscale medical images at all",
+              "correct": false
+            }
+          ],
+          "explain": "Exactly! Perceptual realism can be dangerous when factual pixel accuracy matters most. Next: how GANs push super-resolution even further."
+        }
+      ]
+    }
+  ]
+}

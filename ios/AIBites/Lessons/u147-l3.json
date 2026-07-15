@@ -1,0 +1,222 @@
+{
+  "id": "u147-l3",
+  "unit": 147,
+  "day": 738,
+  "tier": "Modern Object Detection",
+  "tierIcon": "🎯",
+  "title": "IoU & Non-Maximum Suppression",
+  "icon": "📏",
+  "concept": "NMS cleans up duplicate predictions by measuring overlap (IoU) and keeping only the most confident box.",
+  "xp": 15,
+  "hearts": 3,
+  "estMinutes": 7,
+  "segments": [
+    {
+      "type": "warmup",
+      "exercises": [
+        {
+          "id": "w3",
+          "type": "multiple_choice",
+          "xp": 1,
+          "prompt": "Recap: What is the function of the YOLO grid system?",
+          "options": [
+            {
+              "id": "a",
+              "text": "It assigns responsibility for predicting an object to the cell containing its center",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "It crops the image into separate files",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "It reduces the color depth of the image",
+              "correct": false
+            }
+          ],
+          "explain": "Correct! The grid determines which cell is responsible for which object prediction."
+        }
+      ]
+    },
+    {
+      "type": "teach",
+      "cards": [
+        {
+          "kind": "hook",
+          "icon": "👥",
+          "title": "Cleaning up the Clutter",
+          "body": "Since YOLO predicts multiple boxes per grid cell, a single object like a dog might get 10 different bounding boxes from neighboring cells. We don't want a dog covered in boxes! How do we clean up this clutter?"
+        },
+        {
+          "kind": "definition",
+          "icon": "📏",
+          "title": "IoU and NMS",
+          "body": "<strong>Intersection over Union</strong> (IoU) measures the overlap between two boxes. <strong>Non-Maximum Suppression</strong> (NMS) uses IoU to find overlapping boxes and suppress (delete) the ones with lower confidence, leaving only the single best box."
+        },
+        {
+          "kind": "analogy",
+          "icon": "🎤",
+          "title": "The Loudest Voice Wins",
+          "body": "Imagine a crowd of people shouting the same answer. To hear clearly, we tell the loudest, most confident person to speak, and tell everyone else nearby who is saying the same thing to be quiet. That is NMS!"
+        },
+        {
+          "kind": "example",
+          "icon": "🐈",
+          "title": "Cat Box Cleanup",
+          "body": "YOLO outputs 4 overlapping boxes around a cat, with confidences: 95%, 80%, 40%, and 30%. NMS keeps the 95% box, calculates the overlap (IoU) with the others, and deletes the other three because they overlap significantly."
+        },
+        {
+          "kind": "mythbust",
+          "icon": "⚠️",
+          "title": "Neural Network or Not?",
+          "body": "A common myth is that NMS is part of the neural network layers. It isn't! NMS is a post-processing algorithm run on the output boxes after the neural network has completed its forward pass."
+        },
+        {
+          "kind": "visual",
+          "icon": "⚖️",
+          "title": "Before and After NMS",
+          "body": "Comparing detection outputs with and without NMS:",
+          "compare": {
+            "left": {
+              "emoji": "🕸️",
+              "tag": "Without NMS",
+              "text": "Many overlapping boxes per object<br>Cluttered and confusing output<br>Hard to count objects"
+            },
+            "right": {
+              "emoji": "🎯",
+              "tag": "With NMS Active",
+              "text": "Single clean box per object<br>Low confidence overlaps deleted<br>Clear and precise count"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "type": "practice",
+      "exercises": [
+        {
+          "id": "p1",
+          "type": "multiple_choice",
+          "xp": 2,
+          "prompt": "What is the purpose of Non-Maximum Suppression (NMS) in object detection?",
+          "options": [
+            {
+              "id": "a",
+              "text": "To remove overlapping bounding boxes with lower confidence, leaving only the best one",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "To scale up the resolution of the input image",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "To convert bounding boxes into classification labels",
+              "correct": false
+            },
+            {
+              "id": "d",
+              "text": "To speed up the training phase of the neural network",
+              "correct": false
+            }
+          ],
+          "explain": "Correct! NMS filters out duplicate overlapping predictions."
+        },
+        {
+          "id": "p2",
+          "type": "true_false",
+          "xp": 2,
+          "prompt": "True or False: Intersection over Union (IoU) is calculated by dividing the overlapping area of two boxes by their total combined area.",
+          "options": [
+            {
+              "id": "t",
+              "text": "True",
+              "correct": true
+            },
+            {
+              "id": "f",
+              "text": "False",
+              "correct": false
+            }
+          ],
+          "explain": "True. IoU = Area of Overlap / Area of Union. A higher IoU means greater overlap."
+        },
+        {
+          "id": "p3",
+          "type": "fill_blank",
+          "xp": 2,
+          "prompt": "Complete the sentence:",
+          "sentence": "To decide if two boxes overlap too much, NMS calculates their ___ value.",
+          "blank": "IoU",
+          "words": [
+            "IoU",
+            "loss",
+            "accuracy"
+          ],
+          "explain": "NMS compares boxes using their Intersection over Union (IoU) overlap."
+        },
+        {
+          "id": "p4",
+          "type": "spot_the_ai",
+          "xp": 2,
+          "prompt": "If two predicted boxes overlap but have an IoU of only 0.1, what will NMS likely do?",
+          "options": [
+            {
+              "id": "a",
+              "text": "Keep both, because their low overlap suggests they belong to different objects",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "Merge them into a single giant box",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "Delete both because they do not overlap enough",
+              "correct": false
+            }
+          ],
+          "explain": "Correct! Low IoU means they don't overlap much, so they are assumed to be separate objects."
+        }
+      ]
+    },
+    {
+      "type": "boss",
+      "exercises": [
+        {
+          "id": "b1",
+          "type": "multiple_choice",
+          "xp": 5,
+          "prompt": "You are running YOLO on a crowded street video. You notice that overlapping pedestrians are sometimes missed (not detected). How might you adjust the NMS algorithm to fix this?",
+          "options": [
+            {
+              "id": "a",
+              "text": "Increase the IoU threshold in NMS so it is less aggressive in deleting boxes that overlap slightly.",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "Decrease the confidence threshold so all boxes are kept.",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "Disable NMS entirely so all boxes are drawn.",
+              "correct": false
+            },
+            {
+              "id": "d",
+              "text": "Make the grid cells twice as large.",
+              "correct": false
+            }
+          ],
+          "explain": "Exactly! A higher IoU threshold prevents NMS from suppressing real, tightly packed objects that happen to overlap."
+        }
+      ]
+    }
+  ]
+}

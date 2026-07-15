@@ -1,0 +1,222 @@
+{
+  "id": "u137-l1",
+  "unit": 137,
+  "day": 686,
+  "tier": "Image Classification in Depth",
+  "tierIcon": "🏷️",
+  "title": "Beyond Simple Accuracy",
+  "icon": "📊",
+  "concept": "Accuracy can be a misleading metric, especially on imbalanced datasets where rare classes are ignored.",
+  "xp": 15,
+  "hearts": 3,
+  "estMinutes": 7,
+  "segments": [
+    {
+      "type": "warmup",
+      "exercises": [
+        {
+          "id": "w1",
+          "type": "multiple_choice",
+          "xp": 1,
+          "prompt": "Recap: What is the primary purpose of calibrating a model's confidence scores?",
+          "options": [
+            {
+              "id": "a",
+              "text": "To align the stated confidence scores with the actual probability of being correct.",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "To increase the model's accuracy on the validation set.",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "To reduce the physical storage size of the weights.",
+              "correct": false
+            }
+          ],
+          "explain": "Correct! Calibration ensures confidence represents realistic probability, which is vital for safe decision-making."
+        }
+      ]
+    },
+    {
+      "type": "teach",
+      "cards": [
+        {
+          "kind": "hook",
+          "icon": "🚨",
+          "title": "The broken smoke alarm",
+          "body": "If you buy a smoke alarm that is labeled '99.9% accurate', that sounds amazing. But if the alarm achieves this simply by never going off (because fires are rare), it is useless when a real fire starts. Simple accuracy hides this failure."
+        },
+        {
+          "kind": "definition",
+          "icon": "📊",
+          "title": "The limit of accuracy",
+          "body": "<strong>Accuracy</strong> is defined as <code>Correct Predictions / Total Predictions</code>. While intuitive, accuracy is a highly misleading metric on <strong>imbalanced datasets</strong> where one class dominates the data."
+        },
+        {
+          "kind": "analogy",
+          "icon": "⚖️",
+          "title": "A lazy student who says 'No'",
+          "body": "Think of a student who takes a test where 99% of the answers are 'False'. Without reading any questions, the student writes 'False' for everything. They get a 99% score, but they didn't learn a single thing."
+        },
+        {
+          "kind": "example",
+          "icon": "🩺",
+          "title": "Rare disease detection",
+          "body": "A medical dataset has 1,000 patient scans, but only 10 have lung cancer. A model that predicts 'Healthy' for all 1,000 patients achieves <code>99% accuracy</code>, but it misses 100% of the cancer cases. This model is a failure."
+        },
+        {
+          "kind": "mythbust",
+          "icon": "⚠️",
+          "title": "High accuracy does not mean high performance",
+          "body": "You might think a model with 98% accuracy is ready for production. In reality, you must check the distribution of your test classes first. If the target class represents only 2% of your data, a 98% accurate model might just be guessing the majority class constantly."
+        },
+        {
+          "kind": "visual",
+          "icon": "📊",
+          "title": "Accuracy on Imbalanced Data",
+          "body": "Why accuracy fails when classes are 99 to 1:",
+          "compare": {
+            "left": {
+              "emoji": "🟢",
+              "tag": "Majority Class (99%)",
+              "text": "990 safe transactions<br>Model predicts 'Safe' for all<br>990 correct predictions"
+            },
+            "right": {
+              "emoji": "🔴",
+              "tag": "Minority Class (1%)",
+              "text": "10 fraud transactions<br>Model predicts 'Safe' for all<br>10 incorrect predictions (100% missed)"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "type": "practice",
+      "exercises": [
+        {
+          "id": "p1",
+          "type": "multiple_choice",
+          "xp": 2,
+          "prompt": "Why is simple accuracy a poor metric for evaluating models trained on highly imbalanced datasets?",
+          "explain": "A naive model that always predicts the dominant class will look highly accurate, while failing completely on the minority class.",
+          "options": [
+            {
+              "id": "a",
+              "text": "Because a model can achieve very high accuracy by simply predicting the majority class for all inputs.",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "Because accuracy cannot be computed on decimal numbers.",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "Because it requires training on twice as many epochs.",
+              "correct": false
+            },
+            {
+              "id": "d",
+              "text": "Because it forces the logits to sum to infinity.",
+              "correct": false
+            }
+          ]
+        },
+        {
+          "id": "p2",
+          "type": "true_false",
+          "xp": 2,
+          "prompt": "True or false: A model with 99% accuracy on a dataset where 1% of samples are positive is guaranteed to be highly effective at detecting positive samples.",
+          "explain": "False. The model could achieve 99% accuracy by predicting 'negative' for all samples, detecting zero positive samples.",
+          "options": [
+            {
+              "id": "t",
+              "text": "True",
+              "correct": false
+            },
+            {
+              "id": "f",
+              "text": "False",
+              "correct": true
+            }
+          ]
+        },
+        {
+          "id": "p3",
+          "type": "fill_blank",
+          "xp": 2,
+          "prompt": "Complete the sentence:",
+          "explain": "Accuracy measures the fraction of all predictions that the model got correct.",
+          "sentence": "Accuracy is computed as correct predictions divided by ___ predictions.",
+          "blank": "total",
+          "words": [
+            "total",
+            "positive",
+            "negative"
+          ]
+        },
+        {
+          "id": "p4",
+          "type": "spot_the_ai",
+          "xp": 2,
+          "prompt": "Which of these datasets will make accuracy a misleading metric for model evaluation?",
+          "explain": "A 95/5 ratio is highly imbalanced, which makes simple accuracy a poor measure of performance.",
+          "options": [
+            {
+              "id": "a",
+              "text": "A dataset with 9,500 healthy scans and 500 tumor scans",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "A dataset with 5,000 dog photos and 5,000 cat photos",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "A dataset with equal numbers of five different fruit species",
+              "correct": false
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "boss",
+      "exercises": [
+        {
+          "id": "b1",
+          "type": "multiple_choice",
+          "xp": 5,
+          "prompt": "You are building a defect classifier for a microchip factory. Only 0.1% of manufactured chips are defective. A model always predicts 'No Defect'. What is its accuracy, and is it a useful model?",
+          "options": [
+            {
+              "id": "a",
+              "text": "Accuracy is 99.9%. It is completely useless because it fails to catch any defective chips.",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "Accuracy is 0.1%. It is useful because it is honest.",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "Accuracy is 50%. It is useless because it is random.",
+              "correct": false
+            },
+            {
+              "id": "d",
+              "text": "Accuracy is 100%. It is perfect for production.",
+              "correct": false
+            }
+          ],
+          "explain": "Exactly! The model achieves 99.9% accuracy, but it is an absolute failure for the business because the defective chips will pass review and ruin products. We need better metrics! Next, let's explore Precision, Recall, and F1-Score!"
+        }
+      ]
+    }
+  ]
+}

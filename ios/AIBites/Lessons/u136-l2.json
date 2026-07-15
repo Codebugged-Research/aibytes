@@ -1,0 +1,222 @@
+{
+  "id": "u136-l2",
+  "unit": 136,
+  "day": 682,
+  "tier": "Image Classification in Depth",
+  "tierIcon": "🏷️",
+  "title": "Why Modern Neural Networks Overconfide",
+  "icon": "⚠️",
+  "concept": "Modern deep networks are prone to overconfidence due to their high capacity, batch normalization, and training on cross-entropy loss.",
+  "xp": 15,
+  "hearts": 3,
+  "estMinutes": 7,
+  "segments": [
+    {
+      "type": "warmup",
+      "exercises": [
+        {
+          "id": "w1",
+          "type": "multiple_choice",
+          "xp": 1,
+          "prompt": "Recap: What is the difference between model accuracy and model calibration?",
+          "options": [
+            {
+              "id": "a",
+              "text": "Accuracy checks how often the model is correct; calibration checks if the model knows how likely it is to be correct.",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "Accuracy only works on training data.",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "Calibration only works on grayscale images.",
+              "correct": false
+            }
+          ],
+          "explain": "Correct! A model can be highly accurate but poorly calibrated, or moderately accurate but perfectly calibrated."
+        }
+      ]
+    },
+    {
+      "type": "teach",
+      "cards": [
+        {
+          "kind": "hook",
+          "icon": "⚠️",
+          "title": "Deeper but more arrogant",
+          "body": "Older, shallow neural networks from the 1990s (like LeNet) had poor accuracy but were actually well-calibrated. Modern deep networks (like ResNet) are incredibly accurate, but they are also notoriously overconfident. Why did this happen?"
+        },
+        {
+          "kind": "definition",
+          "icon": "⚠️",
+          "title": "The source of overconfidence",
+          "body": "Modern networks overconfide because they are trained to minimize <strong>Cross-Entropy Loss</strong>, which pushes logits to infinity to reach zero loss. The network's high capacity, combined with regularizers like <strong>Batch Normalization</strong> and lack of weight decay, allows it to memorize answers and inflate its confidence."
+        },
+        {
+          "kind": "analogy",
+          "icon": "🎒",
+          "title": "Cramming for a test",
+          "body": "Imagine a student who crams for a test by memorizing the exact phrasing of practice questions. On the test, they confidently bubble in answers instantly without truly understanding. They feel 100% confident, but their actual knowledge is full of gaps."
+        },
+        {
+          "kind": "example",
+          "icon": "📊",
+          "title": "ResNet-110 vs. LeNet-5",
+          "body": "In a famous 2017 study, LeNet-5 had an average error of 27% and average confidence of 27% (perfect calibration). ResNet-110 had an error of only 6%, but its average confidence was 95% (severe overconfidence!)."
+        },
+        {
+          "kind": "mythbust",
+          "icon": "⚠️",
+          "title": "Regularization doesn't solve calibration",
+          "body": "You might think modern regularizations like Batch Normalization and Weight Decay, which prevent overfitting on accuracy, must also help calibration. In reality, Batch Normalization is a major cause of miscalibration because it distributes features in a way that inflates final sigmoid/softmax scores."
+        },
+        {
+          "kind": "visual",
+          "icon": "⚖️",
+          "title": "LeNet vs. ResNet Calibration",
+          "body": "Visualizing the calibration gap:",
+          "compare": {
+            "left": {
+              "emoji": "🐢",
+              "tag": "LeNet-5 (Shallow)",
+              "text": "Accuracy: 73%<br>Average Confidence: 73%<br>Perfect calibration, low accuracy"
+            },
+            "right": {
+              "emoji": "🏎️",
+              "tag": "ResNet-110 (Deep)",
+              "text": "Accuracy: 94%<br>Average Confidence: 98%<br>High accuracy, overconfident"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "type": "practice",
+      "exercises": [
+        {
+          "id": "p1",
+          "type": "multiple_choice",
+          "xp": 2,
+          "prompt": "Why does training on Cross-Entropy loss lead to overconfident models?",
+          "explain": "Cross-Entropy loss is never truly satisfied; it continually pushes the target logit higher and higher, inflating confidence.",
+          "options": [
+            {
+              "id": "a",
+              "text": "Because it only reaches zero loss when the correct class probability is exactly 1.0, pushing logits to infinity.",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "Because it deletes the gradients of wrong classes.",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "Because it forces the model to use Sigmoid instead of Softmax.",
+              "correct": false
+            },
+            {
+              "id": "d",
+              "text": "Because it decreases the network capacity.",
+              "correct": false
+            }
+          ]
+        },
+        {
+          "id": "p2",
+          "type": "true_false",
+          "xp": 2,
+          "prompt": "True or false: Batch Normalization helps prevent overfitting and improves confidence calibration in deep networks.",
+          "explain": "False. While Batch Normalization improves accuracy, research shows it actually worsens confidence calibration.",
+          "options": [
+            {
+              "id": "t",
+              "text": "True",
+              "correct": false
+            },
+            {
+              "id": "f",
+              "text": "False",
+              "correct": true
+            }
+          ]
+        },
+        {
+          "id": "p3",
+          "type": "fill_blank",
+          "xp": 2,
+          "prompt": "Complete the sentence:",
+          "explain": "Modern models suffer from overconfidence, predicting near 100% confidence even on incorrect guesses.",
+          "sentence": "Modern deep neural networks are highly accurate, but tend to be severely ___.",
+          "blank": "overconfident",
+          "words": [
+            "overconfident",
+            "underconfident",
+            "precise"
+          ]
+        },
+        {
+          "id": "p4",
+          "type": "spot_the_ai",
+          "xp": 2,
+          "prompt": "Which of these factors contributes most to modern model overconfidence?",
+          "explain": "High capacity and Batch Normalization allow deep networks to fit data closely, inflating logits and confidence.",
+          "options": [
+            {
+              "id": "a",
+              "text": "High model capacity combined with Batch Normalization",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "Using shallow convolutional layers",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "Training on small datasets without any normalizations",
+              "correct": false
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "boss",
+      "exercises": [
+        {
+          "id": "b1",
+          "type": "multiple_choice",
+          "xp": 5,
+          "prompt": "You are explaining to a product manager why a newly trained ResNet is stating 99.9% confidence when misclassifying an orange as a tennis ball. Which explanation is correct?",
+          "options": [
+            {
+              "id": "a",
+              "text": "The model has high capacity and was trained to minimize Cross-Entropy, which continually pushes target probabilities toward 1.0, making it overconfident on visually similar errors.",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "The model has run out of memory, causing it to default to the tennis ball class.",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "The learning rate was set to zero during training.",
+              "correct": false
+            },
+            {
+              "id": "d",
+              "text": "The orange was painted yellow, changing its convolutional filters.",
+              "correct": false
+            }
+          ],
+          "explain": "Exactly! Deep networks optimize for absolute certainty to satisfy Cross-Entropy loss. This capacity to fit data results in high logits and exaggerated confidence, even on incorrect predictions. Next, let's look at how we fix this using temperature scaling!"
+        }
+      ]
+    }
+  ]
+}

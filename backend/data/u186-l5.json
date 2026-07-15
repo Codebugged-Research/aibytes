@@ -1,0 +1,222 @@
+{
+  "id": "u186-l5",
+  "unit": 186,
+  "day": 935,
+  "tier": "Vision Model Failure Case Analysis",
+  "tierIcon": "📊",
+  "title": "Debugging Vision Models",
+  "icon": "🔧",
+  "concept": "Debugging vision models involves slicing data, inspecting activations, and targeting specific failure modes.",
+  "xp": 15,
+  "hearts": 3,
+  "estMinutes": 7,
+  "segments": [
+    {
+      "type": "warmup",
+      "exercises": [
+        {
+          "id": "w1",
+          "type": "multiple_choice",
+          "xp": 1,
+          "prompt": "Recap: What is the difference between an outlier and in-distribution data?",
+          "options": [
+            {
+              "id": "a",
+              "text": "Outliers represent out-of-distribution inputs that look significantly different from the training set",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "Outliers are only processed on CPUs; in-distribution uses GPUs",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "Outliers are labels that contain spelling mistakes",
+              "correct": false
+            }
+          ],
+          "explain": "Outliers fall outside the training data distribution, causing unpredictable model outputs."
+        }
+      ]
+    },
+    {
+      "type": "teach",
+      "cards": [
+        {
+          "kind": "hook",
+          "icon": "🔧",
+          "title": "Targeted repairs",
+          "body": "When a car has a flat tire, you don't rebuild the entire engine. You fix the tire. In computer vision, debugging works the same way: if a model fails at night, you don't retrain it from scratch on sunny days. You find and fix the specific night-time leak."
+        },
+        {
+          "kind": "definition",
+          "icon": "🔧",
+          "title": "Vision Debugging",
+          "body": "<strong>Debugging Vision Models</strong> involves: <strong>Data Slicing</strong> (evaluating on specific subsets, like rainy days or small objects), <strong>Error Attribution</strong> (determining if loss stems from label noise, model capacity, or shift), and <strong>Targeted Fine-Tuning</strong>."
+        },
+        {
+          "kind": "analogy",
+          "icon": "🩺",
+          "title": "A Medical Checkup",
+          "body": "Instead of checking your overall health score, a doctor checks specific systems: blood pressure, lung capacity, reflexes. If only your blood pressure is high, they prescribe targeted medicine. Slicing data is the checkup; targeted data collection is the medicine."
+        },
+        {
+          "kind": "example",
+          "icon": "📐",
+          "title": "Data Slicing in Action",
+          "body": "For an object detector, you slice the validation set into three: 'Small Objects', 'Medium Objects', 'Large Objects'. You discover that while Large mAP is 0.90, Small mAP is only 0.15. This points directly to the resolution bottleneck."
+        },
+        {
+          "kind": "mythbust",
+          "icon": "⚠️",
+          "title": "Don't just add random data",
+          "body": "You might think the cure for any model bug is to scrape 100,000 random internet images and retrain. If those images don't address your specific sliced failure mode, you waste computing power and might even degrade other classes."
+        },
+        {
+          "kind": "visual",
+          "icon": "⚖️",
+          "title": "Debugging Workflows",
+          "body": "Comparing blind retraining with targeted debugging:",
+          "compare": {
+            "left": {
+              "emoji": "🔄",
+              "tag": "Blind Retraining",
+              "text": "Train longer on entire dataset.<br>Hope the bug fixes itself.<br>Slow, expensive, unpredictable."
+            },
+            "right": {
+              "emoji": "🎯",
+              "tag": "Targeted Debugging",
+              "text": "Slice data -> find failure slice.<br>Collect target data to fix.<br>Fast, precise, reliable."
+            }
+          }
+        }
+      ]
+    },
+    {
+      "type": "practice",
+      "exercises": [
+        {
+          "id": "p1",
+          "type": "multiple_choice",
+          "xp": 2,
+          "prompt": "What is data slicing in model evaluation?",
+          "explain": "Data slicing isolates specific subgroups (e.g., night scenes) to uncover hidden model flaws.",
+          "options": [
+            {
+              "id": "a",
+              "text": "Breaking evaluation metrics down into specific categories or conditions (like lighting or size)",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "Cropping images into four quarters before feeding them to a CNN",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "Dividing the learning rate by a factor of 10 every 5 epochs",
+              "correct": false
+            },
+            {
+              "id": "d",
+              "text": "Converting image files from PNG to JPEG format",
+              "correct": false
+            }
+          ]
+        },
+        {
+          "id": "p2",
+          "type": "true_false",
+          "xp": 2,
+          "prompt": "True or False: If a validation slice reveals that a model fails only at night, the best fix is to collect and train on more night-time images.",
+          "explain": "True. Targeted data collection directly addresses the weak slice revealed by the diagnosis.",
+          "options": [
+            {
+              "id": "t",
+              "text": "True",
+              "correct": true
+            },
+            {
+              "id": "f",
+              "text": "False",
+              "correct": false
+            }
+          ]
+        },
+        {
+          "id": "p3",
+          "type": "fill_blank",
+          "xp": 2,
+          "prompt": "Complete the sentence:",
+          "explain": "Small objects get lost in deep, low-resolution feature maps, requiring features like FPNs to preserve details.",
+          "sentence": "If your model performs poorly on small objects but well on large ones, you should inspect the resolution of your ___ layers.",
+          "blank": "feature map",
+          "words": [
+            "feature map",
+            "activation",
+            "loss"
+          ]
+        },
+        {
+          "id": "p4",
+          "type": "spot_the_ai",
+          "xp": 2,
+          "prompt": "Which of these is a diagnostic step in vision model debugging?",
+          "explain": "Evaluating performance on specific subgroups (slices) helps narrow down systematic failure modes.",
+          "options": [
+            {
+              "id": "a",
+              "text": "Slicing the test set by camera angle to see if accuracy drops on side-view images",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "Adding dropout layers to every convolution layer without evaluating first",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "Running the code on two GPUs instead of one to see if accuracy changes",
+              "correct": false
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "boss",
+      "exercises": [
+        {
+          "id": "b1",
+          "type": "multiple_choice",
+          "xp": 5,
+          "prompt": "Your drone crop-health monitor scores 95% accuracy on sunny days, but drops to 60% on cloudy days. What is the most targeted debugging approach?",
+          "options": [
+            {
+              "id": "a",
+              "text": "Slice your training data by weather, identify the cloud-cover gap, and add augmented cloudy images or apply histogram normalization.",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "Discard the model and train a new one strictly on synthetic 3D shapes.",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "Train the model for 500 more epochs on the sunny dataset.",
+              "correct": false
+            },
+            {
+              "id": "d",
+              "text": "Replace the drone hardware with a heavier battery.",
+              "correct": false
+            }
+          ],
+          "explain": "Slicing by weather isolates the cloudy day failure. Normalizing pixels or adding cloudy augmentations directly targets this domain gap. Next up: Domain Shift!"
+        }
+      ]
+    }
+  ]
+}

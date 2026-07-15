@@ -1,0 +1,222 @@
+{
+  "id": "u145-l2",
+  "unit": 145,
+  "day": 727,
+  "tier": "Object Detection Foundations",
+  "tierIcon": "🎯",
+  "title": "Region Proposal Network (RPN)",
+  "icon": "🕵️",
+  "concept": "The Region Proposal Network (RPN) is a lightweight neural network that slides over the shared feature map to predict objectness scores and bounding box offsets.",
+  "xp": 15,
+  "hearts": 3,
+  "estMinutes": 7,
+  "segments": [
+    {
+      "type": "warmup",
+      "exercises": [
+        {
+          "id": "w1",
+          "type": "multiple_choice",
+          "xp": 1,
+          "prompt": "Recap: What is the main role of the RPN?",
+          "options": [
+            {
+              "id": "a",
+              "text": "To predict region proposal coordinates and objectness scores on the GPU",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "To classify the specific categories of objects",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "To perform NMS on the raw image pixels",
+              "correct": false
+            }
+          ],
+          "explain": "The RPN predicts candidate regions and whether they contain an object (objectness)."
+        }
+      ]
+    },
+    {
+      "type": "teach",
+      "cards": [
+        {
+          "kind": "hook",
+          "icon": "🕵️",
+          "title": "The Internal Scout",
+          "body": "If you are defending a castle, you don't wait for enemies to knock on the gate. You place a scout on the highest tower. The scout looks out and barks: 'Something is moving over there!' they don't know if it's a horse or a soldier — they just detect movement. That is the RPN."
+        },
+        {
+          "kind": "definition",
+          "icon": "🕵️",
+          "title": "Region Proposal Network",
+          "body": "The <strong>Region Proposal Network (RPN)</strong> is a lightweight network that takes the shared feature map as input. It slides a small window over the map, and at each position, it evaluates a set of anchor boxes, predicting an <strong>objectness score</strong> (probability of containing an object vs background) and <strong>bounding box offsets</strong>."
+        },
+        {
+          "kind": "analogy",
+          "icon": "🕵️",
+          "title": "Object vs. Background",
+          "body": "The RPN is like a security guard looking at monitors. The guard doesn't need to identify if a visitor is a manager or a customer. They just shout: <code>'There is a person at door 3!'</code>, leaving the identification to the office staff (the classifier)."
+        },
+        {
+          "kind": "example",
+          "icon": "🕵️",
+          "title": "Sliding Over Features",
+          "body": "The RPN slides a 3x3 convolutional filter over the feature map. At each cell, it evaluates 9 anchor boxes. For a 50x50 feature map, it checks <code>50 x 50 x 9 = 22,500</code> anchor combinations in a fraction of a millisecond."
+        },
+        {
+          "kind": "mythbust",
+          "icon": "⚠️",
+          "title": "RPN does not classify objects",
+          "body": "It's a myth that the RPN outputs labels like 'cat' or 'car'. The RPN is binary: it only outputs two numbers representing 'object' or 'not object' (background). Specific classification is done later in the pipeline."
+        },
+        {
+          "kind": "visual",
+          "icon": "⚖️",
+          "title": "RPN Sliding Window",
+          "body": "Visualizing the RPN heads at a grid cell on the feature map:",
+          "compare": {
+            "left": {
+              "emoji": "❓",
+              "tag": "Objectness Head",
+              "text": "Is there an object inside?<br><code>Outputs: [Object, Background]</code>"
+            },
+            "right": {
+              "emoji": "📐",
+              "tag": "Regression Head",
+              "text": "How should we adjust the anchor?<br><code>Outputs: [dx, dy, dw, dh]</code>"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "type": "practice",
+      "exercises": [
+        {
+          "id": "p1",
+          "type": "multiple_choice",
+          "xp": 2,
+          "prompt": "What is the primary output of the objectness head in the RPN?",
+          "explain": "The RPN is binary and only predicts whether an anchor contains any object ('objectness') or is background.",
+          "options": [
+            {
+              "id": "a",
+              "text": "A probability score indicating if an anchor contains an object vs background",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "The exact class label (like 'cat' or 'dog')",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "The color histogram of the pixels",
+              "correct": false
+            },
+            {
+              "id": "d",
+              "text": "The depth coordinate in meters",
+              "correct": false
+            }
+          ]
+        },
+        {
+          "id": "p2",
+          "type": "true_false",
+          "xp": 2,
+          "prompt": "True or False: The RPN evaluates multiple anchor boxes at each sliding window position of the feature map.",
+          "explain": "True. The RPN checks multiple anchor shapes (aspect ratios/scales) at each cell to catch objects of different sizes.",
+          "options": [
+            {
+              "id": "t",
+              "text": "True",
+              "correct": true
+            },
+            {
+              "id": "f",
+              "text": "False",
+              "correct": false
+            }
+          ]
+        },
+        {
+          "id": "p3",
+          "type": "fill_blank",
+          "xp": 2,
+          "prompt": "Complete the sentence:",
+          "explain": "Class-agnostic means the network does not distinguish between specific object categories at this stage.",
+          "sentence": "The RPN is class-___; it only determines if an object exists, not its specific category.",
+          "blank": "agnostic",
+          "words": [
+            "agnostic",
+            "specific",
+            "imbalanced"
+          ]
+        },
+        {
+          "id": "p4",
+          "type": "spot_the_ai",
+          "xp": 2,
+          "prompt": "Which prediction is output by the Region Proposal Network?",
+          "explain": "The RPN outputs objectness scores and coordinate regression offsets for the draft boxes.",
+          "options": [
+            {
+              "id": "a",
+              "text": "Objectness Score: 0.94, Box Offsets: [0.02, -0.01, 0.12, 0.05]",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "Category: Toyota Camry, Confidence: 98%",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "Loss: 0.23, Epoch: 15",
+              "correct": false
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "boss",
+      "exercises": [
+        {
+          "id": "b1",
+          "type": "multiple_choice",
+          "xp": 5,
+          "prompt": "You are building a custom RPN. At a certain grid location, a tall anchor box has an objectness score of 0.98, and the regression head outputs dx=+2, dy=0, dw=-5, dh=+10. What does this mean?",
+          "options": [
+            {
+              "id": "a",
+              "text": "The model is highly confident there is an object in that location, and recommends shifting the anchor box right and stretching it vertically.",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "The model has detected a pedestrian with 98% accuracy.",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "The anchor box should be classified as background.",
+              "correct": false
+            },
+            {
+              "id": "d",
+              "text": "The learning rate is too high.",
+              "correct": false
+            }
+          ],
+          "explain": "Exactly! The high objectness means an object is present, and the offsets tell the network how to adjust the anchor shape to wrap the object. Next: let's learn how RPN and classification share features!"
+        }
+      ]
+    }
+  ]
+}

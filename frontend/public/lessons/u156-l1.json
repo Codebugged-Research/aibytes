@@ -1,0 +1,222 @@
+{
+  "id": "u156-l1",
+  "unit": 156,
+  "day": 781,
+  "tier": "U-Net Architecture",
+  "tierIcon": "🧬",
+  "title": "The Contracting Path",
+  "icon": "🧬",
+  "concept": "The contracting path (encoder) of U-Net uses repeating convolutions and max pooling to capture high-level context and features.",
+  "xp": 15,
+  "hearts": 3,
+  "estMinutes": 7,
+  "segments": [
+    {
+      "type": "warmup",
+      "exercises": [
+        {
+          "id": "w1",
+          "type": "multiple_choice",
+          "xp": 1,
+          "prompt": "Recap: Which FCN architecture provides the highest detail and why?",
+          "options": [
+            {
+              "id": "a",
+              "text": "FCN-8s, because it fuses multiple fine-grained skip connections",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "FCN-32s, because it upsamples in a single step",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "FCN-16s, because it uses twice the stride of FCN-8s",
+              "correct": false
+            }
+          ],
+          "explain": "Correct! FCN-8s uses skip connections to retain details."
+        }
+      ]
+    },
+    {
+      "type": "teach",
+      "cards": [
+        {
+          "kind": "hook",
+          "icon": "🧬",
+          "title": "The symmetric U",
+          "body": "In 2015, researchers designed an architecture for medical images that became one of the most famous shapes in AI. It looks like the letter 'U'. The left side goes down, and the right side goes up. Let's start by walking down the left side: the contracting path."
+        },
+        {
+          "kind": "definition",
+          "icon": "📉",
+          "title": "The Contracting Path",
+          "body": "The <strong>Contracting Path</strong> (or Encoder) is the left side of the U-Net. It consists of repeating blocks of two 3x3 convolutions followed by a 2x2 max pooling layer, doubling the feature channels at each step while halving spatial resolution."
+        },
+        {
+          "kind": "analogy",
+          "icon": "🔍",
+          "title": "Looking through a zoom lens",
+          "body": "Going down the contracting path is like zooming out with a camera. As you zoom out, you see more of the surrounding context (what the object is) but lose the exact coordinates of individual pixels."
+        },
+        {
+          "kind": "example",
+          "icon": "📐",
+          "title": "Channel doubling",
+          "body": "An input image starts with 3 channels (RGB). The first block of the contracting path outputs 64 channels. The next block outputs 128, then 256, and finally 512 at the bottom, building a rich, abstract representation."
+        },
+        {
+          "kind": "mythbust",
+          "icon": "⚠️",
+          "title": "Not just standard classification",
+          "body": "Many think the contracting path is identical to a classification network like VGG. While it operates similarly, it keeps all intermediate feature maps active so they can be sent across the 'U' to the decoder."
+        },
+        {
+          "kind": "visual",
+          "icon": "⚖️",
+          "title": "Contracting Path Layout",
+          "body": "How the left side of the U-Net works:",
+          "compare": {
+            "left": {
+              "emoji": "🖼️",
+              "tag": "Input Image (High Res)",
+              "text": "Resolution: 256x256, Channels: 3<br>Contains precise pixel positions"
+            },
+            "right": {
+              "emoji": "🧠",
+              "tag": "Bottleneck (Low Res)",
+              "text": "Resolution: 16x16, Channels: 512<br>Contains deep semantic features"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "type": "practice",
+      "exercises": [
+        {
+          "id": "p1",
+          "type": "multiple_choice",
+          "xp": 2,
+          "prompt": "What happens to the channels and spatial resolution in the contracting path?",
+          "options": [
+            {
+              "id": "a",
+              "text": "Channels double and resolution halves at each block",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "Channels halve and resolution doubles",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "Both channels and resolution double",
+              "correct": false
+            },
+            {
+              "id": "d",
+              "text": "Both channels and resolution halve",
+              "correct": false
+            }
+          ],
+          "explain": "Correct! The contracting path contracts space while expanding feature depth."
+        },
+        {
+          "id": "p2",
+          "type": "true_false",
+          "xp": 2,
+          "prompt": "True or False: The contracting path of U-Net is also called the decoder.",
+          "options": [
+            {
+              "id": "t",
+              "text": "True",
+              "correct": false
+            },
+            {
+              "id": "f",
+              "text": "False",
+              "correct": false
+            }
+          ],
+          "explain": "False. The contracting path is the encoder; the expanding path is the decoder."
+        },
+        {
+          "id": "p3",
+          "type": "fill_blank",
+          "xp": 2,
+          "prompt": "Complete the sentence:",
+          "sentence": "The contracting path uses 2x2 ___ pooling to reduce spatial dimensions.",
+          "blank": "max",
+          "words": [
+            "max",
+            "average",
+            "min"
+          ],
+          "explain": "Max pooling is used in U-Net to downsample feature maps."
+        },
+        {
+          "id": "p4",
+          "type": "spot_the_ai",
+          "xp": 2,
+          "prompt": "What is the primary goal of the contracting path?",
+          "options": [
+            {
+              "id": "a",
+              "text": "To capture context and extract deep features",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "To restore spatial boundaries",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "To flatten the image into a class vector",
+              "correct": false
+            }
+          ],
+          "explain": "It extracts semantic context by shrinking resolution and expanding channels."
+        }
+      ]
+    },
+    {
+      "type": "boss",
+      "exercises": [
+        {
+          "id": "b1",
+          "type": "multiple_choice",
+          "xp": 5,
+          "prompt": "If we design a U-Net with too many downsampling steps in the contracting path, what is the risk for small objects like cells?",
+          "options": [
+            {
+              "id": "a",
+              "text": "Their spatial representation might shrink to less than 1 pixel, causing the network to lose them entirely.",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "The model will automatically convert to an object detector.",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "The number of channels will overflow the GPU float limit.",
+              "correct": false
+            },
+            {
+              "id": "d",
+              "text": "The learning rate will increase to infinity.",
+              "correct": false
+            }
+          ],
+          "explain": "Exactly! If we downsample too much, small features are completely erased. Next: let's go up the right side of the U-Net!"
+        }
+      ]
+    }
+  ]
+}

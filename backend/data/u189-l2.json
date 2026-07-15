@@ -1,0 +1,222 @@
+{
+  "id": "u189-l2",
+  "unit": 189,
+  "day": 947,
+  "tier": "Model Explainability",
+  "tierIcon": "📊",
+  "title": "Saliency Maps",
+  "icon": "🗺️",
+  "concept": "Saliency maps highlight the pixels in an input image that had the greatest influence on the model's prediction.",
+  "xp": 15,
+  "hearts": 3,
+  "estMinutes": 7,
+  "segments": [
+    {
+      "type": "warmup",
+      "exercises": [
+        {
+          "id": "w1",
+          "type": "multiple_choice",
+          "xp": 1,
+          "prompt": "Recap: What is a black-box model?",
+          "options": [
+            {
+              "id": "a",
+              "text": "A model whose internal mathematical reasoning is too complex for humans to easily interpret",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "A network that only processes black-and-white images",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "A dataset that contains no class annotations",
+              "correct": false
+            }
+          ],
+          "explain": "Black-box models predict output values without providing clear, human-understandable explanations of their internal reasoning."
+        }
+      ]
+    },
+    {
+      "type": "teach",
+      "cards": [
+        {
+          "kind": "hook",
+          "icon": "🗺️",
+          "title": "Tracing the pixels",
+          "body": "If you predict that an image contains a dog, which specific pixels in the image made you think so? Was it the dog's ears? The nose? Or the grass behind it? Saliency maps trace the model's math backward to find the pixels that matter most."
+        },
+        {
+          "kind": "definition",
+          "icon": "🗺️",
+          "title": "Saliency Mapping",
+          "body": "A <strong>Saliency Map</strong> is a visualization technique that highlights the most influential pixels in an input image. It is computed by taking the <strong>derivative (gradient)</strong> of the output score with respect to the input pixel values."
+        },
+        {
+          "kind": "analogy",
+          "icon": "🔥",
+          "title": "Thermal Camera of Focus",
+          "body": "Think of a saliency map as a thermal heat camera overlay. The hot red spots show the pixels that the model is staring at most intensely. The cold blue spots show background pixels that the model is completely ignoring."
+        },
+        {
+          "kind": "example",
+          "icon": "📐",
+          "title": "Vanilla Gradients",
+          "body": "During a backward pass, you calculate gradients of the predicted class score with respect to the input image pixels. Pixels with large absolute gradient values are those that, if changed slightly, would change the model's prediction the most."
+        },
+        {
+          "kind": "mythbust",
+          "icon": "⚠️",
+          "title": "They can be noisy",
+          "body": "You might think saliency maps always show clean outlines. In practice, **Vanilla Saliency Maps** look like static noise with random scattered pixels highlighted, making them hard to interpret. Advanced methods like Integrated Gradients are needed for cleaner maps."
+        },
+        {
+          "kind": "visual",
+          "icon": "⚖️",
+          "title": "Saliency Heatmap",
+          "body": "Comparing a raw photo with its pixel saliency map:",
+          "compare": {
+            "left": {
+              "emoji": "🐈",
+              "tag": "Raw Input Image",
+              "text": "Standard RGB photo of a cat.<br>Contains background grass & sky.<br>Raw input pixels."
+            },
+            "right": {
+              "emoji": "🗺️",
+              "tag": "Saliency Map",
+              "text": "Bright pixels highlight cat ears & whiskers.<br>Background is dark (zero gradient).<br>Reveals active input zones."
+            }
+          }
+        }
+      ]
+    },
+    {
+      "type": "practice",
+      "exercises": [
+        {
+          "id": "p1",
+          "type": "multiple_choice",
+          "xp": 2,
+          "prompt": "How is a vanilla saliency map calculated in deep learning?",
+          "explain": "Saliency mapping measures how changes in input pixels affect output scores, which is the gradient of output over input.",
+          "options": [
+            {
+              "id": "a",
+              "text": "By calculating the gradient (derivative) of the model's output class score with respect to the input image pixels",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "By averaging the RGB channels of the input image",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "By deleting random weights during the forward pass",
+              "correct": false
+            },
+            {
+              "id": "d",
+              "text": "By converting the label annotations to YOLO format",
+              "correct": false
+            }
+          ]
+        },
+        {
+          "id": "p2",
+          "type": "true_false",
+          "xp": 2,
+          "prompt": "True or False: Pixels with a gradient value near zero on a saliency map have a massive impact on the model's output prediction.",
+          "explain": "False. Near-zero gradients indicate that changing those pixels has no effect on the prediction; they are ignored.",
+          "options": [
+            {
+              "id": "t",
+              "text": "True",
+              "correct": false
+            },
+            {
+              "id": "f",
+              "text": "False",
+              "correct": true
+            }
+          ]
+        },
+        {
+          "id": "p3",
+          "type": "fill_blank",
+          "xp": 2,
+          "prompt": "Complete the sentence:",
+          "explain": "Saliency maps are commonly rendered as colorized heatmaps overlayed on source images.",
+          "sentence": "Saliency maps act like a visual ___ map, showing which regions of the image the model prioritized.",
+          "blank": "heat",
+          "words": [
+            "heat",
+            "activation",
+            "loss"
+          ]
+        },
+        {
+          "id": "p4",
+          "type": "spot_the_ai",
+          "xp": 2,
+          "prompt": "What is a major limitation of vanilla saliency maps?",
+          "explain": "Vanilla gradients can be highly sensitive to minor pixel changes, yielding noisy, diffuse visualizations.",
+          "options": [
+            {
+              "id": "a",
+              "text": "They are often noisy, scattered, and highlight random high-frequency pixel variations",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "They cannot be run on GPU hardware",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "They double the size of the neural network weights",
+              "correct": false
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "boss",
+      "exercises": [
+        {
+          "id": "b1",
+          "type": "multiple_choice",
+          "xp": 5,
+          "prompt": "You generate a saliency map for an apple classifier. The map highlights only the white table background under the apple, rather than the apple itself. What does this diagnose?",
+          "options": [
+            {
+              "id": "a",
+              "text": "The model has learned a shortcut bias, relying on the clean table texture to predict the class rather than the fruit's features.",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "The camera lens is dirty and needs physical cleaning.",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "The model has too few parameter layers to process apples.",
+              "correct": false
+            },
+            {
+              "id": "d",
+              "text": "The image file was loaded in grayscale mode.",
+              "correct": false
+            }
+          ],
+          "explain": "If the model's attention is focused entirely on the background table, it is using background texture as a classification cheat, which will fail on other tables."
+        }
+      ]
+    }
+  ]
+}

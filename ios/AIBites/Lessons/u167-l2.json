@@ -1,0 +1,222 @@
+{
+  "id": "u167-l2",
+  "unit": 167,
+  "day": 837,
+  "tier": "Advanced Vision Applications",
+  "tierIcon": "👁️",
+  "title": "CNN-RNN Encoder-Decoder Models",
+  "icon": "🧠",
+  "concept": "Classical captioning models use a CNN encoder to extract spatial features and an RNN/LSTM decoder to generate the corresponding text sequence word-by-word.",
+  "xp": 15,
+  "hearts": 3,
+  "estMinutes": 7,
+  "segments": [
+    {
+      "type": "warmup",
+      "exercises": [
+        {
+          "id": "w1",
+          "type": "multiple_choice",
+          "xp": 1,
+          "prompt": "Recap: What is the main output format of an image captioning system?",
+          "options": [
+            {
+              "id": "a",
+              "text": "A natural language sentence describing the scene.",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "A vector of face coordinates.",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "A collection of bounding boxes.",
+              "correct": false
+            }
+          ],
+          "explain": "Correct! Captioning generates complete, grammatical strings rather than coordinates or tags."
+        }
+      ]
+    },
+    {
+      "type": "teach",
+      "cards": [
+        {
+          "kind": "hook",
+          "icon": "🧠",
+          "title": "Encoding and decoding",
+          "body": "How do we connect pixels to words? The most standard way is a two-step framework. First, a visual network translates the image into an abstract summary. Then, a language network reads that summary and generates a sequence of words, one by one, until the sentence is complete."
+        },
+        {
+          "kind": "definition",
+          "icon": "🧠",
+          "title": "The Encoder-Decoder Pipeline",
+          "body": "In a classical setup, a <strong>CNN Encoder</strong> (like ResNet or Inception) extracts high-level spatial features from the image and projects them into a vector. An <strong>RNN/LSTM Decoder</strong> takes this vector as its initial state and predicts the sequence of words sequentially (word-by-word) until it outputs a stop token."
+        },
+        {
+          "kind": "analogy",
+          "icon": "📖",
+          "title": "The summary and the storyteller",
+          "body": "The CNN encoder is like an analyst who reads a long report and writes a one-paragraph bulleted summary (feature vector). The RNN decoder is like a storyteller who takes that summary and writes an engaging, full-length narrative, choosing one word at a time based on the previous words."
+        },
+        {
+          "kind": "example",
+          "icon": "⚙️",
+          "title": "'Show and Tell' model",
+          "body": "Google's landmark 2015 'Show and Tell' model used a pre-trained CNN (like Inception) stripped of its classification head. The final convolutional features were mapped to an LSTM input, which then predicted words sequentially from a vocabulary."
+        },
+        {
+          "kind": "mythbust",
+          "icon": "⚠️",
+          "title": "The CNN does not classify",
+          "body": "You might think the CNN encoder output is a class label (like 'dog'). In fact, the final classification layer is removed. The CNN outputs raw **activation maps** (dense feature representations), preserving complex details like colors, shapes, and positions for the decoder to use."
+        },
+        {
+          "kind": "visual",
+          "icon": "⚖️",
+          "title": "CNN-RNN pipeline data flow",
+          "body": "The process of generating a sentence word-by-word:",
+          "compare": {
+            "left": {
+              "emoji": "📷",
+              "tag": "CNN Encoder",
+              "text": "Extracts visual feature map<br>Collapses pixels to feature vector<br>Passes vector to language state"
+            },
+            "right": {
+              "emoji": "✍️",
+              "tag": "RNN Decoder",
+              "text": "Takes visual state<br>Predicts Word 1 -> feeds back to state<br>Predicts Word 2 -> repeats till [END]"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "type": "practice",
+      "exercises": [
+        {
+          "id": "p1",
+          "type": "multiple_choice",
+          "xp": 2,
+          "prompt": "What is the role of the CNN in a classical CNN-RNN captioning model?",
+          "options": [
+            {
+              "id": "a",
+              "text": "To act as a visual feature encoder, extracting spatial descriptors from the image",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "To predict the grammatical structure of the sentence",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "To convert text strings into speech audio",
+              "correct": false
+            },
+            {
+              "id": "d",
+              "text": "To execute anti-spoofing checks",
+              "correct": false
+            }
+          ],
+          "explain": "The CNN acts as the encoder, capturing visual characteristics and passing them to the text decoder."
+        },
+        {
+          "id": "p2",
+          "type": "true_false",
+          "xp": 2,
+          "prompt": "True or False: The RNN decoder predicts all words in the caption simultaneously in a single forward pass.",
+          "options": [
+            {
+              "id": "t",
+              "text": "True",
+              "correct": false
+            },
+            {
+              "id": "f",
+              "text": "False",
+              "correct": true
+            }
+          ],
+          "explain": "False. RNN decoders are autoregressive, generating captions sequentially, one word at a time, feeding prior outputs back into the loop."
+        },
+        {
+          "id": "p3",
+          "type": "fill_blank",
+          "xp": 2,
+          "prompt": "Complete the sentence:",
+          "sentence": "In classical captioning, the CNN acts as the visual encoder, while the LSTM acts as the text ___.",
+          "blank": "decoder",
+          "words": [
+            "decoder",
+            "classifier",
+            "optimizer"
+          ],
+          "explain": "The LSTM decodes visual features into sequential words."
+        },
+        {
+          "id": "p4",
+          "type": "spot_the_ai",
+          "xp": 2,
+          "prompt": "Which visual representation shows a CNN-RNN encoder-decoder system in operation?",
+          "options": [
+            {
+              "id": "a",
+              "text": "An image mapped to a 2048D feature vector, which initializes an LSTM generating words sequentially",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "A list of bounding box coordinates fed to a sorting algorithm",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "A set of facial landmarks rotated horizontally",
+              "correct": false
+            }
+          ],
+          "explain": "Extracting features with a CNN to initialize an LSTM sequence generator is the classic CNN-RNN setup."
+        }
+      ]
+    },
+    {
+      "type": "boss",
+      "exercises": [
+        {
+          "id": "b1",
+          "type": "multiple_choice",
+          "xp": 5,
+          "prompt": "You are training an image captioning model. During testing, the LSTM decoder gets stuck in a loop and outputs the word 'dog' endlessly: 'A dog on a dog dog dog...'. What should you inspect?",
+          "options": [
+            {
+              "id": "a",
+              "text": "The decoder's text generation settings, and implement techniques like beam search or repetition penalty.",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "The resolution of the input image, increasing it to 4K.",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "The face alignment landmarks of the dog.",
+              "correct": false
+            },
+            {
+              "id": "d",
+              "text": "The learning rate of the CNN feature extractor.",
+              "correct": false
+            }
+          ],
+          "explain": "Exactly! Repetitive generation is a common decoder bug. Implementing beam search or adding repetition penalties forces the decoder to consider alternative word choices. Outstanding! Next: how attention maps help the model focus."
+        }
+      ]
+    }
+  ]
+}

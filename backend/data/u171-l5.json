@@ -1,0 +1,222 @@
+{
+  "id": "u171-l5",
+  "unit": 171,
+  "day": 860,
+  "tier": "Advanced Vision Applications",
+  "tierIcon": "👁️",
+  "title": "Approximate Nearest Neighbors at Scale",
+  "icon": "⚡",
+  "concept": "At the scale of millions or billions of images, exact nearest neighbor search becomes too slow — Approximate Nearest Neighbor (ANN) algorithms trade a small amount of accuracy for massive speed gains, making real-time retrieval possible.",
+  "xp": 15,
+  "hearts": 3,
+  "estMinutes": 7,
+  "segments": [
+    {
+      "type": "warmup",
+      "exercises": [
+        {
+          "id": "w1",
+          "type": "multiple_choice",
+          "xp": 1,
+          "prompt": "Recap: Where should the bulk of embedding computation happen for a 50-million-image catalog search feature?",
+          "options": [
+            {
+              "id": "a",
+              "text": "Offline, precomputing and indexing the entire catalog once",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "Live, on every single user query",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "Nowhere; embeddings are unnecessary",
+              "correct": false
+            }
+          ],
+          "explain": "Yes! Offline precomputation keeps live queries fast at scale."
+        }
+      ]
+    },
+    {
+      "type": "teach",
+      "cards": [
+        {
+          "kind": "hook",
+          "icon": "⚡",
+          "title": "Too slow at a billion images",
+          "body": "Comparing a query embedding against every single vector in a database of 10 million images one-by-one (exact search) is manageable. But at 1 billion images, that brute-force comparison becomes far too slow for a real-time product feature."
+        },
+        {
+          "kind": "definition",
+          "icon": "⚡",
+          "title": "Approximate Nearest Neighbors (ANN)",
+          "body": "<strong>ANN algorithms</strong> (like HNSW, FAISS, or Annoy) organize the embedding database into smart index structures that let you find VERY LIKELY nearest neighbors extremely fast, accepting a small chance of missing the exact true closest match in exchange for massive speed gains."
+        },
+        {
+          "kind": "analogy",
+          "icon": "🗺️",
+          "title": "A city guide vs. checking every building",
+          "body": "Exact search is like checking the exact distance from your location to every single building in a huge city one by one to find the closest coffee shop. ANN search is like using a smart city guide that instantly points you to a coffee shop that's almost certainly one of the closest ones, without personally measuring every building."
+        },
+        {
+          "kind": "example",
+          "icon": "🏢",
+          "title": "FAISS at Meta scale",
+          "body": "Large tech companies use ANN libraries like FAISS to search billions of embedding vectors (across photos, videos, or products) in milliseconds — a task that would take hours or days with naive exact brute-force comparison."
+        },
+        {
+          "kind": "mythbust",
+          "icon": "⚠️",
+          "title": "Approximate doesn't mean unreliable",
+          "body": "It's a myth that 'approximate' means the results are noticeably wrong. Well-tuned ANN systems typically find the TRUE nearest neighbor (or something visually indistinguishable from it) the vast majority of the time — the tiny accuracy tradeoff is usually invisible to end users, while the speedup is dramatic (often 100x or more)."
+        },
+        {
+          "kind": "visual",
+          "icon": "⚖️",
+          "title": "Exact vs. Approximate Nearest Neighbor Search",
+          "body": "The core scale tradeoff:",
+          "compare": {
+            "left": {
+              "emoji": "🎯",
+              "tag": "Exact (Brute-Force) Search",
+              "text": "Guarantees the TRUE closest match<br>Compares against every vector<br>Too slow at massive scale"
+            },
+            "right": {
+              "emoji": "⚡",
+              "tag": "Approximate (ANN) Search",
+              "text": "Very likely (not guaranteed) closest match<br>Uses smart index structures<br>Fast enough for billions of vectors"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "type": "practice",
+      "exercises": [
+        {
+          "id": "p1",
+          "type": "multiple_choice",
+          "xp": 2,
+          "prompt": "What tradeoff does Approximate Nearest Neighbor (ANN) search make?",
+          "options": [
+            {
+              "id": "a",
+              "text": "A small chance of missing the exact true closest match, in exchange for massive speed gains at large scale",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "Perfect accuracy but extremely slow performance always",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "No tradeoff at all; ANN is strictly identical to exact search",
+              "correct": false
+            },
+            {
+              "id": "d",
+              "text": "It only works on grayscale images",
+              "correct": false
+            }
+          ],
+          "explain": "Correct! ANN trades a tiny accuracy risk for dramatic speed improvements."
+        },
+        {
+          "id": "p2",
+          "type": "true_false",
+          "xp": 2,
+          "prompt": "True or false: Exact brute-force nearest neighbor search remains practical at the scale of billions of images.",
+          "options": [
+            {
+              "id": "t",
+              "text": "True",
+              "correct": false
+            },
+            {
+              "id": "f",
+              "text": "False",
+              "correct": true
+            }
+          ],
+          "explain": "False. Brute-force comparison against every vector becomes far too slow at billion-scale databases, motivating ANN methods."
+        },
+        {
+          "id": "p3",
+          "type": "fill_blank",
+          "xp": 2,
+          "prompt": "Complete the sentence:",
+          "sentence": "ANN algorithms accept a small risk of inexact results in exchange for massive ___ gains at large scale.",
+          "blank": "speed",
+          "words": [
+            "speed",
+            "resolution",
+            "compression"
+          ],
+          "explain": "Speed is the primary benefit ANN trades accuracy risk for."
+        },
+        {
+          "id": "p4",
+          "type": "spot_the_ai",
+          "xp": 2,
+          "prompt": "Why do large tech companies rely on ANN libraries like FAISS instead of brute-force search for billion-scale image databases?",
+          "options": [
+            {
+              "id": "a",
+              "text": "Brute-force comparison against every vector is far too slow at that scale; ANN provides near-instant results with minimal accuracy loss",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "FAISS eliminates the need for embeddings entirely",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "Brute-force search is actually faster than ANN at any scale",
+              "correct": false
+            }
+          ],
+          "explain": "Correct! ANN's speed-accuracy tradeoff is essential at massive scale."
+        }
+      ]
+    },
+    {
+      "type": "boss",
+      "exercises": [
+        {
+          "id": "b1",
+          "type": "multiple_choice",
+          "xp": 5,
+          "prompt": "We have completed our study of Image Retrieval — embeddings, nearest neighbor search, building a search pipeline, and scaling with ANN. What is the next logical computer vision application to study?",
+          "options": [
+            {
+              "id": "a",
+              "text": "Anomaly & Defect Detection — spotting rare, unusual patterns that deviate from normal examples",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "Restarting the curriculum from image file formats",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "Deleting the embedding model and starting over with raw pixels",
+              "correct": false
+            },
+            {
+              "id": "d",
+              "text": "Skipping directly to deployment without further vision topics",
+              "correct": false
+            }
+          ],
+          "explain": "Exactly! Now let's flip the problem: instead of finding similar images, let's learn to spot images that DON'T fit the pattern. Next up: Anomaly & Defect Detection!"
+        }
+      ]
+    }
+  ]
+}

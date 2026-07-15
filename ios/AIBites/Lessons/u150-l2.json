@@ -1,0 +1,222 @@
+{
+  "id": "u150-l2",
+  "unit": 150,
+  "day": 752,
+  "tier": "Modern Object Detection",
+  "tierIcon": "🎯",
+  "title": "Keypoint-Based Detection (CornerNet)",
+  "icon": "📐",
+  "concept": "CornerNet detects objects by predicting heatmaps for top-left and bottom-right corners and pairing them via embeddings.",
+  "xp": 15,
+  "hearts": 3,
+  "estMinutes": 7,
+  "segments": [
+    {
+      "type": "warmup",
+      "exercises": [
+        {
+          "id": "w2",
+          "type": "multiple_choice",
+          "xp": 1,
+          "prompt": "Recap: What is the main issue with using rigid anchor box templates?",
+          "options": [
+            {
+              "id": "a",
+              "text": "They struggle to fit highly variable or irregular object shapes",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "They only support black and white images",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "They prevent the use of convolutional layers",
+              "correct": false
+            }
+          ],
+          "explain": "Correct! Rigid templates struggle with irregular shapes and require dataset-specific tuning."
+        }
+      ]
+    },
+    {
+      "type": "teach",
+      "cards": [
+        {
+          "kind": "hook",
+          "icon": "📐",
+          "title": "Corner Marks",
+          "body": "What if, instead of guessing a box size, we just locate the boundaries of an object by marking its corners? In 2018, a model called CornerNet did exactly this, pioneering keypoint-based detection. Let's see how it works."
+        },
+        {
+          "kind": "definition",
+          "icon": "📐",
+          "title": "Keypoint-Based Detection (CornerNet)",
+          "body": "<strong>CornerNet</strong> is an anchor-free detector that represents an object as a pair of keypoints: a <strong>top-left corner</strong> and a <strong>bottom-right corner</strong>. The network outputs heatmaps for these corners and groups them using <strong>associative embedding</strong> (matching tags)."
+        },
+        {
+          "kind": "analogy",
+          "icon": "🖼️",
+          "title": "Framing a Painting",
+          "body": "Imagine placing a frame around a painting. You don't try to guess box sizes first. You just mark the top-left corner of the canvas and the bottom-right corner with a pencil, then connect them. That is CornerNet!"
+        },
+        {
+          "kind": "example",
+          "icon": "🐈",
+          "title": "Corner Heatmaps",
+          "body": "For a cat, CornerNet predicts a heatmap peaking at the cat's top-left corner and another at its bottom-right corner. It uses matching ID numbers (embeddings) predicted at each corner to know these two corners belong to the same cat."
+        },
+        {
+          "kind": "mythbust",
+          "icon": "⚠️",
+          "title": "Are Corners Easy?",
+          "body": "You might think corners are easy to find because they are distinct. Fact: The corner of an object's bounding box is often empty background space outside the actual object (like the corner of a round ball), making it tricky to predict."
+        },
+        {
+          "kind": "visual",
+          "icon": "⚖️",
+          "title": "CornerNet Prediction Pipeline",
+          "body": "How keypoint corner detection works:",
+          "compare": {
+            "left": {
+              "emoji": "📍",
+              "tag": "Corner Heatmaps",
+              "text": "Detects top-left & bottom-right points<br>Predicts coordinates independently<br>No anchor templates used"
+            },
+            "right": {
+              "emoji": "🔗",
+              "tag": "Associative Embedding",
+              "text": "Generates matching tags for corners<br>Groups corners with similar tags<br>Draws final bounding box"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "type": "practice",
+      "exercises": [
+        {
+          "id": "p1",
+          "type": "multiple_choice",
+          "xp": 2,
+          "prompt": "How does CornerNet define the location of an object?",
+          "options": [
+            {
+              "id": "a",
+              "text": "By predicting its top-left and bottom-right corners",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "By calculating the center point and the radius",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "By drawing a polygon mask around the pixels",
+              "correct": false
+            },
+            {
+              "id": "d",
+              "text": "By dividing the object into 10 slices",
+              "correct": false
+            }
+          ],
+          "explain": "Correct! CornerNet represents objects using their top-left and bottom-right corners."
+        },
+        {
+          "id": "p2",
+          "type": "true_false",
+          "xp": 2,
+          "prompt": "True or False: Associative embedding is a technique used to match corresponding top-left and bottom-right corners belonging to the same object.",
+          "options": [
+            {
+              "id": "t",
+              "text": "True",
+              "correct": true
+            },
+            {
+              "id": "f",
+              "text": "False",
+              "correct": false
+            }
+          ],
+          "explain": "True. The model predicts a tag value for each corner; corners with similar tag values are grouped together."
+        },
+        {
+          "id": "p3",
+          "type": "fill_blank",
+          "xp": 2,
+          "prompt": "Complete the sentence:",
+          "sentence": "CornerNet is a keypoint-based detector that eliminates the need for ___ boxes.",
+          "blank": "anchor",
+          "words": [
+            "anchor",
+            "convolutional",
+            "pooling"
+          ],
+          "explain": "CornerNet is anchor-free, locating corners directly."
+        },
+        {
+          "id": "p4",
+          "type": "spot_the_ai",
+          "xp": 2,
+          "prompt": "What is a main challenge when predicting box corners?",
+          "options": [
+            {
+              "id": "a",
+              "text": "The corner of a bounding box is often empty background space containing no object features",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "Corners have too many overlapping colors",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "The coordinates must be positive numbers",
+              "correct": false
+            }
+          ],
+          "explain": "Correct! Bounding box corners often lie in the background, making it hard for the network to extract local object features."
+        }
+      ]
+    },
+    {
+      "type": "boss",
+      "exercises": [
+        {
+          "id": "b1",
+          "type": "multiple_choice",
+          "xp": 5,
+          "prompt": "You are detecting multiple overlapping people in a photo. CornerNet detects three top-left corners and three bottom-right corners. How does it know which top-left corner matches which bottom-right corner?",
+          "options": [
+            {
+              "id": "a",
+              "text": "It compares the associative embedding tags predicted for each corner, grouping corners that have the closest tag values.",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "It matches them randomly.",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "It always matches the top-left corner to the nearest bottom-right corner.",
+              "correct": false
+            },
+            {
+              "id": "d",
+              "text": "It uses a classification model to sort them.",
+              "correct": false
+            }
+          ],
+          "explain": "Exactly! Associative embedding tags act as unique identifiers to link matching keypoints together."
+        }
+      ]
+    }
+  ]
+}

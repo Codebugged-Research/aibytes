@@ -1,0 +1,222 @@
+{
+  "id": "u145-l3",
+  "unit": 145,
+  "day": 728,
+  "tier": "Object Detection Foundations",
+  "tierIcon": "🎯",
+  "title": "Shared Backbone (Feature Extraction)",
+  "icon": "🦴",
+  "concept": "The RPN and the classification network share the same convolutional backbone, saving massive computational overhead.",
+  "xp": 15,
+  "hearts": 3,
+  "estMinutes": 7,
+  "segments": [
+    {
+      "type": "warmup",
+      "exercises": [
+        {
+          "id": "w1",
+          "type": "multiple_choice",
+          "xp": 1,
+          "prompt": "Recap: Does the RPN predict specific object classes like 'dog' or 'car'?",
+          "options": [
+            {
+              "id": "a",
+              "text": "No, it is class-agnostic and only predicts objectness vs background",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "Yes, it uses a Softmax classifier over all classes",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "Yes, it uses SVMs",
+              "correct": false
+            }
+          ],
+          "explain": "The RPN is class-agnostic, focusing only on finding bounding boxes of general interest."
+        }
+      ]
+    },
+    {
+      "type": "teach",
+      "cards": [
+        {
+          "kind": "hook",
+          "icon": "🦴",
+          "title": "One Backbone to Rule Them All",
+          "body": "If you have a sales team and a marketing team in the same office, they don't buy two separate customer databases. They share one central database (features) to do their different jobs. This is how the RPN and detection heads share a backbone."
+        },
+        {
+          "kind": "definition",
+          "icon": "🦴",
+          "title": "Shared CNN Backbone",
+          "body": "In Faster R-CNN, the <strong>Backbone</strong> (like ResNet or VGG) is a deep convolutional network that extracts basic features. Instead of running one CNN for proposals and a second for classification, both the RPN and the RoI heads extract features from this **same shared map**."
+        },
+        {
+          "kind": "analogy",
+          "icon": "🗺️",
+          "title": "The Shared Map",
+          "body": "Imagine a tourist agency drawing one highly detailed map of a city. The tour guides use it to plan routes (proposals), and the tourists use it to identify landmarks (classification). Nobody needs to draw a new map!"
+        },
+        {
+          "kind": "example",
+          "icon": "🦴",
+          "title": "Backbone Architectures",
+          "body": "A standard Faster R-CNN uses a pre-trained backbone like <strong>ResNet-101</strong>. The input image passes through the ResNet layers once, and the resulting feature map is split: one path goes to the RPN, and the other to RoI Pooling."
+        },
+        {
+          "kind": "mythbust",
+          "icon": "⚠️",
+          "title": "Weights are not static",
+          "body": "You might think the backbone weights are frozen during training. In reality, during backpropagation, both the RPN loss and the final classification loss calculate gradients that update the shared backbone weights, improving feature quality."
+        },
+        {
+          "kind": "visual",
+          "icon": "⚖️",
+          "title": "Split Feature Flow",
+          "body": "Visualizing how a single backbone feeds two downstream networks:",
+          "compare": {
+            "left": {
+              "emoji": "🕵️",
+              "tag": "RPN Path",
+              "text": "Reads shared features.<br>Generates region proposals."
+            },
+            "right": {
+              "emoji": "🍪",
+              "tag": "RoI Classifier Path",
+              "text": "Reads shared features.<br>Classifies proposed regions."
+            }
+          }
+        }
+      ]
+    },
+    {
+      "type": "practice",
+      "exercises": [
+        {
+          "id": "p1",
+          "type": "multiple_choice",
+          "xp": 2,
+          "prompt": "What is the main computational advantage of a shared backbone?",
+          "explain": "Sharing the convolutional backbone allows the network to reuse the extracted features for both proposal generation and final classification.",
+          "options": [
+            {
+              "id": "a",
+              "text": "It avoids running separate feature extraction passes for proposals and classification",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "It automatically crops the images on the CPU",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "It makes the model weights binary",
+              "correct": false
+            },
+            {
+              "id": "d",
+              "text": "It allows the model to bypass backpropagation",
+              "correct": false
+            }
+          ]
+        },
+        {
+          "id": "p2",
+          "type": "true_false",
+          "xp": 2,
+          "prompt": "True or False: The shared backbone weights are updated during training by gradients from both the RPN and the final classifier.",
+          "explain": "True. The backbone features are optimized jointly to satisfy both the proposal scout (RPN) and the classifier.",
+          "options": [
+            {
+              "id": "t",
+              "text": "True",
+              "correct": true
+            },
+            {
+              "id": "f",
+              "text": "False",
+              "correct": false
+            }
+          ]
+        },
+        {
+          "id": "p3",
+          "type": "fill_blank",
+          "xp": 2,
+          "prompt": "Complete the sentence:",
+          "explain": "Pre-trained classifiers like ResNet or VGG are commonly used as the feature extraction backbone.",
+          "sentence": "In Faster R-CNN, the shared backbone is typically a pre-trained network like ___.",
+          "blank": "ResNet",
+          "words": [
+            "ResNet",
+            "Selective Search",
+            "SVM"
+          ]
+        },
+        {
+          "id": "p4",
+          "type": "spot_the_ai",
+          "xp": 2,
+          "prompt": "Which setup describes a shared backbone architecture?",
+          "explain": "A single backbone network feeding multiple output heads represents a shared feature architecture.",
+          "options": [
+            {
+              "id": "a",
+              "text": "A ResNet backbone extracting features that feed both the RPN head and the RoI Pooling classifier",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "Two separate ResNet networks running in parallel on different images",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "Selective Search on CPU sending crops to an SVM",
+              "correct": false
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "boss",
+      "exercises": [
+        {
+          "id": "b1",
+          "type": "multiple_choice",
+          "xp": 5,
+          "prompt": "You are training Faster R-CNN. During a training step, the classification head makes a poor prediction and calculates a high loss. How does this affect the shared backbone?",
+          "options": [
+            {
+              "id": "a",
+              "text": "Gradients flow back from the classification loss through the backbone layers, adjusting the backbone's weights to extract better features for classification.",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "The backbone weights are locked and do not change.",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "The RPN is disabled for the next epoch.",
+              "correct": false
+            },
+            {
+              "id": "d",
+              "text": "The image is automatically flipped.",
+              "correct": false
+            }
+          ],
+          "explain": "Exactly! The shared nature of the backbone means its weights are optimized by all downstream tasks together during backpropagation. Next: let's study how this enables unified end-to-end training!"
+        }
+      ]
+    }
+  ]
+}

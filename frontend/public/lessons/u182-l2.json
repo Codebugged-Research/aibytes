@@ -1,0 +1,222 @@
+{
+  "id": "u182-l2",
+  "unit": 182,
+  "day": 912,
+  "tier": "Vision Transformers & Modern Approaches",
+  "tierIcon": "\ud83d\udc41\ufe0f",
+  "title": "Reconstruction as a Pretext Task",
+  "icon": "\ud83e\udde9",
+  "concept": "MAE uses reconstruction of raw pixel values in masked patches as its pre-training pretext task, optimizing with Mean Squared Error (MSE) loss.",
+  "xp": 15,
+  "hearts": 3,
+  "estMinutes": 7,
+  "segments": [
+    {
+      "type": "warmup",
+      "exercises": [
+        {
+          "id": "w1",
+          "type": "multiple_choice",
+          "xp": 1,
+          "prompt": "Recap: What is the input sequence length for the encoder in MAE compared to the original patch sequence?",
+          "options": [
+            {
+              "id": "a",
+              "text": "It is reduced by 75% (only unmasked patches are processed).",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "It is doubled to add padding.",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "It remains exactly the same.",
+              "correct": false
+            }
+          ],
+          "explain": "Correct! Only the 25% visible patches enter the encoder block, saving substantial compute."
+        }
+      ]
+    },
+    {
+      "type": "teach",
+      "cards": [
+        {
+          "kind": "hook",
+          "icon": "\ud83e\udde9",
+          "title": "The reconstruction challenge",
+          "body": "If you ERASURE 75% of a photo, how do you train the model to paint it back? We need a decoder network that takes the encoder's clues and outputs raw pixels for the missing pieces. We then compare the model's drawing with the original photo to grade its accuracy."
+        },
+        {
+          "kind": "definition",
+          "icon": "\u2699\ufe0f",
+          "title": "Pixel Reconstruction",
+          "body": "The pretext task in MAE is <strong>pixel reconstruction</strong>. The model must predict the raw RGB pixel values for the hidden patches. The model is trained by calculating the <strong>Mean Squared Error (MSE)</strong> loss between the predicted pixels and the ground-truth pixels, computed strictly on the masked patches."
+        },
+        {
+          "kind": "analogy",
+          "icon": "\ud83c\udfa8",
+          "title": "Restoring a fresco",
+          "body": "Imagine a historical painting that has decayed, leaving only a few clean spots. An art restorer (the model) must paint in the missing details. We check their accuracy by comparing their restoration with a photo of the original painting. The closer the match, the better the restorer is."
+        },
+        {
+          "kind": "example",
+          "icon": "\ud83d\udcbb",
+          "title": "Decoder outputs",
+          "body": "For a 16x16 patch, the decoder outputs a vector of length 768 (16 x 16 x 3). The model reshapes this vector back into a 2D color patch and pastes it into the missing grid slot for evaluation."
+        },
+        {
+          "kind": "mythbust",
+          "icon": "\u26a0\ufe0f",
+          "title": "Not aiming for photographic perfection",
+          "body": "You might think the goal is to generate beautiful, photorealistic images. In fact, MAE outputs are often slightly blurry. The goal isn't art; it is to force the **encoder** to learn rich semantic representations that we can transfer to other tasks."
+        },
+        {
+          "kind": "visual",
+          "icon": "\u2696\ufe0f",
+          "title": "MAE Reconstruction Pipeline",
+          "body": "How data flows through the reconstruction task:",
+          "compare": {
+            "left": {
+              "emoji": "\ud83c\udf11",
+              "tag": "Masked Image Input",
+              "text": "75% patches removed<br>25% visible sent to encoder<br>Creates a visual puzzle"
+            },
+            "right": {
+              "emoji": "\ud83c\udfa8",
+              "tag": "Reconstructed Output",
+              "text": "All patches output by decoder<br>MSE computed on masked slots<br>Forces semantic understanding"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "type": "practice",
+      "exercises": [
+        {
+          "id": "p1",
+          "type": "multiple_choice",
+          "xp": 2,
+          "prompt": "Which loss function is typically used to optimize the pixel reconstruction task in MAE?",
+          "explain": "MAE computes MSE loss between the predicted and original pixel values of the masked patches.",
+          "options": [
+            {
+              "id": "a",
+              "text": "Mean Squared Error (MSE) loss",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "Cross-entropy loss",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "Triplet margin loss",
+              "correct": false
+            },
+            {
+              "id": "d",
+              "text": "Dice loss",
+              "correct": false
+            }
+          ]
+        },
+        {
+          "id": "p2",
+          "type": "true_false",
+          "xp": 2,
+          "prompt": "True or false: The reconstruction loss is calculated over all patches in the image, including the visible ones.",
+          "explain": "False. To focus training, MAE computes MSE loss strictly on the masked (hidden) patch coordinates.",
+          "options": [
+            {
+              "id": "t",
+              "text": "True",
+              "correct": false
+            },
+            {
+              "id": "f",
+              "text": "False",
+              "correct": true
+            }
+          ]
+        },
+        {
+          "id": "p3",
+          "type": "fill_blank",
+          "xp": 2,
+          "prompt": "Complete the sentence:",
+          "explain": "The output vector is reshaped back into a 2D square (e.g. 16x16x3) to match the original image patch layout.",
+          "sentence": "The decoder outputs a flat vector of pixel values that is reshaped back into a ___ patch.",
+          "blank": "2D",
+          "words": [
+            "2D",
+            "1D",
+            "3D"
+          ]
+        },
+        {
+          "id": "p4",
+          "type": "spot_the_ai",
+          "xp": 2,
+          "prompt": "What is the primary objective of the reconstruction pretext task?",
+          "explain": "Predicting missing regions requires the encoder to learn semantic visual features that generalize to other downstream tasks.",
+          "options": [
+            {
+              "id": "a",
+              "text": "To force the encoder to learn general visual features by predicting missing data",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "To generate highly polished artwork for production apps",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "To compress the image size by 10x",
+              "correct": false
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "boss",
+      "exercises": [
+        {
+          "id": "b1",
+          "type": "multiple_choice",
+          "xp": 5,
+          "prompt": "Why does reconstructuring raw pixels work well as a pretext task for transformers, whereas it historically struggled for CNNs?",
+          "options": [
+            {
+              "id": "a",
+              "text": "Transformers can route global information from distant visible patches to fill blanks, whereas local CNN kernels struggle to span large masked gaps.",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "Because CNNs cannot compute MSE loss.",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "Because transformers automatically convert all images to text.",
+              "correct": false
+            },
+            {
+              "id": "d",
+              "text": "Because CNNs have too many attention heads.",
+              "correct": false
+            }
+          ],
+          "explain": "Brilliant! Transformer self-attention bridges large gaps easily by pulling clues from the entire image, making it perfect for MAE. Next: the asymmetric encoder-decoder design!"
+        }
+      ]
+    }
+  ]
+}

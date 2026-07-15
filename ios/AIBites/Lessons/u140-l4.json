@@ -1,0 +1,222 @@
+{
+  "id": "u140-l4",
+  "unit": 140,
+  "day": 704,
+  "tier": "Object Detection Foundations",
+  "tierIcon": "🎯",
+  "title": "Calculating IoU in Practice",
+  "icon": "🧮",
+  "concept": "In practice, an IoU score above a set threshold (usually 0.5) is used to determine if a detection prediction is correct.",
+  "xp": 15,
+  "hearts": 3,
+  "estMinutes": 7,
+  "segments": [
+    {
+      "type": "warmup",
+      "exercises": [
+        {
+          "id": "w1",
+          "type": "multiple_choice",
+          "xp": 1,
+          "prompt": "Recap: What does IoU stand for?",
+          "options": [
+            {
+              "id": "a",
+              "text": "Intersection over Union",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "Image output Unit",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "Indexed Object Utility",
+              "correct": false
+            }
+          ],
+          "explain": "IoU stands for Intersection over Union, measuring box overlap."
+        }
+      ]
+    },
+    {
+      "type": "teach",
+      "cards": [
+        {
+          "kind": "hook",
+          "icon": "🎯",
+          "title": "Grading a Student",
+          "body": "If you ask a student to draw a box around a car, they might draw it slightly wider or taller than the actual car. How close is close enough to give them an 'A'? We need a threshold value to decide if their box is correct."
+        },
+        {
+          "kind": "definition",
+          "icon": "🧮",
+          "title": "IoU Thresholding",
+          "body": "In object detection pipelines, we set an <strong>IoU threshold</strong> (commonly <code>0.5</code> or <code>0.75</code>). Any prediction with an IoU score greater than or equal to this threshold is treated as a successful overlap (a true positive localization)."
+        },
+        {
+          "kind": "analogy",
+          "icon": "🎯",
+          "title": "Ring Toss Game",
+          "body": "In a ring toss game, you don't need to throw the ring so it perfectly centers on the peg. As long as the ring lands around the peg (overlapping enough), it counts as a score. The threshold decides how tight the ring must fit!"
+        },
+        {
+          "kind": "example",
+          "icon": "🚗",
+          "title": "Self-Driving Evaluation",
+          "body": "A self-driving car evaluator calculates IoU for all predicted pedestrian boxes. If a predicted box has an IoU of <code>0.62</code> with a real pedestrian, and the threshold is set to <code>0.5</code>, the prediction is marked correct."
+        },
+        {
+          "kind": "mythbust",
+          "icon": "⚠️",
+          "title": "Not needing 100% alignment",
+          "body": "It's a myth that bounding boxes must align perfectly (IoU = 1.0) to be useful. Slight offsets are common and acceptable in practice because real-world applications (like robot gripping) tolerate minor coordinates errors."
+        },
+        {
+          "kind": "visual",
+          "icon": "⚖️",
+          "title": "Threshold Visualized",
+          "body": "Understanding different IoU overlap quality levels:",
+          "compare": {
+            "left": {
+              "emoji": "❌",
+              "tag": "Poor Overlap",
+              "text": "IoU < 0.5<br>Usually rejected as incorrect."
+            },
+            "right": {
+              "emoji": "✅",
+              "tag": "Good Overlap",
+              "text": "IoU >= 0.5<br>Accepted as correct."
+            }
+          }
+        }
+      ]
+    },
+    {
+      "type": "practice",
+      "exercises": [
+        {
+          "id": "p1",
+          "type": "multiple_choice",
+          "xp": 2,
+          "prompt": "What is the most common default IoU threshold used to evaluate if a box detection is correct?",
+          "explain": "An IoU threshold of 0.5 is the standard benchmark threshold for determining if a localization is successful.",
+          "options": [
+            {
+              "id": "a",
+              "text": "0.5",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "0.0",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "1.0",
+              "correct": false
+            },
+            {
+              "id": "d",
+              "text": "0.99",
+              "correct": false
+            }
+          ]
+        },
+        {
+          "id": "p2",
+          "type": "true_false",
+          "xp": 2,
+          "prompt": "True or False: Increasing the IoU threshold from 0.5 to 0.75 makes it easier for a model to get its predictions marked as correct.",
+          "explain": "False. Raising the threshold means the predicted box must overlap the real box even more precisely, making the test stricter.",
+          "options": [
+            {
+              "id": "t",
+              "text": "True",
+              "correct": false
+            },
+            {
+              "id": "f",
+              "text": "False",
+              "correct": true
+            }
+          ]
+        },
+        {
+          "id": "p3",
+          "type": "fill_blank",
+          "xp": 2,
+          "prompt": "Complete the sentence:",
+          "explain": "Since 0.55 is greater than or equal to the threshold of 0.5, the detection is considered successful.",
+          "sentence": "If the IoU threshold is set to 0.5, a prediction with an IoU of 0.55 is marked as ___.",
+          "blank": "correct",
+          "words": [
+            "correct",
+            "incorrect",
+            "ambiguous"
+          ]
+        },
+        {
+          "id": "p4",
+          "type": "spot_the_ai",
+          "xp": 2,
+          "prompt": "Which IoU score represents a highly precise bounding box prediction?",
+          "explain": "An IoU of 0.87 represents a high degree of overlap, meaning the prediction is very accurate.",
+          "options": [
+            {
+              "id": "a",
+              "text": "IoU = 0.12",
+              "correct": false
+            },
+            {
+              "id": "b",
+              "text": "IoU = 0.87",
+              "correct": true
+            },
+            {
+              "id": "c",
+              "text": "IoU = 0.49",
+              "correct": false
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "boss",
+      "exercises": [
+        {
+          "id": "b1",
+          "type": "multiple_choice",
+          "xp": 5,
+          "prompt": "You are evaluating an object detector for a security system. The system requires very high precision, so you increase the IoU threshold from 0.50 to 0.75. What will happen to the number of predictions marked as correct?",
+          "options": [
+            {
+              "id": "a",
+              "text": "The number of correct predictions will decrease, because only highly precise boxes will pass.",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "The number of correct predictions will increase, because the criteria became looser.",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "The predictions will stay exactly the same.",
+              "correct": false
+            },
+            {
+              "id": "d",
+              "text": "The model will stop outputting coordinates entirely.",
+              "correct": false
+            }
+          ],
+          "explain": "Exactly! Raising the IoU threshold makes the evaluation stricter, decreasing the number of predictions that qualify as correct. Next: let's learn how neural networks adjust draft boxes using bounding box regression!"
+        }
+      ]
+    }
+  ]
+}

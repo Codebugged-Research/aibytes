@@ -1,0 +1,222 @@
+{
+  "id": "u179-l5",
+  "unit": 179,
+  "day": 900,
+  "tier": "Vision Transformers & Modern Approaches",
+  "tierIcon": "\ud83d\udc41\ufe0f",
+  "title": "Convolutional Projection",
+  "icon": "\ud83c\udfaf",
+  "concept": "Using depthwise convolutions to project keys, queries, and values in self-attention blocks adds local inductive bias and reduces parameter count.",
+  "xp": 15,
+  "hearts": 3,
+  "estMinutes": 7,
+  "segments": [
+    {
+      "type": "warmup",
+      "exercises": [
+        {
+          "id": "w1",
+          "type": "multiple_choice",
+          "xp": 1,
+          "prompt": "Recap: What is a key structural difference between LeViT and standard ViT-Base?",
+          "options": [
+            {
+              "id": "a",
+              "text": "LeViT uses Batch Normalization and relative attention biases instead of LayerNorm and absolute embeddings.",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "LeViT relies entirely on 3D convolutions.",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "LeViT lacks residual skip connections.",
+              "correct": false
+            }
+          ],
+          "explain": "Correct! LeViT optimizes for edge speed by utilizing BatchNorm and relative biases."
+        }
+      ]
+    },
+    {
+      "type": "teach",
+      "cards": [
+        {
+          "kind": "hook",
+          "icon": "\ud83c\udfaf",
+          "title": "Convolutions inside attention",
+          "body": "So far, we've looked at putting convolutions *before* attention. But what if we put them *inside* the attention block itself? By replacing standard linear projections with depthwise convolutions, we can inject local context into the query, key, and value vectors. Let's see how."
+        },
+        {
+          "kind": "definition",
+          "icon": "\u2699\ufe0f",
+          "title": "Convolutional Projection",
+          "body": "In <strong>convolutional projection</strong>, the Query (Q), Key (K), and Value (V) vectors are generated using <strong>depthwise separable convolutions</strong> instead of simple linear layers. This enforces local spatial correlation within the attention mechanism itself, adding a local prior."
+        },
+        {
+          "kind": "analogy",
+          "icon": "\ud83d\udd0d",
+          "title": "A smart reading glasses magnifying lens",
+          "body": "A standard projection is like looking at a word in isolation. A convolutional projection is like using a magnifying glass that lets you see the word *and* its adjacent neighbors simultaneously before you write down a summary. It adds local context to every query."
+        },
+        {
+          "kind": "example",
+          "icon": "\u2699\ufe0f",
+          "title": "CvT (Convolutional Transformer)",
+          "body": "The CvT architecture replaces the standard linear projections of Q, K, and V in the self-attention block with depthwise convolutions. This allows the model to achieve top performance on ImageNet without needing position embeddings!"
+        },
+        {
+          "kind": "mythbust",
+          "icon": "\u26a0\ufe0f",
+          "title": "No parameters explosion",
+          "body": "You might worry that adding convolutions inside attention will make the model massive. Because we use <strong>depthwise convolutions</strong> (which process each channel individually), the parameter count and computational overhead are kept extremely low."
+        },
+        {
+          "kind": "visual",
+          "icon": "\u2696\ufe0f",
+          "title": "Linear Projection vs. Conv Projection",
+          "body": "Comparing projection blocks inside attention:",
+          "compare": {
+            "left": {
+              "emoji": "\ud83e\uddf1",
+              "tag": "Linear Projection (ViT)",
+              "text": "1x1 projection matrix<br>Processes each token in isolation<br>Requires position embeddings"
+            },
+            "right": {
+              "emoji": "\ud83c\udf00",
+              "tag": "Conv Projection (CvT)",
+              "text": "Depthwise convolution matrix<br>Processes token + spatial neighbors<br>Bypasses absolute position embeddings"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "type": "practice",
+      "exercises": [
+        {
+          "id": "p1",
+          "type": "multiple_choice",
+          "xp": 2,
+          "prompt": "How does convolutional projection generate Q, K, and V vectors inside attention blocks?",
+          "explain": "Depthwise convolutions replace standard linear projection matrices, injecting local spatial priors into Q, K, and V.",
+          "options": [
+            {
+              "id": "a",
+              "text": "By using depthwise convolutions instead of standard linear layers",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "By multiplying vectors with random noise matrices",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "By running recurrent loops over the channel dimensions",
+              "correct": false
+            },
+            {
+              "id": "d",
+              "text": "By deleting the Query vectors entirely",
+              "correct": false
+            }
+          ]
+        },
+        {
+          "id": "p2",
+          "type": "true_false",
+          "xp": 2,
+          "prompt": "True or false: Models like CvT that use convolutional projections can perform well without absolute position embeddings.",
+          "explain": "True. The convolutional projection inherently injects spatial coordinate order and locality, making absolute position embeddings optional.",
+          "options": [
+            {
+              "id": "t",
+              "text": "True",
+              "correct": true
+            },
+            {
+              "id": "f",
+              "text": "False",
+              "correct": false
+            }
+          ]
+        },
+        {
+          "id": "p3",
+          "type": "fill_blank",
+          "xp": 2,
+          "prompt": "Complete the sentence:",
+          "explain": "Depthwise convolutions ensure that each token embedding aggregates information from its spatial neighbors.",
+          "sentence": "By replacing linear layers with depthwise convolutions, we add spatial ___ directly to the query, key, and value matrices.",
+          "blank": "locality",
+          "words": [
+            "locality",
+            "invariance",
+            "pooling"
+          ]
+        },
+        {
+          "id": "p4",
+          "type": "spot_the_ai",
+          "xp": 2,
+          "prompt": "Which of these benefits is achieved by using depthwise convolutions in convolutional projections?",
+          "explain": "Depthwise convolutions process channels independently, providing local feature extraction with minimal parameters.",
+          "options": [
+            {
+              "id": "a",
+              "text": "Adding local spatial context while keeping parameter overhead extremely low",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "Eliminating the need for loss calculation",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "Increasing the number of attention heads to infinity",
+              "correct": false
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "boss",
+      "exercises": [
+        {
+          "id": "b1",
+          "type": "multiple_choice",
+          "xp": 5,
+          "prompt": "Why does convolutional projection make a transformer more robust to changes in input image resolution?",
+          "options": [
+            {
+              "id": "a",
+              "text": "Because the convolution filters automatically adapt to different stride steps and sizes, and the model doesn't rely on fixed-length absolute position embedding grids.",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "Because it forces the image to be square at all times.",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "Because it converts all color channels to grayscale.",
+              "correct": false
+            },
+            {
+              "id": "d",
+              "text": "Because it doubles the size of the attention matrices.",
+              "correct": false
+            }
+          ],
+          "explain": "Brilliant! Convolutions are translation-invariant and generalize naturally to different shapes, bypassing the rigid grid constraints of absolute position embeddings. Next: let's explore one of the most popular modern vision backbones \u2014 the Swin Transformer!"
+        }
+      ]
+    }
+  ]
+}

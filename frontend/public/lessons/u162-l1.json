@@ -1,0 +1,227 @@
+{
+  "id": "u162-l1",
+  "unit": 162,
+  "day": 811,
+  "tier": "Image Segmentation Capstone",
+  "tierIcon": "🏆",
+  "title": "End-to-End Pipeline Design",
+  "icon": "🏆",
+  "concept": "Designing an end-to-end segmentation pipeline requires structuring data preparation, backbone selection, decoder selection, loss matching, and post-processing.",
+  "xp": 15,
+  "hearts": 3,
+  "estMinutes": 7,
+  "segments": [
+    {
+      "type": "warmup",
+      "exercises": [
+        {
+          "id": "w1",
+          "type": "multiple_choice",
+          "xp": 1,
+          "prompt": "Recap: Why is Hausdorff distance a valuable metric?",
+          "options": [
+            {
+              "id": "a",
+              "text": "It measures the worst-case boundary error, capturing localized contour spikes",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "It calculates the total number of True Negatives in the background",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "It is the only metric compatible with 1D convolutions",
+              "correct": false
+            }
+          ],
+          "explain": "Correct! Hausdorff measures the maximum distance between contours."
+        }
+      ]
+    },
+    {
+      "type": "teach",
+      "cards": [
+        {
+          "kind": "hook",
+          "icon": "🏗️",
+          "title": "Starting the capstone",
+          "body": "Welcome to the Phase 9 Capstone! Over the next five lessons, we will design and deploy a complete, real-world image segmentation system from scratch. We begin with the architecture blueprint: how do we connect the data, the backbone, the decoder, and the loss function into a single working pipeline?"
+        },
+        {
+          "kind": "definition",
+          "icon": "⛓️",
+          "title": "Pipeline Blueprint",
+          "body": "An <strong>End-to-End Segmentation Pipeline</strong> consists of: <br>1. **Data Prep** (loading and augmenting masks).<br>2. **Backbone** (feature extraction).<br>3. **Decoder** (ASPP or U-Net upsampling).<br>4. **Loss Function** (BCE + Dice).<br>5. **Thresholding** (converting probabilities to binary masks)."
+        },
+        {
+          "kind": "analogy",
+          "icon": "🏭",
+          "title": "An assembly line",
+          "body": "Designing a pipeline is like setting up a car factory. You don't just buy an engine; you map how raw steel (data) enters, gets shaped by robots (backbone), painted (decoder), inspected (loss), and finally driven out the gate (inference)."
+        },
+        {
+          "kind": "example",
+          "icon": "🚗",
+          "title": "Self-driving blueprint",
+          "body": "A self-driving team builds a road segmentation system. They feed camera video into a ResNet-50 backbone, decode features using an ASPP module, train with Focal Loss, and apply a 0.5 threshold to get the drivable road mask."
+        },
+        {
+          "kind": "mythbust",
+          "icon": "⚠️",
+          "title": "Don't jump straight to coding",
+          "body": "You might think the first step is writing PyTorch code. That's a mistake! If you don't map your resolution changes, channel depths, and loss functions on paper first, you will spend days debugging shape mismatch errors during training."
+        },
+        {
+          "kind": "visual",
+          "icon": "⚖️",
+          "title": "End-to-End Pipeline Flow",
+          "body": "The stages of a segmentation system:",
+          "compare": {
+            "left": {
+              "emoji": "🖼️",
+              "tag": "Input & Backbone",
+              "text": "Raw Image -> ResNet/MobileNet Backbone -> Feature extraction"
+            },
+            "right": {
+              "emoji": "⚙️",
+              "tag": "Decoder & Output",
+              "text": "Upsampling/Skips -> Sigmoid -> Probability Map -> Threshold -> Final Mask"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "type": "practice",
+      "exercises": [
+        {
+          "id": "p1",
+          "type": "multiple_choice",
+          "xp": 2,
+          "prompt": "What is the first logical step in designing a segmentation pipeline?",
+          "options": [
+            {
+              "id": "a",
+              "text": "Structuring data preparation and mapping resolution transitions",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "Writing the final inference code for mobile devices",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "Quantizing the model weights to 8-bit integers",
+              "correct": false
+            },
+            {
+              "id": "d",
+              "text": "Running a CRF post-processor on empty images",
+              "correct": false
+            }
+          ],
+          "explain": "Correct! Mapping resolutions and data prep is the first phase."
+        },
+        {
+          "id": "p2",
+          "type": "true_false",
+          "xp": 2,
+          "prompt": "True or False: The thresholding step converts continuous pixel probabilities (e.g. 0 to 1) into a binary mask (0 or 1).",
+          "options": [
+            {
+              "id": "t",
+              "text": "True",
+              "correct": false
+            },
+            {
+              "id": "f",
+              "text": "False",
+              "correct": false
+            }
+          ],
+          "explain": "True. Thresholding is required to output a clean, finalized mask."
+        },
+        {
+          "id": "p3",
+          "type": "fill_blank",
+          "xp": 2,
+          "prompt": "Complete the sentence:",
+          "sentence": "The backbone of a segmentation model is responsible for feature ___.",
+          "blank": "extraction",
+          "words": [
+            "extraction",
+            "upsampling",
+            "evaluation"
+          ],
+          "explain": "The backbone extracts high-level semantic features from the input image."
+        },
+        {
+          "id": "p4",
+          "type": "spot_the_ai",
+          "xp": 2,
+          "prompt": "Which component is responsible for increasing the spatial resolution back to the input size?",
+          "options": [
+            {
+              "id": "a",
+              "text": "The Decoder",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "The Backbone",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "The Loss Function",
+              "correct": false
+            },
+            {
+              "id": "d",
+              "text": "The Optimizer",
+              "correct": false
+            }
+          ],
+          "explain": "The decoder upsamples feature maps back to pixel space."
+        }
+      ]
+    },
+    {
+      "type": "boss",
+      "exercises": [
+        {
+          "id": "b1",
+          "type": "multiple_choice",
+          "xp": 5,
+          "prompt": "You are planning a medical lung nodule pipeline. The scans are low-contrast and have high noise. Which pipeline setup is most logical?",
+          "options": [
+            {
+              "id": "a",
+              "text": "A U-Net decoder with skip connections to recover fine boundaries, trained using a hybrid BCE + Dice loss.",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "An FCN-32s with no skip connections, trained using standard unweighted cross-entropy.",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "A simple classification CNN with no decoder, trained using mean squared error.",
+              "correct": false
+            },
+            {
+              "id": "d",
+              "text": "A Mask R-CNN with RoIPool, trained using classification loss only.",
+              "correct": false
+            }
+          ],
+          "explain": "Perfect! Medical scans need skip connections to find boundaries, and hybrid loss to handle the class imbalance. This is the classic, reliable pipeline design. Next: handling mask imbalance!"
+        }
+      ]
+    }
+  ]
+}

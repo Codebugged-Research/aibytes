@@ -1,0 +1,222 @@
+{
+  "id": "u179-l3",
+  "unit": 179,
+  "day": 898,
+  "tier": "Vision Transformers & Modern Approaches",
+  "tierIcon": "\ud83d\udc41\ufe0f",
+  "title": "Early Convolutions, Late Attention",
+  "icon": "\u23f3",
+  "concept": "Placing convolutional layers early in the network extracts low-level features and stabilizes optimization, while later transformer layers model global semantics.",
+  "xp": 15,
+  "hearts": 3,
+  "estMinutes": 7,
+  "segments": [
+    {
+      "type": "warmup",
+      "exercises": [
+        {
+          "id": "w1",
+          "type": "multiple_choice",
+          "xp": 1,
+          "prompt": "Recap: In a backbone hybrid model, what serves as the patch tokens?",
+          "options": [
+            {
+              "id": "a",
+              "text": "The spatial grid cells of the backbone's output feature map.",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "The raw pixels of the input image sliced by a grid.",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "The text embeddings from an NLP head.",
+              "correct": false
+            }
+          ],
+          "explain": "Correct! The cells of the CNN's feature map are treated directly as tokens."
+        }
+      ]
+    },
+    {
+      "type": "teach",
+      "cards": [
+        {
+          "kind": "hook",
+          "icon": "\u23f3",
+          "title": "The division of labor",
+          "body": "When a network processes an image, it has two jobs: look closely at textures, and look broadly at layout. Putting convolutions at the beginning (early) and transformers at the end (late) is a highly optimized division of labor. Let's see why."
+        },
+        {
+          "kind": "definition",
+          "icon": "\ud83d\udcd0",
+          "title": "Early Conv, Late Attention",
+          "body": "This design pattern restricts <strong>convolutions to early layers</strong> (which have small receptive fields and excel at edge detection) and reserves <strong>self-attention for late layers</strong> (where features are abstract and global relationships matter). This avoids running expensive attention on large, raw spatial resolutions."
+        },
+        {
+          "kind": "analogy",
+          "icon": "\ud83d\udd2d",
+          "title": "A microscope and a telescope",
+          "body": "Imagine analyzing a painting. You start by using a microscope (convolutions) to inspect the pigment and weave of the canvas locally. Then, you step back and use a telescope (attention) to map how the characters are arranged across the gallery. Doing it in reverse would make no sense!"
+        },
+        {
+          "kind": "example",
+          "icon": "\u2699\ufe0f",
+          "title": "ViT-CoAtNet",
+          "body": "CoAtNet (Convolution and Attention Network) stacks convolutional blocks in stages 1 and 2 to reduce resolution, then switches to self-attention blocks in stages 3 and 4. This model achieved top ImageNet accuracy with fast training."
+        },
+        {
+          "kind": "mythbust",
+          "icon": "\u26a0\ufe0f",
+          "title": "Not just for accuracy",
+          "body": "You might think this split is only to squeeze out 1% more accuracy. In fact, it also solves a **major training issue**: pure ViT optimization is highly sensitive to learning rate and weight decay. Adding early convs makes the optimization curve smooth and easy to train."
+        },
+        {
+          "kind": "visual",
+          "icon": "\u2696\ufe0f",
+          "title": "Processing Flow: Early vs. Late",
+          "body": "The standard hybrid processing pipeline:",
+          "compare": {
+            "left": {
+              "emoji": "\ud83c\udf00",
+              "tag": "Early Stage (CNN)",
+              "text": "Input: High Resolution<br>Operation: Convolutions<br>Extracts: Edges, colors, textures"
+            },
+            "right": {
+              "emoji": "\ud83e\udde0",
+              "tag": "Late Stage (ViT)",
+              "text": "Input: Low Resolution (downsampled)<br>Operation: Self-Attention<br>Extracts: Semantic objects, global context"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "type": "practice",
+      "exercises": [
+        {
+          "id": "p1",
+          "type": "multiple_choice",
+          "xp": 2,
+          "prompt": "Why are convolutional layers placed in the early stages of a hybrid network?",
+          "explain": "Convolutions handle high-resolution inputs very efficiently, extracting local textures and stabilizing gradient flow.",
+          "options": [
+            {
+              "id": "a",
+              "text": "To capture high-resolution local features efficiently and stabilize early training",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "To classification label the tokens in stage 1",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "To calculate global context weights before seeing edges",
+              "correct": false
+            },
+            {
+              "id": "d",
+              "text": "To prevent the model from using GPUs",
+              "correct": false
+            }
+          ]
+        },
+        {
+          "id": "p2",
+          "type": "true_false",
+          "xp": 2,
+          "prompt": "True or false: Running self-attention on the raw high-resolution input image is computationally cheaper than running it on a downsampled feature map.",
+          "explain": "False. High-resolution attention creates long sequences, which scale quadratically and require far more compute than downsampled inputs.",
+          "options": [
+            {
+              "id": "t",
+              "text": "True",
+              "correct": false
+            },
+            {
+              "id": "f",
+              "text": "False",
+              "correct": true
+            }
+          ]
+        },
+        {
+          "id": "p3",
+          "type": "fill_blank",
+          "xp": 2,
+          "prompt": "Complete the sentence:",
+          "explain": "Downsampled feature maps have fewer spatial dimensions, keeping the transformer sequence length short and efficient.",
+          "sentence": "By placing self-attention late in the network, we apply global modeling to ___ feature maps.",
+          "blank": "downsampled",
+          "words": [
+            "downsampled",
+            "expanded",
+            "raw"
+          ]
+        },
+        {
+          "id": "p4",
+          "type": "spot_the_ai",
+          "xp": 2,
+          "prompt": "Which architecture layout represents the 'Early Convolutions, Late Attention' design pattern?",
+          "explain": "Correct! Running Conv2D and pooling layers first downsamples the spatial grid before routing tokens through the TransformerEncoder.",
+          "options": [
+            {
+              "id": "a",
+              "text": "Conv2D -> Conv2D -> MaxPool -> TransformerEncoder -> TransformerEncoder -> MLP",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "TransformerEncoder -> TransformerEncoder -> Conv2D -> Conv2D -> MLP",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "TransformerEncoder -> MaxPool -> Conv2D -> MLP",
+              "correct": false
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "boss",
+      "exercises": [
+        {
+          "id": "b1",
+          "type": "multiple_choice",
+          "xp": 5,
+          "prompt": "Why does adding early convolutions make training less sensitive to hyperparameters?",
+          "options": [
+            {
+              "id": "a",
+              "text": "Because convolutions provide a consistent, structured starting point for gradient optimization, preventing the chaotic gradient updates common in early ViT layers.",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "Because convolutions completely remove the loss function.",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "Because convolutions force the learning rate to remain constant.",
+              "correct": false
+            },
+            {
+              "id": "d",
+              "text": "Because convolutions make position embeddings redundant.",
+              "correct": false
+            }
+          ],
+          "explain": "Splendid! Early convolutions inject structure into the pipeline, smoothing out the loss landscape for easier training. Next: lightweight edge-inference hybrids like LeViT and ConViT!"
+        }
+      ]
+    }
+  ]
+}

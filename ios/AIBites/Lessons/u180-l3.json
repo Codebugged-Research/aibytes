@@ -1,0 +1,222 @@
+{
+  "id": "u180-l3",
+  "unit": 180,
+  "day": 903,
+  "tier": "Vision Transformers & Modern Approaches",
+  "tierIcon": "\ud83d\udc41\ufe0f",
+  "title": "Shifted Windows",
+  "icon": "\ud83d\udd00",
+  "concept": "The Shifted Window mechanism alternates window partitions in successive layers, allowing cross-window communication while preserving linear complexity.",
+  "xp": 15,
+  "hearts": 3,
+  "estMinutes": 7,
+  "segments": [
+    {
+      "type": "warmup",
+      "exercises": [
+        {
+          "id": "w1",
+          "type": "multiple_choice",
+          "xp": 1,
+          "prompt": "Recap: What is the primary benefit of local window attention in Swin?",
+          "options": [
+            {
+              "id": "a",
+              "text": "It achieves linear complexity (O(N)), making high resolutions affordable.",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "It completely removes self-attention.",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "It runs on CPU without any weights.",
+              "correct": false
+            }
+          ],
+          "explain": "Correct! Restricting attention to windows reduces complexity to linear scaling."
+        }
+      ]
+    },
+    {
+      "type": "teach",
+      "cards": [
+        {
+          "kind": "hook",
+          "icon": "\ud83d\udd00",
+          "title": "Bridging the gap",
+          "body": "If employees are locked in separate cubicles, they can't collaborate on projects that span the whole company. To bridge the gap, Swin doesn't tear down the walls. Instead, it shuffles the cubicle seats in the next layer so neighbors can talk. This is called Shifted Window Attention."
+        },
+        {
+          "kind": "definition",
+          "icon": "\ud83d\udd00",
+          "title": "Shifted Window Attention",
+          "body": "<strong>Shifted Window Attention</strong> (S-WMSA) alternates window boundaries between layers. Layer L splits patches into a standard grid. Layer L+1 shifts the grid boundaries by a fraction of the window size, creating new windows that contain patches from adjacent standard windows."
+        },
+        {
+          "kind": "analogy",
+          "icon": "\ud83e\uddf1",
+          "title": "Bricklaying patterns",
+          "body": "Think of laying bricks. If you stack bricks directly on top of each other, you get columns that fall over easily. To build a strong wall, you shift the bricks in the second row by half a brick. This overlap binds the columns together into a solid structure."
+        },
+        {
+          "kind": "example",
+          "icon": "\ud83d\udcbb",
+          "title": "Efficient masking",
+          "body": "Shifting the window grid creates partial windows at the edges. To prevent wasteful computation on empty pixels, Swin uses a **cyclic shifting** trick combined with masking, allowing the model to compute attention in a clean, uniform matrix."
+        },
+        {
+          "kind": "mythbust",
+          "icon": "\u26a0\ufe0f",
+          "title": "It's still linear!",
+          "body": "You might think shifting windows adds global calculations. In fact, shifted window attention retains the exact same local window size. The sequence length per window remains constant, so the computational complexity remains strictly **linear**."
+        },
+        {
+          "kind": "visual",
+          "icon": "\u2696\ufe0f",
+          "title": "Standard vs. Shifted Partition",
+          "body": "Visualizing the grid shift between layers:",
+          "compare": {
+            "left": {
+              "emoji": "\ud83e\ude9f",
+              "tag": "Standard Window (Layer L)",
+              "text": "Patches grouped: [1, 2], [3, 4]<br>Standard checkerboard grid<br>No communication across grids"
+            },
+            "right": {
+              "emoji": "\ud83d\udd00",
+              "tag": "Shifted Window (Layer L+1)",
+              "text": "Grid shifted by half window size<br>New groups: [2, 3] are grouped<br>Allows adjacent grids to talk"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "type": "practice",
+      "exercises": [
+        {
+          "id": "p1",
+          "type": "multiple_choice",
+          "xp": 2,
+          "prompt": "How do shifted windows enable communication between isolated regions in Swin?",
+          "explain": "Alternating shifted grid lines groups adjacent patch borders, allowing information to diffuse globally across layers.",
+          "options": [
+            {
+              "id": "a",
+              "text": "By shifting the partition grid by half the window size in successive layers, grouping adjacent borders together",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "By copying patches from the center to the corners",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "By using a global pooling layer after every single patch calculation",
+              "correct": false
+            },
+            {
+              "id": "d",
+              "text": "By routing all tokens through a single central CPU coordinator",
+              "correct": false
+            }
+          ]
+        },
+        {
+          "id": "p2",
+          "type": "true_false",
+          "xp": 2,
+          "prompt": "True or false: Shifted window attention increases the computational complexity back to quadratic.",
+          "explain": "False. The window size remains 7x7, meaning computation per window is constant and the total complexity remains linear.",
+          "options": [
+            {
+              "id": "t",
+              "text": "True",
+              "correct": false
+            },
+            {
+              "id": "f",
+              "text": "False",
+              "correct": true
+            }
+          ]
+        },
+        {
+          "id": "p3",
+          "type": "fill_blank",
+          "xp": 2,
+          "prompt": "Complete the sentence:",
+          "explain": "The model alternates standard and shifted window attention layers to mix local and cross-boundary signals.",
+          "sentence": "Swin alternates between standard window attention and ___ window attention blocks to build global context.",
+          "blank": "shifted",
+          "words": [
+            "shifted",
+            "dilated",
+            "pooled"
+          ]
+        },
+        {
+          "id": "p4",
+          "type": "spot_the_ai",
+          "xp": 2,
+          "prompt": "Which of these tricks does Swin use to handle the partial boundary windows created by shifting the grid?",
+          "explain": "Swin uses cyclic shifting and attention masks to group edge patches into regular-sized matrices efficiently.",
+          "options": [
+            {
+              "id": "a",
+              "text": "Cyclic shifting to wrap edge patches, combined with attention masking",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "Resizing the edge patches to make them larger",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "Discarding the edge patches completely to save memory",
+              "correct": false
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "boss",
+      "exercises": [
+        {
+          "id": "b1",
+          "type": "multiple_choice",
+          "xp": 5,
+          "prompt": "Swin stands for 'Shifted Window'. Why was this naming chosen over standard ViT?",
+          "options": [
+            {
+              "id": "a",
+              "text": "To highlight the shifted window mechanism that serves as the foundation for both local efficiency and global communication.",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "Because the model is only designed for swimming pool classification.",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "Because it runs only on software called 'Swin-OS'.",
+              "correct": false
+            },
+            {
+              "id": "d",
+              "text": "Because it shifts color channels back and forth.",
+              "correct": false
+            }
+          ],
+          "explain": "Excellent! Shifted windows are the core innovation of Swin. Next: how Swin builds a hierarchical feature map pyramid like CNNs!"
+        }
+      ]
+    }
+  ]
+}

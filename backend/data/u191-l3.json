@@ -1,0 +1,222 @@
+{
+  "id": "u191-l3",
+  "unit": 191,
+  "day": 958,
+  "tier": "Video & Temporal Vision",
+  "tierIcon": "\ud83c\udfac",
+  "title": "Temporal Resolution and Stride",
+  "icon": "\ud83c\udfc3",
+  "concept": "Temporal stride controls how many frames the filter skips as it slides through time, balancing temporal resolution against computation.",
+  "xp": 15,
+  "hearts": 3,
+  "estMinutes": 7,
+  "segments": [
+    {
+      "type": "warmup",
+      "exercises": [
+        {
+          "id": "w1",
+          "type": "multiple_choice",
+          "xp": 1,
+          "prompt": "Recap: What is the main structural difference between 2D and 3D convolution kernels?",
+          "options": [
+            {
+              "id": "a",
+              "text": "3D kernels have a temporal dimension (depth in time)",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "2D kernels can only run on grayscale images",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "3D kernels must have a size of 100x100 pixels",
+              "correct": false
+            }
+          ],
+          "explain": "Yes! 3D kernels add a temporal size, allowing them to span multiple frames."
+        }
+      ]
+    },
+    {
+      "type": "teach",
+      "cards": [
+        {
+          "kind": "hook",
+          "icon": "\ud83c\udfc3",
+          "title": "High speed or high efficiency?",
+          "body": "If you are watching a security video of a slow-moving queue, you don't need to inspect every single frame to understand what is happening. Skipping frames can speed up analysis. In 3D CNNs, we use temporal stride to decide how fast our filter jumps through time."
+        },
+        {
+          "kind": "definition",
+          "icon": "\u2699\ufe0f",
+          "title": "Temporal Stride",
+          "body": "<strong>Temporal stride</strong> is the step size of the 3D filter along the frame axis. A temporal stride of 1 processes every step. A temporal stride of 2 skips every other step, halving the <strong>temporal resolution</strong> (the number of frames in the output feature map)."
+        },
+        {
+          "kind": "analogy",
+          "icon": "\ud83d\udeb6",
+          "title": "Walking up stairs",
+          "body": "Think of climbing a staircase. A temporal stride of 1 is like stepping on every single step. A temporal stride of 2 is like skipping a step and climbing two at a time. You reach the top twice as fast, but you see less of the staircase!"
+        },
+        {
+          "kind": "example",
+          "icon": "\ud83d\udcca",
+          "title": "Stride of 2 on a clip",
+          "body": "If you feed a 16-frame clip to a model with a temporal kernel size of 4 and a stride of 2, the filter will scan frames 1-4, then skip forward to scan frames 3-6, then 5-8, and so on. This reduces computational steps."
+        },
+        {
+          "kind": "mythbust",
+          "icon": "\ud83d\udeab",
+          "title": "Don't skip too much",
+          "body": "You might think high strides are always better to save computation. However, if your temporal stride is too large, you might skip fast actions completely! A baseball bat swing happens in a fraction of a second; a high stride will miss it."
+        },
+        {
+          "kind": "visual",
+          "icon": "\u2696\ufe0f",
+          "title": "Temporal Stride comparison",
+          "body": "Comparing temporal strides on video sequences:",
+          "compare": {
+            "left": {
+              "emoji": "\ud83d\udc22",
+              "tag": "Temporal Stride = 1",
+              "text": "Slides frame-by-frame<br>Captures very fast motion<br>High computation & memory usage"
+            },
+            "right": {
+              "emoji": "\ud83d\udc06",
+              "tag": "Temporal Stride = 2",
+              "text": "Skips every second frame<br>Best for slow or long actions<br>Saves 50% temporal calculation"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "type": "practice",
+      "exercises": [
+        {
+          "id": "p1",
+          "type": "multiple_choice",
+          "xp": 2,
+          "prompt": "What does a temporal stride of 2 do in a 3D convolution layer?",
+          "options": [
+            {
+              "id": "a",
+              "text": "It skips every other frame step when sliding through time",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "It doubles the spatial height of the output",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "It processes two batches at the same time",
+              "correct": false
+            },
+            {
+              "id": "d",
+              "text": "It changes the color of the video input",
+              "correct": false
+            }
+          ],
+          "explain": "Correct! A temporal stride of 2 slides the filter 2 frames forward at each step, skipping intermediate positions."
+        },
+        {
+          "id": "p2",
+          "type": "true_false",
+          "xp": 2,
+          "prompt": "True or false: Using a high temporal stride is recommended when trying to detect extremely fast-moving objects.",
+          "options": [
+            {
+              "id": "t",
+              "text": "True",
+              "correct": false
+            },
+            {
+              "id": "f",
+              "text": "False",
+              "correct": true
+            }
+          ],
+          "explain": "False. High strides can cause the model to miss rapid events that occur within the skipped frames."
+        },
+        {
+          "id": "p3",
+          "type": "fill_blank",
+          "xp": 2,
+          "prompt": "Complete the sentence:",
+          "sentence": "Increasing the temporal stride ___ the number of frames in the output feature map.",
+          "blank": "reduces",
+          "words": [
+            "reduces",
+            "increases",
+            "stabilizes"
+          ],
+          "explain": "Larger strides mean the filter makes fewer steps, reducing the temporal length of the output tensor."
+        },
+        {
+          "id": "p4",
+          "type": "spot_the_ai",
+          "xp": 2,
+          "prompt": "Which configuration is most computationally efficient for long video clips?",
+          "options": [
+            {
+              "id": "a",
+              "text": "Temporal stride: 4",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "Temporal stride: 1",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "Temporal stride: 2",
+              "correct": false
+            }
+          ],
+          "explain": "A stride of 4 skips 3 out of every 4 steps, making it the most computationally light option."
+        }
+      ]
+    },
+    {
+      "type": "boss",
+      "exercises": [
+        {
+          "id": "b1",
+          "type": "multiple_choice",
+          "xp": 5,
+          "prompt": "You are building a gesture recognition system for a smart TV. The user waves their hand very quickly. Which settings should you select?",
+          "options": [
+            {
+              "id": "a",
+              "text": "Low temporal stride (1) to capture the rapid wave motion without missing frames.",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "High temporal stride (8) to skip frames and ignore the wave speed.",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "Spatial stride of 10 to reduce the screen size to 1 pixel.",
+              "correct": false
+            },
+            {
+              "id": "d",
+              "text": "Grayscale filtering with no temporal tracking.",
+              "correct": false
+            }
+          ],
+          "explain": "Exactly! Fast gestures require a dense temporal view (stride of 1) to catch high-frequency movement detail. Next: how do we downsample both space and time together?"
+        }
+      ]
+    }
+  ]
+}

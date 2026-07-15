@@ -1,0 +1,222 @@
+{
+  "id": "u196-l4",
+  "unit": 196,
+  "day": 984,
+  "tier": "Edge Deployment & Quantization",
+  "tierIcon": "📱",
+  "title": "Pruning and Distillation",
+  "icon": "✂️",
+  "concept": "Pruning removes unimportant weights, while Knowledge Distillation transfers knowledge from a large teacher model to a smaller student model.",
+  "xp": 15,
+  "hearts": 3,
+  "estMinutes": 7,
+  "segments": [
+    {
+      "type": "warmup",
+      "exercises": [
+        {
+          "id": "w1",
+          "type": "multiple_choice",
+          "xp": 1,
+          "prompt": "Recap: What is the main difference between PTQ and QAT?",
+          "options": [
+            {
+              "id": "a",
+              "text": "PTQ happens after training; QAT happens during training",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "PTQ is for GPUs; QAT is for CPUs",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "PTQ increases precision; QAT decreases precision",
+              "correct": false
+            }
+          ],
+          "explain": "PTQ is a fast post-training conversion, whereas QAT integrates rounding constraints during model training."
+        }
+      ]
+    },
+    {
+      "type": "teach",
+      "cards": [
+        {
+          "kind": "hook",
+          "title": "Trim the fat, teach the youth",
+          "body": "In a neural network, many weight connections are close to zero and contribute almost nothing to the final prediction. We can cut them out (pruning). We can also have a massive model teach a tiny model its secrets (distillation). Both techniques make edge AI incredibly small!",
+          "icon": "✂️"
+        },
+        {
+          "kind": "definition",
+          "title": "What are Pruning & Distillation?",
+          "body": "<strong>Pruning</strong> sets unimportant model weights (often based on low magnitude) to zero. <strong>Knowledge Distillation</strong> trains a compact <i>student</i> model to match the probability distributions (soft labels) of a large <i>teacher</i> model.",
+          "icon": "📱"
+        },
+        {
+          "kind": "analogy",
+          "title": "Gardening and school tutoring",
+          "body": "Pruning is like trimming dead branches off a bush so it uses less water (resources) but keeps its shape. Knowledge distillation is like a university professor tutoring a high-school student, giving them the key summaries instead of making them read 1,000 textbooks.",
+          "icon": "🧠"
+        },
+        {
+          "kind": "example",
+          "title": "ResNet to MobileNet distillation",
+          "body": "A team trains a heavy ResNet-152 model on a custom dataset. They use it as a teacher to train a lightweight MobileNet-V2 student. The student achieves 95% of the teacher's accuracy but is 10x faster.",
+          "icon": "🔍"
+        },
+        {
+          "kind": "mythbust",
+          "title": "Pruning needs hardware support to run faster",
+          "body": "You might think setting weights to zero automatically speeds up any CPU. In reality, unless you use structured pruning (removing entire channels) or have specialized hardware that skips zero-multiplications, a sparse model still takes the same time to execute.",
+          "icon": "⚠️"
+        },
+        {
+          "kind": "visual",
+          "title": "Pruning vs. Knowledge Distillation",
+          "body": "Two pathways to model compression:",
+          "icon": "✂️",
+          "compare": {
+            "left": {
+              "emoji": "✂️",
+              "tag": "Pruning",
+              "text": "Removes weak connections<br>Sets small weights to zero<br>Shrinks weight sparse count<br>Needs sparse hardware support"
+            },
+            "right": {
+              "emoji": "🧑‍🏫",
+              "tag": "Knowledge Distillation",
+              "text": "Teacher guides student<br>Student mimics teacher outputs<br>Compact model architecture<br>Runs fast on standard chips"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "type": "practice",
+      "exercises": [
+        {
+          "id": "p1",
+          "type": "multiple_choice",
+          "xp": 2,
+          "prompt": "What is the process of setting low-value weights in a neural network to zero called?",
+          "options": [
+            {
+              "id": "a",
+              "text": "Pruning",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "Distillation",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "Quantization",
+              "correct": false
+            },
+            {
+              "id": "d",
+              "text": "Decoupling",
+              "correct": false
+            }
+          ],
+          "explain": "Pruning trims away unimportant weights, creating a sparse network."
+        },
+        {
+          "id": "p2",
+          "type": "true_false",
+          "xp": 2,
+          "prompt": "True or False: In knowledge distillation, the student model is typically much larger and slower than the teacher model.",
+          "options": [
+            {
+              "id": "t",
+              "text": "True",
+              "correct": false
+            },
+            {
+              "id": "f",
+              "text": "False",
+              "correct": true
+            }
+          ],
+          "explain": "False. The teacher is the large, slow, accurate model; the student is the small, fast model trained to mimic it."
+        },
+        {
+          "id": "p3",
+          "type": "fill_blank",
+          "xp": 2,
+          "prompt": "Complete the sentence:",
+          "sentence": "Knowledge distillation uses the teacher's ___ labels (class probabilities) to guide the student model.",
+          "blank": "soft",
+          "words": [
+            "soft",
+            "hard",
+            "random"
+          ],
+          "explain": "Soft labels (probabilities like 0.7 cat, 0.2 dog) contain richer information about what the model learns than hard labels (cat)."
+        },
+        {
+          "id": "p4",
+          "type": "spot_the_ai",
+          "xp": 2,
+          "prompt": "Which type of pruning is easiest for standard CPUs to accelerate without specialized hardware?",
+          "options": [
+            {
+              "id": "a",
+              "text": "Structured pruning (removing entire channels or neurons)",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "Unstructured pruning (removing random individual weights)",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "Dynamic data pruning",
+              "correct": false
+            }
+          ],
+          "explain": "Removing entire channels (structured pruning) changes matrix dimensions, allowing standard hardware to compute smaller operations directly."
+        }
+      ]
+    },
+    {
+      "type": "boss",
+      "exercises": [
+        {
+          "id": "b1",
+          "type": "multiple_choice",
+          "xp": 5,
+          "prompt": "You have a massive transformer-based vision model that is too large to fit on a smartphone. You want to create a lightweight version that still mimics the complex decision-making of the original. What compression workflow should you use?",
+          "options": [
+            {
+              "id": "a",
+              "text": "Use the massive model as a teacher to perform knowledge distillation into a small MobileNet student, then quantize the student to INT8.",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "Double the layers of the student model to make it more complex.",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "Run unstructured pruning on the massive model and deploy it without quantization.",
+              "correct": false
+            },
+            {
+              "id": "d",
+              "text": "Train the massive model on half the dataset to shrink its capacity.",
+              "correct": false
+            }
+          ],
+          "explain": "Combining knowledge distillation (to shrink model architecture) with quantization (to shrink parameter bits) is an industry-standard pipeline for exporting models to mobile devices."
+        }
+      ]
+    }
+  ]
+}

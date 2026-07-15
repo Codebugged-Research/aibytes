@@ -1,0 +1,222 @@
+{
+  "id": "u140-l5",
+  "unit": 140,
+  "day": 705,
+  "tier": "Object Detection Foundations",
+  "tierIcon": "🎯",
+  "title": "Bounding Box Regression",
+  "icon": "🔧",
+  "concept": "Bounding Box Regression is the technique where a network predicts mathematical offsets to shift and resize candidate boxes closer to the target object.",
+  "xp": 15,
+  "hearts": 3,
+  "estMinutes": 7,
+  "segments": [
+    {
+      "type": "warmup",
+      "exercises": [
+        {
+          "id": "w1",
+          "type": "multiple_choice",
+          "xp": 1,
+          "prompt": "Recap: What is the purpose of an IoU threshold?",
+          "options": [
+            {
+              "id": "a",
+              "text": "To decide if a predicted box overlaps enough with the real object to be correct",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "To scale the image pixels down",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "To calculate class probabilities",
+              "correct": false
+            }
+          ],
+          "explain": "The IoU threshold acts as a decision boundary to classify box overlaps as correct or incorrect."
+        }
+      ]
+    },
+    {
+      "type": "teach",
+      "cards": [
+        {
+          "kind": "hook",
+          "icon": "🖼️",
+          "title": "Nudging a Picture Frame",
+          "body": "If you hang a picture frame on the wall and it's slightly crooked or too far to the right, you don't take it down and start over. You nudge it a few inches left and tilt it slightly. Bounding box regression does the exact same thing."
+        },
+        {
+          "kind": "definition",
+          "icon": "🔧",
+          "title": "What is Box Regression?",
+          "body": "<strong>Bounding Box Regression</strong> is the process where a neural network outputs small offset values (adjustments to x, y, width, and height) to refine a draft candidate box so it tightly wraps the object."
+        },
+        {
+          "kind": "analogy",
+          "icon": "🔧",
+          "title": "The Helpful Assistant",
+          "body": "Imagine you are directing an assistant placing a box on a table. Instead of telling them the absolute coordinate: <code>'Place it at exactly 42 inches'</code>, you give them relative adjustments: <code>'Move it 2 inches left and stretch it 3 inches wider'</code>."
+        },
+        {
+          "kind": "example",
+          "icon": "🚗",
+          "title": "Applying Offsets",
+          "body": "A network starts with a default box at <code>[x=10, y=10, w=50, h=50]</code>. The regression head outputs offsets <code>[dx=+2, dy=-1, dw=+5, dh=0]</code>. The adjusted final box coordinates become <code>[x=12, y=9, w=55, h=50]</code>."
+        },
+        {
+          "kind": "mythbust",
+          "icon": "⚠️",
+          "title": "Not guessing from scratch",
+          "body": "It's a common myth that neural networks guess the final bounding boxes from thin air. In reality, they start with predefined guess templates (anchor boxes) and predict tiny corrections (regression offsets) to adjust them."
+        },
+        {
+          "kind": "visual",
+          "icon": "⚖️",
+          "title": "Offsets in Action",
+          "body": "Comparing a default draft box and its adjusted version after regression:",
+          "compare": {
+            "left": {
+              "emoji": "⬜",
+              "tag": "Draft Box",
+              "text": "Predefined default shape:<br><code>[x, y, w, h]</code>"
+            },
+            "right": {
+              "emoji": "🟦",
+              "tag": "Refined Box",
+              "text": "After applying offsets:<br><code>[x+dx, y+dy, w*dw, h*dh]</code>"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "type": "practice",
+      "exercises": [
+        {
+          "id": "p1",
+          "type": "multiple_choice",
+          "xp": 2,
+          "prompt": "What does a bounding box regression head actually predict?",
+          "explain": "The regression head predicts mathematical offsets (dx, dy, dw, dh) that are applied to shift and resize draft boxes.",
+          "options": [
+            {
+              "id": "a",
+              "text": "Coordinate offsets to adjust draft bounding boxes",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "The RGB pixel color values of the box border",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "The name of the object inside the box",
+              "correct": false
+            },
+            {
+              "id": "d",
+              "text": "The probability that the image contains noise",
+              "correct": false
+            }
+          ]
+        },
+        {
+          "id": "p2",
+          "type": "true_false",
+          "xp": 2,
+          "prompt": "True or False: Bounding box offsets are typically added directly to coordinate values without any normalization scaling.",
+          "explain": "False. Offsets are mathematically scaled based on the anchor box size to ensure the adjustments are proportional and stable during network training.",
+          "options": [
+            {
+              "id": "t",
+              "text": "True",
+              "correct": false
+            },
+            {
+              "id": "f",
+              "text": "False",
+              "correct": true
+            }
+          ]
+        },
+        {
+          "id": "p3",
+          "type": "fill_blank",
+          "xp": 2,
+          "prompt": "Complete the sentence:",
+          "explain": "Regression heads predict coordinates offsets (deltas) to refine predefined draft shapes.",
+          "sentence": "Rather than predicting box coordinates from scratch, networks predict ___ to adjust default boxes.",
+          "blank": "offsets",
+          "words": [
+            "offsets",
+            "classes",
+            "pixels"
+          ]
+        },
+        {
+          "id": "p4",
+          "type": "spot_the_ai",
+          "xp": 2,
+          "prompt": "Which set of outputs represents bounding box regression predictions?",
+          "explain": "Decimals prefixed with d (representing delta/change) represent box regression offsets.",
+          "options": [
+            {
+              "id": "a",
+              "text": "Class probabilities: [Cat: 0.1, Person: 0.9]",
+              "correct": false
+            },
+            {
+              "id": "b",
+              "text": "Box offsets: [dx=0.05, dy=-0.02, dw=0.15, dh=0.08]",
+              "correct": true
+            },
+            {
+              "id": "c",
+              "text": "Resolution: 1080x720 pixels",
+              "correct": false
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "boss",
+      "exercises": [
+        {
+          "id": "b1",
+          "type": "multiple_choice",
+          "xp": 5,
+          "prompt": "A model has a default anchor box at center coordinates (50, 60) with width 100 and height 100. The regression head outputs offsets of dx = +5, dy = -10, dw = +10, dh = -5. What are the final center coordinates (x, y) and size (w, h)?",
+          "options": [
+            {
+              "id": "a",
+              "text": "center = (55, 50), w = 110, h = 95",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "center = (45, 70), w = 90, h = 105",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "center = (50, 60), w = 100, h = 100",
+              "correct": false
+            },
+            {
+              "id": "d",
+              "text": "center = (55, 70), w = 110, h = 105",
+              "correct": false
+            }
+          ],
+          "explain": "Exactly! The center x is 50 + 5 = 55. The center y is 60 - 10 = 50. The width is 100 + 10 = 110. The height is 100 - 5 = 95. Next up: let's learn about anchor boxes and how they serve as the draft templates for these predictions!"
+        }
+      ]
+    }
+  ]
+}

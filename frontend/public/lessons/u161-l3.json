@@ -1,0 +1,227 @@
+{
+  "id": "u161-l3",
+  "unit": 161,
+  "day": 808,
+  "tier": "Evaluating Image Segmentations",
+  "tierIcon": "📏",
+  "title": "Dice Score / F1-Score",
+  "icon": "📏",
+  "concept": "The Dice score (equivalent to F1-score) measures mask overlap, giving slightly higher values than IoU and penalizing near-misses differently.",
+  "xp": 15,
+  "hearts": 3,
+  "estMinutes": 7,
+  "segments": [
+    {
+      "type": "warmup",
+      "exercises": [
+        {
+          "id": "w1",
+          "type": "multiple_choice",
+          "xp": 1,
+          "prompt": "Recap: Why does IoU ignore True Negatives?",
+          "options": [
+            {
+              "id": "a",
+              "text": "To prevent large background areas from inflating the performance score",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "To make the calculation faster on old CPUs",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "To allow the model to run without validation labels",
+              "correct": false
+            }
+          ],
+          "explain": "Correct! Leaving out True Negatives keeps the metric focused on object overlap."
+        }
+      ]
+    },
+    {
+      "type": "teach",
+      "cards": [
+        {
+          "kind": "hook",
+          "icon": "📊",
+          "title": "The twin metric",
+          "body": "While computer scientists love IoU, medical researchers almost always report the Dice Score (also known as the F1-Score). They measure the same thing: overlap. But they use slightly different math, which changes how they penalize mistakes. Let's see how they compare."
+        },
+        {
+          "kind": "definition",
+          "icon": "📏",
+          "title": "Dice Score / F1-Score",
+          "body": "The <strong>Dice Score</strong> is defined as: $$Dice = \\frac{2 TP}{2 TP + FP + FN}$$. It is mathematically identical to the F1-Score. It counts True Positives twice in both the numerator and denominator, yielding higher values than IoU for the same overlap."
+        },
+        {
+          "kind": "analogy",
+          "icon": "📝",
+          "title": "A slightly kinder grader",
+          "body": "If IoU is a strict grader who gives you a C (60%) for a minor boundary error, the Dice score is a kinder teacher who gives you a B (75%) for the same paper. Both agree you made a mistake, but Dice doesn't penalize it as harshly."
+        },
+        {
+          "kind": "example",
+          "icon": "📐",
+          "title": "Dice vs. IoU values",
+          "body": "If a model's prediction overlap has a TP of 80, FP of 10, and FN of 10: <br>- $IoU = 80 / (80+10+10) = 0.8$<br>- $Dice = (2 \\times 80) / (2 \\times 80 + 10 + 10) = 160 / 180 = 0.89$. <br>The Dice score is higher than IoU."
+        },
+        {
+          "kind": "mythbust",
+          "icon": "⚠️",
+          "title": "They are monotonic",
+          "body": "You might think a model could have a high IoU but a low Dice score. That's a myth! They are monotonic: if Model A's Dice score is higher than Model B's, its IoU will also be higher. You can convert between them using: $IoU = Dice / (2 - Dice)$."
+        },
+        {
+          "kind": "visual",
+          "icon": "⚖️",
+          "title": "Dice vs. IoU comparison",
+          "body": "Same overlap, different scores:",
+          "compare": {
+            "left": {
+              "emoji": "📊",
+              "tag": "IoU Score (Jaccard)",
+              "text": "TP / (TP + FP + FN)<br>Penalizes mistakes harder<br>E.g., 0.70 score"
+            },
+            "right": {
+              "emoji": "🧬",
+              "tag": "Dice Score (F1)",
+              "text": "2TP / (2TP + FP + FN)<br>More widely used in medical papers<br>E.g., 0.82 score"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "type": "practice",
+      "exercises": [
+        {
+          "id": "p1",
+          "type": "multiple_choice",
+          "xp": 2,
+          "prompt": "What is the mathematical relationship between the Dice Score and F1-Score?",
+          "options": [
+            {
+              "id": "a",
+              "text": "They are identical",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "Dice is the square of F1",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "Dice is 1 minus F1",
+              "correct": false
+            },
+            {
+              "id": "d",
+              "text": "F1 is double the Dice score",
+              "correct": false
+            }
+          ],
+          "explain": "Correct! Dice Score and F1-Score are two names for the exact same formula."
+        },
+        {
+          "id": "p2",
+          "type": "true_false",
+          "xp": 2,
+          "prompt": "True or False: For any imperfect overlap, the Dice score is mathematically higher than the IoU score.",
+          "options": [
+            {
+              "id": "t",
+              "text": "True",
+              "correct": false
+            },
+            {
+              "id": "f",
+              "text": "False",
+              "correct": false
+            }
+          ],
+          "explain": "True. Because TP is weighted twice, Dice values are always slightly higher than IoU (except at 0 and 1)."
+        },
+        {
+          "id": "p3",
+          "type": "fill_blank",
+          "xp": 2,
+          "prompt": "Complete the sentence:",
+          "sentence": "The Dice score is mathematically identical to the ___ score used in classification.",
+          "blank": "F1",
+          "words": [
+            "F1",
+            "accuracy",
+            "ROC"
+          ],
+          "explain": "The Dice score is the exact same formula as the F1-score (harmonic mean of precision and recall)."
+        },
+        {
+          "id": "p4",
+          "type": "spot_the_ai",
+          "xp": 2,
+          "prompt": "If a model has an IoU of 0.5, what is its Dice score?",
+          "options": [
+            {
+              "id": "a",
+              "text": "0.67",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "0.33",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "0.5",
+              "correct": false
+            },
+            {
+              "id": "d",
+              "text": "1.0",
+              "correct": false
+            }
+          ],
+          "explain": "Using the conversion $Dice = 2 \\times IoU / (1 + IoU)$: $2 \\times 0.5 / (1.5) = 1 / 1.5 = 0.67$."
+        }
+      ]
+    },
+    {
+      "type": "boss",
+      "exercises": [
+        {
+          "id": "b1",
+          "type": "multiple_choice",
+          "xp": 5,
+          "prompt": "A medical paper claims their U-Net achieves an F1-score of 0.85 on tumor masks. Another paper claims an IoU of 0.75. Which model has better overlap?",
+          "options": [
+            {
+              "id": "a",
+              "text": "The second model (IoU 0.75), because an IoU of 0.75 converts to a Dice/F1 score of approximately 0.86, outperforming the first model.",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "The first model (F1 0.85), because 0.85 is larger than 0.75.",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "Neither, because F1-score and IoU cannot be compared.",
+              "correct": false
+            },
+            {
+              "id": "d",
+              "text": "The first model, because F1-score is only used when the model is 100% accurate.",
+              "correct": false
+            }
+          ],
+          "explain": "Perfect! Since $Dice = 2 \\times IoU / (1 + IoU)$, an IoU of 0.75 yields a Dice score of $1.5 / 1.75 \\approx 0.857$ (85.7%). Thus, the 0.75 IoU model is slightly better than the 0.85 F1 model. Next: let's look at confusion matrices!"
+        }
+      ]
+    }
+  ]
+}

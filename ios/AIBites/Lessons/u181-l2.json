@@ -1,0 +1,222 @@
+{
+  "id": "u181-l2",
+  "unit": 181,
+  "day": 907,
+  "tier": "Vision Transformers & Modern Approaches",
+  "tierIcon": "\ud83d\udc41\ufe0f",
+  "title": "Contrastive Learning",
+  "icon": "\ud83e\uddf2",
+  "concept": "Contrastive learning (MoCo, SimCLR) trains models by pulling representation vectors of positive views closer while pushing negative views from different images apart.",
+  "xp": 15,
+  "hearts": 3,
+  "estMinutes": 7,
+  "segments": [
+    {
+      "type": "warmup",
+      "exercises": [
+        {
+          "id": "w1",
+          "type": "multiple_choice",
+          "xp": 1,
+          "prompt": "Recap: What is the primary source of labels in self-supervised learning?",
+          "options": [
+            {
+              "id": "a",
+              "text": "They are generated automatically from the raw data itself.",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "They are downloaded from human crowdsourcing platforms.",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "The model operates without any loss functions or labels.",
+              "correct": false
+            }
+          ],
+          "explain": "Correct! SSL generates its own labels (like comparing crops) directly from the data."
+        }
+      ]
+    },
+    {
+      "type": "teach",
+      "cards": [
+        {
+          "kind": "hook",
+          "icon": "\ud83e\uddf2",
+          "title": "Visual magnets",
+          "body": "If you look at two photos of a cat \u2014 one rotated, one cropped \u2014 you know they show the same animal. If you see a photo of a car, you know it's different. Contrastive learning treats representation vectors like magnets, pulling positive pairs together and pushing negative pairs apart."
+        },
+        {
+          "kind": "definition",
+          "icon": "\ud83e\uddf2",
+          "title": "Contrastive Learning",
+          "body": "<strong>Contrastive learning</strong> is an SSL framework. For an image, we generate two augmented variations (positive views). We pass them through the model and pull their output vectors together in vector space using a contrastive loss (like InfoNCE), while pushing vectors from <em>other</em> images (negative views) far away."
+        },
+        {
+          "kind": "analogy",
+          "icon": "\ud83d\udc65",
+          "title": "Face matching game",
+          "body": "Imagine matching photos. You are given a photo of Sarah wearing sunglasses (crop 1) and Sarah wearing a hat (crop 2). You want to put them in the same folder (close vectors). If you get a photo of Bob, you place it in a separate cabinet (push away). You learn facial structure purely by grouping matching faces."
+        },
+        {
+          "kind": "example",
+          "icon": "\u2699\ufe0f",
+          "title": "MoCo (Momentum Contrast)",
+          "body": "MoCo handles millions of negative views efficiently by using a **dynamic queue** to store previous negative representations. It uses a momentum-updated teacher encoder to keep the representation keys stable as the queue updates."
+        },
+        {
+          "kind": "mythbust",
+          "icon": "\u26a0\ufe0f",
+          "title": "Large batches required",
+          "body": "You might think contrastive learning is simple to train. In SimCLR, to get stable representations, researchers needed massive batch sizes of 4096 images to provide enough negative examples. MoCo solved this with its queue, saving GPU memory."
+        },
+        {
+          "kind": "visual",
+          "icon": "\u2696\ufe0f",
+          "title": "Positive vs. Negative Pairs",
+          "body": "How contrastive loss updates vector space:",
+          "compare": {
+            "left": {
+              "emoji": "\ud83e\uddf2",
+              "tag": "Positive Pair (Same Image)",
+              "text": "Crop A & Crop B of dog<br>Distance: Minimised (Pulled close)<br>Builds invariance to crops/angles"
+            },
+            "right": {
+              "emoji": "\ud83d\udeab",
+              "tag": "Negative Pair (Different Images)",
+              "text": "Crop of dog & crop of car<br>Distance: Maximised (Pushed apart)<br>Forces representation to differentiate"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "type": "practice",
+      "exercises": [
+        {
+          "id": "p1",
+          "type": "multiple_choice",
+          "xp": 2,
+          "prompt": "What is the role of the InfoNCE loss in contrastive learning?",
+          "explain": "InfoNCE loss optimizes the model to maximize similarity for matching pairs and minimize it for different images.",
+          "options": [
+            {
+              "id": "a",
+              "text": "To pull representations of positive views closer while pushing negative views apart",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "To mask out 75% of the pixel coordinates",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "To apply spatial pooling to feature maps",
+              "correct": false
+            },
+            {
+              "id": "d",
+              "text": "To decay the learning rate of the backbone",
+              "correct": false
+            }
+          ]
+        },
+        {
+          "id": "p2",
+          "type": "true_false",
+          "xp": 2,
+          "prompt": "True or false: SimCLR uses a dynamic queue to store negative views, whereas MoCo uses massive batches.",
+          "explain": "False. MoCo uses a dynamic queue to store negative keys, while SimCLR relies on large batch sizes.",
+          "options": [
+            {
+              "id": "t",
+              "text": "True",
+              "correct": false
+            },
+            {
+              "id": "f",
+              "text": "False",
+              "correct": true
+            }
+          ]
+        },
+        {
+          "id": "p3",
+          "type": "fill_blank",
+          "xp": 2,
+          "prompt": "Complete the sentence:",
+          "explain": "Two variations of the same image are positive pairs, representing the same semantic target.",
+          "sentence": "In contrastive learning, two different augmented crops of the same image form a ___ pair.",
+          "blank": "positive",
+          "words": [
+            "positive",
+            "negative",
+            "neutral"
+          ]
+        },
+        {
+          "id": "p4",
+          "type": "spot_the_ai",
+          "xp": 2,
+          "prompt": "Which of these setups describes the Momentum Encoder in MoCo?",
+          "explain": "MoCo's momentum encoder updates its weights slowly using a moving average of the student weights, stabilizing representation keys.",
+          "options": [
+            {
+              "id": "a",
+              "text": "A slowly updating copy of the student network that keeps key representations stable",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "A high-speed convolutional layer that downsamples resolution",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "A linear classifier head that outputs class labels",
+              "correct": false
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "boss",
+      "exercises": [
+        {
+          "id": "b1",
+          "type": "multiple_choice",
+          "xp": 5,
+          "prompt": "What would happen in contrastive learning if we trained the model without any negative pairs?",
+          "options": [
+            {
+              "id": "a",
+              "text": "Representation collapse: the model would learn to output the exact same constant vector for all inputs, trivially achieving zero loss.",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "The model would run twice as fast with higher accuracy.",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "The model would convert itself into a CNN.",
+              "correct": false
+            },
+            {
+              "id": "d",
+              "text": "The attention matrices would become completely empty.",
+              "correct": false
+            }
+          ],
+          "explain": "Spot on! Without negative pressure to push vectors apart, the network cheats by mapping every image to a single constant vector. Next: how DINO avoids collapse without using negative pairs at all!"
+        }
+      ]
+    }
+  ]
+}
