@@ -1,0 +1,222 @@
+{
+  "id": "u360-l4",
+  "unit": 360,
+  "day": 1804,
+  "tier": "Large Language Models",
+  "tierIcon": "🤖",
+  "title": "Cross-Entropy Loss on Response Tokens",
+  "icon": "📉",
+  "concept": "During SFT, we calculate the loss and update weights only on the response tokens, ignoring the instruction tokens to keep training stable.",
+  "xp": 15,
+  "hearts": 3,
+  "estMinutes": 7,
+  "segments": [
+    {
+      "type": "warmup",
+      "exercises": [
+        {
+          "id": "w1",
+          "type": "multiple_choice",
+          "xp": 1,
+          "prompt": "When fine-tuning an AI assistant, which tokens should we calculate loss on to keep training stable?",
+          "options": [
+            {
+              "correct": false,
+              "id": "opt1",
+              "text": "Instruction tokens only"
+            },
+            {
+              "id": "opt2",
+              "text": "Response tokens only",
+              "correct": true
+            },
+            {
+              "correct": false,
+              "id": "opt3",
+              "text": "Both instruction and response tokens equally"
+            }
+          ],
+          "explain": "During Supervised Fine-Tuning (SFT), we want the model to learn how to respond to prompts, not how to write the prompts themselves. Thus, we only update weights based on the response tokens."
+        }
+      ]
+    },
+    {
+      "type": "teach",
+      "cards": [
+        {
+          "kind": "hook",
+          "icon": "📉",
+          "title": "Why Stop the Loss?",
+          "body": "When we train AI models to follow instructions (SFT), we feed them both the instruction and the response. But if we try to train them on both, they might get confused and try to predict the instructions themselves! How do we make sure they only practice writing the answers?"
+        },
+        {
+          "kind": "definition",
+          "icon": "🎯",
+          "title": "Focusing the Loss",
+          "body": "Cross-Entropy Loss on Response Tokens is a training technique where we only calculate the mathematical 'penalty' (loss) on the words the model generates as a response. We mask out or ignore the instruction tokens, so the model's weight updates are driven entirely by its answers."
+        },
+        {
+          "kind": "analogy",
+          "icon": "📝",
+          "title": "The Smart Teacher's Grading",
+          "body": "Imagine a teacher grading a student's essay. The prompt asks, 'Write about your favorite animal.' The student writes: 'Prompt: Write about your favorite animal. Response: I love dogs because they are loyal.' The teacher only grades the response, ignoring the printed prompt. If the teacher graded the prompt itself, they'd waste time grading their own words!"
+        },
+        {
+          "kind": "example",
+          "icon": "💡",
+          "title": "In Action: Translation SFT",
+          "body": "When training an AI on the pair:\nInstruction: \"Translate 'Hello' to Spanish.\"\nResponse: \"Hola.\"\n\nThe model only gets penalized if it predicts \"Hola\" incorrectly. If it struggles to predict \"Translate\", we don't care, and no weights are adjusted for it."
+        },
+        {
+          "kind": "mythbust",
+          "icon": "🚫",
+          "title": "Myth: Train on Everything!",
+          "body": "It's easy to think we should calculate loss on the entire conversation text so the AI learns the whole context. However, doing this makes the model unstable. It tries to predict what the user will ask, which is impossible and hurts training stability!"
+        },
+        {
+          "kind": "visual",
+          "icon": "👁️‍🗨️",
+          "title": "Visualizing Token Masking",
+          "body": "By masking instruction tokens, we ensure the model's brain (weights) is only updated based on its ability to generate the correct answer.",
+          "compare": {
+            "right": {
+              "text": "Loss is calculated ONLY on the poem. The instruction is used as context but ignored for updates.",
+              "tag": "Response-Only Loss",
+              "emoji": "🎯"
+            },
+            "left": {
+              "emoji": "❌",
+              "text": "Loss is calculated on both 'Write a poem' and the actual poem. The model gets confused trying to predict the prompt.",
+              "tag": "Full Loss"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "type": "practice",
+      "exercises": [
+        {
+          "id": "p1",
+          "type": "multiple_choice",
+          "xp": 2,
+          "prompt": "Why do we ignore the instruction tokens when calculating Cross-Entropy Loss?",
+          "options": [
+            {
+              "id": "opt1",
+              "text": "It makes the model answer much faster.",
+              "correct": false
+            },
+            {
+              "correct": true,
+              "id": "opt2",
+              "text": "It keeps training stable by not forcing the model to predict the user's prompts."
+            },
+            {
+              "text": "It allows the model to ignore the prompt entirely during generation.",
+              "correct": false,
+              "id": "opt3"
+            },
+            {
+              "id": "opt4",
+              "text": "It reduces the size of the model's vocabulary.",
+              "correct": false
+            }
+          ],
+          "explain": "Calculating loss on instructions causes the model to try predicting the user's prompt, which makes training unstable and degrades performance."
+        },
+        {
+          "id": "p2",
+          "type": "true_false",
+          "xp": 2,
+          "prompt": "True or False: During Supervised Fine-Tuning, we ignore the instruction tokens when calculating the loss.",
+          "options": [
+            {
+              "correct": true,
+              "id": "opt1",
+              "text": "True"
+            },
+            {
+              "id": "opt2",
+              "text": "False",
+              "correct": false
+            }
+          ],
+          "explain": "True! We only calculate loss on the response tokens. The instruction tokens are kept in the input so the model has context, but they are ignored (masked) during the loss calculation."
+        },
+        {
+          "id": "p3",
+          "type": "fill_blank",
+          "xp": 2,
+          "prompt": "Fill in the missing word to complete how we apply loss during model training.",
+          "sentence": "During SFT, we calculate the cross-entropy loss only on the _____ tokens.",
+          "blank": "response",
+          "words": [
+            "instruction",
+            "response",
+            "random"
+          ],
+          "explain": "We ignore the instruction tokens during loss calculation to prevent the model from wasting energy trying to predict the user's prompt. We only calculate loss on the response tokens."
+        },
+        {
+          "id": "p4",
+          "type": "spot_the_ai",
+          "xp": 2,
+          "prompt": "Which AI assistant suggests the correct way to configure SFT loss?",
+          "options": [
+            {
+              "id": "opt1",
+              "text": "AI A: 'Let's mask the instruction tokens and calculate loss only on the response tokens.'",
+              "correct": true
+            },
+            {
+              "text": "AI B: 'Let's calculate loss on both the prompt and the response to double the training data.'",
+              "correct": false,
+              "id": "opt2"
+            },
+            {
+              "id": "opt3",
+              "text": "AI C: 'Let's calculate loss only on the instruction tokens to help the model understand prompts.'",
+              "correct": false
+            }
+          ],
+          "explain": "Only Option A shows the correct focus: we want the AI to learn how to respond, so we only apply loss (penalties) to the response portion, leaving the instruction unmasked for context but ignored for grading."
+        }
+      ]
+    },
+    {
+      "type": "boss",
+      "exercises": [
+        {
+          "id": "b1",
+          "type": "multiple_choice",
+          "xp": 5,
+          "prompt": "You are building an AI assistant. How do you implement Cross-Entropy Loss during Supervised Fine-Tuning (SFT) to make sure the model learns to generate answers instead of memorizing prompts?",
+          "options": [
+            {
+              "id": "opt1",
+              "text": "By calculating the loss and updating weights only on the response tokens.",
+              "correct": true
+            },
+            {
+              "correct": false,
+              "id": "opt2",
+              "text": "By calculating loss on both instructions and responses equally."
+            },
+            {
+              "id": "opt3",
+              "text": "By deleting the instruction tokens before feeding them to the model.",
+              "correct": false
+            },
+            {
+              "text": "By calculating loss only on the instruction tokens.",
+              "correct": false,
+              "id": "opt4"
+            }
+          ],
+          "explain": "During SFT, we mask (ignore) the instruction tokens during loss calculation. This forces the model to focus its updates only on learning how to generate the correct response, preventing it from messing up its understanding of instructions."
+        }
+      ]
+    }
+  ]
+}

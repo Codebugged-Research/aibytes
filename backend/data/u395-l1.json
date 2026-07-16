@@ -1,0 +1,223 @@
+{
+  "id": "u395-l1",
+  "unit": 395,
+  "day": 1976,
+  "tier": "Large Language Models",
+  "tierIcon": "🤖",
+  "title": "The Production Serving Bottleneck",
+  "icon": "🚀",
+  "concept": "Serving LLMs to millions of users requires high GPU memory bandwidth; standard static batching causes server queues, requiring dynamic scheduling.",
+  "xp": 15,
+  "hearts": 3,
+  "estMinutes": 7,
+  "segments": [
+    {
+      "type": "warmup",
+      "exercises": [
+        {
+          "id": "w1",
+          "type": "multiple_choice",
+          "xp": 1,
+          "prompt": "When serving an AI model to millions of users, what is the most important factor to prevent system slowdowns?",
+          "options": [
+            {
+              "text": "Make the AI model much larger",
+              "id": "w1",
+              "correct": false
+            },
+            {
+              "id": "w2",
+              "correct": true,
+              "text": "Optimize how we schedule and batch incoming user requests"
+            },
+            {
+              "text": "Only allow one user to access the model per day",
+              "id": "w3",
+              "correct": false
+            }
+          ],
+          "explain": "To serve millions of users, we need to efficiently manage how we load the model into GPU memory and process multiple requests at once."
+        }
+      ]
+    },
+    {
+      "type": "teach",
+      "cards": [
+        {
+          "kind": "hook",
+          "icon": "🚀",
+          "title": "The Viral Traffic Jam",
+          "body": "Imagine building a viral AI chatbot. On day one, 10 million users try it at the same time. Even with powerful GPUs, your system grinds to a halt! Why does this happen, and how do top AI systems handle millions of requests without breaking a sweat?"
+        },
+        {
+          "kind": "definition",
+          "icon": "🤖",
+          "title": "What is the Serving Bottleneck?",
+          "body": "The Production Serving Bottleneck occurs because LLMs are highly demanding of GPU memory bandwidth. When millions of users send prompts simultaneously, standard 'static batching' forces users to wait in line until a batch is fully packed, creating massive delays. Dynamic scheduling solves this by constantly grouping and processing requests on the fly."
+        },
+        {
+          "kind": "analogy",
+          "icon": "🍳",
+          "title": "The Busy Kitchen",
+          "body": "Imagine a restaurant with one master chef (the GPU). In a traditional diner (static batching), the chef refuses to start cooking until exactly 4 orders are on the counter. If only 1 person orders, they sit and wait indefinitely. With dynamic scheduling, the chef starts cooking immediately and slide-loads new orders onto the stove as they arrive, keeping the kitchen cooking at maximum speed!"
+        },
+        {
+          "kind": "example",
+          "icon": "💡",
+          "title": "Dynamic Batching in Action",
+          "body": "If user Alice asks for a 5-word poem and user Bob asks for a 500-word essay, static batching would force Alice to wait for Bob's long generation to completely finish. Dynamic scheduling dynamically releases Alice's tokens the moment her short poem is done, freeing up GPU resources instantly."
+        },
+        {
+          "kind": "mythbust",
+          "icon": "💥",
+          "title": "Myth: Just Buy More GPUs!",
+          "body": "People often think that buying faster GPUs is the only way to serve more users. In reality, hardware alone cannot fix poor scheduling. Implementing dynamic batching software can speed up user response times by multiple times without buying a single new chip!"
+        },
+        {
+          "kind": "visual",
+          "icon": "📊",
+          "title": "Batching Methods Compared",
+          "body": "Let's compare how static batching and dynamic scheduling handle multiple user requests in production.",
+          "compare": {
+            "left": {
+              "text": "Requests wait in line until a fixed batch size is filled. Short prompts are held hostage by long prompts.",
+              "tag": "Static Batching",
+              "emoji": "🚦"
+            },
+            "right": {
+              "text": "Requests are grouped and processed instantly as they arrive. Finished requests exit early, saving resources.",
+              "tag": "Dynamic Scheduling",
+              "emoji": "⚡"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "type": "practice",
+      "exercises": [
+        {
+          "id": "p1",
+          "type": "multiple_choice",
+          "xp": 2,
+          "prompt": "Why does standard static batching cause server queues when serving LLMs to many users?",
+          "options": [
+            {
+              "text": "It makes the GPU process calculations too fast for the user.",
+              "id": "mc1",
+              "correct": false
+            },
+            {
+              "correct": true,
+              "text": "It forces users to wait in queues until a fixed batch size is filled.",
+              "id": "mc2"
+            },
+            {
+              "text": "It automatically deletes user prompts to save memory space.",
+              "id": "mc3",
+              "correct": false
+            },
+            {
+              "id": "mc4",
+              "correct": false,
+              "text": "It uses too much internet bandwidth instead of GPU memory."
+            }
+          ],
+          "explain": "Static batching forces incoming user requests to wait in queues until a fixed batch size is reached, leading to slow response times under varying traffic."
+        },
+        {
+          "id": "p2",
+          "type": "true_false",
+          "xp": 2,
+          "prompt": "True or False: Dynamic scheduling allows new user requests to join active GPU batches instead of waiting for a completely new batch to form.",
+          "options": [
+            {
+              "text": "True",
+              "id": "tf_true",
+              "correct": true
+            },
+            {
+              "id": "tf_false",
+              "correct": false,
+              "text": "False"
+            }
+          ],
+          "explain": "Dynamic scheduling allows new requests to join the current processing batch on the fly, dramatically reducing wait times."
+        },
+        {
+          "id": "p3",
+          "type": "fill_blank",
+          "xp": 2,
+          "prompt": "Fill in the missing word to complete the explanation of LLM serving limitations.",
+          "sentence": "LLM serving is primarily limited by GPU memory bandwidth rather than raw calculation speed.",
+          "blank": "bandwidth",
+          "words": [
+            "bandwidth",
+            "cores",
+            "storage",
+            "network"
+          ],
+          "explain": "Generating text with LLMs requires loading massive model weights from memory for every single word generated, making GPU memory bandwidth the primary bottleneck."
+        },
+        {
+          "id": "p4",
+          "type": "spot_the_ai",
+          "xp": 2,
+          "prompt": "Identify which system uses modern dynamic scheduling to solve the serving bottleneck:",
+          "options": [
+            {
+              "text": "A server that waits until exactly 8 requests arrive before running any generation.",
+              "id": "sai1",
+              "correct": false
+            },
+            {
+              "text": "A scheduler that groups incoming prompts of different lengths on the fly to maximize GPU use.",
+              "id": "sai2",
+              "correct": true
+            },
+            {
+              "text": "A system that only allows one user to generate text at a time.",
+              "id": "sai3",
+              "correct": false
+            }
+          ],
+          "explain": "The AI response is the one that dynamically adapts to incoming requests rather than waiting for fixed slots or processing them purely one by one."
+        }
+      ]
+    },
+    {
+      "type": "boss",
+      "exercises": [
+        {
+          "id": "b1",
+          "type": "multiple_choice",
+          "xp": 5,
+          "prompt": "Your AI application is experiencing massive user queues because the server waits for a fixed number of users to submit prompts before running a batch. How should you fix this serving bottleneck?",
+          "options": [
+            {
+              "id": "opt1",
+              "correct": false,
+              "text": "Use static batching to keep batch sizes identical at all times"
+            },
+            {
+              "text": "Implement dynamic scheduling to group and process requests as they arrive",
+              "id": "opt2",
+              "correct": true
+            },
+            {
+              "id": "opt3",
+              "correct": false,
+              "text": "Increase the size of individual model parameters to speed up processing"
+            },
+            {
+              "text": "Turn off token streaming to save memory bandwidth",
+              "id": "opt4",
+              "correct": false
+            }
+          ],
+          "explain": "Dynamic scheduling allows the serving system to group incoming requests together on the fly and stream back tokens as they are ready, bypassing the massive queue delays caused by waiting to fill static batch batches."
+        }
+      ]
+    }
+  ]
+}

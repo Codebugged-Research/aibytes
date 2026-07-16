@@ -1,0 +1,223 @@
+{
+  "id": "u362-l2",
+  "unit": 362,
+  "day": 1812,
+  "tier": "Large Language Models",
+  "tierIcon": "🤖",
+  "title": "Loss Masking in SFT",
+  "icon": "😷",
+  "concept": "Masking out the instruction tokens during loss calculation ensures the model isn't penalized for how the user prompt was written, only for its own response.",
+  "xp": 15,
+  "hearts": 3,
+  "estMinutes": 7,
+  "segments": [
+    {
+      "type": "warmup",
+      "exercises": [
+        {
+          "id": "w1",
+          "type": "multiple_choice",
+          "xp": 1,
+          "prompt": "Before we mask loss, let's recap: what is the main goal of Supervised Fine-Tuning (SFT)?",
+          "options": [
+            {
+              "text": "To train an AI on how to respond correctly using high-quality examples.",
+              "correct": true,
+              "id": "w_1"
+            },
+            {
+              "correct": false,
+              "id": "w_2",
+              "text": "To make the AI run faster on mobile phones."
+            },
+            {
+              "text": "To block the AI from seeing any user input.",
+              "id": "w_3",
+              "correct": false
+            }
+          ],
+          "explain": "Supervised Fine-Tuning (SFT) uses high-quality prompt-response pairs to teach an AI how to behave like a helpful assistant."
+        }
+      ]
+    },
+    {
+      "type": "teach",
+      "cards": [
+        {
+          "kind": "hook",
+          "icon": "🎯",
+          "title": "Only Grade the Answers!",
+          "body": "When training an AI, we want it to learn how to answer questions, not how to write the questions themselves! How do we make sure the AI only studies the answers during training? We use a clever trick called Loss Masking."
+        },
+        {
+          "kind": "definition",
+          "icon": "😷",
+          "title": "What is Loss Masking?",
+          "body": "Loss masking is a training technique in AI where we tell the computer to calculate error scores (loss) only on the bot's responses. The prompt tokens are ignored (masked out) during this calculation so the AI isn't trained to repeat or predict the user's prompt."
+        },
+        {
+          "kind": "analogy",
+          "icon": "🐝",
+          "title": "The Spelling Bee Judge",
+          "body": "Imagine you are practicing for a spelling bee. If the judge reads a word aloud, you shouldn't be graded on how well the judge pronounced the word. You should only be graded on how you spell it! Loss masking is like ignoring the judge's voice and only grading your actual spelling."
+        },
+        {
+          "kind": "example",
+          "icon": "📝",
+          "title": "Masking in Action",
+          "body": "Without masking, if a prompt says \"Translate 'hello' to Spanish:\", the AI is graded on predicting the word \"Translate\". With loss masking, the training ignores those prompt words and only grades the AI on how correctly it predicts the response: \"Hola\"."
+        },
+        {
+          "kind": "mythbust",
+          "icon": "🕵️",
+          "title": "The \"Invisible Prompt\" Myth",
+          "body": "Some think loss masking means the AI cannot see the prompt at all during training. That's not true! The AI still reads the prompt to understand the context; it just isn't graded or penalized on predicting those prompt words."
+        },
+        {
+          "kind": "visual",
+          "icon": "⚖️",
+          "title": "Masked vs. Unmasked",
+          "body": "Compare how the training system treats tokens (words) with and without loss masking. Notice where the active grading happens!",
+          "compare": {
+            "left": {
+              "tag": "No Masking",
+              "emoji": "❌",
+              "text": "Grades both the prompt: \"What is 2+2?\" and the response: \"4\". Wastes energy learning user styles."
+            },
+            "right": {
+              "tag": "With Loss Masking",
+              "emoji": "✅",
+              "text": "Ignores \"What is 2+2?\" and only grades \"4\". Focuses 100% on the correct response."
+            }
+          }
+        }
+      ]
+    },
+    {
+      "type": "practice",
+      "exercises": [
+        {
+          "id": "p1",
+          "type": "multiple_choice",
+          "xp": 2,
+          "prompt": "What happens if we do NOT mask the prompt tokens during training?",
+          "options": [
+            {
+              "correct": false,
+              "text": "The AI will forget how to read English entirely.",
+              "id": "mc_1"
+            },
+            {
+              "id": "mc_2",
+              "text": "The AI's responses will automatically become much longer.",
+              "correct": false
+            },
+            {
+              "text": "The AI will be penalized for prompt styles and waste effort learning to predict prompts.",
+              "id": "mc_3",
+              "correct": true
+            },
+            {
+              "correct": false,
+              "id": "mc_4",
+              "text": "Training will immediately crash with a memory error."
+            }
+          ],
+          "explain": "If we don't use loss masking, the model will waste its training capacity learning how to predict and repeat the user prompts, which makes training less efficient."
+        },
+        {
+          "id": "p2",
+          "type": "true_false",
+          "xp": 2,
+          "prompt": "True or False: Loss masking allows the AI to read the prompt, but prevents the AI from being graded on how it writes the prompt.",
+          "options": [
+            {
+              "correct": true,
+              "id": "tf_true",
+              "text": "True"
+            },
+            {
+              "text": "False",
+              "id": "tf_false",
+              "correct": false
+            }
+          ],
+          "explain": "Loss masking keeps the prompt visible as context, but prevents the model from being graded on predicting it."
+        },
+        {
+          "id": "p3",
+          "type": "fill_blank",
+          "xp": 2,
+          "prompt": "Fill in the blank to complete the explanation of loss calculation:",
+          "sentence": "During training, the user's prompt tokens are loss-_____ so the model only learns from its own answers.",
+          "blank": "masked",
+          "words": [
+            "masked",
+            "deleted",
+            "doubled",
+            "colored"
+          ],
+          "explain": "By masking out the prompt tokens (setting their loss weight to zero), the AI is only evaluated and trained on how well it outputs the response tokens."
+        },
+        {
+          "id": "p4",
+          "type": "spot_the_ai",
+          "xp": 2,
+          "prompt": "Identify which of these represents the internal configuration of a loss-masked training setup:",
+          "options": [
+            {
+              "text": "AI Bot: \"I will now copy your prompt word-for-word to get a perfect score.\"",
+              "correct": false,
+              "id": "sai_1"
+            },
+            {
+              "id": "sai_2",
+              "text": "Training Simulator: \"Target labels: [-100, -100, -100, 'Paris', 'is', 'nice'].\"",
+              "correct": true
+            },
+            {
+              "text": "Human Programmer: \"I want the AI to learn how to write the prompts too.\"",
+              "correct": false,
+              "id": "sai_3"
+            }
+          ],
+          "explain": "The AI bot generated the response with loss masking because it only focuses on answering the question, whereas the training simulator is showing the raw mathematical targets representing a masked prompt (indicated by -100 labels)."
+        }
+      ]
+    },
+    {
+      "type": "boss",
+      "exercises": [
+        {
+          "id": "b1",
+          "type": "multiple_choice",
+          "xp": 5,
+          "prompt": "You are setting up a Supervised Fine-Tuning (SFT) pipeline for a new helper bot. How does loss masking actually tell the computer to ignore the prompt during training?",
+          "options": [
+            {
+              "correct": false,
+              "text": "It deletes the user prompts from the dataset entirely.",
+              "id": "opt_1"
+            },
+            {
+              "id": "opt_2",
+              "text": "It sets the loss weight of prompt tokens to zero so the AI only learns from its responses.",
+              "correct": true
+            },
+            {
+              "correct": false,
+              "text": "It hides the user's prompt so the AI has to guess what the question was.",
+              "id": "opt_3"
+            },
+            {
+              "id": "opt_4",
+              "text": "It speeds up training by skipping the calculation of all words starting with 'M'.",
+              "correct": false
+            }
+          ],
+          "explain": "Loss masking ensures that during training, we set the target loss weights of the instruction tokens to 0. This forces the AI to only learn and improve on generating the response tokens, rather than memorizing the prompt."
+        }
+      ]
+    }
+  ]
+}

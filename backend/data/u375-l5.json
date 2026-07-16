@@ -1,0 +1,222 @@
+{
+  "id": "u375-l5",
+  "unit": 375,
+  "day": 1880,
+  "tier": "Large Language Models",
+  "tierIcon": "🤖",
+  "title": "Inference Optimization Dials",
+  "icon": "🌉",
+  "concept": "Optimizing inference requires balancing batch size, KV cache memory, and quantization choices. Boss explain ends with: 'Next up: Quantization (INT8/INT4).'",
+  "xp": 15,
+  "hearts": 3,
+  "estMinutes": 7,
+  "segments": [
+    {
+      "type": "warmup",
+      "exercises": [
+        {
+          "id": "w1",
+          "type": "multiple_choice",
+          "xp": 1,
+          "prompt": "What does 'inference' mean in the context of AI models?",
+          "options": [
+            {
+              "correct": false,
+              "id": "1",
+              "text": "Training a model on raw data"
+            },
+            {
+              "correct": true,
+              "text": "Running a trained model to generate answers",
+              "id": "2"
+            },
+            {
+              "text": "Writing the code for neural networks",
+              "id": "3",
+              "correct": false
+            }
+          ],
+          "explain": "Inference is the phase where a trained AI model actually runs to generate predictions or answers for users."
+        }
+      ]
+    },
+    {
+      "type": "teach",
+      "cards": [
+        {
+          "kind": "hook",
+          "icon": "🌉",
+          "title": "Speeding Up the Bridge",
+          "body": "Running giant AI models is incredibly expensive. If you don't optimize them, your app will be slow and your cloud bill will skyrocket! By tweaking three magic dials, we can serve thousands of users at lightning speed without buying more hardware."
+        },
+        {
+          "kind": "definition",
+          "icon": "🎛️",
+          "title": "What are Optimization Dials?",
+          "body": "Inference optimization is the process of adjusting software 'dials' to make AI models run faster and use less memory during real-time use. The three main dials are: Batch Size (how many requests we group together), KV Cache (memory storing past conversation context), and Quantization (shrinking the size of model weights)."
+        },
+        {
+          "kind": "analogy",
+          "icon": "🍕",
+          "title": "The Pizza Delivery Dilemma",
+          "body": "Imagine you run a pizza delivery shop. If you send a delivery driver out with just one pizza at a time (small batch), they travel fast but gas is expensive. If you wait until you have 10 pizzas (large batch), the driver is highly efficient, but the first customers have to wait longer. Batch size in AI is just like managing your delivery driver's route!"
+        },
+        {
+          "kind": "example",
+          "icon": "💬",
+          "title": "Serving 50 Users at Once",
+          "body": "Let's look at a real chatbot server. If 50 users message the bot at the same millisecond, the system groups (batches) their prompts together. It uses the KV cache to remember what they said two seconds ago so it doesn't have to re-read the whole chat. To fit all 50 users on one GPU, it uses a quantized (compressed) model."
+        },
+        {
+          "kind": "mythbust",
+          "icon": "💡",
+          "title": "The 'More Hardware' Myth",
+          "body": "Many beginners think that to make an AI model run faster, you just need a bigger, more expensive GPU. In reality, unoptimized models will easily crash even the most expensive hardware. Smart memory management (like KV caching) is far more effective than just throwing money at faster chips."
+        },
+        {
+          "kind": "visual",
+          "icon": "⚖️",
+          "title": "Latency vs. Throughput",
+          "body": "Depending on your application, you must choose whether to optimize for speed of a single response or the total volume of requests handled.",
+          "compare": {
+            "left": {
+              "text": "Small batch size, unquantized weights. Fast response for one user, but expensive.",
+              "tag": "Latency-Focused",
+              "emoji": "🏎️"
+            },
+            "right": {
+              "emoji": "🚌",
+              "text": "Large batch size, quantized weights. Handles many users at once, but slightly slower.",
+              "tag": "Throughput-Focused"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "type": "practice",
+      "exercises": [
+        {
+          "id": "p1",
+          "type": "multiple_choice",
+          "xp": 2,
+          "prompt": "What is the trade-off when you increase the batch size of an AI inference server?",
+          "options": [
+            {
+              "text": "It increases throughput but can increase latency for individual users.",
+              "correct": true,
+              "id": "a"
+            },
+            {
+              "text": "It makes the model use zero GPU memory.",
+              "correct": false,
+              "id": "b"
+            },
+            {
+              "text": "It reduces the accuracy of the model's answers.",
+              "id": "c",
+              "correct": false
+            },
+            {
+              "text": "It completely disables the need for a KV cache.",
+              "id": "d",
+              "correct": false
+            }
+          ],
+          "explain": "Larger batch sizes process more queries at the same time, maximizing hardware use (throughput), but individual users might wait slightly longer for their response to start (latency)."
+        },
+        {
+          "id": "p2",
+          "type": "true_false",
+          "xp": 2,
+          "prompt": "True or False: Quantization helps fit larger models onto smaller GPUs by compressing the model's weights.",
+          "options": [
+            {
+              "correct": true,
+              "id": "t",
+              "text": "True"
+            },
+            {
+              "id": "f",
+              "correct": false,
+              "text": "False"
+            }
+          ],
+          "explain": "Quantization reduces the precision of model weights (e.g., from 16-bit to 8-bit or 4-bit), which saves memory and speeds up computation."
+        },
+        {
+          "id": "p3",
+          "type": "fill_blank",
+          "xp": 2,
+          "prompt": "Fill in the blank with the correct term for saving conversation history in memory.",
+          "sentence": "To avoid recalculating past context, we save the keys and values of previous words in the ________.",
+          "blank": "KV cache",
+          "words": [
+            "KV cache",
+            "quantization",
+            "batch size"
+          ],
+          "explain": "The KV cache stores key-value states of past tokens so the AI doesn't have to process the entire history from scratch for every new word."
+        },
+        {
+          "id": "p4",
+          "type": "spot_the_ai",
+          "xp": 2,
+          "prompt": "Identify the correct statement about inference optimization:",
+          "options": [
+            {
+              "id": "a",
+              "correct": true,
+              "text": "KV cache saves previous token states to prevent redundant computations."
+            },
+            {
+              "correct": false,
+              "text": "Quantizing a model increases its mathematical precision and accuracy.",
+              "id": "b"
+            },
+            {
+              "text": "Smaller batch sizes are always better for maximizing GPU throughput.",
+              "correct": false,
+              "id": "c"
+            }
+          ],
+          "explain": "Option B is incorrect because quantization shrinks weights, which reduces accuracy slightly rather than increasing it. Option C is incorrect because smaller batch sizes reduce GPU utilization efficiency. Option A correctly describes the purpose of the KV cache."
+        }
+      ]
+    },
+    {
+      "type": "boss",
+      "exercises": [
+        {
+          "id": "b1",
+          "type": "multiple_choice",
+          "xp": 5,
+          "prompt": "You are ready to deploy a large language model to millions of users. What is the key takeaway for managing your hardware resources effectively?",
+          "options": [
+            {
+              "id": "opt_1",
+              "text": "Decreasing batch size always improves throughput and saves overall memory.",
+              "correct": false
+            },
+            {
+              "correct": true,
+              "text": "We must carefully balance batch size, KV cache limits, and quantization precision.",
+              "id": "opt_2"
+            },
+            {
+              "correct": false,
+              "id": "opt_3",
+              "text": "KV cache should always be stored on slow system RAM to save GPU memory space."
+            },
+            {
+              "correct": false,
+              "text": "Quantization makes models run slower but improves their output accuracy.",
+              "id": "opt_4"
+            }
+          ],
+          "explain": "Choosing the right batch size, keeping the KV cache in fast memory, and selecting the right quantization level are the three primary dials you can turn to optimize LLM performance. Next up: Quantization (INT8/INT4)."
+        }
+      ]
+    }
+  ]
+}

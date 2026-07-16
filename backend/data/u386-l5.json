@@ -1,0 +1,223 @@
+{
+  "id": "u386-l5",
+  "unit": 386,
+  "day": 1935,
+  "tier": "Large Language Models",
+  "tierIcon": "🤖",
+  "title": "Challenges in MoE Training",
+  "icon": "🌉",
+  "concept": "Training MoEs requires balancing expert workloads to prevent some experts from being neglected while others are overloaded. Boss explain ends with: 'Next up: Long-Context Architectures.'",
+  "xp": 15,
+  "hearts": 3,
+  "estMinutes": 7,
+  "segments": [
+    {
+      "type": "warmup",
+      "exercises": [
+        {
+          "id": "w1",
+          "type": "multiple_choice",
+          "xp": 1,
+          "prompt": "What is the primary challenge we face when training a Mixture of Experts (MoE) model?",
+          "options": [
+            {
+              "correct": true,
+              "id": "a",
+              "text": "Preventing some experts from being neglected while others are overloaded."
+            },
+            {
+              "correct": false,
+              "text": "Teaching the model to write code in multiple programming languages at once.",
+              "id": "b"
+            },
+            {
+              "correct": false,
+              "id": "c",
+              "text": "Making sure the model can run without any internet connection."
+            }
+          ],
+          "explain": "MoE training is tricky because the router tends to favor a few experts, leaving others unused. We must balance the workload."
+        }
+      ]
+    },
+    {
+      "type": "teach",
+      "cards": [
+        {
+          "kind": "hook",
+          "icon": "🌉",
+          "title": "The Laziness Trap",
+          "body": "Mixture of Experts models are powerful, but they have a hidden flaw: they are lazy learners! If we aren't careful, the router will choose the same two or three experts for everything, leaving the rest of the expensive brain power completely unused. Let's learn how we solve this challenge!"
+        },
+        {
+          "kind": "definition",
+          "icon": "⚖️",
+          "title": "What is Load Balancing?",
+          "body": "Training Mixture of Experts (MoE) models is tricky. If left alone, the routing network naturally sends most tokens to a few favorite experts, leaving the others untrained. To fix this, we use load balancing techniques—like adding a special penalty in the loss function—to encourage the router to distribute the workload evenly among all experts."
+        },
+        {
+          "kind": "analogy",
+          "icon": "🏫",
+          "title": "The Overloaded Tutor",
+          "body": "Imagine a classroom where students can ask four different specialized tutors for help. If all students queue up for the 'math tutor' while the 'history tutor' sits empty, the math tutor gets exhausted (overloaded) and the history tutor gets rusty (neglected). Training an MoE is like having a teacher who actively routes students so every tutor gets practice and nobody is waiting in a massive line!"
+        },
+        {
+          "kind": "example",
+          "icon": "📊",
+          "title": "The Empty Expert Problem",
+          "body": "During training, if a router sends 90% of the sentences to Expert A and 0% to Expert B, Expert B never learns anything useful. By introducing an auxiliary loss, the model gets penalized for uneven routing, forcing it to try sending different tokens to Expert B, making it an expert in a different topic."
+        },
+        {
+          "kind": "mythbust",
+          "icon": "🔍",
+          "title": "Myth: Experts Balance Themselves",
+          "body": "Many believe that MoE models automatically distribute work evenly because they have many experts. In reality, without special balancing rules, the router suffers from a 'rich-get-richer' effect, focusing only on a few experts while completely wasting the rest of the network's capacity."
+        },
+        {
+          "kind": "visual",
+          "icon": "📈",
+          "title": "Workload Distribution",
+          "body": "Let's look at how workloads can be distributed. If we don't guide the router, work piles up in one place. With balancing, the work is shared.",
+          "compare": {
+            "left": {
+              "text": "Expert A receives 95% of tokens. Expert B sits idle and learns nothing.",
+              "emoji": "⚠️",
+              "tag": "Unbalanced MoE"
+            },
+            "right": {
+              "emoji": "✅",
+              "tag": "Balanced MoE",
+              "text": "Tokens are distributed evenly. Both experts learn different skills."
+            }
+          }
+        }
+      ]
+    },
+    {
+      "type": "practice",
+      "exercises": [
+        {
+          "id": "p1",
+          "type": "multiple_choice",
+          "xp": 2,
+          "prompt": "What is the main danger of an unbalanced Mixture of Experts (MoE) system during training?",
+          "options": [
+            {
+              "correct": false,
+              "id": "a",
+              "text": "The model will run out of hard drive space instantly."
+            },
+            {
+              "id": "b",
+              "correct": true,
+              "text": "A few experts get overloaded while others are neglected and remain untrained."
+            },
+            {
+              "text": "The experts will start giving conflicting answers to the user.",
+              "id": "c",
+              "correct": false
+            },
+            {
+              "text": "The model forgets how to do basic math.",
+              "correct": false,
+              "id": "d"
+            }
+          ],
+          "explain": "If a few experts do all the work, they become overloaded (slowing down training), while the neglected experts remain untrained and useless."
+        },
+        {
+          "id": "p2",
+          "type": "true_false",
+          "xp": 2,
+          "prompt": "True or False: An MoE model will naturally balance its own workload perfectly without any special training rules.",
+          "options": [
+            {
+              "correct": false,
+              "id": "a",
+              "text": "True"
+            },
+            {
+              "correct": true,
+              "text": "False",
+              "id": "b"
+            }
+          ],
+          "explain": "Without an auxiliary loss or balancing mechanism, the router will naturally gravitate towards using the same few experts for everything, leaving others untrained."
+        },
+        {
+          "id": "p3",
+          "type": "fill_blank",
+          "xp": 2,
+          "prompt": "Fill in the missing word to complete the description of MoE training:",
+          "sentence": "We use load ___ to ensure that all experts get trained equally.",
+          "blank": "balancing",
+          "words": [
+            "balancing",
+            "pruning",
+            "skipping",
+            "routing"
+          ],
+          "explain": "Load balancing forces the routing network to send work to all experts, preventing some from being neglected and others from getting overloaded."
+        },
+        {
+          "id": "p4",
+          "type": "spot_the_ai",
+          "xp": 2,
+          "prompt": "Which of these scenarios describes an AI system actively balancing its expert workloads?",
+          "options": [
+            {
+              "text": "A router that sends every single sentence to the first expert because it is the fastest.",
+              "id": "a",
+              "correct": false
+            },
+            {
+              "text": "A router that tracks how often each expert is used and penalizes itself when some experts are ignored.",
+              "id": "b",
+              "correct": true
+            },
+            {
+              "correct": false,
+              "id": "c",
+              "text": "A system that randomly deletes half of its experts to make the file size smaller."
+            }
+          ],
+          "explain": "A human load-balancer actively adjusts task distribution, which is what the router's auxiliary loss does in an MoE model to prevent expert neglect."
+        }
+      ]
+    },
+    {
+      "type": "boss",
+      "exercises": [
+        {
+          "id": "b1",
+          "type": "multiple_choice",
+          "xp": 5,
+          "prompt": "How does an MoE model actively prevent some experts from being completely neglected during training?",
+          "options": [
+            {
+              "correct": false,
+              "id": "a",
+              "text": "A load balancer is only used during inference, not during training."
+            },
+            {
+              "correct": true,
+              "id": "b",
+              "text": "It uses an auxiliary loss function to penalize routing that favors only a few experts."
+            },
+            {
+              "id": "c",
+              "correct": false,
+              "text": "It shuts down the quietest experts to save electricity."
+            },
+            {
+              "correct": false,
+              "text": "It forces every single expert to process every token.",
+              "id": "d"
+            }
+          ],
+          "explain": "Superb work! You now understand the balancing act required to train Mixture of Experts successfully. Next up: Long-Context Architectures."
+        }
+      ]
+    }
+  ]
+}

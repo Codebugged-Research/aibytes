@@ -1,0 +1,222 @@
+{
+  "id": "u362-l1",
+  "unit": 362,
+  "day": 1811,
+  "tier": "Large Language Models",
+  "tierIcon": "🤖",
+  "title": "The SFT Training Loop",
+  "icon": "🎯",
+  "concept": "SFT uses standard teacher forcing (callback to Unit 262) on the response tokens, updating the model's weights to mimic the target assistant style.",
+  "xp": 15,
+  "hearts": 3,
+  "estMinutes": 7,
+  "segments": [
+    {
+      "type": "warmup",
+      "exercises": [
+        {
+          "id": "w1",
+          "type": "multiple_choice",
+          "xp": 1,
+          "prompt": "What is the main goal of Supervised Fine-Tuning (SFT)?",
+          "options": [
+            {
+              "id": "w1",
+              "correct": true,
+              "text": "To teach the model how to act like a helpful assistant using examples"
+            },
+            {
+              "text": "To make the model run faster on mobile screens",
+              "id": "w2",
+              "correct": false
+            },
+            {
+              "correct": false,
+              "text": "To delete the model's vocabulary",
+              "id": "w3"
+            }
+          ],
+          "explain": "SFT (Supervised Fine-Tuning) is the step where we train a model on high-quality demonstrations to teach it how to behave like a helpful assistant."
+        }
+      ]
+    },
+    {
+      "type": "teach",
+      "cards": [
+        {
+          "kind": "hook",
+          "icon": "🎬",
+          "title": "Inside the Training Loop",
+          "body": "We have collected thousands of perfect assistant answers. But how does a raw AI model actually look at these examples and change its brain to match their style? Let's step inside the training loop to see how standard 'teacher forcing' guides the way!"
+        },
+        {
+          "kind": "definition",
+          "icon": "🎯",
+          "title": "What is the SFT Training Loop?",
+          "body": "Supervised Fine-Tuning (SFT) uses a method called Teacher Forcing. During training, the model predicts the next token in the assistant's response. Even if it makes a mistake, we instantly feed it the correct target token from our dataset for the next step, calculating loss only on the response tokens to update its weights."
+        },
+        {
+          "kind": "analogy",
+          "icon": "🍰",
+          "title": "The Baking Coach",
+          "body": "Imagine teaching someone to bake by showing them a recipe and immediately putting your hands over theirs to guide the mixing bowl. Every time they start to drift off course, you gently nudge them back onto the path. Standard SFT does exactly this—it guides the model's 'hand' token-by-token so it learns the perfect rhythm of a helpful assistant."
+        },
+        {
+          "kind": "example",
+          "icon": "💡",
+          "title": "Step-by-Step Training",
+          "body": "Suppose our target response is 'The capital of France is Paris.' \n\n1. The model predicts the word after 'capital'.\n2. It guesses 'of'. (Correct!)\n3. Next, it guesses 'Rome' instead of 'France'.\n4. Instead of letting it continue guessing based on 'Rome', we force the correct token 'France' into its memory for the next prediction and penalize the mistake."
+        },
+        {
+          "kind": "mythbust",
+          "icon": "🛡️",
+          "title": "The Entire Chat Update Myth",
+          "body": "Many believe the model updates its weights on the entire text, including the user's prompt. In reality, we mask out the prompt tokens! The model is only graded and updated on how well it predicts the assistant's response tokens."
+        },
+        {
+          "kind": "visual",
+          "icon": "👁️",
+          "title": "What the Loop Sees",
+          "body": "Here is how the training loop handles the different parts of a training conversation. We only calculate loss where we want the model to learn the assistant's style.",
+          "compare": {
+            "left": {
+              "text": "Masked out. No loss calculated, no weight updates.",
+              "emoji": "❓",
+              "tag": "Prompt Tokens"
+            },
+            "right": {
+              "emoji": "🎯",
+              "tag": "Response Tokens",
+              "text": "Loss calculated, teacher forcing applied, weights updated!"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "type": "practice",
+      "exercises": [
+        {
+          "id": "p1",
+          "type": "multiple_choice",
+          "xp": 2,
+          "prompt": "Why do we use 'teacher forcing' in the SFT training loop?",
+          "options": [
+            {
+              "text": "It feeds the correct target token at each step, preventing the model from drifting.",
+              "id": "mc_1",
+              "correct": true
+            },
+            {
+              "id": "mc_2",
+              "text": "It forces the human trainer to write code during the training loop.",
+              "correct": false
+            },
+            {
+              "id": "mc_3",
+              "text": "It randomly deletes tokens to make the training harder.",
+              "correct": false
+            },
+            {
+              "correct": false,
+              "text": "It prevents the weights from changing at all.",
+              "id": "mc_4"
+            }
+          ],
+          "explain": "Teacher forcing corrects the model's path immediately at each step by feeding it the true target word from the training data, rather than letting it drift using its own bad predictions."
+        },
+        {
+          "id": "p2",
+          "type": "true_false",
+          "xp": 2,
+          "prompt": "SFT updates the model's weights to mimic the target assistant style by training on response tokens.",
+          "options": [
+            {
+              "text": "True",
+              "correct": true,
+              "id": "tf_true"
+            },
+            {
+              "correct": false,
+              "text": "False",
+              "id": "tf_false"
+            }
+          ],
+          "explain": "SFT uses standard teacher forcing to update the weights based on how well the model mimics the target assistant's response tokens."
+        },
+        {
+          "id": "p3",
+          "type": "fill_blank",
+          "xp": 2,
+          "prompt": "Fill in the missing term for the training technique used in SFT:",
+          "sentence": "SFT training keeps the model on track by using teacher [blank] to feed the correct next token.",
+          "blank": "forcing",
+          "words": [
+            "forcing",
+            "guessing",
+            "stopping"
+          ],
+          "explain": "Teacher forcing keeps the model on the right track during SFT by feeding it the correct target tokens, even if its own predictions were wrong."
+        },
+        {
+          "id": "p4",
+          "type": "spot_the_ai",
+          "xp": 2,
+          "prompt": "If the training example is 'User: Translate: Hello | Assistant: Bonjour', which tokens are used to calculate the loss and update the weights?",
+          "options": [
+            {
+              "text": "Both the prompt and the response tokens",
+              "correct": false,
+              "id": "sai_1"
+            },
+            {
+              "id": "sai_2",
+              "text": "Only the response tokens ('Bonjour')",
+              "correct": true
+            },
+            {
+              "correct": false,
+              "id": "sai_3",
+              "text": "Only the prompt tokens ('Translate: Hello')"
+            }
+          ],
+          "explain": "The prompt tokens ('Translate: Hello') are just context, so their loss is ignored. We only calculate loss and update weights on the target assistant tokens ('Bonjour')."
+        }
+      ]
+    },
+    {
+      "type": "boss",
+      "exercises": [
+        {
+          "id": "b1",
+          "type": "multiple_choice",
+          "xp": 5,
+          "prompt": "If we feed the training loop a sequence containing both a User Prompt and an Assistant Response, how are the model's weights updated?",
+          "options": [
+            {
+              "id": "opt_1",
+              "text": "We update weights on both the user prompt and the assistant response.",
+              "correct": false
+            },
+            {
+              "id": "opt_2",
+              "correct": true,
+              "text": "We mask the prompt tokens and only update weights based on the assistant's response tokens."
+            },
+            {
+              "text": "We only update weights on the prompt tokens and ignore the response.",
+              "id": "opt_3",
+              "correct": false
+            },
+            {
+              "correct": false,
+              "text": "We randomly update weights across the entire conversation.",
+              "id": "opt_4"
+            }
+          ],
+          "explain": "During SFT, we calculate loss and update the weights only on the assistant's response tokens (the green light). The prompt tokens are just context and are ignored (masked) when updating the model's weights."
+        }
+      ]
+    }
+  ]
+}

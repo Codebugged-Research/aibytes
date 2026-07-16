@@ -1,0 +1,223 @@
+{
+  "id": "u368-l3",
+  "unit": 368,
+  "day": 1843,
+  "tier": "Large Language Models",
+  "tierIcon": "🤖",
+  "title": "DPO Loss Math, Conceptually",
+  "icon": "🔢",
+  "concept": "The loss increases the probability of the chosen response and decreases the rejected response, scaled by their ratio under the starting reference model.",
+  "xp": 15,
+  "hearts": 3,
+  "estMinutes": 7,
+  "segments": [
+    {
+      "type": "warmup",
+      "exercises": [
+        {
+          "id": "w1",
+          "type": "multiple_choice",
+          "xp": 1,
+          "prompt": "To calculate preference loss, DPO compares which two things?",
+          "options": [
+            {
+              "text": "A preferred response and a rejected response",
+              "id": "opt1",
+              "correct": true
+            },
+            {
+              "text": "Two identical correct answers",
+              "correct": false,
+              "id": "opt2"
+            },
+            {
+              "correct": false,
+              "id": "opt3",
+              "text": "A list of random numbers"
+            }
+          ],
+          "explain": "DPO works by directly optimizing the model using pairs of chosen (preferred) and rejected (disliked) responses."
+        }
+      ]
+    },
+    {
+      "type": "teach",
+      "cards": [
+        {
+          "kind": "hook",
+          "icon": "🕵️‍♂️",
+          "title": "Inside the Math",
+          "body": "We know Direct Preference Optimization (DPO) helps AIs learn what humans prefer. But how does it actually calculate the math behind its decisions? Let's peek under the hood at how DPO balances its rewards!"
+        },
+        {
+          "kind": "definition",
+          "icon": "🔢",
+          "title": "What is DPO Loss?",
+          "body": "DPO loss is a mathematical score that tells the AI how to improve. It looks at the probability of a preferred response versus a rejected one. Crucially, it divides these by the probabilities from the original reference model, ensuring the AI learns to favor the good answer without drifting too far from its original setup."
+        },
+        {
+          "kind": "analogy",
+          "icon": "🐶",
+          "title": "The Dog & The Cookie",
+          "body": "Think of training an AI like teaching a dog to choose a healthy treat over a cookie. If the dog is already naturally tempted by the cookie, you need a stronger nudge to correct it. If the dog already preferred the healthy treat, you only need a tiny reward. The starting model acts like the dog's natural temptation, telling us how hard we need to nudge!"
+        },
+        {
+          "kind": "example",
+          "icon": "✍️",
+          "title": "Loss in Action",
+          "body": "Imagine a user asks: 'Write a poem.'\nThe AI generates Response A (Good) and Response B (Bad).\nIf the reference model thought both were equally likely, DPO applies a standard push.\nBut if the reference model strongly favored the bad Response B, the loss calculation applies a much larger correction to fix this bias."
+        },
+        {
+          "kind": "mythbust",
+          "icon": "🛡️",
+          "title": "Not Just Wild Guesses",
+          "body": "People think that DPO just pumps up the probability of the chosen response to 100%. In reality, it keeps things balanced. By using the reference model as a anchor, DPO prevents the AI from becoming overconfident or forgetting its original language skills."
+        },
+        {
+          "kind": "visual",
+          "icon": "📊",
+          "title": "Probability Shift",
+          "body": "DPO updates the model by comparing the new probability of a response to its old probability in the reference model.",
+          "compare": {
+            "left": {
+              "tag": "Chosen Response",
+              "emoji": "🟢",
+              "text": "Probability goes UP compared to the reference model."
+            },
+            "right": {
+              "tag": "Rejected Response",
+              "text": "Probability goes DOWN compared to the reference model.",
+              "emoji": "🔴"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "type": "practice",
+      "exercises": [
+        {
+          "id": "p1",
+          "type": "multiple_choice",
+          "xp": 2,
+          "prompt": "What is the primary goal of the DPO loss calculation?",
+          "options": [
+            {
+              "id": "opt1",
+              "correct": true,
+              "text": "Increase chosen, decrease rejected"
+            },
+            {
+              "text": "Decrease chosen, increase rejected",
+              "id": "opt2",
+              "correct": false
+            },
+            {
+              "correct": false,
+              "text": "Make both responses equally likely",
+              "id": "opt3"
+            },
+            {
+              "id": "opt4",
+              "correct": false,
+              "text": "Delete both responses from memory"
+            }
+          ],
+          "explain": "The DPO loss function is designed to make preferred (chosen) responses more likely to be generated, while decreasing the probability of the rejected ones."
+        },
+        {
+          "id": "p2",
+          "type": "true_false",
+          "xp": 2,
+          "prompt": "True or False: If the reference model already preferred the chosen response, DPO requires less adjustment.",
+          "options": [
+            {
+              "correct": true,
+              "text": "True",
+              "id": "true_id"
+            },
+            {
+              "text": "False",
+              "correct": false,
+              "id": "false_id"
+            }
+          ],
+          "explain": "If the AI already preferred the chosen response, the reference ratio is high, meaning only a small correction (loss) is needed."
+        },
+        {
+          "id": "p3",
+          "type": "fill_blank",
+          "xp": 2,
+          "prompt": "Fill in the missing word to describe how DPO compares the new model to the reference model.",
+          "sentence": "DPO calculates updates by looking at the probability ratio under the reference model.",
+          "blank": "ratio",
+          "words": [
+            "addition",
+            "ratio",
+            "subtraction",
+            "sum"
+          ],
+          "explain": "DPO compares the current model's probabilities against the reference model's probabilities. This comparison is calculated as a ratio."
+        },
+        {
+          "id": "p4",
+          "type": "spot_the_ai",
+          "xp": 2,
+          "prompt": "Which system correctly describes DPO loss calculation?",
+          "options": [
+            {
+              "id": "sys_a",
+              "correct": false,
+              "text": "System A: 'I increase the probability of preferred answers blindly, ignoring how the starting model behaved.'"
+            },
+            {
+              "id": "sys_b",
+              "correct": true,
+              "text": "System B: 'I scale the probability updates based on the ratio of the starting reference model.'"
+            },
+            {
+              "id": "sys_c",
+              "correct": false,
+              "text": "System C: 'I train a separate reward model first, then run reinforcement learning.'"
+            }
+          ],
+          "explain": "System B is correct because DPO loss scales updates based on the starting reference model to avoid over-adjusting. System A ignores this reference, and System C relies on a separate reward model (like RLHF), which DPO avoids."
+        }
+      ]
+    },
+    {
+      "type": "boss",
+      "exercises": [
+        {
+          "id": "b1",
+          "type": "multiple_choice",
+          "xp": 5,
+          "prompt": "Why does DPO need the starting 'reference' model when calculating the loss value?",
+          "options": [
+            {
+              "id": "opt1",
+              "correct": true,
+              "text": "It scales the update based on how likely the reference model already found the two answers."
+            },
+            {
+              "id": "opt2",
+              "correct": false,
+              "text": "It completely deletes the reference model to save memory space."
+            },
+            {
+              "correct": false,
+              "text": "It forces the AI to only output the exact average length of both responses.",
+              "id": "opt3"
+            },
+            {
+              "id": "opt4",
+              "correct": false,
+              "text": "It calculates the mathematical average of the user's rating stars."
+            }
+          ],
+          "explain": "The DPO loss function uses the starting reference model to see how much the AI naturally preferred one answer over the other, ensuring we only update the weights as much as necessary to make the good response more likely than the bad one."
+        }
+      ]
+    }
+  ]
+}

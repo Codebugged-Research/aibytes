@@ -1,0 +1,223 @@
+{
+  "id": "u367-l3",
+  "unit": 367,
+  "day": 1838,
+  "tier": "Large Language Models",
+  "tierIcon": "🤖",
+  "title": "The KL Divergence Penalty in PPO",
+  "icon": "📏",
+  "concept": "To prevent the actor from drifting too far from the starting SFT model, PPO adds a KL penalty between the active policy and reference policy.",
+  "xp": 15,
+  "hearts": 3,
+  "estMinutes": 7,
+  "segments": [
+    {
+      "type": "warmup",
+      "exercises": [
+        {
+          "id": "w1",
+          "type": "multiple_choice",
+          "xp": 1,
+          "prompt": "What serves as the 'reference model' when calculating the KL penalty in PPO?",
+          "options": [
+            {
+              "id": "opt1",
+              "text": "The starting SFT (Supervised Fine-Tuned) model",
+              "correct": true
+            },
+            {
+              "text": "A completely random untrained model",
+              "id": "opt2",
+              "correct": false
+            },
+            {
+              "id": "opt3",
+              "text": "An external web search database",
+              "correct": false
+            }
+          ],
+          "explain": "Supervised Fine-Tuning (SFT) provides the high-quality starting point. We want to improve this model using PPO without losing the general knowledge and formatting it learned during SFT."
+        }
+      ]
+    },
+    {
+      "type": "teach",
+      "cards": [
+        {
+          "kind": "hook",
+          "icon": "⚓",
+          "title": "Preventing AI Drift",
+          "body": "When teaching an AI model using reinforcement learning (PPO), we want it to get better at satisfying users. But without boundaries, the model might cheat the reward system and drift into generating nonsensical, repetitive text. How do we keep it grounded?"
+        },
+        {
+          "kind": "definition",
+          "icon": "📏",
+          "title": "What is the KL Penalty?",
+          "body": "The KL divergence penalty is a mathematical constraint added to the PPO loss function. It compares the active policy (the model currently learning) against a frozen reference policy (the original SFT model). If the active model changes its mind too much compared to the reference, it gets penalized."
+        },
+        {
+          "kind": "analogy",
+          "icon": "🐕",
+          "title": "The Training Leash",
+          "body": "Imagine training a dog to do new tricks using a long leash. The dog is our active AI model learning new behaviors, and the post you tied the leash to is the original SFT model. The leash represents the KL penalty. It lets the dog move and learn, but stops it from running so far away that it completely forgets its initial good behavior."
+        },
+        {
+          "kind": "example",
+          "icon": "💬",
+          "title": "Preventing Gibberish",
+          "body": "When fine-tuning a helpful chatbot, if we only reward short answers, the model might start outputting gibberish like 'Yes yes yes' to get quick rewards. The KL penalty detects that 'Yes yes yes' has a drastically different probability profile than the original SFT model's output, and penalizes the action, keeping the bot coherent."
+        },
+        {
+          "kind": "mythbust",
+          "icon": "🛡️",
+          "title": "Does it block learning?",
+          "body": "Many believe that a KL penalty completely stops the model from learning anything new. In reality, it doesn't freeze the model; it simply ensures the model stays within a 'safe zone' near its original conversational capabilities while optimizing for rewards."
+        },
+        {
+          "kind": "visual",
+          "icon": "⚖️",
+          "title": "Stable vs. Unstable Training",
+          "body": "Comparing how the training behaves with and without the protective KL penalty boundaries.",
+          "compare": {
+            "left": {
+              "emoji": "🚀",
+              "tag": "With KL Penalty",
+              "text": "Stable updates. The model explores new behaviors while remaining coherent and close to its helpful SFT foundations."
+            },
+            "right": {
+              "emoji": "💥",
+              "text": "Policy collapse. The model exploits rewards by outputting repetitive gibberish, drifting far from natural language.",
+              "tag": "Without KL Penalty"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "type": "practice",
+      "exercises": [
+        {
+          "id": "p1",
+          "type": "multiple_choice",
+          "xp": 2,
+          "prompt": "Why do we add a KL divergence penalty to the PPO objective?",
+          "options": [
+            {
+              "correct": false,
+              "text": "To make the model generate text much faster.",
+              "id": "a"
+            },
+            {
+              "text": "To prevent the model from drifting too far from the safe, original SFT model.",
+              "id": "b",
+              "correct": true
+            },
+            {
+              "id": "c",
+              "text": "To completely replace human feedback during training.",
+              "correct": false
+            },
+            {
+              "text": "To make the model forget its previous training on purpose.",
+              "correct": false,
+              "id": "d"
+            }
+          ],
+          "explain": "The KL penalty acts as a safeguard. Without it, the policy could update too drastically during optimization, leading to collapsed outputs or gibberish that exploits the reward model."
+        },
+        {
+          "id": "p2",
+          "type": "true_false",
+          "xp": 2,
+          "prompt": "True or False: A lower KL divergence value means the active policy is behaving similarly to the reference policy.",
+          "options": [
+            {
+              "correct": true,
+              "text": "True",
+              "id": "true_val"
+            },
+            {
+              "text": "False",
+              "id": "false_val",
+              "correct": false
+            }
+          ],
+          "explain": "A lower KL divergence indicates that the active model's output probabilities are very close to the reference model, meaning it has not drifted far."
+        },
+        {
+          "id": "p3",
+          "type": "fill_blank",
+          "xp": 2,
+          "prompt": "Fill in the missing word to describe the two policies compared by the KL penalty.",
+          "sentence": "The KL penalty compares the active policy with the original frozen ______ policy.",
+          "blank": "reference",
+          "words": [
+            "reference",
+            "reward",
+            "critic",
+            "environment"
+          ],
+          "explain": "The KL penalty measures the difference between the active policy currently undergoing training and the stable reference (SFT) policy."
+        },
+        {
+          "id": "p4",
+          "type": "spot_the_ai",
+          "xp": 2,
+          "prompt": "Identify which explanation of KL divergence output comparison is incorrect or AI-generated:",
+          "options": [
+            {
+              "id": "opt_a",
+              "correct": false,
+              "text": "The active model outputs 'Hello! How can I assist you today?' while the reference model outputs 'Hello there! What can I help you with?' -> Low KL divergence."
+            },
+            {
+              "correct": true,
+              "id": "opt_b",
+              "text": "The active model outputs 'The the the the' because it has a high spelling mistake count -> High KL divergence."
+            },
+            {
+              "correct": false,
+              "id": "opt_c",
+              "text": "The active model outputs 'Click here buy now cheap' instead of conversational answers -> High KL divergence from SFT."
+            }
+          ],
+          "explain": "The second option is AI-generated nonsense. KL divergence measures differences in probability distributions, not physical character changes or spelling mistakes."
+        }
+      ]
+    },
+    {
+      "type": "boss",
+      "exercises": [
+        {
+          "id": "b1",
+          "type": "multiple_choice",
+          "xp": 5,
+          "prompt": "How does the KL divergence penalty actually get applied during the PPO training step?",
+          "options": [
+            {
+              "correct": false,
+              "text": "It speeds up the training process by bypassing the reference model entirely.",
+              "id": "opt1"
+            },
+            {
+              "id": "opt2",
+              "text": "It subtracts a value from the reward based on how much the active policy's outputs drift from the reference policy's outputs.",
+              "correct": true
+            },
+            {
+              "text": "It forces the reference model to continuously update its weights to match the active model.",
+              "id": "opt3",
+              "correct": false
+            },
+            {
+              "id": "opt4",
+              "correct": false,
+              "text": "It replaces the reward signal completely with a fixed probability distance metric."
+            }
+          ],
+          "explain": "A KL divergence penalty acts as a constraint in the PPO reward function. If the active model generates probabilities that are too different from the reference SFT model, the penalty increases, reducing the total reward and keeping the update stable."
+        }
+      ]
+    }
+  ]
+}

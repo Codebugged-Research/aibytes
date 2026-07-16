@@ -1,0 +1,222 @@
+{
+  "id": "u375-l3",
+  "unit": 375,
+  "day": 1878,
+  "tier": "Large Language Models",
+  "tierIcon": "🤖",
+  "title": "The Memory Cost of KV Caching",
+  "icon": "💸",
+  "concept": "While KV caching speeds up inference, the stored vectors consume huge GPU memory, limiting the number of concurrent user batches.",
+  "xp": 15,
+  "hearts": 3,
+  "estMinutes": 7,
+  "segments": [
+    {
+      "type": "warmup",
+      "exercises": [
+        {
+          "id": "w1",
+          "type": "multiple_choice",
+          "xp": 1,
+          "prompt": "In computing, what is the typical trade-off when you cache (save) data to make things run faster?",
+          "options": [
+            {
+              "id": "opt_1",
+              "correct": false,
+              "text": "It makes the AI smarter."
+            },
+            {
+              "text": "It consumes memory space.",
+              "id": "opt_2",
+              "correct": true
+            },
+            {
+              "correct": false,
+              "id": "opt_3",
+              "text": "It deletes the model weights."
+            }
+          ],
+          "explain": "While caching speeds up performance by skipping redundant math, it requires storing those calculations in memory."
+        }
+      ]
+    },
+    {
+      "type": "teach",
+      "cards": [
+        {
+          "kind": "hook",
+          "icon": "💸",
+          "title": "The Hidden Price of Speed",
+          "body": "We know that KV caching makes AI generation super fast. But speed isn't free! The secret bottleneck in modern AI systems isn't just processing power—it is the massive amount of memory needed to store those cached tokens. Let's find out why speed costs memory."
+        },
+        {
+          "kind": "definition",
+          "icon": "🧠",
+          "title": "What is the Memory Cost?",
+          "body": "The KV (Key-Value) cache stores previously calculated attention representations in the GPU's memory. This means the model doesn't have to recalculate past tokens for every new word it generates. However, keeping these vectors active consumes massive amounts of High Bandwidth Memory (HBM) on your GPU."
+        },
+        {
+          "kind": "analogy",
+          "icon": "🗂️",
+          "title": "The Sticky Note Desk",
+          "body": "Imagine you are a busy translator. Instead of looking up every common phrase in a dictionary over and over, you write them down on sticky notes and paste them all over your desk. It makes you translate much faster! But soon, your desk is completely covered in paper, leaving you no physical space to open new books. The sticky notes are the KV cache, and your desk is the GPU memory."
+        },
+        {
+          "kind": "example",
+          "icon": "💻",
+          "title": "The Batch Size Limit",
+          "body": "Imagine running a large language model with a batch size of 32 users. If each user has a long chat history of 4,000 tokens, the KV cache alone can take up gigabytes of GPU memory. If you run out of memory (Out of Memory error), the system crashes, meaning you have to reduce the batch size and serve fewer users at once."
+        },
+        {
+          "kind": "mythbust",
+          "icon": "🛡️",
+          "title": "Myth: Only Model Weights Matter",
+          "body": "People often think that model weights (the size of the AI file) are the only thing that fills up GPU memory. In reality, during active multi-user chats, the dynamic KV cache can actually grow to consume far more memory than the model itself!"
+        },
+        {
+          "kind": "visual",
+          "icon": "📊",
+          "title": "GPU Memory Breakdown",
+          "body": "Comparing how GPU memory is distributed with and without KV Caching during active multi-user inference.",
+          "compare": {
+            "right": {
+              "tag": "WITH CACHE",
+              "emoji": "🔥",
+              "text": "Memory holds both model weights and massive dynamic KV data. Fast generation speed, but high memory usage limits batch size."
+            },
+            "left": {
+              "tag": "NO CACHE",
+              "emoji": "💾",
+              "text": "Memory is mostly occupied only by the static model weights. Slow generation speed."
+            }
+          }
+        }
+      ]
+    },
+    {
+      "type": "practice",
+      "exercises": [
+        {
+          "id": "p1",
+          "type": "multiple_choice",
+          "xp": 2,
+          "prompt": "What is the main disadvantage or cost of using a KV cache?",
+          "options": [
+            {
+              "correct": true,
+              "text": "It uses up a large amount of GPU memory.",
+              "id": "opt_a"
+            },
+            {
+              "text": "It makes the text generation process slower.",
+              "id": "opt_b",
+              "correct": false
+            },
+            {
+              "correct": false,
+              "id": "opt_c",
+              "text": "It requires a constant internet connection."
+            },
+            {
+              "correct": false,
+              "text": "It permanently modifies the model's weights.",
+              "id": "opt_d"
+            }
+          ],
+          "explain": "The primary drawback of KV caching is its high memory footprint, which can easily fill up the GPU's VRAM."
+        },
+        {
+          "id": "p2",
+          "type": "true_false",
+          "xp": 2,
+          "prompt": "True or False: The memory cost of KV caching restricts the number of concurrent users a model can serve.",
+          "options": [
+            {
+              "text": "True",
+              "correct": true,
+              "id": "opt_true"
+            },
+            {
+              "text": "False",
+              "correct": false,
+              "id": "opt_false"
+            }
+          ],
+          "explain": "Because the KV cache takes up so much memory, it limits how many users can be served at the same time on a single GPU."
+        },
+        {
+          "id": "p3",
+          "type": "fill_blank",
+          "xp": 2,
+          "prompt": "Fill in the missing word to describe the trade-off of KV caching:",
+          "sentence": "KV caching trades GPU memory for generation speed.",
+          "blank": "memory",
+          "words": [
+            "memory",
+            "cores",
+            "storage"
+          ],
+          "explain": "The KV cache saves time by reusing calculations, but it pays for this speed by taking up a large amount of GPU memory."
+        },
+        {
+          "id": "p4",
+          "type": "spot_the_ai",
+          "xp": 2,
+          "prompt": "Which student correctly explains the KV cache tradeoff?",
+          "options": [
+            {
+              "correct": false,
+              "id": "opt_1",
+              "text": "\"We don't need KV caches anymore because newer GPUs have infinite memory anyway.\""
+            },
+            {
+              "id": "opt_2",
+              "text": "\"The KV cache stores text files on the hard drive to make the AI run offline.\"",
+              "correct": false
+            },
+            {
+              "id": "opt_3",
+              "correct": true,
+              "text": "\"Caching keys and values saves CPU/GPU calculation time, but it takes up a lot of active GPU memory.\""
+            }
+          ],
+          "explain": "AI models cannot generate responses faster without calculating tokens or caching. Option C describes the actual tradeoff: we cache keys and values to save processing time, which fills up memory."
+        }
+      ]
+    },
+    {
+      "type": "boss",
+      "exercises": [
+        {
+          "id": "b1",
+          "type": "multiple_choice",
+          "xp": 5,
+          "prompt": "Why does using a KV cache often force AI companies to limit the number of users who can chat with a model simultaneously?",
+          "options": [
+            {
+              "text": "It requires more CPU processing power to calculate.",
+              "correct": false,
+              "id": "opt_1"
+            },
+            {
+              "text": "It makes the model run much slower.",
+              "id": "opt_2",
+              "correct": false
+            },
+            {
+              "id": "opt_3",
+              "correct": true,
+              "text": "It fills up GPU memory, limiting the number of concurrent users."
+            },
+            {
+              "id": "opt_4",
+              "text": "It increases the disk storage space required to download the model weight files.",
+              "correct": false
+            }
+          ],
+          "explain": "While KV caching drastically speeds up generation by avoiding redundant math, saving those past keys and values consumes precious GPU memory. This directly limits how many separate user requests (batch size) a GPU can handle at the same time."
+        }
+      ]
+    }
+  ]
+}

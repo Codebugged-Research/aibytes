@@ -1,0 +1,223 @@
+{
+  "id": "u383-l5",
+  "unit": 383,
+  "day": 1920,
+  "tier": "Large Language Models",
+  "tierIcon": "🤖",
+  "title": "Diagnosing Forgetting in Production",
+  "icon": "🌉",
+  "concept": "Always evaluate fine-tuned models on a general benchmark (like MMLU) alongside your task-specific test set to catch regressions. Boss explain ends with: 'Next up: Model Merging & Soups.'",
+  "xp": 15,
+  "hearts": 3,
+  "estMinutes": 7,
+  "segments": [
+    {
+      "type": "warmup",
+      "exercises": [
+        {
+          "id": "w1",
+          "type": "multiple_choice",
+          "xp": 1,
+          "prompt": "What is a common risk when you fine-tune an AI model on a very deeply on a single specific task?",
+          "options": [
+            {
+              "correct": true,
+              "id": "w1",
+              "text": "It might lose some of its general knowledge."
+            },
+            {
+              "correct": false,
+              "text": "It automatically gets better at all tasks.",
+              "id": "w2"
+            },
+            {
+              "text": "Nothing, it only gets better.",
+              "id": "w3",
+              "correct": false
+            }
+          ],
+          "explain": "Fine-tuning teaches a model new tricks, but it can accidentally overwrite older, general knowledge. This is called forgetting."
+        }
+      ]
+    },
+    {
+      "type": "teach",
+      "cards": [
+        {
+          "kind": "hook",
+          "icon": "🌉",
+          "title": "Why Did My Model Forget?",
+          "body": "Your newly fine-tuned model is amazing at medical jargon, but it just failed a basic middle-school math question! Why does this happen, and how do we spot it before our users do? Let's learn how to diagnose forgetting in production."
+        },
+        {
+          "kind": "definition",
+          "icon": "🩺",
+          "title": "Diagnosing Forgetting",
+          "body": "When we fine-tune a model on a specific task, it can experience 'catastrophic forgetting' where it loses its general knowledge. To diagnose this, we must run evaluations on both our custom task-specific dataset and a general benchmark (like MMLU) to detect performance drops."
+        },
+        {
+          "kind": "analogy",
+          "icon": "👨‍🍳",
+          "title": "The Specialized Chef",
+          "body": "Imagine training a professional chef to bake the ultimate chocolate cake. You spend weeks perfecting their cake skills. But when you ask them to make a simple salad, they've completely forgotten how to chop lettuce! By keeping a standard cookbook (a general benchmark) on the counter, you can test them periodically to make sure their basic kitchen skills don't disappear while they specialize."
+        },
+        {
+          "kind": "example",
+          "icon": "💻",
+          "title": "The Forgotten English Case",
+          "body": "A team at a startup fine-tuned a model to write python code. It got 95% on their coding test. However, when they ran it against MMLU (a general knowledge benchmark), its score dropped from 70% to 30%. The model forgot how to write basic English! They caught this early because they ran both evaluations side-by-side."
+        },
+        {
+          "kind": "mythbust",
+          "icon": "🕵️‍♀️",
+          "title": "The Perfect Score Trap",
+          "body": "Myth: If my model gets a perfect score on my new dataset, it is 100% ready for production. Reality: It might have gotten 'smarter' at your task by wiping out its general reasoning abilities. You must test both!"
+        },
+        {
+          "kind": "visual",
+          "icon": "📊",
+          "title": "The Evaluation Dashboard",
+          "body": "Comparing a healthy specialized model vs one suffering from catastrophic forgetting.",
+          "compare": {
+            "right": {
+              "emoji": "🫠",
+              "text": "High score on specialized task BUT terrible score on general benchmarks.",
+              "tag": "Forgotten Model"
+            },
+            "left": {
+              "tag": "Healthy Model",
+              "text": "High score on specialized task AND high score on general benchmarks.",
+              "emoji": "🧠"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "type": "practice",
+      "exercises": [
+        {
+          "id": "p1",
+          "type": "multiple_choice",
+          "xp": 2,
+          "prompt": "Why is it important to evaluate your fine-tuned model on a general benchmark alongside your custom test set?",
+          "options": [
+            {
+              "correct": false,
+              "id": "mc1",
+              "text": "It makes the model train much faster."
+            },
+            {
+              "correct": true,
+              "id": "mc2",
+              "text": "It helps catch regressions and loss of general knowledge."
+            },
+            {
+              "id": "mc3",
+              "correct": false,
+              "text": "It automatically fixes formatting bugs in your dataset."
+            },
+            {
+              "text": "It guarantees the model will never make a mistake again.",
+              "correct": false,
+              "id": "mc4"
+            }
+          ],
+          "explain": "Evaluating a model on general benchmarks like MMLU helps you spot 'catastrophic forgetting' where the model loses its broad abilities while learning a specific task."
+        },
+        {
+          "id": "p2",
+          "type": "true_false",
+          "xp": 2,
+          "prompt": "True or False: If your model gets a high score on your specific dataset, you do not need to test it on general benchmarks.",
+          "options": [
+            {
+              "text": "True",
+              "correct": false,
+              "id": "t1"
+            },
+            {
+              "id": "f1",
+              "correct": true,
+              "text": "False"
+            }
+          ],
+          "explain": "Even if a model becomes an expert at your target task, it can still suffer from catastrophic forgetting and lose basic reasoning skills."
+        },
+        {
+          "id": "p3",
+          "type": "fill_blank",
+          "xp": 2,
+          "prompt": "Fill in the name of the general benchmark used to check for regressions:",
+          "sentence": "To make sure your model still understands general knowledge, you should test it on MMLU alongside your task-specific test.",
+          "blank": "MMLU",
+          "words": [
+            "MMLU",
+            "Python",
+            "Loss",
+            "Epochs"
+          ],
+          "explain": "A general benchmark like MMLU helps you verify that your model hasn't lost its broad reasoning and general knowledge skills during fine-tuning."
+        },
+        {
+          "id": "p4",
+          "type": "spot_the_ai",
+          "xp": 2,
+          "prompt": "A base model started with 70% on MMLU. Which model shows clear signs of catastrophic forgetting after being fine-tuned for SQL?",
+          "options": [
+            {
+              "text": "Model A (SQL: 80%, MMLU: 70%)",
+              "correct": false,
+              "id": "sai1"
+            },
+            {
+              "text": "Model B (SQL: 95%, MMLU: 25%)",
+              "correct": true,
+              "id": "sai2"
+            },
+            {
+              "correct": false,
+              "id": "sai3",
+              "text": "Model C (SQL: 50%, MMLU: 72%)"
+            }
+          ],
+          "explain": "Model B shows typical signs of catastrophic forgetting: it got better at the new task (SQL) but crashed on general knowledge (MMLU)."
+        }
+      ]
+    },
+    {
+      "type": "boss",
+      "exercises": [
+        {
+          "id": "b1",
+          "type": "multiple_choice",
+          "xp": 5,
+          "prompt": "You are deploying a newly fine-tuned medical chatbot. How should you evaluate it to ensure it hasn't lost its general reasoning skills?",
+          "options": [
+            {
+              "text": "Only test it on the new medical dataset. If it scores 100%, it is ready for production.",
+              "id": "opt1",
+              "correct": false
+            },
+            {
+              "correct": false,
+              "text": "Stop using fine-tuning completely and write longer prompts instead.",
+              "id": "opt2"
+            },
+            {
+              "correct": true,
+              "id": "opt3",
+              "text": "Evaluate it on both your medical dataset and a general benchmark like MMLU."
+            },
+            {
+              "id": "opt4",
+              "correct": false,
+              "text": "Deploy it immediately and wait for user complaints to find bugs."
+            }
+          ],
+          "explain": "To prevent your model from losing its mind on general knowledge while specializing, always test it against a general benchmark alongside your specific dataset. Next up: Model Merging & Soups."
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,223 @@
+{
+  "id": "u375-l1",
+  "unit": 375,
+  "day": 1876,
+  "tier": "Large Language Models",
+  "tierIcon": "🤖",
+  "title": "The Inference Latency Bottleneck",
+  "icon": "⚡",
+  "concept": "LLM inference is autoregressive (token-by-token), making it slow and memory-bandwidth bound on GPU hardware.",
+  "xp": 15,
+  "hearts": 3,
+  "estMinutes": 7,
+  "segments": [
+    {
+      "type": "warmup",
+      "exercises": [
+        {
+          "id": "w1",
+          "type": "multiple_choice",
+          "xp": 1,
+          "prompt": "How do generative Large Language Models (autoregressive LLMs produce their internal LLMs generate text answers?",
+          "options": [
+            {
+              "correct": true,
+              "id": "opt1",
+              "text": "One token (word piece) at a time"
+            },
+            {
+              "id": "opt2",
+              "correct": false,
+              "text": "Whole paragraphs at once"
+            },
+            {
+              "text": "By translating the entire document backward",
+              "id": "opt3",
+              "correct": false
+            }
+          ],
+          "explain": "Autoregressive generation means predicting the very next unit of text (a token) based on all the text that came before it."
+        }
+      ]
+    },
+    {
+      "type": "teach",
+      "cards": [
+        {
+          "kind": "hook",
+          "icon": "⏳",
+          "title": "Why Do LLMs Write So Slowly?",
+          "body": "Have you ever wondered why ChatGPT writes its answers word-by-word instead of showing the whole paragraph at once? It's not just a cool visual effect—it's a fundamental hardware limitation! Let's find out why."
+        },
+        {
+          "kind": "definition",
+          "icon": "⚡",
+          "title": "What is Inference Latency?",
+          "body": "Inference latency is the delay between asking an LLM a question and getting the response. Because LLMs are autoregressive, they must generate text one token (word piece) at a time, feeding each new token back into the model to predict the next one. This makes the GPU wait on memory speed rather than raw calculation power."
+        },
+        {
+          "kind": "analogy",
+          "icon": "✍️",
+          "title": "The Rereading Writer",
+          "body": "Imagine writing a long letter, but you must read everything you've written from the very beginning before you are allowed to write the next single word. Even if you write fast, flipping back to reread your entire paper over and over slows you down. That is how a GPU feels when it generates text token-by-token!"
+        },
+        {
+          "kind": "example",
+          "icon": "📖",
+          "title": "Seeing It in Action",
+          "body": "When you ask an AI to write a story, it doesn't print the whole page instantly. Instead, you see words pop up one after another: 'Once...', 'upon...', 'a...', 'time...'. Each word requires the GPU to load gigabytes of model data to predict the next tiny piece."
+        },
+        {
+          "kind": "mythbust",
+          "icon": "🕵️",
+          "title": "Myth: Fast Processors Solve Everything",
+          "body": "Many believe that buying a GPU with more raw computing power (TFLOPs) will automatically make LLM generation instantly fast. In reality, the bottleneck is memory bandwidth—how fast the GPU can transfer model data from its memory chips to its processors."
+        },
+        {
+          "kind": "visual",
+          "icon": "📊",
+          "title": "Prefill vs. Generation",
+          "body": "Let's compare how reading a prompt differs from generating new text on a GPU.",
+          "compare": {
+            "left": {
+              "text": "Parallel processing: The GPU reads the whole prompt at once. Extremely fast and efficient.",
+              "tag": "Prompt Processing (Prefill)",
+              "emoji": "📥"
+            },
+            "right": {
+              "tag": "Token Generation (Decode)",
+              "text": "Autoregressive loop: One token at a time. Must read model weights from memory for every single word.",
+              "emoji": "📤"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "type": "practice",
+      "exercises": [
+        {
+          "id": "p1",
+          "type": "multiple_choice",
+          "xp": 2,
+          "prompt": "What does it mean when we say LLM inference is 'autoregressive'?",
+          "options": [
+            {
+              "id": "opt1",
+              "text": "It generates the entire paragraph in a single parallel step.",
+              "correct": false
+            },
+            {
+              "correct": true,
+              "id": "opt2",
+              "text": "It generates text one token at a time, using previous tokens as input."
+            },
+            {
+              "correct": false,
+              "text": "It processes only the last letter of the prompt.",
+              "id": "opt3"
+            },
+            {
+              "text": "It ignores the user's prompt during generation.",
+              "correct": false,
+              "id": "opt4"
+            }
+          ],
+          "explain": "Autoregressive generation means the model outputs one token at a time, utilizing the previous tokens to compute the next one."
+        },
+        {
+          "id": "p2",
+          "type": "true_false",
+          "xp": 2,
+          "prompt": "True or False: LLM text generation is slow because GPUs lack the raw mathematical speed to calculate neural network formulas.",
+          "options": [
+            {
+              "text": "True",
+              "id": "opt1",
+              "correct": false
+            },
+            {
+              "correct": true,
+              "id": "opt2",
+              "text": "False"
+            }
+          ],
+          "explain": "LLM inference is heavily bound by memory bandwidth (retrieving weights from memory), not just processor compute speed."
+        },
+        {
+          "id": "p3",
+          "type": "fill_blank",
+          "xp": 2,
+          "prompt": "Fill in the blank to describe the step-by-step nature of LLM generation.",
+          "sentence": "LLM text generation is [blank] because each new token depends on all the previous tokens.",
+          "blank": "autoregressive",
+          "words": [
+            "autoregressive",
+            "instantaneous",
+            "parallel",
+            "random"
+          ],
+          "explain": "LLMs generate text autoregressively (one step at a time), using past outputs as inputs for the next step, which limits speed."
+        },
+        {
+          "id": "p4",
+          "type": "spot_the_ai",
+          "xp": 2,
+          "prompt": "Which of these system behaviors matches a real autoregressive LLM running on standard GPU hardware?",
+          "options": [
+            {
+              "correct": false,
+              "id": "opt1",
+              "text": "AI Model A (Instantly outputs a 500-word essay in 0.001 seconds)"
+            },
+            {
+              "id": "opt2",
+              "text": "AI Model B (Outputs words one-by-one with a steady stream of updates)",
+              "correct": true
+            },
+            {
+              "text": "AI Model C (Requires no memory bandwidth or GPU processing)",
+              "id": "opt3",
+              "correct": false
+            }
+          ],
+          "explain": "AI Model B represents a typical autoregressive LLM, which outputs text token-by-token, whereas AI Model A displays unrealistic instant generation."
+        }
+      ]
+    },
+    {
+      "type": "boss",
+      "exercises": [
+        {
+          "id": "b1",
+          "type": "multiple_choice",
+          "xp": 5,
+          "prompt": "Why does token-by-token generation cause a severe speed bottleneck on modern GPU hardware?",
+          "options": [
+            {
+              "id": "opt1",
+              "correct": true,
+              "text": "The GPU must read the model weights from memory for every single token generated."
+            },
+            {
+              "correct": false,
+              "id": "opt2",
+              "text": "The GPU calculates all words at the exact same millisecond."
+            },
+            {
+              "correct": false,
+              "text": "The model stops using memory once the prompt is read.",
+              "id": "opt3"
+            },
+            {
+              "correct": false,
+              "id": "opt4",
+              "text": "LLMs do not use GPUs during the generation phase."
+            }
+          ],
+          "explain": "Generative LLMs must run a complete forward pass through the network to generate just one single token at a time. Because the GPU has to load the model's massive weights from memory for every single token produced, memory bandwidth becomes the main bottleneck."
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,224 @@
+{
+  "id": "u354-l4",
+  "unit": 354,
+  "day": 1774,
+  "tier": "Large Language Models",
+  "tierIcon": "🤖",
+  "title": "Data Corruption in Flight",
+  "icon": "🧹",
+  "concept": "A single corrupt batch of text (like null bytes or endless repeating characters) can break weight updates, necessitating robust data-loading safeguards.",
+  "xp": 15,
+  "hearts": 3,
+  "estMinutes": 7,
+  "segments": [
+    {
+      "type": "warmup",
+      "exercises": [
+        {
+          "id": "w1",
+          "type": "multiple_choice",
+          "xp": 1,
+          "prompt": "Why is a single batch of corrupt text dangerous during model training?",
+          "options": [
+            {
+              "text": "It speeds up training by giving the model a rest.",
+              "id": "a",
+              "correct": false
+            },
+            {
+              "correct": true,
+              "text": "It can break the training updates, requiring robust safeguards.",
+              "id": "b"
+            },
+            {
+              "correct": false,
+              "text": "It makes the model smarter by teaching it bad habits.",
+              "id": "c"
+            }
+          ],
+          "explain": "Even a tiny amount of corrupted text, like massive blocks of null bytes, can ruin hours of training by breaking the mathematical updates."
+        }
+      ]
+    },
+    {
+      "type": "teach",
+      "cards": [
+        {
+          "kind": "hook",
+          "icon": "✈️",
+          "title": "Crash in Mid-Air!",
+          "body": "You leave your AI model training overnight, expecting great results. But when you wake up, the loss tracker reads \"NaN\" (Not a Number) and the model is completely broken! What happened? A single bad, corrupted sentence sneaked into the training data and ruined everything. Let's learn how to spot and prevent these training disasters!"
+        },
+        {
+          "kind": "definition",
+          "icon": "🧹",
+          "title": "What is In-Flight Corruption?",
+          "body": "Data corruption in flight refers to bad, malformed, or empty data (like strings of null bytes or infinite repeating characters) entering the active training loop. When these bad batches pass through the neural network, they cause the weight updates (gradients) to explode or turn into non-numbers (NaN), instantly ruining hours of training."
+        },
+        {
+          "kind": "analogy",
+          "icon": "🏭",
+          "title": "The Conveyor Jam",
+          "body": "Imagine a factory conveyor belt feeding raw materials into a mixer. If one crate is accidentally filled with solid concrete blockages or endless wet mud, the mixer jams, the motor burns out, and the entire assembly line grinds to a halt. Similarly, feeding a batch of corrupt null characters into a neural network breaks the math equations it uses to learn, stopping all training."
+        },
+        {
+          "kind": "example",
+          "icon": "⚠️",
+          "title": "The Silent Model Killer",
+          "body": "Let's say we are training a text generator on scraped web data. One files contains a system error: 10,000 blank null characters in a row. \n\nIf this batch is fed directly to the model, the loss calculation divides by zero, resulting in \"NaN\" (Not a Number) weights. From that moment on, the model outputs nothing but gibberish!"
+        },
+        {
+          "kind": "mythbust",
+          "icon": "🛡️",
+          "title": "Myth: Models Can Heal Themselves",
+          "body": "Many believe that advanced AI models are smart enough to ignore bad data batches and keep learning normally. In reality, deep learning models are pure mathematics. A single batch filled with corrupt characters or dividing-by-zero errors will corrupt the weights instantly, like dropping a drop of poison into a clean water tank."
+        },
+        {
+          "kind": "visual",
+          "icon": "🔍",
+          "title": "Pipeline Safety",
+          "body": "A comparison of how a training pipeline handles bad data with and without proper guardrails.",
+          "compare": {
+            "right": {
+              "emoji": "✅",
+              "tag": "With Safeguards",
+              "text": "Data filters detect repeating null bytes, drop the bad batch, and keep training running smoothly."
+            },
+            "title": "The Danger of Raw Feeds",
+            "left": {
+              "emoji": "❌",
+              "tag": "No Safeguards",
+              "text": "Raw corrupt data enters the model. Weights instantly turn into NaN, destroying the training run."
+            }
+          }
+        }
+      ]
+    },
+    {
+      "type": "practice",
+      "exercises": [
+        {
+          "id": "p1",
+          "type": "multiple_choice",
+          "xp": 2,
+          "prompt": "What typically happens to a model's internal weights when a batch of heavily corrupted data is processed?",
+          "options": [
+            {
+              "correct": false,
+              "id": "a",
+              "text": "The weights become perfectly optimized."
+            },
+            {
+              "text": "The weights turn into NaNs (Not a Number), breaking the model.",
+              "id": "b",
+              "correct": true
+            },
+            {
+              "text": "The model automatically pauses and waits for user input.",
+              "correct": false,
+              "id": "c"
+            },
+            {
+              "correct": false,
+              "id": "d",
+              "text": "The training speed increases to bypass the bad data."
+            }
+          ],
+          "explain": "When corrupt data causes mathematical errors like dividing by zero, the model's weights often turn into \"NaN\" (Not a Number), which permanently breaks its ability to generate sensible text."
+        },
+        {
+          "id": "p2",
+          "type": "true_false",
+          "xp": 2,
+          "prompt": "True or False: Just one corrupted batch of data is enough to break a neural network's training run.",
+          "options": [
+            {
+              "id": "true",
+              "text": "True",
+              "correct": true
+            },
+            {
+              "correct": false,
+              "text": "False",
+              "id": "false"
+            }
+          ],
+          "explain": "A single highly corrupted batch can cause gradient calculations to fail, ruining the model's weights permanently. That is why validation safeguards are so critical."
+        },
+        {
+          "id": "p3",
+          "type": "fill_blank",
+          "xp": 2,
+          "prompt": "Fill in the blank to complete the safety rule:",
+          "sentence": "To protect our training run, we must add data loader [filters] to remove corrupted text before it reaches the model.",
+          "blank": "filters",
+          "words": [
+            "filters",
+            "weights",
+            "speeds",
+            "losses"
+          ],
+          "explain": "Using protective data filters ensures that malformed, corrupted, or endless repeating text is caught and discarded before it can reach the training loop."
+        },
+        {
+          "id": "p4",
+          "type": "spot_the_ai",
+          "xp": 2,
+          "prompt": "Identify which data pipeline setup is unsafe and vulnerable to in-flight corruption:",
+          "options": [
+            {
+              "correct": false,
+              "id": "a",
+              "text": "System A: Reads text files, runs a length and character validator, and then sends clean data to the training loop."
+            },
+            {
+              "correct": true,
+              "id": "b",
+              "text": "System B: Streams raw text directly from web servers into the GPU training process without any preprocessing."
+            },
+            {
+              "correct": false,
+              "id": "c",
+              "text": "System C: Checks each text batch for excessive repeating patterns and skips any batch that fails the check."
+            }
+          ],
+          "explain": "The second system is insecure because it directly passes raw, unverified data straight from the web into the training loop, leaving it vulnerable to corrupt batches."
+        }
+      ]
+    },
+    {
+      "type": "boss",
+      "exercises": [
+        {
+          "id": "b1",
+          "type": "multiple_choice",
+          "xp": 5,
+          "prompt": "Since data corruption during training can completely halt a model's progress, what is the best way to safeguard our training pipeline?",
+          "options": [
+            {
+              "id": "a",
+              "correct": false,
+              "text": "Only training on larger GPUs, since more video memory naturally absorbs corrupt data."
+            },
+            {
+              "correct": false,
+              "id": "b",
+              "text": "Decreasing the learning rate to zero whenever a training batch is completed."
+            },
+            {
+              "text": "Building validation filters in the data loader to catch and discard corrupt, repetitive, or empty batches before they hit the model.",
+              "correct": true,
+              "id": "c"
+            },
+            {
+              "correct": false,
+              "text": "Ignoring the data errors and relying on the model to automatically learn how to fix the broken text.",
+              "id": "d"
+            }
+          ],
+          "explain": "A robust data pipeline needs active filters to detect anomalies like sudden null blocks, structural corruption, or repeating junk text before they enter the training loop, preventing the math from breaking down entirely."
+        }
+      ]
+    }
+  ]
+}

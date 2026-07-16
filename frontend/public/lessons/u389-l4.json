@@ -1,0 +1,223 @@
+{
+  "id": "u389-l4",
+  "unit": 389,
+  "day": 1949,
+  "tier": "Large Language Models",
+  "tierIcon": "🤖",
+  "title": "The Memory Footprint of Modern Stacks",
+  "icon": "💾",
+  "concept": "Deploying large architectures requires planning for parameter sizes, KV cache budgets, and GPU model-parallel execution requirements.",
+  "xp": 15,
+  "hearts": 3,
+  "estMinutes": 7,
+  "segments": [
+    {
+      "type": "warmup",
+      "exercises": [
+        {
+          "id": "w1",
+          "type": "multiple_choice",
+          "xp": 1,
+          "prompt": "Which hardware resource is the primary bottleneck when hosting massive AI models?",
+          "options": [
+            {
+              "id": "vram",
+              "correct": true,
+              "text": "GPU Memory (VRAM)"
+            },
+            {
+              "text": "Hard Drive Storage",
+              "correct": false,
+              "id": "disk"
+            },
+            {
+              "id": "power",
+              "correct": false,
+              "text": "Power Supply Wattage"
+            }
+          ],
+          "explain": "GPU memory is the critical hardware limitation when running large LLMs, as both weights and active session data must reside in high-speed VRAM."
+        }
+      ]
+    },
+    {
+      "type": "teach",
+      "cards": [
+        {
+          "kind": "hook",
+          "icon": "👣",
+          "title": "Why Do Models Eat Memory?",
+          "body": "Have you ever wondered why running large AI models requires specialized, expensive hardware? It's not just about speed—it's about space! Let's explore how models occupy GPU memory and how developers plan for these giant digital footprints."
+        },
+        {
+          "kind": "definition",
+          "icon": "🧠",
+          "title": "What is a Memory Footprint?",
+          "body": "The memory footprint is the total amount of GPU RAM needed to load and run an AI model. It consists of the static model weights (parameters) and the dynamic runtime memory, such as the Key-Value (KV) cache, which temporarily stores conversation history during generation."
+        },
+        {
+          "kind": "analogy",
+          "icon": "🚚",
+          "title": "The Moving Apartment",
+          "body": "Imagine moving to a new apartment. The LLM's model parameters are like your heavy furniture—they take up a fixed, permanent amount of space. The KV cache is like the moving boxes that pile up dynamically as you unpack more items. If you don't plan for both the furniture and the boxes, you'll run out of room in the apartment (GPU memory)!"
+        },
+        {
+          "kind": "example",
+          "icon": "📊",
+          "title": "Calculating the Budgets",
+          "body": "A 70-billion parameter model stored in 16-bit precision requires 140 GB of GPU memory just to load the model. If we want to serve 100 users simultaneously, we must allocate an additional 30 GB of GPU memory specifically for the KV cache to store their active chat histories."
+        },
+        {
+          "kind": "mythbust",
+          "icon": "🛡️",
+          "title": "Fits on Boot, Crashes on Chat",
+          "body": "Many think that if a model fits on a GPU, it's safe to deploy. In reality, once users start chatting, the KV cache grows with every new word. Without a dynamic memory buffer, the system will crash with an 'Out of Memory' error during long conversations."
+        },
+        {
+          "kind": "visual",
+          "icon": "⚖️",
+          "title": "Static vs. Dynamic Footprint",
+          "body": "Understanding the difference between the rigid, fixed costs of model weights and the dynamic, changing costs of serving active users.",
+          "compare": {
+            "right": {
+              "tag": "Dynamic Memory",
+              "emoji": "🌊",
+              "text": "KV Cache: Expands and contracts based on user traffic and conversation length."
+            },
+            "left": {
+              "tag": "Static Memory",
+              "emoji": "🏗️",
+              "text": "Model Parameters: Stays the same size regardless of how many users are active."
+            }
+          }
+        }
+      ]
+    },
+    {
+      "type": "practice",
+      "exercises": [
+        {
+          "id": "p1",
+          "type": "multiple_choice",
+          "xp": 2,
+          "prompt": "What is the primary purpose of the Key-Value (KV) cache during model inference?",
+          "options": [
+            {
+              "id": "a",
+              "correct": false,
+              "text": "It permanently stores the training dataset on the GPU."
+            },
+            {
+              "id": "b",
+              "text": "It temporarily stores past tokens to speed up word generation.",
+              "correct": true
+            },
+            {
+              "text": "It compresses the model weights to take up less space.",
+              "correct": false,
+              "id": "c"
+            },
+            {
+              "text": "It translates programming code into English.",
+              "correct": false,
+              "id": "d"
+            }
+          ],
+          "explain": "The KV cache stores previously calculated keys and values so the model doesn't have to recompute the entire chat history for every new word."
+        },
+        {
+          "id": "p2",
+          "type": "true_false",
+          "xp": 2,
+          "prompt": "Quantizing a model's weights to lower precision reduces its static memory footprint on the GPU.",
+          "options": [
+            {
+              "text": "True",
+              "id": "true",
+              "correct": true
+            },
+            {
+              "text": "False",
+              "correct": false,
+              "id": "false"
+            }
+          ],
+          "explain": "Quantization reduces the precision of model weights (e.g., from 16-bit to 8-bit), which directly shrinks the memory footprint."
+        },
+        {
+          "id": "p3",
+          "type": "fill_blank",
+          "xp": 2,
+          "prompt": "Fill in the missing word to complete the memory footprint equation.",
+          "sentence": "Total Memory = Model [blank] + KV Cache Budget",
+          "blank": "parameters",
+          "words": [
+            "parameters",
+            "disk",
+            "network",
+            "pixels"
+          ],
+          "explain": "The total memory footprint is the sum of the fixed model parameters (weights) and the active KV cache generated during the conversation."
+        },
+        {
+          "id": "p4",
+          "type": "spot_the_ai",
+          "xp": 2,
+          "prompt": "Which of the following scenarios describes model-parallel execution?",
+          "options": [
+            {
+              "id": "a",
+              "text": "Option A: Run multiple small models sequentially on a single mobile phone.",
+              "correct": false
+            },
+            {
+              "id": "b",
+              "correct": true,
+              "text": "Option B: Split a giant model's layers across four interconnected GPUs to share the memory load."
+            },
+            {
+              "text": "Option C: Save the model onto a USB flash drive to reduce its parameters.",
+              "correct": false,
+              "id": "c"
+            }
+          ],
+          "explain": "Model-parallel execution allows a single large model to be split across multiple GPUs when its memory footprint is too large for one device."
+        }
+      ]
+    },
+    {
+      "type": "boss",
+      "exercises": [
+        {
+          "id": "b1",
+          "type": "multiple_choice",
+          "xp": 5,
+          "prompt": "You are designing the deployment infrastructure for a massive 70-billion parameter model. To prevent \"Out of Memory\" crashes during peak traffic, what two primary memory consumers must you calculate and budget for?",
+          "options": [
+            {
+              "id": "a",
+              "text": "Fixed model parameters and dynamic KV cache memory requirements",
+              "correct": true
+            },
+            {
+              "correct": false,
+              "id": "b",
+              "text": "Only the network latency speed of the user's internet connection"
+            },
+            {
+              "text": "The physical size of the GPU's cooling fan and power cables",
+              "id": "c",
+              "correct": false
+            },
+            {
+              "correct": false,
+              "id": "d",
+              "text": "The number of lines of code written in the front-end interface"
+            }
+          ],
+          "explain": "We must calculate both the static model parameters and the active KV cache per user request to ensure the GPU does not run out of memory during inference."
+        }
+      ]
+    }
+  ]
+}

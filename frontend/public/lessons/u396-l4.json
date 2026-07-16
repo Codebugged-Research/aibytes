@@ -1,0 +1,222 @@
+{
+  "id": "u396-l4",
+  "unit": 396,
+  "day": 1984,
+  "tier": "Large Language Models",
+  "tierIcon": "🤖",
+  "title": "Context Truncation and Pruning",
+  "icon": "✂️",
+  "concept": "Compressing or truncating old conversation history keeps prompt token counts small, reducing the linear cost growth of chat APIs.",
+  "xp": 15,
+  "hearts": 3,
+  "estMinutes": 7,
+  "segments": [
+    {
+      "type": "warmup",
+      "exercises": [
+        {
+          "id": "w1",
+          "type": "multiple_choice",
+          "xp": 1,
+          "prompt": "As a chat conversation gets longer, what happens to your LLM API costs if you don't manage the history?",
+          "options": [
+            {
+              "correct": true,
+              "id": "opt_1",
+              "text": "They increase"
+            },
+            {
+              "text": "They decrease",
+              "id": "opt_2",
+              "correct": false
+            },
+            {
+              "text": "They stay exactly the same",
+              "id": "opt_3",
+              "correct": false
+            }
+          ],
+          "explain": "As the length of your chat history increases, you send more tokens to the API, which increases your cost."
+        }
+      ]
+    },
+    {
+      "type": "teach",
+      "cards": [
+        {
+          "kind": "hook",
+          "icon": "💸",
+          "title": "The Growing Cost of Chatting",
+          "body": "Did you know that as a chat session gets longer, every new reply you get costs more than the last one? That's because LLMs read the entire chat history every single time. Let's learn how to stop this money leak!"
+        },
+        {
+          "kind": "definition",
+          "icon": "✂️",
+          "title": "What is Context Pruning?",
+          "body": "Context Truncation and Pruning is the practice of cutting out, summarizing, or removing older messages from a chat history before sending them to an LLM. Since API costs are calculated per token, keeping the history small prevents your bills from growing larger with every message."
+        },
+        {
+          "kind": "analogy",
+          "icon": "📓",
+          "title": "The Heavy Notepad",
+          "body": "Imagine your LLM chat is like a running notepad. Instead of carrying a massive, heavy binder containing every single page written since day one, you periodically tear out the oldest pages or summarize them. This keeps your notepad light, cheap to carry around, and easy to flip through quickly!"
+        },
+        {
+          "kind": "example",
+          "icon": "💻",
+          "title": "Pruning in Action",
+          "body": "Let's say a user has sent 20 messages. Instead of passing all 20 messages to the API, your application code slices the history list to only include the last 5 messages: `recent_history = chat_history[-5:]`. The LLM still has recent context, but you only pay for a fraction of the tokens!"
+        },
+        {
+          "kind": "mythbust",
+          "icon": "🛡️",
+          "title": "Do LLMs Need Every Detail?",
+          "body": "Many developers think they must feed the LLM every single word of a conversation for it to work. In reality, LLMs rarely need to know what you said 50 turns ago to answer your current question. Cutting old context saves money without hurting the user experience!"
+        },
+        {
+          "kind": "visual",
+          "icon": "📊",
+          "title": "Pruning vs. No Pruning",
+          "body": "Compare how your data is sent to the API with and without pruning. Pruning keeps the request payload small and predictable.",
+          "compare": {
+            "left": {
+              "text": "Entire history is sent. The token size and cost grow larger with every single turn.",
+              "tag": "No Pruning",
+              "emoji": "📈"
+            },
+            "right": {
+              "emoji": "✂️",
+              "text": "Old history is cut. Only the most recent messages are sent, keeping costs flat.",
+              "tag": "With Pruning"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "type": "practice",
+      "exercises": [
+        {
+          "id": "p1",
+          "type": "multiple_choice",
+          "xp": 2,
+          "prompt": "Why does a long, unmanaged conversation history lead to higher LLM API bills?",
+          "options": [
+            {
+              "correct": true,
+              "id": "opt_1",
+              "text": "The bill increases because the chat history grows larger with every turn."
+            },
+            {
+              "text": "The LLM gets smarter and charges a premium rate for older messages.",
+              "correct": false,
+              "id": "opt_2"
+            },
+            {
+              "id": "opt_3",
+              "text": "The API charges a flat fee regardless of the history size.",
+              "correct": false
+            },
+            {
+              "text": "The network speed slows down, triggering inactivity fees.",
+              "id": "opt_4",
+              "correct": false
+            }
+          ],
+          "explain": "LLM APIs charge you for every token sent in the prompt. If the chat history grows linearly with every turn, your prompt token count—and therefore your cost—will also grow linearly."
+        },
+        {
+          "id": "p2",
+          "type": "true_false",
+          "xp": 2,
+          "prompt": "True or False: If you prune a chat history to only the last 5 messages, the LLM will lose the ability to remember details from the 10th message back.",
+          "options": [
+            {
+              "correct": true,
+              "text": "True",
+              "id": "opt_t"
+            },
+            {
+              "correct": false,
+              "id": "opt_f",
+              "text": "False"
+            }
+          ],
+          "explain": "Truncating old context means the LLM no longer receives those early messages. If it doesn't receive them, it cannot recall specific details mentioned in them."
+        },
+        {
+          "id": "p3",
+          "type": "fill_blank",
+          "xp": 2,
+          "prompt": "Fill in the blank to complete the sentence about managing chat history sizes.",
+          "sentence": "To prevent your API bills from growing forever, you can use context __________ to drop older messages.",
+          "blank": "truncation",
+          "words": [
+            "truncation",
+            "expansion",
+            "generation"
+          ],
+          "explain": "Truncation refers to cutting off the older parts of the conversation to keep the active token size small and affordable."
+        },
+        {
+          "id": "p4",
+          "type": "spot_the_ai",
+          "xp": 2,
+          "prompt": "Which bot implementation is successfully using context pruning to save costs while keeping a brief conversational memory?",
+          "options": [
+            {
+              "id": "opt_a",
+              "correct": false,
+              "text": "Bot A: Sends all 100 previous messages in the chat history on every turn."
+            },
+            {
+              "text": "Bot B: Slices the history list to only include the last 6 messages.",
+              "id": "opt_b",
+              "correct": true
+            },
+            {
+              "id": "opt_c",
+              "text": "Bot C: Clears the entire history on every turn, making the bot forget everything.",
+              "correct": false
+            }
+          ],
+          "explain": "Bot B demonstrates context pruning by selecting only the recent messages. Bot A sends the entire long history, which is expensive, while Bot C ignores the history completely, which ruins the chat flow."
+        }
+      ]
+    },
+    {
+      "type": "boss",
+      "exercises": [
+        {
+          "id": "b1",
+          "type": "multiple_choice",
+          "xp": 5,
+          "prompt": "Your chatbot has been running for 50 turns, and the API bills are skyrocketing because the entire chat history is sent with every new message. What is the best strategy to cap your API costs without breaking the conversation flow?",
+          "options": [
+            {
+              "id": "opt_a",
+              "text": "Send all 50 messages to the API on every single turn.",
+              "correct": false
+            },
+            {
+              "correct": false,
+              "id": "opt_b",
+              "text": "Switch to a more expensive AI model with a larger context window."
+            },
+            {
+              "correct": true,
+              "id": "opt_c",
+              "text": "Prune the history to only send the last 5 messages to the API."
+            },
+            {
+              "correct": false,
+              "text": "Stop the user from typing any more messages after they hit 10 turns.",
+              "id": "opt_d"
+            }
+          ],
+          "explain": "To keep costs from growing out of control, we must truncate or summarize old messages. In this case, setting a sliding window of the last 5 messages prevents the prompt size from expanding indefinitely, effectively capping the cost per turn."
+        }
+      ]
+    }
+  ]
+}

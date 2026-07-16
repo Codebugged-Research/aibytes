@@ -1,0 +1,222 @@
+{
+  "id": "u354-l3",
+  "unit": 354,
+  "day": 1773,
+  "tier": "Large Language Models",
+  "tierIcon": "🤖",
+  "title": "Gradient Overflow and Underflow",
+  "icon": "🔢",
+  "concept": "Using 16-bit float formats (FP16) can cause activations to exceed float boundaries, requiring dynamic loss scaling or BF16 format to stabilize training.",
+  "xp": 15,
+  "hearts": 3,
+  "estMinutes": 7,
+  "segments": [
+    {
+      "type": "warmup",
+      "exercises": [
+        {
+          "id": "w1",
+          "type": "multiple_choice",
+          "xp": 1,
+          "prompt": "Why do developers want to use 16-bit float formats (FP16) in the first place?",
+          "options": [
+            {
+              "text": "It uses less memory to speed up AI training",
+              "id": "w_1",
+              "correct": true
+            },
+            {
+              "correct": false,
+              "text": "It makes models 100% accurate instantly",
+              "id": "w_2"
+            },
+            {
+              "text": "It prevents models from using any GPU memory",
+              "id": "w_3",
+              "correct": false
+            }
+          ],
+          "explain": "FP16 stands for 16-bit floating-point numbers. It uses half the memory of standard FP32, making training faster but more sensitive to numerical errors."
+        }
+      ]
+    },
+    {
+      "type": "teach",
+      "cards": [
+        {
+          "kind": "hook",
+          "icon": "💥",
+          "title": "When Math Breaks Your AI",
+          "body": "Have you ever tried to write a massive math calculation on a pocket calculator, only for it to say 'ERROR' or '0'? That's exactly what happens to AI models when we try to squeeze their numbers into tiny 16-bit formats to make them train faster!"
+        },
+        {
+          "kind": "definition",
+          "icon": "⚠️",
+          "title": "What is Overflow and Underflow?",
+          "body": "Gradient Overflow happens when numbers become too large for 16-bit floats (FP16) to hold, turning into 'NaN' (Not a Number). Gradient Underflow happens when numbers become so tiny they round down to zero. Both issues freeze or break your model's learning process."
+        },
+        {
+          "kind": "analogy",
+          "icon": "📝",
+          "title": "The Tiny Sticky Note",
+          "body": "Imagine writing numbers on tiny sticky notes. If a number is too big, it spills off the paper (overflow). If it is too tiny, it gets rounded down to absolute zero (underflow). Using FP16 is like switching to smaller sticky notes—you save space, but you must write carefully to avoid losing your numbers."
+        },
+        {
+          "kind": "example",
+          "icon": "⚙️",
+          "title": "FP16 in Action",
+          "body": "In a standard neural network training loop, switching to FP16 without safeguards might cause your gradients to shrink to 0.000000... which the computer just treats as 0. To fix this, developers use a 'Loss Scaler' which multiplies the loss by a factor (like 1024) to scale up the gradients before they shrink into oblivion."
+        },
+        {
+          "kind": "mythbust",
+          "icon": "🛡️",
+          "title": "Is 16-bit Always Worse?",
+          "body": "You might think that using smaller 16-bit floats (FP16) always makes training worse. But with tools like dynamic loss scaling, or by using the BF16 format (which handles tiny and huge numbers better), you get the same high accuracy in half the memory!"
+        },
+        {
+          "kind": "visual",
+          "icon": "📊",
+          "title": "Comparing Float Formats",
+          "body": "Compare how standard FP16 behaves compared to BF16/Scaled formats when dealing with extreme gradient values.",
+          "compare": {
+            "left": {
+              "emoji": "❌",
+              "text": "Extremes turn into NaN (too big) or absolute 0 (too small).",
+              "tag": "Standard FP16"
+            },
+            "right": {
+              "tag": "BF16 / Scaled FP16",
+              "text": "Values stay within bounds, keeping the training smooth and stable.",
+              "emoji": "✅"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "type": "practice",
+      "exercises": [
+        {
+          "id": "p1",
+          "type": "multiple_choice",
+          "xp": 2,
+          "prompt": "Why do activations and gradients easily overflow or underflow when training with FP16?",
+          "options": [
+            {
+              "text": "FP16 uses too much computer memory",
+              "id": "mc_1",
+              "correct": false
+            },
+            {
+              "text": "The numbers exceed the tiny boundaries of the 16-bit format",
+              "correct": true,
+              "id": "mc_2"
+            },
+            {
+              "text": "The model learns too slowly to update its weights",
+              "correct": false,
+              "id": "mc_3"
+            },
+            {
+              "text": "Computer chips do not support 16-bit calculations",
+              "id": "mc_4",
+              "correct": false
+            }
+          ],
+          "explain": "FP16 uses fewer bits, meaning it has a much narrower range of numbers it can represent compared to standard FP32. This makes it easy for numbers to get too big (NaN) or too small (zero)."
+        },
+        {
+          "id": "p2",
+          "type": "true_false",
+          "xp": 2,
+          "prompt": "True or False: Using the BF16 format helps prevent overflow because it has a wider numeric range than standard FP16.",
+          "options": [
+            {
+              "id": "tf_1",
+              "text": "True",
+              "correct": true
+            },
+            {
+              "correct": false,
+              "id": "tf_2",
+              "text": "False"
+            }
+          ],
+          "explain": "BF16 is specifically designed with a larger range (exponent) than FP16, allowing it to represent very large and very small numbers without overflowing."
+        },
+        {
+          "id": "p3",
+          "type": "fill_blank",
+          "xp": 2,
+          "prompt": "Fill in the missing word to complete the description of this training safeguard:",
+          "sentence": "To prevent small gradients from turning into zero, developers use dynamic loss scaling.",
+          "blank": "scaling",
+          "words": [
+            "scaling",
+            "speeding",
+            "stopping"
+          ],
+          "explain": "Loss scaling temporarily multiplies gradients by a large number so they do not shrink to zero (underflow) during FP16 training."
+        },
+        {
+          "id": "p4",
+          "type": "spot_the_ai",
+          "xp": 2,
+          "prompt": "A team is building an AI and gets 'NaN' errors due to gradient overflow. Which AI configuration solves this problem correctly?",
+          "options": [
+            {
+              "text": "Model A: Switch the data format to BF16 to expand the range of exponent values.",
+              "correct": true,
+              "id": "sai_1"
+            },
+            {
+              "id": "sai_2",
+              "correct": false,
+              "text": "Model B: Convert all floats back to 8-bit integers to prevent fractional rounding."
+            },
+            {
+              "correct": false,
+              "text": "Model C: Divide all gradients by 1000 to keep them as small as possible.",
+              "id": "sai_3"
+            }
+          ],
+          "explain": "AI Model A is correct because it uses BF16, which has the same dynamic exponent range as FP32, preventing the values from spilling over. Model C is wrong because scaling down would make underflow worse."
+        }
+      ]
+    },
+    {
+      "type": "boss",
+      "exercises": [
+        {
+          "id": "b1",
+          "type": "multiple_choice",
+          "xp": 5,
+          "prompt": "Your deep learning model is training on 16-bit floats, but suddenly the loss turns into 'NaN' because the numbers became too big and spilled over. How should you fix this problem to stabilize training?",
+          "options": [
+            {
+              "id": "opt_1",
+              "correct": false,
+              "text": "Switching to 8-bit floats and disabling loss scaling entirely"
+            },
+            {
+              "text": "Using BF16 or applying dynamic loss scaling to keep gradients within representable bounds",
+              "correct": true,
+              "id": "opt_2"
+            },
+            {
+              "text": "Increasing the learning rate to push values past the overflow limit",
+              "id": "opt_3",
+              "correct": false
+            },
+            {
+              "text": "Rounding all fractional numbers to the nearest whole integer",
+              "correct": false,
+              "id": "opt_4"
+            }
+          ],
+          "explain": "BF16 maintains the same dynamic range (exponent size) as standard FP32, which prevents overflow and underflow, while dynamic loss scaling multiplies gradients during training to keep FP16 numbers within a safe, readable range."
+        }
+      ]
+    }
+  ]
+}

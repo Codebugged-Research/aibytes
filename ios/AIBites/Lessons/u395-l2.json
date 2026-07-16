@@ -1,0 +1,224 @@
+{
+  "id": "u395-l2",
+  "unit": 395,
+  "day": 1977,
+  "tier": "Large Language Models",
+  "tierIcon": "🤖",
+  "title": "Continuous Batching (vLLM style)",
+  "icon": "📦",
+  "concept": "Continuous batching schedules generation at the token iteration level rather than the request level, reducing GPU idle time and boosting throughput by 4x.",
+  "xp": 15,
+  "hearts": 3,
+  "estMinutes": 7,
+  "segments": [
+    {
+      "type": "warmup",
+      "exercises": [
+        {
+          "id": "w1",
+          "type": "multiple_choice",
+          "xp": 1,
+          "prompt": "What is the main benefit of using continuous batching?",
+          "options": [
+            {
+              "correct": false,
+              "text": "It makes the AI model smarter.",
+              "id": "opt1"
+            },
+            {
+              "correct": true,
+              "text": "It reduces GPU idle time and boosts throughput.",
+              "id": "opt2"
+            },
+            {
+              "correct": false,
+              "id": "opt3",
+              "text": "It reduces the size of the model files."
+            }
+          ],
+          "explain": "Continuous batching dramatically improves the efficiency of LLM serving systems, leading to up to a 4x increase in throughput."
+        }
+      ]
+    },
+    {
+      "type": "teach",
+      "cards": [
+        {
+          "kind": "hook",
+          "icon": "📦",
+          "title": "Stop Waiting on Slow Texts",
+          "body": "When serving LLMs, some users want a short word, while others want a long story. Traditional batching makes everyone wait for the slowest response. Let's learn how continuous batching solves this, making AI servers 4x faster!"
+        },
+        {
+          "kind": "definition",
+          "icon": "⚡",
+          "title": "What is Continuous Batching?",
+          "body": "Continuous batching is a smart way to run LLMs. Instead of waiting for a whole group of requests to finish generating their text, the engine schedules work at the token iteration level. As soon as one request completes, a new one takes its place immediately."
+        },
+        {
+          "kind": "analogy",
+          "icon": "🍳",
+          "title": "The Busy Restaurant Kitchen",
+          "body": "Imagine a restaurant kitchen. With traditional batching, the chef waits for a table of four to finish all their meals before cooking for any new customers. With continuous batching, the moment one customer at a table finishes their appetizer, the chef immediately starts cooking the next person's entree. No one sits waiting for the slowest eater to finish their entire meal!"
+        },
+        {
+          "kind": "example",
+          "icon": "📝",
+          "title": "Continuous Batching in Action",
+          "body": "Imagine User A asks for a short 'Yes', while User B asks for a 500-word essay. In a static batch, User A's GPU resources are held hostage until User B's essay is fully written. With continuous batching, User A gets their 'Yes' instantly, and a new User C is slotted in to start their generation right away."
+        },
+        {
+          "kind": "mythbust",
+          "icon": "🚫",
+          "title": "Myth: Bigger Batches Always Mean Better Speed",
+          "body": "Some think that to get high throughput, you must wait to group requests into huge batches. In reality, static batching causes massive delays. Continuous batching dynamically updates the batch on every single token step, maximizing speed and efficiency."
+        },
+        {
+          "kind": "visual",
+          "icon": "📊",
+          "title": "Efficiency Comparison",
+          "body": "See how continuous batching keeps the hardware busy compared to traditional static batching.",
+          "compare": {
+            "title": "Static vs. Continuous Batching",
+            "left": {
+              "emoji": "⏳",
+              "tag": "Static Batching",
+              "text": "Idle slots wait for the longest request to complete."
+            },
+            "right": {
+              "emoji": "🚀",
+              "tag": "Continuous Batching",
+              "text": "Completed requests are immediately replaced by new ones."
+            }
+          }
+        }
+      ]
+    },
+    {
+      "type": "practice",
+      "exercises": [
+        {
+          "id": "p1",
+          "type": "multiple_choice",
+          "xp": 2,
+          "prompt": "What is the main drawback of traditional static batching?",
+          "options": [
+            {
+              "text": "It processes everything in parallel without any batching at all.",
+              "correct": false,
+              "id": "opt1"
+            },
+            {
+              "text": "It forces fast requests to wait for the longest request in the batch to finish.",
+              "id": "opt2",
+              "correct": true
+            },
+            {
+              "correct": false,
+              "text": "It automatically splits requests into smaller sub-sentences.",
+              "id": "opt3"
+            },
+            {
+              "id": "opt4",
+              "text": "It only allows one user to use the GPU at a time.",
+              "correct": false
+            }
+          ],
+          "explain": "Static batching groups requests together and waits for the longest one to finish before starting a new batch, causing faster requests to waste GPU power while waiting."
+        },
+        {
+          "id": "p2",
+          "type": "true_false",
+          "xp": 2,
+          "prompt": "True or False: Continuous batching requires all requests in a batch to start and finish at the exact same time.",
+          "options": [
+            {
+              "correct": false,
+              "id": "opt1",
+              "text": "True"
+            },
+            {
+              "text": "False",
+              "id": "opt2",
+              "correct": true
+            }
+          ],
+          "explain": "Continuous batching operates at the token iteration level, allowing new requests to join the batch dynamically without waiting for the entire batch to complete."
+        },
+        {
+          "id": "p3",
+          "type": "fill_blank",
+          "xp": 2,
+          "prompt": "Fill in the missing word to complete the description of continuous batching.",
+          "sentence": "Continuous batching schedules generation at the token iteration level rather than the request level.",
+          "blank": "iteration",
+          "words": [
+            "request",
+            "iteration",
+            "static",
+            "server"
+          ],
+          "explain": "Continuous batching schedules work at the token iteration level, meaning decisions are made after every single token is generated, rather than waiting for whole requests to finish."
+        },
+        {
+          "id": "p4",
+          "type": "spot_the_ai",
+          "xp": 2,
+          "prompt": "Identify which response correctly explains how an AI engine using continuous batching manages incoming requests.",
+          "options": [
+            {
+              "id": "opt1",
+              "text": "It groups requests and processes them all together, releasing the batch only when every request is fully complete.",
+              "correct": false
+            },
+            {
+              "correct": true,
+              "id": "opt2",
+              "text": "It dynamically adds new requests to the active batch at each token generation step, keeping the GPU busy."
+            },
+            {
+              "correct": false,
+              "text": "It processes each user request one after the other in a single queue to prevent memory sharing.",
+              "id": "opt3"
+            }
+          ],
+          "explain": "Option B is an AI assistant response that correctly describes how continuous batching works at the token level to maximize GPU utilization. Option A describes static batching, and Option C describes sequential execution."
+        }
+      ]
+    },
+    {
+      "type": "boss",
+      "exercises": [
+        {
+          "id": "b1",
+          "type": "multiple_choice",
+          "xp": 5,
+          "prompt": "You are designing a high-performance LLM serving system. How does continuous batching achieve 4x higher throughput compared to traditional static batching?",
+          "options": [
+            {
+              "id": "opt1",
+              "text": "It processes requests one by one in a strict queue.",
+              "correct": false
+            },
+            {
+              "text": "It inserts new requests into the batch at the token iteration level as soon as others finish.",
+              "id": "opt2",
+              "correct": true
+            },
+            {
+              "correct": false,
+              "text": "It waits for all requests in a batch to finish before starting a new batch.",
+              "id": "opt3"
+            },
+            {
+              "id": "opt4",
+              "text": "It runs requests on separate GPUs and merges the output text at the end.",
+              "correct": false
+            }
+          ],
+          "explain": "Continuous batching operates at the individual token generation step (iteration level). When one request finishes generating its text, its slot is immediately freed up for a new request, keeping the GPU highly active and preventing idle time."
+        }
+      ]
+    }
+  ]
+}

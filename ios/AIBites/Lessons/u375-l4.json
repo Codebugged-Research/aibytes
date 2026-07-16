@@ -1,0 +1,223 @@
+{
+  "id": "u375-l4",
+  "unit": 375,
+  "day": 1879,
+  "tier": "Large Language Models",
+  "tierIcon": "🤖",
+  "title": "PagedAttention: Managing Cache Memory",
+  "icon": "🧱",
+  "concept": "PagedAttention partitions the KV cache into virtual blocks, eliminating memory fragmentation and allowing multiple batches to share cache space efficiently.",
+  "xp": 15,
+  "hearts": 3,
+  "estMinutes": 7,
+  "segments": [
+    {
+      "type": "warmup",
+      "exercises": [
+        {
+          "id": "w1",
+          "type": "multiple_choice",
+          "xp": 1,
+          "prompt": "Before we look at PagedAttention, what is the KV cache in an AI system?",
+          "options": [
+            {
+              "correct": true,
+              "id": "a",
+              "text": "The memory of previous words in the conversation"
+            },
+            {
+              "text": "A list of passwords used to log into the AI tool",
+              "correct": false,
+              "id": "b"
+            },
+            {
+              "text": "The speed at which the internet connection runs",
+              "id": "c",
+              "correct": false
+            }
+          ],
+          "explain": "The Key-Value (KV) cache stores the context of the conversation so the model doesn't have to re-read everything from scratch for every new word."
+        }
+      ]
+    },
+    {
+      "type": "teach",
+      "cards": [
+        {
+          "kind": "hook",
+          "icon": "🔍",
+          "title": "The Memory Mess",
+          "body": "When AI chatbots generate long answers, they have to remember everything they've said so far. This 'memory' (called the KV cache) takes up huge amounts of space. Usually, systems reserve giant, unbroken blocks of memory for this, leaving tons of empty, wasted space. How can we make this process super-efficient? Enter PagedAttention!"
+        },
+        {
+          "kind": "definition",
+          "icon": "🧱",
+          "title": "What is PagedAttention?",
+          "body": "PagedAttention is a smart memory management technique for AI models. It breaks the Key-Value (KV) cache—the memory of past words in a conversation—into small, fixed-size virtual blocks. Instead of needing one giant, continuous chunk of memory, the system can scatter these blocks anywhere in the physical memory, preventing waste and allowing different user requests to share memory."
+        },
+        {
+          "kind": "analogy",
+          "icon": "📁",
+          "title": "The Binder Analogy",
+          "body": "Imagine writing a long story on loose-leaf binder paper. Instead of panicking because you ran out of room at the bottom of a page, you just grab a new blank sheet of paper and slip it into your binder wherever it fits. PagedAttention does this with computer memory! It slices the KV cache into small virtual pages, so your computer can use every single pocket of empty space, no matter where it is."
+        },
+        {
+          "kind": "example",
+          "icon": "💡",
+          "title": "PagedAttention in Action",
+          "body": "If three users ask the AI to summarize the exact same long article, a standard system would save three identical copies of that article's memory. With PagedAttention, the system stores the article's KV cache in blocks just once. All three users share those same blocks in memory, instantly saving massive amounts of GPU space!"
+        },
+        {
+          "kind": "mythbust",
+          "icon": "⚡",
+          "title": "Myth: We Just Need More RAM!",
+          "body": "Many believe that to speed up AI memory, you just need to buy more expensive hardware. But the real problem isn't the amount of memory; it's how it is organized. PagedAttention proves that by simply reorganizing memory into smart, virtual blocks, you can run AI models up to 24 times faster without buying new chips!"
+        },
+        {
+          "kind": "visual",
+          "icon": "📊",
+          "title": "Memory Allocation Comparison",
+          "body": "Let's look at how memory is allocated with and without PagedAttention.",
+          "compare": {
+            "left": {
+              "emoji": "❌",
+              "text": "Allocates giant, continuous slots of memory. If a slot is only half-filled, the rest is locked up and wasted.",
+              "tag": "Traditional Cache"
+            },
+            "right": {
+              "text": "Slices memory into small, flexible blocks. Every tiny gap in memory is utilized, and identical blocks can be shared.",
+              "tag": "PagedAttention",
+              "emoji": "✅"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "type": "practice",
+      "exercises": [
+        {
+          "id": "p1",
+          "type": "multiple_choice",
+          "xp": 2,
+          "prompt": "What main problem does PagedAttention solve when managing the KV cache?",
+          "options": [
+            {
+              "correct": false,
+              "id": "a",
+              "text": "It makes the AI model smarter and more creative."
+            },
+            {
+              "correct": false,
+              "text": "It translates text into different languages automatically.",
+              "id": "b"
+            },
+            {
+              "id": "c",
+              "correct": true,
+              "text": "It prevents wasting large, continuous blocks of memory."
+            },
+            {
+              "id": "d",
+              "text": "It completely deletes the history of the conversation.",
+              "correct": false
+            }
+          ],
+          "explain": "Standard systems must guess and pre-allocate large, continuous blocks of memory for the maximum possible chat length, leaving most of it unused. PagedAttention solves this."
+        },
+        {
+          "id": "p2",
+          "type": "true_false",
+          "xp": 2,
+          "prompt": "True or False: PagedAttention allows multiple active chatbot sessions to share cache memory blocks.",
+          "options": [
+            {
+              "correct": true,
+              "id": "true",
+              "text": "True"
+            },
+            {
+              "id": "false",
+              "correct": false,
+              "text": "False"
+            }
+          ],
+          "explain": "PagedAttention allows different requests (like two users asking about the same document) to share the same physical memory blocks, saving massive amounts of space."
+        },
+        {
+          "id": "p3",
+          "type": "fill_blank",
+          "xp": 2,
+          "prompt": "Fill in the blank to complete the explanation of PagedAttention's main benefit.",
+          "sentence": "By breaking memory into small virtual blocks, PagedAttention prevents memory ________________.",
+          "blank": "fragmentation",
+          "words": [
+            "fragmentation",
+            "deletion",
+            "slowing",
+            "encryption"
+          ],
+          "explain": "PagedAttention eliminates memory fragmentation by cutting the KV cache into small, flexible virtual blocks that fit into any available space."
+        },
+        {
+          "id": "p4",
+          "type": "spot_the_ai",
+          "xp": 2,
+          "prompt": "Identify which AI system is utilizing PagedAttention.",
+          "options": [
+            {
+              "correct": false,
+              "id": "sys_a",
+              "text": "System A: It reserves a fixed, giant chunk of physical memory for every user, even if they only type one word."
+            },
+            {
+              "text": "System B: It splits the conversational memory into small blocks, allowing multiple users to share the same starting context.",
+              "id": "sys_b",
+              "correct": true
+            },
+            {
+              "text": "System C: It saves memory by forgetting the beginning of the conversation as soon as the user types a new question.",
+              "correct": false,
+              "id": "sys_c"
+            }
+          ],
+          "explain": "System B uses PagedAttention because it dynamically shares memory blocks across different prompts, which is a key feature of this technology. System A uses traditional, wasteful pre-allocation."
+        }
+      ]
+    },
+    {
+      "type": "boss",
+      "exercises": [
+        {
+          "id": "b1",
+          "type": "multiple_choice",
+          "xp": 5,
+          "prompt": "You are designing a high-performance chatbot server using PagedAttention. How does this technology solve the memory bottleneck during text generation?",
+          "options": [
+            {
+              "id": "a",
+              "text": "It forces the computer to reserve one giant, unbroken block of memory for each conversation.",
+              "correct": false
+            },
+            {
+              "correct": true,
+              "text": "It chops the KV cache into small virtual blocks that can live anywhere in memory and be shared.",
+              "id": "b"
+            },
+            {
+              "correct": false,
+              "id": "c",
+              "text": "It deletes the system's memory after every single word is generated to save space."
+            },
+            {
+              "correct": false,
+              "id": "d",
+              "text": "It slows down the AI so that the memory has time to cool off and reset."
+            }
+          ],
+          "explain": "PagedAttention acts like a virtual memory manager, breaking the KV cache into fixed-size blocks so they can be stored anywhere in memory and even shared between requests, completely eliminating wasted empty space (fragmentation)."
+        }
+      ]
+    }
+  ]
+}

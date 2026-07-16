@@ -1,0 +1,223 @@
+{
+  "id": "u404-l3",
+  "unit": 404,
+  "day": 2023,
+  "tier": "Large Language Models",
+  "tierIcon": "🤖",
+  "title": "Designing a Production LLM Pipeline",
+  "icon": "🏗️",
+  "concept": "A production architecture: SentencePiece tokenization -> Quantized MoE backbone -> RAG vector database retrieval -> Llama Guard content filters -> Continuous batch serving.",
+  "xp": 15,
+  "hearts": 3,
+  "estMinutes": 7,
+  "segments": [
+    {
+      "type": "warmup",
+      "exercises": [
+        {
+          "id": "w1",
+          "type": "multiple_choice",
+          "xp": 1,
+          "prompt": "Why do we need a \"pipeline\" instead of just using a raw LLM model on its own?",
+          "options": [
+            {
+              "text": "Because raw models are not written in Python.",
+              "id": "w_1",
+              "correct": false
+            },
+            {
+              "text": "To handle safety, speed, and real-time database lookup.",
+              "correct": true,
+              "id": "w_2"
+            },
+            {
+              "text": "To make the model completely shut down when not in use.",
+              "correct": false,
+              "id": "w_3"
+            }
+          ],
+          "explain": "A pipeline connects multiple steps like tokenization, database retrieval, model execution, and safety filtering to deliver a fast, safe user experience."
+        }
+      ]
+    },
+    {
+      "type": "teach",
+      "cards": [
+        {
+          "kind": "hook",
+          "icon": "🚀",
+          "title": "From Model to Masterpiece",
+          "body": "Building an AI model is like building an engine. But to drive a car, you need wheels, fuel lines, brakes, and a steering wheel. Let's learn how to connect an LLM to real-world pipelines that are safe, fast, and smart!"
+        },
+        {
+          "kind": "definition",
+          "icon": "🏗️",
+          "title": "What is a Production Pipeline?",
+          "body": "A production LLM pipeline is a sequence of connected tools that process user inputs, retrieve accurate information, run efficient models, filter out bad content, and serve multiple users at the same time without crashing."
+        },
+        {
+          "kind": "analogy",
+          "icon": "🍕",
+          "title": "The Pizza Parlor Pipeline",
+          "body": "Imagine running a super-busy pizza parlor. Instead of having one giant chef cook everything, you have:\n1. A receptionist who cuts orders into smaller words (Tokenization).\n2. A smart filing cabinet to quickly look up recipes (RAG Vector DB).\n3. A kitchen where only the specialized chef for that specific pizza steps up to cook (Quantized MoE).\n4. A safety inspector checking the pizza before it goes out (Llama Guard).\n5. A delivery driver who groups orders together to deliver them fast (Continuous Batching)."
+        },
+        {
+          "kind": "example",
+          "icon": "🏦",
+          "title": "AI Banking Assistant in Action",
+          "body": "When you ask an AI assistant about your bank account balance:\n1. SentencePiece turns your text into numbers.\n2. The system retrieves your transaction history from a database.\n3. A lightweight MoE model processes the query.\n4. Llama Guard checks that no private passwords are leaked in the output.\n5. The server sends the response instantly alongside thousands of other users' requests."
+        },
+        {
+          "kind": "mythbust",
+          "icon": "🛡️",
+          "title": "The Model Isn't Everything!",
+          "body": "Myth: You just need a large AI model to build a great app.\nReality: A model alone is slow, expensive, and can hallucinate. You need a pipeline with retrieval databases, safety filters, and smart batching to make it work reliably for real users."
+        },
+        {
+          "kind": "visual",
+          "icon": "⚖️",
+          "title": "The Architecture Shift",
+          "body": "Let's compare a basic raw LLM with a complete production-grade pipeline.",
+          "compare": {
+            "title": "Raw LLM vs. Production Pipeline",
+            "right": {
+              "tag": "Production Pipeline",
+              "text": "Fast MoE, RAG database lookup, Llama Guard safety filters, and continuous batch serving.",
+              "emoji": "⚡"
+            },
+            "left": {
+              "emoji": "🐌",
+              "tag": "Raw LLM",
+              "text": "Slow, expensive, struggles with real-time data, and might output unsafe answers."
+            }
+          }
+        }
+      ]
+    },
+    {
+      "type": "practice",
+      "exercises": [
+        {
+          "id": "p1",
+          "type": "multiple_choice",
+          "xp": 2,
+          "prompt": "Which technology ensures the AI server can handle thousands of users at the same time without long waiting delays?",
+          "options": [
+            {
+              "correct": false,
+              "id": "mc_1",
+              "text": "Static single-user queues"
+            },
+            {
+              "correct": true,
+              "text": "Continuous batch serving",
+              "id": "mc_2"
+            },
+            {
+              "text": "Manual page reloading",
+              "id": "mc_3",
+              "correct": false
+            },
+            {
+              "text": "Local text file storage",
+              "id": "mc_4",
+              "correct": false
+            }
+          ],
+          "explain": "Continuous batching groups incoming requests dynamically as they arrive, maximizing GPU usage and speed."
+        },
+        {
+          "id": "p2",
+          "type": "true_false",
+          "xp": 2,
+          "prompt": "Does quantizing a Mixture of Experts (MoE) model make it run faster and use less computer memory?",
+          "options": [
+            {
+              "correct": true,
+              "text": "True",
+              "id": "tf_true"
+            },
+            {
+              "id": "tf_false",
+              "text": "False",
+              "correct": false
+            }
+          ],
+          "explain": "Quantization shrinks the size of a model, making it run faster on cheaper hardware with minimal loss in quality."
+        },
+        {
+          "id": "p3",
+          "type": "fill_blank",
+          "xp": 2,
+          "prompt": "Fill in the name of the safety tool used to filter out bad content in an LLM pipeline.",
+          "sentence": "We use ________ to scan inputs and outputs for harmful or unsafe text.",
+          "blank": "Llama Guard",
+          "words": [
+            "SentencePiece",
+            "Llama Guard",
+            "Vector DB"
+          ],
+          "explain": "Llama Guard acts as a safety filter at the end of the pipeline to check inputs and outputs for harmful content."
+        },
+        {
+          "id": "p4",
+          "type": "spot_the_ai",
+          "xp": 2,
+          "prompt": "Identify the true production-grade LLM pipeline among these choices.",
+          "options": [
+            {
+              "id": "sai_1",
+              "correct": false,
+              "text": "An LLM that answers medical questions directly from its memory without any verification filters."
+            },
+            {
+              "text": "An LLM that fetches real medical papers from a database, answers using a fast MoE model, and checks safety using Llama Guard.",
+              "id": "sai_2",
+              "correct": true
+            },
+            {
+              "id": "sai_3",
+              "text": "A python script that uses 'if/else' statements to reply to pre-written user messages.",
+              "correct": false
+            }
+          ],
+          "explain": "Option B is correct because it uses a real-world knowledge database (RAG) and safety checks, whereas Option A has no safety and Option C is just a simple hardcoded dictionary."
+        }
+      ]
+    },
+    {
+      "type": "boss",
+      "exercises": [
+        {
+          "id": "b1",
+          "type": "multiple_choice",
+          "xp": 5,
+          "prompt": "You are building a production-grade AI customer support agent. Which sequence represents the most complete, safe, and highly optimized pipeline from start to finish?",
+          "options": [
+            {
+              "text": "Tokenization -> Llama Guard -> RAG -> MoE -> Single-sequence batching",
+              "id": "opt_1",
+              "correct": false
+            },
+            {
+              "id": "opt_2",
+              "correct": true,
+              "text": "SentencePiece -> RAG Retrieval -> Quantized MoE -> Llama Guard -> Continuous Batching"
+            },
+            {
+              "correct": false,
+              "id": "opt_3",
+              "text": "Llama Guard -> Quantized MoE -> SentencePiece -> RAG Retrieval"
+            },
+            {
+              "correct": false,
+              "text": "SentencePiece -> Quantized MoE only",
+              "id": "opt_4"
+            }
+          ],
+          "explain": "A production LLM pipeline requires multiple coordinated steps to be safe, fast, and smart: SentencePiece tokenizes, RAG retrieves external facts, MoE runs the model efficiently, Llama Guard filters content, and continuous batching optimizes throughput."
+        }
+      ]
+    }
+  ]
+}

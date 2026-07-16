@@ -1,0 +1,223 @@
+{
+  "id": "u380-l3",
+  "unit": 380,
+  "day": 1903,
+  "tier": "Large Language Models",
+  "tierIcon": "🤖",
+  "title": "Rank Decomposition Matrices",
+  "icon": "🧱",
+  "concept": "A weight update matrix ΔW is factorized into two low-rank matrices A and B (e.g. rank r=8), reducing trainable parameters by 99%.",
+  "xp": 15,
+  "hearts": 3,
+  "estMinutes": 7,
+  "segments": [
+    {
+      "type": "warmup",
+      "exercises": [
+        {
+          "id": "w1",
+          "type": "multiple_choice",
+          "xp": 1,
+          "prompt": "Why do we use rank decomposition when training large-scale developers use Rank Decomposition in machine learning?",
+          "options": [
+            {
+              "correct": true,
+              "text": "To reduce the number of trainable parameters during fine-tuning.",
+              "id": "w1"
+            },
+            {
+              "id": "w2",
+              "text": "To make the AI run slower and use more memory.",
+              "correct": false
+            },
+            {
+              "id": "w3",
+              "text": "To completely rewrite the entire base model from scratch.",
+              "correct": false
+            }
+          ],
+          "explain": "Rank decomposition splits a large weight update into two smaller matrices, drastically reducing the number of variables we need to calculate during training."
+        }
+      ]
+    },
+    {
+      "type": "teach",
+      "cards": [
+        {
+          "kind": "hook",
+          "icon": "🎹",
+          "title": "Tuning a Giant Piano",
+          "body": "Imagine trying to tune a giant piano with 10,000 keys. It would take all day! But what if you found a secret panel where adjusting just 8 master knobs could tune the whole instrument? Rank decomposition does exactly that for AI models, letting us tune giant networks using only a tiny fraction of the dials."
+        },
+        {
+          "kind": "definition",
+          "icon": "📐",
+          "title": "What is Rank Decomposition?",
+          "body": "Instead of training a massive, square update matrix directly, we break it down (decompose it) into two extremely thin matrices, A and B. If our original update is size 4096 by 4096, we factorize it into a 4096-by-r matrix and an r-by-4096 matrix. When we set the rank 'r' to a small number like 8, we only have to train the thin matrices, saving massive amounts of computer memory!"
+        },
+        {
+          "kind": "analogy",
+          "icon": "🎨",
+          "title": "The Stencil Stacking Trick",
+          "body": "Imagine trying to print a giant, high-resolution photo on a huge canvas. It takes forever and uses tons of ink. Instead, you could use a stencil: one card with horizontal slots, and another with vertical slots. By layering them, you recreate the complex image using only two simple stencils! In LoRA, matrices A and B act as these lightweight stencils, replacing a giant heavy stamp."
+        },
+        {
+          "kind": "example",
+          "icon": "📊",
+          "title": "Math in Action",
+          "body": "If a neural network layer has a size of 4,096 by 4,096, updating it directly requires updating 16.7 million weights. By using Rank Decomposition with a rank (r) of 8, we train one matrix of 4,096 x 8, and another of 8 x 4,096. This requires training only 65,536 weights instead of 16.7 million! That is a 99.6% reduction in parameters to train."
+        },
+        {
+          "kind": "mythbust",
+          "icon": "🕵️",
+          "title": "Does Shrinking Mean Losing Quality?",
+          "body": "Many think that shrinking the trainable parameters by 99% means the AI becomes 99% dumber. Actually, because the essential changes in a model usually lie in a low-dimensional space, low-rank matrices capture almost all the important learning while ignoring unnecessary noise. The AI performs nearly identically to full training!"
+        },
+        {
+          "kind": "visual",
+          "icon": "🔍",
+          "title": "Heavy Grid vs. Slim Strands",
+          "body": "Compare updating every single weight in a giant grid versus using two thin matrices to represent the changes.",
+          "compare": {
+            "right": {
+              "tag": "Decomposed (A × B)",
+              "text": "Two thin matrices multiplied together. Only a tiny fraction of parameters (e.g. 1%) are updated.",
+              "emoji": "⏳"
+            },
+            "left": {
+              "text": "A massive square matrix of weights. Modifying it requires updating millions of parameters at once.",
+              "emoji": "🧱",
+              "tag": "Full Update (ΔW)"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "type": "practice",
+      "exercises": [
+        {
+          "id": "p1",
+          "type": "multiple_choice",
+          "xp": 2,
+          "prompt": "Why do matrices A and B have so few parameters compared to the original update matrix?",
+          "options": [
+            {
+              "id": "a",
+              "correct": true,
+              "text": "The rank 'r' is set to a very small number, making both matrices extremely thin."
+            },
+            {
+              "id": "b",
+              "correct": false,
+              "text": "It converts all the weight values into zeros."
+            },
+            {
+              "correct": false,
+              "text": "It trains only one single weight value for the entire model.",
+              "id": "c"
+            },
+            {
+              "id": "d",
+              "correct": false,
+              "text": "It turns the matrices into simple text files."
+            }
+          ],
+          "explain": "Because r (the rank) is extremely small (like 8) compared to the huge dimensions of the model (like 4096), the total size of A and B combined is a tiny fraction of the original square matrix."
+        },
+        {
+          "id": "p2",
+          "type": "true_false",
+          "xp": 2,
+          "prompt": "True or False: Using rank decomposition allows you to keep the original model's main weights frozen during training.",
+          "options": [
+            {
+              "correct": true,
+              "text": "True",
+              "id": "t"
+            },
+            {
+              "correct": false,
+              "text": "False",
+              "id": "f"
+            }
+          ],
+          "explain": "Rank decomposition allows us to train just the two small matrices A and B, while keeping the original, massive pre-trained model weights completely frozen."
+        },
+        {
+          "id": "p3",
+          "type": "fill_blank",
+          "xp": 2,
+          "prompt": "Fill in the missing term regarding parameter reduction:",
+          "sentence": "Rank decomposition splits a massive update matrix into two ________ matrices to save memory.",
+          "blank": "low-rank",
+          "words": [
+            "low-rank",
+            "high-precision",
+            "random",
+            "dense"
+          ],
+          "explain": "By decomposing a giant weight update into two thin, low-rank matrices A and B, we can train models using a tiny fraction of the parameters."
+        },
+        {
+          "id": "p4",
+          "type": "spot_the_ai",
+          "xp": 2,
+          "prompt": "Three AI assistants describe Rank Decomposition. Pinpoint the one that is incorrect:",
+          "options": [
+            {
+              "correct": false,
+              "text": "AI A says: 'Rank decomposition factorizes a large update matrix into two smaller ones.'",
+              "id": "a"
+            },
+            {
+              "correct": false,
+              "text": "AI B says: 'Using a small rank like r=8 can reduce trainable parameters by over 99%.'",
+              "id": "b"
+            },
+            {
+              "correct": true,
+              "id": "c",
+              "text": "AI C says: 'Rank decomposition physically alters and shrinks the original base model weights.'"
+            }
+          ],
+          "explain": "Statement C is incorrect because rank decomposition splits the update matrix ΔW, while the original pre-trained weights remain frozen and unchanged."
+        }
+      ]
+    },
+    {
+      "type": "boss",
+      "exercises": [
+        {
+          "id": "b1",
+          "type": "multiple_choice",
+          "xp": 5,
+          "prompt": "How does Rank Decomposition help train large AI models with 99% fewer parameters?",
+          "options": [
+            {
+              "text": "It merges the weights of two entirely different models into one.",
+              "correct": false,
+              "id": "opt_1"
+            },
+            {
+              "correct": true,
+              "id": "opt_2",
+              "text": "It splits a giant update matrix into two thin, low-rank matrices."
+            },
+            {
+              "correct": false,
+              "id": "opt_3",
+              "text": "It increases the precision of the weights from 16-bit to 32-bit."
+            },
+            {
+              "text": "It physically deletes 99% of the neurons in the base network.",
+              "correct": false,
+              "id": "opt_4"
+            }
+          ],
+          "explain": "Rank decomposition factorizes a giant, unmanageable weight update ΔW (which would require millions of parameters to update directly) into two thin, low-rank matrices A and B. Because they are skinny, they contain a tiny fraction of the original parameter count (often reducing them by over 99%), making training incredibly fast and memory-efficient."
+        }
+      ]
+    }
+  ]
+}

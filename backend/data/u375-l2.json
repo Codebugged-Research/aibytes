@@ -1,0 +1,222 @@
+{
+  "id": "u375-l2",
+  "unit": 375,
+  "day": 1877,
+  "tier": "Large Language Models",
+  "tierIcon": "🤖",
+  "title": "KV Caching: Reusing States",
+  "icon": "💾",
+  "concept": "Callback to Unit 293: KV caching stores Key-Value attention states of past tokens in GPU memory, avoiding redundant math during generation.",
+  "xp": 15,
+  "hearts": 3,
+  "estMinutes": 7,
+  "segments": [
+    {
+      "type": "warmup",
+      "exercises": [
+        {
+          "id": "w1",
+          "type": "multiple_choice",
+          "xp": 1,
+          "prompt": "Why is reusing past attention states useful when generating text?",
+          "options": [
+            {
+              "id": "w_1",
+              "text": "It stops the AI from doing the same math repeatedly.",
+              "correct": true
+            },
+            {
+              "text": "It lets the AI search the internet faster.",
+              "correct": false,
+              "id": "w_2"
+            },
+            {
+              "correct": false,
+              "id": "w_3",
+              "text": "It shrinks the size of the AI model on your hard drive."
+            }
+          ],
+          "explain": "Redundant calculations slow down the generation process. Reusing past states makes it much faster."
+        }
+      ]
+    },
+    {
+      "type": "teach",
+      "cards": [
+        {
+          "kind": "hook",
+          "icon": "⚡",
+          "title": "Stop Repeating Yourself!",
+          "body": "When you chat with an AI, it seems to type out answers word by word. But did you know that without a clever memory trick, the AI would have to re-read your entire prompt and everything it wrote before typing every single new letter? Let's see how it avoids this extra work!"
+        },
+        {
+          "kind": "definition",
+          "icon": "💾",
+          "title": "What is KV Caching?",
+          "body": "A Key-Value (KV) Cache is a dedicated slice of fast GPU memory. It saves the mathematical 'attention states' (Keys and Values) of words we have already processed. When the AI predicts the next word, it pulls these saved states from memory instead of recalculating them."
+        },
+        {
+          "kind": "analogy",
+          "icon": "📝",
+          "title": "The Sticky Note Reader",
+          "body": "Imagine writing a book report where you have to re-read the entire book from page one every single time you want to write a new sentence. That is what an AI does without a KV cache! With a KV cache, it is like keeping sticky notes of all the chapters you already read so you only look at the new words."
+        },
+        {
+          "kind": "example",
+          "icon": "☀️",
+          "title": "Caching in Action",
+          "body": "If you type 'The sky is', the AI processes these three words and saves their KV states in the cache. To generate the next word, 'blue', it only calculates the math for 'blue' and blends it with the cached states of 'The sky is', saving precious milliseconds!"
+        },
+        {
+          "kind": "mythbust",
+          "icon": "🔍",
+          "title": "Not Just Text!",
+          "body": "Many think a KV cache stores the actual words like 'the' or 'sky' in a text database. In reality, it stores complex mathematical patterns (vectors) that represent how those words relate to each other in the model's brain."
+        },
+        {
+          "kind": "visual",
+          "icon": "📊",
+          "title": "Math Overload vs. Smart Memory",
+          "body": "Compare how a model generates the 100th word with and without a KV Cache.",
+          "compare": {
+            "left": {
+              "text": "Must recalculate all math for words 1 to 99 before writing word 100. Slow!",
+              "emoji": "🐌",
+              "tag": "Without KV Cache"
+            },
+            "right": {
+              "tag": "With KV Cache",
+              "emoji": "🚀",
+              "text": "Retrieves saved math for words 1 to 99 from memory. Instantly writes word 100."
+            }
+          }
+        }
+      ]
+    },
+    {
+      "type": "practice",
+      "exercises": [
+        {
+          "id": "p1",
+          "type": "multiple_choice",
+          "xp": 2,
+          "prompt": "What does the 'KV' in KV Cache stand for?",
+          "options": [
+            {
+              "correct": false,
+              "id": "opt_1",
+              "text": "Keyboard-Volume"
+            },
+            {
+              "correct": true,
+              "text": "Key-Value",
+              "id": "opt_2"
+            },
+            {
+              "text": "Kernel-Vector",
+              "id": "opt_3",
+              "correct": false
+            },
+            {
+              "text": "Known-Variable",
+              "id": "opt_4",
+              "correct": false
+            }
+          ],
+          "explain": "KV stands for Key-Value, which are the specific types of attention matrices (states) saved in the cache."
+        },
+        {
+          "id": "p2",
+          "type": "true_false",
+          "xp": 2,
+          "prompt": "True or False: Using a KV cache reduces the amount of GPU memory required to run a model.",
+          "options": [
+            {
+              "correct": false,
+              "text": "True",
+              "id": "t_1"
+            },
+            {
+              "correct": true,
+              "id": "f_1",
+              "text": "False"
+            }
+          ],
+          "explain": "While KV caching saves computation time, it requires storing states in GPU memory, which increases memory usage."
+        },
+        {
+          "id": "p3",
+          "type": "fill_blank",
+          "xp": 2,
+          "prompt": "Fill in the missing word to complete how KV caching saves resources.",
+          "sentence": "KV caching saves past attention states directly in GPU memory to avoid redundant calculations.",
+          "blank": "memory",
+          "words": [
+            "memory",
+            "disk",
+            "network"
+          ],
+          "explain": "A KV cache stores past calculations in GPU memory to prevent the processor from doing the same math over and over again."
+        },
+        {
+          "id": "p4",
+          "type": "spot_the_ai",
+          "xp": 2,
+          "prompt": "Which of these describes an AI system actively utilizing KV caching?",
+          "options": [
+            {
+              "correct": false,
+              "text": "An AI recalculating the math for the entire paragraph every time it appends one letter.",
+              "id": "ai_a"
+            },
+            {
+              "id": "ai_b",
+              "correct": true,
+              "text": "An AI pulling saved mathematical states of past words from GPU memory to generate the next word."
+            },
+            {
+              "text": "An AI training on millions of web pages to learn how to write essays.",
+              "id": "ai_c",
+              "correct": false
+            }
+          ],
+          "explain": "Option B describes an efficient system using KV caching (reusing past calculations), whereas Option A is doing redundant math, and Option C is not related to caching."
+        }
+      ]
+    },
+    {
+      "type": "boss",
+      "exercises": [
+        {
+          "id": "b1",
+          "type": "multiple_choice",
+          "xp": 5,
+          "prompt": "Why does using a KV Cache speed up how fast a Large Language Model can generate a response?",
+          "options": [
+            {
+              "text": "It deletes past words so the model forgets them.",
+              "id": "opt_a",
+              "correct": false
+            },
+            {
+              "correct": false,
+              "id": "opt_b",
+              "text": "It only works when the model is training on new data."
+            },
+            {
+              "correct": true,
+              "id": "opt_c",
+              "text": "It saves past calculations in memory so we do not have to recalculate them."
+            },
+            {
+              "text": "It forces the AI to output random words faster.",
+              "id": "opt_d",
+              "correct": false
+            }
+          ],
+          "explain": "Without a KV cache, an LLM has to recompute the attention math for every single previous word in the prompt and response for every new word it generates, which is incredibly slow and wasteful."
+        }
+      ]
+    }
+  ]
+}

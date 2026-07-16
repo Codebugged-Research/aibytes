@@ -1,0 +1,222 @@
+{
+  "id": "u353-l2",
+  "unit": 353,
+  "day": 1767,
+  "tier": "Large Language Models",
+  "tierIcon": "🤖",
+  "title": "3D Parallelism",
+  "icon": "🧱",
+  "concept": "3D Parallelism combines Data Parallelism (split batch), Pipeline Parallelism (split layers), and Tensor Parallelism (split attention heads) across GPUs.",
+  "xp": 15,
+  "hearts": 3,
+  "estMinutes": 7,
+  "segments": [
+    {
+      "type": "warmup",
+      "exercises": [
+        {
+          "id": "w1",
+          "type": "multiple_choice",
+          "xp": 1,
+          "prompt": "Before combining them into 3D, what does basic 'Data Parallelism' do? do? basic models grew too large, what did standard 'Data Parallelism' do to Data Parallelism do?",
+          "options": [
+            {
+              "id": "split_data",
+              "correct": true,
+              "text": "Splits the incoming training data batch"
+            },
+            {
+              "id": "split_layers",
+              "text": "Splits the neural network layers sequentially",
+              "correct": false
+            },
+            {
+              "id": "split_math",
+              "correct": false,
+              "text": "Splits the mathematical tensors within a layer"
+            }
+          ],
+          "explain": "Data Parallelism splits the incoming training data batches, allowing multiple GPUs to process different inputs simultaneously."
+        }
+      ]
+    },
+    {
+      "type": "teach",
+      "cards": [
+        {
+          "kind": "hook",
+          "icon": "🧠",
+          "title": "Too Big for One GPU",
+          "body": "Have you ever wondered how AI models with hundreds of billions of parameters are trained? They are too massive to fit on a single computer, and even simple division isn't enough. We need a three-dimensional strategy to split the work!"
+        },
+        {
+          "kind": "definition",
+          "icon": "🧱",
+          "title": "What is 3D Parallelism?",
+          "body": "3D Parallelism is a training technique that combines three methods at the same time: Data Parallelism (splitting the training data), Pipeline Parallelism (splitting model layers sequentially), and Tensor Parallelism (splitting individual layer operations, like attention heads). This allows models with hundreds of billions of parameters to fit and train across thousands of GPUs."
+        },
+        {
+          "kind": "analogy",
+          "icon": "🏰",
+          "title": "The Mega Lego Factory",
+          "body": "Imagine you are building thousands of complex Lego castles. Data Parallelism is having different teams build identical castles in parallel. Pipeline Parallelism is setting up an assembly line where one team builds the foundation, and the next adds the towers. Tensor Parallelism is having three people hold and assemble the same massive, heavy gate together because it's too big for one person. 3D Parallelism is doing all three at once!"
+        },
+        {
+          "kind": "example",
+          "icon": "🚀",
+          "title": "Training Giant Models",
+          "body": "Super-massive AI models like Megatron-Turing NLG (530 billion parameters) cannot fit on a single GPU—or even a single server. By grouping GPUs into a 3D grid (e.g., 8 GPUs for Tensor splitting, 16 for Pipeline splitting, and 4 for Data splitting), researchers successfully trained the model across 512 total GPUs without running out of memory."
+        },
+        {
+          "kind": "mythbust",
+          "icon": "🛡️",
+          "title": "More GPUs Isn't Just More Data",
+          "body": "Many believe that to train bigger models, you just need to buy more GPUs and clone the data. But once a model's layers are too large to fit in one GPU's memory, simple data cloning fails. You must slice the actual layers and math operations using 3D Parallelism to make it possible."
+        },
+        {
+          "kind": "visual",
+          "icon": "📊",
+          "title": "Division of Labor",
+          "body": "Let's compare how work is divided between standard Data Parallelism and advanced 3D Parallelism.",
+          "compare": {
+            "right": {
+              "emoji": "🧱",
+              "text": "The model layers are split sequentially (Pipeline), individual operations are split (Tensor), and data is split (Data) all at once.",
+              "tag": "3D Parallelism"
+            },
+            "left": {
+              "text": "Every GPU keeps a full copy of the model; we only split the incoming data batches. fails if the model is too big for one GPU.",
+              "tag": "Data Parallelism",
+              "emoji": "👥"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "type": "practice",
+      "exercises": [
+        {
+          "id": "p1",
+          "type": "multiple_choice",
+          "xp": 2,
+          "prompt": "How does 3D Parallelism manage to fit giant AI models across multiple GPUs?",
+          "options": [
+            {
+              "text": "It only splits the dataset into smaller parts.",
+              "id": "a1",
+              "correct": false
+            },
+            {
+              "correct": true,
+              "text": "It splits data, sequential model layers, and individual layer operations.",
+              "id": "a2"
+            },
+            {
+              "text": "It replicates the entire model on every single GPU.",
+              "correct": false,
+              "id": "a3"
+            },
+            {
+              "text": "It runs the model on three different computer brands.",
+              "id": "a4",
+              "correct": false
+            }
+          ],
+          "explain": "Data Parallelism focuses on splitting the batch of incoming data, while Pipeline Parallelism splits the sequential layers, and Tensor Parallelism splits individual matrix math operations."
+        },
+        {
+          "id": "p2",
+          "type": "true_false",
+          "xp": 2,
+          "prompt": "Is 3D Parallelism primarily used because giant AI models are too big to fit on a single GPU?",
+          "options": [
+            {
+              "text": "True",
+              "id": "true_val",
+              "correct": true
+            },
+            {
+              "text": "False",
+              "id": "false_val",
+              "correct": false
+            }
+          ],
+          "explain": "3D Parallelism is specifically designed for very large models that cannot fit on a single GPU's memory."
+        },
+        {
+          "id": "p3",
+          "type": "fill_blank",
+          "xp": 2,
+          "prompt": "Fill in the missing parallelism type that splits single operations within a layer.",
+          "sentence": "3D Parallelism combines Data, Pipeline, and _ Parallelism.",
+          "blank": "Tensor",
+          "words": [
+            "Tensor",
+            "Network",
+            "Memory"
+          ],
+          "explain": "Tensor Parallelism slices individual operations (like matrix multiplications) within a single layer across multiple nearby GPUs."
+        },
+        {
+          "id": "p4",
+          "type": "spot_the_ai",
+          "xp": 2,
+          "prompt": "Two of these are real strategies used in 3D Parallelism. Which one is AI-generated nonsense?",
+          "options": [
+            {
+              "correct": false,
+              "id": "real1",
+              "text": "We split the batch of data across different worker groups."
+            },
+            {
+              "text": "We partition model layers sequentially like an assembly line.",
+              "correct": false,
+              "id": "real2"
+            },
+            {
+              "id": "ai_fake",
+              "correct": true,
+              "text": "We project the model weight tensors into holographic 3D light arrays."
+            }
+          ],
+          "explain": "The third option is generated by an AI making up a fake technology ('Holographic Parallelism') that is not part of the standard 3D Parallelism framework."
+        }
+      ]
+    },
+    {
+      "type": "boss",
+      "exercises": [
+        {
+          "id": "b1",
+          "type": "multiple_choice",
+          "xp": 5,
+          "prompt": "To train the largest AI models in the world, 3D Parallelism simultaneously combines which three techniques?",
+          "options": [
+            {
+              "id": "ans_3d",
+              "correct": true,
+              "text": "Data Parallelism, Pipeline Parallelism, and Tensor Parallelism"
+            },
+            {
+              "id": "ans_wrong1",
+              "correct": false,
+              "text": "CPU, GPU, and TPU computing levels"
+            },
+            {
+              "id": "ans_wrong2",
+              "correct": false,
+              "text": "1D, 2D, and 3D printing structures"
+            },
+            {
+              "text": "Storage, Memory, and Network routing speeds",
+              "correct": false,
+              "id": "ans_wrong3"
+            }
+          ],
+          "explain": "3D Parallelism is the ultimate combination: Data Parallelism scales the batch size, Pipeline Parallelism splits layers across rows of GPUs, and Tensor Parallelism splits individual calculations within a layer across GPUs in a column."
+        }
+      ]
+    }
+  ]
+}

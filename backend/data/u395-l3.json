@@ -1,0 +1,223 @@
+{
+  "id": "u395-l3",
+  "unit": 395,
+  "day": 1978,
+  "tier": "Large Language Models",
+  "tierIcon": "🤖",
+  "title": "Distributed Inference Serving",
+  "icon": "🧱",
+  "concept": "Serving large models requires tensor parallelism across multiple local GPUs to fit parameter and KV cache memory in active memory.",
+  "xp": 15,
+  "hearts": 3,
+  "estMinutes": 7,
+  "segments": [
+    {
+      "type": "warmup",
+      "exercises": [
+        {
+          "id": "w1",
+          "type": "multiple_choice",
+          "xp": 1,
+          "prompt": "Why can't we run modern giant AI models on a single standard GPU?",
+          "options": [
+            {
+              "id": "too_large",
+              "correct": true,
+              "text": "They require more memory than a single GPU has."
+            },
+            {
+              "text": "Their internet connection is too slow.",
+              "id": "slow_internet",
+              "correct": false
+            },
+            {
+              "id": "cheap_gpus",
+              "text": "GPUs are not designed to do math.",
+              "correct": false
+            }
+          ],
+          "explain": "Giant models have billions of parameters and take up massive amounts of memory (for weights and KV cache), which exceeds the memory capacity of any single GPU."
+        }
+      ]
+    },
+    {
+      "type": "teach",
+      "cards": [
+        {
+          "kind": "hook",
+          "icon": "🧱",
+          "title": "Too Big for One Brain",
+          "body": "Today's AI models are absolute giants! They are often too massive to fit inside the memory of a single graphics card (GPU). If you try to run them on just one card, they run out of memory and crash. To serve these models to millions of users, we have to slice them up and run them across multiple chips at once."
+        },
+        {
+          "kind": "definition",
+          "icon": "⚡",
+          "title": "What is Tensor Parallelism?",
+          "body": "Tensor Parallelism is a technique that splits a single model's mathematical layers (tensors) across multiple local GPUs. Instead of putting different layers on different GPUs, it cuts each layer in half (or quarters) so that all GPUs work together to calculate a single step of the model at the same time. This is essential for fitting massive weights and memory-heavy conversation history (KV cache) into active GPU memory."
+        },
+        {
+          "kind": "analogy",
+          "icon": "📖",
+          "title": "The Encyclopedia Team",
+          "body": "Imagine trying to read a massive, heavy encyclopedia. It is too heavy for one person to hold and flip through quickly. Instead, you tear the book into chapters and give one chapter to each of your friends. When you need to find an answer, everyone searches their own chapter at the exact same time and combines their notes. This is tensor parallelism: splitting the model's brain across multiple GPUs so they can think as one team."
+        },
+        {
+          "kind": "example",
+          "icon": "🚀",
+          "title": "Real-World Scaling",
+          "body": "Imagine running a 175-billion parameter model. No single GPU has enough memory to hold it. By using Tensor Parallelism across 8 interconnected GPUs, the model's weights are divided equally. When a user asks a question, all 8 GPUs process their piece of the math simultaneously, sharing their calculations instantly to produce the next word in milliseconds."
+        },
+        {
+          "kind": "mythbust",
+          "icon": "🔍",
+          "title": "Myth: Just copy the model!",
+          "body": "It is easy to think that if we have 4 GPUs, we should just run a separate copy of the model on each one. However, if the model is 100 gigabytes and each GPU only has 40 gigabytes of memory, a single copy won't even fit on one card! We have no choice but to split the single model across the cards to make it fit and run."
+        },
+        {
+          "kind": "visual",
+          "icon": "📊",
+          "title": "Tensor vs. Pipeline Parallelism",
+          "body": "Compare how different parallelism strategies distribute a model's memory workload across GPUs.",
+          "compare": {
+            "left": {
+              "emoji": "✂️",
+              "text": "Splits each individual layer's math. All GPUs work on every step together. Fast but needs ultra-fast connections.",
+              "tag": "Tensor Parallelism"
+            },
+            "right": {
+              "tag": "Pipeline Parallelism",
+              "emoji": "⛓️",
+              "text": "Splits the model by layers (e.g., GPU 1 does layers 1-10, GPU 2 does 11-20). Slower per request."
+            }
+          }
+        }
+      ]
+    },
+    {
+      "type": "practice",
+      "exercises": [
+        {
+          "id": "p1",
+          "type": "multiple_choice",
+          "xp": 2,
+          "prompt": "What does Tensor Parallelism do to help run giant AI models?",
+          "options": [
+            {
+              "text": "It duplicates the entire model on every single GPU.",
+              "id": "a",
+              "correct": false
+            },
+            {
+              "id": "b",
+              "correct": true,
+              "text": "It splits the internal mathematical layers (tensors) of the model across multiple GPUs."
+            },
+            {
+              "id": "c",
+              "correct": false,
+              "text": "It stores the model on a slow hard drive and loads it only when needed."
+            },
+            {
+              "correct": false,
+              "id": "d",
+              "text": "It translates the model into a different programming language."
+            }
+          ],
+          "explain": "Tensor parallelism slices individual layers across multiple GPUs, allowing them to split the math and fit the massive weights and KV cache in memory."
+        },
+        {
+          "id": "p2",
+          "type": "true_false",
+          "xp": 2,
+          "prompt": "True or False: Tensor parallelism works by sending the first half of the model's layers to GPU A, and the second half of the layers to GPU B.",
+          "options": [
+            {
+              "text": "True",
+              "correct": false,
+              "id": "true_val"
+            },
+            {
+              "id": "false_val",
+              "text": "False",
+              "correct": true
+            }
+          ],
+          "explain": "Tensor parallelism actually splits the layers themselves so that multiple GPUs work on the same layer simultaneously, making it great for ultra-low latency."
+        },
+        {
+          "id": "p3",
+          "type": "fill_blank",
+          "xp": 2,
+          "prompt": "Fill in the blank to describe how tensor parallelism manages model data:",
+          "sentence": "Tensor parallelism works by splitting a single layer's mathematical weights across several GPUs at the same time.",
+          "blank": "weights",
+          "words": [
+            "weights",
+            "files",
+            "users",
+            "prompts"
+          ],
+          "explain": "Tensor parallelism divides the actual mathematical weights of each layer across multiple GPUs, allowing them to collaborate on a single calculation."
+        },
+        {
+          "id": "p4",
+          "type": "spot_the_ai",
+          "xp": 2,
+          "prompt": "Because tensor parallelism requires GPUs to share calculation data constantly, which setup is required?",
+          "options": [
+            {
+              "correct": false,
+              "text": "Option A: A normal home Wi-Fi network connecting laptops.",
+              "id": "option_a"
+            },
+            {
+              "id": "option_b",
+              "text": "Option B: Ultra-fast physical links (like NVLink) directly connecting GPUs inside a server.",
+              "correct": true
+            },
+            {
+              "correct": false,
+              "text": "Option C: Sending data over a standard USB cable to an external hard drive.",
+              "id": "option_c"
+            }
+          ],
+          "explain": "Tensor parallelism requires GPUs to exchange mathematical outputs constantly during a single layer's computation, making fast connections like NVLink mandatory. Pipeline parallelism splits by layers, which requires less frequent communication."
+        }
+      ]
+    },
+    {
+      "type": "boss",
+      "exercises": [
+        {
+          "id": "b1",
+          "type": "multiple_choice",
+          "xp": 5,
+          "prompt": "You are setting up a cluster of GPUs to run a massive 70-billion parameter AI model. To make it respond instantly, you decide to use Tensor Parallelism. How does this technique work?",
+          "options": [
+            {
+              "id": "tp_weight_split",
+              "correct": true,
+              "text": "It splits the mathematical layers across GPUs, requiring ultra-fast connection to combine results."
+            },
+            {
+              "id": "dp_copy",
+              "correct": false,
+              "text": "It makes a full copy of the model on every GPU to handle different requests."
+            },
+            {
+              "id": "pp_stage",
+              "correct": false,
+              "text": "It puts the first half of the model's layers on GPU 1 and the second half on GPU 2."
+            },
+            {
+              "text": "It moves the model parameters to a slower computer hard drive to save GPU space.",
+              "correct": false,
+              "id": "disk_offload"
+            }
+          ],
+          "explain": "Tensor parallelism splits the layer weights of a model across multiple GPUs, which requires high-bandwidth communication (like NVLink) to combine the intermediate mathematical results during the forward pass. Pipeline parallelism splits different layers sequentially across GPUs."
+        }
+      ]
+    }
+  ]
+}
