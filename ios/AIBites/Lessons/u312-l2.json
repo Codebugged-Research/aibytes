@@ -1,0 +1,223 @@
+{
+  "id": "u312-l2",
+  "unit": 312,
+  "day": 1562,
+  "tier": "Generative Media",
+  "tierIcon": "🌌",
+  "title": "Beta-VAE: Weighting the KL Term",
+  "icon": "β",
+  "concept": "Beta-VAE introduces a tunable weight (beta) on the KL term, letting practitioners explicitly control the reconstruction-regularization balance.",
+  "xp": 15,
+  "hearts": 3,
+  "estMinutes": 7,
+  "segments": [
+    {
+      "type": "warmup",
+      "exercises": [
+        {
+          "id": "w1",
+          "type": "multiple_choice",
+          "xp": 1,
+          "prompt": "In a normal VAE, what does the KL term in the loss encourage?",
+          "options": [
+            {
+              "id": "a",
+              "text": "The latent space to stay organized and close to a simple, known shape",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "The images to be reconstructed in bright colors",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "The model to train faster on a GPU",
+              "correct": false
+            }
+          ],
+          "explain": "The KL term pushes the latent space to match a simple prior (usually a standard normal distribution), keeping it smooth and organized."
+        }
+      ]
+    },
+    {
+      "type": "teach",
+      "cards": [
+        {
+          "kind": "hook",
+          "icon": "🎚️",
+          "title": "What if you had a dial for creativity?",
+          "body": "A normal VAE gives reconstruction and regularization equal say in the loss. But what if you wanted the model to care WAY more about tidy, meaningful latent space than perfect pixel copies? Beta-VAE adds one tiny knob to do exactly that."
+        },
+        {
+          "kind": "definition",
+          "icon": "📐",
+          "title": "Beta-VAE, Defined",
+          "body": "Beta-VAE is a VAE where the KL term is multiplied by a number called beta (β). When β = 1, it's a regular VAE. When β > 1, the model is pushed harder to keep its latent space simple and organized, even if that means blurrier reconstructions. When β < 1, the model focuses more on sharp reconstructions."
+        },
+        {
+          "kind": "analogy",
+          "icon": "🧹",
+          "title": "The Tidiness Dial",
+          "body": "Imagine grading a kid's room on two things: how nice their toy display looks (reconstruction) and how organized the shelves are (KL term). Beta is like a weight you put on the 'organized shelves' score. Crank beta up, and the kid obsesses over tidy shelves, even if the toy display gets messier. Crank it down, and they focus on the pretty display, letting shelves get cluttered."
+        },
+        {
+          "kind": "example",
+          "icon": "🖼️",
+          "title": "Disentangling Faces",
+          "body": "Researchers trained a Beta-VAE with a high β on face images. Because the latent space was forced to be extra simple and organized, individual latent dimensions started to control single, understandable features on their own — like just 'smile amount' or just 'head rotation' — without a human ever labeling those features."
+        },
+        {
+          "kind": "mythbust",
+          "icon": "🚫",
+          "title": "Myth: Bigger Beta Is Always Better",
+          "body": "Not true! A very high β can crush the model into copying almost nothing useful — reconstructions get too blurry and the model loses important details. Beta is a trade-off dial, not a 'quality' dial. Good beta values are found through experimentation, not by always maxing them out."
+        },
+        {
+          "kind": "visual",
+          "icon": "⚖️",
+          "title": "Two Beta Settings, Two Outcomes",
+          "body": "Changing beta shifts the balance between sharp copies and clean, organized latent space.",
+          "compare": {
+            "left": {
+              "emoji": "🔍",
+              "tag": "Low Beta (β < 1)",
+              "text": "Sharper reconstructions, but latent space may be tangled and less meaningful."
+            },
+            "right": {
+              "emoji": "🧩",
+              "tag": "High Beta (β > 1)",
+              "text": "Blurrier reconstructions, but latent dimensions become cleaner and often more interpretable."
+            }
+          }
+        }
+      ]
+    },
+    {
+      "type": "practice",
+      "exercises": [
+        {
+          "id": "p1",
+          "type": "multiple_choice",
+          "xp": 2,
+          "prompt": "What does the beta (β) in Beta-VAE actually do?",
+          "options": [
+            {
+              "id": "a",
+              "text": "It scales how much the KL term counts in the total loss",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "It sets the number of layers in the decoder",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "It controls how many images are in the training batch",
+              "correct": false
+            },
+            {
+              "id": "d",
+              "text": "It changes the learning rate of the optimizer",
+              "correct": false
+            }
+          ],
+          "explain": "Beta is a multiplier placed directly on the KL divergence term, changing how strongly it's weighted against the reconstruction term."
+        },
+        {
+          "id": "p2",
+          "type": "true_false",
+          "xp": 2,
+          "prompt": "Setting beta greater than 1 always produces perfectly sharp reconstructions.",
+          "options": [
+            {
+              "id": "true",
+              "text": "True",
+              "correct": false
+            },
+            {
+              "id": "false",
+              "text": "False",
+              "correct": true
+            }
+          ],
+          "explain": "False. A high beta pushes the model to prioritize a clean, organized latent space over pixel-perfect reconstructions, so images often become blurrier, not sharper."
+        },
+        {
+          "id": "p3",
+          "type": "fill_blank",
+          "xp": 2,
+          "prompt": "Fill in the blank:",
+          "sentence": "When beta equals 1, Beta-VAE behaves exactly like a _____ VAE.",
+          "blank": "regular",
+          "words": [
+            "regular",
+            "broken",
+            "supervised",
+            "pixelated"
+          ],
+          "explain": "At β = 1, there's no extra weighting on the KL term, so the loss is identical to a standard VAE's loss."
+        },
+        {
+          "id": "p4",
+          "type": "spot_the_ai",
+          "xp": 2,
+          "prompt": "A researcher wants latent dimensions that each control one clear, separate feature (like just 'hair length'). Should they raise or lower beta?",
+          "options": [
+            {
+              "id": "a",
+              "text": "Raise beta, to push for a more organized, disentangled latent space",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "Lower beta, to make the model ignore the latent space entirely",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "Set beta to zero, which removes the KL term completely",
+              "correct": false
+            }
+          ],
+          "explain": "Raising beta pressures the encoder to keep the latent space extra simple and structured, which often leads to more disentangled, human-interpretable features."
+        }
+      ]
+    },
+    {
+      "type": "boss",
+      "exercises": [
+        {
+          "id": "b1",
+          "type": "multiple_choice",
+          "xp": 5,
+          "prompt": "A team trains two Beta-VAEs on the same dataset: Model A uses β = 0.5, Model B uses β = 4. Which statement is most likely true?",
+          "options": [
+            {
+              "id": "a",
+              "text": "Model A will likely have sharper reconstructions; Model B will likely have a more organized latent space but blurrier outputs",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "Model A and Model B will produce identical results since beta doesn't affect training",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "Model B will always be objectively better because higher beta means better quality",
+              "correct": false
+            },
+            {
+              "id": "d",
+              "text": "Model A will have a more disentangled latent space than Model B",
+              "correct": false
+            }
+          ],
+          "explain": "Lower beta (Model A) weakens the KL term's influence, letting the model focus on accurate, sharp reconstructions. Higher beta (Model B) strengthens the KL term's pull, favoring a cleaner, more organized (often more disentangled) latent space at the cost of reconstruction sharpness."
+        }
+      ]
+    }
+  ]
+}

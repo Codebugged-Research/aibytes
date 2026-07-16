@@ -1,0 +1,223 @@
+{
+  "id": "u308-l1",
+  "unit": 308,
+  "day": 1541,
+  "tier": "Generative Media",
+  "tierIcon": "🌌",
+  "title": "The Problem: Sampling Isn't Differentiable",
+  "icon": "🎩",
+  "concept": "Randomly sampling from a distribution is not a smooth, differentiable operation, which breaks backpropagation through the sampling step.",
+  "xp": 15,
+  "hearts": 3,
+  "estMinutes": 7,
+  "segments": [
+    {
+      "type": "warmup",
+      "exercises": [
+        {
+          "id": "w1",
+          "type": "multiple_choice",
+          "xp": 1,
+          "prompt": "When you flip a coin and it lands on heads, can you predict exactly which tiny nudge caused 'heads' instead of 'tails'?",
+          "options": [
+            {
+              "id": "a",
+              "text": "No — it just randomly landed that way, no smooth cause-effect link",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "Yes — flipping harder always gives heads",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "Yes — the coin's color decides it",
+              "correct": false
+            }
+          ],
+          "explain": "Exactly! Random outcomes don't have a smooth, traceable link back to a tiny adjustment. That's the core issue with sampling and gradients."
+        }
+      ]
+    },
+    {
+      "type": "teach",
+      "cards": [
+        {
+          "kind": "hook",
+          "icon": "🎩",
+          "title": "The Magician's Hat Problem",
+          "body": "A magician pulls a random rabbit out of a hat. Cool trick — but if you asked 'which knob do I turn to get a bigger rabbit next time?', there's no knob! Random sampling in AI has the same mystery: it produces a result, but hides HOW that result connects to the settings that created it."
+        },
+        {
+          "kind": "definition",
+          "icon": "🎲",
+          "title": "What Does 'Not Differentiable' Mean?",
+          "body": "Differentiable means we can measure how a tiny change in the input causes a tiny, predictable change in the output — this is how neural networks learn. Random sampling just picks a value by chance, with no smooth link back to the settings (like the mean or spread) that produced it. So gradients can't flow backward through it."
+        },
+        {
+          "kind": "analogy",
+          "icon": "🎰",
+          "title": "Like a Slot Machine Lever",
+          "body": "Imagine a slot machine. You pull the lever, and it randomly lands on a result. You can't ask 'how would the result change if I pulled the lever a tiny bit softer?' — the randomness breaks that smooth connection. A neural network's 'gradient' is like asking that question, and random sampling gives no answer."
+        },
+        {
+          "kind": "example",
+          "icon": "🌡️",
+          "title": "Guessing Tomorrow's Temperature",
+          "body": "Say a model predicts tomorrow's temperature will be around 20°C, with some randomness added for uncertainty. It samples and gets 23°C. If we ask 'how should I adjust my prediction to get a better sample?', we can't trace that back smoothly — the random dice roll hides the connection between the 20°C setting and the 23°C result."
+        },
+        {
+          "kind": "mythbust",
+          "icon": "🚫",
+          "title": "Myth: Random Just Means Messy Math",
+          "body": "Myth: 'Sampling is just noisy math, so gradients just get a little noisy too.' Truth: It's not about noise — it's that the sampling STEP itself has no derivative at all. There's no slope to compute, because a random draw is a jump, not a smooth curve. This is a structural problem, not a precision problem."
+        },
+        {
+          "kind": "visual",
+          "icon": "📉",
+          "title": "Smooth Path vs. Random Jump",
+          "body": "Backpropagation needs a smooth, connected path from output back to input, like a ramp. Random sampling is more like teleporting — there's no ramp to walk back down.",
+          "compare": {
+            "left": {
+              "emoji": "📈",
+              "tag": "Differentiable Function",
+              "text": "Smooth curve — tiny input changes create tiny, trackable output changes. Gradients flow easily."
+            },
+            "right": {
+              "emoji": "🎲",
+              "tag": "Random Sampling",
+              "text": "A sudden random jump to one outcome. No smooth curve exists, so gradients get stuck."
+            }
+          }
+        }
+      ]
+    },
+    {
+      "type": "practice",
+      "exercises": [
+        {
+          "id": "p1",
+          "type": "multiple_choice",
+          "xp": 2,
+          "prompt": "Why can't backpropagation flow through a random sampling step?",
+          "options": [
+            {
+              "id": "a",
+              "text": "Because computers can't generate random numbers fast enough",
+              "correct": false
+            },
+            {
+              "id": "b",
+              "text": "Because random sampling has no smooth, differentiable connection between settings and the outcome",
+              "correct": true
+            },
+            {
+              "id": "c",
+              "text": "Because random numbers are always too large for neural networks",
+              "correct": false
+            },
+            {
+              "id": "d",
+              "text": "Because sampling only works with images, not numbers",
+              "correct": false
+            }
+          ],
+          "explain": "Right! The random draw is a sudden jump, not a smooth function, so there's no gradient (slope) to send backward through it."
+        },
+        {
+          "id": "p2",
+          "type": "true_false",
+          "xp": 2,
+          "prompt": "True or False: Random sampling is just a 'noisy' differentiable function, so gradients still flow through it fine, just less accurately.",
+          "options": [
+            {
+              "id": "t",
+              "text": "True",
+              "correct": false
+            },
+            {
+              "id": "f",
+              "text": "False",
+              "correct": true
+            }
+          ],
+          "explain": "False! It's not a matter of accuracy — sampling has NO derivative at all. It's a structural break in the smooth path gradients need."
+        },
+        {
+          "id": "p3",
+          "type": "fill_blank",
+          "xp": 2,
+          "prompt": "Fill in the blank:",
+          "sentence": "Random sampling breaks backpropagation because it isn't ___, meaning tiny changes in settings don't create smooth, trackable changes in the output.",
+          "blank": "differentiable",
+          "words": [
+            "differentiable",
+            "colorful",
+            "expensive",
+            "slow"
+          ],
+          "explain": "'Differentiable' means we can compute a smooth slope connecting inputs to outputs. Sampling lacks this smooth connection entirely."
+        },
+        {
+          "id": "p4",
+          "type": "spot_the_ai",
+          "xp": 2,
+          "prompt": "Which of these best explains WHY gradients can't pass through a random sampling step?",
+          "options": [
+            {
+              "id": "a",
+              "text": "Sampling produces a single random jump with no smooth slope connecting it back to the input settings",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "Sampling always produces numbers that are too big for computers to handle",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "Gradients can pass through fine, but only in image-based models",
+              "correct": false
+            }
+          ],
+          "explain": "Correct! There's no 'slope' to measure — a random draw jumps straight to a result, with no smooth in-between path for gradients to follow."
+        }
+      ]
+    },
+    {
+      "type": "boss",
+      "exercises": [
+        {
+          "id": "b1",
+          "type": "multiple_choice",
+          "xp": 5,
+          "prompt": "A student says: 'Since sampling is random, we should just skip computing gradients for it and hope the rest of the network learns anyway.' What's the better mindset for solving this problem?",
+          "options": [
+            {
+              "id": "a",
+              "text": "Accept it can never be solved and avoid randomness entirely in AI models",
+              "correct": false
+            },
+            {
+              "id": "b",
+              "text": "Recognize the sampling step blocks gradient flow, and look for a clever trick to make it smooth or bypass it (a problem to solve, not ignore)",
+              "correct": true
+            },
+            {
+              "id": "c",
+              "text": "Just make the random numbers smaller so gradients pass through easier",
+              "correct": false
+            },
+            {
+              "id": "d",
+              "text": "Ignore the issue since neural networks don't actually need gradients to learn",
+              "correct": false
+            }
+          ],
+          "explain": "Exactly right mindset! Sampling truly blocks gradients — but instead of giving up, researchers look for clever workarounds (like reparameterization tricks) to restore that smooth path. That's the problem this whole unit will solve!"
+        }
+      ]
+    }
+  ]
+}

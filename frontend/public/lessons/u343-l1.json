@@ -1,0 +1,223 @@
+{
+  "id": "u343-l1",
+  "unit": 343,
+  "day": 1716,
+  "tier": "Generative Media",
+  "tierIcon": "🌌",
+  "title": "Deploying Generative Models at Scale",
+  "icon": "🚀",
+  "concept": "Serving generative models to many concurrent users requires efficient batching, GPU utilization, and careful queue management for expensive generation requests.",
+  "xp": 15,
+  "hearts": 3,
+  "estMinutes": 7,
+  "segments": [
+    {
+      "type": "warmup",
+      "exercises": [
+        {
+          "id": "w1",
+          "type": "multiple_choice",
+          "xp": 1,
+          "prompt": "What happens if thousands of users try to access a generative model hosted on a single server without any queue management?",
+          "options": [
+            {
+              "text": "The server gets overloaded and users experience high delays or errors.",
+              "id": "a",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "correct": false,
+              "text": "The AI model automatically deletes itself to save space."
+            },
+            {
+              "id": "c",
+              "text": "The user's internet speed automatically increases.",
+              "correct": false
+            }
+          ],
+          "explain": "Generative models require huge amounts of calculation. When thousands of users connect at once, the limited GPU hardware can easily get overloaded without smart management."
+        }
+      ]
+    },
+    {
+      "type": "teach",
+      "cards": [
+        {
+          "kind": "hook",
+          "icon": "🚀",
+          "title": "Going Viral Overnight",
+          "body": "Imagine you build a cool AI art generator and overnight it goes viral with a million users. Suddenly, your server crashes and everything freezes. How do massive AI companies keep their systems running fast for millions of concurrent users without buying infinite GPUs? Let's find out!"
+        },
+        {
+          "kind": "definition",
+          "icon": "⚙️",
+          "title": "What is Scaling?",
+          "body": "Model serving at scale is the technology and strategy used to host large generative models (like LLMs) so thousands of people can use them simultaneously. Because these models require heavy GPU computing power, smart systems must group requests together (batching) and manage incoming queues so the hardware never sits idle."
+        },
+        {
+          "kind": "analogy",
+          "icon": "🎂",
+          "title": "The Big Batch Bakery",
+          "body": "Think of serving a generative model like a popular baker making custom cakes. If the baker makes one cake at a time for each customer waiting in line, the queue moves incredibly slowly. But if the baker groups similar orders together and bakes several cakes in the big oven at the exact same time, everyone gets served much faster!"
+        },
+        {
+          "kind": "example",
+          "icon": "⚡",
+          "title": "Dynamic Batching in Action",
+          "body": "Without smart scaling, if 100 users ask an AI to write a story at the same time, the GPU will process them one-by-one, causing the 100th user to wait minutes. With dynamic batching middleware like vLLM or TGI, those 100 requests are packed together into a single GPU computation pass, delivering results to all users in seconds."
+        },
+        {
+          "kind": "mythbust",
+          "icon": "💡",
+          "title": "The Hardware Myth",
+          "body": "Many think that scaling up AI just means buying more and faster GPUs. In reality, hardware is only half the battle. Without efficient request-handling software to manage memory and queues, even the most expensive GPUs will sit idle waiting for data, wasting time and money."
+        },
+        {
+          "kind": "visual",
+          "icon": "📊",
+          "title": "Sequential vs. Batched Serving",
+          "body": "See how queue management and grouping makes a difference in handling multiple users.",
+          "compare": {
+            "left": {
+              "text": "Processes requests one by one. Users at the back of the queue experience massive delays.",
+              "tag": "Sequential Serving",
+              "emoji": "🐌"
+            },
+            "right": {
+              "tag": "Batched Serving",
+              "emoji": "🚀",
+              "text": "Combines incoming requests into parallel groups. The GPU processes them together, slashing wait times."
+            }
+          }
+        }
+      ]
+    },
+    {
+      "type": "practice",
+      "exercises": [
+        {
+          "id": "p1",
+          "type": "multiple_choice",
+          "xp": 2,
+          "prompt": "Why do we want to batch multiple user generation requests together on a GPU?",
+          "options": [
+            {
+              "text": "To keep the GPU cores busy and process multiple requests in parallel",
+              "id": "a",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "To make the individual words generate more creatively",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "correct": false,
+              "text": "To reduce the electricity cost of the user's mobile device"
+            },
+            {
+              "id": "d",
+              "correct": false,
+              "text": "To allow the AI to run without any internet connection"
+            }
+          ],
+          "explain": "GPUs are designed for massive parallel processing. By grouping multiple requests together, we feed the GPU enough data to keep all its processing cores busy, maximizing efficiency."
+        },
+        {
+          "id": "p2",
+          "type": "true_false",
+          "xp": 2,
+          "prompt": "True or False: Because generative AI outputs can vary in length, every user request takes the exact same amount of time to complete.",
+          "options": [
+            {
+              "id": "a",
+              "correct": false,
+              "text": "True"
+            },
+            {
+              "text": "False",
+              "correct": true,
+              "id": "b"
+            }
+          ],
+          "explain": "Text generation length is highly unpredictable. If one user asks for a single word and another asks for a long essay, they will finish at very different times, requiring smart dynamic management."
+        },
+        {
+          "id": "p3",
+          "type": "fill_blank",
+          "xp": 2,
+          "prompt": "Fill in the missing word to complete the description of efficient AI serving.",
+          "sentence": "To serve thousands of users at once, AI servers use dynamic batching to group requests together.",
+          "blank": "batching",
+          "words": [
+            "batching",
+            "cooling",
+            "coding",
+            "testing"
+          ],
+          "explain": "Batching combines multiple individual requests into a single group, allowing the GPU to process them all at once, which is much faster than running them one by one."
+        },
+        {
+          "id": "p4",
+          "type": "spot_the_ai",
+          "xp": 2,
+          "prompt": "Which of these systems is NOT an automated, scalable way to serve generative AI models?",
+          "options": [
+            {
+              "correct": false,
+              "id": "a",
+              "text": "System A: An automated API gateway using vLLM to dynamically batch incoming user prompts."
+            },
+            {
+              "text": "System B: A cloud service scale-out group that starts new GPU containers as traffic increases.",
+              "id": "b",
+              "correct": false
+            },
+            {
+              "text": "System C: A customer support agent manually copying prompts into a desktop app one-by-one.",
+              "id": "c",
+              "correct": true
+            }
+          ],
+          "explain": "System C represents a human manually copying and pasting, which is not an automated or scalable AI serving system. Systems A and B are real automated AI serving frameworks."
+        }
+      ]
+    },
+    {
+      "type": "boss",
+      "exercises": [
+        {
+          "id": "b1",
+          "type": "multiple_choice",
+          "xp": 5,
+          "prompt": "You are designing a backend for a viral AI chatbot that experiences sudden traffic spikes. Why is 'continuous batching' preferred over traditional static batching for serving LLMs at scale?",
+          "options": [
+            {
+              "correct": false,
+              "text": "It forces all users to write prompts of the exact same character length.",
+              "id": "a"
+            },
+            {
+              "correct": false,
+              "text": "It runs the model on CPU instead of GPU to save electrical power.",
+              "id": "b"
+            },
+            {
+              "text": "It dynamically inserts new requests into the active GPU batch as old ones finish.",
+              "id": "c",
+              "correct": true
+            },
+            {
+              "id": "d",
+              "text": "It turns off the model when no users are online to save hardware costs.",
+              "correct": false
+            }
+          ],
+          "explain": "Continuous batching solves the wastefulness of static batching. Because different text generations finish at different times, continuous batching lets the server eject completed requests and pull in new ones on the fly, maximizing GPU speed."
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,223 @@
+{
+  "id": "u322-l3",
+  "unit": 322,
+  "day": 1613,
+  "tier": "Generative Media",
+  "tierIcon": "🌌",
+  "title": "Injecting the Timestep into the Network",
+  "icon": "⏱️",
+  "concept": "Since denoising behavior differs at each noise level, the current timestep is encoded (similar to positional encoding) and fed into every U-Net layer.",
+  "xp": 15,
+  "hearts": 3,
+  "estMinutes": 7,
+  "segments": [
+    {
+      "type": "warmup",
+      "exercises": [
+        {
+          "id": "w1",
+          "type": "multiple_choice",
+          "xp": 1,
+          "prompt": "When a doctor treats you, do they act the same way whether you have a tiny cough or a serious illness?",
+          "options": [
+            {
+              "id": "a",
+              "text": "No, they adjust their treatment based on how bad it is",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "Yes, they always do the exact same thing",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "Doctors don't consider severity at all",
+              "correct": false
+            }
+          ],
+          "explain": "Just like a doctor adjusts treatment based on severity, a denoising network needs to adjust its behavior based on how much noise is present!"
+        }
+      ]
+    },
+    {
+      "type": "teach",
+      "cards": [
+        {
+          "kind": "hook",
+          "icon": "⏱️",
+          "title": "Same Network, Different Jobs",
+          "body": "Imagine one worker who has to clean a room that's SUPER messy on Monday, and only slightly messy on Friday. Should they use the same cleaning strategy both days? A diffusion model's U-Net faces this exact problem — it must denoise images at wildly different noise levels, so it needs to know WHICH day (timestep) it's on!"
+        },
+        {
+          "kind": "definition",
+          "icon": "📖",
+          "title": "Timestep Injection",
+          "body": "Timestep injection means telling the U-Net exactly how noisy the current image is by encoding the timestep number (like t=1 or t=900) into a special vector, then feeding that vector into every layer of the network. This lets one single network behave differently depending on the noise level."
+        },
+        {
+          "kind": "analogy",
+          "icon": "🎚️",
+          "title": "A Volume Knob for Noise",
+          "body": "Think of the timestep encoding like a dial on a machine that tells every part of the machine 'how loud the noise is right now.' Every single room (layer) in the factory gets a peek at this dial's reading, so every worker adjusts their actions to match — gentle touch-ups near the end, big changes at the start."
+        },
+        {
+          "kind": "example",
+          "icon": "🧩",
+          "title": "Positional Encoding, Reused",
+          "body": "Just like Transformers encode word POSITION in a sentence using sine and cosine waves, diffusion models encode the TIMESTEP number using a similar sinusoidal formula. This turns a simple number like '500' into a rich vector that the network can easily use to adjust its behavior at every layer."
+        },
+        {
+          "kind": "mythbust",
+          "icon": "🚫",
+          "title": "Myth: The Network Just 'Knows' the Noise Level",
+          "body": "Myth: The U-Net can automatically sense how noisy an image is just by looking at the pixels. Truth: The network needs to be explicitly TOLD the timestep through an encoded vector — without this injection, the same network would treat a barely-noisy image the same as a fully-noisy one, which leads to poor denoising!"
+        },
+        {
+          "kind": "visual",
+          "icon": "🔀",
+          "title": "With vs. Without Timestep Info",
+          "body": "Feeding the timestep into every layer lets the network adapt its behavior smartly across the whole denoising journey, instead of guessing blindly.",
+          "compare": {
+            "left": {
+              "emoji": "❌",
+              "tag": "No Timestep Info",
+              "text": "Network treats every noise level the same — clumsy, one-size-fits-all denoising"
+            },
+            "right": {
+              "emoji": "✅",
+              "tag": "With Timestep Info",
+              "text": "Network knows exactly how noisy things are and adjusts each layer's behavior accordingly"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "type": "practice",
+      "exercises": [
+        {
+          "id": "p1",
+          "type": "multiple_choice",
+          "xp": 2,
+          "prompt": "Why does the U-Net need the timestep to be injected into its layers?",
+          "options": [
+            {
+              "id": "a",
+              "text": "Because denoising behavior should differ depending on the noise level",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "Because it makes the images bigger",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "Because it removes the need for training",
+              "correct": false
+            },
+            {
+              "id": "d",
+              "text": "Because it speeds up image saving",
+              "correct": false
+            }
+          ],
+          "explain": "The network must act differently at high noise vs low noise, so it needs to know the timestep to adjust its behavior."
+        },
+        {
+          "id": "p2",
+          "type": "true_false",
+          "xp": 2,
+          "prompt": "True or False: The timestep is only given to the very first layer of the U-Net, not the rest.",
+          "options": [
+            {
+              "id": "true",
+              "text": "True",
+              "correct": false
+            },
+            {
+              "id": "false",
+              "text": "False",
+              "correct": true
+            }
+          ],
+          "explain": "False! The timestep encoding is fed into EVERY layer of the U-Net, not just the first one, so the whole network stays aware of the noise level."
+        },
+        {
+          "id": "p3",
+          "type": "fill_blank",
+          "xp": 2,
+          "prompt": "Fill in the blank:",
+          "sentence": "The timestep is encoded using a method similar to ___ encoding, then injected into every U-Net layer.",
+          "blank": "positional",
+          "words": [
+            "positional",
+            "random",
+            "color",
+            "pixel"
+          ],
+          "explain": "Timestep encoding borrows the same sinusoidal idea used in positional encoding from Transformers, turning a number into a useful vector."
+        },
+        {
+          "id": "p4",
+          "type": "spot_the_ai",
+          "xp": 2,
+          "prompt": "What would likely happen if a diffusion model's U-Net was NOT given any timestep information?",
+          "options": [
+            {
+              "id": "a",
+              "text": "It would denoise every noise level with the same fixed behavior, leading to poor results",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "It would automatically become faster to train",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "It would perfectly denoise every image regardless of noise level",
+              "correct": false
+            }
+          ],
+          "explain": "Without timestep info, the network can't tell how noisy the image currently is, so it can't adjust its denoising strategy appropriately."
+        }
+      ]
+    },
+    {
+      "type": "boss",
+      "exercises": [
+        {
+          "id": "b1",
+          "type": "multiple_choice",
+          "xp": 5,
+          "prompt": "A student says: 'Diffusion models use one single U-Net for every timestep, but the network still behaves differently depending on the noise level because...' — how would you complete this sentence?",
+          "options": [
+            {
+              "id": "a",
+              "text": "...the timestep is encoded into a vector and injected into every layer, letting the network adapt its behavior",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "...each timestep secretly uses a totally different U-Net trained separately",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "...the network randomly guesses the noise level using trial and error",
+              "correct": false
+            },
+            {
+              "id": "d",
+              "text": "...the image resolution changes automatically at each timestep",
+              "correct": false
+            }
+          ],
+          "explain": "The key trick is timestep injection: encoding the timestep (like positional encoding) and feeding it into every layer lets one shared network flexibly adapt its denoising behavior to any noise level."
+        }
+      ]
+    }
+  ]
+}

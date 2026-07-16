@@ -1,0 +1,223 @@
+{
+  "id": "u321-l4",
+  "unit": 321,
+  "day": 1609,
+  "tier": "Generative Media",
+  "tierIcon": "🌌",
+  "title": "The Denoising Loss Function",
+  "icon": "📉",
+  "concept": "The loss compares predicted noise to true noise across many random (image, timestep) pairs, averaged over a training batch.",
+  "xp": 15,
+  "hearts": 3,
+  "estMinutes": 7,
+  "segments": [
+    {
+      "type": "warmup",
+      "exercises": [
+        {
+          "id": "w1",
+          "type": "multiple_choice",
+          "xp": 1,
+          "prompt": "When a diffusion model is training, what is it trying to get better at?",
+          "options": [
+            {
+              "id": "a",
+              "text": "Guessing the noise that was added to an image",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "Memorizing every training image exactly",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "Picking random colors to paint with",
+              "correct": false
+            }
+          ],
+          "explain": "During training, the model's job is to look at a noisy image and guess what noise was mixed in. Getting better at this guess is exactly what training means!"
+        }
+      ]
+    },
+    {
+      "type": "teach",
+      "cards": [
+        {
+          "kind": "hook",
+          "icon": "🎯",
+          "title": "How Does the Model Know It's Wrong?",
+          "body": "Imagine playing darts blindfolded. You'd need someone to tell you how far off you were so you could adjust next time. A diffusion model is the same — it needs a score that tells it exactly how wrong its noise guess was, so it can learn to aim better!"
+        },
+        {
+          "kind": "definition",
+          "icon": "📉",
+          "title": "The Denoising Loss",
+          "body": "The denoising loss is a number that measures how different the model's *predicted* noise is from the *real* noise that was actually added to an image. The model checks this on many different images at many different noise levels (timesteps), then averages all those differences into one single score to learn from."
+        },
+        {
+          "kind": "analogy",
+          "icon": "🎓",
+          "title": "Like a Graded Practice Test",
+          "body": "Think of a teacher grading a stack of practice tests. Each test has a correct answer key (the true noise) and a student answer (the predicted noise). The teacher checks many tests, scores how far off each answer was, and averages all scores into one final grade. That average grade is the loss — and the student studies harder based on it!"
+        },
+        {
+          "kind": "example",
+          "icon": "🧮",
+          "title": "A Mini Batch Example",
+          "body": "Say we grab 4 random images, each mixed with noise at a random timestep. The model predicts the noise for all 4. We compare each prediction to the true noise added, measure how close they are, then average those 4 comparison scores together. That average number is the loss for this training step."
+        },
+        {
+          "kind": "mythbust",
+          "icon": "🚫",
+          "title": "Myth: The Loss Compares Two Images",
+          "body": "Many beginners think the loss compares the noisy image to the clean image. Not quite! The loss actually compares the *predicted noise* to the *true noise* that was added — not the images themselves. Noise-to-noise, not image-to-image."
+        },
+        {
+          "kind": "visual",
+          "icon": "⚖️",
+          "title": "True Noise vs Predicted Noise",
+          "body": "The loss is calculated by comparing these two noise patterns and averaging the difference across the whole batch.",
+          "compare": {
+            "left": {
+              "emoji": "🌪️",
+              "tag": "True Noise",
+              "text": "The exact random noise actually added to the image during the forward process."
+            },
+            "right": {
+              "emoji": "🤖",
+              "tag": "Predicted Noise",
+              "text": "The model's guess of what that noise looked like."
+            }
+          }
+        }
+      ]
+    },
+    {
+      "type": "practice",
+      "exercises": [
+        {
+          "id": "p1",
+          "type": "multiple_choice",
+          "xp": 2,
+          "prompt": "What two things does the denoising loss directly compare?",
+          "options": [
+            {
+              "id": "a",
+              "text": "The predicted noise and the true noise",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "The clean image and the noisy image",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "Two different clean images",
+              "correct": false
+            },
+            {
+              "id": "d",
+              "text": "The timestep number and the batch size",
+              "correct": false
+            }
+          ],
+          "explain": "The loss is all about noise — comparing what the model predicted the noise to be versus what noise was truly added."
+        },
+        {
+          "id": "p2",
+          "type": "true_false",
+          "xp": 2,
+          "prompt": "The denoising loss is calculated using only one single image and one timestep.",
+          "options": [
+            {
+              "id": "true",
+              "text": "True",
+              "correct": false
+            },
+            {
+              "id": "false",
+              "text": "False",
+              "correct": true
+            }
+          ],
+          "explain": "False! The loss is averaged over many random (image, timestep) pairs in a batch, not just one, to give a more reliable learning signal."
+        },
+        {
+          "id": "p3",
+          "type": "fill_blank",
+          "xp": 2,
+          "prompt": "Fill in the blank to complete the idea about the loss.",
+          "sentence": "The loss is calculated by averaging the difference between predicted and true noise across a training ___.",
+          "blank": "batch",
+          "words": [
+            "batch",
+            "pixel",
+            "color",
+            "canvas"
+          ],
+          "explain": "A batch is the group of random image-timestep pairs used together in one training step. Averaging over the batch gives a smoother, more stable loss."
+        },
+        {
+          "id": "p4",
+          "type": "spot_the_ai",
+          "xp": 2,
+          "prompt": "Why does the model use many random (image, timestep) pairs instead of just one when computing the loss?",
+          "options": [
+            {
+              "id": "a",
+              "text": "To get a more stable and reliable average signal for learning",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "Because one image doesn't have enough pixels to use",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "Because timesteps must always be used only once ever",
+              "correct": false
+            }
+          ],
+          "explain": "Using many random pairs and averaging smooths out lucky or unlucky single guesses, giving the model a steadier direction to improve in."
+        }
+      ]
+    },
+    {
+      "type": "boss",
+      "exercises": [
+        {
+          "id": "b1",
+          "type": "multiple_choice",
+          "xp": 5,
+          "prompt": "A diffusion model is training. For a batch, it takes 8 random images, adds noise at 8 random timesteps, predicts the noise for each, and needs one final loss number. What should it do next?",
+          "options": [
+            {
+              "id": "a",
+              "text": "Compare each prediction to its true noise, then average all 8 differences into one loss",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "Pick the single best prediction out of the 8 and ignore the rest",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "Compare the 8 noisy images to each other directly",
+              "correct": false
+            },
+            {
+              "id": "d",
+              "text": "Add up the timestep numbers to get the loss",
+              "correct": false
+            }
+          ],
+          "explain": "The correct process is: compare each predicted noise to its own true noise, then average all those differences together to get the single loss number used for learning."
+        }
+      ]
+    }
+  ]
+}

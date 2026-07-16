@@ -1,0 +1,223 @@
+{
+  "id": "u308-l2",
+  "unit": 308,
+  "day": 1542,
+  "tier": "Generative Media",
+  "tierIcon": "🌌",
+  "title": "The Reparameterization Trick, Conceptually",
+  "icon": "🔧",
+  "concept": "Instead of sampling directly, we sample fixed random noise separately, then combine it with the learnable mean and variance using simple, differentiable math.",
+  "xp": 15,
+  "hearts": 3,
+  "estMinutes": 7,
+  "segments": [
+    {
+      "type": "warmup",
+      "exercises": [
+        {
+          "id": "w1",
+          "type": "multiple_choice",
+          "xp": 1,
+          "prompt": "When a computer 'randomly' picks a number, can it still track how that pick relates to other numbers it learned?",
+          "options": [
+            {
+              "id": "a",
+              "text": "No, random means totally disconnected from everything else",
+              "correct": false
+            },
+            {
+              "id": "b",
+              "text": "Yes, if we split the randomness from the learned parts cleverly",
+              "correct": true
+            },
+            {
+              "id": "c",
+              "text": "Only if the computer stops using randomness",
+              "correct": false
+            }
+          ],
+          "explain": "That's exactly the idea behind today's trick! We keep the randomness, but separate it from the learnable parts so the computer can still learn."
+        }
+      ]
+    },
+    {
+      "type": "teach",
+      "cards": [
+        {
+          "kind": "hook",
+          "icon": "🎲",
+          "title": "A Puzzle: Can You Learn From a Dice Roll?",
+          "body": "Imagine a robot needs to roll dice to make decisions, but it also needs to LEARN from what happens. Problem: dice rolls are random, and you can't 'learn' from pure randomness the normal way. So how do AI models like VAEs learn even when they sample random values? There's a clever trick for that — let's find out!"
+        },
+        {
+          "kind": "definition",
+          "icon": "📘",
+          "title": "What Is the Reparameterization Trick?",
+          "body": "Instead of directly sampling a random value from a learned distribution (which blocks learning), we split the process into two parts: (1) a fixed piece of random noise, and (2) the learnable mean and spread (variance). Then we combine them with simple math like: sample = mean + spread × noise. This way, the 'randomness' stays separate, and the mean/spread can still be adjusted through learning."
+        },
+        {
+          "kind": "analogy",
+          "icon": "🎯",
+          "title": "Like Aiming a Dart with Wind",
+          "body": "Imagine you're throwing a dart at a target. You choose WHERE to aim (the mean) and HOW STEADY your hand is (the variance). But wind (random noise) still nudges the dart a little. The wind itself doesn't change — it's the same unpredictable gust every time — but YOU can still adjust your aim and steadiness to hit closer to the target, even with the wind blowing. That's reparameterization: separate the 'wind' (fixed noise) from what you control (aim and steadiness)."
+        },
+        {
+          "kind": "example",
+          "icon": "🧪",
+          "title": "A Simple Walkthrough",
+          "body": "Say a model learns a mean of 5 and a spread of 2. Normally we'd just 'randomly sample' near 5 — but that blocks learning. Instead: grab a fixed random noise value, say 0.3. Then compute: sample = 5 + 2 × 0.3 = 5.6. Now the '5' and '2' are learnable and connected through simple multiplication and addition, while the noise (0.3) stays fixed and separate. The model can adjust its mean and spread through learning, even though randomness is involved!"
+        },
+        {
+          "kind": "mythbust",
+          "icon": "🚫",
+          "title": "Myth: Reparameterization Removes Randomness",
+          "body": "Nope! The randomness is still there — the noise value is still random. What changes is WHERE the randomness lives. Instead of randomness being tangled up with the learnable parts, it's pulled out into its own separate piece. This lets the learnable parts (mean and variance) stay connected to the rest of the model through simple, trackable math."
+        },
+        {
+          "kind": "visual",
+          "icon": "⚖️",
+          "title": "Direct Sampling vs Reparameterized Sampling",
+          "body": "Compare the two approaches to see why one blocks learning and the other doesn't.",
+          "compare": {
+            "left": {
+              "emoji": "🚫",
+              "tag": "Direct Sampling",
+              "text": "Sample straight from mean & spread — randomness is mixed in, so the learning signal gets stuck and can't flow back"
+            },
+            "right": {
+              "emoji": "✅",
+              "tag": "Reparameterized Sampling",
+              "text": "Sample = mean + spread × fixed noise — randomness is separate, so mean & spread stay connected and learnable"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "type": "practice",
+      "exercises": [
+        {
+          "id": "p1",
+          "type": "multiple_choice",
+          "xp": 2,
+          "prompt": "What are the two learnable parts in the reparameterization trick?",
+          "options": [
+            {
+              "id": "a",
+              "text": "Mean and variance (spread)",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "Noise and randomness",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "Wind and target",
+              "correct": false
+            },
+            {
+              "id": "d",
+              "text": "Dice and dots",
+              "correct": false
+            }
+          ],
+          "explain": "The mean and variance (spread) are the learnable parts, while the noise stays fixed and separate."
+        },
+        {
+          "id": "p2",
+          "type": "true_false",
+          "xp": 2,
+          "prompt": "True or False: In reparameterization, the random noise itself becomes learnable.",
+          "options": [
+            {
+              "id": "true",
+              "text": "True",
+              "correct": false
+            },
+            {
+              "id": "false",
+              "text": "False",
+              "correct": true
+            }
+          ],
+          "explain": "False! The noise stays fixed and separate — it's the mean and variance that are learnable, not the noise itself."
+        },
+        {
+          "id": "p3",
+          "type": "fill_blank",
+          "xp": 2,
+          "prompt": "Fill in the blank to complete the idea:",
+          "sentence": "In reparameterization, we combine the learnable mean and variance with fixed random ___ using simple math.",
+          "blank": "noise",
+          "words": [
+            "noise",
+            "answers",
+            "colors",
+            "shapes"
+          ],
+          "explain": "We combine mean and variance with fixed random noise to create the final sample, using simple addition and multiplication."
+        },
+        {
+          "id": "p4",
+          "type": "spot_the_ai",
+          "xp": 2,
+          "prompt": "Why can't a model easily learn from direct random sampling?",
+          "options": [
+            {
+              "id": "a",
+              "text": "Because randomness gets tangled with the learnable parts, blocking the learning signal",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "Because computers can't generate random numbers at all",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "Because random numbers are always too big",
+              "correct": false
+            }
+          ],
+          "explain": "Direct sampling mixes randomness directly with the learnable parts, so the model can't trace back how to adjust them. Separating them fixes this."
+        }
+      ]
+    },
+    {
+      "type": "boss",
+      "exercises": [
+        {
+          "id": "b1",
+          "type": "multiple_choice",
+          "xp": 5,
+          "prompt": "Boss Challenge: A model learns mean = 10 and spread = 3. Using reparameterization with fixed noise = 2, what is the sample? (sample = mean + spread × noise)",
+          "options": [
+            {
+              "id": "a",
+              "text": "16",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "5",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "10",
+              "correct": false
+            },
+            {
+              "id": "d",
+              "text": "23",
+              "correct": false
+            }
+          ],
+          "explain": "sample = mean + spread × noise = 10 + 3 × 2 = 10 + 6 = 16. This shows how the learnable mean and spread combine with fixed noise through simple math!"
+        }
+      ]
+    }
+  ]
+}

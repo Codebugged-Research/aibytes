@@ -1,0 +1,223 @@
+{
+  "id": "u302-l5",
+  "unit": 302,
+  "day": 1515,
+  "tier": "Generative Media",
+  "tierIcon": "🌌",
+  "title": "Choosing the Right Reconstruction Loss",
+  "icon": "🌉",
+  "concept": "The choice of reconstruction loss shapes what the autoencoder prioritizes: pixel accuracy vs. perceptual realism. Boss explain ends with: 'Next up: Denoising Autoencoders.'",
+  "xp": 15,
+  "hearts": 3,
+  "estMinutes": 7,
+  "segments": [
+    {
+      "type": "warmup",
+      "exercises": [
+        {
+          "id": "w1",
+          "type": "multiple_choice",
+          "xp": 1,
+          "prompt": "When you reconstruct a blurry photo, what matters most?",
+          "options": [
+            {
+              "id": "a",
+              "text": "That it looks realistic and sharp to human eyes",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "That every single pixel value is mathematically identical",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "That the file size stays small",
+              "correct": false
+            }
+          ],
+          "explain": "Sometimes we care more about pixel-perfect accuracy, and sometimes we care more about the image just looking right to us — that's the whole point of today's lesson!"
+        }
+      ]
+    },
+    {
+      "type": "teach",
+      "cards": [
+        {
+          "kind": "hook",
+          "icon": "🌉",
+          "title": "Two Ways to Judge a Rebuild",
+          "body": "Imagine two builders rebuild a broken bridge. One measures every brick to match the original exactly. The other just makes sure the bridge looks right and feels sturdy to people crossing it. Both are 'accurate' — but in totally different ways. Autoencoders face this same choice!"
+        },
+        {
+          "kind": "definition",
+          "icon": "📏",
+          "title": "Reconstruction Loss",
+          "body": "Reconstruction loss is the score that tells an autoencoder how different its rebuilt output is from the original input. The TYPE of loss you pick decides what 'good' means — pixel-by-pixel matching or overall realistic look."
+        },
+        {
+          "kind": "analogy",
+          "icon": "🎨",
+          "title": "Tracing vs. Painting",
+          "body": "Pixel-based loss is like tracing a drawing exactly, dot by dot — precise but can look stiff. Perceptual loss is like a painter recreating the scene from memory — it might not match every line, but it FEELS true to life. Both are valid ways to 'redraw' something!"
+        },
+        {
+          "kind": "example",
+          "icon": "🖼️",
+          "title": "Blurry vs. Sharp",
+          "body": "An autoencoder trained with simple pixel loss (like MSE) often produces slightly blurry images — it plays it safe by averaging possible pixel values. One trained with a perceptual loss produces sharper, more realistic-looking images, even if the exact pixel values differ more from the original."
+        },
+        {
+          "kind": "mythbust",
+          "icon": "🚫",
+          "title": "Myth: Lower Loss = Better Image",
+          "body": "Not always true! A model can have very low pixel loss but still produce a blurry, unconvincing image. Meanwhile, a model with slightly higher pixel loss might produce a sharper, more realistic image using perceptual loss. The 'best' loss depends on what you actually want!"
+        },
+        {
+          "kind": "visual",
+          "icon": "⚖️",
+          "title": "Pixel Loss vs. Perceptual Loss",
+          "body": "These two loss types push the autoencoder toward different goals during training.",
+          "compare": {
+            "left": {
+              "emoji": "🔢",
+              "tag": "Pixel Loss (MSE)",
+              "text": "Matches exact pixel values; safe, averaged, sometimes blurry results"
+            },
+            "right": {
+              "emoji": "👀",
+              "tag": "Perceptual Loss",
+              "text": "Matches how the image 'feels' to a viewer; sharper, more realistic textures"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "type": "practice",
+      "exercises": [
+        {
+          "id": "p1",
+          "type": "multiple_choice",
+          "xp": 2,
+          "prompt": "Why might a model trained with only pixel-based loss (MSE) produce blurry images?",
+          "options": [
+            {
+              "id": "a",
+              "text": "It averages out uncertain pixel values to minimize error, which smooths details",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "It has too many layers",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "It trains too fast",
+              "correct": false
+            },
+            {
+              "id": "d",
+              "text": "It ignores the input completely",
+              "correct": false
+            }
+          ],
+          "explain": "MSE loss punishes big mistakes heavily, so the model plays it safe by predicting an 'average' pixel value when unsure — this creates blur instead of confident sharp details."
+        },
+        {
+          "id": "p2",
+          "type": "true_false",
+          "xp": 2,
+          "prompt": "The best reconstruction loss to use is always the one that produces the lowest possible number.",
+          "options": [
+            {
+              "id": "true",
+              "text": "True",
+              "correct": false
+            },
+            {
+              "id": "false",
+              "text": "False",
+              "correct": true
+            }
+          ],
+          "explain": "False! The best loss depends on your goal. Low pixel loss doesn't guarantee a realistic-looking image — sometimes a slightly higher-loss image actually looks better to humans."
+        },
+        {
+          "id": "p3",
+          "type": "fill_blank",
+          "xp": 2,
+          "prompt": "Fill in the blank:",
+          "sentence": "A loss that focuses on how realistic an image looks to human eyes, rather than exact pixel matches, is called a ___ loss.",
+          "blank": "perceptual",
+          "words": [
+            "perceptual",
+            "pixel",
+            "random",
+            "binary"
+          ],
+          "explain": "Perceptual loss compares deeper, human-relevant features of images (like textures and shapes) instead of just raw pixel values."
+        },
+        {
+          "id": "p4",
+          "type": "spot_the_ai",
+          "xp": 2,
+          "prompt": "You're building an autoencoder to compress medical scans where every tiny pixel detail matters for diagnosis. Which loss type should you prioritize?",
+          "options": [
+            {
+              "id": "a",
+              "text": "Pixel-based loss (like MSE), since exact values matter most",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "Perceptual loss, since it just needs to look nice",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "No loss function is needed at all",
+              "correct": false
+            }
+          ],
+          "explain": "For medical scans, exact pixel accuracy can be critical for spotting small details, so pixel-based loss is usually prioritized over general realism."
+        }
+      ]
+    },
+    {
+      "type": "boss",
+      "exercises": [
+        {
+          "id": "b1",
+          "type": "multiple_choice",
+          "xp": 5,
+          "prompt": "A team is training an autoencoder to reconstruct photos of faces for a social media filter app. Users care most about the results looking natural and pleasing, not about exact pixel matching. Which loss approach fits best, and what's next in our journey?",
+          "options": [
+            {
+              "id": "a",
+              "text": "Use perceptual loss to prioritize realistic, human-pleasing results — because the CHOICE of reconstruction loss shapes what the autoencoder prioritizes: pixel accuracy vs. perceptual realism. Next up: Denoising Autoencoders.",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "Use pixel loss only, since lower numeric loss always means a better-looking result. Next up: Denoising Autoencoders.",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "Use no loss function since faces are too complex to score. Next up: Denoising Autoencoders.",
+              "correct": false
+            },
+            {
+              "id": "d",
+              "text": "Use perceptual loss because it's mathematically identical to pixel loss. Next up: Denoising Autoencoders.",
+              "correct": false
+            }
+          ],
+          "explain": "Exactly! Since the app cares about natural, pleasing faces rather than exact pixel matches, perceptual loss is the better fit — this shows how the choice of reconstruction loss shapes what the autoencoder prioritizes: pixel accuracy vs. perceptual realism. Next up: Denoising Autoencoders."
+        }
+      ]
+    }
+  ]
+}

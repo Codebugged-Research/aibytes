@@ -1,0 +1,223 @@
+{
+  "id": "u308-l3",
+  "unit": 308,
+  "day": 1543,
+  "tier": "Generative Media",
+  "tierIcon": "🌌",
+  "title": "Separating Randomness from Learnable Parameters",
+  "icon": "🔀",
+  "concept": "The random noise itself is not learned; only the mean and variance that shape how that noise gets used are learnable, keeping gradients flowing cleanly.",
+  "xp": 15,
+  "hearts": 3,
+  "estMinutes": 7,
+  "segments": [
+    {
+      "type": "warmup",
+      "exercises": [
+        {
+          "id": "w1",
+          "type": "multiple_choice",
+          "xp": 1,
+          "prompt": "When a machine learning model needs some randomness (like in a VAE), what should stay random and untouched by learning?",
+          "options": [
+            {
+              "id": "a",
+              "text": "The raw noise source itself",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "The shape of the network",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "The loss function name",
+              "correct": false
+            }
+          ],
+          "explain": "The noise itself stays a pure random draw — it's the mean and variance around it that the model learns to adjust."
+        }
+      ]
+    },
+    {
+      "type": "teach",
+      "cards": [
+        {
+          "kind": "hook",
+          "icon": "🎲",
+          "title": "A Dice Roll You Can't Train",
+          "body": "Imagine a model that needs a bit of randomness to work — like rolling dice inside its brain. You can't teach the dice how to roll differently. But you CAN teach the model how to use whatever number the dice give it. That's the trick behind separating randomness from learning!"
+        },
+        {
+          "kind": "definition",
+          "icon": "📐",
+          "title": "The Reparameterization Trick",
+          "body": "In models like VAEs, we split randomness into two parts: a fixed random noise (never learned, always just random) and learnable numbers called mean and variance that stretch and shift that noise. Only the mean and variance get updated during training — the noise stays pure randomness."
+        },
+        {
+          "kind": "analogy",
+          "icon": "🎯",
+          "title": "The Archer and the Wind",
+          "body": "Think of an archer aiming at a target. The wind blowing that day is totally random — no one can train the wind. But the archer CAN learn where to aim and how hard to pull the bow (mean and variance) to land closer to the target despite the wind. The wind stays random; the aiming skill improves."
+        },
+        {
+          "kind": "example",
+          "icon": "🧪",
+          "title": "Sampling in a VAE",
+          "body": "A VAE picks a random noise value z (like 0.7, drawn from a standard random source). Then it computes: sample = mean + variance × z. The network learns 'mean' and 'variance' through training. The noise z itself never changes its behavior — it just keeps being random, batch after batch."
+        },
+        {
+          "kind": "mythbust",
+          "icon": "🚫",
+          "title": "Myth: 'The model learns to be less random'",
+          "body": "Nope! The model doesn't learn to control the noise itself — that would break the whole point of having randomness. What it learns is how to shape and place that randomness (mean and variance) so the random samples end up useful."
+        },
+        {
+          "kind": "visual",
+          "icon": "⚖️",
+          "title": "Learnable vs. Non-Learnable",
+          "body": "Two ingredients work together, but only one is trained.",
+          "compare": {
+            "left": {
+              "emoji": "🎲",
+              "tag": "Random Noise",
+              "text": "Fixed, untrained, purely random every single time — gradients don't flow through it."
+            },
+            "right": {
+              "emoji": "🎛️",
+              "tag": "Mean & Variance",
+              "text": "Learnable knobs the network adjusts through training to shape how the noise is used."
+            }
+          }
+        }
+      ]
+    },
+    {
+      "type": "practice",
+      "exercises": [
+        {
+          "id": "p1",
+          "type": "multiple_choice",
+          "xp": 2,
+          "prompt": "Which part of the process is NEVER updated by the learning algorithm?",
+          "options": [
+            {
+              "id": "a",
+              "text": "The mean",
+              "correct": false
+            },
+            {
+              "id": "b",
+              "text": "The variance",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "The random noise value",
+              "correct": true
+            },
+            {
+              "id": "d",
+              "text": "The network's weights that produce mean/variance",
+              "correct": false
+            }
+          ],
+          "explain": "The random noise is drawn fresh and stays random — it's never adjusted by training. Only the mean, variance, and the weights that compute them get updated."
+        },
+        {
+          "id": "p2",
+          "type": "true_false",
+          "xp": 2,
+          "prompt": "True or False: Separating randomness from learnable parameters helps gradients flow cleanly during training.",
+          "options": [
+            {
+              "id": "true",
+              "text": "True",
+              "correct": true
+            },
+            {
+              "id": "false",
+              "text": "False",
+              "correct": false
+            }
+          ],
+          "explain": "True! By keeping the pure randomness separate, the learnable parts (mean and variance) stay differentiable, so gradients can flow through them smoothly."
+        },
+        {
+          "id": "p3",
+          "type": "fill_blank",
+          "xp": 2,
+          "prompt": "Fill in the blank:",
+          "sentence": "In the reparameterization trick, only the mean and ___ are learnable, while the noise stays random.",
+          "blank": "variance",
+          "words": [
+            "variance",
+            "noise",
+            "gradient",
+            "target"
+          ],
+          "explain": "The mean and variance are the learnable knobs that shape the noise — the noise itself is never trained."
+        },
+        {
+          "id": "p4",
+          "type": "spot_the_ai",
+          "xp": 2,
+          "prompt": "Why can't the raw random noise itself be learned during training?",
+          "options": [
+            {
+              "id": "a",
+              "text": "Because learning noise would remove its randomness, defeating its purpose",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "Because computers cannot generate random numbers",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "Because noise is always exactly zero",
+              "correct": false
+            }
+          ],
+          "explain": "If the noise were trained, it would stop being random and the model would lose the variety it needs — so it's kept fixed while mean/variance are learned instead."
+        }
+      ]
+    },
+    {
+      "type": "boss",
+      "exercises": [
+        {
+          "id": "b1",
+          "type": "multiple_choice",
+          "xp": 5,
+          "prompt": "A student says: 'During training, my model learns to make the random noise smaller and smaller until it disappears.' What's wrong with this statement?",
+          "options": [
+            {
+              "id": "a",
+              "text": "Nothing — that's exactly correct behavior",
+              "correct": false
+            },
+            {
+              "id": "b",
+              "text": "The noise itself is never learned or shrunk directly; only the mean and variance that shape its use are learned",
+              "correct": true
+            },
+            {
+              "id": "c",
+              "text": "The noise should grow larger, not smaller",
+              "correct": false
+            },
+            {
+              "id": "d",
+              "text": "Models never use randomness at all",
+              "correct": false
+            }
+          ],
+          "explain": "The raw noise stays a fixed random draw forever — it's not something the model shrinks or trains. What changes is how the learned mean and variance use that noise, which can make its effect appear smaller, but the noise generator itself is untouched."
+        }
+      ]
+    }
+  ]
+}

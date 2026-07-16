@@ -1,0 +1,223 @@
+{
+  "id": "u327-l2",
+  "unit": 327,
+  "day": 1637,
+  "tier": "Generative Media",
+  "tierIcon": "🌌",
+  "title": "Compressing Images First with an Autoencoder",
+  "icon": "🗜️",
+  "concept": "Latent diffusion first compresses images into a much smaller latent representation using a pretrained autoencoder (callback to Units 300-304).",
+  "xp": 15,
+  "hearts": 3,
+  "estMinutes": 7,
+  "segments": [
+    {
+      "type": "warmup",
+      "exercises": [
+        {
+          "id": "w1",
+          "type": "multiple_choice",
+          "xp": 1,
+          "prompt": "If you zip a big picture file into a smaller file without losing the important details, what did you just do?",
+          "options": [
+            {
+              "id": "a",
+              "text": "Compressed it into a smaller representation",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "Deleted the picture",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "Made it a bigger file",
+              "correct": false
+            }
+          ],
+          "explain": "Zipping keeps the important information but shrinks the size — that's exactly what an autoencoder does to images before diffusion happens!"
+        }
+      ]
+    },
+    {
+      "type": "teach",
+      "cards": [
+        {
+          "kind": "hook",
+          "icon": "🗜️",
+          "title": "Why Shrink a Picture First?",
+          "body": "Imagine trying to sculpt clay while every tiny grain of sand is also part of the sculpture — that's slow and messy! AI image generators found a shortcut: shrink the picture into a small 'idea version' first, do all the hard work there, then blow it back up at the end."
+        },
+        {
+          "kind": "definition",
+          "icon": "📦",
+          "title": "Latent Compression",
+          "body": "Latent diffusion doesn't work on the full-size image. First, a pretrained autoencoder squishes the image into a much smaller latent representation — a compact code that still holds the important visual information. All the diffusion steps happen on this small version, which is way faster."
+        },
+        {
+          "kind": "analogy",
+          "icon": "🧳",
+          "title": "Packing a Suitcase",
+          "body": "Think of the autoencoder like packing a suitcase before a trip. You don't bring your entire room — you fold and compress your stuff into a small bag that still has everything you need. Later, you unpack it and everything is there again, just neatly stored in a smaller space in between."
+        },
+        {
+          "kind": "example",
+          "icon": "🖼️",
+          "title": "From Big to Small to Big",
+          "body": "A 512x512 pixel photo gets squeezed by the autoencoder's encoder into a tiny latent grid, like 64x64. The diffusion model then denoises this tiny grid instead of the huge photo. Finally, the autoencoder's decoder expands the clean latent back into a full, detailed image."
+        },
+        {
+          "kind": "mythbust",
+          "icon": "🚫",
+          "title": "Myth: Diffusion Always Works on Full Pixels",
+          "body": "Myth: Every diffusion model adds and removes noise directly on full-size images. Truth: Latent diffusion models (like the ones behind many popular image generators) do this in a small compressed latent space instead, which is why they can create images so much faster."
+        },
+        {
+          "kind": "visual",
+          "icon": "⚖️",
+          "title": "Pixel Space vs Latent Space",
+          "body": "Comparing where the noisy, step-by-step diffusion process actually happens.",
+          "compare": {
+            "left": {
+              "emoji": "🖥️",
+              "tag": "Pixel Space Diffusion",
+              "text": "Works on full-size images with millions of pixel values — slow and needs tons of compute."
+            },
+            "right": {
+              "emoji": "🗜️",
+              "tag": "Latent Space Diffusion",
+              "text": "Works on a small compressed code from the autoencoder — much faster, same great results."
+            }
+          }
+        }
+      ]
+    },
+    {
+      "type": "practice",
+      "exercises": [
+        {
+          "id": "p1",
+          "type": "multiple_choice",
+          "xp": 2,
+          "prompt": "What does the autoencoder do first in latent diffusion?",
+          "options": [
+            {
+              "id": "a",
+              "text": "Compresses the image into a smaller latent representation",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "Adds random noise to the final image",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "Deletes the background of the image",
+              "correct": false
+            },
+            {
+              "id": "d",
+              "text": "Trains a text model from scratch",
+              "correct": false
+            }
+          ],
+          "explain": "The autoencoder's job before diffusion begins is to squeeze the full image down into a compact latent representation."
+        },
+        {
+          "id": "p2",
+          "type": "true_false",
+          "xp": 2,
+          "prompt": "Latent diffusion models perform the denoising steps on the full-size pixel image, not a compressed version.",
+          "options": [
+            {
+              "id": "true",
+              "text": "True",
+              "correct": false
+            },
+            {
+              "id": "false",
+              "text": "False",
+              "correct": true
+            }
+          ],
+          "explain": "False! Latent diffusion performs the noisy denoising steps on the small latent representation, not the full pixel image — that's what makes it faster."
+        },
+        {
+          "id": "p3",
+          "type": "fill_blank",
+          "xp": 2,
+          "prompt": "Fill in the blank:",
+          "sentence": "Latent diffusion first uses a pretrained autoencoder to compress the image into a smaller ___ before running the diffusion steps.",
+          "blank": "latent representation",
+          "words": [
+            "latent representation",
+            "text prompt",
+            "pixel grid",
+            "random noise"
+          ],
+          "explain": "The autoencoder creates a compact 'latent representation' that holds the key information from the image in a much smaller form."
+        },
+        {
+          "id": "p4",
+          "type": "spot_the_ai",
+          "xp": 2,
+          "prompt": "Which of these best describes why compressing the image first with an autoencoder helps latent diffusion?",
+          "options": [
+            {
+              "id": "a",
+              "text": "It makes the diffusion process work on far fewer numbers, so it's much faster and less costly",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "It makes the image permanently blurry so the model can't fail",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "It removes the need for any decoder at the end",
+              "correct": false
+            }
+          ],
+          "explain": "Working in a small latent space instead of full pixel space means far fewer values to process, saving huge amounts of time and compute."
+        }
+      ]
+    },
+    {
+      "type": "boss",
+      "exercises": [
+        {
+          "id": "b1",
+          "type": "multiple_choice",
+          "xp": 5,
+          "prompt": "A student says: 'Latent diffusion models generate images by directly denoising millions of raw pixels from the start.' What's wrong with this statement?",
+          "options": [
+            {
+              "id": "a",
+              "text": "Nothing, that's exactly how latent diffusion works",
+              "correct": false
+            },
+            {
+              "id": "b",
+              "text": "Latent diffusion first compresses the image into a small latent representation using an autoencoder, then denoises that instead of raw pixels",
+              "correct": true
+            },
+            {
+              "id": "c",
+              "text": "Latent diffusion doesn't use any autoencoder at all, ever",
+              "correct": false
+            },
+            {
+              "id": "d",
+              "text": "Latent diffusion only works on text, not images",
+              "correct": false
+            }
+          ],
+          "explain": "The key idea of latent diffusion is that a pretrained autoencoder compresses the image first, so the actual diffusion (denoising) steps happen in a small latent space, not on the raw, full-size pixels."
+        }
+      ]
+    }
+  ]
+}

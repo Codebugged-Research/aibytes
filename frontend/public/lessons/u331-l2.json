@@ -1,0 +1,223 @@
+{
+  "id": "u331-l2",
+  "unit": 331,
+  "day": 1657,
+  "tier": "Generative Media",
+  "tierIcon": "🌌",
+  "title": "Using CLIP Embeddings as Conditioning",
+  "icon": "🎯",
+  "concept": "Text-to-image diffusion models use CLIP's text embeddings as the conditioning signal fed into the denoising U-Net at every generation step.",
+  "xp": 15,
+  "hearts": 3,
+  "estMinutes": 7,
+  "segments": [
+    {
+      "type": "warmup",
+      "exercises": [
+        {
+          "id": "w1",
+          "type": "multiple_choice",
+          "xp": 1,
+          "prompt": "When you type 'a cat wearing a hat' into an AI image generator, what do you think helps the AI understand your words?",
+          "options": [
+            {
+              "id": "a",
+              "text": "A special text-understanding model that turns words into meaning",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "The AI just picks random pixels until it looks nice",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "It searches the internet for a matching photo",
+              "correct": false
+            }
+          ],
+          "explain": "AI image generators need something that understands language first! That's where CLIP's text embeddings come in — they turn your words into a meaning-map the image model can follow."
+        }
+      ]
+    },
+    {
+      "type": "teach",
+      "cards": [
+        {
+          "kind": "hook",
+          "icon": "🧭",
+          "title": "How Does AI 'Read' Your Prompt?",
+          "body": "You type 'a dragon made of glowing crystals' and boom — an image appears. But diffusion models don't read English! They need your words turned into numbers that capture meaning. That translator is CLIP, and its output becomes the steering wheel for the whole image-making process."
+        },
+        {
+          "kind": "definition",
+          "icon": "📘",
+          "title": "What Is CLIP Conditioning?",
+          "body": "CLIP is a model trained to turn text into a list of numbers (an embedding) that captures its meaning. In text-to-image diffusion models, this embedding is fed into the denoising U-Net at EVERY step of image generation, telling it 'steer toward this meaning' as it slowly turns noise into a picture."
+        },
+        {
+          "kind": "analogy",
+          "icon": "🎨",
+          "title": "The Art Director Analogy",
+          "body": "Imagine a painter (the U-Net) working blindfolded, starting from a messy splash of paint (noise). An art director (CLIP embedding) whispers instructions after every single brushstroke: 'more like a sunset,' 'add crystal texture.' The painter never sees the words directly — only the director's constant meaning-guidance — but it shapes every stroke into the final artwork."
+        },
+        {
+          "kind": "example",
+          "icon": "🖼️",
+          "title": "From Prompt to Pixels",
+          "body": "Prompt: 'a red bicycle on the moon'\n1. CLIP turns this sentence into an embedding (a list of numbers capturing 'red,' 'bicycle,' 'moon').\n2. The diffusion model starts with random noise.\n3. At every denoising step, the CLIP embedding is injected into the U-Net, nudging the noise to look more like a red bicycle on the moon.\n4. After many steps, a clear image emerges — guided the whole time by that same embedding."
+        },
+        {
+          "kind": "mythbust",
+          "icon": "🚫",
+          "title": "Myth: CLIP Guides Only Once",
+          "body": "Myth: CLIP's embedding is used just at the start, like a single instruction, then the model works alone.\n\nTruth: The SAME CLIP embedding is fed into the U-Net at every single denoising step — from pure noise to final image. It's constant guidance, not a one-time hint!"
+        },
+        {
+          "kind": "visual",
+          "icon": "⚖️",
+          "title": "Unconditioned vs. CLIP-Conditioned Diffusion",
+          "body": "Without conditioning, a diffusion model just denoises randomly into 'some image.' With CLIP conditioning, every denoising step is steered by your text's meaning, so the final image actually matches your prompt.",
+          "compare": {
+            "left": {
+              "emoji": "🎲",
+              "tag": "No Conditioning",
+              "text": "Random noise → random denoising → any generic image, unrelated to any prompt"
+            },
+            "right": {
+              "emoji": "🎯",
+              "tag": "CLIP Conditioning",
+              "text": "Random noise → CLIP embedding guides every step → image matching 'red bicycle on the moon'"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "type": "practice",
+      "exercises": [
+        {
+          "id": "p1",
+          "type": "multiple_choice",
+          "xp": 2,
+          "prompt": "What role does CLIP's text embedding play in a text-to-image diffusion model?",
+          "options": [
+            {
+              "id": "a",
+              "text": "It stores the final image in memory",
+              "correct": false
+            },
+            {
+              "id": "b",
+              "text": "It acts as a conditioning signal guiding the U-Net at every denoising step",
+              "correct": true
+            },
+            {
+              "id": "c",
+              "text": "It compresses the image file size",
+              "correct": false
+            },
+            {
+              "id": "d",
+              "text": "It replaces the need for a U-Net entirely",
+              "correct": false
+            }
+          ],
+          "explain": "CLIP turns text into an embedding that's injected into the U-Net repeatedly during denoising, steering the image toward the prompt's meaning."
+        },
+        {
+          "id": "p2",
+          "type": "true_false",
+          "xp": 2,
+          "prompt": "True or False: The CLIP text embedding is only used once, at the very first denoising step.",
+          "options": [
+            {
+              "id": "true",
+              "text": "True",
+              "correct": false
+            },
+            {
+              "id": "false",
+              "text": "False",
+              "correct": true
+            }
+          ],
+          "explain": "False! The same CLIP embedding is fed into the U-Net at every single step of the denoising process, not just the first one."
+        },
+        {
+          "id": "p3",
+          "type": "fill_blank",
+          "xp": 2,
+          "prompt": "Fill in the blank:",
+          "sentence": "CLIP turns your text prompt into a ______ that guides the denoising U-Net toward matching the meaning of your words.",
+          "blank": "embedding",
+          "words": [
+            "embedding",
+            "pixel",
+            "filename",
+            "resolution"
+          ],
+          "explain": "The embedding is a list of numbers capturing meaning — it's what CLIP produces from text and what conditions the diffusion model."
+        },
+        {
+          "id": "p4",
+          "type": "spot_the_ai",
+          "xp": 2,
+          "prompt": "Why does a text-to-image model need the SAME CLIP embedding at every denoising step, instead of just once at the start?",
+          "options": [
+            {
+              "id": "a",
+              "text": "So the meaning keeps steering the image consistently as it slowly forms, step after step",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "Because computers require repeated data to save power",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "So the image file loads faster once finished",
+              "correct": false
+            }
+          ],
+          "explain": "Denoising happens gradually over many steps — without constant guidance, later steps could drift away from the prompt's meaning. Repeating the embedding keeps every step on target."
+        }
+      ]
+    },
+    {
+      "type": "boss",
+      "exercises": [
+        {
+          "id": "b1",
+          "type": "multiple_choice",
+          "xp": 5,
+          "prompt": "A friend says: 'The U-Net just magically knows what image to make once it starts denoising — the text prompt isn't needed after the first step.' What's the best correction?",
+          "options": [
+            {
+              "id": "a",
+              "text": "That's basically correct — text is only needed at the start",
+              "correct": false
+            },
+            {
+              "id": "b",
+              "text": "The CLIP text embedding is fed into the U-Net at every denoising step, continuously steering it toward the prompt's meaning",
+              "correct": true
+            },
+            {
+              "id": "c",
+              "text": "The U-Net doesn't use text at all — it only uses random noise",
+              "correct": false
+            },
+            {
+              "id": "d",
+              "text": "CLIP only matters for choosing image resolution, not meaning",
+              "correct": false
+            }
+          ],
+          "explain": "The key idea of CLIP conditioning: the same text embedding is injected at EVERY step of denoising, not just once, so the final image consistently reflects the prompt's meaning."
+        }
+      ]
+    }
+  ]
+}

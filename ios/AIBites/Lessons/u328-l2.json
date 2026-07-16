@@ -1,0 +1,223 @@
+{
+  "id": "u328-l2",
+  "unit": 328,
+  "day": 1642,
+  "tier": "Generative Media",
+  "tierIcon": "🌌",
+  "title": "Classifier Guidance, Briefly",
+  "icon": "🏷️",
+  "concept": "An early approach used a separate classifier during sampling to push generation toward a target class, but this required training an extra model.",
+  "xp": 15,
+  "hearts": 3,
+  "estMinutes": 7,
+  "segments": [
+    {
+      "type": "warmup",
+      "exercises": [
+        {
+          "id": "w1",
+          "type": "multiple_choice",
+          "xp": 1,
+          "prompt": "If you wanted an AI to draw only 'cats', what's one way to nudge it while it's drawing?",
+          "options": [
+            {
+              "id": "a",
+              "text": "Have a helper look at the drawing and say how 'cat-like' it is, then adjust",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "Delete the AI and start over every time",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "Only draw in black and white",
+              "correct": false
+            }
+          ],
+          "explain": "That's exactly the idea! A helper (classifier) checks how close the image is to 'cat' and nudges the drawing toward it, step by step."
+        }
+      ]
+    },
+    {
+      "type": "teach",
+      "cards": [
+        {
+          "kind": "hook",
+          "icon": "🕵️",
+          "title": "A Helper With Opinions",
+          "body": "Imagine an AI artist drawing a picture, one hazy step at a time. Now imagine a judge standing behind them, whispering 'more cat-like!' or 'less dog-like!' after every stroke. That judge is exactly what early diffusion models used to steer their images toward a specific class."
+        },
+        {
+          "kind": "definition",
+          "icon": "📖",
+          "title": "What Is Classifier Guidance?",
+          "body": "Classifier guidance is a technique where a separate, already-trained classifier model looks at the noisy image during each denoising step. It tells the diffusion model which direction to nudge the pixels to make the image look more like a chosen class (like 'dog' or 'sunset'). The catch: you need to train this extra classifier model on noisy images first, which adds cost and complexity."
+        },
+        {
+          "kind": "analogy",
+          "icon": "🎯",
+          "title": "The Backseat Coach",
+          "body": "Think of learning to shoot basketballs while a coach stands nearby yelling 'more to the left! aim higher!' after every shot. The coach (classifier) doesn't shoot the ball themselves, but their feedback steers your aim. Problem is, you had to train that coach separately before they could help you!"
+        },
+        {
+          "kind": "example",
+          "icon": "🖼️",
+          "title": "Guiding Toward 'Golden Retriever'",
+          "body": "A diffusion model is generating an image starting from pure noise. At each denoising step, a classifier trained to recognize dog breeds looks at the current blurry image and computes how 'golden retriever-like' it is. It then points out which pixel changes would increase that score, and the diffusion model shifts its output slightly in that direction. After many steps, a golden retriever image emerges."
+        },
+        {
+          "kind": "mythbust",
+          "icon": "🚫",
+          "title": "Myth: The Classifier Draws the Image",
+          "body": "Myth: The classifier is the artist that creates the picture. Truth: The classifier never draws anything — it only judges the current noisy image and gives a hint on how to nudge it. The diffusion model still does all the actual generating; the classifier just acts as a guiding compass."
+        },
+        {
+          "kind": "visual",
+          "icon": "⚖️",
+          "title": "With vs. Without a Guiding Classifier",
+          "body": "Classifier guidance adds an extra 'judge' model to steer generation, but it means training and running two models instead of one.",
+          "compare": {
+            "left": {
+              "emoji": "🎨",
+              "tag": "No Guidance",
+              "text": "Diffusion model denoises freely — results can be random or unfocused, not tied to any class"
+            },
+            "right": {
+              "emoji": "🏷️",
+              "tag": "Classifier Guidance",
+              "text": "A separate trained classifier checks each step and nudges output toward a target class — but needs its own training"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "type": "practice",
+      "exercises": [
+        {
+          "id": "p1",
+          "type": "multiple_choice",
+          "xp": 2,
+          "prompt": "What does the classifier do in classifier guidance?",
+          "options": [
+            {
+              "id": "a",
+              "text": "It generates the final image pixel by pixel",
+              "correct": false
+            },
+            {
+              "id": "b",
+              "text": "It judges the noisy image and nudges generation toward a target class",
+              "correct": true
+            },
+            {
+              "id": "c",
+              "text": "It removes noise from the image directly",
+              "correct": false
+            },
+            {
+              "id": "d",
+              "text": "It stores the training dataset",
+              "correct": false
+            }
+          ],
+          "explain": "The classifier's job is to evaluate the current image and point the diffusion model in a direction that matches the desired class — it doesn't generate pixels itself."
+        },
+        {
+          "id": "p2",
+          "type": "true_false",
+          "xp": 2,
+          "prompt": "Classifier guidance requires training an extra separate model besides the diffusion model.",
+          "options": [
+            {
+              "id": "true",
+              "text": "True",
+              "correct": true
+            },
+            {
+              "id": "false",
+              "text": "False",
+              "correct": false
+            }
+          ],
+          "explain": "True! That's the main downside — you need to train a classifier (often on noisy images at every step) in addition to the diffusion model itself."
+        },
+        {
+          "id": "p3",
+          "type": "fill_blank",
+          "xp": 2,
+          "prompt": "Fill in the blank:",
+          "sentence": "In classifier guidance, a separate ___ looks at the noisy image and tells the model how to move toward a target class.",
+          "blank": "classifier",
+          "words": [
+            "classifier",
+            "dataset",
+            "pixel",
+            "noise"
+          ],
+          "explain": "The word 'classifier' fits because it's the extra model whose job is to judge how well the image matches a class."
+        },
+        {
+          "id": "p4",
+          "type": "spot_the_ai",
+          "xp": 2,
+          "prompt": "Which of these is the biggest drawback of classifier guidance?",
+          "options": [
+            {
+              "id": "a",
+              "text": "It needs an extra model to be trained, adding cost and complexity",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "It makes images completely random",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "It only works on black and white images",
+              "correct": false
+            }
+          ],
+          "explain": "The main downside discussed is needing a whole separate classifier model trained just to provide guidance — extra work and resources."
+        }
+      ]
+    },
+    {
+      "type": "boss",
+      "exercises": [
+        {
+          "id": "b1",
+          "type": "multiple_choice",
+          "xp": 5,
+          "prompt": "A student says: 'Classifier guidance is great because the diffusion model doesn't need any extra help — it works completely alone.' What's wrong with this statement?",
+          "options": [
+            {
+              "id": "a",
+              "text": "Nothing, that's correct",
+              "correct": false
+            },
+            {
+              "id": "b",
+              "text": "Classifier guidance actually requires training and using a separate classifier model alongside the diffusion model",
+              "correct": true
+            },
+            {
+              "id": "c",
+              "text": "Classifier guidance means the diffusion model trains itself twice",
+              "correct": false
+            },
+            {
+              "id": "d",
+              "text": "Classifier guidance removes the need for denoising steps entirely",
+              "correct": false
+            }
+          ],
+          "explain": "The statement is wrong because classifier guidance specifically relies on an extra, separately-trained classifier model working alongside the diffusion model — it's not a solo effort, and that dependency is exactly its main drawback."
+        }
+      ]
+    }
+  ]
+}

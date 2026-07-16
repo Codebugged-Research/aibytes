@@ -1,0 +1,223 @@
+{
+  "id": "u302-l3",
+  "unit": 302,
+  "day": 1513,
+  "tier": "Generative Media",
+  "tierIcon": "🌌",
+  "title": "Binary Cross-Entropy for Reconstruction",
+  "icon": "⚖️",
+  "concept": "For pixel values treated as probabilities (0 to 1), binary cross-entropy loss (callback to Unit 67) can be used instead of MSE for reconstruction.",
+  "xp": 15,
+  "hearts": 3,
+  "estMinutes": 7,
+  "segments": [
+    {
+      "type": "warmup",
+      "exercises": [
+        {
+          "id": "w1",
+          "type": "multiple_choice",
+          "xp": 1,
+          "prompt": "Quick refresh: in Unit 67, binary cross-entropy was used to measure the difference between two things. What kind of values did it compare?",
+          "options": [
+            {
+              "id": "a",
+              "text": "Probabilities between 0 and 1",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "Only whole numbers like 1, 2, 3",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "Colors like red, green, blue",
+              "correct": false
+            }
+          ],
+          "explain": "Binary cross-entropy measures how far apart two probability-like values are, each squeezed between 0 and 1."
+        }
+      ]
+    },
+    {
+      "type": "teach",
+      "cards": [
+        {
+          "kind": "hook",
+          "icon": "⚖️",
+          "title": "Not All Mistakes Are Measured the Same",
+          "body": "When an autoencoder rebuilds a pixel, how should we grade it? If pixels act like probabilities (0 = black, 1 = white), there's a smarter grading tool than plain distance — and you've already met it before!"
+        },
+        {
+          "kind": "definition",
+          "icon": "📐",
+          "title": "Binary Cross-Entropy for Pixels",
+          "body": "Binary cross-entropy (BCE) loss measures how well a predicted pixel value (between 0 and 1) matches the true pixel value, also between 0 and 1. Instead of just checking 'how far off' like MSE does, BCE checks 'how confident and correct' the prediction was — punishing confident wrong guesses extra hard."
+        },
+        {
+          "kind": "analogy",
+          "icon": "🎯",
+          "title": "Confident Guesses Matter",
+          "body": "Imagine two students guessing if a light is ON or OFF. Student A says '51% ON' and is wrong. Student B says '99% ON' and is wrong. Both made mistakes, but Student B was way more confidently wrong. BCE punishes Student B harder — just like it did back in Unit 67 for classification!"
+        },
+        {
+          "kind": "example",
+          "icon": "🖼️",
+          "title": "Grading a Rebuilt Pixel",
+          "body": "A true pixel value is 1 (pure white). The autoencoder predicts 0.9 — pretty close, so BCE gives a small loss. Another pixel's true value is 1, but the model predicts 0.1 — very wrong and confident, so BCE gives a much bigger loss than a simple distance measure like MSE would."
+        },
+        {
+          "kind": "mythbust",
+          "icon": "🚫",
+          "title": "Myth: BCE Is Only for Classification",
+          "body": "Truth: BCE isn't locked to 'cat vs dog' problems! Anytime a value is squeezed between 0 and 1 — including grayscale pixel brightness — BCE can grade reconstruction quality, making it a popular loss for image autoencoders too."
+        },
+        {
+          "kind": "visual",
+          "icon": "🔀",
+          "title": "MSE vs. BCE for Pixels",
+          "body": "Both compare predicted pixel to true pixel, but they punish errors differently.",
+          "compare": {
+            "left": {
+              "emoji": "📏",
+              "tag": "MSE Loss",
+              "text": "Measures plain distance between values. Treats all errors of the same size equally."
+            },
+            "right": {
+              "emoji": "⚖️",
+              "tag": "BCE Loss",
+              "text": "Treats values as probabilities. Punishes confident wrong guesses much more heavily."
+            }
+          }
+        }
+      ]
+    },
+    {
+      "type": "practice",
+      "exercises": [
+        {
+          "id": "p1",
+          "type": "multiple_choice",
+          "xp": 2,
+          "prompt": "Why can binary cross-entropy be used for pixel reconstruction?",
+          "options": [
+            {
+              "id": "a",
+              "text": "Because pixel values can be treated as probabilities between 0 and 1",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "Because pixels are always exactly 0 or 1",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "Because BCE only works on images, not text",
+              "correct": false
+            },
+            {
+              "id": "d",
+              "text": "Because it ignores how confident the prediction was",
+              "correct": false
+            }
+          ],
+          "explain": "BCE works with values between 0 and 1, and pixel brightness can be scaled to that same range, making BCE a valid loss choice."
+        },
+        {
+          "id": "p2",
+          "type": "true_false",
+          "xp": 2,
+          "prompt": "True or False: Binary cross-entropy punishes confident wrong predictions more than MSE typically does.",
+          "options": [
+            {
+              "id": "true",
+              "text": "True",
+              "correct": true
+            },
+            {
+              "id": "false",
+              "text": "False",
+              "correct": false
+            }
+          ],
+          "explain": "True! BCE grows very large when a confident prediction turns out wrong, while MSE grows more gently since it just measures squared distance."
+        },
+        {
+          "id": "p3",
+          "type": "fill_blank",
+          "xp": 2,
+          "prompt": "Fill in the blank:",
+          "sentence": "Binary cross-entropy treats pixel values like ______ between 0 and 1 when grading reconstruction.",
+          "blank": "probabilities",
+          "words": [
+            "probabilities",
+            "colors",
+            "integers",
+            "labels"
+          ],
+          "explain": "Since pixel brightness can range from 0 to 1, BCE treats it like a probability and grades predictions accordingly."
+        },
+        {
+          "id": "p4",
+          "type": "spot_the_ai",
+          "xp": 2,
+          "prompt": "An autoencoder reconstructs a pixel whose true value is 0 (pure black), but predicts 0.95 (almost white). Which loss would likely give this mistake a bigger penalty?",
+          "options": [
+            {
+              "id": "a",
+              "text": "Binary cross-entropy, because the confident wrong guess is punished heavily",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "MSE, because it always punishes more than BCE",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "Neither — both give the exact same penalty always",
+              "correct": false
+            }
+          ],
+          "explain": "BCE grows sharply when a prediction is both wrong and confident, so this bad, confident guess gets a much bigger penalty under BCE than under MSE."
+        }
+      ]
+    },
+    {
+      "type": "boss",
+      "exercises": [
+        {
+          "id": "b1",
+          "type": "multiple_choice",
+          "xp": 5,
+          "prompt": "An engineer is building an autoencoder to reconstruct grayscale images, where pixel values are scaled between 0 and 1. She wants a loss function that strongly punishes confident, wrong pixel predictions. Which loss should she pick, and why?",
+          "options": [
+            {
+              "id": "a",
+              "text": "Binary cross-entropy, because it treats pixel values as probabilities and punishes confident wrong guesses more",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "MSE, because it always punishes confident wrong guesses the most",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "Binary cross-entropy, because it only works on non-image data",
+              "correct": false
+            },
+            {
+              "id": "d",
+              "text": "Neither loss works when pixel values are between 0 and 1",
+              "correct": false
+            }
+          ],
+          "explain": "Since pixel values are scaled to 0-1 like probabilities, binary cross-entropy is the right pick — it specifically punishes confident, wrong predictions harder than simple distance-based losses like MSE."
+        }
+      ]
+    }
+  ]
+}

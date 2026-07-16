@@ -1,0 +1,217 @@
+{
+  "id": "u305-l1",
+  "unit": 305,
+  "day": 1526,
+  "tier": "Generative Media",
+  "tierIcon": "🌌",
+  "title": "Sampling From a Plain Latent Space",
+  "icon": "🚫",
+  "concept": "If you pick a random point in a vanilla autoencoder's latent space and decode it, the result is usually meaningless noise, not a realistic new sample.",
+  "xp": 15,
+  "hearts": 3,
+  "estMinutes": 7,
+  "segments": [
+    {
+      "type": "warmup",
+      "exercises": [
+        {
+          "id": "w1",
+          "type": "multiple_choice",
+          "xp": 1,
+          "prompt": "An autoencoder squishes an image down into a small list of numbers (a 'latent point') and then rebuilds the image from it. What do you think happens if we invent a totally random list of numbers ourselves and try to rebuild an image from it?",
+          "options": [
+            {
+              "id": "a",
+              "text": "We get a brand new, realistic image every time",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "We probably get blurry, meaningless garbage",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "The autoencoder refuses to work",
+              "correct": false
+            }
+          ],
+          "explain": "A vanilla autoencoder only learns to decode the exact spots it saw during training — random spots in between usually decode into nonsense."
+        }
+      ]
+    },
+    {
+      "type": "teach",
+      "cards": [
+        {
+          "kind": "hook",
+          "icon": "🎲",
+          "title": "Roll the Dice on Latent Space",
+          "body": "Imagine you have a magic box that turns faces into 3 secret numbers, and turning those numbers back gives you the face again. Cool! Now... what if you just typed in 3 random numbers yourself? Would you get a brand new face? Usually — no. You'd get mush."
+        },
+        {
+          "kind": "definition",
+          "icon": "📖",
+          "title": "What's Going On",
+          "body": "A vanilla (regular) autoencoder only learns to organize the latent space around the exact training examples it has seen. It never learns to make the *space between* those points meaningful. So picking a random point and decoding it usually lands in an empty, untrained region and produces noise instead of a realistic sample."
+        },
+        {
+          "kind": "analogy",
+          "icon": "🏝️",
+          "title": "Islands, Not a Continent",
+          "body": "Think of the latent space as an ocean with a few small islands (the training examples) scattered around. The autoencoder only knows how to build nice houses on those exact islands. If you drop a random pin in the open ocean between islands, there's no house there — just water. A vanilla autoencoder's latent space is full of empty ocean."
+        },
+        {
+          "kind": "example",
+          "icon": "🖼️",
+          "title": "Try It With Digit Images",
+          "body": "Train a plain autoencoder on handwritten digits 0-9. Pick two latent points that decode perfectly into a '3' and a '7'. Now decode the exact midpoint between them. Instead of a smooth blend or a valid new digit, you often get a smudgy, unrecognizable shape — because that midpoint was never organized to mean anything."
+        },
+        {
+          "kind": "mythbust",
+          "icon": "🚫",
+          "title": "Myth: Autoencoders Are Generative Models",
+          "body": "Myth: 'An autoencoder can generate new, realistic data just like a proper generative model.' Truth: A vanilla autoencoder is built to compress and reconstruct specific inputs — not to fill its latent space smoothly. That's exactly the problem Variational Autoencoders (VAEs) were invented to fix, by forcing the latent space to be smooth and continuous."
+        },
+        {
+          "kind": "visual",
+          "icon": "🗺️",
+          "title": "Structured vs. Empty Latent Space",
+          "body": "Compare how a well-organized latent space differs from a vanilla autoencoder's patchy one.",
+          "compare": {
+            "left": {
+              "emoji": "🕳️",
+              "tag": "Vanilla Autoencoder",
+              "text": "Scattered clusters with big empty gaps — random points often land in 'dead zones' with no meaning"
+            },
+            "right": {
+              "emoji": "🌐",
+              "tag": "Smooth Latent Space (e.g. VAE)",
+              "text": "Every region is packed and continuous — any random point decodes into something plausible"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "type": "practice",
+      "exercises": [
+        {
+          "id": "p1",
+          "type": "multiple_choice",
+          "xp": 2,
+          "prompt": "Why does decoding a random point in a vanilla autoencoder's latent space usually fail to give a realistic sample?",
+          "options": [
+            {
+              "id": "a",
+              "text": "The decoder is too slow to process random inputs"
+            },
+            {
+              "id": "b",
+              "text": "The latent space wasn't trained to be smooth or filled in between known points",
+              "correct": true
+            },
+            {
+              "id": "c",
+              "text": "Random numbers are always negative, which breaks the decoder"
+            },
+            {
+              "id": "d",
+              "text": "Autoencoders can only decode images, not numbers"
+            }
+          ],
+          "explain": "Vanilla autoencoders only organize latent space around the specific training points — the gaps in between are never shaped to have meaning."
+        },
+        {
+          "id": "p2",
+          "type": "true_false",
+          "xp": 2,
+          "prompt": "A vanilla autoencoder's latent space is guaranteed to be smooth and continuous, so any random point decodes into a realistic sample.",
+          "options": [
+            {
+              "id": "true",
+              "text": "True"
+            },
+            {
+              "id": "false",
+              "text": "False",
+              "correct": true
+            }
+          ],
+          "explain": "False — vanilla autoencoders have no pressure to organize the whole space, leaving empty 'dead zones' that decode into garbage."
+        },
+        {
+          "id": "p3",
+          "type": "fill_blank",
+          "xp": 2,
+          "prompt": "Fill in the blank:",
+          "sentence": "Decoding a random point in a plain autoencoder's latent space usually produces meaningless ____ instead of a realistic sample.",
+          "blank": "noise",
+          "words": [
+            "noise",
+            "sharpness",
+            "labels",
+            "gradients"
+          ],
+          "explain": "Because untrained regions of latent space have no learned structure, decoding them typically produces noise or garbled output."
+        },
+        {
+          "id": "p4",
+          "type": "spot_the_ai",
+          "xp": 2,
+          "prompt": "Which fix was specifically invented to make latent space smooth so random sampling produces realistic outputs?",
+          "options": [
+            {
+              "id": "a",
+              "text": "Variational Autoencoder (VAE), which forces latent space to be continuous",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "Adding more convolutional layers to the encoder"
+            },
+            {
+              "id": "c",
+              "text": "Training on a larger image resolution"
+            }
+          ],
+          "explain": "VAEs add a special constraint during training that pushes the latent space to be smooth and continuous, so nearby (and random) points decode meaningfully."
+        }
+      ]
+    },
+    {
+      "type": "boss",
+      "exercises": [
+        {
+          "id": "b1",
+          "type": "multiple_choice",
+          "xp": 5,
+          "prompt": "You train a vanilla autoencoder on cat photos. You then generate a random latent vector and decode it, hoping for a brand new cat image. What is the MOST likely outcome, and why?",
+          "options": [
+            {
+              "id": "a",
+              "text": "A brand new, photorealistic cat — because the decoder learned to draw cats",
+              "correct": false
+            },
+            {
+              "id": "b",
+              "text": "A blurry or meaningless image — because the random point likely falls in an untrained, empty region of latent space",
+              "correct": true
+            },
+            {
+              "id": "c",
+              "text": "An exact copy of one training cat photo — because the decoder memorizes everything perfectly",
+              "correct": false
+            },
+            {
+              "id": "d",
+              "text": "An error message — because autoencoders cannot accept random input",
+              "correct": false
+            }
+          ],
+          "explain": "Vanilla autoencoders only shape latent space near the training points they saw. A random vector usually lands in a gap the model never learned to interpret, producing noise or blur rather than a realistic new cat."
+        }
+      ]
+    }
+  ]
+}

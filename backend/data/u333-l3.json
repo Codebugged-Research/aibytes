@@ -1,0 +1,223 @@
+{
+  "id": "u333-l3",
+  "unit": 333,
+  "day": 1668,
+  "tier": "Generative Media",
+  "tierIcon": "🌌",
+  "title": "The Latent Diffusion U-Net Component",
+  "icon": "🏗️",
+  "concept": "The core U-Net (callback to Unit 322) performs the actual denoising steps entirely within the compressed latent space (callback to Unit 327).",
+  "xp": 15,
+  "hearts": 3,
+  "estMinutes": 7,
+  "segments": [
+    {
+      "type": "warmup",
+      "exercises": [
+        {
+          "id": "w1",
+          "type": "multiple_choice",
+          "xp": 1,
+          "prompt": "Quick refresher: what does a 'latent space' let an AI do with an image?",
+          "options": [
+            {
+              "id": "a",
+              "text": "Store the image as a small, compressed set of numbers instead of full pixels",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "Delete the image completely",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "Turn the image into a sound file",
+              "correct": false
+            }
+          ],
+          "explain": "Right! Latent space is like a compressed 'summary' of an image, way smaller than the full pixel grid, but still full of useful info."
+        }
+      ]
+    },
+    {
+      "type": "teach",
+      "cards": [
+        {
+          "kind": "hook",
+          "icon": "🏗️",
+          "title": "Where does the magic actually happen?",
+          "body": "You know AI can turn noise into a picture. But WHERE does it clean up that noise? Not on the full-size image — it happens inside a tiny compressed space, using a special tool called a U-Net. Let's peek inside the engine room!"
+        },
+        {
+          "kind": "definition",
+          "icon": "📘",
+          "title": "The U-Net in Latent Space",
+          "body": "The U-Net is the AI network that does the actual 'cleaning' during diffusion — it looks at a noisy latent and predicts the noise to remove, step by step. In latent diffusion, this entire process happens inside the compressed latent space (not on full pixels), which makes it much faster and cheaper."
+        },
+        {
+          "kind": "analogy",
+          "icon": "🧽",
+          "title": "A Tiny Cleaning Robot in a Model House",
+          "body": "Imagine instead of cleaning a giant real house (full-size image), you shrink everything down into a dollhouse model (latent space). A tiny robot (the U-Net) zooms around the dollhouse wiping away dust (noise) bit by bit. Once it's spotless, you blow the dollhouse back up into a full-size, clean house!"
+        },
+        {
+          "kind": "example",
+          "icon": "🖼️",
+          "title": "Step by Step",
+          "body": "1) Start with random noisy latent numbers (tiny compressed grid). 2) The U-Net looks at the noisy latent and guesses 'here's the noise to remove.' 3) Subtract that noise a little bit. 4) Repeat many times until the latent looks clean and meaningful. 5) A decoder finally expands this clean latent into the final full-size picture."
+        },
+        {
+          "kind": "mythbust",
+          "icon": "🚫",
+          "title": "Myth: The U-Net cleans the full image directly",
+          "body": "Nope! The U-Net never touches the full-resolution picture during denoising. It only works on the small latent version. That's the whole trick behind 'latent diffusion' being so much faster than doing diffusion on raw pixels."
+        },
+        {
+          "kind": "visual",
+          "icon": "⚖️",
+          "title": "Full-Pixel Denoising vs Latent Denoising",
+          "body": "Same denoising idea, very different workspace size!",
+          "compare": {
+            "left": {
+              "emoji": "🖼️",
+              "tag": "Pixel-Space Diffusion",
+              "text": "U-Net denoises a huge grid of pixels directly — slow and needs lots of computer power."
+            },
+            "right": {
+              "emoji": "🗜️",
+              "tag": "Latent Diffusion",
+              "text": "U-Net denoises a small compressed latent grid — much faster, then a decoder expands it at the end."
+            }
+          }
+        }
+      ]
+    },
+    {
+      "type": "practice",
+      "exercises": [
+        {
+          "id": "p1",
+          "type": "multiple_choice",
+          "xp": 2,
+          "prompt": "In latent diffusion, where does the U-Net perform its denoising steps?",
+          "options": [
+            {
+              "id": "a",
+              "text": "Directly on the full-resolution pixel image",
+              "correct": false
+            },
+            {
+              "id": "b",
+              "text": "Inside the compressed latent space",
+              "correct": true
+            },
+            {
+              "id": "c",
+              "text": "On the text prompt only",
+              "correct": false
+            },
+            {
+              "id": "d",
+              "text": "On a random unrelated image",
+              "correct": false
+            }
+          ],
+          "explain": "Correct! Denoising happens in the small, compressed latent space, which is much faster than working on full pixels."
+        },
+        {
+          "id": "p2",
+          "type": "true_false",
+          "xp": 2,
+          "prompt": "True or False: The U-Net needs to process every full-size pixel during each denoising step in latent diffusion.",
+          "options": [
+            {
+              "id": "true",
+              "text": "True",
+              "correct": false
+            },
+            {
+              "id": "false",
+              "text": "False",
+              "correct": true
+            }
+          ],
+          "explain": "False! The U-Net only works on the compact latent representation, not the full pixel grid, which is the key speed trick of latent diffusion."
+        },
+        {
+          "id": "p3",
+          "type": "fill_blank",
+          "xp": 2,
+          "prompt": "Fill in the blank to complete the sentence.",
+          "sentence": "The U-Net performs its denoising steps entirely within the compressed ___ space.",
+          "blank": "latent",
+          "words": [
+            "latent",
+            "pixel",
+            "audio",
+            "text"
+          ],
+          "explain": "The whole point of latent diffusion is that the U-Net works inside the compressed latent space, not on raw pixels."
+        },
+        {
+          "id": "p4",
+          "type": "spot_the_ai",
+          "xp": 2,
+          "prompt": "Which statement best explains WHY latent diffusion is faster than pixel-space diffusion?",
+          "options": [
+            {
+              "id": "a",
+              "text": "Because the U-Net cleans a much smaller compressed representation instead of the full-size image",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "Because it skips the denoising steps entirely",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "Because it uses a bigger image to work with",
+              "correct": false
+            }
+          ],
+          "explain": "Yes! Working on a smaller compressed latent grid means far fewer numbers to crunch at each step, so it's much faster."
+        }
+      ]
+    },
+    {
+      "type": "boss",
+      "exercises": [
+        {
+          "id": "b1",
+          "type": "multiple_choice",
+          "xp": 5,
+          "prompt": "Boss Challenge: A friend says, 'The U-Net must denoise the full 1024x1024 pixel image at every single step, that's why diffusion models take so long.' What's the flaw in this claim?",
+          "options": [
+            {
+              "id": "a",
+              "text": "There's no flaw — that is exactly how latent diffusion works",
+              "correct": false
+            },
+            {
+              "id": "b",
+              "text": "The flaw is that in latent diffusion, the U-Net denoises a small compressed latent version, not the full pixel image, making it much faster",
+              "correct": true
+            },
+            {
+              "id": "c",
+              "text": "The flaw is that diffusion models don't use noise at all",
+              "correct": false
+            },
+            {
+              "id": "d",
+              "text": "The flaw is that U-Nets only work on text, not images",
+              "correct": false
+            }
+          ],
+          "explain": "Exactly! The whole point of latent diffusion is compressing the image first, so the U-Net's repeated denoising steps happen on a tiny latent grid instead of the massive full-resolution pixel image — saving huge amounts of computation."
+        }
+      ]
+    }
+  ]
+}

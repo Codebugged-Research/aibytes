@@ -1,0 +1,223 @@
+{
+  "id": "u308-l4",
+  "unit": 308,
+  "day": 1544,
+  "tier": "Generative Media",
+  "tierIcon": "🌌",
+  "title": "Backpropagating Through Sampling",
+  "icon": "🔄",
+  "concept": "With randomness moved outside the learnable path, gradients can now flow backward from the reconstruction loss all the way to the encoder's weights.",
+  "xp": 15,
+  "hearts": 3,
+  "estMinutes": 7,
+  "segments": [
+    {
+      "type": "warmup",
+      "exercises": [
+        {
+          "id": "w1",
+          "type": "multiple_choice",
+          "xp": 1,
+          "prompt": "When we sample randomly inside a neural network, why does normal backpropagation get stuck?",
+          "options": [
+            {
+              "id": "a",
+              "text": "Because random sampling has no smooth, traceable path for gradients to flow through",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "Because the network runs out of memory",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "Because random numbers are too big",
+              "correct": false
+            }
+          ],
+          "explain": "Randomness is not a smooth math operation, so gradients can't 'flow backward' through a random sampling step directly."
+        }
+      ]
+    },
+    {
+      "type": "teach",
+      "cards": [
+        {
+          "kind": "hook",
+          "icon": "⚡",
+          "title": "The Broken Chain",
+          "body": "Imagine a chain of dominoes carrying a message backward, step by step. But right in the middle, someone rolls a dice instead of pushing a domino. The message just... stops. That's what happens when raw randomness sits inside a neural network. Today we fix the broken chain using the reparameterization trick!"
+        },
+        {
+          "kind": "definition",
+          "icon": "📘",
+          "title": "Backpropagating Through Sampling",
+          "body": "Once we move the randomness outside the learnable path (using the reparameterization trick), the sampled value becomes a smooth function of the encoder's outputs plus a separate noise input. This means gradients from the reconstruction loss can now travel backward through the sampling step, all the way to the encoder's weights, so the encoder can actually learn."
+        },
+        {
+          "kind": "analogy",
+          "icon": "🎯",
+          "title": "The Relay Race with a Fixed Baton",
+          "body": "Picture a relay race where one runner used to randomly teleport instead of passing a baton — impossible to trace who ran what! Now imagine that same runner carries a baton (the noise) handed to them beforehand, and simply runs a normal, traceable path using it. The coach (gradient) can now watch and correct every runner's form, including the very first one."
+        },
+        {
+          "kind": "example",
+          "icon": "🧪",
+          "title": "Encoder Learns From Its Mistakes",
+          "body": "A VAE encoder outputs a mean and spread for a latent code. Using reparameterization, the sampled latent = mean + spread × fixed random noise. When the decoder's reconstruction is blurry, the loss signal now flows backward through this formula, adjusting the mean and spread — so next time the encoder produces better latent codes."
+        },
+        {
+          "kind": "mythbust",
+          "icon": "🚫",
+          "title": "Myth: We Removed the Randomness",
+          "body": "Some think reparameterization gets rid of randomness entirely. Not true! The randomness is still there — it's just moved to a separate, fixed noise input that doesn't need learning. The encoder's learnable parts (mean and spread) stay fully connected to the gradient path."
+        },
+        {
+          "kind": "visual",
+          "icon": "🔀",
+          "title": "Before vs After Reparameterization",
+          "body": "Compare how gradients travel through the network before and after the trick is applied.",
+          "compare": {
+            "left": {
+              "emoji": "🧱",
+              "tag": "Before: Direct Sampling",
+              "text": "Gradient hits the random sampling step and stops — encoder gets no learning signal."
+            },
+            "right": {
+              "emoji": "🌊",
+              "tag": "After: Reparameterized Sampling",
+              "text": "Gradient flows smoothly through mean + noise×spread, reaching all the way back to the encoder."
+            }
+          }
+        }
+      ]
+    },
+    {
+      "type": "practice",
+      "exercises": [
+        {
+          "id": "p1",
+          "type": "multiple_choice",
+          "xp": 2,
+          "prompt": "What allows gradients to flow backward through the sampling step after reparameterization?",
+          "options": [
+            {
+              "id": "a",
+              "text": "The randomness is moved outside the learnable path, leaving a smooth function behind",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "The network stops using any randomness at all",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "The decoder is removed from the model",
+              "correct": false
+            },
+            {
+              "id": "d",
+              "text": "The loss function is deleted",
+              "correct": false
+            }
+          ],
+          "explain": "By separating the fixed noise from the learnable mean and spread, the sampling step becomes a smooth formula that gradients can pass through."
+        },
+        {
+          "id": "p2",
+          "type": "true_false",
+          "xp": 2,
+          "prompt": "After the reparameterization trick, the encoder's weights can finally receive gradient updates from the reconstruction loss.",
+          "options": [
+            {
+              "id": "true",
+              "text": "True",
+              "correct": true
+            },
+            {
+              "id": "false",
+              "text": "False",
+              "correct": false
+            }
+          ],
+          "explain": "True! That's the whole point — the gradient path is now unbroken from the loss all the way back to the encoder."
+        },
+        {
+          "id": "p3",
+          "type": "fill_blank",
+          "xp": 2,
+          "prompt": "Fill in the blank:",
+          "sentence": "Moving randomness outside the learnable path lets gradients flow ___ from the reconstruction loss to the encoder's weights.",
+          "blank": "backward",
+          "words": [
+            "backward",
+            "sideways",
+            "nowhere",
+            "upward"
+          ],
+          "explain": "Gradients flow backward from the loss through the network to update earlier weights — that's how backpropagation works."
+        },
+        {
+          "id": "p4",
+          "type": "spot_the_ai",
+          "xp": 2,
+          "prompt": "In your own words, why couldn't the encoder learn before the reparameterization trick was used?",
+          "options": [
+            {
+              "id": "a",
+              "text": "Because the random sampling step blocked the gradient from reaching the encoder's weights",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "Because the encoder had too many layers",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "Because the loss function was too small",
+              "correct": false
+            }
+          ],
+          "explain": "The raw sampling operation has no smooth derivative, so gradients couldn't pass through it to update the encoder — until the trick separated out the noise."
+        }
+      ]
+    },
+    {
+      "type": "boss",
+      "exercises": [
+        {
+          "id": "b1",
+          "type": "multiple_choice",
+          "xp": 5,
+          "prompt": "A VAE's encoder isn't improving no matter how much you train it. You suspect the sampling step is blocking gradients. What's the fix, and why does it work?",
+          "options": [
+            {
+              "id": "a",
+              "text": "Apply the reparameterization trick: rewrite the sample as mean + noise×spread, so gradients can flow through the smooth mean and spread while noise stays separate",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "Remove the sampling step entirely so the model becomes deterministic",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "Increase the learning rate until gradients somehow pass through the random step",
+              "correct": false
+            },
+            {
+              "id": "d",
+              "text": "Add more decoder layers to compensate for the blocked gradient",
+              "correct": false
+            }
+          ],
+          "explain": "The reparameterization trick is the correct fix — it turns sampling into a smooth, differentiable function of learnable parameters plus fixed noise, unblocking the gradient path back to the encoder."
+        }
+      ]
+    }
+  ]
+}
