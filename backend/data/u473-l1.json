@@ -1,0 +1,222 @@
+{
+  "id": "u473-l1",
+  "unit": 473,
+  "day": 2366,
+  "tier": "LLM Application Engineering",
+  "tierIcon": "🔌",
+  "title": "Retrieval Metrics: Precision@K and Recall@K",
+  "icon": "📏",
+  "concept": "Measuring how many of the top-K retrieved documents are actually relevant, and how many relevant documents were found.",
+  "xp": 15,
+  "hearts": 3,
+  "estMinutes": 7,
+  "segments": [
+    {
+      "type": "warmup",
+      "exercises": [
+        {
+          "id": "w1",
+          "type": "multiple_choice",
+          "xp": 1,
+          "prompt": "How does a Retrieval-Augmented Generation (RAG) system keep an LLM's knowledge up to date?",
+          "options": [
+            {
+              "id": "w_opt_1",
+              "text": "By fine-tuning the model's internal weights on new internet data hourly.",
+              "correct": false
+            },
+            {
+              "id": "w_opt_2",
+              "text": "By searching a database for relevant documents and adding them to the LLM's prompt.",
+              "correct": true
+            },
+            {
+              "id": "w_opt_3",
+              "text": "By asking the LLM to guess the facts using creative temperature settings.",
+              "correct": false
+            }
+          ],
+          "explain": "Before evaluating how we retrieve documents, we must remember that RAG (Retrieval-Augmented Generation) connects an external database to an LLM so the model can answer questions using fresh, factual source data."
+        }
+      ]
+    },
+    {
+      "type": "teach",
+      "cards": [
+        {
+          "kind": "hook",
+          "icon": "🔍",
+          "title": "Garbage In, Garbage Out",
+          "body": "When an LLM answers a question using RAG, its answer is only as good as the documents we feed it. If we retrieve garbage, the LLM will output garbage. How do we measure if our search engine is bringing back the right ingredients?"
+        },
+        {
+          "kind": "definition",
+          "icon": "🎯",
+          "title": "What are Precision@K and Recall@K?",
+          "body": "Precision@K and Recall@K are metrics used to evaluate how well your retrieval system selects the top 'K' documents. Precision@K measures the percentage of retrieved documents that are useful, while Recall@K measures what fraction of all possible useful documents were successfully retrieved."
+        },
+        {
+          "kind": "analogy",
+          "icon": "🎣",
+          "title": "The Fishing Net Analogy",
+          "body": "Imagine your RAG system is a fishing net. If you cast a net that only catches 5 fish (K=5), Precision@5 is the percentage of those 5 fish that are actually edible. Recall@5 is the percentage of all edible fish in the entire pond that you managed to catch in that single net."
+        },
+        {
+          "kind": "example",
+          "icon": "📊",
+          "title": "A Quick Calculation",
+          "body": "If there are 10 relevant documents in your database, and your search returns 5 documents (K=5), and 4 of them are relevant: your Precision@5 is 80% (4 out of 5), and your Recall@5 is 40% (4 out of the 10 total relevant ones)."
+        },
+        {
+          "kind": "mythbust",
+          "icon": "🛑",
+          "title": "More is Not Always Better",
+          "body": "Many beginners think retrieving 100 documents guarantees a better RAG output. In reality, retrieving too many documents lowers Precision@K, flooding the LLM with distracting, irrelevant information and causing it to hallucinate."
+        },
+        {
+          "kind": "visual",
+          "icon": "⚖️",
+          "title": "Precision vs. Recall",
+          "body": "Let's compare what these two metrics focus on when looking at your search results.",
+          "compare": {
+            "left": {
+              "emoji": "🎯",
+              "tag": "Precision@K",
+              "text": "Focuses on quality. 'Are the top search results clean and free of noise?'"
+            },
+            "right": {
+              "emoji": "🕸️",
+              "tag": "Recall@K",
+              "text": "Focuses on quantity. 'Did we catch all the relevant documents that exist?'"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "type": "practice",
+      "exercises": [
+        {
+          "id": "p1",
+          "type": "multiple_choice",
+          "xp": 2,
+          "prompt": "Your RAG system retrieves 5 documents (K=5). Upon inspection, only 3 of them are actually relevant to the user's query. What is the Precision@5?",
+          "options": [
+            {
+              "id": "p_opt_1",
+              "text": "100%",
+              "correct": false
+            },
+            {
+              "id": "p_opt_2",
+              "text": "60%",
+              "correct": true
+            },
+            {
+              "id": "p_opt_3",
+              "text": "40%",
+              "correct": false
+            },
+            {
+              "id": "p_opt_4",
+              "text": "30%",
+              "correct": false
+            }
+          ],
+          "explain": "Precision@5 is calculated as (number of relevant retrieved docs) / (total retrieved docs, which is K=5). Here, 3 out of 5 are relevant, which equals 60%."
+        },
+        {
+          "id": "p2",
+          "type": "true_false",
+          "xp": 2,
+          "prompt": "True or False: Increasing the number of retrieved documents (K) generally increases or maintains Recall@K.",
+          "options": [
+            {
+              "id": "tf_true",
+              "text": "True",
+              "correct": true
+            },
+            {
+              "id": "tf_false",
+              "text": "False",
+              "correct": false
+            }
+          ],
+          "explain": "As you increase K (retrieving more documents), you are likely to find more of the relevant documents that exist, which increases your Recall@K."
+        },
+        {
+          "id": "p3",
+          "type": "fill_blank",
+          "xp": 2,
+          "prompt": "Fill in the missing metric name that measures document completeness:",
+          "sentence": "If you want to know what percentage of all relevant documents were successfully found, you calculate Recall@K.",
+          "blank": "Recall@K",
+          "words": [
+            "Recall@K",
+            "Precision@K",
+            "Accuracy"
+          ],
+          "explain": "Recall@K measures the proportion of all truly relevant documents in the database that were successfully retrieved in the top K."
+        },
+        {
+          "id": "p4",
+          "type": "spot_the_ai",
+          "xp": 2,
+          "prompt": "Identify the question written by a confused AI chatbot trying to explain the math behind these metrics:",
+          "options": [
+            {
+              "id": "sai_1",
+              "text": "If I increase K from 5 to 20, what will typically happen to my Precision@K?",
+              "correct": false
+            },
+            {
+              "id": "sai_2",
+              "text": "To calculate the Precision@K, divide the cosine prompt accuracy of the vector embeddings limit by the total token weight of K.",
+              "correct": true
+            },
+            {
+              "id": "sai_3",
+              "text": "Why does high recall sometimes lead to lower precision in retrieval systems?",
+              "correct": false
+            }
+          ],
+          "explain": "Option B contains classic AI hallucination gibberish ('cosine prompt accuracy of the vector embeddings limit') that makes no mathematical sense for Precision@K. Option A is a clean, human-like question testing understanding of the metric."
+        }
+      ]
+    },
+    {
+      "type": "boss",
+      "exercises": [
+        {
+          "id": "b1",
+          "type": "multiple_choice",
+          "xp": 5,
+          "prompt": "You are building a RAG pipeline for medical questions. Why must you track both Precision@K and Recall@K instead of just one?",
+          "options": [
+            {
+              "id": "opt_1",
+              "text": "Precision@K measures the purity of the top results; Recall@K measures the completeness of the retrieved set.",
+              "correct": true
+            },
+            {
+              "id": "opt_2",
+              "text": "Recall@K measures speed, while Precision@K measures the accuracy of the final LLM text generation.",
+              "correct": false
+            },
+            {
+              "id": "opt_3",
+              "text": "Precision@K counts how many irrelevant documents were safely ignored by the vector database.",
+              "correct": false
+            },
+            {
+              "id": "opt_4",
+              "text": "Both metrics measure the exact same thing but use different math formulas to confuse developers.",
+              "correct": false
+            }
+          ],
+          "explain": "Precision@K measures the density of relevant documents in your top results (reducing noise/clutter for the LLM), while Recall@K measures how complete your search was (ensuring no critical facts were missed). Both are crucial because an LLM needs clean, relevant context without missing the actual answer."
+        }
+      ]
+    }
+  ]
+}

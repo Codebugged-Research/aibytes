@@ -1,0 +1,222 @@
+{
+  "id": "u453-l5",
+  "unit": 453,
+  "day": 2270,
+  "tier": "LLM Application Engineering",
+  "tierIcon": "🔌",
+  "title": "RRF in a Hybrid Search Pipeline",
+  "icon": "🔀",
+  "concept": "A worked example fusing dense and sparse result lists with RRF before final reranking.",
+  "xp": 15,
+  "hearts": 3,
+  "estMinutes": 7,
+  "segments": [
+    {
+      "type": "warmup",
+      "exercises": [
+        {
+          "id": "w1",
+          "type": "multiple_choice",
+          "xp": 1,
+          "prompt": "Why might you choose RRF over weighted score fusion when merging search results?",
+          "options": [
+            {
+              "id": "w_1",
+              "text": "Weighted score fusion requires no parameters.",
+              "correct": false
+            },
+            {
+              "id": "w_2",
+              "text": "RRF does not require calibrating or normalizing different score scales.",
+              "correct": true
+            },
+            {
+              "id": "w_3",
+              "text": "Weighted score fusion ignores raw scores and only uses ranks.",
+              "correct": false
+            }
+          ],
+          "explain": "While weighted score fusion requires hand-tuning weights to balance different score ranges, RRF is rank-based and requires no calibration, making it highly robust and simple to implement."
+        }
+      ]
+    },
+    {
+      "type": "teach",
+      "cards": [
+        {
+          "kind": "hook",
+          "icon": "🔌",
+          "title": "The Best of Both Worlds",
+          "body": "How do search engines combine keyword matches like 'dark roast' with conceptual matches like 'bold coffee flavors'? They run them in parallel and use RRF to merge the results without getting tripped up by different scoring scales."
+        },
+        {
+          "kind": "definition",
+          "icon": "🎛️",
+          "title": "Hybrid Search Pipeline",
+          "body": "A Hybrid Search Pipeline combines keyword-based sparse search and semantic dense search, using Reciprocal Rank Fusion (RRF) to merge their outputs into a single, balanced list before final precision tuning."
+        },
+        {
+          "kind": "analogy",
+          "icon": "🗳️",
+          "title": "The Unified Ballot Box",
+          "body": "Think of RRF as a crowd-sourced voting ballot. Instead of measuring how loud each voter shouts (raw scores), RRF only cares about their order of preference on the ballot, making it easy to combine votes from a whisperer (sparse search) and a singer (dense search)."
+        },
+        {
+          "kind": "example",
+          "icon": "📋",
+          "title": "Merging the Ranks",
+          "body": "Suppose your keyword search ranks Doc A first, while vector search ranks Doc A fifth. RRF calculates their reciprocal ranks (e.g., 1/1 and 1/5) and sums them up, outputting a merged list where Doc A scores highly due to its strong keyword match."
+        },
+        {
+          "kind": "mythbust",
+          "icon": "🚫",
+          "title": "Score Normalization is a Trap",
+          "body": "Many think you need to normalize vector and keyword scores to the same scale before merging them. In reality, RRF ignores the raw scores entirely and only looks at the item positions, saving you from complex scaling math."
+        },
+        {
+          "kind": "visual",
+          "icon": "⚖️",
+          "title": "Weighted Scores vs. RRF Rank Fusion",
+          "body": "Comparing how raw scores and RRF behave when merging a BM25 sparse search and a vector dense search.",
+          "compare": {
+            "left": {
+              "emoji": "🔢",
+              "tag": "Weighted Scores",
+              "text": "Requires tuning weights (e.g. 0.7 * BM25 + 0.3 * Vector) because the score ranges are completely different."
+            },
+            "right": {
+              "emoji": "📶",
+              "tag": "RRF Pipeline",
+              "text": "Uses only the rank positions (1st, 2nd, 3rd), completely ignoring the raw score scales."
+            }
+          }
+        }
+      ]
+    },
+    {
+      "type": "practice",
+      "exercises": [
+        {
+          "id": "p1",
+          "type": "multiple_choice",
+          "xp": 2,
+          "prompt": "How does RRF solve the challenge of fusing dense and sparse search results that have completely different score ranges?",
+          "options": [
+            {
+              "id": "mc_1",
+              "text": "By mathematically converting BM25 scores into dense vector embeddings.",
+              "correct": false
+            },
+            {
+              "id": "mc_2",
+              "text": "By ignoring the raw scores entirely and only using the position of results in each list.",
+              "correct": true
+            },
+            {
+              "id": "mc_3",
+              "text": "By multiplying the raw sparse score by the raw dense score.",
+              "correct": false
+            },
+            {
+              "id": "mc_4",
+              "text": "By converting both lists into percentages based on their maximum values.",
+              "correct": false
+            }
+          ],
+          "explain": "RRF only looks at the position (rank) of the items in each list, bypassing the problem of incompatible scoring scales between dense vectors (like cosine similarity) and sparse search (like BM25)."
+        },
+        {
+          "id": "p2",
+          "type": "true_false",
+          "xp": 2,
+          "prompt": "True or False: In a hybrid pipeline, RRF is typically run before a heavy reranking step to filter down the candidate pool efficiently.",
+          "options": [
+            {
+              "id": "tf_1",
+              "text": "True",
+              "correct": true
+            },
+            {
+              "id": "tf_2",
+              "text": "False",
+              "correct": false
+            }
+          ],
+          "explain": "A reranker (like a Cross-Encoder) is computationally expensive, so we use RRF first to prune the candidates down to a small, high-quality subset."
+        },
+        {
+          "id": "p3",
+          "type": "fill_blank",
+          "xp": 2,
+          "prompt": "Fill in the missing concept that RRF uses to calculate its final merged scores.",
+          "sentence": "RRF merges the two search pathways by calculating and summing the reciprocal ranks of the documents.",
+          "blank": "reciprocal ranks",
+          "words": [
+            "reciprocal ranks",
+            "cosine similarities",
+            "exact keyword counts"
+          ],
+          "explain": "RRF combines rankings by summing up the reciprocal ranks (1 / rank) of each document across the sparse and dense search results."
+        },
+        {
+          "id": "p4",
+          "type": "spot_the_ai",
+          "xp": 2,
+          "prompt": "Which of the following describes an AI system using RRF in a hybrid search pipeline?",
+          "options": [
+            {
+              "id": "sai_1",
+              "text": "We run a vector search, convert the vector coordinates to text keywords, and then count word occurrences.",
+              "correct": false
+            },
+            {
+              "id": "sai_2",
+              "text": "We normalize the dense cosine similarity scores to match the range of the sparse BM25 scores and multiply them.",
+              "correct": false
+            },
+            {
+              "id": "sai_3",
+              "text": "We retrieve top-100 results from BM25 and top-100 from vector search, compute their RRF scores based on ranking, and sort the combined list.",
+              "correct": true
+            }
+          ],
+          "explain": "Option C describes the classic hybrid RRF pattern: merging rank positions from keyword and vector searches to produce a unified list for a downstream reranker. Options A and B describe non-RRF or incorrect processes."
+        }
+      ]
+    },
+    {
+      "type": "boss",
+      "exercises": [
+        {
+          "id": "b1",
+          "type": "multiple_choice",
+          "xp": 5,
+          "prompt": "You are designing an enterprise hybrid search pipeline. What is the most efficient and standard way to sequence these components to balance speed, diversity, and high precision?",
+          "options": [
+            {
+              "id": "opt_1",
+              "text": "Run parallel dense/sparse search -> Fuse ranks with RRF -> Send top-K to a Cross-Encoder reranker.",
+              "correct": true
+            },
+            {
+              "id": "opt_2",
+              "text": "Run Cross-Encoder first -> Split into dense/sparse -> Add scores with RRF.",
+              "correct": false
+            },
+            {
+              "id": "opt_3",
+              "text": "Normalize dense scores -> Multiply by sparse ranks -> Skip reranking.",
+              "correct": false
+            },
+            {
+              "id": "opt_4",
+              "text": "Use RRF to convert sparse keywords into dense vector coordinates directly.",
+              "correct": false
+            }
+          ],
+          "explain": "In a standard hybrid pipeline, we run dense and sparse queries in parallel, combine their ranked results using RRF to catch relevant items from both worlds, and then pass only this top-K fused list to the expensive cross-encoder reranker to save computational cost."
+        }
+      ]
+    }
+  ]
+}

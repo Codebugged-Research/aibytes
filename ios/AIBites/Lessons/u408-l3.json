@@ -1,0 +1,222 @@
+{
+  "id": "u408-l3",
+  "unit": 408,
+  "day": 2043,
+  "tier": "LLM Application Engineering",
+  "tierIcon": "🔌",
+  "title": "Schema-Constrained Generation",
+  "icon": "🧬",
+  "concept": "JSON schema / grammar-constrained decoding to guarantee parseable structured output.",
+  "xp": 15,
+  "hearts": 3,
+  "estMinutes": 7,
+  "segments": [
+    {
+      "type": "warmup",
+      "exercises": [
+        {
+          "id": "w1",
+          "type": "multiple_choice",
+          "xp": 1,
+          "prompt": "Why did we use delimiters and tags like XML in the previous lesson?",
+          "options": [
+            {
+              "id": "w1",
+              "text": "To encrypt the text so the model cannot read it.",
+              "correct": false
+            },
+            {
+              "id": "w2",
+              "text": "To clearly separate instructions from untrusted user input data.",
+              "correct": true
+            },
+            {
+              "id": "w3",
+              "text": "To make the prompt look nice and colorful in code editors.",
+              "correct": false
+            }
+          ],
+          "explain": "Delimiters like XML tags (e.g., <input>...</input>) clearly mark where untrusted user input begins and ends, preventing the model from confusing inputs with instructions."
+        }
+      ]
+    },
+    {
+      "type": "teach",
+      "cards": [
+        {
+          "kind": "hook",
+          "icon": "💥",
+          "title": "The Fragile JSON Problem",
+          "body": "Have you ever built an app that crashed because an LLM forgot a closing curly bracket or added an extra comma in its response? Relying on prompts to get clean data formats is risky, but we can actually force the AI to follow our rules."
+        },
+        {
+          "kind": "definition",
+          "icon": "🛡️",
+          "title": "Grammar-Constrained Decoding",
+          "body": "Schema-constrained generation forces the LLM's decoding process to follow strict grammatical rules, such as a JSON schema. Instead of just hoping the model outputs valid code, the system physically blocks it from generating characters that would break the format."
+        },
+        {
+          "kind": "analogy",
+          "icon": "🧁",
+          "title": "The Silicone Mold Analogy",
+          "body": "Think of standard prompting like ordering food verbally and hoping the chef plates it right. Constrained generation is like giving the chef a baking tray with pre-carved slots for cupcakes; the batter has no choice but to fill the exact shapes provided."
+        },
+        {
+          "kind": "example",
+          "icon": "📋",
+          "title": "Strict Type Enforcement",
+          "body": "If you require an output with a 'name' (string) and 'age' (integer), the system won't let the LLM output a letter when it is time to write the age. It forces the LLM to only select numeric tokens for that field."
+        },
+        {
+          "kind": "mythbust",
+          "icon": "🕵️‍♂️",
+          "title": "Myth: Retries are the Only Way",
+          "body": "Many think you just have to write a really good prompt and retry if the JSON fails to parse. In reality, you can use engine-level constraints to get a 100% guarantee of valid JSON on the very first try, saving time and API costs."
+        },
+        {
+          "kind": "visual",
+          "icon": "⚖️",
+          "title": "Prompting vs. Constraining",
+          "body": "Compare prompting for JSON vs. enforcing JSON with a schema constraint.",
+          "compare": {
+            "left": {
+              "emoji": "💬",
+              "tag": "Prompted JSON",
+              "text": "High chance of extra conversational text, missing brackets, or bad commas."
+            },
+            "right": {
+              "emoji": "🔒",
+              "tag": "Constrained JSON",
+              "text": "Guaranteed to parse perfectly because invalid tokens are physically blocked."
+            }
+          }
+        }
+      ]
+    },
+    {
+      "type": "practice",
+      "exercises": [
+        {
+          "id": "p1",
+          "type": "multiple_choice",
+          "xp": 2,
+          "prompt": "Which of the following is the most reliable way to guarantee that an LLM outputs parseable JSON?",
+          "options": [
+            {
+              "id": "mc1",
+              "text": "Write 'OUTPUT ONLY VALID JSON' in all capital letters in the system prompt.",
+              "correct": false
+            },
+            {
+              "id": "mc2",
+              "text": "Set the model's temperature to 0 and use markdown code blocks.",
+              "correct": false
+            },
+            {
+              "id": "mc3",
+              "text": "Use a schema-constrained generation engine to restrict token selection.",
+              "correct": true
+            },
+            {
+              "id": "mc4",
+              "text": "Use regular expressions to strip out text before and after the brackets.",
+              "correct": false
+            }
+          ],
+          "explain": "Standard prompts only advise the LLM on what to do; they cannot physically prevent the model from hallucinating a bad character or formatting error. Constrained generation enforces the rules at the model's output layer."
+        },
+        {
+          "id": "p2",
+          "type": "true_false",
+          "xp": 2,
+          "prompt": "True or False: Schema-constrained generation works at the token selection level, not just by rewriting the prompt.",
+          "options": [
+            {
+              "id": "t1",
+              "text": "True",
+              "correct": true
+            },
+            {
+              "id": "t2",
+              "text": "False",
+              "correct": false
+            }
+          ],
+          "explain": "Constrained generation alters the probability of the tokens during generation, ensuring only schema-compliant tokens are selected, regardless of what the prompt says."
+        },
+        {
+          "id": "p3",
+          "type": "fill_blank",
+          "xp": 2,
+          "prompt": "Fill in the blank to complete the explanation of how grammar engines restrict LLM outputs.",
+          "sentence": "Constrained decoding works by disabling invalid tokens during the generation process.",
+          "blank": "tokens",
+          "words": [
+            "tokens",
+            "prompts",
+            "temperatures"
+          ],
+          "explain": "By restricting the tokens the LLM is allowed to output at each step, we ensure it only generates valid characters that match our schema."
+        },
+        {
+          "id": "p4",
+          "type": "spot_the_ai",
+          "xp": 2,
+          "prompt": "Which response is most likely the output of an LLM using strict schema-constrained generation?",
+          "options": [
+            {
+              "id": "s1",
+              "text": "Here is the user profile you requested: Name: Alex, Age: 29. Let me know if you need anything else!",
+              "correct": false
+            },
+            {
+              "id": "s2",
+              "text": "```json\\n{\\n  \"name\": \"Alex\",\\n  \"age\": 29\\n}\\n```\\nHope this JSON payload helps you build your database entry!",
+              "correct": false
+            },
+            {
+              "id": "s3",
+              "text": "{\"name\": \"Alex\", \"age\": 29}",
+              "correct": true
+            }
+          ],
+          "explain": "Option C is generated by an AI because it outputs a raw, structured JSON format with no conversational preamble or conversational formatting, matching a strict schema constraint."
+        }
+      ]
+    },
+    {
+      "type": "boss",
+      "exercises": [
+        {
+          "id": "b1",
+          "type": "multiple_choice",
+          "xp": 5,
+          "prompt": "How does schema-constrained generation (or grammar-based decoding) guarantee that an LLM's output will match a JSON structure perfectly every single time?",
+          "options": [
+            {
+              "id": "b1",
+              "text": "It uses a powerful system prompt telling the LLM 'You must output valid JSON or you will be shut down.'",
+              "correct": false
+            },
+            {
+              "id": "b2",
+              "text": "It intercepts the token-by-token generation process, filtering out any tokens that would violate the schema's syntax.",
+              "correct": true
+            },
+            {
+              "id": "b3",
+              "text": "It runs the LLM's output through a regular expression parser and automatically fixes missing brackets afterward.",
+              "correct": false
+            },
+            {
+              "id": "b4",
+              "text": "It uses a second, smaller LLM to rewrite the output of the first LLM into a structured template.",
+              "correct": false
+            }
+          ],
+          "explain": "Schema-constrained generation intercepts the token selection process at the engine level (like llama.cpp or vLLM), rejecting any token that would violate the syntax rules of your schema (like JSON). This guarantees that the final string parses successfully without needing error-prone retry loops."
+        }
+      ]
+    }
+  ]
+}

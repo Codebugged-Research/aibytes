@@ -1,0 +1,222 @@
+{
+  "id": "u458-l2",
+  "unit": 458,
+  "day": 2292,
+  "tier": "LLM Application Engineering",
+  "tierIcon": "🔌",
+  "title": "Top-K Selection at Each Stage",
+  "icon": "🎛️",
+  "concept": "How many candidates to retrieve, how many to rerank, and how many to finally inject into context.",
+  "xp": 15,
+  "hearts": 3,
+  "estMinutes": 7,
+  "segments": [
+    {
+      "type": "warmup",
+      "exercises": [
+        {
+          "id": "w1",
+          "type": "multiple_choice",
+          "xp": 1,
+          "prompt": "Recapping our last lesson: What is the correct order of stages in a standard online retrieval pipeline?",
+          "options": [
+            {
+              "id": "a",
+              "text": "Query Rewrite -> Retrieve Candidates -> Rerank -> Assemble Context -> Generate",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "Generate -> Retrieve Candidates -> Rerank -> Query Rewrite",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "Retrieve Candidates -> Generate -> Rerank -> Assemble Context",
+              "correct": false
+            }
+          ],
+          "explain": "The online request path goes from user query to query rewriting, candidate retrieval, reranking, assembling the final context window, and finally generating the response using the LLM."
+        }
+      ]
+    },
+    {
+      "type": "teach",
+      "cards": [
+        {
+          "kind": "hook",
+          "icon": " funnel ",
+          "title": "The Goldilocks Problem of Search",
+          "body": "Retrieving 100 documents makes sure we don't miss the answer, but feeding 100 documents directly to an LLM is slow, expensive, and confuses the model. How do we filter down our search results at each stage of the pipeline without losing the gold nuggets?"
+        },
+        {
+          "kind": "definition",
+          "icon": "🔍",
+          "title": "What is Top-K Selection?",
+          "body": "Top-K selection is the practice of choosing how many candidate documents (K) to pass from one stage of your pipeline to the next. In a typical pipeline, K starts large during cheap initial search and gets progressively smaller as we use more expensive ranking and reasoning tools."
+        },
+        {
+          "kind": "analogy",
+          "icon": "🎭",
+          "title": "The Casting Call Analogy",
+          "body": "Think of it like auditioning actors for a play. You start with an open casting call (Retrieval) to get 100 headshots. Then, you invite the top 10 in for a live reading (Reranking) because it takes more time. Finally, you cast just the 2 best actors (Context Injection) for the show."
+        },
+        {
+          "kind": "example",
+          "icon": "💡",
+          "title": "A Pipeline in Action",
+          "body": "A user asks 'How do I fix error 404?' Your system retrieves the top 50 matches using quick keyword search, runs those 50 through a smart AI reranker to find the top 10 most relevant, and feeds only the top 3 direct answers into the prompt to generate the final response."
+        },
+        {
+          "kind": "mythbust",
+          "icon": "🚫",
+          "title": "The 'More is Always Better' Myth",
+          "body": "More context isn't always better. Feeding too many documents to an LLM leads to 'lost in the middle' syndrome, where the model ignores facts buried in the middle of a massive prompt, while also inflating your API bill."
+        },
+        {
+          "kind": "visual",
+          "icon": "📐",
+          "title": "The Quality-vs-Quantity Funnel",
+          "body": "As data moves from raw database search to the final LLM prompt, the number of documents shrinks while the processing quality per document increases.",
+          "compare": {
+            "left": {
+              "emoji": "⚡",
+              "tag": "Retrieval (K=100)",
+              "text": "Fast, cheap, looks at millions of items, lower accuracy."
+            },
+            "right": {
+              "emoji": "🧠",
+              "tag": "Context Injection (K=3)",
+              "text": "Slow, expensive, looks at very few items, extremely high accuracy."
+            }
+          }
+        }
+      ]
+    },
+    {
+      "type": "practice",
+      "exercises": [
+        {
+          "id": "p1",
+          "type": "multiple_choice",
+          "xp": 2,
+          "prompt": "Why do we start with a large Top-K (e.g., K=100) during the initial retrieval stage?",
+          "options": [
+            {
+              "id": "a",
+              "text": "To keep LLM costs low by sending 100 documents to the prompt",
+              "correct": false
+            },
+            {
+              "id": "b",
+              "text": "Because reranking millions of documents is extremely fast and cheap",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "To ensure we don't miss the correct answer during the initial fast, low-accuracy search",
+              "correct": true
+            },
+            {
+              "id": "d",
+              "text": "Because LLMs perform best when reading hundreds of documents at once",
+              "correct": false
+            }
+          ],
+          "explain": "Initial retrieval needs to search through millions of documents very quickly, so we use a large K (like 50 to 100) with a fast, lightweight search algorithm to ensure the correct answer is captured in the initial pool."
+        },
+        {
+          "id": "p2",
+          "type": "true_false",
+          "xp": 2,
+          "prompt": "True or False: To get the best results, you should pass at least 1,000 retrieved candidate documents directly into the reranking stage.",
+          "options": [
+            {
+              "id": "a",
+              "text": "True",
+              "correct": false
+            },
+            {
+              "id": "b",
+              "text": "False",
+              "correct": true
+            }
+          ],
+          "explain": "Reranking is computationally heavy. If you try to rerank 1,000 documents for every search query, your application will become extremely slow and expensive. We keep the reranking K relatively small (like 10 to 25)."
+        },
+        {
+          "id": "p3",
+          "type": "fill_blank",
+          "xp": 2,
+          "prompt": "Fill in the blank to describe how document counts decrease at each stage of the pipeline:",
+          "sentence": "The Top-K pipeline acts like a funnel by selecting fewer, higher-quality documents at each step.",
+          "blank": "funnel",
+          "words": [
+            "funnel",
+            "square",
+            "loop"
+          ],
+          "explain": "We start with a wide retrieval pool and narrow it down to a tiny, high-quality set of documents for the LLM, resembling a funnel shape."
+        },
+        {
+          "id": "p4",
+          "type": "spot_the_ai",
+          "xp": 2,
+          "prompt": "Which of the following pipeline adjustment descriptions sounds like it was generated by an AI assistant managing system architecture?",
+          "options": [
+            {
+              "id": "a",
+              "text": "'I hardcoded the pipeline to retrieve 50 documents and send 5 to the LLM.'",
+              "correct": false
+            },
+            {
+              "id": "b",
+              "text": "'The pipeline agent detected high query complexity, dynamically increasing retrieval K to 150 and rerank K to 25 to capture fringe context.'",
+              "correct": true
+            },
+            {
+              "id": "c",
+              "text": "'I changed the configuration file to use K=10 for reranking instead of K=20.'",
+              "correct": false
+            }
+          ],
+          "explain": "Option B represents an automated system dynamically adjusting thresholds, which is typical of an AI-driven pipeline manager. Options A and C describe manual developer decisions."
+        }
+      ]
+    },
+    {
+      "type": "boss",
+      "exercises": [
+        {
+          "id": "b1",
+          "type": "multiple_choice",
+          "xp": 5,
+          "prompt": "You are designing a RAG system for a massive database of 1 million articles. Which of the following Top-K filtering strategies at each stage represents the most cost-effective and accurate pipeline?",
+          "options": [
+            {
+              "id": "a",
+              "text": "Retrieve 3 -> Rerank 3 -> Inject 100 to maximize LLM focus",
+              "correct": false
+            },
+            {
+              "id": "b",
+              "text": "Retrieve 100 -> Rerank 10 -> Inject 3 to balance speed, cost, and accuracy",
+              "correct": true
+            },
+            {
+              "id": "c",
+              "text": "Retrieve 10 -> Rerank 100 -> Inject 100 to let the LLM do all the sorting",
+              "correct": false
+            },
+            {
+              "id": "d",
+              "text": "Retrieve 100 -> Rerank 100 -> Inject 100 to keep the pipeline simple",
+              "correct": false
+            }
+          ],
+          "explain": "Starting with a wide net (K=100) ensures we don't miss relevant documents during the fast, cheap search. We then narrow it down (K=10) for the slower, more expensive rerank stage, and finally fit only the absolute best (K=3) into the limited context window."
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,222 @@
+{
+  "id": "u475-l1",
+  "unit": 475,
+  "day": 2376,
+  "tier": "LLM Application Engineering",
+  "tierIcon": "🔌",
+  "title": "Where the Time Goes",
+  "icon": "⏱️",
+  "concept": "Breaking down a RAG request's latency budget across embedding, retrieval, reranking, and generation.",
+  "xp": 15,
+  "hearts": 3,
+  "estMinutes": 7,
+  "segments": [
+    {
+      "type": "warmup",
+      "exercises": [
+        {
+          "id": "w1",
+          "type": "multiple_choice",
+          "xp": 1,
+          "prompt": "Welcome to Unit 475! Let's start with a quick recap: What is the primary purpose of a Retrieval-Augmented Generation (RAG) pipeline?",
+          "options": [
+            {
+              "id": "w_1",
+              "text": "Injecting external knowledge into an LLM prompt",
+              "correct": true
+            },
+            {
+              "id": "w_2",
+              "text": "Training a brand new foundation model from scratch",
+              "correct": false
+            },
+            {
+              "id": "w_3",
+              "text": "Running code inside a secure virtual environment",
+              "correct": false
+            }
+          ],
+          "explain": "Retrieval-Augmented Generation (RAG) is a technique that pulls relevant information from an external data source to help the LLM write accurate answers."
+        }
+      ]
+    },
+    {
+      "type": "teach",
+      "cards": [
+        {
+          "kind": "hook",
+          "icon": "⚡",
+          "title": "Why is my RAG app slow?",
+          "body": "When users ask a question, they expect an answer in the blink of an eye. In RAG pipelines, your request travels through multiple servers and algorithms, and every millisecond counts. Let's find out where the time is actually spent."
+        },
+        {
+          "kind": "definition",
+          "icon": "⏱️",
+          "title": "The Latency Budget",
+          "body": "A RAG latency budget is the total time allowed for a complete user request. We split this budget into four main slices: converting the query to a vector (Embedding), pulling raw documents (Retrieval), sorting the best matches (Reranking), and writing the final response (LLM Generation)."
+        },
+        {
+          "kind": "analogy",
+          "icon": "🍷",
+          "title": "The Restaurant Analogy",
+          "body": "Think of a RAG pipeline like a high-end restaurant. The waiter writes your order (embedding), searches the cellar for matching wines (retrieval), sorts the best bottles on a tray (reranking), and pours the glass (generation). If the wine search takes 20 minutes, it doesn't matter how fast the pour is!"
+        },
+        {
+          "kind": "example",
+          "icon": "⏳",
+          "title": "Adding Up the Milliseconds",
+          "body": "Imagine your app has a strict 1.5-second limit. If your embedding step takes 100ms, database retrieval takes 200ms, and reranking takes 300ms, you only have 900ms left for the LLM to generate its answer before the user feels the lag."
+        },
+        {
+          "kind": "mythbust",
+          "icon": "🔍",
+          "title": "The Database Myth",
+          "body": "Many developers think database search is the main bottleneck. In reality, modern vector databases can search millions of items in under 10 milliseconds; the real time sink is waiting for the LLM to generate text token-by-token."
+        },
+        {
+          "kind": "visual",
+          "icon": "📊",
+          "title": "Fast Lookup vs. Slow Generation",
+          "body": "Compare the fast search-based steps with the slow token-by-token generation phase.",
+          "compare": {
+            "left": {
+              "emoji": "⚡",
+              "tag": "Retrieval Step",
+              "text": "Very fast vector math lookup taking 10 to 50 milliseconds."
+            },
+            "right": {
+              "emoji": "🐢",
+              "tag": "Generation Step",
+              "text": "Autoregressive model generating words one-by-one taking 1000+ milliseconds."
+            }
+          }
+        }
+      ]
+    },
+    {
+      "type": "practice",
+      "exercises": [
+        {
+          "id": "p1",
+          "type": "multiple_choice",
+          "xp": 2,
+          "prompt": "What is the correct sequential order of operations in a standard RAG pipeline?",
+          "options": [
+            {
+              "id": "mc_1",
+              "text": "Reranking -> Retrieval -> Embedding -> Generation",
+              "correct": false
+            },
+            {
+              "id": "mc_2",
+              "text": "Embedding -> Retrieval -> Reranking -> Generation",
+              "correct": true
+            },
+            {
+              "id": "mc_3",
+              "text": "Generation -> Embedding -> Retrieval -> Reranking",
+              "correct": false
+            },
+            {
+              "id": "mc_4",
+              "text": "Retrieval -> Reranking -> Generation -> Embedding",
+              "correct": false
+            }
+          ],
+          "explain": "A standard RAG pipeline executes steps sequentially: first embedding the query, then retrieving documents, then reranking them, and finally generating the response using the LLM."
+        },
+        {
+          "id": "p2",
+          "type": "true_false",
+          "xp": 2,
+          "prompt": "True or False: Every single RAG pipeline must include a reranking step to function.",
+          "options": [
+            {
+              "id": "tf_1",
+              "text": "True",
+              "correct": false
+            },
+            {
+              "id": "tf_2",
+              "text": "False",
+              "correct": true
+            }
+          ],
+          "explain": "Reranking is an optional step used to re-order retrieved documents for better accuracy. While helpful, a pipeline can function by sending raw retrieval results directly to the LLM."
+        },
+        {
+          "id": "p3",
+          "type": "fill_blank",
+          "xp": 2,
+          "prompt": "Fill in the blank to complete the rule of optimization:",
+          "sentence": "To speed up a RAG pipeline, you must find and optimize the largest bottleneck first.",
+          "blank": "bottleneck",
+          "words": [
+            "bottleneck",
+            "database",
+            "embedding"
+          ],
+          "explain": "Identifying the largest bottleneck first ensures you don't waste time optimizing steps that barely impact the overall latency."
+        },
+        {
+          "id": "p4",
+          "type": "spot_the_ai",
+          "xp": 2,
+          "prompt": "Identify which log snippet looks like it was generated by an AI analyzing pipeline performance:",
+          "options": [
+            {
+              "id": "sai_1",
+              "text": "Why does my database query take so long when using raw SQL?",
+              "correct": false
+            },
+            {
+              "id": "sai_2",
+              "text": "Based on our telemetry, the latency profile is: Embedding (80ms), Vector Retrieval (120ms), Cross-Encoder Reranking (450ms), and LLM Generation (1200ms).",
+              "correct": true
+            },
+            {
+              "id": "sai_3",
+              "text": "I want to make my search engine faster but I don't know how vectors work.",
+              "correct": false
+            }
+          ],
+          "explain": "Option B is structured like an AI assistant responding with a realistic breakdown of RAG latency steps, while options A and C are generic human-like questions or basic definitions."
+        }
+      ]
+    },
+    {
+      "type": "boss",
+      "exercises": [
+        {
+          "id": "b1",
+          "type": "multiple_choice",
+          "xp": 5,
+          "prompt": "If you measure a standard RAG pipeline and find a total latency of 2.0 seconds, which step is almost always responsible for the largest share (often over 60%) of that time budget, and why?",
+          "options": [
+            {
+              "id": "opt_1",
+              "text": "Embedding generation because vector math is extremely slow.",
+              "correct": false
+            },
+            {
+              "id": "opt_2",
+              "text": "Vector database retrieval because searching millions of documents takes seconds.",
+              "correct": false
+            },
+            {
+              "id": "opt_3",
+              "text": "Reranking because it uses simple keyword matching rules.",
+              "correct": false
+            },
+            {
+              "id": "opt_4",
+              "text": "LLM Generation because generating text token-by-token is computationally heavy.",
+              "correct": true
+            }
+          ],
+          "explain": "In a typical production RAG pipeline, the generation step (LLM token generation) is an autoregressive process that requires multiple network calls and heavy computing, usually making up 60% to 80% or more of the total request time. Retrieval and reranking are fast search operations by comparison."
+        }
+      ]
+    }
+  ]
+}

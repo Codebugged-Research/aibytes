@@ -1,0 +1,222 @@
+{
+  "id": "u463-l4",
+  "unit": 463,
+  "day": 2319,
+  "tier": "LLM Application Engineering",
+  "tierIcon": "🔌",
+  "title": "Multi-Hop Failure Modes",
+  "icon": "⛓️",
+  "concept": "Error compounding across hops, and how one bad intermediate retrieval derails the entire chain.",
+  "xp": 15,
+  "hearts": 3,
+  "estMinutes": 7,
+  "segments": [
+    {
+      "type": "warmup",
+      "exercises": [
+        {
+          "id": "w1",
+          "type": "multiple_choice",
+          "xp": 1,
+          "prompt": "What is the core idea of the 'Iterative Retrieve-Reason-Retrieve' loop covered in the last lesson?Retrieve' loop' covered in the last lesson-Reason-Retrieve' pattern we covered previously discussed in the last lesson?",
+          "options": [
+            {
+              "id": "w1",
+              "text": "Generating all search queries at once before looking at any documents.",
+              "correct": false
+            },
+            {
+              "id": "w2",
+              "text": "Retrieving information, reasoning to form the next query, and retrieving again.",
+              "correct": true
+            },
+            {
+              "id": "w3",
+              "text": "Asking the user to manually type the second query after the first one completes.",
+              "correct": false
+            }
+          ],
+          "explain": "Iterative Retrieve-Reason-Retrieve uses the information retrieved in the first step to reason about what to search for in the second step."
+        }
+      ]
+    },
+    {
+      "type": "teach",
+      "cards": [
+        {
+          "kind": "hook",
+          "icon": "🔍",
+          "title": "The Danger of the First Step",
+          "body": "In multi-hop RAG, the LLM acts as a detective solving a case step-by-step. But what happens if the very first clue the detective finds is a red herring? The entire investigation goes down the wrong path."
+        },
+        {
+          "kind": "definition",
+          "icon": "⚠️",
+          "title": "Error Compounding",
+          "body": "Multi-hop failure modes occur when an early mistake in the retrieval chain makes all subsequent steps irrelevant. Because each hop builds on the last, a single incorrect document retrieved early on derails the rest of the search."
+        },
+        {
+          "kind": "analogy",
+          "icon": "📞",
+          "title": "The Telephone Effect",
+          "body": "Think of multi-hop RAG like a game of Telephone. If the first player whispers the wrong word, every player down the line repeats and builds on that error, resulting in a completely scrambled final message."
+        },
+        {
+          "kind": "example",
+          "icon": "❌",
+          "title": "A Broken Chain in Action",
+          "body": "To find 'the population of the birth city of the CEO of TechCorp', Hop 1 retrieves the wrong CEO (Bob instead of Alice). Hop 2 then searches for Bob's birthplace and retrieves Dallas, giving a confident but entirely wrong final answer."
+        },
+        {
+          "kind": "mythbust",
+          "icon": "🛑",
+          "title": "LLMs Don't Fact-Check the Hops",
+          "body": "You might think that because LLMs are smart, they will notice if they retrieve the wrong information in an early hop and correct it. In reality, LLMs cannot verify external facts on their own; they blindly trust and build on whatever information is retrieved."
+        },
+        {
+          "kind": "visual",
+          "icon": "📉",
+          "title": "Success vs. Failure Cascade",
+          "body": "See how the retrieval quality at the start determines the success of the entire pipeline.",
+          "compare": {
+            "left": {
+              "emoji": "✅",
+              "tag": "Clean Chain",
+              "text": "Hop 1 finds correct CEO -> Hop 2 searches for correct CEO's hometown -> Correct answer."
+            },
+            "right": {
+              "emoji": "💥",
+              "tag": "Broken Chain",
+              "text": "Hop 1 finds wrong CEO -> Hop 2 searches for wrong CEO's hometown -> Incorrect answer."
+            }
+          }
+        }
+      ]
+    },
+    {
+      "type": "practice",
+      "exercises": [
+        {
+          "id": "p1",
+          "type": "multiple_choice",
+          "xp": 2,
+          "prompt": "What happens in a multi-hop RAG pipeline if the first hop retrieves incorrect information?",
+          "options": [
+            {
+              "id": "q1_o1",
+              "text": "The system will speed up because there is less data to process.",
+              "correct": false
+            },
+            {
+              "id": "q1_o2",
+              "text": "The query for the next hop will be built on false premises, leading to bad search results.",
+              "correct": true
+            },
+            {
+              "id": "q1_o3",
+              "text": "The vector store will automatically fallback to keyword search.",
+              "correct": false
+            },
+            {
+              "id": "q1_o4",
+              "text": "The LLM will ignore the retrieved data and use its internal weights instead.",
+              "correct": false
+            }
+          ],
+          "explain": "If the first hop retrieves incorrect or irrelevant documents, the LLM will generate the next query based on that false information, sending the next retrieval step in the wrong direction."
+        },
+        {
+          "id": "p2",
+          "type": "true_false",
+          "xp": 2,
+          "prompt": "True or False: In multi-hop RAG, a retrieval failure in the very first hop usually guarantees that the final answer will be incorrect.",
+          "options": [
+            {
+              "id": "tf_t",
+              "text": "True",
+              "correct": true
+            },
+            {
+              "id": "tf_f",
+              "text": "False",
+              "correct": false
+            }
+          ],
+          "explain": "Each step in a multi-hop chain relies on the correctness of the previous step. An error in step 1 will corrupt step 2, step 3, and the final answer."
+        },
+        {
+          "id": "p3",
+          "type": "fill_blank",
+          "xp": 2,
+          "prompt": "Fill in the blank to describe how errors grow in a multi-hop chain:",
+          "sentence": "When an early retrieval step returns bad data, the error compounds as it passes down the chain.",
+          "blank": "compounds",
+          "words": [
+            "compounds",
+            "shrinks",
+            "disappears"
+          ],
+          "explain": "Errors in multi-hop RAG compound because each hop uses the output of the previous hop. A small mistake at the start grows into a complete failure at the end."
+        },
+        {
+          "id": "p4",
+          "type": "spot_the_ai",
+          "xp": 2,
+          "prompt": "Identify which RAG system output shows a multi-hop failure mode due to an early retrieval error:",
+          "options": [
+            {
+              "id": "sai1",
+              "text": "User: 'Where was the director of Inception born?'\nSystem: 'Searching for director of Inception... found Christopher Nolan. Searching for birthplace of Christopher Nolan... found London, UK.'",
+              "correct": false
+            },
+            {
+              "id": "sai2",
+              "text": "User: 'Where was the lead actor of The Matrix born?'\nSystem: 'Searching for lead actor of The Matrix... found developer Thomas Anderson. Searching for birthplace of Thomas Anderson... found Capital City (fictional location).'",
+              "correct": true
+            },
+            {
+              "id": "sai3",
+              "text": "User: 'Where was the lead actor of The Matrix born?'\nSystem: 'Searching for lead actor of The Matrix... found Keanu Reeves. Searching for birthplace of Keanu Reeves... found Beirut, Lebanon.'",
+              "correct": false
+            }
+          ],
+          "explain": "Option B shows an AI bot confidently presenting a hallucinated answer because it retrieved the wrong intermediate entity (a developer instead of the actor) and proceeded to search for the developer's birthplace."
+        }
+      ]
+    },
+    {
+      "type": "boss",
+      "exercises": [
+        {
+          "id": "b1",
+          "type": "multiple_choice",
+          "xp": 5,
+          "prompt": "Imagine you ask a multi-hop RAG system: 'What college did the founder of Company X attend?' If the first hop incorrectly identifies the founder as 'John Smith' instead of 'Jane Doe', why does the entire chain fail?",
+          "options": [
+            {
+              "id": "opt1",
+              "text": "The search queries in later hops will be formulated using incorrect information, leading to irrelevant documents.",
+              "correct": true
+            },
+            {
+              "id": "opt2",
+              "text": "The LLM will automatically stop the chain and prompt the user to correct the first query.",
+              "correct": false
+            },
+            {
+              "id": "opt3",
+              "text": "The vector database will detect the logical error and return empty results to prevent failure.",
+              "correct": false
+            },
+            {
+              "id": "opt4",
+              "text": "The error will only affect the first hop, while subsequent hops remain perfectly accurate.",
+              "correct": false
+            }
+          ],
+          "explain": "In a multi-hop chain, each step relies on the previous one. If step one retrieves the wrong founder (e.g., mixing up the CEO with an early investor), step two will search for that investor's alma mater instead of the CEO's. The error compounds, making the final answer completely wrong."
+        }
+      ]
+    }
+  ]
+}

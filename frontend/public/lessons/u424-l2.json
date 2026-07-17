@@ -1,0 +1,222 @@
+{
+  "id": "u424-l2",
+  "unit": 424,
+  "day": 2122,
+  "tier": "LLM Application Engineering",
+  "tierIcon": "🔌",
+  "title": "Compacting Tool Outputs",
+  "icon": "🗜️",
+  "concept": "Summarizing or truncating verbose tool results before they re-enter the agent's context on the next step.",
+  "xp": 15,
+  "hearts": 3,
+  "estMinutes": 7,
+  "segments": [
+    {
+      "type": "warmup",
+      "exercises": [
+        {
+          "id": "w1",
+          "type": "multiple_choice",
+          "xp": 1,
+          "prompt": "Quick recap: why does an agent's context budget get squeezed the longer its loop runs?",
+          "options": [
+            {
+              "id": "a",
+              "text": "Because each tool call and its observation gets added to context, and it all compounds over steps",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "Because the model gets tired and starts writing longer responses",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "Because tool outputs are deleted automatically after each step, forcing repeats",
+              "correct": false
+            }
+          ],
+          "explain": "Right — every action and observation in an agent loop adds more tokens to context, and since nothing is removed by default, the budget keeps shrinking step after step. That's exactly why today's lesson on compacting tool outputs matters!"
+        }
+      ]
+    },
+    {
+      "type": "teach",
+      "cards": [
+        {
+          "kind": "hook",
+          "icon": "📦",
+          "title": "That's a LOT of JSON",
+          "body": "Your agent calls a weather API just to check if it's raining, and the tool dumps back a 400-line JSON blob with hourly data for 10 days. The agent only needed one word: 'yes'. That whole blob is now stuck in context, bloating every future step."
+        },
+        {
+          "kind": "definition",
+          "icon": "🗜️",
+          "title": "What Is Compacting?",
+          "body": "Compacting means shrinking a tool's raw output — like a 2,000-word webpage or a giant JSON blob — down to just the useful bits before it goes back into the agent's context. You can summarize it in plain language or truncate it to the most relevant part."
+        },
+        {
+          "kind": "analogy",
+          "icon": "📰",
+          "title": "Like a News Editor, Not a Stenographer",
+          "body": "A stenographer writes down every single word said in a room. A news editor reads all that and writes a 3-sentence summary for tomorrow's paper. Your agent should act like the editor: take the giant tool output and hand its future self the headline, not the transcript."
+        },
+        {
+          "kind": "example",
+          "icon": "🌐",
+          "title": "Web Search Example",
+          "body": "A 'search the web' tool returns 3 full articles (6,000 words total). Instead of feeding all of it back to the model, you summarize each article into 2 sentences covering just what's relevant to the user's question — cutting the tokens by 95% while keeping the answer-worthy facts."
+        },
+        {
+          "kind": "mythbust",
+          "icon": "🚫",
+          "title": "Myth: More Raw Data = Smarter Agent",
+          "body": "It feels safer to keep everything 'just in case.' But stuffing raw tool output into context often makes agents worse — they get distracted by irrelevant details, burn budget faster, and sometimes even quote stale or wrong parts of a huge blob. Less, curated context often beats more, raw context."
+        },
+        {
+          "kind": "visual",
+          "icon": "⚖️",
+          "title": "Raw Dump vs. Compacted Result",
+          "body": "Same tool call, two very different context footprints. One clogs the budget with noise; the other keeps only the signal.",
+          "compare": {
+            "left": {
+              "emoji": "📄",
+              "tag": "Raw Tool Output",
+              "text": "400-line JSON blob with every hourly weather field for 10 days — 3,000+ tokens, mostly irrelevant"
+            },
+            "right": {
+              "emoji": "✅",
+              "tag": "Compacted Output",
+              "text": "'Rain expected today, 2pm-5pm, 70% chance.' — 12 tokens, exactly what's needed"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "type": "practice",
+      "exercises": [
+        {
+          "id": "p1",
+          "type": "multiple_choice",
+          "xp": 2,
+          "prompt": "An agent calls a tool that scrapes an entire webpage (5,000 words) just to find a phone number. What's the best compacting strategy?",
+          "options": [
+            {
+              "id": "a",
+              "text": "Feed the full 5,000 words into context so nothing is missed",
+              "correct": false
+            },
+            {
+              "id": "b",
+              "text": "Extract and return just the phone number (or the relevant snippet), not the whole page",
+              "correct": true
+            },
+            {
+              "id": "c",
+              "text": "Feed only the last 500 words into context, since important info is usually at the end",
+              "correct": false
+            },
+            {
+              "id": "d",
+              "text": "Ask the model to re-scrape the page every time it needs the number again",
+              "correct": false
+            }
+          ],
+          "explain": "The point of compacting is to keep only what's relevant to the task at hand. Since the goal is a phone number, extracting just that (or the surrounding snippet) gives the agent everything it needs without wasting thousands of tokens on unrelated page content. Truncating blindly to 'the last 500 words' is arbitrary and risky — the number could be anywhere."
+        },
+        {
+          "id": "p2",
+          "type": "true_false",
+          "xp": 2,
+          "prompt": "True or False: A well-designed tool should sometimes return a short summary or computed result instead of its full raw output, to help keep the agent's context manageable.",
+          "options": [
+            {
+              "id": "a",
+              "text": "True",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "False",
+              "correct": false
+            }
+          ],
+          "explain": "True! Compacting isn't only something you do after getting a tool's output — you can also design the tool itself to pre-summarize, filter, or compute results so it never returns more than necessary in the first place."
+        },
+        {
+          "id": "p3",
+          "type": "fill_blank",
+          "xp": 2,
+          "prompt": "Fill in the blank:",
+          "sentence": "Before a giant tool result re-enters context, a good agent should summarize or truncate it so only the useful part remains.",
+          "blank": "summarize or truncate",
+          "words": [
+            "summarize or truncate",
+            "translate into French",
+            "delete entirely"
+          ],
+          "explain": "Compacting means condensing the output — either by summarizing it in plain language or truncating it to the most relevant slice — so only what's useful sticks around in context, not the whole raw blob."
+        },
+        {
+          "id": "p4",
+          "type": "spot_the_ai",
+          "xp": 2,
+          "prompt": "Which of these tool-output summaries was most likely written by an AI trying to compact a huge log file well (clear, relevant, and short)?",
+          "options": [
+            {
+              "id": "a",
+              "text": "Log summary: 3 errors found — all 'connection timeout' on the payments service between 2:03–2:11am. No errors elsewhere.",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "Log summary: Lots of stuff happened, some errors, some warnings, seems mostly fine overall, hard to say for sure.",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "Log summary: [paste of all 4,000 raw log lines follows below for full context]",
+              "correct": false
+            }
+          ],
+          "explain": "Good compaction is specific and short — it tells you exactly what mattered (3 timeout errors, one service, a tight time window) without vague filler or a raw data dump. Option B is too vague to be useful, and option C isn't compacting at all — it's the opposite."
+        }
+      ]
+    },
+    {
+      "type": "boss",
+      "exercises": [
+        {
+          "id": "b1",
+          "type": "multiple_choice",
+          "xp": 5,
+          "prompt": "Your agent calls a database tool that returns 500 rows of customer data (huge!) just to answer 'How many customers signed up last week?' What's the best context engineering move?",
+          "options": [
+            {
+              "id": "a",
+              "text": "Dump all 500 rows into context so the agent has full data to double-check itself",
+              "correct": false
+            },
+            {
+              "id": "b",
+              "text": "Have the tool (or a wrapper) compute/count the answer and return just the count plus a short summary, not raw rows",
+              "correct": true
+            },
+            {
+              "id": "c",
+              "text": "Truncate the 500 rows to the first 10 rows and hope that's representative",
+              "correct": false
+            },
+            {
+              "id": "d",
+              "text": "Skip calling the tool at all to save context",
+              "correct": false
+            }
+          ],
+          "explain": "The smartest compaction isn't just shortening text after the fact—it's designing the tool call so the heavy lifting (counting, filtering, aggregating) happens outside the context window, and only the small, relevant answer enters context. Dumping all rows wastes budget on data the agent doesn't need reasoning over. Grabbing just the first 10 rows is arbitrary truncation that could give a wrong or misleading answer since it's not representative. Skipping the tool call means no answer at all. Returning a computed count with a brief summary gives the agent exactly what it needs to respond correctly, cheaply, and clearly — that's the heart of compacting tool outputs."
+        }
+      ]
+    }
+  ]
+}

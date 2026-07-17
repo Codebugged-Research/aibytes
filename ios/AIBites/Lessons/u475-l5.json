@@ -1,0 +1,222 @@
+{
+  "id": "u475-l5",
+  "unit": 475,
+  "day": 2380,
+  "tier": "LLM Application Engineering",
+  "tierIcon": "🔌",
+  "title": "Trading Accuracy for Speed",
+  "icon": "⏱️",
+  "concept": "Reducing top-K, skipping reranking, or using a smaller model as deliberate latency/quality tradeoffs.",
+  "xp": 15,
+  "hearts": 3,
+  "estMinutes": 7,
+  "segments": [
+    {
+      "type": "warmup",
+      "exercises": [
+        {
+          "id": "w1",
+          "type": "multiple_choice",
+          "xp": 1,
+          "prompt": "How does precomputing and caching embeddings help optimize a RAG pipeline?",
+          "options": [
+            {
+              "id": "warmup_opt_1",
+              "text": "It recalculates the entire vector space database with every query.",
+              "correct": false
+            },
+            {
+              "id": "warmup_opt_2",
+              "text": "It allows us to reuse already calculated document vectors instead of generating them during user queries.",
+              "correct": true
+            },
+            {
+              "id": "warmup_opt_3",
+              "text": "It automatically translates user queries into multiple languages.",
+              "correct": false
+            }
+          ],
+          "explain": "Precomputing embeddings at ingest time saves computation during the actual query phase, avoiding the bottleneck of embedding unchanged database documents repeatedly."
+        }
+      ]
+    },
+    {
+      "type": "teach",
+      "cards": [
+        {
+          "kind": "hook",
+          "icon": "🏎️",
+          "title": "Speed or Perfection?",
+          "body": "Sometimes, getting a slightly less detailed answer in half a second is much better than waiting ten seconds for a perfect answer. In production RAG systems, we have knobs we can turn to balance speed and quality. Let's learn how to tune them!"
+        },
+        {
+          "kind": "definition",
+          "icon": "⚖️",
+          "title": "What is a Latency-Quality Tradeoff?",
+          "body": "Trading accuracy for speed means deliberately simplifying your RAG pipeline steps—like retrieving fewer documents (smaller top-K), bypassing heavy reranking models, or using smaller LLMs—to achieve faster response times when absolute precision isn't required."
+        },
+        {
+          "kind": "analogy",
+          "icon": "📚",
+          "title": "The Library Skimming Analogy",
+          "body": "Think of RAG like a research assistant in a library. To find an answer, they can either read 20 books cover-to-cover (high accuracy, very slow) or skim the summaries of just the top 3 books (lower accuracy, very fast). You decide how deep they dig based on how quickly you need the answer."
+        },
+        {
+          "kind": "example",
+          "icon": "⏱️",
+          "title": "Tradeoffs in Action",
+          "body": "A customer support bot might skip the reranker and retrieve only 3 documents (low top-K) to respond in under 1 second. Meanwhile, a medical diagnosis assistant will search 20 documents and use a heavy reranker, taking 5 seconds because accuracy is critical."
+        },
+        {
+          "kind": "mythbust",
+          "icon": "🔍",
+          "title": "The 'More is Always Better' Myth",
+          "body": "You might think you always need the largest LLM and the most complex reranking step for a good RAG system. In reality, many user queries can be answered perfectly with a smaller, faster model and fewer retrieved context documents, saving time and money."
+        },
+        {
+          "kind": "visual",
+          "icon": "📊",
+          "title": "Speed vs. Quality Configuration",
+          "body": "Visualize how pipeline design changes the balance between speed and precision.",
+          "compare": {
+            "left": {
+              "emoji": "⚡",
+              "tag": "High Speed",
+              "text": "Top-K: 3. No reranking. Smaller LLM. Response in 0.5s."
+            },
+            "right": {
+              "emoji": "🎯",
+              "tag": "High Accuracy",
+              "text": "Top-K: 25. Heavy cross-encoder reranking. Giant LLM. Response in 4.0s."
+            }
+          }
+        }
+      ]
+    },
+    {
+      "type": "practice",
+      "exercises": [
+        {
+          "id": "p1",
+          "type": "multiple_choice",
+          "xp": 2,
+          "prompt": "What is the main benefit of lowering the 'top-K' parameter (retrieving fewer documents) in a RAG pipeline?",
+          "options": [
+            {
+              "id": "mc_opt_1",
+              "text": "It increases the time the LLM spends reading documents.",
+              "correct": false
+            },
+            {
+              "id": "mc_opt_2",
+              "text": "It speeds up response times by reducing the data the database and LLM must process.",
+              "correct": true
+            },
+            {
+              "id": "mc_opt_3",
+              "text": "It guarantees that the absolute best document is always found.",
+              "correct": false
+            },
+            {
+              "id": "mc_opt_4",
+              "text": "It increases the cost of vector database queries.",
+              "correct": false
+            }
+          ],
+          "explain": "Lowering top-K means the vector database retrieves fewer documents, and the generator LLM has to read less text, resulting in a much faster response time."
+        },
+        {
+          "id": "p2",
+          "type": "true_false",
+          "xp": 2,
+          "prompt": "True or False: Swapping your LLM for a smaller, faster model is a valid way to optimize latency, even if the answer quality slightly drops.",
+          "options": [
+            {
+              "id": "tf_opt_1",
+              "text": "True",
+              "correct": true
+            },
+            {
+              "id": "tf_opt_2",
+              "text": "False",
+              "correct": false
+            }
+          ],
+          "explain": "Using a smaller generator model is a classic tradeoff: it runs much faster and costs less, but its language processing and reasoning might not be as sophisticated."
+        },
+        {
+          "id": "p3",
+          "type": "fill_blank",
+          "xp": 2,
+          "prompt": "Fill in the blank to complete the explanation of why skipping a step improves response time:",
+          "sentence": "We can achieve faster responses by skipping the reranking step, even though it means our document order might be slightly less optimal.",
+          "blank": "reranking",
+          "words": [
+            "reranking",
+            "caching",
+            "indexing"
+          ],
+          "explain": "Reranking uses a slower, more precise model to re-order search results. Skipping it saves significant time but might place less relevant documents at the top."
+        },
+        {
+          "id": "p4",
+          "type": "spot_the_ai",
+          "xp": 2,
+          "prompt": "Identify the explanation that sounds like it was written by an AI trying to sound overly complex:",
+          "options": [
+            {
+              "id": "sai_opt_1",
+              "text": "To speed up the app, we can skip the reranking step and send the raw search results directly to the LLM.",
+              "correct": false
+            },
+            {
+              "id": "sai_opt_2",
+              "text": "By deliberately curtailing the quantitative value of retrieved document vectors, we can mathematically compress execution latency.",
+              "correct": true
+            },
+            {
+              "id": "sai_opt_3",
+              "text": "If you use a smaller, faster model to generate answers, you get quicker responses but might lose some nuance.",
+              "correct": false
+            }
+          ],
+          "explain": "Option B is typical of AI-generated text, using overly formal and verbose phrasing ('By deliberately curtailing the quantitative value of retrieved document vectors') to describe simply lowering top-K. Options A and C are concise and direct."
+        }
+      ]
+    },
+    {
+      "type": "boss",
+      "exercises": [
+        {
+          "id": "b1",
+          "type": "multiple_choice",
+          "xp": 5,
+          "prompt": "Imagine you are building a real-time customer support chatbot where answers must appear in under 200 milliseconds. If caching cannot help because most questions are unique, which combination of strategies will best reduce latency for new queries?",
+          "options": [
+            {
+              "id": "boss_opt_1",
+              "text": "Precomputing embeddings and caching results for repeated inputs",
+              "correct": false
+            },
+            {
+              "id": "boss_opt_2",
+              "text": "Retrieving fewer documents (lowering top-K) and skipping the reranking step",
+              "correct": true
+            },
+            {
+              "id": "boss_opt_3",
+              "text": "Using a larger retriever model with a deeper vector database index search",
+              "correct": false
+            },
+            {
+              "id": "boss_opt_4",
+              "text": "Moving all vector index metadata to cold storage disk drives",
+              "correct": false
+            }
+          ],
+          "explain": "While caching handles repeat requests instantly, it does not help with unique, unseen queries. To speed up first-time queries, you must shorten the active pipeline steps—such as retrieving fewer documents (lower top-K) or skipping the heavy reranker model entirely."
+        }
+      ]
+    }
+  ]
+}

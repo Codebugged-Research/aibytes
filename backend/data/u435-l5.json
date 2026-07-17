@@ -1,0 +1,222 @@
+{
+  "id": "u435-l5",
+  "unit": 435,
+  "day": 2180,
+  "tier": "LLM Application Engineering",
+  "tierIcon": "🔌",
+  "title": "Vector DB vs Vector Library",
+  "icon": "⚖️",
+  "concept": "Distinguishing a full database (persistence, filtering, scaling) from an in-memory ANN library.",
+  "xp": 15,
+  "hearts": 3,
+  "estMinutes": 7,
+  "segments": [
+    {
+      "type": "warmup",
+      "exercises": [
+        {
+          "id": "w1",
+          "type": "multiple_choice",
+          "xp": 1,
+          "prompt": "In the last lesson, we learned about core vector operations. Which operation is used to find the most similar items to a query vector?",
+          "options": [
+            {
+              "id": "w_1",
+              "text": "A primary key deletion",
+              "correct": false
+            },
+            {
+              "id": "w_2",
+              "text": "A k-nearest neighbor (k-NN) query",
+              "correct": true
+            },
+            {
+              "id": "w_3",
+              "text": "A relational table join",
+              "correct": false
+            }
+          ],
+          "explain": "The k-nearest neighbor (k-NN) query is the primary way we search a vector space to find the most semantically similar items to our input query."
+        }
+      ]
+    },
+    {
+      "type": "teach",
+      "cards": [
+        {
+          "kind": "hook",
+          "icon": "⚡",
+          "title": "Where Do Vectors Live?",
+          "body": "We know how to insert and query vectors, but where do they actually live? If you keep them all in your application's temporary memory, they disappear when your app restarts! Let's explore when to use a simple memory tool versus a heavy-duty database."
+        },
+        {
+          "kind": "definition",
+          "icon": "🗄️",
+          "title": "Library vs. Database",
+          "body": "A vector library (like FAISS) is a tool that runs directly in your application's memory to perform fast similarity searches on static data. A vector database (like Pinecone or Milvus) is a full management system that handles storage, real-time updates, security, and multi-user access."
+        },
+        {
+          "kind": "analogy",
+          "icon": "📖",
+          "title": "The Popup Book vs. The Public Library",
+          "body": "Think of a vector library like a popup book: it's quick to open, sits right on your desk (in-memory), but you can't easily add new pages or share it with a friend far away. A vector database is like a public library: it has a permanent building, digital catalogs, backup generators, and allows many visitors to check out books at once."
+        },
+        {
+          "kind": "example",
+          "icon": "💡",
+          "title": "Choosing the Right Tool",
+          "body": "If you are building a one-time semantic search for a fixed set of 1,000 PDF articles, a library like FAISS is perfect. If you are building a global chat app where millions of users constantly add new messages that must be searchable instantly, you need a vector database."
+        },
+        {
+          "kind": "mythbust",
+          "icon": "🔍",
+          "title": "Is Bigger Always Better?",
+          "body": "Many believe that vector databases are always better because they do more. In reality, vector databases add network latency and cost, so for small, unchanging datasets, a local vector library is often much faster and simpler to set up."
+        },
+        {
+          "kind": "visual",
+          "icon": "📊",
+          "title": "Side-by-Side Comparison",
+          "body": "Let's compare how data is managed and accessed in both setups.",
+          "compare": {
+            "left": {
+              "emoji": "📚",
+              "tag": "Vector Library",
+              "text": "Runs in RAM, fast local math, index is static, data is lost on restart."
+            },
+            "right": {
+              "emoji": "☁️",
+              "tag": "Vector Database",
+              "text": "Runs on a server, persistent storage, handles live updates and filters."
+            }
+          }
+        }
+      ]
+    },
+    {
+      "type": "practice",
+      "exercises": [
+        {
+          "id": "p1",
+          "type": "multiple_choice",
+          "xp": 2,
+          "prompt": "What is a key advantage of using a vector database over a vector library?",
+          "options": [
+            {
+              "id": "mc_1",
+              "text": "Libraries are always slower at searching than databases.",
+              "correct": false
+            },
+            {
+              "id": "mc_2",
+              "text": "Databases support live updates, metadata filtering, and data persistence.",
+              "correct": true
+            },
+            {
+              "id": "mc_3",
+              "text": "Libraries automatically save your data to a secure cloud server.",
+              "correct": false
+            },
+            {
+              "id": "mc_4",
+              "text": "Databases cannot perform nearest-neighbor searches.",
+              "correct": false
+            }
+          ],
+          "explain": "Vector databases are built to handle live, dynamic data streams (CRUD operations) and allow you to filter results using metadata, whereas libraries are generally optimized for static, read-only search."
+        },
+        {
+          "id": "p2",
+          "type": "true_false",
+          "xp": 2,
+          "prompt": "True or False: Adding new vectors to a vector library often requires rebuilding the search index, unlike a database which handles real-time inserts.",
+          "options": [
+            {
+              "id": "tf_true",
+              "text": "True",
+              "correct": true
+            },
+            {
+              "id": "tf_false",
+              "text": "False",
+              "correct": false
+            }
+          ],
+          "explain": "Vector libraries do not have built-in database management features, so updating the data index often requires rebuilding the entire index from scratch in memory."
+        },
+        {
+          "id": "p3",
+          "type": "fill_blank",
+          "xp": 2,
+          "prompt": "Fill in the missing concept describing where vector libraries load and search their data:",
+          "sentence": "Because they are in-memory tools, vector libraries lose their index if the application crashes or restarts.",
+          "blank": "in-memory",
+          "words": [
+            "in-memory",
+            "cloud-hosted",
+            "relational"
+          ],
+          "explain": "Vector libraries operate in-memory, which makes them incredibly fast for local operations but limits their ability to handle datasets larger than the system's RAM without custom engineering."
+        },
+        {
+          "id": "p4",
+          "type": "spot_the_ai",
+          "xp": 2,
+          "prompt": "Which of the following describes how a vector library actually runs?",
+          "options": [
+            {
+              "id": "sai_1",
+              "text": "Vector libraries run as separate server processes that you connect to via API keys.",
+              "correct": false
+            },
+            {
+              "id": "sai_2",
+              "text": "Vector libraries use the Vector Library Hyper-Protocol to automatically sync data globally.",
+              "correct": false
+            },
+            {
+              "id": "sai_3",
+              "text": "Vector libraries run directly inside your application code and store indexes in RAM.",
+              "correct": true
+            }
+          ],
+          "explain": "Option B is typical AI-generated hallucination/nonsense; 'Vector Library Hyper-Protocol' is a made-up term. Option C is the correct choice because vector libraries are designed to run locally within the application process for low-overhead mathematical operations on vectors."
+        }
+      ]
+    },
+    {
+      "type": "boss",
+      "exercises": [
+        {
+          "id": "b1",
+          "type": "multiple_choice",
+          "xp": 5,
+          "prompt": "Your team is building a search app and starts by using FAISS (a vector library) in production. As the user base grows, you need to support real-time updates and search filtering by user ID. What bottleneck will you hit first?",
+          "options": [
+            {
+              "id": "opt_1",
+              "text": "FAISS will automatically replicate data across three cloud servers to ensure backup.",
+              "correct": false
+            },
+            {
+              "id": "opt_2",
+              "text": "FAISS runs in-memory, making it hard to update data dynamically or query with metadata filters.",
+              "correct": true
+            },
+            {
+              "id": "opt_3",
+              "text": "FAISS uses SQL queries to automatically handle concurrent user logins and transactions.",
+              "correct": false
+            },
+            {
+              "id": "opt_4",
+              "text": "FAISS will crash because it cannot perform fast nearest-neighbor calculations.",
+              "correct": false
+            }
+          ],
+          "explain": "FAISS is an in-memory vector library, meaning it lacks native support for real-time document updates, CRUD database operations, multi-user access control, and metadata-filtering, which are standard features of a dedicated vector database."
+        }
+      ]
+    }
+  ]
+}

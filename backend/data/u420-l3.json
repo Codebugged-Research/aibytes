@@ -1,0 +1,222 @@
+{
+  "id": "u420-l3",
+  "unit": 420,
+  "day": 2103,
+  "tier": "LLM Application Engineering",
+  "tierIcon": "🔌",
+  "title": "Context Assembly Pipelines",
+  "icon": "🏗️",
+  "concept": "A staged pipeline: retrieve, filter, rank, compress, format, inject — as composable steps.",
+  "xp": 15,
+  "hearts": 3,
+  "estMinutes": 7,
+  "segments": [
+    {
+      "type": "warmup",
+      "exercises": [
+        {
+          "id": "w1",
+          "type": "multiple_choice",
+          "xp": 1,
+          "prompt": "In the previous lesson, we learned about conditionally including context sections. What determines whether a section gets included?",
+          "options": [
+            {
+              "id": "a",
+              "text": "Things like the query type, user state, or how confident the retrieval was",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "The alphabetical order of the section titles",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "Whether the section was written by a human or an AI",
+              "correct": false
+            }
+          ],
+          "explain": "Conditional inclusion means deciding per-request whether a context section belongs at all — based on signals like what kind of query it is, the user's current state, or how confident the retrieval system was in its results."
+        }
+      ]
+    },
+    {
+      "type": "teach",
+      "cards": [
+        {
+          "kind": "hook",
+          "icon": "🚦",
+          "title": "One giant blob vs. a smooth pipeline",
+          "body": "Imagine dumping every retrieved document straight into a prompt with no order, no trimming, no cleanup. Messy, bloated, confusing for the model — and expensive! There's a better way: break the work into stages."
+        },
+        {
+          "kind": "definition",
+          "icon": "🧩",
+          "title": "What is a context assembly pipeline?",
+          "body": "It's a series of separate steps — retrieve, filter, rank, compress, format, inject — that each transform context a little before passing it to the next step. Because each step is its own composable piece, you can swap, reorder, test, or upgrade one step without breaking the others."
+        },
+        {
+          "kind": "analogy",
+          "icon": "🏭",
+          "title": "Think of an assembly line",
+          "body": "A car factory doesn't slap all parts on at once — one station adds the frame, next adds the engine, next paints it, next inspects it. A context pipeline works the same way: each station does ONE job, then passes its output to the next station."
+        },
+        {
+          "kind": "example",
+          "icon": "📚",
+          "title": "A study-helper bot in action",
+          "body": "1) Retrieve: pull 20 textbook chunks about photosynthesis. 2) Filter: drop chunks that are off-topic or too advanced. 3) Rank: put the clearest, most relevant chunks first. 4) Compress: summarize long chunks into short bullet facts. 5) Format: turn bullets into a clean labeled block. 6) Inject: paste that block into the prompt right before the user's question."
+        },
+        {
+          "kind": "mythbust",
+          "icon": "🚫",
+          "title": "Myth: retrieval is the whole job",
+          "body": "Many beginners think 'good context' just means 'good search results.' Truth: even perfect retrieval can produce a terrible prompt if you skip filtering, ranking, compressing, and formatting. Each stage fixes different problems — retrieval alone isn't enough."
+        },
+        {
+          "kind": "visual",
+          "icon": "⚙️",
+          "title": "One blob vs. staged pipeline",
+          "body": "Dumping everything at once creates a cluttered, unpredictable prompt. A staged pipeline processes context step-by-step, so each stage's job is clear and easy to debug or improve.",
+          "compare": {
+            "left": {
+              "emoji": "🗑️",
+              "tag": "All-at-once dump",
+              "text": "Every retrieved doc pasted in raw, no trimming, no order — bloated and confusing for the model."
+            },
+            "right": {
+              "emoji": "🏭",
+              "tag": "Staged pipeline",
+              "text": "Retrieve → filter → rank → compress → format → inject, each stage doing one clear job in sequence."
+            }
+          }
+        }
+      ]
+    },
+    {
+      "type": "practice",
+      "exercises": [
+        {
+          "id": "p1",
+          "type": "multiple_choice",
+          "xp": 2,
+          "prompt": "Which order correctly reflects a typical context assembly pipeline?",
+          "options": [
+            {
+              "id": "a",
+              "text": "Format → Inject → Retrieve → Rank → Filter → Compress",
+              "correct": false
+            },
+            {
+              "id": "b",
+              "text": "Retrieve → Filter → Rank → Compress → Format → Inject",
+              "correct": true
+            },
+            {
+              "id": "c",
+              "text": "Inject → Retrieve → Compress → Filter → Rank → Format",
+              "correct": false
+            },
+            {
+              "id": "d",
+              "text": "Rank → Retrieve → Filter → Inject → Format → Compress",
+              "correct": false
+            }
+          ],
+          "explain": "The logical flow is: first fetch candidates (retrieve), remove bad ones (filter), order the good ones (rank), shrink them (compress), lay them out cleanly (format), and finally place them in the prompt (inject). Each stage depends on the previous one's output."
+        },
+        {
+          "id": "p2",
+          "type": "true_false",
+          "xp": 2,
+          "prompt": "True or False: Because each stage in a context pipeline is composable, you could swap out the compress stage for a different summarization method without needing to rewrite the retrieve or rank stages.",
+          "options": [
+            {
+              "id": "a",
+              "text": "True",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "False",
+              "correct": false
+            }
+          ],
+          "explain": "That's the whole point of composable stages — each one has a clear input and output, so you can upgrade or replace one stage (like swapping in a better compressor) without touching the others, as long as the input/output shapes still match."
+        },
+        {
+          "id": "p3",
+          "type": "fill_blank",
+          "xp": 2,
+          "prompt": "Fill in the blank.",
+          "sentence": "In a context assembly pipeline, the compress step shrinks long text down while the format step arranges it into a clean, structured block before injection.",
+          "blank": "compress",
+          "words": [
+            "compress",
+            "retrieve",
+            "inject"
+          ],
+          "explain": "The compress step is specifically about shrinking or summarizing content to save space, which is different from formatting (arranging) or retrieving (fetching) it."
+        },
+        {
+          "id": "p4",
+          "type": "spot_the_ai",
+          "xp": 2,
+          "prompt": "Which of these three pipeline descriptions was likely AI-generated filler text rather than a real, useful pipeline design?",
+          "options": [
+            {
+              "id": "a",
+              "text": "Retrieve top 15 docs → filter by relevance score > 0.6 → rank by recency → compress to 3 bullet points each → format as a labeled list → inject before the question",
+              "correct": false
+            },
+            {
+              "id": "b",
+              "text": "The pipeline dynamically leverages a synergistic architecture to holistically optimize contextual relevance through multifaceted retrieval-augmented paradigms that seamlessly enhance downstream generative fidelity",
+              "correct": true
+            },
+            {
+              "id": "c",
+              "text": "Retrieve from the FAQ database → filter out entries older than a year → rank by match to user's exact question → compress long answers → format with headers → inject into system prompt",
+              "correct": false
+            }
+          ],
+          "explain": "Option B is full of vague buzzwords ('synergistic architecture,' 'holistically optimize,' 'multifaceted paradigms') but describes zero concrete steps — a classic sign of AI-generated filler. The other two options name specific, checkable actions at each stage, which is what a real engineered pipeline looks like."
+        }
+      ]
+    },
+    {
+      "type": "boss",
+      "exercises": [
+        {
+          "id": "b1",
+          "type": "multiple_choice",
+          "xp": 5,
+          "prompt": "Your app retrieves 40 documents for a user question, but the model only gets 3 short paragraphs of context and answers well. Which pipeline stages most likely explain why so much input shrank to so little?",
+          "options": [
+            {
+              "id": "a",
+              "text": "Retrieve and inject only — the other stages aren't needed",
+              "correct": false
+            },
+            {
+              "id": "b",
+              "text": "Filter, rank, and compress removed and condensed the irrelevant/low-value content before formatting and injection",
+              "correct": true
+            },
+            {
+              "id": "c",
+              "text": "The model itself silently deleted the extra documents during generation",
+              "correct": false
+            },
+            {
+              "id": "d",
+              "text": "Format stage alone is responsible for shrinking 40 documents to 3 paragraphs",
+              "correct": false
+            }
+          ],
+          "explain": "Going from 40 raw documents to 3 tight paragraphs is exactly the job of filter (drop irrelevant docs), rank (keep the best few), and compress (shrink even those down to essentials). Format then just arranges the survivors nicely, and inject places them in the prompt — but the heavy lifting of shrinking happens in filter, rank, and compress working together as composable stages."
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,222 @@
+{
+  "id": "u477-l2",
+  "unit": 477,
+  "day": 2387,
+  "tier": "LLM Application Engineering",
+  "tierIcon": "🔌",
+  "title": "Tracing a Request Across Stages",
+  "icon": "🕸️",
+  "concept": "A single trace ID connecting retrieval, reranking, and generation logs so a request can be replayed and debugged.",
+  "xp": 15,
+  "hearts": 3,
+  "estMinutes": 7,
+  "segments": [
+    {
+      "type": "warmup",
+      "exercises": [
+        {
+          "id": "w1",
+          "type": "multiple_choice",
+          "xp": 1,
+          "prompt": "In our last lesson, we discussed what to log in a RAG pipeline. Which set of data is most effectively. What should you want to monitor. What should you capture?",
+          "options": [
+            {
+              "id": "warmup_all",
+              "text": "The queries, retrieved chunks with scores, final context, generated answers, and latency at each stage.",
+              "correct": true
+            },
+            {
+              "id": "warmup_only_llm",
+              "text": "Only the final generated answer from the LLM.",
+              "correct": false
+            },
+            {
+              "id": "warmup_user_ip",
+              "text": "Only the user's IP address and browser type.",
+              "correct": false
+            }
+          ],
+          "explain": "In a RAG pipeline, logging the inputs, outputs, and performance metrics (like latency) at each stage is essential to pinpoint bottlenecks and errors."
+        }
+      ]
+    },
+    {
+      "type": "teach",
+      "cards": [
+        {
+          "kind": "hook",
+          "icon": "🕵️",
+          "title": "Where Did it Go Wrong?",
+          "body": "When an LLM app gives a bad answer, you can't just look at the final output. You need to see exactly what was retrieved, how it was ranked, and what was sent to the LLM—all for that one specific user request."
+        },
+        {
+          "kind": "definition",
+          "icon": "🆔",
+          "title": "What is a Trace ID?",
+          "body": "A Trace ID is a unique identifier assigned to an incoming request. It is passed along to every single component in the pipeline, ensuring all logs from retrieval, reranking, and generation share the same ID."
+        },
+        {
+          "kind": "analogy",
+          "icon": "🏷️",
+          "title": "The Luggage Tag Analogy",
+          "body": "Think of a trace ID like a luggage tag placed on your suitcase at check-in. As it moves from the conveyor belt, through security, onto the plane, and finally to the baggage carousel, the same tag ID tracks its entire journey."
+        },
+        {
+          "kind": "example",
+          "icon": "🔍",
+          "title": "Tracing in Action",
+          "body": "When User 42 asks a question, the system generates trace ID 'xyz-999'. The retriever logs 'xyz-999: fetched 3 chunks', the reranker logs 'xyz-999: sorted chunks', and the LLM logs 'xyz-999: generated answer'. Developers can query 'xyz-999' to see the whole flow."
+        },
+        {
+          "kind": "mythbust",
+          "icon": "⏰",
+          "title": "Timestamps Aren't Enough",
+          "body": "Some developers think having timestamps is enough to align logs. However, if thousands of users query your app at the same millisecond, timestamps become a tangled mess; only a unique trace ID guarantees accurate tracking."
+        },
+        {
+          "kind": "visual",
+          "icon": "🗺️",
+          "title": "Traced vs. Untraced Flows",
+          "body": "Passing a single ID ties your entire system together, whereas using different IDs for every stage scatters your logs.",
+          "compare": {
+            "left": {
+              "emoji": "🔗",
+              "tag": "Traced Request",
+              "text": "Retrieval [ID: A] -> Rerank [ID: A] -> LLM [ID: A]"
+            },
+            "right": {
+              "emoji": "❌",
+              "tag": "Disconnected Logs",
+              "text": "Retrieval [ID: A] -> Rerank [ID: B] -> LLM [ID: C]"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "type": "practice",
+      "exercises": [
+        {
+          "id": "p1",
+          "type": "multiple_choice",
+          "xp": 2,
+          "prompt": "Why is a single trace ID critical for monitoring multi-stage LLM applications?",
+          "options": [
+            {
+              "id": "opt_a",
+              "text": "It speeds up the database queries.",
+              "correct": false
+            },
+            {
+              "id": "opt_b",
+              "text": "It connects logs across all stages so you can replay and debug a single request.",
+              "correct": true
+            },
+            {
+              "id": "opt_c",
+              "text": "It automatically rewrites bad LLM prompts.",
+              "correct": false
+            },
+            {
+              "id": "opt_d",
+              "text": "It encrypts the user's personal information.",
+              "correct": false
+            }
+          ],
+          "explain": "A single trace ID connects the logs of all stages, allowing you to reconstruct and replay the exact flow of a single user request."
+        },
+        {
+          "id": "p2",
+          "type": "true_false",
+          "xp": 2,
+          "prompt": "True or False: If you forget to pass the trace ID to the reranker, you will lose the ability to easily link the reranking logs back to the original retrieval logs for that request.",
+          "options": [
+            {
+              "id": "true_val",
+              "text": "True",
+              "correct": true
+            },
+            {
+              "id": "false_val",
+              "text": "False",
+              "correct": false
+            }
+          ],
+          "explain": "Without passing the trace ID, the stages act as isolated islands, and you won't be able to reconstruct the sequential journey of a specific request."
+        },
+        {
+          "id": "p3",
+          "type": "fill_blank",
+          "xp": 2,
+          "prompt": "Fill in the blank to complete the explanation of pipeline observability:",
+          "sentence": "To connect logs across retrieval, reranking, and generation, every stage must log the same trace ID.",
+          "blank": "trace ID",
+          "words": [
+            "trace ID",
+            "timestamp",
+            "API key"
+          ],
+          "explain": "A trace ID is a single, consistent identifier that connects all individual step logs (spans) for a single request."
+        },
+        {
+          "id": "p4",
+          "type": "spot_the_ai",
+          "xp": 2,
+          "prompt": "Which of the following represents an AI system log utilizing a trace ID?",
+          "options": [
+            {
+              "id": "opt_a",
+              "text": "User: 'Why is my code failing at the retrieval step?'",
+              "correct": false
+            },
+            {
+              "id": "opt_b",
+              "text": "System Log: '[trace_12345] Reranker completed. Input: 5 chunks. Output: 3 chunks. Latency: 45ms.'",
+              "correct": true
+            },
+            {
+              "id": "opt_c",
+              "text": "Assistant: 'I found 3 relevant documents for your query about physics.'",
+              "correct": false
+            }
+          ],
+          "explain": "Option B represents an automated system log entry that links a specific stage (reranker) to a global request using a trace ID (trace_12345). Options A and C are generic user-facing interactions."
+        }
+      ]
+    },
+    {
+      "type": "boss",
+      "exercises": [
+        {
+          "id": "b1",
+          "type": "multiple_choice",
+          "xp": 5,
+          "prompt": "Your RAG system randomly generates poor answers, and you need to debug whether the retrieval stage, the reranking stage, or the LLM generation stage is at fault. What is the best architectural practice to solve this?",
+          "options": [
+            {
+              "id": "trace_link",
+              "text": "Pass a unique trace ID through all stages to link their logs together.",
+              "correct": true
+            },
+            {
+              "id": "separate_id",
+              "text": "Generate a brand new random ID at the start of every individual stage.",
+              "correct": false
+            },
+            {
+              "id": "no_id",
+              "text": "Avoid using IDs and match logs purely by guessing the timestamps.",
+              "correct": false
+            },
+            {
+              "id": "one_log",
+              "text": "Only log the final step and delete all previous stage logs to save space.",
+              "correct": false
+            }
+          ],
+          "explain": "A trace ID acts as a unique thread linking every micro-service or pipeline step (retrieval, reranking, LLM call) together. Without a shared trace ID, you only have disconnected, messy logs that make debugging multi-stage systems nearly impossible."
+        }
+      ]
+    }
+  ]
+}

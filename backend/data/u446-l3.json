@@ -1,0 +1,222 @@
+{
+  "id": "u446-l3",
+  "unit": 446,
+  "day": 2233,
+  "tier": "LLM Application Engineering",
+  "tierIcon": "🔌",
+  "title": "Weighted Linear Combination",
+  "icon": "🎛️",
+  "concept": "A tunable alpha parameter blending dense and sparse scores into one final ranking.",
+  "xp": 15,
+  "hearts": 3,
+  "estMinutes": 7,
+  "segments": [
+    {
+      "type": "warmup",
+      "exercises": [
+        {
+          "id": "w1",
+          "type": "multiple_choice",
+          "xp": 1,
+          "prompt": "Why do we need to normalize BM25 and cosine similarity scores before combining them?",
+          "options": [
+            {
+              "id": "wu_1",
+              "text": "Because BM25 scores are always decimal percentages.",
+              "correct": false
+            },
+            {
+              "id": "wu_2",
+              "text": "Because they use completely different scales and ranges, making direct addition unfair.",
+              "correct": true
+            },
+            {
+              "id": "wu_3",
+              "text": "Because cosine similarity measures exact keyword matches while BM25 measures meanings.",
+              "correct": false
+            }
+          ],
+          "explain": "BM25 produces unbounded scores based on term frequency, while cosine similarity yields values strictly between -1 and 1. We must normalize them to a shared scale (like 0 to 1) so one doesn't completely overwhelm the other."
+        }
+      ]
+    },
+    {
+      "type": "teach",
+      "cards": [
+        {
+          "kind": "hook",
+          "icon": "🎚️",
+          "title": "Balancing the Scales",
+          "body": "Once our keyword and vector scores are normalized on a scale from 0 to 1, we can't just add them up blindly. What if our users care more about exact jargon matches than general concepts? We need a volume knob to balance the two."
+        },
+        {
+          "kind": "definition",
+          "icon": "⚖️",
+          "title": "Weighted Linear Combination",
+          "body": "Weighted Linear Combination is a method to merge normalized dense and sparse search scores. It uses a slider parameter, usually called alpha (α), to control how much influence keyword matching versus semantic meaning has on the final ranking."
+        },
+        {
+          "kind": "analogy",
+          "icon": "🎛️",
+          "title": "The Shower Faucet Analogy",
+          "body": "Think of tuning alpha like adjusting a faucet handle. Turn it all the way to the left, and you get only hot water (sparse search). Turn it all the way to the right, and you get only cold water (dense search). Warm water is the balanced blend in the middle."
+        },
+        {
+          "kind": "example",
+          "icon": "🧪",
+          "title": "Calculating a Combined Score",
+          "body": "If we set alpha to 0.7, a document's final score is calculated as (0.7 * Dense Score) + (0.3 * Sparse Score). This configuration slightly favors semantic meaning while still using keyword matches as a secondary signal."
+        },
+        {
+          "kind": "mythbust",
+          "icon": "🔍",
+          "title": "The Myth of the Golden Middle",
+          "body": "Many assume there is a single perfect alpha value, like 0.5, that works for every app. In reality, the best alpha depends entirely on your specific data and must be tuned through user testing and evaluation."
+        },
+        {
+          "kind": "visual",
+          "icon": "👁️",
+          "title": "Visualizing Alpha Weights",
+          "body": "Adjusting the alpha parameter shifts the focus of your search engine between literal words and abstract concepts.",
+          "compare": {
+            "left": {
+              "emoji": "🔑",
+              "tag": "Alpha = 0.1",
+              "text": "Heavy focus on sparse keyword matching (BM25). Good for finding specific product codes."
+            },
+            "right": {
+              "emoji": "🧠",
+              "tag": "Alpha = 0.9",
+              "text": "Heavy focus on dense vector similarity. Good for answering abstract questions."
+            }
+          }
+        }
+      ]
+    },
+    {
+      "type": "practice",
+      "exercises": [
+        {
+          "id": "p1",
+          "type": "multiple_choice",
+          "xp": 2,
+          "prompt": "If you set your alpha parameter to 0.8, what does this tell you about the resulting search behavior?",
+          "options": [
+            {
+              "id": "mc_1",
+              "text": "It relies almost entirely on exact keyword matching.",
+              "correct": false
+            },
+            {
+              "id": "mc_2",
+              "text": "It heavily favors semantic meaning over exact keyword matching.",
+              "correct": true
+            },
+            {
+              "id": "mc_3",
+              "text": "It ignores the dense vector scores completely.",
+              "correct": false
+            },
+            {
+              "id": "mc_4",
+              "text": "It weights both scores exactly equally.",
+              "correct": false
+            }
+          ],
+          "explain": "An alpha value of 0.8 places 80% of the weight on the dense (semantic) score and only 20% (1 - 0.8) on the sparse (keyword) score, making the search behavior highly semantic."
+        },
+        {
+          "id": "p2",
+          "type": "true_false",
+          "xp": 2,
+          "prompt": "True or False: In a standard weighted linear combination, if the dense score weight is alpha, the sparse score weight is calculated as 1 minus alpha.",
+          "options": [
+            {
+              "id": "tf_true",
+              "text": "True",
+              "correct": true
+            },
+            {
+              "id": "tf_false",
+              "text": "False",
+              "correct": false
+            }
+          ],
+          "explain": "The sum of the weights must equal 1.0. If the weight for the dense score is alpha, the weight for the sparse score must be (1 - alpha)."
+        },
+        {
+          "id": "p3",
+          "type": "fill_blank",
+          "xp": 2,
+          "prompt": "Fill in the missing parameter that controls the weighting balance in hybrid search.",
+          "sentence": "In hybrid search, tuning the alpha parameter lets you decide whether to favor semantic meaning or exact keyword matches.",
+          "blank": "alpha",
+          "words": [
+            "alpha",
+            "normalization",
+            "BM25"
+          ],
+          "explain": "The alpha parameter is a number between 0 and 1 that determines the balance between dense (semantic) and sparse (keyword) search scores."
+        },
+        {
+          "id": "p4",
+          "type": "spot_the_ai",
+          "xp": 2,
+          "prompt": "Identify the AI-generated description of how weighted linear combination works.",
+          "options": [
+            {
+              "id": "sai_1",
+              "text": "A score combination where alpha determines the weight of the vector score, and (1 - alpha) determines the weight of the keyword score.",
+              "correct": false
+            },
+            {
+              "id": "sai_2",
+              "text": "We use a single float value between 0 and 1 to scale the normalized scores before adding them together.",
+              "correct": false
+            },
+            {
+              "id": "sai_3",
+              "text": "You must configure both alpha and beta parameters simultaneously, where beta is the exponential decay factor of the cosine distance.",
+              "correct": true
+            }
+          ],
+          "explain": "The third option is generated by an AI because it hallucinates a non-existent parameter ('beta') and gives an incorrect, overly complex formula for a standard linear combination, which only needs a single alpha parameter."
+        }
+      ]
+    },
+    {
+      "type": "boss",
+      "exercises": [
+        {
+          "id": "b1",
+          "type": "multiple_choice",
+          "xp": 5,
+          "prompt": "Imagine you set your hybrid search system's alpha parameter to exactly 0.0. What behavior will you observe in the search results?",
+          "options": [
+            {
+              "id": "opt_1",
+              "text": "It ranks results using only the dense vector scores.",
+              "correct": false
+            },
+            {
+              "id": "opt_2",
+              "text": "It ignores the dense scores completely and ranks only by sparse keyword scores.",
+              "correct": true
+            },
+            {
+              "id": "opt_3",
+              "text": "It gives equal weight (50/50) to both dense and sparse scores.",
+              "correct": false
+            },
+            {
+              "id": "opt_4",
+              "text": "It causes the search engine to return an error because alpha cannot be zero.",
+              "correct": false
+            }
+          ],
+          "explain": "When alpha is set to 0.0, the dense vector score is multiplied by 0.0, which completely nullifies the semantic search component. The system only uses the sparse score (1 - 0.0 = 1.0), relying entirely on exact keyword matching."
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,222 @@
+{
+  "id": "u414-l3",
+  "unit": 414,
+  "day": 2073,
+  "tier": "LLM Application Engineering",
+  "tierIcon": "🔌",
+  "title": "Prompt Diffing",
+  "icon": "🔍",
+  "concept": "Reviewing exactly what changed between two prompt versions before deploying an update.",
+  "xp": 15,
+  "hearts": 3,
+  "estMinutes": 7,
+  "segments": [
+    {
+      "type": "warmup",
+      "exercises": [
+        {
+          "id": "w1",
+          "type": "multiple_choice",
+          "xp": 1,
+          "prompt": "In the last lesson, you learned to separate prompts from application logic. What does that mean in practice?",
+          "options": [
+            {
+              "id": "a",
+              "text": "Storing prompt text in a config file or prompt registry instead of hardcoding it directly inside the application code",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "Writing all prompts in a separate programming language from the rest of the app",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "Never using prompts inside application code at all",
+              "correct": false
+            }
+          ],
+          "explain": "Separating prompts from logic means keeping prompt text in a config file, database, or dedicated prompt registry rather than hardcoded as strings buried in your code. That makes prompts easier to find, update, and — as you'll see today — easier to compare across versions."
+        }
+      ]
+    },
+    {
+      "type": "teach",
+      "cards": [
+        {
+          "kind": "hook",
+          "icon": "🕵️",
+          "title": "What Actually Changed?",
+          "body": "A teammate says, 'I updated the prompt, it should work better now.' Before you deploy that to thousands of users, wouldn't you want to know exactly which words changed — not just take their word for it?"
+        },
+        {
+          "kind": "definition",
+          "icon": "🔍",
+          "title": "What Is Prompt Diffing?",
+          "body": "Prompt diffing means comparing two versions of a prompt side by side to see exactly which words, lines, or examples were added, removed, or changed. It turns a vague 'we updated the prompt' into a precise, reviewable list of edits."
+        },
+        {
+          "kind": "analogy",
+          "icon": "📝",
+          "title": "Track Changes for Prompts",
+          "body": "Remember 'Track Changes' in a shared document, where deleted text shows up red and new text shows up green? Prompt diffing is the exact same idea, but for your AI's instructions. It highlights precisely what got added, removed, or edited between two versions."
+        },
+        {
+          "kind": "example",
+          "icon": "✂️",
+          "title": "A Tiny Diff, A Big Deal",
+          "body": "v1: 'Summarize the article in 3 sentences.' v2: 'Summarize the article in 3 sentences, using a casual, friendly tone.' The diff shows just one phrase added: ', using a casual, friendly tone.' That's a small edit on paper, but it could noticeably change every summary your app produces — which is exactly why you'd want to review it before shipping."
+        },
+        {
+          "kind": "mythbust",
+          "icon": "🚫",
+          "title": "Myth: A Small Edit Can't Break Much",
+          "body": "Not true! LLMs are very sensitive to wording. Removing one example, swapping 'must' for 'should', or reordering instructions can change output format, tone, or accuracy dramatically. Diffing helps you catch these small-but-risky edits before they surprise you in production."
+        },
+        {
+          "kind": "visual",
+          "icon": "🔀",
+          "title": "Vague Update vs. Precise Diff",
+          "body": "Diffing turns an unclear update into a clear, reviewable set of changes, so your team can catch risky edits before real users are affected.",
+          "compare": {
+            "left": {
+              "emoji": "❓",
+              "tag": "Without Diffing",
+              "text": "'I updated the prompt' — nobody knows exactly what changed until something breaks in production."
+            },
+            "right": {
+              "emoji": "✅",
+              "tag": "With Diffing",
+              "text": "'Line 3 changed from X to Y, one example removed' — the team reviews the exact edit and tests it before deploying."
+            }
+          }
+        }
+      ]
+    },
+    {
+      "type": "practice",
+      "exercises": [
+        {
+          "id": "p1",
+          "type": "multiple_choice",
+          "xp": 2,
+          "prompt": "Why is reviewing a diff better than just reading a changelog note like 'improved the summarization prompt'?",
+          "options": [
+            {
+              "id": "a",
+              "text": "A diff shows the exact wording changes, letting you judge the real impact instead of trusting a vague summary",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "A diff automatically fixes any bugs in the prompt",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "A changelog note is always more detailed than a diff",
+              "correct": false
+            },
+            {
+              "id": "d",
+              "text": "Diffs are only useful for code, never for prompt text",
+              "correct": false
+            }
+          ],
+          "explain": "A changelog note like 'improved the prompt' is vague and could mean anything. A diff shows the literal before-and-after text, so you can reason concretely about how the change might affect the model's behavior — that specificity is the whole point of diffing."
+        },
+        {
+          "id": "p2",
+          "type": "true_false",
+          "xp": 2,
+          "prompt": "True or False: If a new prompt version passes a quick manual read-through and 'looks fine,' you don't need to review the actual diff before deploying.",
+          "options": [
+            {
+              "id": "a",
+              "text": "True",
+              "correct": false
+            },
+            {
+              "id": "b",
+              "text": "False",
+              "correct": true
+            }
+          ],
+          "explain": "False — a full read-through can miss subtle edits (a dropped example, a reworded constraint) that a side-by-side diff makes obvious. Always review the precise diff, since even tiny wording changes can shift model behavior in ways that are easy to overlook when skimming."
+        },
+        {
+          "id": "p3",
+          "type": "fill_blank",
+          "xp": 2,
+          "prompt": "Fill in the blank:",
+          "sentence": "Prompt diffing shows you exactly which words were added, removed, or changed between two versions.",
+          "blank": "changed",
+          "words": [
+            "changed",
+            "translated",
+            "encrypted"
+          ],
+          "explain": "Diffing highlights additions, removals, and changes so you can review precisely what's different, rather than guessing based on a vague description of the update."
+        },
+        {
+          "id": "p4",
+          "type": "spot_the_ai",
+          "xp": 2,
+          "prompt": "Which of these three diff summaries was most likely written by an AI assistant asked to 'explain this prompt diff' rather than a careful human reviewer?",
+          "options": [
+            {
+              "id": "a",
+              "text": "Added one example showing JSON output format; removed the sentence 'be concise' from the closing instruction.",
+              "correct": false
+            },
+            {
+              "id": "b",
+              "text": "This prompt update represents a comprehensive enhancement that significantly optimizes overall performance and elevates the quality of generated responses across the board.",
+              "correct": true
+            },
+            {
+              "id": "c",
+              "text": "Changed 'list 3 items' to 'list up to 5 items' in the second instruction line.",
+              "correct": false
+            }
+          ],
+          "explain": "The second option is full of vague, generic hype language ('comprehensive enhancement', 'significantly optimizes', 'elevates quality') but names zero actual changes — a classic sign of ungrounded AI filler text. A real diff review names specific lines, words, or examples that changed, like options A and C do."
+        }
+      ]
+    },
+    {
+      "type": "boss",
+      "exercises": [
+        {
+          "id": "b1",
+          "type": "multiple_choice",
+          "xp": 5,
+          "prompt": "Your team separated prompts into a registry (lesson 1) and now uses semantic versioning (lesson 2) to tag a new prompt as v2.4.0. Before deploying v2.4.0 to replace v2.3.0, what should you do, and why?",
+          "options": [
+            {
+              "id": "a",
+              "text": "Deploy immediately, since the version number increase already proves the prompt is safe",
+              "correct": false
+            },
+            {
+              "id": "b",
+              "text": "Run a diff between v2.3.0 and v2.4.0 to see exactly what changed, then evaluate that change against test cases before deploying",
+              "correct": true
+            },
+            {
+              "id": "c",
+              "text": "Delete v2.3.0 first so there's no chance of confusion, then deploy v2.4.0 blind",
+              "correct": false
+            },
+            {
+              "id": "d",
+              "text": "Skip evaluation since prompt changes are just text and can't break anything the way code can",
+              "correct": false
+            }
+          ],
+          "explain": "A version bump only tells you THAT something changed, not WHAT changed or whether it's safe. Diffing shows you the exact edited lines (a tweaked instruction, a removed example, a reworded constraint) so you can reason about the likely impact and test it before real users see it. Deleting the old version removes your safety net (no rollback!), and assuming text changes can't break behavior is a myth — even a single reworded sentence can flip an LLM's output style or accuracy. Diff first, evaluate, then deploy."
+        }
+      ]
+    }
+  ]
+}

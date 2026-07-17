@@ -1,0 +1,222 @@
+{
+  "id": "u466-l5",
+  "unit": 466,
+  "day": 2335,
+  "tier": "LLM Application Engineering",
+  "tierIcon": "🔌",
+  "title": "The Full Request Flow",
+  "icon": "🔁",
+  "concept": "Tracing a tool call from host to client to server and the result back, end to end.",
+  "xp": 15,
+  "hearts": 3,
+  "estMinutes": 7,
+  "segments": [
+    {
+      "type": "warmup",
+      "exercises": [
+        {
+          "id": "w1",
+          "type": "multiple_choice",
+          "xp": 1,
+          "prompt": "In the previous lesson, we explored 'One Host, Many Servers'. How do these servers interact with the Host?",
+          "options": [
+            {
+              "id": "opt_1",
+              "text": "Only one server at a time can be active in an MCP system",
+              "correct": false
+            },
+            {
+              "id": "opt_2",
+              "text": "A single Host can connect to multiple independent Servers through its Client",
+              "correct": true
+            },
+            {
+              "id": "opt_3",
+              "text": "Servers must communicate with each other directly to share tools",
+              "correct": false
+            }
+          ],
+          "explain": "An MCP Client acts as the central hub, allowing a single Host application to connect to multiple independent MCP Servers simultaneously."
+        }
+      ]
+    },
+    {
+      "type": "teach",
+      "cards": [
+        {
+          "kind": "hook",
+          "icon": "🗺️",
+          "title": "Tracing the Journey",
+          "body": "We know that one Host can talk to many Servers. But how does a single action—like asking an AI to fetch a weather report—actually travel through this network and return a result? Let's trace the journey step-by-step."
+        },
+        {
+          "kind": "definition",
+          "icon": "🔄",
+          "title": "The Request Lifecycle",
+          "body": "The full request flow is the complete lifecycle of an MCP request: starting at the Host, passing through the Client's protocol layer, executed by the Server, and returned back along the same path."
+        },
+        {
+          "kind": "analogy",
+          "icon": "🍕",
+          "title": "The Restaurant Order",
+          "body": "Think of MCP like ordering food through a waiter. You (the Host application) decide you want pizza. You tell your waiter (the MCP Client), who walks into the kitchen (the MCP Server) to get it made. The chef cooks the pizza and hands it back to the waiter, who brings it to your table."
+        },
+        {
+          "kind": "example",
+          "icon": "📝",
+          "title": "Saving a File End-to-End",
+          "body": "When you ask an AI assistant to write a file, the assistant (Host) requests a 'write_file' tool. The MCP Client formats this as a JSON-RPC message and sends it to the Filesystem Server, which writes the file and sends a 'Success' message back."
+        },
+        {
+          "kind": "mythbust",
+          "icon": "🛑",
+          "title": "No Direct Backdoors",
+          "body": "You might think the LLM (Host) communicates directly with the computer's tools. In reality, the LLM has no direct access; it must pass every request through the MCP Client, which acts as a secure boundary and translator."
+        },
+        {
+          "kind": "visual",
+          "icon": "↔️",
+          "title": "The Round Trip",
+          "body": "See how the request travels forward to do the work, and the response travels backward to deliver the result.",
+          "compare": {
+            "left": {
+              "emoji": "📤",
+              "tag": "Request Flow",
+              "text": "Host -> Client -> Server (Executes Tool)"
+            },
+            "right": {
+              "emoji": "📥",
+              "tag": "Response Flow",
+              "text": "Server -> Client -> Host (Uses Result)"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "type": "practice",
+      "exercises": [
+        {
+          "id": "p1",
+          "type": "multiple_choice",
+          "xp": 2,
+          "prompt": "Which component initiates the request flow when it decides a tool needs to be called?",
+          "options": [
+            {
+              "id": "opt_1",
+              "text": "The Host application (LLM)",
+              "correct": true
+            },
+            {
+              "id": "opt_2",
+              "text": "The MCP Server",
+              "correct": false
+            },
+            {
+              "id": "opt_3",
+              "text": "The external API database",
+              "correct": false
+            },
+            {
+              "id": "opt_4",
+              "text": "The transport protocol itself",
+              "correct": false
+            }
+          ],
+          "explain": "The Host (the LLM application) initiates the flow because it realizes it needs external data or an action to answer the user's prompt."
+        },
+        {
+          "id": "p2",
+          "type": "true_false",
+          "xp": 2,
+          "prompt": "True or False: The tool result must travel back through the MCP Client to reach the Host.",
+          "options": [
+            {
+              "id": "opt_1",
+              "text": "True",
+              "correct": true
+            },
+            {
+              "id": "opt_2",
+              "text": "False",
+              "correct": false
+            }
+          ],
+          "explain": "The return path mirrors the request path: the Server sends the result to the Client, which then delivers it to the Host."
+        },
+        {
+          "id": "p3",
+          "type": "fill_blank",
+          "xp": 2,
+          "prompt": "Fill in the missing component in the flow sequence: Host -> ______ -> Server.",
+          "sentence": "In the request path, the message travels from Host to Client to Server.",
+          "blank": "Client",
+          "words": [
+            "Client",
+            "Database",
+            "Browser"
+          ],
+          "explain": "The MCP Client is the middleman that standardizes the communication, taking the Host's request and sending it to the Server."
+        },
+        {
+          "id": "p4",
+          "type": "spot_the_ai",
+          "xp": 2,
+          "prompt": "How is the result of a tool execution returned back to the user?",
+          "options": [
+            {
+              "id": "opt_1",
+              "text": "The Server executes the tool, directly modifies the Host's memory, and bypasses the Client entirely to save latency.",
+              "correct": false
+            },
+            {
+              "id": "opt_2",
+              "text": "The Server executes the tool, packages the result in a JSON-RPC response, and sends it back to the Client, which delivers it to the Host.",
+              "correct": true
+            },
+            {
+              "id": "opt_3",
+              "text": "The Server sends the raw code to the Host so the Host can execute the tool locally inside the LLM context window.",
+              "correct": false
+            }
+          ],
+          "explain": "Option B represents the correct execution order where the Server does the actual work and sends the response back through the Client to the Host."
+        }
+      ]
+    },
+    {
+      "type": "boss",
+      "exercises": [
+        {
+          "id": "b1",
+          "type": "multiple_choice",
+          "xp": 5,
+          "prompt": "Let's tie it all together. During a tool execution flow, what is the exact role of the MCP Client when the Host decides to run a tool?",
+          "options": [
+            {
+              "id": "opt_1",
+              "text": "The Host talks directly to the Server database bypasses the Client completely",
+              "correct": false
+            },
+            {
+              "id": "opt_2",
+              "text": "The Client translates the Host's intent into JSON-RPC, routes it to the correct Server, and returns the result",
+              "correct": true
+            },
+            {
+              "id": "opt_3",
+              "text": "The Server decides which Client should execute the tool request",
+              "correct": false
+            },
+            {
+              "id": "opt_4",
+              "text": "The Host bypasses the Client to parse raw JSON-RPC messages from all servers",
+              "correct": false
+            }
+          ],
+          "explain": "The Client handles the translation and routing. It translates the Host's abstract tool call into a structured JSON-RPC message, sends it to the correct Server, waits for the response, and translates it back for the Host application to use."
+        }
+      ]
+    }
+  ]
+}

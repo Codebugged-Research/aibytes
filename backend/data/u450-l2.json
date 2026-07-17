@@ -1,0 +1,222 @@
+{
+  "id": "u450-l2",
+  "unit": 450,
+  "day": 2252,
+  "tier": "LLM Application Engineering",
+  "tierIcon": "🔌",
+  "title": "The Two-Stage Retrieval Pipeline",
+  "icon": "⌛",
+  "concept": "Retrieve a broad candidate set cheaply, then rerank the top-K candidates expensively for final ordering.",
+  "xp": 15,
+  "hearts": 3,
+  "estMinutes": 7,
+  "segments": [
+    {
+      "type": "warmup",
+      "exercises": [
+        {
+          "id": "w1",
+          "type": "multiple_choice",
+          "xp": 1,
+          "prompt": "In the previous lesson, we learned that initial retrieval is a recall step. What is its main goal?",
+          "options": [
+            {
+              "id": "a",
+              "text": "To sort the final results with perfect accuracy.",
+              "correct": false
+            },
+            {
+              "id": "b",
+              "text": "To quickly search the entire database and maximize recall.",
+              "correct": true
+            },
+            {
+              "id": "c",
+              "text": "To ignore semantic meaning and only match exact keywords.",
+              "correct": false
+            }
+          ],
+          "explain": "Initial retrieval prioritizes recall (finding all possible matches quickly), leaving the precision (getting the absolute best order) to the subsequent reranking step."
+        }
+      ]
+    },
+    {
+      "type": "teach",
+      "cards": [
+        {
+          "kind": "hook",
+          "icon": "🎣",
+          "title": "The Speed vs. Smart Dilemma",
+          "body": "We want our search systems to search millions of documents instantly and with perfect accuracy. But high-accuracy AI models are too slow to run on millions of files. The solution is a smart division of labor!"
+        },
+        {
+          "kind": "definition",
+          "icon": "⚙️",
+          "title": "Two-Stage Retrieval Pipeline",
+          "body": "The two-stage retrieval pipeline combines a fast, cheap 'Retriever' to gather a broad set of candidates, and a slower, powerful 'Rerank' model to perfectly order the top-K results."
+        },
+        {
+          "kind": "analogy",
+          "icon": "💼",
+          "title": "The Hiring Funnel",
+          "body": "Think of it like hiring for a job. A fast recruiter scans 1,000 resumes to pick the top 50, then a hiring manager spends hours deeply interviewing just those 50 to find the best fit."
+        },
+        {
+          "kind": "example",
+          "icon": "📝",
+          "title": "Speed Meets Precision",
+          "body": "A search engine queries a vector database to find 100 relevant articles in 10 milliseconds. It then feeds only those 100 articles into a reranker, which takes 80 milliseconds to rank the best 5."
+        },
+        {
+          "kind": "mythbust",
+          "icon": "🛑",
+          "title": "Don't Rerank Everything",
+          "body": "Many believe you should run your smartest AI model over the entire database. Doing this would make search take minutes instead of milliseconds. We only feed the top candidates to the smart model."
+        },
+        {
+          "kind": "visual",
+          "icon": "⚖️",
+          "title": "Workload Split",
+          "body": "Compare the workload at each stage of the pipeline to see how we balance cost and accuracy.",
+          "compare": {
+            "left": {
+              "emoji": "🏃‍♂️",
+              "tag": "Stage 1: Retrieve",
+              "text": "Searches millions of items instantly. Fast, cheap, and broad."
+            },
+            "right": {
+              "emoji": "🧐",
+              "tag": "Stage 2: Rerank",
+              "text": "Analyzes only the top 50 items deeply. Slower, smart, and precise."
+            }
+          }
+        }
+      ]
+    },
+    {
+      "type": "practice",
+      "exercises": [
+        {
+          "id": "p1",
+          "type": "multiple_choice",
+          "xp": 2,
+          "prompt": "What is the primary role of the first-stage retriever in the pipeline?",
+          "options": [
+            {
+              "id": "a",
+              "text": "To compute final relevancy scores for the user.",
+              "correct": false
+            },
+            {
+              "id": "b",
+              "text": "To quickly filter the entire database down to a smaller candidate set.",
+              "correct": true
+            },
+            {
+              "id": "c",
+              "text": "To sort the final top 3 results with maximum precision.",
+              "correct": false
+            },
+            {
+              "id": "d",
+              "text": "To translate the user's query into different languages.",
+              "correct": false
+            }
+          ],
+          "explain": "The retriever's job is to screen the entire database quickly and cheaply, casting a wide net (high recall) without worrying about perfect order."
+        },
+        {
+          "id": "p2",
+          "type": "true_false",
+          "xp": 2,
+          "prompt": "True or False: In a two-stage system, the expensive reranker is only run on a small candidate set (top-K), not the entire database.",
+          "options": [
+            {
+              "id": "a",
+              "text": "True",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "False",
+              "correct": false
+            }
+          ],
+          "explain": "Reranking is computationally heavy. Running it on the entire database is too slow, so we only run it on a small subset (the top-K candidates) generated by the retriever."
+        },
+        {
+          "id": "p3",
+          "type": "fill_blank",
+          "xp": 2,
+          "prompt": "Fill in the missing term to describe this hybrid architecture.",
+          "sentence": "By dividing the work, the two-stage pipeline balances speed and accuracy.",
+          "blank": "two-stage",
+          "words": [
+            "two-stage",
+            "single-pass",
+            "brute-force"
+          ],
+          "explain": "The two-stage pipeline uses a cheap retriever first to gather candidates, and an expensive reranker second to order them."
+        },
+        {
+          "id": "p4",
+          "type": "spot_the_ai",
+          "xp": 2,
+          "prompt": "Identify which search system pipeline is designed by an AI engineer using the two-stage approach.",
+          "options": [
+            {
+              "id": "a",
+              "text": "We run a BM25 keyword search on all 1,000,000 files, then sort them alphabetically to return the top 10 results.",
+              "correct": false
+            },
+            {
+              "id": "b",
+              "text": "We run a fast vector search to get the top 50 matches, then run those 50 matches through a slower, high-accuracy cross-encoder to get the top 5.",
+              "correct": true
+            },
+            {
+              "id": "c",
+              "text": "We pass all 1,000,000 database documents directly into a GPT-4 prompt to find the single most relevant page.",
+              "correct": false
+            }
+          ],
+          "explain": "Option B shows the correct flow of a two-stage pipeline: a fast, cheap search (vector search) gathers candidates, followed by an expensive, smart reranker (cross-encoder) ordering the final subset."
+        }
+      ]
+    },
+    {
+      "type": "boss",
+      "exercises": [
+        {
+          "id": "b1",
+          "type": "multiple_choice",
+          "xp": 5,
+          "prompt": "You are designing a search system for a library of 100,000 books. Which design represents the most efficient and accurate implementation of a two-stage retrieval pipeline?",
+          "options": [
+            {
+              "id": "a",
+              "text": "Running the cross-encoder on all 100,000 documents to avoid needing a retriever at all.",
+              "correct": false
+            },
+            {
+              "id": "b",
+              "text": "Retrieving only 5 documents with a vector search and displaying them immediately to the user.",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "Retrieving 100 candidate documents quickly using embeddings, then reranking the top 10 with a cross-encoder.",
+              "correct": true
+            },
+            {
+              "id": "d",
+              "text": "Using a keyword search to find 10 documents and reversing their order randomly.",
+              "correct": false
+            }
+          ],
+          "explain": "The two-stage pipeline balances speed and accuracy by using a cheap, high-recall retriever to get a broad pool of candidates, followed by an expensive, high-precision cross-encoder to select the final top results."
+        }
+      ]
+    }
+  ]
+}

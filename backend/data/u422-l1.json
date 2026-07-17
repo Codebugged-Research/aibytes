@@ -1,0 +1,222 @@
+{
+  "id": "u422-l1",
+  "unit": 422,
+  "day": 2111,
+  "tier": "LLM Application Engineering",
+  "tierIcon": "🔌",
+  "title": "The Growing Conversation Problem",
+  "icon": "📈",
+  "concept": "Why naively appending every turn to context eventually blows the token budget and induces context rot.",
+  "xp": 15,
+  "hearts": 3,
+  "estMinutes": 7,
+  "segments": [
+    {
+      "type": "warmup",
+      "exercises": [
+        {
+          "id": "w1",
+          "type": "multiple_choice",
+          "xp": 1,
+          "prompt": "Quick refresher: what do we call the window of text (instructions + history + new input) that an LLM can actually 'see' at once?",
+          "options": [
+            {
+              "id": "a",
+              "text": "The context window",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "The training set",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "The API key",
+              "correct": false
+            }
+          ],
+          "explain": "The context window is the limited chunk of tokens (text) the model can read at once. Everything else — instructions, chat history, new messages — has to fit inside it."
+        }
+      ]
+    },
+    {
+      "type": "teach",
+      "cards": [
+        {
+          "kind": "hook",
+          "icon": "💬",
+          "title": "Chat 1 vs. Chat 500",
+          "body": "Message 1 of a chatbot feels instant and sharp. But by message 500, the same bot feels slower, forgetful, and weirdly confused about things you said earlier. What changed?"
+        },
+        {
+          "kind": "definition",
+          "icon": "📦",
+          "title": "The Growing Conversation Problem",
+          "body": "If you naively append every single past turn to the prompt each time, the conversation history keeps growing forever. Eventually it overflows the model's token budget, or the important stuff gets buried in noise — this is called context rot."
+        },
+        {
+          "kind": "analogy",
+          "icon": "🧳",
+          "title": "The Never-Emptied Suitcase",
+          "body": "Imagine packing a suitcase for a trip, but you never take anything out — you just keep stuffing in more clothes every day. Eventually it won't zip closed, and even if it does, you can't find your socks under all the extra sweaters."
+        },
+        {
+          "kind": "example",
+          "icon": "🗂️",
+          "title": "Watch It Grow",
+          "body": "Turn 1: prompt has 50 tokens. Turn 20: naive appending means you resend all 20 previous turns PLUS the new one, so the prompt might now be 4,000 tokens — for one simple question. Keep going, and you hit the model's hard limit."
+        },
+        {
+          "kind": "mythbust",
+          "icon": "🚫",
+          "title": "Myth: More history = smarter replies",
+          "body": "Not true! Dumping the entire raw conversation back in doesn't make the model smarter — it dilutes attention across thousands of tokens, so the model can actually get WORSE at using the one relevant fact from turn 3."
+        },
+        {
+          "kind": "visual",
+          "icon": "⚖️",
+          "title": "Lean History vs. Bloated History",
+          "body": "Same conversation, two ways of handling it.",
+          "compare": {
+            "left": {
+              "emoji": "🎯",
+              "tag": "Managed context",
+              "text": "Old turns summarized or trimmed; only relevant, recent info kept. Fast, focused, accurate."
+            },
+            "right": {
+              "emoji": "🐘",
+              "tag": "Naive append-all",
+              "text": "Every turn ever sent, forever. Slow, expensive, and key details get lost in the pile — context rot."
+            }
+          }
+        }
+      ]
+    },
+    {
+      "type": "practice",
+      "exercises": [
+        {
+          "id": "p1",
+          "type": "multiple_choice",
+          "xp": 2,
+          "prompt": "What happens if a chatbot naively appends every past turn to every new prompt, with no limit?",
+          "options": [
+            {
+              "id": "a",
+              "text": "The prompt eventually exceeds the token budget and/or key details get buried in noise",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "The model automatically deletes old turns for you",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "Nothing changes — models have unlimited memory",
+              "correct": false
+            },
+            {
+              "id": "d",
+              "text": "The model gets faster the longer the conversation goes",
+              "correct": false
+            }
+          ],
+          "explain": "Every turn added to the prompt costs tokens. Left unmanaged, this grows without bound, eventually blowing past the context window limit — and even before that, drowning important details in irrelevant history (context rot)."
+        },
+        {
+          "id": "p2",
+          "type": "true_false",
+          "xp": 2,
+          "prompt": "True or False: Context rot means the model's replies can get worse even before you technically hit the token limit, simply because relevant info is buried among too much irrelevant history.",
+          "options": [
+            {
+              "id": "t",
+              "text": "True",
+              "correct": true
+            },
+            {
+              "id": "f",
+              "text": "False",
+              "correct": false
+            }
+          ],
+          "explain": "True. Context rot isn't just about hitting a hard cutoff — it's the gradual decline in response quality as useful details get diluted or lost in a growing, unmanaged pile of history."
+        },
+        {
+          "id": "p3",
+          "type": "fill_blank",
+          "xp": 2,
+          "prompt": "Fill in the blank:",
+          "sentence": "Naively appending every turn forever eventually causes the prompt to exceed the model's token budget, a problem often called context rot.",
+          "blank": "token budget",
+          "words": [
+            "token budget",
+            "training data",
+            "API version"
+          ],
+          "explain": "The token budget is the limited space a model has for reading a prompt. Endless appending eats through that budget fast."
+        },
+        {
+          "id": "p4",
+          "type": "spot_the_ai",
+          "xp": 2,
+          "prompt": "Which of these three explanations of the growing conversation problem sounds like it was generated by an AI padding out a simple idea with vague filler, rather than a concise human explanation?",
+          "options": [
+            {
+              "id": "a",
+              "text": "It is imperative to acknowledge that, in the dynamic landscape of conversational AI, the continuous accumulation of dialogic turns represents a multifaceted challenge that necessitates careful consideration of numerous interrelated factors.",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "If you keep adding every message to the prompt without trimming, you'll eventually run out of room and confuse the model.",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "Long chats need pruning — otherwise old messages pile up and either blow the token limit or bury the important stuff.",
+              "correct": false
+            }
+          ],
+          "explain": "Option A is full of vague, inflated phrases ('multifaceted challenge', 'interrelated factors') that sound impressive but say nothing concrete — a classic sign of AI filler text. The other two get straight to the point with a clear cause and effect."
+        }
+      ]
+    },
+    {
+      "type": "boss",
+      "exercises": [
+        {
+          "id": "b1",
+          "type": "multiple_choice",
+          "xp": 5,
+          "prompt": "A support chatbot has been running for hours with a customer, naively appending every single turn to the prompt. The developer notices two problems: (1) the API starts throwing a 'context length exceeded' error, and (2) even before that error, the bot started giving oddly generic answers, ignoring a key detail the customer mentioned 30 messages ago. What's the best description of what's happening?",
+          "options": [
+            {
+              "id": "a",
+              "text": "Problem 1 is hitting the token budget limit; problem 2 is context rot from unmanaged history diluting the important detail",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "Both problems are caused by the customer typing too fast",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "Problem 1 means the model is broken and needs retraining; problem 2 is unrelated",
+              "correct": false
+            },
+            {
+              "id": "d",
+              "text": "Neither problem is related to conversation length — it's just random model variance",
+              "correct": false
+            }
+          ],
+          "explain": "This is exactly the growing conversation problem in action: naive append-everything strategies first cause quality to quietly degrade (context rot, where old-but-important details get buried under newer, less relevant text) and eventually hit a hard wall (the token budget / context length limit). Both stem from the same root cause — never managing what stays in the prompt. In upcoming lessons, you'll learn concrete strategies like summarization, trimming, and retrieval to fix this."
+        }
+      ]
+    }
+  ]
+}

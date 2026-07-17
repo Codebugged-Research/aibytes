@@ -1,0 +1,222 @@
+{
+  "id": "u425-l3",
+  "unit": 425,
+  "day": 2128,
+  "tier": "LLM Application Engineering",
+  "tierIcon": "🔌",
+  "title": "Sentence & Document Embeddings",
+  "icon": "🗜️",
+  "concept": "Pooling token-level representations into a single fixed-size vector for a sentence, paragraph, or document.",
+  "xp": 15,
+  "hearts": 3,
+  "estMinutes": 7,
+  "segments": [
+    {
+      "type": "warmup",
+      "exercises": [
+        {
+          "id": "w1",
+          "type": "multiple_choice",
+          "xp": 1,
+          "prompt": "Why do we use dedicated embedding models instead of generative LLMs for semantic search tasks?",
+          "options": [
+            {
+              "id": "wu_1",
+              "text": "Embedding models are much larger and slower than generative models.",
+              "correct": false
+            },
+            {
+              "id": "wu_2",
+              "text": "Embedding models are trained to map similar concepts close together in vector space.",
+              "correct": true
+            },
+            {
+              "id": "wu_3",
+              "text": "Embedding models are only used to generate conversational chat responses.",
+              "correct": false
+            }
+          ],
+          "explain": "Embedding models are specifically optimized using contrastive learning to group similar concepts together in vector space, making them much more efficient and accurate for similarity searches than raw generative models."
+        }
+      ]
+    },
+    {
+      "type": "teach",
+      "cards": [
+        {
+          "kind": "hook",
+          "icon": "🔍",
+          "title": "The Vector Overflow Problem",
+          "body": "LLMs read text word-by-word, generating a list of individual vectors for every single word. But how do we compare an entire resume to a job description if we have dozens of different vectors for each? We need a way to squash them down."
+        },
+        {
+          "kind": "definition",
+          "icon": "🧪",
+          "title": "What is Pooling?",
+          "body": "Pooling is the mathematical process of combining multiple token embeddings from a piece of text into a single, fixed-size vector. This allows us to compare entire sentences or documents of any length using standard similarity metrics."
+        },
+        {
+          "kind": "analogy",
+          "icon": "📊",
+          "title": "The Movie Review Stack",
+          "body": "Imagine you have a team of five critics reviewing a movie, each writing a detailed report. To send a quick summary to your boss, you stack their reports together and calculate the average score they gave; you compress multiple opinions into one final grade."
+        },
+        {
+          "kind": "example",
+          "icon": "📝",
+          "title": "Averaging a Sentence",
+          "body": "To embed the sentence 'I love coding', we first get three separate 768-dimension vectors for 'I', 'love', and 'coding'. By averaging them together, we get a single 768-dimension vector representing the overall meaning of the entire sentence."
+        },
+        {
+          "kind": "mythbust",
+          "icon": "🎈",
+          "title": "Size Doesn't Scale with Length",
+          "body": "You might think that longer documents automatically get larger vector sizes. In reality, pooling always compresses the output into the exact same vector size (like 1536 dimensions), whether you embed a single word or a full page."
+        },
+        {
+          "kind": "visual",
+          "icon": "👁️",
+          "title": "Tokens vs. Pooled Output",
+          "body": "Compare how token vectors are treated before and after applying a pooling layer.",
+          "compare": {
+            "left": {
+              "emoji": "⛓️",
+              "tag": "Token Vectors",
+              "text": "Multiple individual vectors, one for every word in the sentence."
+            },
+            "right": {
+              "emoji": "📦",
+              "tag": "Pooled Vector",
+              "text": "One single vector representing the entire sentence's meaning."
+            }
+          }
+        }
+      ]
+    },
+    {
+      "type": "practice",
+      "exercises": [
+        {
+          "id": "p1",
+          "type": "multiple_choice",
+          "xp": 2,
+          "prompt": "Why is pooling essential when you want to compare the similarity of two documents of different lengths?",
+          "options": [
+            {
+              "id": "mc_1",
+              "text": "It increases the number of dimensions for every new word added.",
+              "correct": false
+            },
+            {
+              "id": "mc_2",
+              "text": "It outputs a single vector of the exact same size, regardless of the text length.",
+              "correct": true
+            },
+            {
+              "id": "mc_3",
+              "text": "It deletes all verbs and only embeds the nouns.",
+              "correct": false
+            },
+            {
+              "id": "mc_4",
+              "text": "It converts the text into a generative prompt for a chatbot.",
+              "correct": false
+            }
+          ],
+          "explain": "Because pooling merges all token vectors into a single vector of the same dimension, we can directly compare sentences of different lengths using simple tools like cosine similarity."
+        },
+        {
+          "id": "p2",
+          "type": "true_false",
+          "xp": 2,
+          "prompt": "True or False: When using mean pooling, every word in the sentence influences the final document embedding.",
+          "options": [
+            {
+              "id": "tf_true",
+              "text": "True",
+              "correct": true
+            },
+            {
+              "id": "tf_false",
+              "text": "False",
+              "correct": false
+            }
+          ],
+          "explain": "Mean pooling averages the vectors of all tokens, meaning every single word contributes to the final sentence embedding."
+        },
+        {
+          "id": "p3",
+          "type": "fill_blank",
+          "xp": 2,
+          "prompt": "Fill in the blank to name the technique used to combine token-level vectors into one.",
+          "sentence": "To merge individual word vectors into a single representation, we apply a technique called pooling.",
+          "blank": "pooling",
+          "words": [
+            "pooling",
+            "tokenizing",
+            "decoding"
+          ],
+          "explain": "Pooling is the exact term used for squashing multiple word-level vectors into a single sentence-level or document-level representation."
+        },
+        {
+          "id": "p4",
+          "type": "spot_the_ai",
+          "xp": 2,
+          "prompt": "Which of the following explanations of pooling was generated by an AI?",
+          "options": [
+            {
+              "id": "sai_1",
+              "text": "Let's write a python function: `sentence_vector = np.mean(token_embeddings, axis=0)` to combine these token outputs.",
+              "correct": false
+            },
+            {
+              "id": "sai_2",
+              "text": "I tried to compare two documents, but one had 10 tokens and the other had 50, so my similarity formula crashed until I averaged them.",
+              "correct": false
+            },
+            {
+              "id": "sai_3",
+              "text": "In the realm of natural language processing, pooling is the mathematical abstraction that aggregates sequence-based token tensors into a singular document vector.",
+              "correct": true
+            }
+          ],
+          "explain": "Option C is generated by an AI because it uses robotic, generic phrasing ('In the realm of...', 'computational representation') to state a simple definition, unlike the human-like code/scenario descriptions in A and B."
+        }
+      ]
+    },
+    {
+      "type": "boss",
+      "exercises": [
+        {
+          "id": "b1",
+          "type": "multiple_choice",
+          "xp": 5,
+          "prompt": "When converting a paragraph of text into a single embedding, you must choose a pooling strategy. What is the key difference between using 'mean pooling' and 'max pooling' on your token vectors?",
+          "options": [
+            {
+              "id": "opt_1",
+              "text": "Mean pooling keeps only the very first token vector, while max pooling keeps only the last one.",
+              "correct": false
+            },
+            {
+              "id": "opt_2",
+              "text": "Mean pooling ignores all word meanings, whereas max pooling counts the total number of words.",
+              "correct": false
+            },
+            {
+              "id": "opt_3",
+              "text": "Mean pooling averages the vectors to capture the overall theme, while max pooling captures the most prominent features across tokens.",
+              "correct": true
+            },
+            {
+              "id": "opt_4",
+              "text": "Mean pooling is only used for short words, while max pooling is reserved for entire books.",
+              "correct": false
+            }
+          ],
+          "explain": "Mean pooling calculates the mathematical average of all token vectors to capture the overall theme. Max pooling takes the highest value for each feature dimension across all tokens, which is great for detecting if specific high-impact words (like 'urgent' or 'error') are present anywhere in the document."
+        }
+      ]
+    }
+  ]
+}

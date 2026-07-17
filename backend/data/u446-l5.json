@@ -1,0 +1,222 @@
+{
+  "id": "u446-l5",
+  "unit": 446,
+  "day": 2235,
+  "tier": "LLM Application Engineering",
+  "tierIcon": "🔌",
+  "title": "When Hybrid Search Is Worth the Complexity",
+  "icon": "📊",
+  "concept": "Measuring the accuracy gain of hybrid search against its added infrastructure and latency cost.",
+  "xp": 15,
+  "hearts": 3,
+  "estMinutes": 7,
+  "segments": [
+    {
+      "type": "warmup",
+      "exercises": [
+        {
+          "id": "w1",
+          "type": "multiple_choice",
+          "xp": 1,
+          "prompt": "In the last lesson, we learned that Reciprocal Rank Fusion (RRF) merges search results without scaling raw scores. How does it achieve this?",
+          "options": [
+            {
+              "id": "w1",
+              "text": "By converting vector scores into percentages.",
+              "correct": false
+            },
+            {
+              "id": "w2",
+              "text": "By using the item's rank position in both result lists.",
+              "correct": true
+            },
+            {
+              "id": "w3",
+              "text": "By multiplying the raw scores of both algorithms together.",
+              "correct": false
+            }
+          ],
+          "explain": "Reciprocal Rank Fusion (RRF) evaluates the relative position (rank) of an item in both the keyword and vector result lists, avoiding the need to normalize raw scores."
+        }
+      ]
+    },
+    {
+      "type": "teach",
+      "cards": [
+        {
+          "kind": "hook",
+          "icon": "🤔",
+          "title": "Double the Power, Double the Pain",
+          "body": "Hybrid search sounds like a silver bullet, but it requires running twice as many queries and maintaining two different databases. How do we know when the extra performance is actually worth the extra headache?"
+        },
+        {
+          "kind": "definition",
+          "icon": "⚖️",
+          "title": "The Cost of Hybrid Search",
+          "body": "Hybrid search is not free; it requires running two separate database queries and merging them. We must measure if the lift in search accuracy is worth the double index storage, increased query latency, and system complexity."
+        },
+        {
+          "kind": "analogy",
+          "icon": "🍳",
+          "title": "The Two-Kitchen Restaurant",
+          "body": "Imagine running two completely separate kitchens (keyword and vector) just to make one dinner plate. If your guests are perfectly happy with a simple sandwich from one kitchen, opening a second kitchen just adds double the cleanup, double the staff, and delays the food."
+        },
+        {
+          "kind": "example",
+          "icon": "🩺",
+          "title": "A Real-World Trade-Off",
+          "body": "A medical app compared keyword search to hybrid search. Hybrid search increased diagnostic search accuracy by 15%, but added 80ms of latency. Because accuracy is critical in medicine, the team decided the latency cost was worth the trade-off."
+        },
+        {
+          "kind": "mythbust",
+          "icon": "🚫",
+          "title": "Myth: Hybrid is Always Better",
+          "body": "Many developers believe hybrid search should always be used. In reality, if your users search for exact product codes or simple titles, standard keyword search is faster, cheaper, and just as accurate."
+        },
+        {
+          "kind": "visual",
+          "icon": "📊",
+          "title": "Simple vs. Hybrid Setup",
+          "body": "Compare the lean profile of a single search index against the heavy, high-maintenance profile of a hybrid setup.",
+          "compare": {
+            "left": {
+              "emoji": "⚡",
+              "tag": "Single Search",
+              "text": "Fast latency, low storage cost, easy to maintain."
+            },
+            "right": {
+              "emoji": "🏋️",
+              "tag": "Hybrid Search",
+              "text": "Higher accuracy, but higher latency, double indexing, and complex merging."
+            }
+          }
+        }
+      ]
+    },
+    {
+      "type": "practice",
+      "exercises": [
+        {
+          "id": "p1",
+          "type": "multiple_choice",
+          "xp": 2,
+          "prompt": "How can an engineering team quantitatively decide if hybrid search is worth keeping in production?",
+          "options": [
+            {
+              "id": "q1",
+              "text": "By deleting the keyword index to free up memory.",
+              "correct": false
+            },
+            {
+              "id": "q2",
+              "text": "By running A/B tests to compare search relevance and user engagement against latency.",
+              "correct": true
+            },
+            {
+              "id": "q3",
+              "text": "By manually checking every single query result yourself.",
+              "correct": false
+            },
+            {
+              "id": "q4",
+              "text": "By switching to a database that does not support vector embeddings.",
+              "correct": false
+            }
+          ],
+          "explain": "We use A/B testing to serve hybrid search to one group and standard search to another, directly measuring if the relevance improvement translates to better user behavior."
+        },
+        {
+          "id": "p2",
+          "type": "true_false",
+          "xp": 2,
+          "prompt": "True or False: Using hybrid search increases the infrastructure storage footprint because you must maintain two distinct search indexes.",
+          "options": [
+            {
+              "id": "t1",
+              "text": "True",
+              "correct": true
+            },
+            {
+              "id": "t2",
+              "text": "False",
+              "correct": false
+            }
+          ],
+          "explain": "Hybrid search requires keeping both a sparse index (like BM25) and a dense vector index active, which increases memory and storage requirements."
+        },
+        {
+          "id": "p3",
+          "type": "fill_blank",
+          "xp": 2,
+          "prompt": "Fill in the blank to describe the main performance drawback of hybrid search:",
+          "sentence": "Executing dual queries and merging results inherently increases query latency compared to a single search.",
+          "blank": "latency",
+          "words": [
+            "latency",
+            "storage",
+            "accuracy"
+          ],
+          "explain": "Running two searches (keyword and vector) and merging them takes more time, which increases the overall query latency for the end user."
+        },
+        {
+          "id": "p4",
+          "type": "spot_the_ai",
+          "xp": 2,
+          "prompt": "Identify the AI-generated report discussing hybrid search complexity metrics:",
+          "options": [
+            {
+              "id": "s1",
+              "text": "We need to optimize our PostgreSQL database by adding a basic B-tree index on the user ID column to make login queries faster.",
+              "correct": false
+            },
+            {
+              "id": "s2",
+              "text": "Although our hybrid search system improved search relevance (NDCG) by 8%, it increased our p99 query latency by 45ms and doubled our database hosting costs.",
+              "correct": true
+            },
+            {
+              "id": "s3",
+              "text": "To generate vector embeddings, we send our raw text documents to an API and store the resulting array of floating-point numbers in a local file.",
+              "correct": false
+            }
+          ],
+          "explain": "Option B clearly details a real-world hybrid search engineering trade-off (accuracy vs. latency/infrastructure), whereas the others describe standard database tuning or basic vector generation."
+        }
+      ]
+    },
+    {
+      "type": "boss",
+      "exercises": [
+        {
+          "id": "b1",
+          "type": "multiple_choice",
+          "xp": 5,
+          "prompt": "Before deploying hybrid search to a production environment, which trade-off must an engineer carefully calculate?",
+          "options": [
+            {
+              "id": "b1",
+              "text": "When the vector search engine's latency drops to zero.",
+              "correct": false
+            },
+            {
+              "id": "b2",
+              "text": "When the measurable gain in search relevance justifies the added infrastructure costs and latency.",
+              "correct": true
+            },
+            {
+              "id": "b3",
+              "text": "When you want to replace Reciprocal Rank Fusion with raw score addition.",
+              "correct": false
+            },
+            {
+              "id": "b4",
+              "text": "When you want to search purely through unstructured image databases without text.",
+              "correct": false
+            }
+          ],
+          "explain": "Hybrid search requires running two search queries, normalizing or ranking their outputs, and managing two database indexes. If a simple keyword search satisfies your users' needs, the added engineering complexity, storage costs, and query latency of hybrid search are not justified."
+        }
+      ]
+    }
+  ]
+}

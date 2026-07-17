@@ -1,0 +1,222 @@
+{
+  "id": "u432-l5",
+  "unit": 432,
+  "day": 2165,
+  "tier": "LLM Application Engineering",
+  "tierIcon": "🔌",
+  "title": "Building a Parent-Child Index",
+  "icon": "⛓️",
+  "concept": "A worked example wiring up a document into parent and child chunk stores for small-to-big retrieval.",
+  "xp": 15,
+  "hearts": 3,
+  "estMinutes": 7,
+  "segments": [
+    {
+      "type": "warmup",
+      "exercises": [
+        {
+          "id": "w1",
+          "type": "multiple_choice",
+          "xp": 1,
+          "prompt": "How did the summary-linked chunking technique we learned last time work?",
+          "options": [
+            {
+              "id": "opt_1",
+              "text": "It replaces all original document text with short AI summaries to save storage.",
+              "correct": false
+            },
+            {
+              "id": "opt_2",
+              "text": "It matches queries against a summary chunk, but retrieves the full text chunk for the LLM.",
+              "correct": true
+            },
+            {
+              "id": "opt_3",
+              "text": "It disables semantic vector search entirely in favor of keyword matching.",
+              "correct": false
+            }
+          ],
+          "explain": "Summary-linked chunking matches queries against condensed summary embeddings but returns the detailed, original parent text chunk for generation."
+        }
+      ]
+    },
+    {
+      "type": "teach",
+      "cards": [
+        {
+          "kind": "hook",
+          "icon": "🔌",
+          "title": "Wiring Up the Magic",
+          "body": "We know that small chunks are easy to search, but big chunks give the LLM better context. How do we actually build a system that searches the small ones but hands the big ones to our AI?"
+        },
+        {
+          "kind": "definition",
+          "icon": "🏗️",
+          "title": "What is a Parent-Child Index?",
+          "body": "A Parent-Child Index splits a document into large parent chunks for context, and links them to many smaller child chunks. You search the child chunks to find matches, but return the parent chunks to the LLM."
+        },
+        {
+          "kind": "analogy",
+          "icon": "🗂️",
+          "title": "The Library Sticky-Note",
+          "body": "Imagine a library where the catalog cards contain tiny, easily searchable sticky notes. Instead of bringing you the sticky note, the librarian uses it to find the massive original book on the shelf."
+        },
+        {
+          "kind": "example",
+          "icon": "📝",
+          "title": "A Small-to-Big Retrieval Run",
+          "body": "We take a 1,000-word page (Parent). We split it into five 200-word sentences (Children), each holding the Parent's ID. When a query matches a sentence, we retrieve the full 1,000-word page."
+        },
+        {
+          "kind": "mythbust",
+          "icon": "🛡️",
+          "title": "The Dual-Embedding Myth",
+          "body": "You don't need to generate embeddings for the large parent chunks. You only embed and search the small child chunks, saving computational power and database space."
+        },
+        {
+          "kind": "visual",
+          "icon": "👁️",
+          "title": "Search vs. Generation Context",
+          "body": "Let's look at how the search query interacts with child chunks versus what actually gets sent to the LLM.",
+          "compare": {
+            "left": {
+              "emoji": "🔍",
+              "tag": "Search Phase",
+              "text": "Matches the small, precise child chunk using embeddings."
+            },
+            "right": {
+              "emoji": "🧠",
+              "tag": "LLM Generation",
+              "text": "Receives the large parent chunk containing full surrounding context."
+            }
+          }
+        }
+      ]
+    },
+    {
+      "type": "practice",
+      "exercises": [
+        {
+          "id": "p1",
+          "type": "multiple_choice",
+          "xp": 2,
+          "prompt": "In a parent-child index workflow, what do we search, and what do we feed to the LLM?",
+          "options": [
+            {
+              "id": "opt_1",
+              "text": "We search parent chunks and feed child chunks to the LLM",
+              "correct": false
+            },
+            {
+              "id": "opt_2",
+              "text": "We search child chunks and feed parent chunks to the LLM",
+              "correct": true
+            },
+            {
+              "id": "opt_3",
+              "text": "We search both and discard the parent chunks",
+              "correct": false
+            },
+            {
+              "id": "opt_4",
+              "text": "We search neither and let the LLM guess the context",
+              "correct": false
+            }
+          ],
+          "explain": "We search the child chunks because their narrow focus makes them easier to match semantically, but we feed the parent chunk to the LLM to provide complete context."
+        },
+        {
+          "id": "p2",
+          "type": "true_false",
+          "xp": 2,
+          "prompt": "True or False: The primary goal of parent-child retrieval is to provide the LLM with broader context than what was matched during the initial search.",
+          "options": [
+            {
+              "id": "opt_1",
+              "text": "True",
+              "correct": true
+            },
+            {
+              "id": "opt_2",
+              "text": "False",
+              "correct": false
+            }
+          ],
+          "explain": "The main benefit of parent-child chunking is returning the richer, larger parent context to the LLM, avoiding the cut-off sentences of small chunks."
+        },
+        {
+          "id": "p3",
+          "type": "fill_blank",
+          "xp": 2,
+          "prompt": "Fill in the missing property name used to link a child chunk to its origin.",
+          "sentence": "Every child chunk contains a parent_id to point back to the larger text block.",
+          "blank": "parent_id",
+          "words": [
+            "parent_id",
+            "summary_hash",
+            "vector_index"
+          ],
+          "explain": "Each child chunk must store a reference to its parent's unique identifier (parent_id) so the retriever can look up the larger text block when a match is found."
+        },
+        {
+          "id": "p4",
+          "type": "spot_the_ai",
+          "xp": 2,
+          "prompt": "Which explanation represents a structured programmatic workflow for indexing parent-child chunks?",
+          "options": [
+            {
+              "id": "opt_1",
+              "text": "Just copy paste the text into a single database and hope the search engine finds the right paragraph.",
+              "correct": false
+            },
+            {
+              "id": "opt_2",
+              "text": "To index: 1. Generate parent documents with unique IDs. 2. Sub-segment parents into child docs. 3. Add parent_id to child metadata. 4. Store parents in DocStore, and child embeddings in Vector DB.",
+              "correct": true
+            },
+            {
+              "id": "opt_3",
+              "text": "You write a script that merges all documents into one giant string, runs a regex search, and sends the matched line to the AI model.",
+              "correct": false
+            }
+          ],
+          "explain": "Option B is clearly AI-generated as it demonstrates a complete, programmatic steps list for indexing both child vectors and parent documents with cross-referencing IDs."
+        }
+      ]
+    },
+    {
+      "type": "boss",
+      "exercises": [
+        {
+          "id": "b1",
+          "type": "multiple_choice",
+          "xp": 5,
+          "prompt": "To build a complete parent-child retrieval system, which two storage components do you need to wire together?",
+          "options": [
+            {
+              "id": "opt_1",
+              "text": "A Vector DB for child embeddings, and a Document Store for parent text mapped by ID",
+              "correct": true
+            },
+            {
+              "id": "opt_2",
+              "text": "A single Vector DB storing only the parent chunks with no child embeddings",
+              "correct": false
+            },
+            {
+              "id": "opt_3",
+              "text": "A relational SQL database storing only raw text without any vector search",
+              "correct": false
+            },
+            {
+              "id": "opt_4",
+              "text": "A local JSON file storing children, without saving the parent chunks at all",
+              "correct": false
+            }
+          ],
+          "explain": "In a parent-child index, child chunks are stored in a vector database for quick semantic searching. Each child carries a reference (like a parent_id) pointing to its larger parent chunk stored in a separate, fast document store (like a key-value database)."
+        }
+      ]
+    }
+  ]
+}

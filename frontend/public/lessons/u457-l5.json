@@ -1,0 +1,222 @@
+{
+  "id": "u457-l5",
+  "unit": 457,
+  "day": 2290,
+  "tier": "LLM Application Engineering",
+  "tierIcon": "🔌",
+  "title": "Indexing Pipeline Failure Modes",
+  "icon": "🚨",
+  "concept": "Partial failures mid-batch, duplicate ingestion, and embedding-model mismatches across index versions.",
+  "xp": 15,
+  "hearts": 3,
+  "estMinutes": 7,
+  "segments": [
+    {
+      "type": "warmup",
+      "exercises": [
+        {
+          "id": "w1",
+          "type": "multiple_choice",
+          "xp": 1,
+          "prompt": "Why is it critical to handle document deletions in a RAG system's vector index?",
+          "options": [
+            {
+              "id": "w1",
+              "text": "To make the LLM generate text faster by reducing prompt size.",
+              "correct": false
+            },
+            {
+              "id": "w2",
+              "text": "To stop the system from retrieving obsolete information and hallucinating outdated facts.",
+              "correct": true
+            },
+            {
+              "id": "w3",
+              "text": "To change the vector dimensions of the existing embeddings.",
+              "correct": false
+            }
+          ],
+          "explain": "Removing stale content and deleted documents prevents the LLM from retrieving obsolete data and generating incorrect responses based on outdated information."
+        }
+      ]
+    },
+    {
+      "type": "teach",
+      "cards": [
+        {
+          "kind": "hook",
+          "icon": "💥",
+          "title": "When Vector Pipelines Break",
+          "body": "Building a vector search engine is great, but what happens when the API crashes halfway through your 10,000-document upload? Or when you update your AI model and suddenly all your search results turn to gibberish? Let's explore how pipelines break and how to fix them."
+        },
+        {
+          "kind": "definition",
+          "icon": "⚠️",
+          "title": "What is an Indexing Failure?",
+          "body": "An indexing pipeline failure occurs when document processing breaks mid-way. This leaves you with partially updated databases, duplicate entries, or mixed-up vector dimensions that break search accuracy."
+        },
+        {
+          "kind": "analogy",
+          "icon": "📦",
+          "title": "The Sorting Office Mix-up",
+          "body": "Imagine a post office where workers suddenly start using different-sized delivery boxes midway through the day. If some boxes are in inches and others in centimeters, they won't fit on the sorting shelves properly, causing complete chaos!"
+        },
+        {
+          "kind": "example",
+          "icon": "🧩",
+          "title": "Real-world Pipeline Clash",
+          "body": "An engineer updates their pipeline's embedding model from Ada to Cohere, but forgets to clear the vector database. Now, user queries search across incompatible vector spaces, returning random and irrelevant documents."
+        },
+        {
+          "kind": "mythbust",
+          "icon": "🧹",
+          "title": "The Myth of Auto-Cleanup",
+          "body": "Many believe that if an indexing script crashes, the database will clean itself up automatically. In reality, without explicit transaction handling or tracking IDs, you will end up with duplicate documents or half-updated indexes."
+        },
+        {
+          "kind": "visual",
+          "icon": "⚖️",
+          "title": "Consistent vs. Mismatched Vectors",
+          "body": "Comparing what happens when you keep your vector spaces consistent versus mixing them up.",
+          "compare": {
+            "left": {
+              "emoji": "📐",
+              "tag": "Consistent Space",
+              "text": "All vectors created by Model A. Match works perfectly."
+            },
+            "right": {
+              "emoji": "🌀",
+              "tag": "Mixed Space",
+              "text": "Vectors from Model A and Model B mixed. Search breaks."
+            }
+          }
+        }
+      ]
+    },
+    {
+      "type": "practice",
+      "exercises": [
+        {
+          "id": "p1",
+          "type": "multiple_choice",
+          "xp": 2,
+          "prompt": "Which of the following is the best way to prevent duplicate ingestion when running an indexing pipeline multiple times?",
+          "options": [
+            {
+              "id": "mc1",
+              "text": "Use random vector dimensions for every batch run.",
+              "correct": false
+            },
+            {
+              "id": "mc2",
+              "text": "Use deterministic document IDs or content hashes as the primary keys.",
+              "correct": true
+            },
+            {
+              "id": "mc3",
+              "text": "Manually delete the database before every single document upload.",
+              "correct": false
+            },
+            {
+              "id": "mc4",
+              "text": "Change the embedding model every time you run the script.",
+              "correct": false
+            }
+          ],
+          "explain": "Using unique document hashes (or IDs) allows the database to overwrite old versions of a document instead of creating duplicates when a batch is run multiple times."
+        },
+        {
+          "id": "p2",
+          "type": "true_false",
+          "xp": 2,
+          "prompt": "True or False: If an indexing pipeline fails mid-batch, it automatically rolls back all successfully written vectors.",
+          "options": [
+            {
+              "id": "t1",
+              "text": "True",
+              "correct": false
+            },
+            {
+              "id": "t2",
+              "text": "False",
+              "correct": true
+            }
+          ],
+          "explain": "If a batch of 100 documents fails at document 50, the first 50 remain in the database. Without proper tracking, re-running the batch will duplicate those first 50 documents."
+        },
+        {
+          "id": "p3",
+          "type": "fill_blank",
+          "xp": 2,
+          "prompt": "Fill in the missing phrase to complete the rule about vector consistency:",
+          "sentence": "You must rebuild your entire index if you change your embedding model to avoid dimension mismatches.",
+          "blank": "embedding model",
+          "words": [
+            "embedding model",
+            "chunk size",
+            "database password"
+          ],
+          "explain": "Changing the embedding model changes how the vectors are calculated. You must rebuild the index from scratch when you swap models, otherwise the vectors cannot be compared."
+        },
+        {
+          "id": "p4",
+          "type": "spot_the_ai",
+          "xp": 2,
+          "prompt": "Identify the scenario describing an embedding model mismatch failure:",
+          "options": [
+            {
+              "id": "s1",
+              "text": "Our vector database returned a 404 error because the collection name was misspelled in the config.",
+              "correct": false
+            },
+            {
+              "id": "s2",
+              "text": "The search engine returned recipe documents for coding queries because we mixed 768-dimension and 1536-dimension vectors in the same index.",
+              "correct": true
+            },
+            {
+              "id": "s3",
+              "text": "We ran out of API credits, so the document chunker stopped running after the first ten pages.",
+              "correct": false
+            }
+          ],
+          "explain": "Option B shows an AI chatbot trying to query a database that has incompatible vector spaces (models) mixed together, resulting in random nonsense because the math no longer aligns."
+        }
+      ]
+    },
+    {
+      "type": "boss",
+      "exercises": [
+        {
+          "id": "b1",
+          "type": "multiple_choice",
+          "xp": 5,
+          "prompt": "Your pipeline crashes halfway through updating an index to a new embedding model. You did not clear the old vectors first. What happens to your vector database?",
+          "options": [
+            {
+              "id": "b1",
+              "text": "The index automatically translates the old embeddings to the new model's coordinate space.",
+              "correct": false
+            },
+            {
+              "id": "b2",
+              "text": "You will get a mix of successful and failed chunks, and queries will compare incompatible vector dimensions.",
+              "correct": true
+            },
+            {
+              "id": "b3",
+              "text": "The database will reject the new batch because duplicate documents are automatically self-healing.",
+              "correct": false
+            },
+            {
+              "id": "b4",
+              "text": "The pipeline will pause itself and roll back all changes automatically without extra code.",
+              "correct": false
+            }
+          ],
+          "explain": "If you run a pipeline without transaction-like safety (such as rollback or retry states) and update the embedding model without wiping or segregating the old index, you risk leaving the index in a broken, half-updated state with incompatible vector spaces. This results in corrupt query results."
+        }
+      ]
+    }
+  ]
+}

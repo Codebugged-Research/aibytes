@@ -1,0 +1,222 @@
+{
+  "id": "u468-l2",
+  "unit": 468,
+  "day": 2342,
+  "tier": "LLM Application Engineering",
+  "tierIcon": "🔌",
+  "title": "Handling a Tool Call Request",
+  "icon": "🛠️",
+  "concept": "The server-side handler that receives arguments, executes logic, and returns a structured result.",
+  "xp": 15,
+  "hearts": 3,
+  "estMinutes": 7,
+  "segments": [
+    {
+      "type": "warmup",
+      "exercises": [
+        {
+          "id": "w1",
+          "type": "multiple_choice",
+          "xp": 1,
+          "prompt": "When you declare a tool on a server, what information do you share with the client so the model knows how to call it?",
+          "options": [
+            {
+              "id": "w_1",
+              "text": "Its name, description, and input schema.",
+              "correct": true
+            },
+            {
+              "id": "w_2",
+              "text": "The complete secret API key for database access.",
+              "correct": false
+            },
+            {
+              "id": "w_3",
+              "text": "The raw code block that executes the database query.",
+              "correct": false
+            }
+          ],
+          "explain": "In the prior lesson, we learned that declaring a tool requires specifying its name, description, and input schema so the client knows what the tool does and what parameters it accepts."
+        }
+      ]
+    },
+    {
+      "type": "teach",
+      "cards": [
+        {
+          "kind": "hook",
+          "icon": "📥",
+          "title": "From Schema to Action",
+          "body": "Declaring a tool's schema is only half the battle. Once the AI decides to use your tool, your server needs to actually run the code to get the answer. Let's learn how to catch that request and return the perfect response!"
+        },
+        {
+          "kind": "definition",
+          "icon": "⚙️",
+          "title": "What is a Tool Call Handler?",
+          "body": "A tool call handler is a server-side function that triggers when a client requests a tool execution. It unpacks the arguments provided by the client, runs the necessary code, and packages the outcome into a structured format like a text block."
+        },
+        {
+          "kind": "analogy",
+          "icon": "🍳",
+          "title": "The Kitchen Analogy",
+          "body": "Think of a tool call handler like a restaurant kitchen. The waiter brings an order ticket (the arguments) to the kitchen. The kitchen reads the ticket, cooks the meal (executes the logic), and sends the plated dish (the structured result) back to the table."
+        },
+        {
+          "kind": "example",
+          "icon": "📝",
+          "title": "A Real-World Handler in Action",
+          "body": "When a client requests 'fetch_weather' with the argument 'city: Paris', the server-side handler executes a fetch request to a weather API, gets the temperature, and returns a structured JSON response containing the text 'It is 15°C in Paris'."
+        },
+        {
+          "kind": "mythbust",
+          "icon": "🛡️",
+          "title": "Who Actually Runs the Code?",
+          "body": "You might think the LLM executes the tool code itself, but that is false! The LLM only requests the call; your server does 100% of the execution safely within your own controlled environment."
+        },
+        {
+          "kind": "visual",
+          "icon": "🔄",
+          "title": "Input vs. Output",
+          "body": "Let's compare what the client sends to the server versus what the server-side handler returns back.",
+          "compare": {
+            "left": {
+              "emoji": "📥",
+              "tag": "Input Request",
+              "text": "Tool name and a structured dictionary of arguments (like 'zipcode: 90210')."
+            },
+            "right": {
+              "emoji": "📤",
+              "tag": "Output Response",
+              "text": "Structured content blocks containing the execution results (like 'weather: sunny')."
+            }
+          }
+        }
+      ]
+    },
+    {
+      "type": "practice",
+      "exercises": [
+        {
+          "id": "p1",
+          "type": "multiple_choice",
+          "xp": 2,
+          "prompt": "What format should the tool handler use when returning a result to the client?",
+          "options": [
+            {
+              "id": "mc_1",
+              "text": "A raw, unstructured text string with no formatting.",
+              "correct": false
+            },
+            {
+              "id": "mc_2",
+              "text": "The entire server's source code files.",
+              "correct": false
+            },
+            {
+              "id": "mc_3",
+              "text": "A structured object containing an array of content blocks.",
+              "correct": true
+            },
+            {
+              "id": "mc_4",
+              "text": "A simple boolean value indicating success.",
+              "correct": false
+            }
+          ],
+          "explain": "An MCP tool handler must return a structured response containing content blocks (like text or image objects) so the client and model can parse the result properly."
+        },
+        {
+          "id": "p2",
+          "type": "true_false",
+          "xp": 2,
+          "prompt": "True or False: A tool call handler should inspect and validate the incoming arguments before executing its main logic.",
+          "options": [
+            {
+              "id": "tf_1",
+              "text": "True",
+              "correct": true
+            },
+            {
+              "id": "tf_2",
+              "text": "False",
+              "correct": false
+            }
+          ],
+          "explain": "A tool handler must validate that the incoming arguments match the schema defined by the tool to prevent errors or security issues."
+        },
+        {
+          "id": "p3",
+          "type": "fill_blank",
+          "xp": 2,
+          "prompt": "Fill in the blank: The handler extracts incoming data to perform the action.",
+          "sentence": "To run the tool logic, the handler first extracts incoming arguments sent by the client.",
+          "blank": "arguments",
+          "words": [
+            "arguments",
+            "descriptions",
+            "servers"
+          ],
+          "explain": "The handler must extract the inputs, known as arguments, sent by the client in order to perform the correct logic."
+        },
+        {
+          "id": "p4",
+          "type": "spot_the_ai",
+          "xp": 2,
+          "prompt": "Which of the following looks like an AI-generated command line response rather than a developer's tool handler snippet or system error?",
+          "options": [
+            {
+              "id": "sai_1",
+              "text": "function handle(req) { const { city } = req.params; return { content: [{ type: 'text', text: `Weather in ${city} is sunny.` }] }; }",
+              "correct": false
+            },
+            {
+              "id": "sai_2",
+              "text": "Executing system command: tool_call_handler --run-all-tasks --force-output-text",
+              "correct": true
+            },
+            {
+              "id": "sai_3",
+              "text": "Error: Handlers failed to initialize due to connection timeout.",
+              "correct": false
+            }
+          ],
+          "explain": "Option B shows a typical automated AI response simulating a direct system interaction, while Option C is a generic error. Option A shows a realistic handler code snippet parsing the arguments structure."
+        }
+      ]
+    },
+    {
+      "type": "boss",
+      "exercises": [
+        {
+          "id": "b1",
+          "type": "multiple_choice",
+          "xp": 5,
+          "prompt": "Imagine you are writing a custom MCP handler for a tool called 'calculate_tax'. When the client sends a request to call this tool, what sequence of actions does your handler perform?",
+          "options": [
+            {
+              "id": "boss_1",
+              "text": "It automatically updates the client's database without server-side permission.",
+              "correct": false
+            },
+            {
+              "id": "boss_2",
+              "text": "It reads the input arguments, runs the custom logic, and returns a structured object containing the result content.",
+              "correct": true
+            },
+            {
+              "id": "boss_3",
+              "text": "It converts the entire server code into a text file and sends it back to the client.",
+              "correct": false
+            },
+            {
+              "id": "boss_4",
+              "text": "It bypasses the schema validation entirely to speed up execution.",
+              "correct": false
+            }
+          ],
+          "explain": "When handling a tool call, you must first read the arguments, execute your custom business logic, and then format the outcome into a structure the MCP protocol requires—typically an array of content objects (like text) wrapping the result."
+        }
+      ]
+    }
+  ]
+}

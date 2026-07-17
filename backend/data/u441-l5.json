@@ -1,0 +1,222 @@
+{
+  "id": "u441-l5",
+  "unit": 441,
+  "day": 2210,
+  "tier": "LLM Application Engineering",
+  "tierIcon": "🔌",
+  "title": "Cost at Scale",
+  "icon": "💰",
+  "concept": "Estimating storage and compute cost as vector count grows from thousands to billions.",
+  "xp": 15,
+  "hearts": 3,
+  "estMinutes": 7,
+  "segments": [
+    {
+      "type": "warmup",
+      "exercises": [
+        {
+          "id": "w1",
+          "type": "multiple_choice",
+          "xp": 1,
+          "prompt": "In the previous lesson, we learned about 'tombstones' created during deletions. Why do they affect cost and performance?",
+          "options": [
+            {
+              "id": "w1",
+              "text": "They speed up search queries by acting as fast-path skip lists.",
+              "correct": false
+            },
+            {
+              "id": "w2",
+              "text": "They consume memory and slow down searches until compaction runs.",
+              "correct": true
+            },
+            {
+              "id": "w3",
+              "text": "They automatically compress neighbor vectors to save storage space.",
+              "correct": false
+            }
+          ],
+          "explain": "Tombstones are placeholders for deleted vectors that still occupy memory and slow down searches until a compaction process rebuilds the index."
+        }
+      ]
+    },
+    {
+      "type": "teach",
+      "cards": [
+        {
+          "kind": "hook",
+          "icon": "📈",
+          "title": "The Bill Shock",
+          "body": "When you build a prototype, vector search costs pennies. But as your user base grows and you index millions of documents, that tiny database can suddenly cost more than all your other servers combined if you aren't careful."
+        },
+        {
+          "kind": "definition",
+          "icon": "💵",
+          "title": "Vector Storage Economics",
+          "body": "Vector storage costs scale linearly with vector count and dimensions. When you move to billions of vectors, keeping everything in RAM becomes prohibitively expensive, forcing a trade-off between RAM (fast/expensive) and Disk (slow/cheap)."
+        },
+        {
+          "kind": "analogy",
+          "icon": "🚢",
+          "title": "The Parking Harbor Analogy",
+          "body": "Think of storing billions of vectors like parking a fleet of cargo ships. Storing them on the water (RAM) is fast but incredibly expensive, while parking them in dry dock (Disk) takes longer to get going but costs a fraction of the price."
+        },
+        {
+          "kind": "example",
+          "icon": "📊",
+          "title": "From Thousands to Billions",
+          "body": "A small application with 100,000 vectors of 1536 dimensions needs only about 600 MB of space, easily fitting in cheap RAM. A enterprise search engine with 1 billion of the same vectors requires 6 TB of raw storage, making pure RAM hosting cost thousands of dollars per month."
+        },
+        {
+          "kind": "mythbust",
+          "icon": "🚫",
+          "title": "The Compression Illusion",
+          "body": "Many developers assume vector databases are cheap because text files are small. In reality, converting text to dense high-dimensional floating-point vectors inflates the storage footprint by 10x to 100x."
+        },
+        {
+          "kind": "visual",
+          "icon": "⚖️",
+          "title": "RAM vs. Disk Trade-off",
+          "body": "Choosing where to store your vectors directly impacts your monthly cloud bill and search performance.",
+          "compare": {
+            "left": {
+              "emoji": "🧠",
+              "tag": "RAM-Only",
+              "text": "Lightning fast searches, but extremely expensive as vector count grows."
+            },
+            "right": {
+              "emoji": "💾",
+              "tag": "Disk-Backed",
+              "text": "Much cheaper to scale, but introduces disk read latency during queries."
+            }
+          }
+        }
+      ]
+    },
+    {
+      "type": "practice",
+      "exercises": [
+        {
+          "id": "p1",
+          "type": "multiple_choice",
+          "xp": 2,
+          "prompt": "If a single 1536-dimensional vector takes 6 Kilobytes of raw storage, about how much raw storage space do you need for 10 million vectors?",
+          "options": [
+            {
+              "id": "mc1",
+              "text": "Around 60 Megabytes",
+              "correct": false
+            },
+            {
+              "id": "mc2",
+              "text": "Around 6 Gigabytes",
+              "correct": false
+            },
+            {
+              "id": "mc3",
+              "text": "Around 60 Gigabytes",
+              "correct": true
+            },
+            {
+              "id": "mc4",
+              "text": "Around 6 Terabytes",
+              "correct": false
+            }
+          ],
+          "explain": "Each 1536-dimension vector stored as 32-bit (4-byte) floats takes up roughly 6 KB. Multiplying 6 KB by 10 million vectors gives approximately 60 Gigabytes of raw vector data (excluding index overhead)."
+        },
+        {
+          "id": "p2",
+          "type": "true_false",
+          "xp": 2,
+          "prompt": "True or False: Quantizing vectors to lower precision is a common strategy to reduce vector database RAM costs.",
+          "options": [
+            {
+              "id": "t1",
+              "text": "True",
+              "correct": true
+            },
+            {
+              "id": "f1",
+              "text": "False",
+              "correct": false
+            }
+          ],
+          "explain": "Scalar quantization (e.g., converting float32 to int8) reduces the size of each vector, allowing you to fit far more vectors into cheaper memory configurations."
+        },
+        {
+          "id": "p3",
+          "type": "fill_blank",
+          "xp": 2,
+          "prompt": "Fill in the blank: To save money at scale, we must move raw vectors out of memory and only load what is necessary.",
+          "sentence": "Storing every single vector in RAM becomes too expensive when scaling to billions of items.",
+          "blank": "RAM",
+          "words": [
+            "RAM",
+            "Disk",
+            "Cache"
+          ],
+          "explain": "Keeping vectors in RAM provides the lowest latency but is by far the most expensive storage medium at scale."
+        },
+        {
+          "id": "p4",
+          "type": "spot_the_ai",
+          "xp": 2,
+          "prompt": "Which explanation of vector database cost optimization was generated by an AI?",
+          "options": [
+            {
+              "id": "sai1",
+              "text": "We can reduce RAM costs by quantizing our 32-bit vectors to 8-bit integers, which cuts memory usage by 75% at the cost of slight search accuracy.",
+              "correct": false
+            },
+            {
+              "id": "sai2",
+              "text": "Our database uses quantum-entangled vector compression to store billions of vectors in zero bytes of memory while maintaining 100% search accuracy.",
+              "correct": true
+            },
+            {
+              "id": "sai3",
+              "text": "By utilizing disk-backed indexes like DiskANN, we store the full vectors on SSDs and only keep a highly compressed search graph in RAM to save on costs.",
+              "correct": false
+            }
+          ],
+          "explain": "Option B is generated by an AI because it hallucinates a nonexistent, magical 'quantum-entangled compression' technique that promises infinite scaling without loss, which is not a real database engineering concept."
+        }
+      ]
+    },
+    {
+      "type": "boss",
+      "exercises": [
+        {
+          "id": "b1",
+          "type": "multiple_choice",
+          "xp": 5,
+          "prompt": "Your startup is scaling to 1 billion vectors (each 1536 dimensions). RAM costs $5 per GB/month, while Disk costs $0.05 per GB/month. How should you architect your database to avoid a massive monthly bill?",
+          "options": [
+            {
+              "id": "b1",
+              "text": "Keep all 1 billion raw vectors in RAM to ensure sub-millisecond search speed.",
+              "correct": false
+            },
+            {
+              "id": "b2",
+              "text": "Delete the index entirely and perform raw linear scans on disk files.",
+              "correct": false
+            },
+            {
+              "id": "b3",
+              "text": "Use a disk-backed vector database and keep only the index or quantized vectors in RAM.",
+              "correct": true
+            },
+            {
+              "id": "b4",
+              "text": "Store the vectors as compressed text strings inside a standard relational database.",
+              "correct": false
+            }
+          ],
+          "explain": "Scaling to 1 billion vectors with 1536 dimensions each requires about 6 Terabytes of raw float32 data. Storing this entirely in RAM is financially ruinous for most apps. Using Disk-backed vector storage with a small RAM cache for the index is the industry standard for keeping costs manageable at this scale."
+        }
+      ]
+    }
+  ]
+}

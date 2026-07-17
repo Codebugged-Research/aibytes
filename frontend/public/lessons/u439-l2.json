@@ -1,0 +1,222 @@
+{
+  "id": "u439-l2",
+  "unit": 439,
+  "day": 2197,
+  "tier": "LLM Application Engineering",
+  "tierIcon": "🔌",
+  "title": "Build Time vs Query Time",
+  "icon": "⏱️",
+  "concept": "Some indexes are expensive to build but cheap to query, and vice versa; matching index choice to workload.",
+  "xp": 15,
+  "hearts": 3,
+  "estMinutes": 7,
+  "segments": [
+    {
+      "type": "warmup",
+      "exercises": [
+        {
+          "id": "w1",
+          "type": "multiple_choice",
+          "xp": 1,
+          "prompt": "In our last lesson, we compared index types. Which index provides perfect search accuracy (recall) but scales poorly in query speed as your data grows?",
+          "options": [
+            {
+              "id": "opt1",
+              "text": "Quantized Index (IVF-PQ)",
+              "correct": false
+            },
+            {
+              "id": "opt2",
+              "text": "HNSW Graph Index",
+              "correct": false
+            },
+            {
+              "id": "opt3",
+              "text": "Flat Index",
+              "correct": true
+            }
+          ],
+          "explain": "A Flat Index does not compress or structure the vectors, meaning it retains 100% accuracy (recall) at the expense of query speed and high memory footprint for large datasets."
+        }
+      ]
+    },
+    {
+      "type": "teach",
+      "cards": [
+        {
+          "kind": "hook",
+          "icon": "⚖️",
+          "title": "The Vector Tradeoff",
+          "body": "When setting up a vector database for your LLM, you cannot have it all. An index that answers user questions in milliseconds might take hours to build, while an index that sets up instantly might crawl when searched."
+        },
+        {
+          "kind": "definition",
+          "icon": "⏳",
+          "title": "Build Time vs. Query Time",
+          "body": "Build time is the upfront work required to construct and organize an index, like clustering vectors or linking graphs. Query time is the speed at which the system searches that index to return matching documents to a user."
+        },
+        {
+          "kind": "analogy",
+          "icon": "📖",
+          "title": "The Dictionary Analogy",
+          "body": "Think of a dictionary. Writing it from scratch and sorting every single word alphabetically takes a long time. However, once it is finished, finding a word takes only seconds."
+        },
+        {
+          "kind": "example",
+          "icon": "💡",
+          "title": "Real-world Workloads",
+          "body": "A real-time news search engine might use a flat index because articles are added every second and need to be searchable instantly. A static help-desk bot can afford to spend 3 hours building an HNSW graph because users expect sub-millisecond query replies."
+        },
+        {
+          "kind": "mythbust",
+          "icon": "🕵️",
+          "title": "The Build Time Trap",
+          "body": "It is a mistake to think a slower build time is always bad. If your data rarely changes but users query it millions of times a day, a slow, high-quality build is actually your best investment."
+        },
+        {
+          "kind": "visual",
+          "icon": "📊",
+          "title": "Index Spectrum Comparison",
+          "body": "Compare the two extreme ends of the index building spectrum to choose the right strategy.",
+          "compare": {
+            "left": {
+              "emoji": "📂",
+              "tag": "Flat Index",
+              "text": "Zero build time, but slow queries (scans everything)."
+            },
+            "right": {
+              "emoji": "🕸️",
+              "tag": "HNSW Graph",
+              "text": "Slow build time, but ultra-fast queries (skips most data)."
+            }
+          }
+        }
+      ]
+    },
+    {
+      "type": "practice",
+      "exercises": [
+        {
+          "id": "p1",
+          "type": "multiple_choice",
+          "xp": 2,
+          "prompt": "Which of the following index types is notoriously expensive and slow to build, but offers exceptionally fast query times?",
+          "options": [
+            {
+              "id": "opt1",
+              "text": "A Flat Index, which requires no structural setup.",
+              "correct": false
+            },
+            {
+              "id": "opt2",
+              "text": "An HNSW Graph Index, which requires building complex multi-layer connections.",
+              "correct": true
+            },
+            {
+              "id": "opt3",
+              "text": "A random lookup index with no mathematical relations.",
+              "correct": false
+            },
+            {
+              "id": "opt4",
+              "text": "A simple key-value store index.",
+              "correct": false
+            }
+          ],
+          "explain": "HNSW indexes require calculating and linking multiple layers of nearest-neighbor graphs for every vector, making the build phase highly computationally expensive, even though searching it later is extremely fast."
+        },
+        {
+          "id": "p2",
+          "type": "true_false",
+          "xp": 2,
+          "prompt": "True or False: A flat index has a build time of practically zero, but has slow, O(N) query times.",
+          "options": [
+            {
+              "id": "opt1",
+              "text": "True",
+              "correct": true
+            },
+            {
+              "id": "opt2",
+              "text": "False",
+              "correct": false
+            }
+          ],
+          "explain": "Flat indexes have zero build time because they just store the vectors as they are, but they have the slowest query times because they must search through every single vector one-by-one."
+        },
+        {
+          "id": "p3",
+          "type": "fill_blank",
+          "xp": 2,
+          "prompt": "Fill in the blank to describe the best workload type for a slow-build, fast-query index:",
+          "sentence": "A slow-build but fast-query index is perfect for a read-heavy application.",
+          "blank": "read-heavy",
+          "words": [
+            "read-heavy",
+            "write-heavy",
+            "real-time"
+          ],
+          "explain": "For read-heavy workloads where data changes rarely, we want to spend extra time building a highly optimized index so that users get near-instant query results."
+        },
+        {
+          "id": "p4",
+          "type": "spot_the_ai",
+          "xp": 2,
+          "prompt": "Identify the AI-generated explanation of index tradeoffs:",
+          "options": [
+            {
+              "id": "opt1",
+              "text": "We chose a flat index because we add new vectors every minute, and we couldn't wait for a graph to rebuild.",
+              "correct": false
+            },
+            {
+              "id": "opt2",
+              "text": "Our users were complaining about slow search speeds, so we switched to HNSW even though it takes hours to compile.",
+              "correct": false
+            },
+            {
+              "id": "opt3",
+              "text": "The temporal complexity of index construction exhibits an inverse relationship with subsequent query latency profiles.",
+              "correct": true
+            }
+          ],
+          "explain": "Option C sounds like an AI-generated generic definition of vector indexing tradeoffs, focusing on the mathematical relationship between construction complexity and query execution speed."
+        }
+      ]
+    },
+    {
+      "type": "boss",
+      "exercises": [
+        {
+          "id": "b1",
+          "type": "multiple_choice",
+          "xp": 5,
+          "prompt": "Your LLM application has a read-heavy workload: users make millions of queries per hour, but the knowledge base only updates once a week. Which indexing strategy best optimizes this system?",
+          "options": [
+            {
+              "id": "opt1",
+              "text": "Increase the number of IVF clusters during build time to narrow down the search space for queries.",
+              "correct": true
+            },
+            {
+              "id": "opt2",
+              "text": "Rebuild the index from scratch on every single incoming user query.",
+              "correct": false
+            },
+            {
+              "id": "opt3",
+              "text": "Switch to a flat index, because flat indexes have the fastest query speeds for massive datasets.",
+              "correct": false
+            },
+            {
+              "id": "opt4",
+              "text": "Disable indexing entirely to ensure queries do not have to search through clusters.",
+              "correct": false
+            }
+          ],
+          "explain": "An IVF (Inverted File) index partitions the vector space into clusters. If you have a read-heavy workload where queries must be lightning-fast, spending more time upfront building a highly optimized index is the best strategy. Creating more clusters (higher list count) takes longer to train and build, but dramatically narrows down the search space during queries, speeding up search time."
+        }
+      ]
+    }
+  ]
+}

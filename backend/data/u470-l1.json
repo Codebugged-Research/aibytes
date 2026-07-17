@@ -1,0 +1,222 @@
+{
+  "id": "u470-l1",
+  "unit": 470,
+  "day": 2351,
+  "tier": "LLM Application Engineering",
+  "tierIcon": "🔌",
+  "title": "Function Calling, Revisited",
+  "icon": "📞",
+  "concept": "The model-native mechanism of declaring functions in a request and receiving a structured call-intent back.",
+  "xp": 15,
+  "hearts": 3,
+  "estMinutes": 7,
+  "segments": [
+    {
+      "type": "warmup",
+      "exercises": [
+        {
+          "id": "w1",
+          "type": "multiple_choice",
+          "xp": 1,
+          "prompt": "To build advanced AI agents, what must we enable LLMs to do beyond simply generating text responses?",
+          "options": [
+            {
+              "id": "w_a",
+              "text": "Generate highly creative poetry and stories",
+              "correct": false
+            },
+            {
+              "id": "w_b",
+              "text": "Connect to external databases, APIs, and local systems",
+              "correct": true
+            },
+            {
+              "id": "w_c",
+              "text": "Compress text documents into smaller file sizes",
+              "correct": false
+            }
+          ],
+          "explain": "In modern AI systems, we often need LLMs to fetch live data or take actions, which requires them to interact with external APIs and custom code."
+        }
+      ]
+    },
+    {
+      "type": "teach",
+      "cards": [
+        {
+          "kind": "hook",
+          "icon": "⚡",
+          "title": "Connecting LLMs to the Real World",
+          "body": "Imagine if ChatGPT could actually interact with your local files or trigger real actions on your computer. Before we explore the brand-new Model Context Protocol (MCP), we need to understand how LLMs natively decide to call functions in the first place."
+        },
+        {
+          "kind": "definition",
+          "icon": "🎯",
+          "title": "What is Function Calling?",
+          "body": "Function calling is a model-native mechanism where you describe tools (using JSON schemas) in your request. The LLM then returns a structured call-intent—a clean JSON object detailing which function to run and with what parameters—instead of a plain text response."
+        },
+        {
+          "kind": "analogy",
+          "icon": "🛠️",
+          "title": "The Toolbelt Analogy",
+          "body": "Think of function calling like giving a smart assistant a toolbelt. Instead of trying to cut a board with its bare hands, the assistant looks at its belt, picks the saw, and hands it to you to make the cut."
+        },
+        {
+          "kind": "example",
+          "icon": "🌦️",
+          "title": "Function Calling in Action",
+          "body": "If you declare a tool called 'get_weather(location)', and the user asks 'Is it raining in Paris?', the model won't guess the weather. It will return a structured JSON response: '{ \"name\": \"get_weather\", \"arguments\": { \"location\": \"Paris\" } }'."
+        },
+        {
+          "kind": "mythbust",
+          "icon": "🛑",
+          "title": "LLMs Don't Run the Code!",
+          "body": "Many beginners think the LLM directly runs your code. In reality, the LLM only generates the text instructions (JSON) representing the intent to call a function. Your backend code is still the one that actually executes the function."
+        },
+        {
+          "kind": "visual",
+          "icon": "👁️",
+          "title": "The Separation of Roles",
+          "body": "Traditional function calling separates the brain (the LLM deciding what to do) from the hands (your application executing the tool).",
+          "compare": {
+            "left": {
+              "emoji": "🧠",
+              "tag": "LLM's Role",
+              "text": "Reads user query, matches tool description, and returns JSON call-intent."
+            },
+            "right": {
+              "emoji": "⚙️",
+              "tag": "App's Role",
+              "text": "Receives JSON, runs the actual database/API code, and sends back the result."
+            }
+          }
+        }
+      ]
+    },
+    {
+      "type": "practice",
+      "exercises": [
+        {
+          "id": "p1",
+          "type": "multiple_choice",
+          "xp": 2,
+          "prompt": "How does an LLM learn about the tools it is allowed to use during a conversation?",
+          "options": [
+            {
+              "id": "q1_a",
+              "text": "Upload the compiled binary code of your tool to the model's server",
+              "correct": false
+            },
+            {
+              "id": "q1_b",
+              "text": "Declare the function's name, description, and parameter types in the API request",
+              "correct": true
+            },
+            {
+              "id": "q1_c",
+              "text": "Train a custom model from scratch on your function's source code",
+              "correct": false
+            },
+            {
+              "id": "q1_d",
+              "text": "Ask the model to guess what tools you have installed on your computer",
+              "correct": false
+            }
+          ],
+          "explain": "To let an LLM know a tool exists, you must provide a detailed declaration (usually a JSON schema) describing what the function does and what arguments it accepts."
+        },
+        {
+          "id": "p2",
+          "type": "true_false",
+          "xp": 2,
+          "prompt": "True or False: When you define a function for an LLM, the model automatically executes the API database query on its own.",
+          "options": [
+            {
+              "id": "tf_true",
+              "text": "True",
+              "correct": false
+            },
+            {
+              "id": "tf_false",
+              "text": "False",
+              "correct": true
+            }
+          ],
+          "explain": "An LLM does not have direct access to your local database or APIs unless you define tools for it and run the code that connects them."
+        },
+        {
+          "id": "p3",
+          "type": "fill_blank",
+          "xp": 2,
+          "prompt": "Fill in the missing term to describe what the LLM returns when it wants to use a tool:",
+          "sentence": "The LLM outputs a structured call-intent instead of running the code directly.",
+          "blank": "call-intent",
+          "words": [
+            "call-intent",
+            "source-code",
+            "database-query"
+          ],
+          "explain": "The model outputs a structured call-intent, which is a JSON object containing the function name and arguments, rather than executing the code itself."
+        },
+        {
+          "id": "p4",
+          "type": "spot_the_ai",
+          "xp": 2,
+          "prompt": "Identify the output generated by an LLM performing a structured function call:",
+          "options": [
+            {
+              "id": "sai_1",
+              "text": "Sure! I will search for the weather in Tokyo right now. Please wait a moment.",
+              "correct": false
+            },
+            {
+              "id": "sai_2",
+              "text": "{ \"name\": \"fetch_weather\", \"arguments\": { \"city\": \"Tokyo\" } }",
+              "correct": true
+            },
+            {
+              "id": "sai_3",
+              "text": "I checked my internal knowledge and Tokyo is usually warm this time of year.",
+              "correct": false
+            }
+          ],
+          "explain": "The second response is structured JSON containing the precise name and arguments of the function, which is the signature output of an LLM using function calling. The others are plain text conversational responses."
+        }
+      ]
+    },
+    {
+      "type": "boss",
+      "exercises": [
+        {
+          "id": "b1",
+          "type": "multiple_choice",
+          "xp": 5,
+          "prompt": "When an LLM decides to use a declared function to answer a user's question, what is its actual output?",
+          "options": [
+            {
+              "id": "q_b1",
+              "text": "The model automatically runs the Python or JavaScript code on its own servers",
+              "correct": false
+            },
+            {
+              "id": "q_b2",
+              "text": "The model returns a JSON payload containing the function name and argument values for you to run",
+              "correct": true
+            },
+            {
+              "id": "q_b3",
+              "text": "The model rewrites its own neural network weights to learn the new action",
+              "correct": false
+            },
+            {
+              "id": "q_b4",
+              "text": "The model executes the code inside a secure sandbox environment automatically",
+              "correct": false
+            }
+          ],
+          "explain": "In traditional function calling, the model does not execute code. It reads the user's prompt, matches it to the schemas you provided, and returns a structured call-intent (JSON payload) specifying which function to run and with what arguments. Your application code must then execute that function."
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,222 @@
+{
+  "id": "u423-l5",
+  "unit": 423,
+  "day": 2120,
+  "tier": "LLM Application Engineering",
+  "tierIcon": "🔌",
+  "title": "Caching Cost & Latency Tradeoffs",
+  "icon": "⚖️",
+  "concept": "Quantifying the savings from cached input tokens versus the overhead of cache management.",
+  "xp": 15,
+  "hearts": 3,
+  "estMinutes": 7,
+  "segments": [
+    {
+      "type": "warmup",
+      "exercises": [
+        {
+          "id": "w1",
+          "type": "multiple_choice",
+          "xp": 1,
+          "prompt": "Quick recap: what usually breaks a cache hit, according to the last lesson?",
+          "options": [
+            {
+              "id": "a",
+              "text": "Any change earlier in the prompt's prefix, even a tiny one",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "Using the cache too many times in a row",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "Making the output shorter than expected",
+              "correct": false
+            }
+          ],
+          "explain": "Cache invalidation happens when anything earlier in the prefix changes — even a single token difference near the start can break the match and force a fresh (non-cached) run for everything after it."
+        }
+      ]
+    },
+    {
+      "type": "teach",
+      "cards": [
+        {
+          "kind": "hook",
+          "icon": "💸",
+          "title": "Is Caching Actually Worth It?",
+          "body": "Caching sounds like a free win — cheaper tokens, faster responses. But every cache has hidden costs: setup time, storage, and the risk of invalidation wiping it out. Today we learn how to actually weigh the savings against the overhead."
+        },
+        {
+          "kind": "definition",
+          "icon": "⚖️",
+          "title": "What's the Tradeoff?",
+          "body": "Caching saves money because cached input tokens are billed at a steep discount compared to fresh ones. But caching isn't free — there's overhead: extra latency on the first (cold) call, memory/storage costs, and engineering complexity to keep the cache valid. The tradeoff is: does the savings from reuse outweigh that overhead?"
+        },
+        {
+          "kind": "analogy",
+          "icon": "🥡",
+          "title": "Meal Prep vs. Cooking Fresh",
+          "body": "Prepping a big batch of rice on Sunday saves time all week — but only if you actually eat rice every day. If you only eat it once, the extra prep work wasn't worth it. Caching prompt tokens is the same: it saves money and time ONLY if you reuse that prefix often enough to make the setup worthwhile."
+        },
+        {
+          "kind": "example",
+          "icon": "🧮",
+          "title": "Do the Math",
+          "body": "Say your fresh input tokens cost $3 per million, but cached tokens cost $0.30 per million (a 90% discount). If you send the same 2,000-token system prompt 500 times a day, that's 1,000,000 tokens — normally $3, but cached it's about $0.30 plus a tiny one-time write cost. Multiply that daily savings by a whole month, and it adds up fast, especially at scale."
+        },
+        {
+          "kind": "mythbust",
+          "icon": "🚫",
+          "title": "Myth: Caching Always Makes Things Cheaper AND Faster",
+          "body": "Not always! The very first call that creates the cache (a 'cache write') can be slightly slower or cost slightly more than a normal call. If your prompt rarely repeats, you pay that overhead repeatedly without ever collecting the reuse savings — a net loss."
+        },
+        {
+          "kind": "visual",
+          "icon": "📊",
+          "title": "Savings vs. Overhead",
+          "body": "Picture two bars: one for token savings from reuse, one for overhead cost of maintaining the cache. Caching is worth it only when the savings bar is taller.",
+          "compare": {
+            "left": {
+              "emoji": "📈",
+              "tag": "High Reuse",
+              "text": "Same 3,000-token prefix used 200x/day → tiny overhead, huge discount stacking up — clear win"
+            },
+            "right": {
+              "emoji": "📉",
+              "tag": "Low Reuse",
+              "text": "Prefix changes almost every call → you pay write costs repeatedly, rarely hit the discount — likely a loss"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "type": "practice",
+      "exercises": [
+        {
+          "id": "p1",
+          "type": "multiple_choice",
+          "xp": 2,
+          "prompt": "A team caches a 4,000-token prompt prefix, but their app's prefix changes on almost every single request due to dynamic content near the start. What's most likely true?",
+          "options": [
+            {
+              "id": "a",
+              "text": "They'll get massive savings because the prefix is long",
+              "correct": false
+            },
+            {
+              "id": "b",
+              "text": "They'll rarely benefit, since a changing prefix invalidates the cache almost every time, so they mostly pay cache-write overhead without reuse savings",
+              "correct": true
+            },
+            {
+              "id": "c",
+              "text": "Caching always beats no caching regardless of reuse rate",
+              "correct": false
+            },
+            {
+              "id": "d",
+              "text": "The cache will automatically fix the changing content to keep it valid",
+              "correct": false
+            }
+          ],
+          "explain": "Caching's value comes from REUSE. If the prefix keeps changing (as we learned in the invalidation lesson), the cache mostly misses — meaning they pay the write cost over and over but rarely collect the cheaper cached-read discount. Long prefixes only pay off when they're stable and reused often."
+        },
+        {
+          "id": "p2",
+          "type": "true_false",
+          "xp": 2,
+          "prompt": "True or False: Even with caching enabled, the very first request that writes to the cache typically doesn't get the full cached-token discount.",
+          "options": [
+            {
+              "id": "a",
+              "text": "True",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "False",
+              "correct": false
+            }
+          ],
+          "explain": "True. The first call has to actually create the cache entry (a 'cache write'), which isn't the same as a cache hit. Only requests AFTER that, which reuse the same prefix, get the cheaper cached-read pricing."
+        },
+        {
+          "id": "p3",
+          "type": "fill_blank",
+          "xp": 2,
+          "prompt": "Fill in the blank:",
+          "sentence": "Caching only pays off when the same prefix is reused often enough to outweigh the overhead of the cache write.",
+          "blank": "overhead",
+          "words": [
+            "overhead",
+            "output",
+            "latency"
+          ],
+          "explain": "The word 'overhead' refers to the extra cost of creating and maintaining the cache. If reuse doesn't happen often enough, that overhead outweighs the savings — making caching a net loss."
+        },
+        {
+          "id": "p4",
+          "type": "spot_the_ai",
+          "xp": 2,
+          "prompt": "Which of these three cost explanations was most likely AI-generated filler — technically-worded but actually vague and unhelpful for decision-making?",
+          "options": [
+            {
+              "id": "a",
+              "text": "'Caching leverages advanced optimization paradigms to holistically enhance token efficiency across the request lifecycle.'",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "'If your fixed prefix repeats 100+ times a day, the discounted cached tokens will likely save more than the one-time write cost.'",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "'Compare fresh-token price times prefix length against cached-token price times prefix length, times how many times you reuse it, to see your break-even point.'",
+              "correct": false
+            }
+          ],
+          "explain": "Option A is buzzword-heavy ('leverages', 'paradigms', 'holistically') but says nothing concrete about numbers, reuse, or tradeoffs — a classic sign of AI-generated filler that sounds smart but doesn't help you actually decide anything. The other two give real, usable reasoning."
+        }
+      ]
+    },
+    {
+      "type": "boss",
+      "exercises": [
+        {
+          "id": "b1",
+          "type": "multiple_choice",
+          "xp": 5,
+          "prompt": "Your app sends a 6,000-token system prompt + tool schema on every request, followed by a short unique user question. You get 1,000 requests per day, and cached tokens cost far less than fresh ones. What's the smartest way to think about whether caching helps here?",
+          "options": [
+            {
+              "id": "a",
+              "text": "Caching never helps unless the whole prompt including the user question is identical every time",
+              "correct": false
+            },
+            {
+              "id": "b",
+              "text": "Since the 6,000-token prefix repeats across all 1,000 requests, caching it turns almost all of that cost into discounted cached tokens, while only the short unique question stays full price",
+              "correct": true
+            },
+            {
+              "id": "c",
+              "text": "Caching only matters for output tokens, not input tokens, so this setup won't benefit",
+              "correct": false
+            },
+            {
+              "id": "d",
+              "text": "You should avoid caching here because the user question changes every request, invalidating the whole prompt",
+              "correct": false
+            }
+          ],
+          "explain": "The key insight of this whole unit: caching works on the shared, unchanging PREFIX, not the entire request. Here, the 6,000-token system prompt/tool schema is identical across all 1,000 calls, so it's a perfect caching candidate — it gets stored once and reused (at a steep discount) again and again. Only the small unique tail (the user's question) needs full-price processing each time. The math clearly favors caching: huge repeated cost turned cheap, tiny variable cost stays as-is. That's the tradeoff to always check — repetition volume vs. management overhead — before deciding to cache. You've completed this unit on Prompt & Context Caching!"
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,222 @@
+{
+  "id": "u453-l4",
+  "unit": 453,
+  "day": 2269,
+  "tier": "LLM Application Engineering",
+  "tierIcon": "🔌",
+  "title": "RRF vs Weighted Score Fusion",
+  "icon": "⚖️",
+  "concept": "Comparing RRF's simplicity and robustness against a tuned weighted-score combination approach.",
+  "xp": 15,
+  "hearts": 3,
+  "estMinutes": 7,
+  "segments": [
+    {
+      "type": "warmup",
+      "exercises": [
+        {
+          "id": "w1",
+          "type": "multiple_choice",
+          "xp": 1,
+          "prompt": "How does RRF solve the problem of comparing scores from different retrieval models?",
+          "options": [
+            {
+              "id": "w_1",
+              "text": "It converts rank positions into high-dimensional vector embeddings.",
+              "correct": false
+            },
+            {
+              "id": "w_2",
+              "text": "It uses rank order instead of raw scores to sidestep incompatible score scales.",
+              "correct": true
+            },
+            {
+              "id": "w_3",
+              "text": "It averages the raw scores to find a universal scale.",
+              "correct": false
+            }
+          ],
+          "explain": "RRF uses rank position instead of raw scores, meaning we don't have to worry about scale differences between sparse (BM25) and dense (vector) retrievers."
+        }
+      ]
+    },
+    {
+      "type": "teach",
+      "cards": [
+        {
+          "kind": "hook",
+          "icon": "🌡️",
+          "title": "The Calibration Trap",
+          "body": "Imagine having to re-calibrate your thermometer every time the weather changes. That's what maintaining a weighted search system feels like when you update your models!"
+        },
+        {
+          "kind": "definition",
+          "icon": "⚖️",
+          "title": "RRF vs Weighted Fusion",
+          "body": "Weighted Score Fusion combines search results by multiplying raw scores by set weights. Reciprocal Rank Fusion (RRF) bypasses raw scores entirely, blending results solely based on their relative rank positions."
+        },
+        {
+          "kind": "analogy",
+          "icon": "🏆",
+          "title": "The Sports Tournament Analogy",
+          "body": "Weighted fusion is like hiring judges who score on different rubrics and trying to scale their numbers fairly. RRF is like having a playoff bracket where only who beats whom matters, completely bypassing the scale problem."
+        },
+        {
+          "kind": "example",
+          "icon": "📝",
+          "title": "A Tale of Two Systems",
+          "body": "A weighted system might combine BM25 and vector search using the formula (0.3 * BM25_score) + (0.7 * Vector_score). RRF simply looks at a document's position (e.g., 2nd in BM25, 5th in vector) and sums their reciprocal ranks."
+        },
+        {
+          "kind": "mythbust",
+          "icon": "🛡️",
+          "title": "Is Weighted Always Better?",
+          "body": "While weighted score fusion can theoretically be tuned to outperform RRF on a specific dataset, it is highly fragile. In practice, RRF's plug-and-play simplicity often matches or beats it over time as data changes."
+        },
+        {
+          "kind": "visual",
+          "icon": "📊",
+          "title": "Tuning vs Simplicity",
+          "body": "Weighted fusion depends on fragile numbers that change easily, whereas RRF relies on stable, scale-free rankings.",
+          "compare": {
+            "left": {
+              "emoji": "🎛️",
+              "tag": "Weighted Fusion",
+              "text": "Fragile scores, requires constant tuning when models change."
+            },
+            "right": {
+              "emoji": "📋",
+              "tag": "RRF",
+              "text": "Robust ranks, works out-of-the-box with any retriever."
+            }
+          }
+        }
+      ]
+    },
+    {
+      "type": "practice",
+      "exercises": [
+        {
+          "id": "p1",
+          "type": "multiple_choice",
+          "xp": 2,
+          "prompt": "What is a major requirement of Weighted Score Fusion that RRF completely avoids?",
+          "options": [
+            {
+              "id": "mc_1",
+              "text": "It uses ranks instead of raw scores.",
+              "correct": false
+            },
+            {
+              "id": "mc_2",
+              "text": "It requires normalizing raw scores to a common scale.",
+              "correct": true
+            },
+            {
+              "id": "mc_3",
+              "text": "It completely ignores the scores of the retriever.",
+              "correct": false
+            },
+            {
+              "id": "mc_4",
+              "text": "It only works with one retrieval system at a time.",
+              "correct": false
+            }
+          ],
+          "explain": "Weighted score fusion requires raw scores to be normalized to the same scale first (e.g., between 0 and 1) so that one retriever's scores don't skew the final math."
+        },
+        {
+          "id": "p2",
+          "type": "true_false",
+          "xp": 2,
+          "prompt": "True or False: Weighted score fusion is more robust than RRF when updating search models because it doesn't need retuning.",
+          "options": [
+            {
+              "id": "tf_1",
+              "text": "True",
+              "correct": false
+            },
+            {
+              "id": "tf_2",
+              "text": "False",
+              "correct": true
+            }
+          ],
+          "explain": "Weighted score fusion is fragile because a change in one model's score distribution will break the weights, requiring developer intervention to retune."
+        },
+        {
+          "id": "p3",
+          "type": "fill_blank",
+          "xp": 2,
+          "prompt": "Fill in the blank to complete the contrast between RRF and weighted fusion.",
+          "sentence": "RRF is highly robust because it does not require tuning complex parameters.",
+          "blank": "parameters",
+          "words": [
+            "parameters",
+            "servers",
+            "indices"
+          ],
+          "explain": "Unlike weighted score fusion which has multiple sensitive weights (parameters) to tune, RRF works robustly without complex parameter tuning."
+        },
+        {
+          "id": "p4",
+          "type": "spot_the_ai",
+          "xp": 2,
+          "prompt": "Identify the AI-generated description of weighted score fusion.",
+          "options": [
+            {
+              "id": "sai_1",
+              "text": "Weighted score fusion requires manually tuning weights whenever you add a new database.",
+              "correct": false
+            },
+            {
+              "id": "sai_2",
+              "text": "Weighted score fusion demands the mechanical execution of scaling algorithms to calibrate raw metrics.",
+              "correct": true
+            },
+            {
+              "id": "sai_3",
+              "text": "RRF simplifies merging because it ignores the actual score numbers.",
+              "correct": false
+            }
+          ],
+          "explain": "The second option is AI-generated and uses overly complex, slightly unnatural phrasing ('the mechanical execution of scaling algorithms') to describe a simple setup process."
+        }
+      ]
+    },
+    {
+      "type": "boss",
+      "exercises": [
+        {
+          "id": "b1",
+          "type": "multiple_choice",
+          "xp": 5,
+          "prompt": "Imagine you just replaced your keyword search engine with a brand new vector model. Why is Reciprocal Rank Fusion (RRF) easier to maintain here than Weighted Score Fusion?",
+          "options": [
+            {
+              "id": "opt_1",
+              "text": "Weighted score fusion automatically adapts to new models without retuning.",
+              "correct": false
+            },
+            {
+              "id": "opt_2",
+              "text": "RRF requires retraining a neural network every time you add a document.",
+              "correct": false
+            },
+            {
+              "id": "opt_3",
+              "text": "RRF works out-of-the-box without recalculating weights when you upgrade search models.",
+              "correct": true
+            },
+            {
+              "id": "opt_4",
+              "text": "Weighted score fusion is immune to scale changes when swapping retrieval algorithms.",
+              "correct": false
+            }
+          ],
+          "explain": "Weighted score fusion requires recalculating weights and re-normalizing scores whenever a model or index changes. RRF only needs the final rank order, making it incredibly robust to system updates without manual retuning."
+        }
+      ]
+    }
+  ]
+}

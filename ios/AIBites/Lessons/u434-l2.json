@@ -1,0 +1,222 @@
+{
+  "id": "u434-l2",
+  "unit": 434,
+  "day": 2172,
+  "tier": "LLM Application Engineering",
+  "tierIcon": "🔌",
+  "title": "Table-Aware Extraction",
+  "icon": "🕸️",
+  "concept": "Converting tables to markdown or a row-per-chunk representation that preserves structure for retrieval.",
+  "xp": 15,
+  "hearts": 3,
+  "estMinutes": 7,
+  "segments": [
+    {
+      "type": "warmup",
+      "exercises": [
+        {
+          "id": "w1",
+          "type": "multiple_choice",
+          "xp": 1,
+          "prompt": "Why does naive chunking (splitting text by character limits) fail when handling limits) fail when it like plain paragraphs) break tables?",
+          "options": [
+            {
+              "id": "faster_token",
+              "text": "It uses too many tokens compared to images.",
+              "correct": false
+            },
+            {
+              "id": "scramble_relations",
+              "text": "It splits columns and rows apart, destroying their logical relationships.",
+              "correct": true
+            },
+            {
+              "id": "duplicate_text",
+              "text": "It duplicates the data, leading to double-counting.",
+              "correct": false
+            }
+          ],
+          "explain": "Splitting tables purely by character limits cuts off cells mid-row and separates column headers from their values, destroying the logical connections between data points."
+        }
+      ]
+    },
+    {
+      "type": "teach",
+      "cards": [
+        {
+          "kind": "hook",
+          "icon": "🔍",
+          "title": "Don't Shred Your Data",
+          "body": "When standard text splitters chop up a PDF, they completely scramble tables, turning columns into meaningless, disjointed fragments. To search and retrieve table data correctly, we need an extraction method that respects the grid."
+        },
+        {
+          "kind": "definition",
+          "icon": "📊",
+          "title": "What is Table-Aware Extraction?",
+          "body": "Table-Aware Extraction means identifying tabular structures in a document and converting them into formats like Markdown tables or row-by-row text chunks. This preserves the relationships between headers, columns, and rows, making it easy for search systems to query the data accurately."
+        },
+        {
+          "kind": "analogy",
+          "icon": "📄",
+          "title": "The Spreadsheet Scroll",
+          "body": "Think of a table like a neatly organized spreadsheet grid. Splitting it by character count is like running it through a paper shredder. Converting it to Markdown is like printing it onto a clean scroll where vertical lines are replaced with simple pipes (|) so you can still read it top-to-bottom without losing the grid structure."
+        },
+        {
+          "kind": "example",
+          "icon": "💡",
+          "title": "Markdown in Action",
+          "body": "If you extract a clean Markdown table, a row like '| Product A | $50 | Out of Stock |' remains grouped together. The AI can easily associate 'Product A' with the price '$50' and status 'Out of Stock' because they inhabit the same structural line."
+        },
+        {
+          "kind": "mythbust",
+          "icon": "🚫",
+          "title": "LLMs Aren't Mind Readers",
+          "body": "Many believe that LLMs can automatically reconstruct scrambled table data if you just feed them raw text. In reality, once column relationships are lost during chunking, the LLM will struggle to guess which number belonged to which header. Preserving the structure upfront is essential."
+        },
+        {
+          "kind": "visual",
+          "icon": "👁️",
+          "title": "Visualizing Table Preservation",
+          "body": "See how naive chunking scrambles columns, whereas structured table extraction keeps columns aligned side-by-side.",
+          "compare": {
+            "left": {
+              "emoji": "❌",
+              "tag": "Naive Chunking",
+              "text": "Headers and cells are split into separate lines, losing track of which number belongs to which label."
+            },
+            "right": {
+              "emoji": "✅",
+              "tag": "Table-Aware Extraction",
+              "text": "Data is stored in Markdown rows, keeping headers and values cleanly linked together."
+            }
+          }
+        }
+      ]
+    },
+    {
+      "type": "practice",
+      "exercises": [
+        {
+          "id": "p1",
+          "type": "multiple_choice",
+          "xp": 2,
+          "prompt": "Why is keeping tables in a structured format (like Markdown) better than using a naive character splitter?",
+          "options": [
+            {
+              "id": "size_only",
+              "text": "It allows us to make the chunks much smaller than standard text paragraphs.",
+              "correct": false
+            },
+            {
+              "id": "preserve_relation",
+              "text": "It prevents column values from being separated from their row neighbors and headers.",
+              "correct": true
+            },
+            {
+              "id": "no_formatting",
+              "text": "It removes all formatting so the LLM only has to read numbers.",
+              "correct": false
+            },
+            {
+              "id": "speed_up",
+              "text": "It speeds up the document parsing process by ignoring the text outside of tables.",
+              "correct": false
+            }
+          ],
+          "explain": "Standard character splitters do not understand table cells or rows, meaning they will cut through columns arbitrarily and destroy the context. Table-aware splitters keep rows or whole tables intact."
+        },
+        {
+          "id": "p2",
+          "type": "true_false",
+          "xp": 2,
+          "prompt": "True or False: Simply converting a table to Markdown guarantees that it will never exceed your maximum vector chunk size, regardless of how large the table is.",
+          "options": [
+            {
+              "id": "true_val",
+              "text": "True",
+              "correct": false
+            },
+            {
+              "id": "false_val",
+              "text": "False",
+              "correct": true
+            }
+          ],
+          "explain": "Even with table-aware extraction, extremely wide or tall tables can exceed standard chunk limits, requiring advanced strategies like prepending headers to individual rows."
+        },
+        {
+          "id": "p3",
+          "type": "fill_blank",
+          "xp": 2,
+          "prompt": "Fill in the blank to complete the sentence on maintaining table layouts:",
+          "sentence": "Converting a PDF table into Markdown format keeps the rows and columns aligned for the AI.",
+          "blank": "Markdown",
+          "words": [
+            "Markdown",
+            "JSON-LD",
+            "unstructured"
+          ],
+          "explain": "Markdown uses simple characters like pipes (|) to maintain the layout of rows and columns, making it an excellent format for preserving table structure during document parsing."
+        },
+        {
+          "id": "p4",
+          "type": "spot_the_ai",
+          "xp": 2,
+          "prompt": "Identify the output generated by an extraction tool designed to output structured Markdown tables.",
+          "options": [
+            {
+              "id": "human_1",
+              "text": "The item named Widget costs ten dollars, while the Gadget costs twenty dollars.",
+              "correct": false
+            },
+            {
+              "id": "human_2",
+              "text": "{ \"items\": [ {\"name\": \"Widget\", \"price\": 10}, {\"name\": \"Gadget\", \"price\": 20} ] }",
+              "correct": false
+            },
+            {
+              "id": "ai_1",
+              "text": "| Item | Price |\\n|---|---|\\n| Widget | $10 |\\n| Gadget | $20 |",
+              "correct": true
+            }
+          ],
+          "explain": "Option C shows a clean Markdown representation of a table, maintaining the columns (Item, Price) and rows using pipes. Options A and B are just plain unstructured text and standard JSON list structures."
+        }
+      ]
+    },
+    {
+      "type": "boss",
+      "exercises": [
+        {
+          "id": "b1",
+          "type": "multiple_choice",
+          "xp": 5,
+          "prompt": "You are building a QA bot for financial reports containing large, complex tables. If a user asks about a specific cell, the system needs to retrieve just that row while still knowing exactly what the column headers were. What is the best extraction strategy?",
+          "options": [
+            {
+              "id": "row_metadata",
+              "text": "Convert the table into row-by-row chunks, prepending the column headers as metadata to every single row.",
+              "correct": true
+            },
+            {
+              "id": "plain_text",
+              "text": "Flatten the table into a single paragraph of plain text, removing all headers to save token space.",
+              "correct": false
+            },
+            {
+              "id": "naive_split",
+              "text": "Split the table strictly every 100 characters to keep chunk sizes uniform, ignoring table boundaries.",
+              "correct": false
+            },
+            {
+              "id": "image_only",
+              "text": "Convert the table to an image and chunk it by slicing the image into four equal quadrants.",
+              "correct": false
+            }
+          ],
+          "explain": "Converting tables into a row-per-chunk format with prepended header names ensures that every single chunk is fully self-contained. Even if a search query only looks at row 5, the model can instantly tell what columns those values belong to because the header metadata is baked into that specific chunk."
+        }
+      ]
+    }
+  ]
+}

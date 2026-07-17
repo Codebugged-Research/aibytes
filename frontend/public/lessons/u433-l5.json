@@ -1,0 +1,222 @@
+{
+  "id": "u433-l5",
+  "unit": 433,
+  "day": 2170,
+  "tier": "LLM Application Engineering",
+  "tierIcon": "🔌",
+  "title": "Metadata Schema Design",
+  "icon": "📐",
+  "concept": "Designing a consistent metadata schema across heterogeneous document sources before they enter one index.",
+  "xp": 15,
+  "hearts": 3,
+  "estMinutes": 7,
+  "segments": [
+    {
+      "type": "warmup",
+      "exercises": [
+        {
+          "id": "w1",
+          "type": "multiple_choice",
+          "xp": 1,
+          "prompt": "When distinguishing metadata for filtering versus display, what is a key requirement for filtering metadata?",
+          "options": [
+            {
+              "id": "w1",
+              "text": "It must be formatted as raw HTML.",
+              "correct": false
+            },
+            {
+              "id": "w2",
+              "text": "It must be structured and queryable so the search engine can filter out irrelevant records.",
+              "correct": true
+            },
+            {
+              "id": "w3",
+              "text": "It must be stored in a separate database entirely.",
+              "correct": false
+            }
+          ],
+          "explain": "Metadata for filtering must be structured (like dates or tags) so the database engine can programmatically narrow down search results, whereas display-only metadata is simply shown to the user as context."
+        }
+      ]
+    },
+    {
+      "type": "teach",
+      "cards": [
+        {
+          "kind": "hook",
+          "icon": "🗺️",
+          "title": "The Chaos of Mixed Sources",
+          "body": "When building a search engine, you will pull data from emails, PDFs, and databases. If you don't standardize their fields beforehand, finding information becomes a chaotic game of hide-and-seek because different sources use different labels for the same ideas!"
+        },
+        {
+          "kind": "definition",
+          "icon": "📋",
+          "title": "What is a Metadata Schema?",
+          "body": "A metadata schema is a blueprint that defines the exact names, data types, and purposes of information fields attached to your text chunks. Designing a consistent schema ensures that no matter where your documents come from—whether they are PDFs, web pages, or Slack messages—they share a unified set of searchable fields."
+        },
+        {
+          "kind": "analogy",
+          "icon": "🛂",
+          "title": "The Border Control Analogy",
+          "body": "Think of a metadata schema like a passport control form. If every country has its own custom layout, custom questions, and date formats, processing travellers at the border is incredibly slow. A standardized passport layout allows immigration systems to scan and process everyone instantly, no matter where they started their journey."
+        },
+        {
+          "kind": "example",
+          "icon": "💡",
+          "title": "Schema Standardization in Action",
+          "body": "Imagine merging a folder of Word docs and a database of customer reviews. By mapping both sources to a shared schema containing fields like 'creation_date' (as an ISO-8601 date string) and 'document_type' (as a string), you can easily filter all sources using a single, clean query."
+        },
+        {
+          "kind": "mythbust",
+          "icon": "🚫",
+          "title": "LLMs Can't Fix Messy Fields Later",
+          "body": "Many think you can just dump raw metadata from every source directly into your vector database and let the LLM sort it out. In reality, modern search indexes require strict, uniform keys to perform fast, accurate metadata filtering."
+        },
+        {
+          "kind": "visual",
+          "icon": "📊",
+          "title": "Aligning the Fields",
+          "body": "Standardizing fields before they enter the index turns messy, unpredictable data into a clean, searchable library.",
+          "compare": {
+            "left": {
+              "emoji": "📁",
+              "tag": "Messy Data",
+              "text": "Doc A has 'date_created', Doc B has 'written_on', Doc C has 'timestamp'."
+            },
+            "right": {
+              "emoji": "🗂️",
+              "tag": "Schema Aligned",
+              "text": "All documents store their date in a single field called 'created_at'."
+            }
+          }
+        }
+      ]
+    },
+    {
+      "type": "practice",
+      "exercises": [
+        {
+          "id": "p1",
+          "type": "multiple_choice",
+          "xp": 2,
+          "prompt": "Which of the following is a core requirement when designing a metadata schema for mixed document sources?",
+          "options": [
+            {
+              "id": "q1_a",
+              "text": "A schema must have at least fifty different fields to be useful.",
+              "correct": false
+            },
+            {
+              "id": "q1_b",
+              "text": "Every document source must have its metadata mapped to a set of standardized key names.",
+              "correct": true
+            },
+            {
+              "id": "q1_c",
+              "text": "You should write custom search code for every file type in your database.",
+              "correct": false
+            },
+            {
+              "id": "q1_d",
+              "text": "Metadata keys should change daily to keep the index dynamic.",
+              "correct": false
+            }
+          ],
+          "explain": "To filter and query documents effectively, fields that represent the same type of data must share the exact same key name and data type, regardless of their source file type."
+        },
+        {
+          "id": "p2",
+          "type": "true_false",
+          "xp": 2,
+          "prompt": "True or False: Standardizing date formats across all documents is important for enabling reliable chronological filtering.",
+          "options": [
+            {
+              "id": "t1",
+              "text": "True",
+              "correct": true
+            },
+            {
+              "id": "f1",
+              "text": "False",
+              "correct": false
+            }
+          ],
+          "explain": "Standardizing dates to a single format (like ISO-8601) is critical because it allows database engines to compare dates, sort results chronologically, and filter ranges accurately."
+        },
+        {
+          "id": "p3",
+          "type": "fill_blank",
+          "xp": 2,
+          "prompt": "Fill in the blank to complete the rule for metadata design:",
+          "sentence": "Designing a consistent schema helps us organize heterogeneous document sources.",
+          "blank": "heterogeneous",
+          "words": [
+            "heterogeneous",
+            "identical",
+            "unformatted"
+          ],
+          "explain": "We need a single schema because our documents are heterogeneous (diverse and originating from different sources), meaning they start with inconsistent formats and fields."
+        },
+        {
+          "id": "p4",
+          "type": "spot_the_ai",
+          "xp": 2,
+          "prompt": "Identify the approach that represents an automated, schema-driven metadata pipeline:",
+          "options": [
+            {
+              "id": "sai_a",
+              "text": "Just dump the PDFs and Word files into the folder and let the search engine read the filenames to guess who wrote them.",
+              "correct": false
+            },
+            {
+              "id": "sai_b",
+              "text": "Manually rename every file to include the author's name and creation date inside the actual title string.",
+              "correct": false
+            },
+            {
+              "id": "sai_c",
+              "text": "Write a mapping script: convert PDF 'Author' and Word 'Created By' fields both into a unified 'doc_author' metadata field before saving to the vector database.",
+              "correct": true
+            }
+          ],
+          "explain": "Option C shows an AI-designed, standardized schema mapping system where various source files are explicitly mapped to common, uniform metadata fields (source_type, creation_date, author) for indexing. Options A and B are manual, unstructured approaches."
+        }
+      ]
+    },
+    {
+      "type": "boss",
+      "exercises": [
+        {
+          "id": "b1",
+          "type": "multiple_choice",
+          "xp": 5,
+          "prompt": "You are building a search system that indexes PDFs, emails, and database exports. The PDFs call the author 'creator', the emails call the author 'sender', and the databases call the author 'written_by'. How should you design your schema ingestion pipeline to allow users to filter by author?",
+          "options": [
+            {
+              "id": "b1",
+              "text": "Create separate vector databases for each document format so they do not mix.",
+              "correct": false
+            },
+            {
+              "id": "b2",
+              "text": "Map all source-specific author keys to a single standardized 'document_author' field before indexing.",
+              "correct": true
+            },
+            {
+              "id": "b3",
+              "text": "Keep all original field names and run three separate searches for 'author', 'written_by', and 'creator'.",
+              "correct": false
+            },
+            {
+              "id": "b4",
+              "text": "Discard all metadata except for the raw text chunk to avoid search confusion.",
+              "correct": false
+            }
+          ],
+          "explain": "A unified schema maps diverse, source-specific keys (like 'author', 'written_by', and 'creator') to a single, standardized field (like 'document_author') before ingestion, ensuring that search queries and filters target a single consistent key across all indexed items."
+        }
+      ]
+    }
+  ]
+}

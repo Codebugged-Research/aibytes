@@ -1,0 +1,222 @@
+{
+  "id": "u466-l3",
+  "unit": 466,
+  "day": 2333,
+  "tier": "LLM Application Engineering",
+  "tierIcon": "🔌",
+  "title": "The MCP Server",
+  "icon": "⚙️",
+  "concept": "A lightweight program that exposes a specific capability (a tool, a data source) through the MCP protocol.",
+  "xp": 15,
+  "hearts": 3,
+  "estMinutes": 7,
+  "segments": [
+    {
+      "type": "warmup",
+      "exercises": [
+        {
+          "id": "w1",
+          "type": "multiple_choice",
+          "xp": 1,
+          "prompt": "What did we learn about the MCP Client's connection behavior of a Client in the previous lesson?",
+          "options": [
+            {
+              "id": "w1",
+              "text": "The Host itself directly communicates with all external databases without a client.",
+              "correct": false
+            },
+            {
+              "id": "w2",
+              "text": "The MCP Client manages a direct 1:1 connection to a single MCP Server.",
+              "correct": true
+            },
+            {
+              "id": "w3",
+              "text": "The Client runs the central LLM model itself.",
+              "correct": false
+            }
+          ],
+          "explain": "In the MCP architecture, the Client is the component inside the Host (like a desktop IDE) that maintains a direct, 1:1 connection to a single MCP Server."
+        }
+      ]
+    },
+    {
+      "type": "teach",
+      "cards": [
+        {
+          "kind": "hook",
+          "icon": "🔌",
+          "title": "Giving the AI Hands and Eyes",
+          "body": "An AI model might know how to write code, but it cannot access your local files or check live weather on its own. How do we safely give it these superpowers without rewriting the whole AI program? We use modular servers!"
+        },
+        {
+          "kind": "definition",
+          "icon": "🖥️",
+          "title": "What is an MCP Server?",
+          "body": "An MCP Server is a lightweight program that exposes specific capabilities—like tools, prompts, or data sources—to a client using the standardized Model Context Protocol. It acts as a dedicated worker waiting to answer specific requests."
+        },
+        {
+          "kind": "analogy",
+          "icon": "🧑‍🍳",
+          "title": "The Specialist Chef",
+          "body": "Think of an MCP server like a specialist chef at an ingredients bar. They wait in their kitchen until you ask them to chop a specific onion or bake a specific dish, handing back only the finished product without needing to know your entire menu."
+        },
+        {
+          "kind": "example",
+          "icon": "📊",
+          "title": "A Database Server in Action",
+          "body": "A local Postgres Database Server exposes a 'run-query' tool. When the LLM needs to look up sales data, the client sends a request to this server, which runs the SQL query and returns the rows safely."
+        },
+        {
+          "kind": "mythbust",
+          "icon": "⚡",
+          "title": "Myth: Servers Must Be Huge Cloud Machines",
+          "body": "You might think an MCP server must run on a giant cloud system. In reality, most MCP servers are tiny Node.js or Python scripts running locally on your own computer, spinning up only when the AI client calls them."
+        },
+        {
+          "kind": "visual",
+          "icon": "⚖️",
+          "title": "Client vs. Server Roles",
+          "body": "See how responsibilities are cleanly split between the LLM client and the modular server.",
+          "compare": {
+            "left": {
+              "emoji": "📱",
+              "tag": "Client",
+              "text": "Manages the UI, talks to the LLM, and sends requests to servers."
+            },
+            "right": {
+              "emoji": "⚙️",
+              "tag": "Server",
+              "text": "Runs the local tool or reads the database, returning raw data."
+            }
+          }
+        }
+      ]
+    },
+    {
+      "type": "practice",
+      "exercises": [
+        {
+          "id": "p1",
+          "type": "multiple_choice",
+          "xp": 2,
+          "prompt": "What is the primary role of an MCP Server?",
+          "options": [
+            {
+              "id": "mc1",
+              "text": "To run the neural network weights of the LLM.",
+              "correct": false
+            },
+            {
+              "id": "mc2",
+              "text": "To expose specific capabilities like tools or data sources.",
+              "correct": true
+            },
+            {
+              "id": "mc3",
+              "text": "To store the user's global conversation history.",
+              "correct": false
+            },
+            {
+              "id": "mc4",
+              "text": "To coordinate multiple human users in a chatroom.",
+              "correct": false
+            }
+          ],
+          "explain": "An MCP server's main job is to provide specific capabilities like custom tools, documents, or APIs that the client can request. It does not train the LLM or manage the chat UI."
+        },
+        {
+          "id": "p2",
+          "type": "true_false",
+          "xp": 2,
+          "prompt": "True or False: An MCP server must be redesigned from scratch for every different LLM model a host application uses.",
+          "options": [
+            {
+              "id": "t1",
+              "text": "True",
+              "correct": false
+            },
+            {
+              "id": "f1",
+              "text": "False",
+              "correct": true
+            }
+          ],
+          "explain": "An MCP server is highly modular. It only needs to know how to speak the MCP protocol; it does not need to know which specific LLM (GPT-4, Claude, etc.) is asking the questions."
+        },
+        {
+          "id": "p3",
+          "type": "fill_blank",
+          "xp": 2,
+          "prompt": "Fill in the blank: An MCP server is a program that makes a resource available to the client.",
+          "sentence": "A server exposes a specific capability through the MCP protocol.",
+          "blank": "exposes",
+          "words": [
+            "exposes",
+            "hides",
+            "deletes"
+          ],
+          "explain": "An MCP server exposes specific capabilities (like tools or documents) using a standard format so any client can use them."
+        },
+        {
+          "id": "p4",
+          "type": "spot_the_ai",
+          "xp": 2,
+          "prompt": "Which of these responses represents a standard MCP Server listing its tools to a client?",
+          "options": [
+            {
+              "id": "sai1",
+              "text": "SELECT * FROM users WHERE active = true;",
+              "correct": false
+            },
+            {
+              "id": "sai2",
+              "text": "{\"jsonrpc\": \"2.0\", \"result\": {\"tools\": [{\"name\": \"fetch_weather\", \"description\": \"Get current weather\"}]}}",
+              "correct": true
+            },
+            {
+              "id": "sai3",
+              "text": "const app = express(); app.listen(8080);",
+              "correct": false
+            }
+          ],
+          "explain": "Option B shows an AI-style generator tool payload using the standard Model Context Protocol format, listing tools and their input schemas for a client to read. Options A and C are generic database or web server configurations."
+        }
+      ]
+    },
+    {
+      "type": "boss",
+      "exercises": [
+        {
+          "id": "b1",
+          "type": "multiple_choice",
+          "xp": 5,
+          "prompt": "Why is an MCP server considered 'lightweight' compared to the main AI Host application?",
+          "options": [
+            {
+              "id": "b1",
+              "text": "It manages the user's chat window and runs the central LLM model.",
+              "correct": false
+            },
+            {
+              "id": "b2",
+              "text": "It runs a lightweight script that executes a specific task and returns the result when asked.",
+              "correct": true
+            },
+            {
+              "id": "b3",
+              "text": "It serves as the main gateway coordinating all other servers at the same time.",
+              "correct": false
+            },
+            {
+              "id": "b4",
+              "text": "It translates human language directly into machine binary code without a client.",
+              "correct": false
+            }
+          ],
+          "explain": "MCP servers are lightweight because they do not run the LLM or handle the user interface. They simply wait for standard protocol requests, run their specific code (like searching a local database or calling a weather API), and return the structured result back to the client."
+        }
+      ]
+    }
+  ]
+}

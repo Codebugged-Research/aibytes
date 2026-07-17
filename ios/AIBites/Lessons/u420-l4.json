@@ -1,0 +1,222 @@
+{
+  "id": "u420-l4",
+  "unit": 420,
+  "day": 2104,
+  "tier": "LLM Application Engineering",
+  "tierIcon": "🔌",
+  "title": "Token Budget Allocation Across Sources",
+  "icon": "📊",
+  "concept": "Deciding, for a fixed token budget, how many tokens go to history vs retrieved docs vs tool results.",
+  "xp": 15,
+  "hearts": 3,
+  "estMinutes": 7,
+  "segments": [
+    {
+      "type": "warmup",
+      "exercises": [
+        {
+          "id": "w1",
+          "type": "multiple_choice",
+          "xp": 1,
+          "prompt": "In the last lesson, we learned that context assembly is a staged pipeline. Which of these is one of those stages?",
+          "options": [
+            {
+              "id": "a",
+              "text": "Compress",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "Encrypt",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "Compile",
+              "correct": false
+            }
+          ],
+          "explain": "Compress is one of the pipeline stages (retrieve, filter, rank, compress, format, inject) that shrinks content to fit before it gets injected into the prompt. Encrypt and compile aren't part of the context assembly pipeline."
+        }
+      ]
+    },
+    {
+      "type": "teach",
+      "cards": [
+        {
+          "kind": "hook",
+          "icon": "💰",
+          "title": "You Only Have So Many Tokens",
+          "body": "Imagine you have $100 to spend on a group dinner, but everyone wants a different amount of food. You can't give everyone unlimited money — you have to decide who gets how much. Context windows work the same way with tokens."
+        },
+        {
+          "kind": "definition",
+          "icon": "📊",
+          "title": "What Is Token Budget Allocation?",
+          "body": "It's deciding, out of your total context window, how many tokens go to conversation history, how many to retrieved documents, and how many to tool results. You set limits for each source so the total never exceeds your budget."
+        },
+        {
+          "kind": "analogy",
+          "icon": "🧳",
+          "title": "Packing a Suitcase for a Trip",
+          "body": "Your suitcase (context window) has a fixed size. You must decide how much space goes to clothes (history), toiletries (retrieved docs), and gear (tool results). If you overpack clothes, there's no room for the toiletries you actually need at your destination."
+        },
+        {
+          "kind": "example",
+          "icon": "🛠️",
+          "title": "A Support Bot's Budget",
+          "body": "A help-desk bot has a 4,000 token window. It might allocate 500 tokens to recent chat history, 2,500 to retrieved help articles (the most useful part), and 1,000 to a tool result showing the user's order status. The split changes if the user asks a simple follow-up instead."
+        },
+        {
+          "kind": "mythbust",
+          "icon": "🚫",
+          "title": "Myth: More History Is Always Better",
+          "body": "It's tempting to think stuffing in the whole chat history helps the model. But if that uses 90% of your budget, there's no room left for the fresh retrieved doc that actually answers the question. Relevance beats recency-hoarding."
+        },
+        {
+          "kind": "visual",
+          "icon": "⚖️",
+          "title": "Fixed Slice vs Dynamic Slice",
+          "body": "A fixed split gives every source the same percentage every time, no matter the task. A dynamic split adjusts based on what the current question actually needs.",
+          "compare": {
+            "left": {
+              "emoji": "📏",
+              "tag": "Fixed Split",
+              "text": "Always 33% history, 33% docs, 33% tools — even when tools aren't needed at all"
+            },
+            "right": {
+              "emoji": "🎯",
+              "tag": "Dynamic Split",
+              "text": "Task needs code docs most, so docs get 60%, history gets 20%, tools get 20%"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "type": "practice",
+      "exercises": [
+        {
+          "id": "p1",
+          "type": "multiple_choice",
+          "xp": 2,
+          "prompt": "A user asks a question that can be fully answered using only the last 2 chat turns — no documents or tools are needed. What should the token budget allocator do?",
+          "options": [
+            {
+              "id": "a",
+              "text": "Still reserve large chunks for retrieved docs and tool results just in case",
+              "correct": false
+            },
+            {
+              "id": "b",
+              "text": "Give most of the budget to history since that's what's actually relevant here, and skip or minimize the other sources",
+              "correct": true
+            },
+            {
+              "id": "c",
+              "text": "Split the budget evenly across all three sources regardless of need",
+              "correct": false
+            },
+            {
+              "id": "d",
+              "text": "Use the entire budget on retrieved docs since docs are usually the most valuable source",
+              "correct": false
+            }
+          ],
+          "explain": "Smart allocation follows relevance. If the answer only needs recent history, that's where the budget should go — wasting tokens on unneeded docs or tools just crowds out useful content."
+        },
+        {
+          "id": "p2",
+          "type": "true_false",
+          "xp": 2,
+          "prompt": "True or False: The best token budget allocation strategy is always to divide the context window into equal thirds for history, retrieved docs, and tool results.",
+          "options": [
+            {
+              "id": "a",
+              "text": "True",
+              "correct": false
+            },
+            {
+              "id": "b",
+              "text": "False",
+              "correct": true
+            }
+          ],
+          "explain": "False. The best allocation depends on the specific task — sometimes docs matter most, sometimes tool results do, sometimes barely any history is needed at all. Equal thirds ignores relevance and often wastes tokens."
+        },
+        {
+          "id": "p3",
+          "type": "fill_blank",
+          "xp": 2,
+          "prompt": "Fill in the blank.",
+          "sentence": "A rigid split that always gives history 33% of tokens ignores what the current task actually needs, which is why dynamic budget allocation is usually smarter than a fixed split.",
+          "blank": "fixed split",
+          "words": [
+            "fixed split",
+            "retrieved doc",
+            "tool call"
+          ],
+          "explain": "A fixed split treats every request the same, regardless of relevance. Dynamic allocation adapts the budget to what the task actually requires, which usually produces better answers."
+        },
+        {
+          "id": "p4",
+          "type": "spot_the_ai",
+          "xp": 2,
+          "prompt": "Which of these three token allocation explanations was most likely written by an AI trying to sound sophisticated but actually giving vague, unhelpful advice?",
+          "options": [
+            {
+              "id": "a",
+              "text": "\"Allocate tokens by first estimating each source's marginal value to the current query, then assign budgets proportionally, adjusting as needed.\"",
+              "correct": false
+            },
+            {
+              "id": "b",
+              "text": "\"Token allocation harmoniously balances the multifaceted dimensions of contextual synergy to unlock optimal AI-driven insight generation.\"",
+              "correct": true
+            },
+            {
+              "id": "c",
+              "text": "\"Give more tokens to whichever source is most likely to contain the answer to this specific question, and cut sources that aren't needed.\"",
+              "correct": false
+            }
+          ],
+          "explain": "Option b is full of buzzwords like 'multifaceted dimensions' and 'contextual synergy' but says nothing concrete about how to actually decide token amounts — a classic sign of AI-generated filler text. The other two options give clear, actionable guidance."
+        }
+      ]
+    },
+    {
+      "type": "boss",
+      "exercises": [
+        {
+          "id": "b1",
+          "type": "multiple_choice",
+          "xp": 5,
+          "prompt": "A coding assistant has an 8,000 token context window. The user asks a question that needs: recent chat history, a retrieved code snippet, and a tool result from running tests. Test results are long but critical for this specific bug. Which allocation strategy is best?",
+          "options": [
+            {
+              "id": "a",
+              "text": "Give history 80% of tokens since it's always most important",
+              "correct": false
+            },
+            {
+              "id": "b",
+              "text": "Split evenly into thirds no matter what the task needs",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "Allocate more tokens to test results since they're most relevant to fixing this bug, and trim history to just the last relevant turns",
+              "correct": true
+            },
+            {
+              "id": "d",
+              "text": "Give retrieved docs 100% of the budget and drop history and tool results entirely",
+              "correct": false
+            }
+          ],
+          "explain": "Token budgeting isn't about fixed rules — it's about matching allocation to what the CURRENT task needs. Here, the test results are the most direct evidence for fixing the bug, so they deserve the biggest slice, while history can be trimmed to just enough for continuity. Dropping a source entirely (like option d) usually loses needed context, and rigid splits (like even thirds or a fixed 80%) ignore what the task actually demands. This is the core skill of Dynamic Context Assembly: every source competes for limited space, and smart engineers allocate based on relevance and cost, not habit."
+        }
+      ]
+    }
+  ]
+}

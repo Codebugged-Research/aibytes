@@ -1,0 +1,222 @@
+{
+  "id": "u461-l5",
+  "unit": 461,
+  "day": 2310,
+  "tier": "LLM Application Engineering",
+  "tierIcon": "🔌",
+  "title": "Cost of Self-Correction Loops",
+  "icon": "💸",
+  "concept": "Extra LLM calls for self-critique trade latency and cost for accuracy — quantifying when it's worth it.",
+  "xp": 15,
+  "hearts": 3,
+  "estMinutes": 7,
+  "segments": [
+    {
+      "type": "warmup",
+      "exercises": [
+        {
+          "id": "w1",
+          "type": "multiple_choice",
+          "xp": 1,
+          "prompt": "In the fallback strategy learned in the last lesson, what should a RAG system do if the initial retrieved documents are evaluated as irrelevant?",
+          "options": [
+            {
+              "id": "w1",
+              "text": "Always output a generic hallucination to keep the user happy.",
+              "correct": false
+            },
+            {
+              "id": "w2",
+              "text": "Rewrite the query and search again, or escalate to a wider source.",
+              "correct": true
+            },
+            {
+              "id": "w3",
+              "text": "Crash the system immediately to save API token costs.",
+              "correct": false
+            }
+          ],
+          "explain": "In Retry and Fallback strategies, if the retrieved documents are graded as irrelevant, the system rewrites the query or escalates to a broader search before giving up."
+        }
+      ]
+    },
+    {
+      "type": "teach",
+      "cards": [
+        {
+          "kind": "hook",
+          "icon": "⏳",
+          "title": "The Price of Perfection",
+          "body": "We know that grading and correcting our LLM's answers makes them much more reliable. But in production, nothing is free. Every extra check adds cents to your bill and seconds of waiting for your users."
+        },
+        {
+          "kind": "definition",
+          "icon": "⚖️",
+          "title": "The Latency-Cost Trade-Off",
+          "body": "Self-Correction Loops run extra LLM evaluation calls to grade and refine answers before delivery. While this boosts accuracy, it introduces a trade-off: you pay more in API tokens and users wait longer for their answers."
+        },
+        {
+          "kind": "analogy",
+          "icon": "✍️",
+          "title": "The Editor Analogy",
+          "body": "Think of self-correction like hiring a professional editor. If you publish a raw draft, it's instant and free, but might have errors. Having an editor read, highlight issues, and make you rewrite guarantees quality, but it costs extra money and delays publication."
+        },
+        {
+          "kind": "example",
+          "icon": "🏥",
+          "title": "When Correction is Worth It",
+          "body": "For a casual chat assistant, a 5-second delay to self-correct a typo isn't worth the extra $0.05. However, for a medical diagnosis tool, paying $0.50 and waiting 10 seconds to correct a factual error is highly worth it."
+        },
+        {
+          "kind": "mythbust",
+          "icon": "🛑",
+          "title": "Myth: Loops are Instant",
+          "body": "You might think self-correction loops always run instantly. In reality, each loop step is a sequential LLM call. If your base answer takes 2 seconds, checking and rewriting can easily push the total wait time to 6 seconds or more."
+        },
+        {
+          "kind": "visual",
+          "icon": "📊",
+          "title": "Speed vs. Verification",
+          "body": "Compare the resource profiles of a standard single-pass RAG system versus a self-correcting loop system.",
+          "compare": {
+            "left": {
+              "emoji": "⚡",
+              "tag": "Single-Pass RAG",
+              "text": "Low latency (1s), low token cost, but higher risk of hallucinations."
+            },
+            "right": {
+              "emoji": "🛡️",
+              "tag": "Self-Correcting RAG",
+              "text": "High latency (4s+), multiple LLM calls, but highly verified and accurate output."
+            }
+          }
+        }
+      ]
+    },
+    {
+      "type": "practice",
+      "exercises": [
+        {
+          "id": "p1",
+          "type": "multiple_choice",
+          "xp": 2,
+          "prompt": "In which of the following scenarios is a multi-step self-correction loop most justified?",
+          "options": [
+            {
+              "id": "mc1",
+              "text": "A real-time gaming chatbot where players expect instant replies.",
+              "correct": false
+            },
+            {
+              "id": "mc2",
+              "text": "A casual emoji recommender based on user mood.",
+              "correct": false
+            },
+            {
+              "id": "mc3",
+              "text": "A legal document parser extracting financial obligations for a audit.",
+              "correct": true
+            },
+            {
+              "id": "mc4",
+              "text": "A public search engine answering trivia questions about celebrities.",
+              "correct": false
+            }
+          ],
+          "explain": "Low-stakes tasks where speed is key (like typing assistance) should avoid heavy correction loops. High-stakes tasks where mistakes are dangerous (like legal contract analysis) justify the cost and latency."
+        },
+        {
+          "id": "p2",
+          "type": "true_false",
+          "xp": 2,
+          "prompt": "True or False: Running an LLM self-grader on your retrieved documents increases the total token cost of a single user query.",
+          "options": [
+            {
+              "id": "tf1",
+              "text": "True",
+              "correct": true
+            },
+            {
+              "id": "tf2",
+              "text": "False",
+              "correct": false
+            }
+          ],
+          "explain": "Each evaluation step requires sending tokens to the LLM and generating new tokens, which increases the total API bill."
+        },
+        {
+          "id": "p3",
+          "type": "fill_blank",
+          "xp": 2,
+          "prompt": "Fill in the blank to complete the sentence explaining the trade-off of correction loops.",
+          "sentence": "Adding multiple critique steps to your RAG pipeline improves accuracy but increases latency for the end user.",
+          "blank": "latency",
+          "words": [
+            "latency",
+            "memory",
+            "bandwidth"
+          ],
+          "explain": "Latency refers to the delay or wait time before the user receives a response, which increases as you add more correction steps."
+        },
+        {
+          "id": "p4",
+          "type": "spot_the_ai",
+          "xp": 2,
+          "prompt": "Identify which of these system logs represents a Self-RAG correction loop in action.",
+          "options": [
+            {
+              "id": "sai1",
+              "text": "The system searched the vector database, found the exact match, and instantly streamed the answer to the user in 0.8 seconds.",
+              "correct": false
+            },
+            {
+              "id": "sai2",
+              "text": "The system failed to retrieve any documents, so it immediately returned a default hardcoded message: 'Sorry, database offline.'",
+              "correct": false
+            },
+            {
+              "id": "sai3",
+              "text": "The system generated a draft, detected a hallucination during the self-critique phase, ran a second generation step, and returned the verified answer after 4.5 seconds.",
+              "correct": true
+            }
+          ],
+          "explain": "Option C simulates a classic agentic self-correction loop where the system notices a hallucination, loops back to regenerate, and eventually provides the correct answer at the cost of higher latency."
+        }
+      ]
+    },
+    {
+      "type": "boss",
+      "exercises": [
+        {
+          "id": "b1",
+          "type": "multiple_choice",
+          "xp": 5,
+          "prompt": "Your team implements a Self-RAG loop that checks, rewrites, and re-evaluates answers up to 3 times before showing them to the user. What is the main engineering trade-off of this decision?",
+          "options": [
+            {
+              "id": "b1",
+              "text": "It decreases the total token count by summarizing the prompt.",
+              "correct": false
+            },
+            {
+              "id": "b2",
+              "text": "It multiplies both the financial token cost and the time the user waits for a response.",
+              "correct": true
+            },
+            {
+              "id": "b3",
+              "text": "It eliminates the need for vector databases entirely, reducing infra costs.",
+              "correct": false
+            },
+            {
+              "id": "b4",
+              "text": "It runs completely offline, so it has zero impact on live user latency.",
+              "correct": false
+            }
+          ],
+          "explain": "While accuracy increases, every critique and rewrite step requires additional prompt and generation tokens. If the system loops 3 times, you pay for 3 times as many LLM calls, and the user waits much longer for the final response."
+        }
+      ]
+    }
+  ]
+}

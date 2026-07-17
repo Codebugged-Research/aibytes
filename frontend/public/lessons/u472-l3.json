@@ -1,0 +1,222 @@
+{
+  "id": "u472-l3",
+  "unit": 472,
+  "day": 2363,
+  "tier": "LLM Application Engineering",
+  "tierIcon": "🔌",
+  "title": "Scoping Server Permissions",
+  "icon": "🎛️",
+  "concept": "Restricting what a server can actually do (read-only file access, sandboxed execution) at the server level.",
+  "xp": 15,
+  "hearts": 3,
+  "estMinutes": 7,
+  "segments": [
+    {
+      "type": "warmup",
+      "exercises": [
+        {
+          "id": "w1",
+          "type": "multiple_choice",
+          "xp": 1,
+          "prompt": "In our last lesson, we discussed 'Human-in-the-Loop' tool approval. What does this practice require?",
+          "options": [
+            {
+              "id": "a",
+              "text": "Letting the LLM automatically run any command it wants.",
+              "correct": false
+            },
+            {
+              "id": "b",
+              "text": "Requiring explicit human approval before a sensitive tool action is executed.",
+              "correct": true
+            },
+            {
+              "id": "c",
+              "text": "Writing code that automatically fixes bugs without user notification.",
+              "correct": false
+            }
+          ],
+          "explain": "Human-in-the-Loop (HITL) approval requires a human user to review and manually confirm sensitive actions before they are executed."
+        }
+      ]
+    },
+    {
+      "type": "teach",
+      "cards": [
+        {
+          "kind": "hook",
+          "icon": "🔒",
+          "title": "Defense in Depth",
+          "body": "We know humans should approve risky actions, but what if a server gets compromised and tries to read your private keys without even asking? We need a second line of defense: locking down the server's actual system privileges."
+        },
+        {
+          "kind": "definition",
+          "icon": "🛡️",
+          "title": "Scoping Server Permissions",
+          "body": "Scoping server permissions means restricting what an MCP server can access on your host system. By enforcing rules like read-only paths and sandboxed environments, you ensure the server cannot delete files or run harmful system commands."
+        },
+        {
+          "kind": "analogy",
+          "icon": "🪪",
+          "title": "The Library Guest Pass",
+          "body": "Think of a scoped server like a library guest pass. Instead of giving a visitor the keys to the entire building, you give them a pass that only lets them read books in the history room, preventing them from entering the staff offices."
+        },
+        {
+          "kind": "example",
+          "icon": "📂",
+          "title": "Locked in the Workspace",
+          "body": "An MCP file-manager server is configured with access restricted only to '/workspace/projects'. If an LLM asks the server to read '/etc/passwd' or delete a system file, the server returns an access denied error."
+        },
+        {
+          "kind": "mythbust",
+          "icon": "🛑",
+          "title": "LLMs Aren't Security Guards",
+          "body": "You might think that because the LLM is instructed to be good, the server tools are safe. In reality, LLMs can be tricked by prompt injection, making hard-coded server-side permission boundaries absolutely essential."
+        },
+        {
+          "kind": "visual",
+          "icon": "⚖️",
+          "title": "Unrestricted vs. Scoped",
+          "body": "Restricting server access at the system level provides hard boundaries that prompt injections cannot break.",
+          "compare": {
+            "left": {
+              "emoji": "🔓",
+              "tag": "Unscoped Server",
+              "text": "Full disk read/write access. A malicious prompt could delete your entire operating system."
+            },
+            "right": {
+              "emoji": "🔒",
+              "tag": "Scoped & Sandboxed",
+              "text": "Read-only access restricted to one folder. Safe from system-wide destructive actions."
+            }
+          }
+        }
+      ]
+    },
+    {
+      "type": "practice",
+      "exercises": [
+        {
+          "id": "p1",
+          "type": "multiple_choice",
+          "xp": 2,
+          "prompt": "What does configuring an MCP server with 'read-only' file access achieve?",
+          "options": [
+            {
+              "id": "a",
+              "text": "It allows the server to write new system files.",
+              "correct": false
+            },
+            {
+              "id": "b",
+              "text": "It allows the server to view files but prevents any modifications or deletions.",
+              "correct": true
+            },
+            {
+              "id": "c",
+              "text": "It completely blocks the server from seeing any files.",
+              "correct": false
+            },
+            {
+              "id": "d",
+              "text": "It forces the user to type a password for every file read.",
+              "correct": false
+            }
+          ],
+          "explain": "Read-only access ensures the server can view files to assist the user, but cannot modify, overwrite, or delete any data on the disk."
+        },
+        {
+          "id": "p2",
+          "type": "true_false",
+          "xp": 2,
+          "prompt": "True or False: Scoping server permissions at the system level acts as a backup safety net if a human mistakenly approves a dangerous tool action.",
+          "options": [
+            {
+              "id": "true",
+              "text": "True",
+              "correct": true
+            },
+            {
+              "id": "false",
+              "text": "False",
+              "correct": false
+            }
+          ],
+          "explain": "Even if a user accidentally approves a harmful delete tool call, a properly scoped server restricted to read-only access will block the deletion at the system level."
+        },
+        {
+          "id": "p3",
+          "type": "fill_blank",
+          "xp": 2,
+          "prompt": "Fill in the blank to complete the security rule:",
+          "sentence": "To protect your main operating system, always run untrusted MCP servers inside an isolated sandbox.",
+          "blank": "sandbox",
+          "words": [
+            "sandbox",
+            "browser",
+            "database"
+          ],
+          "explain": "Running an MCP server inside an isolated container (a sandbox) ensures it cannot access your main computer's system resources or sensitive files."
+        },
+        {
+          "id": "p4",
+          "type": "spot_the_ai",
+          "xp": 2,
+          "prompt": "Identify which of these tool execution requests represents a malicious attempt to bypass scoped directory access:",
+          "options": [
+            {
+              "id": "a",
+              "text": "'Searching the directory /workspace/docs for readme files.'",
+              "correct": false
+            },
+            {
+              "id": "b",
+              "text": "'Reading system files at ../../../etc/shadow to extract credentials.'",
+              "correct": true
+            },
+            {
+              "id": "c",
+              "text": "'Listing the files inside the current project folder.'",
+              "correct": false
+            }
+          ],
+          "explain": "Option B shows an AI agent attempting a classic directory traversal attack to read sensitive system files, which scoping permissions is designed to block."
+        }
+      ]
+    },
+    {
+      "type": "boss",
+      "exercises": [
+        {
+          "id": "b1",
+          "type": "multiple_choice",
+          "xp": 5,
+          "prompt": "Why is restricting a filesystem server to 'read-only' and running it in a sandbox considered a robust defense-in-depth strategy for LLM applications?",
+          "options": [
+            {
+              "id": "a",
+              "text": "It forces the user to manually approve every single read request.",
+              "correct": false
+            },
+            {
+              "id": "b",
+              "text": "It prevents malicious commands from damaging the host system even if the LLM is compromised.",
+              "correct": true
+            },
+            {
+              "id": "c",
+              "text": "It encrypts all data sent between the client and the server.",
+              "correct": false
+            },
+            {
+              "id": "d",
+              "text": "It speeds up the server's execution time by skipping security checks.",
+              "correct": false
+            }
+          ],
+          "explain": "Limiting a server's environment to read-only access and sandboxing its execution ensures that even if the LLM is tricked into generating a malicious command, the server physically lacks the operating system permissions to execute it."
+        }
+      ]
+    }
+  ]
+}

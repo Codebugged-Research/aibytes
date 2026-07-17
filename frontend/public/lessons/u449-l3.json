@@ -1,0 +1,222 @@
+{
+  "id": "u449-l3",
+  "unit": 449,
+  "day": 2248,
+  "tier": "LLM Application Engineering",
+  "tierIcon": "🔌",
+  "title": "Retrieval Pipeline Complexity Budget",
+  "icon": "⏱️",
+  "concept": "Why stacking every technique at once adds latency and failure surface faster than it adds accuracy.",
+  "xp": 15,
+  "hearts": 3,
+  "estMinutes": 7,
+  "segments": [
+    {
+      "type": "warmup",
+      "exercises": [
+        {
+          "id": "w1",
+          "type": "multiple_choice",
+          "xp": 1,
+          "prompt": "In our last lesson, we combined hybrid search with query rewriting. What does this combination achieve?",
+          "options": [
+            {
+              "id": "w_1",
+              "text": "It combines LLM query translation with dense vector and sparse keyword matching.",
+              "correct": true
+            },
+            {
+              "id": "w_2",
+              "text": "It replaces all vector databases with traditional SQL databases.",
+              "correct": false
+            },
+            {
+              "id": "w_3",
+              "text": "It runs search queries purely on local device memory without networks.",
+              "correct": false
+            }
+          ],
+          "explain": "Combining hybrid search (dense embeddings + sparse keywords) with query rewriting (using an LLM to rephrase or generate hypothetical documents) helps retrieve documents that match both semantic meaning and exact terms."
+        }
+      ]
+    },
+    {
+      "type": "teach",
+      "cards": [
+        {
+          "kind": "hook",
+          "icon": "⏳",
+          "title": "More is Not Always Better",
+          "body": "It is tempting to stack every fancy retrieval technique we have learned: query rewriting, hybrid search, and reranking. But in production, stacking everything at once can turn a snappy search engine into a slow, expensive nightmare."
+        },
+        {
+          "kind": "definition",
+          "icon": "⚖️",
+          "title": "What is a Complexity Budget?",
+          "body": "A Complexity Budget is the limit on how many steps, API calls, and model runs you can chain together before your system becomes too slow, expensive, or fragile for users. Every added technique must justify its latency cost."
+        },
+        {
+          "kind": "analogy",
+          "icon": "🛫",
+          "title": "The Security Checkpoint Congestion",
+          "body": "Think of your pipeline like a airport security line. Adding one ID check helps, but adding a body scan, luggage X-ray, manual bag search, and a lie detector test makes the line stall. Eventually, passengers miss flights due to delay."
+        },
+        {
+          "kind": "example",
+          "icon": "🤖",
+          "title": "The 8-Second Customer Bot",
+          "body": "A customer support bot works best with simple keyword search and a fast vector lookup. If you force it to use HyDE, query expansion, and two layers of reranking, users wait 8 seconds for a response that only improved in quality by 1%."
+        },
+        {
+          "kind": "mythbust",
+          "icon": "🚫",
+          "title": "The Accuracy Trap",
+          "body": "Many developers believe that adding more retrieval steps always yields a better user experience. In reality, the slight gain in search accuracy is often ruined by the massive drop in system speed and reliability."
+        },
+        {
+          "kind": "visual",
+          "icon": "📊",
+          "title": "Pipeline Comparison",
+          "body": "Compare a lean, balanced retrieval pipeline against an over-engineered one that violates its complexity budget.",
+          "compare": {
+            "left": {
+              "emoji": "⚡",
+              "tag": "Lean Pipeline",
+              "text": "Query -> Hybrid Search -> Top Results. Fast, reliable, and cheap."
+            },
+            "right": {
+              "emoji": "🐌",
+              "tag": "Over-Engineered",
+              "text": "Query -> LLM Rewrite -> Multi-Vector Search -> Cross-Encoder Rerank. Slow and fragile."
+            }
+          }
+        }
+      ]
+    },
+    {
+      "type": "practice",
+      "exercises": [
+        {
+          "id": "p1",
+          "type": "multiple_choice",
+          "xp": 2,
+          "prompt": "Why is stacking query rewriting, hybrid search, and reranking dangerous for a production app?",
+          "options": [
+            {
+              "id": "mc_1",
+              "text": "It lowers database costs by caching everything.",
+              "correct": false
+            },
+            {
+              "id": "mc_2",
+              "text": "It increases latency and adds multiple potential points of failure.",
+              "correct": true
+            },
+            {
+              "id": "mc_3",
+              "text": "It automatically guarantees perfect search precision.",
+              "correct": false
+            },
+            {
+              "id": "mc_4",
+              "text": "It simplifies code maintenance by using more APIs.",
+              "correct": false
+            }
+          ],
+          "explain": "A system with multiple sequential steps suffers from compounding latency (each step takes time) and multiple points of failure (if any one step fails or times out, the whole search fails)."
+        },
+        {
+          "id": "p2",
+          "type": "true_false",
+          "xp": 2,
+          "prompt": "True or False: Stacking more retrieval techniques makes your application more stable and reliable.",
+          "options": [
+            {
+              "id": "tf_1",
+              "text": "True",
+              "correct": false
+            },
+            {
+              "id": "tf_2",
+              "text": "False",
+              "correct": true
+            }
+          ],
+          "explain": "Every step in a pipeline has a chance of failing or timing out. The more steps you link together, the higher the overall chance that something will break."
+        },
+        {
+          "id": "p3",
+          "type": "fill_blank",
+          "xp": 2,
+          "prompt": "Fill in the blank to describe the main trade-off of adding multiple retrieval steps:",
+          "sentence": "Every extra step you add to a pipeline increases the overall latency of your search application.",
+          "blank": "latency",
+          "words": [
+            "latency",
+            "accuracy",
+            "safety"
+          ],
+          "explain": "Adding extra steps to a retrieval pipeline increases the total time it takes to get a response, which is known as latency."
+        },
+        {
+          "id": "p4",
+          "type": "spot_the_ai",
+          "xp": 2,
+          "prompt": "Identify the design advice that ignores the complexity budget and is likely AI-generated:",
+          "options": [
+            {
+              "id": "sai_1",
+              "text": "To build a fast chat assistant, we should use GPT-4 to rewrite queries, run dual-vector search, apply BM25, and use a 400M parameter Cross-Encoder for reranking.",
+              "correct": true
+            },
+            {
+              "id": "sai_2",
+              "text": "For a fast chat assistant, we should start with a simple vector search and only add a reranker if we notice bad results in our evaluations.",
+              "correct": false
+            },
+            {
+              "id": "sai_3",
+              "text": "For a fast chat assistant, we should keep the pipeline under a 200ms budget to ensure the user gets instant feedback.",
+              "correct": false
+            }
+          ],
+          "explain": "The first option mimics an AI generating over-engineered code by suggesting a massive, slow sequence of expensive models for a simple real-time application."
+        }
+      ]
+    },
+    {
+      "type": "boss",
+      "exercises": [
+        {
+          "id": "b1",
+          "type": "multiple_choice",
+          "xp": 5,
+          "prompt": "You design a retrieval pipeline that uses an LLM to rewrite a query into 3 variations, runs dense and sparse searches for each, merges them, and then runs a heavy Cross-Encoder reranker. What is the most immediate risk of this pipeline design in production?",
+          "options": [
+            {
+              "id": "opt_1",
+              "text": "It guarantees 100% accuracy because more components always catch more errors.",
+              "correct": false
+            },
+            {
+              "id": "opt_2",
+              "text": "It compounds latency and introduces multiple points of failure where a timeout can break the app.",
+              "correct": true
+            },
+            {
+              "id": "opt_3",
+              "text": "It reduces costs because late-stage filters process less total text data.",
+              "correct": false
+            },
+            {
+              "id": "opt_4",
+              "text": "It eliminates the need for vector databases by relying entirely on rerankers.",
+              "correct": false
+            }
+          ],
+          "explain": "Stacking complex steps like HyDE, sparse-dense hybrid search, and cross-encoder reranking creates a sequence of API and database calls. This guarantees high latency and introduces multiple points of failure where an LLM or database timeout can break the entire system."
+        }
+      ]
+    }
+  ]
+}

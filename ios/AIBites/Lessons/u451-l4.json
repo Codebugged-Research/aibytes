@@ -1,0 +1,222 @@
+{
+  "id": "u451-l4",
+  "unit": 451,
+  "day": 2259,
+  "tier": "LLM Application Engineering",
+  "tierIcon": "🔌",
+  "title": "The Two-Stage Tradeoff",
+  "icon": "🔄",
+  "concept": "Using fast bi-encoders to narrow millions of documents to dozens, then slow cross-encoders to rerank those dozens precisely.",
+  "xp": 15,
+  "hearts": 3,
+  "estMinutes": 7,
+  "segments": [
+    {
+      "type": "warmup",
+      "exercises": [
+        {
+          "id": "w1",
+          "type": "multiple_choice",
+          "xp": 1,
+          "prompt": "Why can't we index and search millions of documents ahead of time using a Cross-encoder?",
+          "options": [
+            {
+              "id": "opt_1",
+              "text": "They are too large to fit in modern server memory.",
+              "correct": false
+            },
+            {
+              "id": "opt_2",
+              "text": "They need the user's query at inference time to compute the joint attention score.",
+              "correct": true
+            },
+            {
+              "id": "opt_3",
+              "text": "They only work with image data, not text documents.",
+              "correct": false
+            }
+          ],
+          "explain": "Cross-encoders cannot pre-calculate document embeddings because they require both the user's query and the document to be fed into the network together at the moment of searching."
+        }
+      ]
+    },
+    {
+      "type": "teach",
+      "cards": [
+        {
+          "kind": "hook",
+          "icon": "⚡",
+          "title": "The Best of Both Worlds",
+          "body": "If you want the absolute highest quality search, you should use a Cross-encoder. But if you have millions of documents, doing this directly is way too slow. What if we could combine the speed of Bi-encoders with the intelligence of Cross-encoders?"
+        },
+        {
+          "kind": "definition",
+          "icon": "⚙️",
+          "title": "Two-Stage Retrieval",
+          "body": "A two-stage retrieval pipeline uses a fast Bi-encoder to retrieve a small candidate set (e.g., 50 documents) from a massive dataset, and then uses a precise Cross-encoder to rerank only those 50 candidates. This gives you the speed of vector search combined with the deep understanding of cross-attention."
+        },
+        {
+          "kind": "analogy",
+          "icon": "👔",
+          "title": "The Hiring Recruiter Analogy",
+          "body": "Think of it like hiring a new team member. The Bi-Encoder is the HR recruiter who quickly filters 10,000 resumes down to 10 candidates based on keywords. The Cross-Encoder is the hiring manager who conducts deep, 1-hour interviews with just those 10 candidates to pick the absolute best one."
+        },
+        {
+          "kind": "example",
+          "icon": "🔍",
+          "title": "Search in Action",
+          "body": "When you search for 'how to fix a leaky faucet' on a modern search engine, a Bi-encoder quickly grabs the top 100 plumbing articles using vector distance. Then, a Cross-encoder analyzes the exact phrasing of your query alongside those 100 articles, bubble-sorting the absolute best step-by-step guide to the #1 spot."
+        },
+        {
+          "kind": "mythbust",
+          "icon": "🙅",
+          "title": "The False Dichotomy",
+          "body": "Many developers think they have to choose between a fast search system and an accurate one. In reality, modern search systems use both in sequence, proving you don't have to sacrifice quality for speed."
+        },
+        {
+          "kind": "visual",
+          "icon": "⏳",
+          "title": "The Pipeline Flow",
+          "body": "Visualizing the pipeline workflow from a massive dataset to the final top results.",
+          "compare": {
+            "left": {
+              "emoji": "🚀",
+              "tag": "Stage 1 (Bi-Encoder)",
+              "text": "Searches 1,000,000 documents instantly using vector similarity. Outputs top 100."
+            },
+            "right": {
+              "emoji": "🧠",
+              "tag": "Stage 2 (Cross-Encoder)",
+              "text": "Reranks the 100 documents using deep attention. Outputs top 10 highly accurate results."
+            }
+          }
+        }
+      ]
+    },
+    {
+      "type": "practice",
+      "exercises": [
+        {
+          "id": "p1",
+          "type": "multiple_choice",
+          "xp": 2,
+          "prompt": "Which model should you use in the first stage to narrow down 1,000,000 documents to 100?",
+          "options": [
+            {
+              "id": "opt_a",
+              "text": "A Bi-encoder, because it can query pre-computed vector indexes in milliseconds.",
+              "correct": true
+            },
+            {
+              "id": "opt_b",
+              "text": "A Cross-encoder, because it compares the query to every document in parallel.",
+              "correct": false
+            },
+            {
+              "id": "opt_c",
+              "text": "A manual database scan, because it doesn't require ML models.",
+              "correct": false
+            },
+            {
+              "id": "opt_d",
+              "text": "A Cross-encoder, because it is more accurate for large datasets.",
+              "correct": false
+            }
+          ],
+          "explain": "Bi-encoders are fast enough to search millions of documents in milliseconds using vector indexing, making them the perfect 'first stage' filter."
+        },
+        {
+          "id": "p2",
+          "type": "true_false",
+          "xp": 2,
+          "prompt": "True or False: We should use a Cross-encoder to score all 5 million documents in our database for every user query.",
+          "options": [
+            {
+              "id": "opt_t",
+              "text": "True",
+              "correct": false
+            },
+            {
+              "id": "opt_f",
+              "text": "False",
+              "correct": true
+            }
+          ],
+          "explain": "Cross-encoders must process the query and document together at the same time, making them too slow to run on millions of documents for every search query."
+        },
+        {
+          "id": "p3",
+          "type": "fill_blank",
+          "xp": 2,
+          "prompt": "Fill in the missing step of the two-stage retrieval process:",
+          "sentence": "We first retrieve candidate documents, and then use a Cross-encoder to rerank them.",
+          "blank": "rerank",
+          "words": [
+            "rerank",
+            "delete",
+            "compress"
+          ],
+          "explain": "In a two-stage system, we first retrieve a small pool of candidate documents, and then use the Cross-encoder to rerank them for the final output."
+        },
+        {
+          "id": "p4",
+          "type": "spot_the_ai",
+          "xp": 2,
+          "prompt": "Which of the following search results highlights the deep query-document analysis typical of an AI-powered Cross-encoder reranker?",
+          "options": [
+            {
+              "id": "opt_1",
+              "text": "A basic keyword match that returns documents containing the word 'java' sorted by date.",
+              "correct": false
+            },
+            {
+              "id": "opt_2",
+              "text": "A simple vector similarity search that returns the closest 10 articles based on title embeddings.",
+              "correct": false
+            },
+            {
+              "id": "opt_3",
+              "text": "A reranked list of documents where the system analyzed the query 'java basics' against paragraph contents to prioritize introductory programming concepts over coffee brewing guides.",
+              "correct": true
+            }
+          ],
+          "explain": "Option C represents an AI generated search result ranking because it shows a deep, non-linear comparison of semantic intent (matching 'java' programming concepts to 'object-oriented language' without needing direct keyword matches)."
+        }
+      ]
+    },
+    {
+      "type": "boss",
+      "exercises": [
+        {
+          "id": "b1",
+          "type": "multiple_choice",
+          "xp": 5,
+          "prompt": "You are building a search engine for 10 million user posts. Users expect search results in under 200 milliseconds, but you also need high-quality relevance. How should you design the pipeline?",
+          "options": [
+            {
+              "id": "opt_1",
+              "text": "Retrieve the top 100 documents using a Bi-encoder, then rerank them using a Cross-encoder.",
+              "correct": true
+            },
+            {
+              "id": "opt_2",
+              "text": "Compare all 1 million documents directly using a Cross-encoder to ensure absolute accuracy.",
+              "correct": false
+            },
+            {
+              "id": "opt_3",
+              "text": "Run a Bi-encoder on the entire database twice to double the retrieval quality without using Cross-encoders.",
+              "correct": false
+            },
+            {
+              "id": "opt_4",
+              "text": "Use a Cross-encoder to index the database overnight and a Bi-encoder to search it at runtime.",
+              "correct": false
+            }
+          ],
+          "explain": "By combining the speed of Bi-encoders with the accuracy of Cross-encoders in a two-stage pipeline, you get the best of both worlds: lightning-fast search over millions of documents and highly accurate relevance ranking for the top results."
+        }
+      ]
+    }
+  ]
+}

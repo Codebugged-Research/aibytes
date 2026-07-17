@@ -1,0 +1,222 @@
+{
+  "id": "u431-l4",
+  "unit": 431,
+  "day": 2159,
+  "tier": "LLM Application Engineering",
+  "tierIcon": "🔌",
+  "title": "Recursive Chunking",
+  "icon": "🌲",
+  "concept": "Trying to split on paragraphs first, falling back to sentences, then words, until chunks fit the size budget.",
+  "xp": 15,
+  "hearts": 3,
+  "estMinutes": 7,
+  "segments": [
+    {
+      "type": "warmup",
+      "exercises": [
+        {
+          "id": "w1",
+          "type": "multiple_choice",
+          "xp": 1,
+          "prompt": "What did we learn about 'Semantic Chunking' in the previous lesson?",
+          "options": [
+            {
+              "id": "w_a",
+              "text": "Splitting text at strict, equal character counts.",
+              "correct": false
+            },
+            {
+              "id": "w_b",
+              "text": "Measuring embedding similarity between sentences to split on topic shifts.",
+              "correct": true
+            },
+            {
+              "id": "w_c",
+              "text": "Replacing all vowels in the document with vector values.",
+              "correct": false
+            }
+          ],
+          "explain": "Semantic chunking uses embedding similarity to find natural topic shifts between sentences, ensuring that sentences about different ideas are separated even if they are next to each other."
+        }
+      ]
+    },
+    {
+      "type": "teach",
+      "cards": [
+        {
+          "kind": "hook",
+          "icon": "🪓",
+          "title": "The Smart Middle Ground",
+          "body": "Fixed-size chunking blindly cuts sentences in half, while semantic chunking can be slow and computationally expensive. What if we could split text intelligently by respecting natural paragraphs and sentences first, only resorting to smaller cuts when absolutely necessary?"
+        },
+        {
+          "kind": "definition",
+          "icon": "🪜",
+          "title": "What is Recursive Chunking?",
+          "body": "Recursive chunking uses a hierarchical list of separators (like paragraphs, sentences, and words) to slice text. It tries to split using the biggest separator first, and only falls back to smaller separators if a chunk still exceeds the target size."
+        },
+        {
+          "kind": "analogy",
+          "icon": "📦",
+          "title": "The Nested Boxes Analogy",
+          "body": "Think of packing a large collection of fragile porcelain dolls. You first try to wrap them gently in whole newspaper pages. If a page is too big for a box, you fold it along the natural creases, and if needed, you tear it into strips to wrap small details safely."
+        },
+        {
+          "kind": "example",
+          "icon": "📝",
+          "title": "Recursive Chunking in Action",
+          "body": "If we want 100-character chunks, a recursive splitter looks at a 150-character paragraph. Because the whole paragraph is too big, it splits it at the period between its two sentences. Each sentence is under 100 characters, so it stops splitting there!"
+        },
+        {
+          "kind": "mythbust",
+          "icon": "🛡️",
+          "title": "Myth: It Over-Splits Everything",
+          "body": "You might think recursive chunking always splits text down to the word level. In reality, it only goes as deep down the separator list as needed; if a paragraph already fits the size budget, it is left completely intact."
+        },
+        {
+          "kind": "visual",
+          "icon": "🔍",
+          "title": "Fallback Behavior",
+          "body": "See how recursive chunking adapts to different text lengths by using the largest possible boundary that fits the budget.",
+          "compare": {
+            "left": {
+              "emoji": "📄",
+              "tag": "Short Paragraph",
+              "text": "Fits the size budget. Kept whole as one single chunk."
+            },
+            "right": {
+              "emoji": "✂️",
+              "tag": "Long Paragraph",
+              "text": "Exceeds budget. Split at the period into two sentence chunks."
+            }
+          }
+        }
+      ]
+    },
+    {
+      "type": "practice",
+      "exercises": [
+        {
+          "id": "p1",
+          "type": "multiple_choice",
+          "xp": 2,
+          "prompt": "In a standard recursive character text splitter, what is the typical order of separators tried, from first to last?",
+          "options": [
+            {
+              "id": "q1_a",
+              "text": "Paragraphs, then sentences, then words",
+              "correct": true
+            },
+            {
+              "id": "q1_b",
+              "text": "Individual characters, then words, then sentences",
+              "correct": false
+            },
+            {
+              "id": "q1_c",
+              "text": "Random character counts only",
+              "correct": false
+            },
+            {
+              "id": "q1_d",
+              "text": "Embedding similarity thresholds only",
+              "correct": false
+            }
+          ],
+          "explain": "By attempting to split on paragraphs first, we preserve the highest level of semantic unity before falling back to sentences or words."
+        },
+        {
+          "id": "p2",
+          "type": "true_false",
+          "xp": 2,
+          "prompt": "True or False: Recursive chunking always forces every paragraph to be split into individual sentences.",
+          "options": [
+            {
+              "id": "q2_true",
+              "text": "True",
+              "correct": false
+            },
+            {
+              "id": "q2_false",
+              "text": "False",
+              "correct": true
+            }
+          ],
+          "explain": "If a paragraph is already smaller than the maximum chunk size, the recursive algorithm does not need to apply secondary separators like sentences or words to it."
+        },
+        {
+          "id": "p3",
+          "type": "fill_blank",
+          "xp": 2,
+          "prompt": "Fill in the missing concept about how recursive chunking decides where to split text:",
+          "sentence": "Recursive chunking keeps text structure intact by falling back through a list of nested separators.",
+          "blank": "separators",
+          "words": [
+            "separators",
+            "embeddings",
+            "randomizers"
+          ],
+          "explain": "Recursive chunking relies on a prioritized list of separators (like paragraphs, then sentences, then words) to gracefully degrade its split points."
+        },
+        {
+          "id": "p4",
+          "type": "spot_the_ai",
+          "xp": 2,
+          "prompt": "Which of the following descriptions represents a recursive chunking strategy?",
+          "options": [
+            {
+              "id": "q3_a",
+              "text": "We will scan the text and insert a hard split exactly every 500 characters, regardless of punctuation.",
+              "correct": false
+            },
+            {
+              "id": "q3_b",
+              "text": "We will attempt to split the document by double newlines first. For any section that remains too large, we will fall back to splitting by periods, and finally by spaces.",
+              "correct": true
+            },
+            {
+              "id": "q3_c",
+              "text": "We will calculate vector embeddings for every sentence and split only when the cosine similarity drops below 0.75.",
+              "correct": false
+            }
+          ],
+          "explain": "Option B mimics human-like structural reasoning and lists the classic fallback hierarchy of recursive chunking (paragraphs to sentences to words). Option A is a basic character limit rule, and Option C describes semantic similarity thresholds."
+        }
+      ]
+    },
+    {
+      "type": "boss",
+      "exercises": [
+        {
+          "id": "b1",
+          "type": "multiple_choice",
+          "xp": 5,
+          "prompt": "You are designing a document preprocessor for a large textbook. If you use recursive chunking with a target chunk size of 500 characters, how does the algorithm process a 1200-character paragraph?",
+          "options": [
+            {
+              "id": "q4_a",
+              "text": "It immediately cuts the text at the exact character limit without checking boundaries.",
+              "correct": false
+            },
+            {
+              "id": "q4_b",
+              "text": "It tries splitting by paragraphs, then sentences, then words, only split-testing pieces that exceed the limit.",
+              "correct": true
+            },
+            {
+              "id": "q4_c",
+              "text": "It calculates semantic embeddings for every single word in the document first.",
+              "correct": false
+            },
+            {
+              "id": "q4_d",
+              "text": "It reverses the text and splits from the end of the document backward to the front.",
+              "correct": false
+            }
+          ],
+          "explain": "Recursive chunking works from the top down. It first attempts to split using the largest boundary separator (like double newlines for paragraphs). If the resulting pieces are still larger than the target chunk size, it moves down to the next separator (like single newlines or periods) to break those specific oversized pieces down further."
+        }
+      ]
+    }
+  ]
+}

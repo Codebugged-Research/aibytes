@@ -1,0 +1,222 @@
+{
+  "id": "u428-l5",
+  "unit": 428,
+  "day": 2145,
+  "tier": "LLM Application Engineering",
+  "tierIcon": "🔌",
+  "title": "Evaluating a Fine-Tuned Embedder",
+  "icon": "🎯",
+  "concept": "Before/after retrieval benchmarks to confirm fine-tuning actually improved downstream search quality.",
+  "xp": 15,
+  "hearts": 3,
+  "estMinutes": 7,
+  "segments": [
+    {
+      "type": "warmup",
+      "exercises": [
+        {
+          "id": "w1",
+          "type": "multiple_choice",
+          "xp": 1,
+          "prompt": "When building a training dataset for fine-tuning an embedding model, what kinds of pairs do we primarily collect?",
+          "options": [
+            {
+              "id": "wu_1",
+              "text": "Random words and their dictionary definitions.",
+              "correct": false
+            },
+            {
+              "id": "wu_2",
+              "text": "Pairs of search queries and their corresponding relevant documents.",
+              "correct": true
+            },
+            {
+              "id": "wu_3",
+              "text": "Entire books translated into three different languages.",
+              "correct": false
+            }
+          ],
+          "explain": "In the prior lesson, we learned that a fine-tuning dataset consists of pairs matching specific user search queries with the most relevant document or passage."
+        }
+      ]
+    },
+    {
+      "type": "teach",
+      "cards": [
+        {
+          "kind": "hook",
+          "icon": "🏁",
+          "title": "Did It Actually Work?",
+          "body": "You've spent time and money fine-tuning your embedding model. But how do you know it actually got smarter at finding your specific documents, or if it just got worse at general search? Let's learn how to run a proper before-and-after check."
+        },
+        {
+          "kind": "definition",
+          "icon": "📊",
+          "title": "Retrieval Benchmarking",
+          "body": "Evaluating a fine-tuned embedder involves running 'before-and-after' search benchmarks. We use metrics like 'Hit Rate' (how often the correct document is in the top results) to prove that the fine-tuned model performs better than the original baseline model."
+        },
+        {
+          "kind": "analogy",
+          "icon": "🐕",
+          "title": "The Hunting Dog Test",
+          "body": "Think of it like training a hunting dog. You don't just trust that the training worked because the dog sat quietly in class. You take it out to the field, throw a decoy, and measure how quickly and accurately it retrieves it compared to before."
+        },
+        {
+          "kind": "example",
+          "icon": "🏥",
+          "title": "A Medical Search Success",
+          "body": "A medical startup tests their new embedder on 100 patient search queries. The original model found the right treatment page in the top 5 results only 60% of the time, while the fine-tuned model scores 85%, confirming a successful tune."
+        },
+        {
+          "kind": "mythbust",
+          "icon": "🚫",
+          "title": "Low Loss Doesn't Mean Victory",
+          "body": "Many beginners think a model that trains to a low 'loss' score is guaranteed to be better. In reality, a model can overfit the training data and perform worse on real user queries. You must always test retrieval on unseen data."
+        },
+        {
+          "kind": "visual",
+          "icon": "⚖️",
+          "title": "Evaluating Side-by-Side",
+          "body": "Compare how we run a retrieval evaluation. We run the same queries through both models and count how many target documents make it to the top.",
+          "compare": {
+            "left": {
+              "emoji": "📉",
+              "tag": "Baseline Model",
+              "text": "Top 5 search results contain the correct document for 50 out of 100 test queries."
+            },
+            "right": {
+              "emoji": "📈",
+              "tag": "Fine-Tuned Model",
+              "text": "Top 5 search results contain the correct document for 85 out of 100 test queries."
+            }
+          }
+        }
+      ]
+    },
+    {
+      "type": "practice",
+      "exercises": [
+        {
+          "id": "p1",
+          "type": "multiple_choice",
+          "xp": 2,
+          "prompt": "Why must you run your evaluation queries through the original 'baseline' model before evaluating your fine-tuned model?",
+          "options": [
+            {
+              "id": "mc_1",
+              "text": "To make sure the model generates longer vectors.",
+              "correct": false
+            },
+            {
+              "id": "mc_2",
+              "text": "To establish a benchmark showing how well the original, untuned model performs on your specific test set.",
+              "correct": true
+            },
+            {
+              "id": "mc_3",
+              "text": "To delete the old model automatically.",
+              "correct": false
+            },
+            {
+              "id": "mc_4",
+              "text": "To speed up the training process.",
+              "correct": false
+            }
+          ],
+          "explain": "A baseline comparison ensures you have a benchmark. If you don't test the original model on the exact same dataset, you can't tell if your fine-tuned model is an improvement or a step backward."
+        },
+        {
+          "id": "p2",
+          "type": "true_false",
+          "xp": 2,
+          "prompt": "True or False: To get an unbiased measure of search quality, you should evaluate your model using the exact same query-document pairs you used to train it.",
+          "options": [
+            {
+              "id": "tf_true",
+              "text": "True",
+              "correct": false
+            },
+            {
+              "id": "tf_false",
+              "text": "False",
+              "correct": true
+            }
+          ],
+          "explain": "Evaluating on the same data used for training leads to overfitting bias. You must use a separate, unseen test set of queries to measure real-world performance."
+        },
+        {
+          "id": "p3",
+          "type": "fill_blank",
+          "xp": 2,
+          "prompt": "Fill in the blank to complete the definition of this crucial search metric.",
+          "sentence": "The metric that measures how often the correct document appears in the top search results is called the Hit Rate.",
+          "blank": "Hit Rate",
+          "words": [
+            "Hit Rate",
+            "Cosine Similarity",
+            "Loss Function"
+          ],
+          "explain": "Hit Rate measures the percentage of queries for which the correct document appears anywhere within the top retrieved results (like the top 5 or 10)."
+        },
+        {
+          "id": "p4",
+          "type": "spot_the_ai",
+          "xp": 2,
+          "prompt": "Which of the following evaluation report statements was generated by an AI making a factual error about how embedding models work?",
+          "options": [
+            {
+              "id": "sai_1",
+              "text": "The fine-tuned model showed a 15% increase in MRR (Mean Reciprocal Rank) compared to the base model.",
+              "correct": false
+            },
+            {
+              "id": "sai_2",
+              "text": "Our Hit Rate @ 5 improved from 64% to 82% after training on the domain-specific corpus.",
+              "correct": false
+            },
+            {
+              "id": "sai_3",
+              "text": "The model's vector dimensions successfully doubled to store the extra knowledge gained during fine-tuning.",
+              "correct": true
+            }
+          ],
+          "explain": "Option C is typical AI-generated hallucination/nonsense. Vector dimensions are fixed by the model architecture (e.g., 768 or 1536) and do not automatically double during domain adaptation fine-tuning."
+        }
+      ]
+    },
+    {
+      "type": "boss",
+      "exercises": [
+        {
+          "id": "b1",
+          "type": "multiple_choice",
+          "xp": 5,
+          "prompt": "You have finished fine-tuning your custom embedding model for a legal search application. What is the most scientifically sound next step to prove your model actually retrieves better legal documents than the original baseline model?",
+          "options": [
+            {
+              "id": "boss_1",
+              "text": "Evaluate only the fine-tuned model on the training dataset to ensure it memorized the pairs perfectly.",
+              "correct": false
+            },
+            {
+              "id": "boss_2",
+              "text": "Compare the vector generation speed (latency) of the two models on random gibberish text.",
+              "correct": false
+            },
+            {
+              "id": "boss_3",
+              "text": "Compare the Hit Rate of the baseline and fine-tuned models using a separate, unseen validation dataset of search queries.",
+              "correct": true
+            },
+            {
+              "id": "boss_4",
+              "text": "Manually read through all 10,000 vectors to see if the numbers look more accurate after tuning.",
+              "correct": false
+            }
+          ],
+          "explain": "To evaluate your fine-tuned model fairly, you must test it on a separate, unseen 'test' dataset of query-document pairs, and compare its Hit Rate or MRR against the baseline (original) model. Evaluating on training data leads to overfitting bias."
+        }
+      ]
+    }
+  ]
+}

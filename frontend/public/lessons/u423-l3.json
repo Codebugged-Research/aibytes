@@ -1,0 +1,222 @@
+{
+  "id": "u423-l3",
+  "unit": 423,
+  "day": 2118,
+  "tier": "LLM Application Engineering",
+  "tierIcon": "🔌",
+  "title": "Structuring Prompts for Cache Hits",
+  "icon": "🧩",
+  "concept": "Placing stable content (system prompt, docs) before variable content (user query) to maximize prefix cache reuse.",
+  "xp": 15,
+  "hearts": 3,
+  "estMinutes": 7,
+  "segments": [
+    {
+      "type": "warmup",
+      "exercises": [
+        {
+          "id": "w1",
+          "type": "multiple_choice",
+          "xp": 1,
+          "prompt": "Quick recap: what does prompt caching actually save and reuse?",
+          "options": [
+            {
+              "id": "a",
+              "text": "The model's internal key-value state for a shared prefix, so those tokens aren't reprocessed",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "A screenshot of the chat window",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "The user's account password for faster login",
+              "correct": false
+            }
+          ],
+          "explain": "Right — caching stores the internal computation (key-value state) for tokens the model has already 'seen', so it can skip recomputing them next time the same prefix appears."
+        }
+      ]
+    },
+    {
+      "type": "teach",
+      "cards": [
+        {
+          "kind": "hook",
+          "icon": "🐢",
+          "title": "Why Is My Chatbot Slow Today?",
+          "body": "Two developers build the same chatbot with the same cache-enabled model. One is lightning fast and cheap. The other is sluggish and expensive. The only difference? The ORDER they put things in the prompt."
+        },
+        {
+          "kind": "definition",
+          "icon": "📐",
+          "title": "Prefix Cache Reuse",
+          "body": "A prefix cache only helps if the beginning of your prompt matches exactly, token for token, between requests. So you should place stable content — like the system prompt and reference documents — first, and put the ever-changing user question last."
+        },
+        {
+          "kind": "analogy",
+          "icon": "📦",
+          "title": "The Packing Order Trick",
+          "body": "Imagine packing the same heavy suitcase every morning before adding your daily lunch bag. If the suitcase always goes in first, you barely have to think about it — you just toss the lunch bag on top. But if you shove the lunch bag in first, you have to unpack and repack the whole suitcase every single day."
+        },
+        {
+          "kind": "example",
+          "icon": "🧾",
+          "title": "Good vs Risky Order",
+          "body": "Good: [System instructions] + [Company policy doc] + [User's new question]. Here the first two chunks stay identical across requests, so they get cached and reused. If you instead put the user's question first, everything after it counts as 'new' and can't be cached, even though the doc never changed."
+        },
+        {
+          "kind": "mythbust",
+          "icon": "🚫",
+          "title": "Myth: Order Doesn't Matter, Only Content Does",
+          "body": "Not true! Caching works on the PREFIX — the exact starting sequence of tokens. Even if your prompt has the same pieces, rearranging them (like moving the user query to the front) breaks the match and forces a full recompute."
+        },
+        {
+          "kind": "visual",
+          "icon": "⚖️",
+          "title": "Cache-Friendly vs Cache-Breaking Layout",
+          "body": "Where you put the variable part changes everything downstream of it.",
+          "compare": {
+            "left": {
+              "emoji": "✅",
+              "tag": "Cache Hit Layout",
+              "text": "System prompt → Reference docs → User query (stable stuff stays first, variable stuff last)"
+            },
+            "right": {
+              "emoji": "❌",
+              "tag": "Cache Miss Layout",
+              "text": "User query → System prompt → Reference docs (variable part up front breaks the match for everything after it)"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "type": "practice",
+      "exercises": [
+        {
+          "id": "p1",
+          "type": "multiple_choice",
+          "xp": 2,
+          "prompt": "Which prompt structure best maximizes prefix cache reuse?",
+          "options": [
+            {
+              "id": "a",
+              "text": "User question first, then system instructions, then documents",
+              "correct": false
+            },
+            {
+              "id": "b",
+              "text": "System instructions and documents first, user question last",
+              "correct": true
+            },
+            {
+              "id": "c",
+              "text": "Randomly shuffle the order each request for variety",
+              "correct": false
+            },
+            {
+              "id": "d",
+              "text": "Documents in the middle, user question first, system prompt last",
+              "correct": false
+            }
+          ],
+          "explain": "Putting stable content (system prompt, docs) first means that identical block can be reused from cache every time, while only the final, changing user query needs fresh processing."
+        },
+        {
+          "id": "p2",
+          "type": "true_false",
+          "xp": 2,
+          "prompt": "True or False: If you move the user's question to the very front of the prompt, everything after it can still be cached normally.",
+          "options": [
+            {
+              "id": "a",
+              "text": "True",
+              "correct": false
+            },
+            {
+              "id": "b",
+              "text": "False",
+              "correct": true
+            }
+          ],
+          "explain": "False. Since the user question changes every request, putting it first means the 'shared prefix' is broken immediately — nothing after it can match a previous cache, even if those later parts are identical to before."
+        },
+        {
+          "id": "p3",
+          "type": "fill_blank",
+          "xp": 2,
+          "prompt": "Fill in the blank:",
+          "sentence": "To maximize cache hits, keep the stable content, like the system prompt and reference documents, at the start, and place the changing user query at the end so it doesn't break the prefix.",
+          "blank": "prefix",
+          "words": [
+            "prefix",
+            "password",
+            "screenshot"
+          ],
+          "explain": "The word 'prefix' refers to the matching starting sequence of tokens — keeping stable content there means it stays reusable across requests."
+        },
+        {
+          "id": "p4",
+          "type": "spot_the_ai",
+          "xp": 2,
+          "prompt": "Which of these three explanations of prompt structuring for caching sounds like generic AI-generated filler rather than a precise, concept-accurate explanation?",
+          "options": [
+            {
+              "id": "a",
+              "text": "Place fixed elements like system instructions and documents before the variable user query, since caching relies on an unbroken matching prefix.",
+              "correct": false
+            },
+            {
+              "id": "b",
+              "text": "In today's fast-paced digital landscape, optimizing your prompts is key to unlocking synergy and taking your AI workflow to the next level!",
+              "correct": true
+            },
+            {
+              "id": "c",
+              "text": "Because the cache matches prompts token-by-token from the start, reordering so the query comes last preserves the shared prefix across calls.",
+              "correct": false
+            }
+          ],
+          "explain": "Option B is vague buzzword filler ('synergy', 'next level') with no actual technical content about prefixes or token matching — a telltale sign of generic AI padding rather than a real explanation."
+        }
+      ]
+    },
+    {
+      "type": "boss",
+      "exercises": [
+        {
+          "id": "b1",
+          "type": "multiple_choice",
+          "xp": 5,
+          "prompt": "A customer support bot sends this prompt structure: [User's live question] + [50-page policy manual] + [System role instructions]. The manual and instructions never change between users, only the question does. What's the BEST fix, and why?",
+          "options": [
+            {
+              "id": "a",
+              "text": "Move the user's question to the end, after the manual and instructions, so the stable content forms a reusable cached prefix",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "Leave it as is, since caching only cares about total prompt length, not order",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "Delete the policy manual to make the prompt shorter and faster",
+              "correct": false
+            },
+            {
+              "id": "d",
+              "text": "Repeat the system instructions twice to reinforce them for the model",
+              "correct": false
+            }
+          ],
+          "explain": "The fix is to reorder so stable content (manual + instructions) comes first and the ever-changing question comes last. That way the huge, unchanging manual and instructions get cached and reused across every user, and only the short new question needs fresh processing — saving massive time and cost. Order matters because caching depends on matching an identical starting sequence of tokens, not just having the same content somewhere in the prompt."
+        }
+      ]
+    }
+  ]
+}

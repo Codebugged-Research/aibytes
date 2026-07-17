@@ -1,0 +1,222 @@
+{
+  "id": "u423-l4",
+  "unit": 423,
+  "day": 2119,
+  "tier": "LLM Application Engineering",
+  "tierIcon": "🔌",
+  "title": "Cache Invalidation",
+  "icon": "💥",
+  "concept": "What breaks a cache hit — any change earlier in the prefix — and designing prompts to avoid needless invalidation.",
+  "xp": 15,
+  "hearts": 3,
+  "estMinutes": 7,
+  "segments": [
+    {
+      "type": "warmup",
+      "exercises": [
+        {
+          "id": "w1",
+          "type": "multiple_choice",
+          "xp": 1,
+          "prompt": "Quick recap: for the best cache hit rate, how should you order a prompt?",
+          "options": [
+            {
+              "id": "a",
+              "text": "Stable content (system prompt, docs) first, then variable content (user query) last",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "Variable content first, then stable content last",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "Order doesn't matter as long as all the content is present",
+              "correct": false
+            }
+          ],
+          "explain": "Placing stable, unchanging content at the front lets that portion be reused from cache across many requests. The variable, ever-changing user query goes last so it doesn't disturb the cached prefix."
+        }
+      ]
+    },
+    {
+      "type": "teach",
+      "cards": [
+        {
+          "kind": "hook",
+          "icon": "🎯",
+          "title": "So Close, Yet So Costly",
+          "body": "You carefully ordered your prompt for perfect caching — system prompt first, docs second, user question last. Then one day your cache hit rate crashes to zero. What happened? Something upstream quietly changed."
+        },
+        {
+          "kind": "definition",
+          "icon": "💥",
+          "title": "What is Cache Invalidation?",
+          "body": "Cache invalidation is when a cached prefix can no longer be reused because something earlier in the prompt changed. Even a tiny edit — one word, one timestamp, one space — near the front forces the model to reprocess everything after that point."
+        },
+        {
+          "kind": "analogy",
+          "icon": "📦",
+          "title": "A stack of boxes in a hallway",
+          "body": "Prompt caching is like stacking boxes in a hallway in a fixed order. If you add a new box at the very front, every box behind it has to be picked up and re-stacked. But if you just add one more box at the very end, the rest of the stack never moves."
+        },
+        {
+          "kind": "example",
+          "icon": "🧾",
+          "title": "One Word Wrecks It",
+          "body": "Your system prompt says 'You are HelpBot v1.2.' Someone bumps it to 'v1.3' to track a small change. That single word sits at the very start, so now EVERY cached prefix for EVERY user is invalidated at once, even though nothing about the actual behavior changed."
+        },
+        {
+          "kind": "mythbust",
+          "icon": "🚫",
+          "title": "Myth: Only Big Edits Break the Cache",
+          "body": "Not true. A single extra space, a changed timestamp, or reordering two sentences in your system prompt is just as fatal to a cache hit as rewriting the whole thing. The cache doesn't care HOW MUCH changed — it only cares WHERE the first difference is."
+        },
+        {
+          "kind": "visual",
+          "icon": "⛓️",
+          "title": "Where the Break Happens",
+          "body": "Picture the prompt as a chain of links. The cache stays valid up to the first broken link, then everything after it must be rebuilt — no matter how good the links before were.",
+          "compare": {
+            "left": {
+              "emoji": "✅",
+              "tag": "Change at the END",
+              "text": "System + docs stay cached, only the new tail is processed — fast and cheap."
+            },
+            "right": {
+              "emoji": "❌",
+              "tag": "Change near the START",
+              "text": "Even one edited word up front breaks the whole chain — everything after must be reprocessed."
+            }
+          }
+        }
+      ]
+    },
+    {
+      "type": "practice",
+      "exercises": [
+        {
+          "id": "p1",
+          "type": "multiple_choice",
+          "xp": 2,
+          "prompt": "Which change is MOST likely to invalidate the cache for every single user at once?",
+          "options": [
+            {
+              "id": "a",
+              "text": "A user asks a slightly different question than yesterday",
+              "correct": false
+            },
+            {
+              "id": "b",
+              "text": "Updating a version number inside the shared system prompt",
+              "correct": true
+            },
+            {
+              "id": "c",
+              "text": "A user's session ID changes between requests",
+              "correct": false
+            },
+            {
+              "id": "d",
+              "text": "The user's question is one character longer than usual",
+              "correct": false
+            }
+          ],
+          "explain": "The system prompt is shared by every user and sits at the very front of the prefix. Changing anything inside it — even a small version number — invalidates the cache for EVERY user, not just one. Changes to the user's own question only affect that user's own cache, since it's already at the end."
+        },
+        {
+          "id": "p2",
+          "type": "true_false",
+          "xp": 2,
+          "prompt": "True or False: Changing only the very last sentence of a long prompt (the user's question) still forces the entire prompt to be reprocessed from the beginning.",
+          "options": [
+            {
+              "id": "a",
+              "text": "True",
+              "correct": false
+            },
+            {
+              "id": "b",
+              "text": "False",
+              "correct": true
+            }
+          ],
+          "explain": "False — this is the whole point of ordering prompts well. If only the final part changes, everything BEFORE it (the stable prefix) can still be reused from cache. Only the new, changed tail needs fresh processing."
+        },
+        {
+          "id": "p3",
+          "type": "fill_blank",
+          "xp": 2,
+          "prompt": "Fill in the blank:",
+          "sentence": "A cache hit breaks the moment any content changes earlier in the prefix, so even a tiny edit near the start forces everything after it to be reprocessed.",
+          "blank": "prefix",
+          "words": [
+            "prefix",
+            "output",
+            "tokenizer"
+          ],
+          "explain": "The cache is built on the shared beginning portion of the prompt, called the prefix. Any change inside that prefix — no matter how small — invalidates the cache from that point forward."
+        },
+        {
+          "id": "p4",
+          "type": "spot_the_ai",
+          "xp": 2,
+          "prompt": "Which of these three prompt-construction habits was most likely written by an AI assistant that doesn't fully understand caching, rather than an engineer optimizing for cache hits?",
+          "options": [
+            {
+              "id": "a",
+              "text": "Insert the current server timestamp as the very first line of the prompt, before the system instructions, 'so the model always knows what time it is'",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "Keep the system prompt and reference docs frozen and byte-identical across requests whenever possible",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "Place the user's dynamic query at the very end of the prompt",
+              "correct": false
+            }
+          ],
+          "explain": "Putting a constantly-changing timestamp at the very FRONT of the prompt is a classic cache-invalidation mistake — it guarantees the cache breaks on every request, no matter how stable everything else is. A caching-aware engineer would instead put stable content first and any needed timestamp near the end, right next to the user query."
+        }
+      ]
+    },
+    {
+      "type": "boss",
+      "exercises": [
+        {
+          "id": "b1",
+          "type": "multiple_choice",
+          "xp": 5,
+          "prompt": "You run a customer-support bot. The prompt is built as: [system instructions] + [product manual] + [today's date] + [user question]. Cache hit rates are terrible. What's the best fix?",
+          "options": [
+            {
+              "id": "a",
+              "text": "Move 'today's date' to the very end of the prompt, right before the user question, since it changes every single day",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "Switch to a bigger, more powerful model so it processes the changing date faster",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "Remove the system instructions entirely so there's less text to reprocess",
+              "correct": false
+            },
+            {
+              "id": "d",
+              "text": "Cache the user question instead of the system instructions and manual",
+              "correct": false
+            }
+          ],
+          "explain": "Cache invalidation happens the moment something CHANGES earlier in the prefix — and everything after that change point has to be reprocessed. Here, 'today's date' sits between the stable manual and the variable user question, but it changes daily, so it breaks the cache every single day even though the system instructions and manual never changed! Moving the date to the very end (right next to the naturally-changing user question) means the huge stable chunk (instructions + manual) stays cached and reused every time. This is the core skill of cache-aware prompt design: order things from most-stable to least-stable, and don't let a small changing piece sit in front of a big stable piece."
+        }
+      ]
+    }
+  ]
+}

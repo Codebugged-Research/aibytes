@@ -1,0 +1,222 @@
+{
+  "id": "u408-l5",
+  "unit": 408,
+  "day": 2045,
+  "tier": "LLM Application Engineering",
+  "tierIcon": "🔌",
+  "title": "Templating Libraries in Practice",
+  "icon": "🧬",
+  "concept": "Jinja-style templating for prompts, separating prompt logic from application code.",
+  "xp": 15,
+  "hearts": 3,
+  "estMinutes": 7,
+  "segments": [
+    {
+      "type": "warmup",
+      "exercises": [
+        {
+          "id": "w1",
+          "type": "multiple_choice",
+          "xp": 1,
+          "prompt": "In our last lesson on Multi-Part Prompts, why did we split prompts into separate instruction, context, and few-shot blocks?",
+          "options": [
+            {
+              "id": "opt_1",
+              "text": "To make the prompt easier to test, update, and reuse in different parts of an app.",
+              "correct": true
+            },
+            {
+              "id": "opt_2",
+              "text": "To reduce the token cost of the final prompt.",
+              "correct": false
+            },
+            {
+              "id": "opt_3",
+              "text": "To make the LLM process the prompt faster.",
+              "correct": false
+            }
+          ],
+          "explain": "In modular multi-part prompting, splitting instructions, context, and few-shot examples into separate blocks makes the system easier to test and update."
+        }
+      ]
+    },
+    {
+      "type": "teach",
+      "cards": [
+        {
+          "kind": "hook",
+          "icon": "🪲",
+          "title": "The Danger of Manual Stitching",
+          "body": "Have you ever copy-pasted a prompt template and accidentally left a placeholder like [INSERT NAME HERE] in the final text sent to the LLM? Using code to stitch strings together manually is messy and prone to silly, embarrassing bugs."
+        },
+        {
+          "kind": "definition",
+          "icon": "🗂️",
+          "title": "What is Templating?",
+          "body": "Templating libraries like Jinja allow you to write prompts as separate text files with dynamic placeholders. Your code loads the file, fills in variables like user queries or system instructions, and sends the clean, assembled text to the LLM."
+        },
+        {
+          "kind": "analogy",
+          "icon": "📝",
+          "title": "The Mail-Merge Analogy",
+          "body": "Think of a prompt template like an email mail-merge or a mad-libs template. Instead of rewriting the entire email for every customer, you write it once with placeholders like {{ name }}, and let the computer swap in the correct names automatically."
+        },
+        {
+          "kind": "example",
+          "icon": "💻",
+          "title": "Jinja in Action",
+          "body": "In a file named 'summarizer.jinja', we write: 'Summarize this text: {{ document }}'. In Python, we load this file and render it with 'template.render(document=user_input)', producing a clean prompt ready for the LLM."
+        },
+        {
+          "kind": "mythbust",
+          "icon": "🔍",
+          "title": "Not Just for Web Developers",
+          "body": "You might think template engines are only for building HTML websites. Actually, because modern LLM prompts require strict structuring, loops, and conditionals, templates are now standard tools for prompt engineering."
+        },
+        {
+          "kind": "visual",
+          "icon": "⚖️",
+          "title": "Manual vs. Templated Prompts",
+          "body": "Comparing manual string formatting with template engines. Templates keep your codebase clean and modular.",
+          "compare": {
+            "left": {
+              "emoji": "❌",
+              "tag": "Manual Concatenation",
+              "text": "Mixing prompt text, list loops, and variable replacements inside Python f-strings."
+            },
+            "right": {
+              "emoji": "✅",
+              "tag": "Jinja Template File",
+              "text": "Prompt is a clean, readable text file; Python code only loads and runs it."
+            }
+          }
+        }
+      ]
+    },
+    {
+      "type": "practice",
+      "exercises": [
+        {
+          "id": "p1",
+          "type": "multiple_choice",
+          "xp": 2,
+          "prompt": "Which syntax does the Jinja library use to define a variable placeholder in a template?",
+          "options": [
+            {
+              "id": "opt_1",
+              "text": "{ variable }",
+              "correct": false
+            },
+            {
+              "id": "opt_2",
+              "text": "{{ variable }}",
+              "correct": true
+            },
+            {
+              "id": "opt_3",
+              "text": "<% variable %>",
+              "correct": false
+            },
+            {
+              "id": "opt_4",
+              "text": "[variable]",
+              "correct": false
+            }
+          ],
+          "explain": "In Jinja, double curly braces {{ }} are used as placeholders for variables that will be dynamically evaluated and replaced."
+        },
+        {
+          "id": "p2",
+          "type": "true_false",
+          "xp": 2,
+          "prompt": "True or False: Storing prompts in separate template files makes it easier to update prompts without modifying your Python code.",
+          "options": [
+            {
+              "id": "true_1",
+              "text": "True",
+              "correct": true
+            },
+            {
+              "id": "false_1",
+              "text": "False",
+              "correct": false
+            }
+          ],
+          "explain": "Keeping prompts in separate files means you can modify the wording or instructions without touching or risking breaking the underlying Python application code."
+        },
+        {
+          "id": "p3",
+          "type": "fill_blank",
+          "xp": 2,
+          "prompt": "Fill in the missing method name that combines the Jinja template with our data variables.",
+          "sentence": "We call the render method to fill the template variables with actual data.",
+          "blank": "render",
+          "words": [
+            "render",
+            "compile",
+            "execute"
+          ],
+          "explain": "The render method is used in Jinja to replace the double-curly-brace placeholders with real data values."
+        },
+        {
+          "id": "p4",
+          "type": "spot_the_ai",
+          "xp": 2,
+          "prompt": "Identify the correct AI-style prompt template that uses Jinja loop tags to list items dynamically.",
+          "options": [
+            {
+              "id": "opt_1",
+              "text": "Please list the following items: for item in list: print('- ' + item)",
+              "correct": false
+            },
+            {
+              "id": "opt_2",
+              "text": "Here are the tasks: [tasks.map(t => t.name)]",
+              "correct": false
+            },
+            {
+              "id": "opt_3",
+              "text": "Review these tasks:\n{% for task in tasks %}\n- {{ task }}\n{% endfor %}",
+              "correct": true
+            }
+          ],
+          "explain": "Option 3 uses correct Jinja loop syntax ({% for item in list %}) and variable syntax ({{ item }}) to generate a dynamic list for a prompt."
+        }
+      ]
+    },
+    {
+      "type": "boss",
+      "exercises": [
+        {
+          "id": "b1",
+          "type": "multiple_choice",
+          "xp": 5,
+          "prompt": "Why is it considered a software engineering best practice to load a Jinja2 prompt template from a separate '.jinja' file rather than hardcoding it as a string inside your main Python code?",
+          "options": [
+            {
+              "id": "opt_1",
+              "text": "It runs the prompt inside the LLM automatically without needing an API call.",
+              "correct": false
+            },
+            {
+              "id": "opt_2",
+              "text": "It decouples the prompt layout from your Python code, allowing clean updates without changing application logic.",
+              "correct": true
+            },
+            {
+              "id": "opt_3",
+              "text": "It encrypts the prompt so the user cannot see it in the final output.",
+              "correct": false
+            },
+            {
+              "id": "opt_4",
+              "text": "It automatically translates the prompt into multiple foreign languages.",
+              "correct": false
+            }
+          ],
+          "explain": "Using a real engine like Jinja2 keeps prompt layouts (the design) separate from the Python code (the execution). Modifying the prompt wording in 'prompt.jinja' won't break your Python code, making it safer to maintain and deploy."
+        }
+      ]
+    }
+  ]
+}

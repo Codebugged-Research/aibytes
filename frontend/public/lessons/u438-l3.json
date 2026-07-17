@@ -1,0 +1,222 @@
+{
+  "id": "u438-l3",
+  "unit": 438,
+  "day": 2193,
+  "tier": "LLM Application Engineering",
+  "tierIcon": "🔌",
+  "title": "Product Quantization (PQ)",
+  "icon": "🧩",
+  "concept": "Compressing each vector into a compact code by quantizing sub-vector chunks independently, cutting memory drastically.",
+  "xp": 15,
+  "hearts": 3,
+  "estMinutes": 7,
+  "segments": [
+    {
+      "type": "warmup",
+      "exercises": [
+        {
+          "id": "w1",
+          "type": "multiple_choice",
+          "xp": 1,
+          "prompt": "In the previous lesson, we learned about the nprobe parameter. What does nprobe control?",
+          "options": [
+            {
+              "id": "opt_1",
+              "text": "The size of the compressed vector sub-spaces",
+              "correct": false
+            },
+            {
+              "id": "opt_2",
+              "text": "The number of partitions to search at query time, balancing recall and latency",
+              "correct": true
+            },
+            {
+              "id": "opt_3",
+              "text": "The total number of clusters created during the indexing phase",
+              "correct": false
+            }
+          ],
+          "explain": "The nprobe parameter controls how many centroid partitions are searched during a query. Higher nprobe increases search accuracy (recall) but also increases search time (latency)."
+        }
+      ]
+    },
+    {
+      "type": "teach",
+      "cards": [
+        {
+          "kind": "hook",
+          "icon": "💡",
+          "title": "The Memory Crunch",
+          "body": "Vector databases can quickly exhaust RAM when storing millions of large embeddings. Instead of buying expensive hardware, what if we could compress our vectors by 95% or more while still keeping them highly searchable?"
+        },
+        {
+          "kind": "definition",
+          "icon": "✂️",
+          "title": "What is Product Quantization?",
+          "body": "Product Quantization (PQ) is a compression technique that chops a high-dimensional vector into smaller sub-vectors. Each sub-vector is then matched to the closest center point in a pre-trained dictionary, and replaced by that center's short ID code."
+        },
+        {
+          "kind": "analogy",
+          "icon": "👚",
+          "title": "The Outfit Wardrobe Analogy",
+          "body": "Think of Product Quantization like styling an outfit. Instead of describing every thread of your clothes, you pick a shirt color from a small palette, pants from another, and shoes from a third. Together, these three simple category codes define your entire look."
+        },
+        {
+          "kind": "example",
+          "icon": "📊",
+          "title": "Chop, Cluster, Code",
+          "body": "A 1024-dimensional embedding vector is sliced into 8 chunks of 128 dimensions each. Each chunk is represented by a single byte index (0-255) pointing to a cluster center, shrinking the total storage size from 4,096 bytes down to just 8 bytes!"
+        },
+        {
+          "kind": "mythbust",
+          "icon": "🚫",
+          "title": "Myth: PQ Quantizes the Whole Vector at Once",
+          "body": "It actually quantizes independent chunks (sub-spaces) of the vector separately. Quantizing the whole vector at once would require an impossibly large dictionary of options to keep good accuracy."
+        },
+        {
+          "kind": "visual",
+          "icon": "🔍",
+          "title": "PQ vs Uncompressed",
+          "body": "Instead of treating a vector as one giant coordinate, PQ slices it and maps each slice to a small codebook.",
+          "compare": {
+            "left": {
+              "emoji": "🗜️",
+              "tag": "Product Quantization",
+              "text": "Splits vector into 8 segments; stores 8 short index codes (e.g., 8 bytes)."
+            },
+            "right": {
+              "emoji": "💾",
+              "tag": "Uncompressed Vector",
+              "text": "Stores full floating-point numbers for all dimensions (e.g., 512 bytes)."
+            }
+          }
+        }
+      ]
+    },
+    {
+      "type": "practice",
+      "exercises": [
+        {
+          "id": "p1",
+          "type": "multiple_choice",
+          "xp": 2,
+          "prompt": "How does Product Quantization (PQ) compress high-dimensional vectors?",
+          "options": [
+            {
+              "id": "opt_1",
+              "text": "By dropping all negative values in the vector to save space",
+              "correct": false
+            },
+            {
+              "id": "opt_2",
+              "text": "By splitting vectors into sub-vectors and replacing them with short centroid codes",
+              "correct": true
+            },
+            {
+              "id": "opt_3",
+              "text": "By converting float values into absolute binary strings of 1s and 0s",
+              "correct": false
+            },
+            {
+              "id": "opt_4",
+              "text": "By training a neural network to predict the next word in the vector",
+              "correct": false
+            }
+          ],
+          "explain": "PQ splits the vector space into lower-dimensional sub-spaces, trains centroids on each sub-space, and maps each sub-vector to the index of its nearest centroid."
+        },
+        {
+          "id": "p2",
+          "type": "true_false",
+          "xp": 2,
+          "prompt": "True or False: Product Quantization drastically cuts memory usage at the cost of a small loss in vector precision.",
+          "options": [
+            {
+              "id": "opt_1",
+              "text": "True",
+              "correct": true
+            },
+            {
+              "id": "opt_2",
+              "text": "False",
+              "correct": false
+            }
+          ],
+          "explain": "By representing sub-vectors as short codebook indices, memory usage is drastically reduced, enabling massive datasets to fit in RAM."
+        },
+        {
+          "id": "p3",
+          "type": "fill_blank",
+          "xp": 2,
+          "prompt": "Fill in the blank to complete the description of how Product Quantization breaks down vectors.",
+          "sentence": "Product Quantization achieves high compression by slicing vectors into smaller sub-vectors and quantizing them separately.",
+          "blank": "sub-vectors",
+          "words": [
+            "sub-vectors",
+            "centroids",
+            "matrices"
+          ],
+          "explain": "Product Quantization works by slicing a long vector into several smaller sub-vectors, and then quantizing each sub-vector independently."
+        },
+        {
+          "id": "p4",
+          "type": "spot_the_ai",
+          "xp": 2,
+          "prompt": "Which of the following describes an engineer implementing Product Quantization (PQ)?",
+          "options": [
+            {
+              "id": "opt_1",
+              "text": "I wrote a Python script to manually truncate all my vector floats to two decimal places to save disk space.",
+              "correct": false
+            },
+            {
+              "id": "opt_2",
+              "text": "We trained a linear regression model to predict the query latency based on the length of the vector index.",
+              "correct": false
+            },
+            {
+              "id": "opt_3",
+              "text": "We sliced the 768-dimension embeddings into 12 chunks, mapped each chunk to a centroid index from our codebook, and stored the resulting 12-byte array.",
+              "correct": true
+            }
+          ],
+          "explain": "The third option describes a classic rule-based clustering or vector quantization process with automated ID replacement, while the others describe manual operations or unrelated ML tasks."
+        }
+      ]
+    },
+    {
+      "type": "boss",
+      "exercises": [
+        {
+          "id": "b1",
+          "type": "multiple_choice",
+          "xp": 5,
+          "prompt": "Imagine you have a 128-dimensional vector using 32-bit floats (512 bytes total). You apply Product Quantization by splitting it into 8 sub-vectors, and run k-means on each sub-space to find 256 centroids (indexable by 1 byte). What is the compressed size of the vector?",
+          "options": [
+            {
+              "id": "opt_1",
+              "text": "128 bytes, by reducing the precision of the floats from 32-bit to 8-bit",
+              "correct": false
+            },
+            {
+              "id": "opt_2",
+              "text": "8 bytes, by using 8 sub-vectors each mapped to a 1-byte centroid index",
+              "correct": true
+            },
+            {
+              "id": "opt_3",
+              "text": "16 bytes, because the sub-vectors must always use 16-bit float representations",
+              "correct": false
+            },
+            {
+              "id": "opt_4",
+              "text": "1 byte, because all sub-vectors share a single global centroid index",
+              "correct": false
+            }
+          ],
+          "explain": "PQ divides a 128-dimensional vector into 8 sub-vectors (16 dimensions each). Each sub-vector is replaced by a 1-byte ID pointing to its nearest centroid. 8 sub-vectors times 1 byte each equals 8 bytes total, achieving a massive compression from the original 512 bytes!"
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,222 @@
+{
+  "id": "u451-l2",
+  "unit": 451,
+  "day": 2257,
+  "tier": "LLM Application Engineering",
+  "tierIcon": "🔌",
+  "title": "Cross-Encoders",
+  "icon": "🔀",
+  "concept": "Feeding the query and document together into one model so it can directly attend across both, yielding sharper relevance scores.",
+  "xp": 15,
+  "hearts": 3,
+  "estMinutes": 7,
+  "segments": [
+    {
+      "type": "warmup",
+      "exercises": [
+        {
+          "id": "w1",
+          "type": "multiple_choice",
+          "xp": 1,
+          "prompt": "How do Bi-encoders, which we learned about in the last lesson, handle queries and documents?",
+          "options": [
+            {
+              "id": "w1",
+              "text": "They analyze the query and document together.",
+              "correct": false
+            },
+            {
+              "id": "w2",
+              "text": "They encode query and document independently into vectors.",
+              "correct": true
+            },
+            {
+              "id": "w3",
+              "text": "They do not use vectors at all.",
+              "correct": false
+            }
+          ],
+          "explain": "Bi-encoders process queries and documents independently to generate separate embeddings, allowing fast search via vector similarity."
+        }
+      ]
+    },
+    {
+      "type": "teach",
+      "cards": [
+        {
+          "kind": "hook",
+          "icon": "🤝",
+          "title": "The Search for Precision",
+          "body": "While Bi-encoders are fast, they process queries and documents in isolation. What if we could let the query and document interact word-for-word to get much more accurate search results?"
+        },
+        {
+          "kind": "definition",
+          "icon": "🔍",
+          "title": "What is a Cross-Encoder?",
+          "body": "A Cross-encoder is an architecture where a query and a document are packed together into a single input sequence. The model uses self-attention to compare every word in the query directly to every word in the document."
+        },
+        {
+          "kind": "analogy",
+          "icon": "💃",
+          "title": "The Live Duet",
+          "body": "Imagine a judge grading two dancers. Instead of watching videos of them separately and giving individual scores, the judge watches them perform a duet live, observing how they coordinate step-by-step."
+        },
+        {
+          "kind": "example",
+          "icon": "💡",
+          "title": "Context is King",
+          "body": "If you search 'bank interest rates' and a document says 'the river bank was steep', a Cross-encoder immediately flags that 'bank' doesn't align with 'rates' because it reads them together."
+        },
+        {
+          "kind": "mythbust",
+          "icon": "🛡️",
+          "title": "The Speed Myth",
+          "body": "Many think Cross-encoders are just faster Bi-encoders. In reality, Cross-encoders are much slower and computationally heavier, but they provide far superior ranking accuracy."
+        },
+        {
+          "kind": "visual",
+          "icon": "📊",
+          "title": "Separation vs. Mixture",
+          "body": "Compare how Bi-encoders keep inputs isolated until the very end, while Cross-encoders mix them from the start.",
+          "compare": {
+            "left": {
+              "emoji": "👥",
+              "tag": "Bi-Encoder",
+              "text": "Query and Document processed in separate lanes, compared at the end."
+            },
+            "right": {
+              "emoji": "🔀",
+              "tag": "Cross-Encoder",
+              "text": "Query and Document mixed inside the model to attend to each other."
+            }
+          }
+        }
+      ]
+    },
+    {
+      "type": "practice",
+      "exercises": [
+        {
+          "id": "p1",
+          "type": "multiple_choice",
+          "xp": 2,
+          "prompt": "How does a Cross-encoder achieve sharper relevance scores?",
+          "options": [
+            {
+              "id": "a",
+              "text": "By keeping the query and document vectors completely separate.",
+              "correct": false
+            },
+            {
+              "id": "b",
+              "text": "By feeding both texts together so the model can attend across both inputs.",
+              "correct": true
+            },
+            {
+              "id": "c",
+              "text": "By ignoring the query and only focusing on document tags.",
+              "correct": false
+            },
+            {
+              "id": "d",
+              "text": "By using static dictionary lookups.",
+              "correct": false
+            }
+          ],
+          "explain": "Cross-encoders allow full self-attention across both the query and document tokens simultaneously, which leads to richer context matching."
+        },
+        {
+          "id": "p2",
+          "type": "true_false",
+          "xp": 2,
+          "prompt": "True or False: Cross-encoders are ideal for searching through millions of documents in milliseconds.",
+          "options": [
+            {
+              "id": "t",
+              "text": "True",
+              "correct": false
+            },
+            {
+              "id": "f",
+              "text": "False",
+              "correct": true
+            }
+          ],
+          "explain": "Because Cross-encoders must compare the query with every single candidate document dynamically, they are too slow to run on millions of documents from scratch."
+        },
+        {
+          "id": "p3",
+          "type": "fill_blank",
+          "xp": 2,
+          "prompt": "Fill in the missing word to describe how a Cross-encoder processes inputs:",
+          "sentence": "A Cross-encoder feeds the query and document together to analyze their interactions.",
+          "blank": "together",
+          "words": [
+            "together",
+            "separately",
+            "never"
+          ],
+          "explain": "Cross-encoders process both pieces of text together at the same time to calculate a direct relevance score."
+        },
+        {
+          "id": "p4",
+          "type": "spot_the_ai",
+          "xp": 2,
+          "prompt": "Which output format represents the work of a Cross-encoder?",
+          "options": [
+            {
+              "id": "ai_1",
+              "text": "Input: '[CLS] What is AI? [SEP] Artificial Intelligence is...'. Output: Relevance score of 0.98.",
+              "correct": true
+            },
+            {
+              "id": "non_ai_1",
+              "text": "Input: 'What is AI?'. Output: Vector A. Input: 'Artificial Intelligence is...'. Output: Vector B.",
+              "correct": false
+            },
+            {
+              "id": "non_ai_2",
+              "text": "Input: 'What is AI?'. Output: ['Artificial', 'Intelligence'].",
+              "correct": false
+            }
+          ],
+          "explain": "The first option represents a classic Cross-encoder output, which produces a single classifier score indicating how relevant the document is to the query, rather than two separate vectors."
+        }
+      ]
+    },
+    {
+      "type": "boss",
+      "exercises": [
+        {
+          "id": "b1",
+          "type": "multiple_choice",
+          "xp": 5,
+          "prompt": "Why are Cross-encoders highly accurate at scoring relevance, yet rarely used as the first step in searching a massive database?",
+          "options": [
+            {
+              "id": "opt1",
+              "text": "They analyze the query and document together, allowing word-to-word attention, but are computationally slow.",
+              "correct": true
+            },
+            {
+              "id": "opt2",
+              "text": "They precompute vectors separately, making them faster than Bi-encoders.",
+              "correct": false
+            },
+            {
+              "id": "opt3",
+              "text": "They ignore the relationships between words to prioritize search speed.",
+              "correct": false
+            },
+            {
+              "id": "opt4",
+              "text": "They only work on short queries and cannot handle document text.",
+              "correct": false
+            }
+          ],
+          "explain": "Cross-encoders yield high-quality, precise relevance scores because the self-attention mechanism processes all tokens of the query and document simultaneously. This allows every word in the query to be weighed directly against every word in the document, but it is too slow to run on millions of documents in real-time."
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,222 @@
+{
+  "id": "u431-l3",
+  "unit": 431,
+  "day": 2158,
+  "tier": "LLM Application Engineering",
+  "tierIcon": "🔌",
+  "title": "Semantic Chunking",
+  "icon": "🧩",
+  "concept": "Using embedding similarity between adjacent sentences to detect topic shifts and split there instead of at a fixed size.",
+  "xp": 15,
+  "hearts": 3,
+  "estMinutes": 7,
+  "segments": [
+    {
+      "type": "warmup",
+      "exercises": [
+        {
+          "id": "w1",
+          "type": "multiple_choice",
+          "xp": 1,
+          "prompt": "What is the main advantage of sentence and paragraph-aware chunking over simple fixed-size character chunking?",
+          "options": [
+            {
+              "id": "opt_w1",
+              "text": "It slices text at exact character limits, ignoring punctuation.",
+              "correct": false
+            },
+            {
+              "id": "opt_w2",
+              "text": "It respects natural boundaries like periods and newlines so sentences stay intact.",
+              "correct": true
+            },
+            {
+              "id": "opt_w3",
+              "text": "It uses an LLM to rewrite the entire text into bullet points.",
+              "correct": false
+            }
+          ],
+          "explain": "The previous lesson covered splitting text at natural boundaries like periods or paragraphs, ensuring we do not slice a single sentence in half."
+        }
+      ]
+    },
+    {
+      "type": "teach",
+      "cards": [
+        {
+          "kind": "hook",
+          "icon": "🎣",
+          "title": "Beyond Punctuation",
+          "body": "Even if we split text nicely at sentence boundaries, we might still pack unrelated ideas into the same chunk. What if our code could actually 'understand' when the conversation shifts to a new topic and split right there?"
+        },
+        {
+          "kind": "definition",
+          "icon": "🧠",
+          "title": "What is Semantic Chunking?",
+          "body": "Semantic chunking uses text embeddings to measure how closely related adjacent sentences are. If two neighboring sentences have very different meanings, a topic shift is detected, and a chunk boundary is placed between them."
+        },
+        {
+          "kind": "analogy",
+          "icon": "📖",
+          "title": "The Smart Book Editor",
+          "body": "Imagine a book editor reading a manuscript. Instead of cutting pages every 500 words, the editor reads line by line. When they notice the topic shifts from 'cooking' to 'hiking', they draw a line. Semantic chunking does this using math to sense the change."
+        },
+        {
+          "kind": "example",
+          "icon": "🍰",
+          "title": "Spotting the Shift",
+          "body": "If sentence A is 'Preheat the oven to 350 degrees' and sentence B is 'Mix the flour and sugar', they are highly similar. If sentence C is 'Then, buy a ticket to France', the similarity drops sharply, triggering a split before sentence C."
+        },
+        {
+          "kind": "mythbust",
+          "icon": "⚡",
+          "title": "Is it too slow to be useful?",
+          "body": "You might think semantic chunking is slow because it runs every sentence through an embedding model. While it takes more compute than basic splitting, it prevents AI models from retrieving irrelevant context later on."
+        },
+        {
+          "kind": "visual",
+          "icon": "👁️",
+          "title": "Blind Splitting vs. Smart Splitting",
+          "body": "Compare how fixed-size chunking blindly splits text versus how semantic chunking respects the flow of ideas.",
+          "compare": {
+            "left": {
+              "emoji": "📏",
+              "tag": "Fixed-Size Splitting",
+              "text": "Cuts text at exactly 100 words, even if it splits a single recipe across two chunks."
+            },
+            "right": {
+              "emoji": "🎯",
+              "tag": "Semantic Splitting",
+              "text": "Creates one chunk for the recipe and a new chunk when the text shifts to travel tips."
+            }
+          }
+        }
+      ]
+    },
+    {
+      "type": "practice",
+      "exercises": [
+        {
+          "id": "p1",
+          "type": "multiple_choice",
+          "xp": 2,
+          "prompt": "How does a semantic chunker evaluate if two sentences are talking about the same topic?",
+          "options": [
+            {
+              "id": "opt_mc1",
+              "text": "By counting the number of syllables in each sentence.",
+              "correct": false
+            },
+            {
+              "id": "opt_mc2",
+              "text": "By converting sentences to embeddings and comparing their vector similarity.",
+              "correct": true
+            },
+            {
+              "id": "opt_mc3",
+              "text": "By checking if the sentences use the exact same words.",
+              "correct": false
+            },
+            {
+              "id": "opt_mc4",
+              "text": "By checking if they contain the same number of vowels.",
+              "correct": false
+            }
+          ],
+          "explain": "Embedding models convert sentences into vectors that represent meaning. By comparing adjacent vectors, we can mathematically calculate how similar the sentences are."
+        },
+        {
+          "id": "p2",
+          "type": "true_false",
+          "xp": 2,
+          "prompt": "True or False: Semantic chunking guarantees that all output chunks will have the exact same number of characters.",
+          "options": [
+            {
+              "id": "opt_t1",
+              "text": "True",
+              "correct": false
+            },
+            {
+              "id": "opt_t2",
+              "text": "False",
+              "correct": true
+            }
+          ],
+          "explain": "Semantic chunking adapts to the content's meaning, meaning chunks will naturally be of varying lengths depending on when the topic changes."
+        },
+        {
+          "id": "p3",
+          "type": "fill_blank",
+          "xp": 2,
+          "prompt": "Fill in the missing concept used to detect topic shifts between sentences:",
+          "sentence": "We measure the embedding similarity between neighboring sentences to find where to split.",
+          "blank": "embedding similarity",
+          "words": [
+            "embedding similarity",
+            "character count",
+            "font style"
+          ],
+          "explain": "Semantic chunking calculates the embedding similarity between adjacent sentences to find where the topic changes."
+        },
+        {
+          "id": "p4",
+          "type": "spot_the_ai",
+          "xp": 2,
+          "prompt": "Which of these describes a semantic chunking implementation?",
+          "options": [
+            {
+              "id": "opt_s1",
+              "text": "AI: A script that groups sentences, computes embedding vectors for neighbors, and splits when cosine similarity drops below 0.7.",
+              "correct": true
+            },
+            {
+              "id": "opt_s2",
+              "text": "Human: A Python script that loops through text and splits it using a regular expression at every period or question mark.",
+              "correct": false
+            },
+            {
+              "id": "opt_s3",
+              "text": "Human: A program that takes a string and slices it every 500 characters, ignoring punctuation completely.",
+              "correct": false
+            }
+          ],
+          "explain": "Option A describes semantic chunking using embeddings to detect topic drift. Option B is simple sentence-boundary chunking, and Option C is fixed-size chunking."
+        }
+      ]
+    },
+    {
+      "type": "boss",
+      "exercises": [
+        {
+          "id": "b1",
+          "type": "multiple_choice",
+          "xp": 5,
+          "prompt": "How does a semantic chunker decide the exact point to split a document?",
+          "options": [
+            {
+              "id": "opt_b1",
+              "text": "It measures the embedding similarity between neighboring sentences and splits where similarity drops below a threshold.",
+              "correct": true
+            },
+            {
+              "id": "opt_b2",
+              "text": "It splits the text into equal character groups and then generates an embedding for each group.",
+              "correct": false
+            },
+            {
+              "id": "opt_b3",
+              "text": "It translates every sentence to another language to see if the grammatical structure changes.",
+              "correct": false
+            },
+            {
+              "id": "opt_b4",
+              "text": "It relies entirely on punctuation marks like periods and question marks to create even splits.",
+              "correct": false
+            }
+          ],
+          "explain": "Semantic chunking measures the distance (or similarity) between embedding vectors of neighboring sentences. When the similarity drops below a set threshold, it indicates a topic shift, and a new chunk boundary is created there."
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,222 @@
+{
+  "id": "u452-l1",
+  "unit": 452,
+  "day": 2261,
+  "tier": "LLM Application Engineering",
+  "tierIcon": "🔌",
+  "title": "Off-the-Shelf Reranking Models",
+  "icon": "🔄",
+  "concept": "Using a pretrained cross-encoder reranker as a drop-in second stage without any custom training.",
+  "xp": 15,
+  "hearts": 3,
+  "estMinutes": 7,
+  "segments": [
+    {
+      "type": "warmup",
+      "exercises": [
+        {
+          "id": "w1",
+          "type": "multiple_choice",
+          "xp": 1,
+          "prompt": "In a typical first-stage vector search, how do we quickly identify candidate documents from a large database?",
+          "options": [
+            {
+              "id": "warm_1",
+              "text": "By comparing query and document embeddings using cosine similarity.",
+              "correct": true
+            },
+            {
+              "id": "warm_2",
+              "text": "By passing both the query and document together through a deep neural network every time.",
+              "correct": false
+            },
+            {
+              "id": "warm_3",
+              "text": "By manual SQL matching of text strings.",
+              "correct": false
+            }
+          ],
+          "explain": "This unit starts our exploration of Reranking Models. Before diving in, let's look at how we typically fetch initial documents using vector embeddings (bi-encoders) from a database."
+        }
+      ]
+    },
+    {
+      "type": "teach",
+      "cards": [
+        {
+          "kind": "hook",
+          "icon": "🎯",
+          "title": "Why First-Stage Search Isn't Enough",
+          "body": "Standard search engines are fast, but they often miss the deeper meaning of your query because they look at documents and questions separately. Reranking models act as a second-stage brain, looking at your query and search results together to put the absolute best answers at the very top."
+        },
+        {
+          "kind": "definition",
+          "icon": "🔌",
+          "title": "What is an Off-the-Shelf Reranker?",
+          "body": "An off-the-shelf reranker is a pre-trained model (typically a cross-encoder) that takes a query and a set of candidate documents, analyzes them together, and outputs a relevancy score for each. You don't need to train it; you simply plug it in to refine the rough results of your initial search."
+        },
+        {
+          "kind": "analogy",
+          "icon": "🔍",
+          "title": "The Two-Stage Hiring Manager",
+          "body": "Imagine you are sorting resumes for a job. A fast keyword scanner (like bi-encoder search) filters 1,000 resumes down to 10 based on basic words. Then, a human manager (the cross-encoder) spends time carefully comparing each of those 10 resumes side-by-side with the job description to pick the absolute best candidate."
+        },
+        {
+          "kind": "example",
+          "icon": "💡",
+          "title": "Rerankers in Action",
+          "body": "You search a database for 'How do I fix a leaky pipe?' and get 50 documents. You pass these 50 documents and your query to an off-the-shelf Cohere or BGE-Reranker model, which instantly rearranges them so the exact step-by-step plumbing guide is ranked #1 instead of a general article about water conservation."
+        },
+        {
+          "kind": "mythbust",
+          "icon": "🛡️",
+          "title": "The Fine-Tuning Myth",
+          "body": "Many developers think you must fine-tune a reranking model on your own data to get good results. In reality, modern pre-trained off-the-shelf rerankers perform incredibly well on general text right out of the box, saving you time and compute."
+        },
+        {
+          "kind": "visual",
+          "icon": "📊",
+          "title": "The Two-Stage Retrieval Pipeline",
+          "body": "See how the system changes when you introduce a reranker after your initial vector database lookup.",
+          "compare": {
+            "left": {
+              "emoji": "🔍",
+              "tag": "First-Stage (Bi-Encoder)",
+              "text": "Searches millions of documents instantly; fast but might rank irrelevant matches too high."
+            },
+            "right": {
+              "emoji": "🎯",
+              "tag": "Second-Stage (Cross-Encoder)",
+              "text": "Reranks the top 25-100 documents by reading them closely alongside the query; highly accurate."
+            }
+          }
+        }
+      ]
+    },
+    {
+      "type": "practice",
+      "exercises": [
+        {
+          "id": "p1",
+          "type": "multiple_choice",
+          "xp": 2,
+          "prompt": "How do cross-encoder rerankers achieve higher accuracy than standard bi-encoder retrievers?",
+          "options": [
+            {
+              "id": "mc_1",
+              "text": "They process the query and document together to calculate joint attention.",
+              "correct": true
+            },
+            {
+              "id": "mc_2",
+              "text": "They generate separate vector embeddings for the query and document independently.",
+              "correct": false
+            },
+            {
+              "id": "mc_3",
+              "text": "They are much faster and use less compute than bi-encoders.",
+              "correct": false
+            },
+            {
+              "id": "mc_4",
+              "text": "They completely eliminate the need for an initial search database.",
+              "correct": false
+            }
+          ],
+          "explain": "Cross-encoders process the query and document together, allowing the model to compare every word in the query directly to every word in the document for superior relevance scoring."
+        },
+        {
+          "id": "p2",
+          "type": "true_false",
+          "xp": 2,
+          "prompt": "True or False: You can use an off-the-shelf reranking model as a drop-in tool without training it on your own dataset.",
+          "options": [
+            {
+              "id": "tf_true",
+              "text": "True",
+              "correct": true
+            },
+            {
+              "id": "tf_false",
+              "text": "False",
+              "correct": false
+            }
+          ],
+          "explain": "Pre-trained rerankers like Cohere Rerank or BGE-Reranker can be integrated into your application using simple API calls or library imports without needing any custom training data."
+        },
+        {
+          "id": "p3",
+          "type": "fill_blank",
+          "xp": 2,
+          "prompt": "Fill in the missing term to complete the workflow description of a rerank system:",
+          "sentence": "We use a fast vector search first, and then apply a cross-encoder reranker as a second-stage filter to get the best results.",
+          "blank": "second-stage",
+          "words": [
+            "second-stage",
+            "first-stage",
+            "zero-shot"
+          ],
+          "explain": "A cross-encoder reranker is used as a second-stage step to reorder the top candidates returned by a fast first-stage search."
+        },
+        {
+          "id": "p4",
+          "type": "spot_the_ai",
+          "xp": 2,
+          "prompt": "Identify the search result list that was likely generated by a simple first-stage keyword retriever WITHOUT an off-the-shelf reranker:",
+          "options": [
+            {
+              "id": "sai_1",
+              "text": "A list of biological articles about python diets and habitats ranked at the top.",
+              "correct": false
+            },
+            {
+              "id": "sai_2",
+              "text": "An encyclopedia entry about the reticulated python species.",
+              "correct": false
+            },
+            {
+              "id": "sai_3",
+              "text": "A coding tutorial on 'How to install Python on Windows' ranked as the top result for 'python snake facts'.",
+              "correct": true
+            }
+          ],
+          "explain": "Option C shows a typical response from a retriever that only matches keywords ('python') but misses the contextual intent of the query ('non-programming snakes'), which is exactly the kind of mistake an off-the-shelf reranker corrects."
+        }
+      ]
+    },
+    {
+      "type": "boss",
+      "exercises": [
+        {
+          "id": "b1",
+          "type": "multiple_choice",
+          "xp": 5,
+          "prompt": "Why do we use an off-the-shelf cross-encoder reranker specifically as a second-stage tool rather than using it to search our entire database of millions of documents directly?",
+          "options": [
+            {
+              "id": "opt_1",
+              "text": "It indexes millions of documents instantly using pre-computed vector embeddings.",
+              "correct": false
+            },
+            {
+              "id": "opt_2",
+              "text": "It applies joint attention over query-document pairs, making it accurate but too slow to search millions of documents directly.",
+              "correct": true
+            },
+            {
+              "id": "opt_3",
+              "text": "It requires retraining the base LLM weights before it can perform any scoring.",
+              "correct": false
+            },
+            {
+              "id": "opt_4",
+              "text": "It replaces the first-stage retriever entirely by using less memory than a bi-encoder.",
+              "correct": false
+            }
+          ],
+          "explain": "An off-the-shelf cross-encoder is perfect as a plug-and-play second stage because it performs deep attention across both the query and document together. However, because it calculates these complex attention patterns on-the-fly for every pair, it is too computationally expensive to run over a database of millions of documents."
+        }
+      ]
+    }
+  ]
+}

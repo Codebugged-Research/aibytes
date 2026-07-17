@@ -1,0 +1,222 @@
+{
+  "id": "u441-l2",
+  "unit": 441,
+  "day": 2207,
+  "tier": "LLM Application Engineering",
+  "tierIcon": "🔌",
+  "title": "Replication for Read Throughput",
+  "icon": "👯",
+  "concept": "Duplicating an index across replicas to serve more concurrent queries without added write complexity.",
+  "xp": 15,
+  "hearts": 3,
+  "estMinutes": 7,
+  "segments": [
+    {
+      "type": "warmup",
+      "exercises": [
+        {
+          "id": "w1",
+          "type": "multiple_choice",
+          "xp": 1,
+          "prompt": "In the last lesson, we learned about sharding. What does sharding primarily achieve?",
+          "options": [
+            {
+              "id": "w1",
+              "text": "Splits a large vector collection across multiple machines to fit into memory.",
+              "correct": true
+            },
+            {
+              "id": "w2",
+              "text": "Duplicates the entire collection to multiple machines to protect against crashes.",
+              "correct": false
+            },
+            {
+              "id": "w3",
+              "text": "Compresses high-dimensional vectors into low-dimensional representations.",
+              "correct": false
+            }
+          ],
+          "explain": "Sharding is the process of splitting a single large vector index into smaller pieces (shards) across multiple machines to fit data that is too big for one machine's RAM."
+        }
+      ]
+    },
+    {
+      "type": "teach",
+      "cards": [
+        {
+          "kind": "hook",
+          "icon": "⚡",
+          "title": "The Rush Hour Problem",
+          "body": "When your AI app goes viral, thousands of users will search your vector database at the exact same millisecond. If you only have one index, users will face lag. How do we serve millions of reads without breaking a sweat?"
+        },
+        {
+          "kind": "definition",
+          "icon": "💾",
+          "title": "What is Replication?",
+          "body": "Replication means copying your entire vector index across multiple machines. Instead of splitting the data, every machine holds a complete copy of the index so they can all answer search queries at the same time."
+        },
+        {
+          "kind": "analogy",
+          "icon": "📚",
+          "title": "The Library Copy Analogy",
+          "body": "Think of a popular novel at a library. If there is only one copy, only one person can read it at a time. If the library buys five identical copies, five people can read it simultaneously without waiting in line!"
+        },
+        {
+          "kind": "example",
+          "icon": "🛒",
+          "title": "Handling Black Friday traffic",
+          "body": "If an e-commerce app experiences a massive surge of users searching for similar products, replication spins up three extra search nodes. Each node handles a fraction of the incoming search traffic using its own local copy of the vector database."
+        },
+        {
+          "kind": "mythbust",
+          "icon": "🛡️",
+          "title": "More Nodes, Not More Space",
+          "body": "People often think replication helps you store larger datasets. It doesn't! Because every replica stores a complete copy of the data, replication increases your total hardware costs without expanding your maximum database capacity."
+        },
+        {
+          "kind": "visual",
+          "icon": "⚖️",
+          "title": "Sharding vs. Replication",
+          "body": "Let's look at how replication distributes the workload compared to sharding.",
+          "compare": {
+            "left": {
+              "emoji": "🧩",
+              "tag": "Sharding",
+              "text": "Splits one big index into smaller chunks across nodes. Useful for data size."
+            },
+            "right": {
+              "emoji": "👥",
+              "tag": "Replication",
+              "text": "Copies the whole index to multiple nodes. Useful for traffic volume."
+            }
+          }
+        }
+      ]
+    },
+    {
+      "type": "practice",
+      "exercises": [
+        {
+          "id": "p1",
+          "type": "multiple_choice",
+          "xp": 2,
+          "prompt": "What is the primary reason to use replication in a vector database?",
+          "options": [
+            {
+              "id": "mc1",
+              "text": "To split a massive index that is too large for a single machine's memory.",
+              "correct": false
+            },
+            {
+              "id": "mc2",
+              "text": "To handle a high volume of search queries by querying identical copies in parallel.",
+              "correct": true
+            },
+            {
+              "id": "mc3",
+              "text": "To speed up the time it takes to write new vectors to the database.",
+              "correct": false
+            },
+            {
+              "id": "mc4",
+              "text": "To compress vectors so they take up less disk space.",
+              "correct": false
+            }
+          ],
+          "explain": "Replication duplicates the entire database on multiple servers so they can handle queries independently, boosting the number of concurrent reads."
+        },
+        {
+          "id": "p2",
+          "type": "true_false",
+          "xp": 2,
+          "prompt": "True or False: In a replicated system, each database node only stores a fraction of the total vectors.",
+          "options": [
+            {
+              "id": "t1",
+              "text": "True",
+              "correct": false
+            },
+            {
+              "id": "f1",
+              "text": "False",
+              "correct": true
+            }
+          ],
+          "explain": "Replication does not split the data; it duplicates it. Every replica contains 100% of the vector index."
+        },
+        {
+          "id": "p3",
+          "type": "fill_blank",
+          "xp": 2,
+          "prompt": "Fill in the missing goal of replication in a vector database:",
+          "sentence": "We use replication primarily to increase read throughput by letting multiple nodes answer queries.",
+          "blank": "read throughput",
+          "words": [
+            "read throughput",
+            "storage space",
+            "write speed"
+          ],
+          "explain": "Replication creates identical copies of the database to handle more simultaneous queries, which directly improves read throughput."
+        },
+        {
+          "id": "p4",
+          "type": "spot_the_ai",
+          "xp": 2,
+          "prompt": "Identify the correct explanation of vector database replication:",
+          "options": [
+            {
+              "id": "sai1",
+              "text": "Replication is when we split our vector database into 10 smaller shards so that search queries run on smaller chunks of data.",
+              "correct": false
+            },
+            {
+              "id": "sai2",
+              "text": "Replication scales read throughput by maintaining identical copies of the vector index on multiple machines to process queries in parallel.",
+              "correct": true
+            },
+            {
+              "id": "sai3",
+              "text": "Replication is a method where we store only the most recently used vectors in a fast memory cache.",
+              "correct": false
+            }
+          ],
+          "explain": "Option B is generated by an AI assistant because it accurately describes replication (making identical copies of the vector index to scale search queries) rather than sharding (splitting the database) or caching."
+        }
+      ]
+    },
+    {
+      "type": "boss",
+      "exercises": [
+        {
+          "id": "b1",
+          "type": "multiple_choice",
+          "xp": 5,
+          "prompt": "Imagine your vector database is suddenly hit with 10,000 search queries per second, but only 5 vector updates per minute. If you decide to add 3 new replicas of your index, what is the impact on your system's performance?",
+          "options": [
+            {
+              "id": "b1",
+              "text": "Read throughput increases, but write complexity increases because updates must copy to all replicas.",
+              "correct": true
+            },
+            {
+              "id": "b2",
+              "text": "Both read and write throughput increase equally because data is split.",
+              "correct": false
+            },
+            {
+              "id": "b3",
+              "text": "Read throughput decreases because nodes must constantly coordinate search results.",
+              "correct": false
+            },
+            {
+              "id": "b4",
+              "text": "Storage needs decrease because data is compressed across the replicas.",
+              "correct": false
+            }
+          ],
+          "explain": "Replication copies the entire index to new nodes, allowing them to handle read queries independently. This multiplies read capacity (throughput) but does not help with write-heavy workloads, as any updates must eventually copy to all replicas."
+        }
+      ]
+    }
+  ]
+}

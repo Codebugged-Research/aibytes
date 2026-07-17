@@ -1,0 +1,222 @@
+{
+  "id": "u478-l5",
+  "unit": 478,
+  "day": 2395,
+  "tier": "LLM Application Engineering",
+  "tierIcon": "🔌",
+  "title": "Common Anti-Patterns",
+  "icon": "🚫",
+  "concept": "Unbounded context growth, no reranking stage, untested prompts, and ungoverned tool access as recurring mistakes.",
+  "xp": 15,
+  "hearts": 3,
+  "estMinutes": 7,
+  "segments": [
+    {
+      "type": "warmup",
+      "exercises": [
+        {
+          "id": "w1",
+          "type": "multiple_choice",
+          "xp": 1,
+          "prompt": "In the reference architecture from our last lesson, how do retrieval, reranking, and generation work together?",
+          "options": [
+            {
+              "id": "a",
+              "text": "It sends the raw query to the LLM without searching any external data source.",
+              "correct": false
+            },
+            {
+              "id": "b",
+              "text": "It retrieves candidate documents, refines them with a reranker, and passes the best ones to the LLM.",
+              "correct": true
+            },
+            {
+              "id": "c",
+              "text": "It runs the LLM first, and then uses the MCP tool to check if the answer was correct.",
+              "correct": false
+            }
+          ],
+          "explain": "Our reference architecture connects the Host App to MCP Servers for tools, a Vector Store for semantic search, and a Reranker to filter the most relevant documents before calling the LLM."
+        }
+      ]
+    },
+    {
+      "type": "teach",
+      "cards": [
+        {
+          "kind": "hook",
+          "icon": "🔍",
+          "title": "When Good Architecture Goes Bad",
+          "body": "Now that you know how to build a complete AI system with RAG, MCP, and agents, you need to know how they break. A single missing check can lead to astronomical API bills or accidental data deletion. Let's look at the pitfalls to avoid!"
+        },
+        {
+          "kind": "definition",
+          "icon": "⚠️",
+          "title": "What is an Anti-Pattern?",
+          "body": "Anti-patterns are common but flawed design decisions when building AI applications. They include dumping raw data into the LLM context without reranking, using untested prompts, and granting tools direct access to critical systems without safety guardrails."
+        },
+        {
+          "kind": "analogy",
+          "icon": "💳",
+          "title": "The Unrestricted Credit Card",
+          "body": "Building an agent without safety limits is like hiring a delivery driver and giving them your primary credit card with no spending limits, no GPS tracking, and no list of approved stores. They might get the job done, or they might buy a yacht."
+        },
+        {
+          "kind": "example",
+          "icon": "💥",
+          "title": "The Runaway Database Tool",
+          "body": "An engineer connects an MCP tool that can delete user databases directly to an LLM. Without human-in-the-loop approval or strict system prompt guidelines, a single user prompt injection causes the agent to wipe the entire database."
+        },
+        {
+          "kind": "mythbust",
+          "icon": "🛑",
+          "title": "Myth: LLMs Know When to Stop",
+          "body": "Many believe that if you give an LLM a tool, it will only use it when perfectly appropriate. In reality, LLMs suffer from prompt injections and confusion; they will call tools with incorrect parameters or at wrong times unless restricted by the host application."
+        },
+        {
+          "kind": "visual",
+          "icon": "⚖️",
+          "title": "Tool Governance Comparison",
+          "body": "Compare how we manage tool access. Unrestricted tools invite chaos, while governed access keeps your system secure and predictable.",
+          "compare": {
+            "left": {
+              "emoji": "🔓",
+              "tag": "Ungoverned",
+              "text": "Agent executes code or deletes files automatically based on user input."
+            },
+            "right": {
+              "emoji": "🛡️",
+              "tag": "Governed",
+              "text": "Agent requests human confirmation before running any destructive actions."
+            }
+          }
+        }
+      ]
+    },
+    {
+      "type": "practice",
+      "exercises": [
+        {
+          "id": "p1",
+          "type": "multiple_choice",
+          "xp": 2,
+          "prompt": "What causes 'unbounded context growth' in an agentic system?",
+          "options": [
+            {
+              "id": "a",
+              "text": "Retrieving too few search results from the vector database.",
+              "correct": false
+            },
+            {
+              "id": "b",
+              "text": "Continually appending search results and chat history to the prompt without trimming.",
+              "correct": true
+            },
+            {
+              "id": "c",
+              "text": "Updating the model's weights during inference.",
+              "correct": false
+            },
+            {
+              "id": "d",
+              "text": "Using too many MCP servers at the same time.",
+              "correct": false
+            }
+          ],
+          "explain": "Unbounded context growth happens when we continuously append new user messages, system logs, and retrieved documents without trimming or summarizing, eventually exceeding token limits or blowing up API costs."
+        },
+        {
+          "id": "p2",
+          "type": "true_false",
+          "xp": 2,
+          "prompt": "True or False: Because LLMs understand natural language, you do not need to test or version your prompt templates before deploying them to production.",
+          "options": [
+            {
+              "id": "true",
+              "text": "True",
+              "correct": false
+            },
+            {
+              "id": "false",
+              "text": "False",
+              "correct": true
+            }
+          ],
+          "explain": "Untested prompts are highly fragile; even a single word change can cause an LLM to fail to call an MCP tool or format its output incorrectly. Prompts must be versioned and tested."
+        },
+        {
+          "id": "p3",
+          "type": "fill_blank",
+          "xp": 2,
+          "prompt": "Fill in the blank to identify the missing step that filter-ranks retrieved documents:",
+          "sentence": "Skipping the reranking step causes poor quality documents to crowd out the correct answers in the context window.",
+          "blank": "reranking",
+          "words": [
+            "reranking",
+            "vectorizing",
+            "indexing"
+          ],
+          "explain": "Without a reranking stage, the LLM receives lower-quality context documents, which reduces answer accuracy and wastes expensive token space."
+        },
+        {
+          "id": "p4",
+          "type": "spot_the_ai",
+          "xp": 2,
+          "prompt": "Which of the following sounds like generic text written by an AI instead of real software engineering code or configuration?",
+          "options": [
+            {
+              "id": "a",
+              "text": "import sys; print('Testing tool safety limits...')",
+              "correct": false
+            },
+            {
+              "id": "b",
+              "text": "To avoid anti-patterns, always write clear prompts, clean your database weekly, and ensure you have a modern computer system for running local LLMs.",
+              "correct": true
+            },
+            {
+              "id": "c",
+              "text": "const results = await reranker.predict({ query, documents });",
+              "correct": false
+            }
+          ],
+          "explain": "Option B exhibits classic signs of an LLM trying to write a generic list of tips, whereas Options A and C represent practical developer implementations."
+        }
+      ]
+    },
+    {
+      "type": "boss",
+      "exercises": [
+        {
+          "id": "b1",
+          "type": "multiple_choice",
+          "xp": 5,
+          "prompt": "Which of the following scenarios represents the most dangerous combination of the anti-patterns discussed in this lesson?",
+          "options": [
+            {
+              "id": "a",
+              "text": "A system that runs out of memory because the context window is too small",
+              "correct": false
+            },
+            {
+              "id": "b",
+              "text": "An agent gets confused by a long chat history and executes a destructive database tool without human approval",
+              "correct": true
+            },
+            {
+              "id": "c",
+              "text": "A search engine that returns too few matches because it lacks an MCP connection",
+              "correct": false
+            },
+            {
+              "id": "d",
+              "text": "A system that runs slowly because the reranker is placed before the vector database retrieval",
+              "correct": false
+            }
+          ],
+          "explain": "Ungoverned tool execution combined with unbounded context growth means the LLM can get confused by massive histories, hallucinate bad arguments, and execute destructive tools (like database drops or file deletions) without any human oversight or sandbox protection."
+        }
+      ]
+    }
+  ]
+}

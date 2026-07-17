@@ -1,0 +1,222 @@
+{
+  "id": "u468-l5",
+  "unit": 468,
+  "day": 2345,
+  "tier": "LLM Application Engineering",
+  "tierIcon": "🔌",
+  "title": "A Minimal MCP Server, Worked Example",
+  "icon": "🛠️",
+  "concept": "Walking through a small server exposing one tool end to end, from schema definition to handler.",
+  "xp": 15,
+  "hearts": 3,
+  "estMinutes": 7,
+  "segments": [
+    {
+      "type": "warmup",
+      "exercises": [
+        {
+          "id": "w1",
+          "type": "multiple_choice",
+          "xp": 1,
+          "prompt": "In our last lesson on error handling, how did we prevent a server from crashing when something goes wrong?",
+          "options": [
+            {
+              "id": "warmup_a",
+              "text": "Let the server crash so the host operating system restarts it.",
+              "correct": false
+            },
+            {
+              "id": "warmup_b",
+              "text": "Return structured errors in the response so the host can recover.",
+              "correct": true
+            },
+            {
+              "id": "warmup_c",
+              "text": "Ignore errors and return empty strings instead.",
+              "correct": false
+            }
+          ],
+          "explain": "Returning structured error codes or error messages inside the protocol prevents the server process from crashing and allows the host application to handle the problem gracefully."
+        }
+      ]
+    },
+    {
+      "type": "teach",
+      "cards": [
+        {
+          "kind": "hook",
+          "icon": "🚀",
+          "title": "From Code to Tool",
+          "body": "Ever wondered how we turn a simple Python function into a tool that an AI can discover, understand, and run on its own? Let's build a minimal server from start to finish!"
+        },
+        {
+          "kind": "definition",
+          "icon": "📝",
+          "title": "The Anatomy of a Server",
+          "body": "A minimal MCP server consists of two main parts: a JSON schema that describes what the tool does and its parameters, and a handler function that executes the actual code when called."
+        },
+        {
+          "kind": "analogy",
+          "icon": "🍳",
+          "title": "The Restaurant Analogy",
+          "body": "Think of your MCP server as a tiny restaurant. The schema is the printed menu on the table, and the tool handler is the chef in the kitchen waiting to cook whatever item you point to."
+        },
+        {
+          "kind": "example",
+          "icon": "💻",
+          "title": "A Simple Calculator Server",
+          "body": "In Python or TypeScript, you register a tool called 'calculate_tax' with a schema defining 'price' and 'rate', and write a handler function that multiplies them and returns the result."
+        },
+        {
+          "kind": "mythbust",
+          "icon": "🕵️",
+          "title": "No Complex Servers Needed",
+          "body": "You don't need a complex web framework or an external database to build an MCP server. A single short file running over simple standard input/output (stdio) is all it takes to get started."
+        },
+        {
+          "kind": "visual",
+          "icon": "⚖️",
+          "title": "Schema vs. Handler",
+          "body": "Comparing the two essential sides of any MCP tool implementation.",
+          "compare": {
+            "left": {
+              "emoji": "📋",
+              "tag": "Schema",
+              "text": "Defines names, types, and descriptions of arguments."
+            },
+            "right": {
+              "emoji": "⚙️",
+              "tag": "Handler",
+              "text": "Receives arguments, runs the logic, and returns text content."
+            }
+          }
+        }
+      ]
+    },
+    {
+      "type": "practice",
+      "exercises": [
+        {
+          "id": "p1",
+          "type": "multiple_choice",
+          "xp": 2,
+          "prompt": "What is the primary role of the JSON schema in an MCP tool definition?",
+          "options": [
+            {
+              "id": "mc_a",
+              "text": "It runs the Python code.",
+              "correct": false
+            },
+            {
+              "id": "mc_b",
+              "text": "It describes the parameters and types the tool expects.",
+              "correct": true
+            },
+            {
+              "id": "mc_c",
+              "text": "It handles connection retries.",
+              "correct": false
+            },
+            {
+              "id": "mc_d",
+              "text": "It encrypts the communication channel.",
+              "correct": false
+            }
+          ],
+          "explain": "The schema serves as the advertisement or description that tells the client (and the LLM) what parameters the tool accepts."
+        },
+        {
+          "id": "p2",
+          "type": "true_false",
+          "xp": 2,
+          "prompt": "True or False: A minimal MCP server can run entirely over stdio without needing to open a network port.",
+          "options": [
+            {
+              "id": "tf_a",
+              "text": "True",
+              "correct": true
+            },
+            {
+              "id": "tf_b",
+              "text": "False",
+              "correct": false
+            }
+          ],
+          "explain": "MCP servers communicate over simple standard input and output (stdin/stdout), meaning they don't require open HTTP ports to function."
+        },
+        {
+          "id": "p3",
+          "type": "fill_blank",
+          "xp": 2,
+          "prompt": "Fill in the blank to complete the description of MCP server components:",
+          "sentence": "While the schema defines the inputs, the handler executes the actual tool logic.",
+          "blank": "handler",
+          "words": [
+            "handler",
+            "protocol",
+            "schema"
+          ],
+          "explain": "The handler function runs the actual backend code once the client requests that specific tool."
+        },
+        {
+          "id": "p4",
+          "type": "spot_the_ai",
+          "xp": 2,
+          "prompt": "Identify the valid MCP server response payload returned by a tool handler.",
+          "options": [
+            {
+              "id": "sai_a",
+              "text": "{ \"type\": \"string\", \"description\": \"Just print a message\" }",
+              "correct": false
+            },
+            {
+              "id": "sai_b",
+              "text": "{ \"content\": [{ \"type\": \"text\", \"text\": \"The server time is 12:00 PM\" }] }",
+              "correct": true
+            },
+            {
+              "id": "sai_c",
+              "text": "{ \"error\": \"Crash loop detected on port 80\" }",
+              "correct": false
+            }
+          ],
+          "explain": "Option B contains a complete, valid JSON response representing a tool execution result, which is what an MCP server handler returns to the client. The other options are incorrect schemas or client requests."
+        }
+      ]
+    },
+    {
+      "type": "boss",
+      "exercises": [
+        {
+          "id": "b1",
+          "type": "multiple_choice",
+          "xp": 5,
+          "prompt": "In a complete, minimal MCP server setup, how do the tool schema and the tool handler work together to fulfill an LLM's request?",
+          "options": [
+            {
+              "id": "boss_a",
+              "text": "The schema handles database connections, while the handler validates the LLM API key.",
+              "correct": false
+            },
+            {
+              "id": "boss_b",
+              "text": "The client runs the handler code directly on the user's computer without notifying the server.",
+              "correct": false
+            },
+            {
+              "id": "boss_c",
+              "text": "The schema tells the LLM what inputs are needed, and the handler processes those inputs to return a result.",
+              "correct": true
+            },
+            {
+              "id": "boss_d",
+              "text": "The handler generates the JSON schema dynamically every time a user types a prompt.",
+              "correct": false
+            }
+          ],
+          "explain": "The schema defines the interface (parameters) so the LLM knows how to call the tool. The handler function is the actual logic that executes using those inputs and returns the content list back to the client."
+        }
+      ]
+    }
+  ]
+}

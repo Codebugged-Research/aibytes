@@ -1,0 +1,222 @@
+{
+  "id": "u466-l2",
+  "unit": 466,
+  "day": 2332,
+  "tier": "LLM Application Engineering",
+  "tierIcon": "🔌",
+  "title": "The MCP Client",
+  "icon": "🔌",
+  "concept": "The component inside the host that maintains a 1:1 connection to a single MCP server.",
+  "xp": 15,
+  "hearts": 3,
+  "estMinutes": 7,
+  "segments": [
+    {
+      "type": "warmup",
+      "exercises": [
+        {
+          "id": "w1",
+          "type": "multiple_choice",
+          "xp": 1,
+          "prompt": "What is the 'Host Application' in the context of the Model Context Protocol?",
+          "options": [
+            {
+              "id": "warmup_1",
+              "text": "The user-facing chat app or IDE that orchestrates connections.",
+              "correct": true
+            },
+            {
+              "id": "warmup_2",
+              "text": "A remote server hosting third-party data APIs.",
+              "correct": false
+            },
+            {
+              "id": "warmup_3",
+              "text": "The physical network router connecting the computer to the internet.",
+              "correct": false
+            }
+          ],
+          "explain": "The Host Application is the main user-facing tool, such as an IDE or chat app, which serves as the entry point and orchestrates the connections."
+        }
+      ]
+    },
+    {
+      "type": "teach",
+      "cards": [
+        {
+          "kind": "hook",
+          "icon": "🌉",
+          "title": "Bridge to the Servers",
+          "body": "A host application like a chat window doesn't know how to speak directly to databases, filesystems, or web APIs. It needs dedicated bridge builders—these are called MCP Clients, and each one focuses on exactly one server."
+        },
+        {
+          "kind": "definition",
+          "icon": "🔍",
+          "title": "The MCP Client",
+          "body": "An MCP Client is the specific component inside the Host Application that manages a single, active connection to an MCP Server. It handles the raw messaging protocols, handshakes, and translation so the main AI application doesn't have to worry about details."
+        },
+        {
+          "kind": "analogy",
+          "icon": "🎧",
+          "title": "The Translator Headset",
+          "body": "Think of the MCP Client as a translator headset. The Host Application (like Claude) wears this headset to talk to one specific tool (like Google Drive). Each headset translates commands back and forth for just that one server."
+        },
+        {
+          "kind": "example",
+          "icon": "💻",
+          "title": "Connecting IDEs to databases",
+          "body": "When you ask Cursor (the Host) to search a database, Cursor spawns an MCP Client. This client initiates a JSON-RPC connection over standard input/output to the PostgreSQL MCP Server, asking it to run the search."
+        },
+        {
+          "kind": "mythbust",
+          "icon": "🛡️",
+          "title": "Not a Universal Hub",
+          "body": "You might think one MCP Client connects the host to all servers at once. In reality, MCP uses a 1:1 connection model: if your host wants to talk to a Postgres server and a GitHub server, it spins up two distinct MCP clients."
+        },
+        {
+          "kind": "visual",
+          "icon": "👁️",
+          "title": "Host vs. Client",
+          "body": "Visualizing the boundary between the host's coordinating brain and the client's direct communication line.",
+          "compare": {
+            "left": {
+              "emoji": "🧠",
+              "tag": "Host Application",
+              "text": "Orchestrates the entire user chat and handles multiple clients at once."
+            },
+            "right": {
+              "emoji": "🔌",
+              "tag": "MCP Client",
+              "text": "Maintains a single 1:1 connection to one specific server."
+            }
+          }
+        }
+      ]
+    },
+    {
+      "type": "practice",
+      "exercises": [
+        {
+          "id": "p1",
+          "type": "multiple_choice",
+          "xp": 2,
+          "prompt": "What is the primary role of an MCP Client?",
+          "options": [
+            {
+              "id": "mc_1",
+              "text": "The remote cloud service hosting the database.",
+              "correct": false
+            },
+            {
+              "id": "mc_2",
+              "text": "The component inside the Host that maintains a connection to a single server.",
+              "correct": true
+            },
+            {
+              "id": "mc_3",
+              "text": "The user interface that displays the final chat message to the user.",
+              "correct": false
+            },
+            {
+              "id": "mc_4",
+              "text": "The server script that reads local files.",
+              "correct": false
+            }
+          ],
+          "explain": "The MCP Client lives inside the Host Application and handles the direct communication channel (like stdio or SSE) to a single server."
+        },
+        {
+          "id": "p2",
+          "type": "true_false",
+          "xp": 2,
+          "prompt": "True or False: The MCP Client is instantiated and run inside the Host Application.",
+          "options": [
+            {
+              "id": "tf_true",
+              "text": "True",
+              "correct": true
+            },
+            {
+              "id": "tf_false",
+              "text": "False",
+              "correct": false
+            }
+          ],
+          "explain": "Yes, the Host application (like an IDE or Agent framework) is the parent process that contains and orchestrates one or more MCP Client instances."
+        },
+        {
+          "id": "p3",
+          "type": "fill_blank",
+          "xp": 2,
+          "prompt": "Fill in the blank to describe how MCP clients link to servers:",
+          "sentence": "Each MCP client maintains a strict 1:1 connection with a single server.",
+          "blank": "1:1 connection",
+          "words": [
+            "1:1 connection",
+            "shared network",
+            "global broadcast"
+          ],
+          "explain": "MCP clients maintain a dedicated, isolated 1:1 connection to their respective servers to keep communications simple and secure."
+        },
+        {
+          "id": "p4",
+          "type": "spot_the_ai",
+          "xp": 2,
+          "prompt": "Identify which message represents the inner workings of an MCP Client establishing a connection.",
+          "options": [
+            {
+              "id": "sai_1",
+              "text": "User: 'Show me my current database schemas as a formatted markdown table.'",
+              "correct": false
+            },
+            {
+              "id": "sai_2",
+              "text": "Server response: {'jsonrpc': '2.0', 'result': {'content': [{'type': 'text', 'text': 'Found tables: users, orders'}]}}",
+              "correct": false
+            },
+            {
+              "id": "sai_3",
+              "text": "Client request: {'method': 'initialize', 'params': {'protocolVersion': '2024-11-05'}}",
+              "correct": true
+            }
+          ],
+          "explain": "Option C represents a client initiating a standardized JSON-RPC handshake request to a server, which is the core protocol-level duty of an MCP Client."
+        }
+      ]
+    },
+    {
+      "type": "boss",
+      "exercises": [
+        {
+          "id": "b1",
+          "type": "multiple_choice",
+          "xp": 5,
+          "prompt": "In a complex LLM system with multiple tools, what is the exact responsibility of an MCP Client instance?",
+          "options": [
+            {
+              "id": "opt_1",
+              "text": "It bypasses the host entirely to run arbitrary system code directly on your local machine.",
+              "correct": false
+            },
+            {
+              "id": "opt_2",
+              "text": "It acts as a public registry where all servers register their API keys globally.",
+              "correct": false
+            },
+            {
+              "id": "opt_3",
+              "text": "It manages the connection to a single server, handling JSON-RPC messaging and protocol handshake steps.",
+              "correct": true
+            },
+            {
+              "id": "opt_4",
+              "text": "It replaces the user interface of the host application with a command line.",
+              "correct": false
+            }
+          ],
+          "explain": "The Client acts as the dedicated mediator inside the Host. It manages the lifecycle of the connection to one specific server, translating the Host's abstract requests into exact JSON-RPC messages and routing the server's responses back safely."
+        }
+      ]
+    }
+  ]
+}

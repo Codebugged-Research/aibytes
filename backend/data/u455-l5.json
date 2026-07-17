@@ -1,0 +1,222 @@
+{
+  "id": "u455-l5",
+  "unit": 455,
+  "day": 2280,
+  "tier": "LLM Application Engineering",
+  "tierIcon": "🔌",
+  "title": "What Makes RAG Hard in Practice",
+  "icon": "⚙️",
+  "concept": "The gap between a RAG demo and a reliable production system: chunking quality, retrieval precision, and grounding fidelity.",
+  "xp": 15,
+  "hearts": 3,
+  "estMinutes": 7,
+  "segments": [
+    {
+      "type": "warmup",
+      "exercises": [
+        {
+          "id": "w1",
+          "type": "multiple_choice",
+          "xp": 1,
+          "prompt": "If your application needs to answer questions about real-time stock prices that change every minute, which approach is most suitable?",
+          "options": [
+            {
+              "id": "w1",
+              "text": "Fine-tuning the LLM on new data hourly",
+              "correct": false
+            },
+            {
+              "id": "w2",
+              "text": "Using RAG to retrieve the latest articles from a vector database",
+              "correct": true
+            },
+            {
+              "id": "w3",
+              "text": "Relying entirely on a massive static context window",
+              "correct": false
+            }
+          ],
+          "explain": "While fine-tuning bakes style or static facts into the model's weights, RAG is best when you have rapidly changing data that needs to be updated instantly in a database."
+        }
+      ]
+    },
+    {
+      "type": "teach",
+      "cards": [
+        {
+          "kind": "hook",
+          "icon": "⚠️",
+          "title": "From Toy to Tool",
+          "body": "Building a basic RAG system takes about 20 lines of code. But making it reliable enough to answer real customer questions without hallucinating or fetching outdated information is one of the hardest challenges in AI engineering."
+        },
+        {
+          "kind": "definition",
+          "icon": "🏗️",
+          "title": "The Three RAG Pillars",
+          "body": "Making RAG work in production requires solving three main challenges: chunking quality (slicing documents cleanly), retrieval precision (fetching only the right slices), and grounding fidelity (ensuring the LLM sticks strictly to the fetched facts)."
+        },
+        {
+          "kind": "analogy",
+          "icon": "📚",
+          "title": "The Production Library",
+          "body": "Imagine building a library search system. A simple demo just matches book titles. But a production system must find the exact paragraph on page 42, make sure the book isn't outdated, and translate it without adding personal opinions."
+        },
+        {
+          "kind": "example",
+          "icon": "🏥",
+          "title": "Where Demos Break",
+          "body": "A medical RAG app might fail if it slices a document right in the middle of a dosage instruction (bad chunking), retrieves articles about dogs instead of humans (low precision), or invents a recovery time not mentioned in the text (poor grounding)."
+        },
+        {
+          "kind": "mythbust",
+          "icon": "🛡️",
+          "title": "The Smart Model Myth",
+          "body": "Many think that using a smarter LLM automatically solves all RAG issues. In reality, if your system retrieves irrelevant or badly sliced chunks, even the smartest model will generate incorrect or incomplete answers."
+        },
+        {
+          "kind": "visual",
+          "icon": "🔍",
+          "title": "Demo vs. Production",
+          "body": "A production-grade RAG pipeline filters out irrelevant noise and strictly bounds the LLM's imagination.",
+          "compare": {
+            "left": {
+              "emoji": "🧪",
+              "tag": "Demo RAG",
+              "text": "Messy text chunks, pulls in irrelevant documents, and lets the LLM guess missing details."
+            },
+            "right": {
+              "emoji": "🏭",
+              "tag": "Production RAG",
+              "text": "Clean semantic chunks, retrieves only exact matching facts, and restricts the LLM to those facts."
+            }
+          }
+        }
+      ]
+    },
+    {
+      "type": "practice",
+      "exercises": [
+        {
+          "id": "p1",
+          "type": "multiple_choice",
+          "xp": 2,
+          "prompt": "Why does poor document chunking hurt a production RAG system?",
+          "options": [
+            {
+              "id": "mc1",
+              "text": "It makes the vector database run out of storage space.",
+              "correct": false
+            },
+            {
+              "id": "mc2",
+              "text": "It cuts sentences in half, separating key facts from their context.",
+              "correct": true
+            },
+            {
+              "id": "mc3",
+              "text": "It automatically fine-tunes the LLM on incorrect data.",
+              "correct": false
+            },
+            {
+              "id": "mc4",
+              "text": "It forces the user to write longer search queries.",
+              "correct": false
+            }
+          ],
+          "explain": "Bad chunking splits coherent thoughts or sentences across different blocks, making it impossible for the retriever or LLM to understand the complete context."
+        },
+        {
+          "id": "p2",
+          "type": "true_false",
+          "xp": 2,
+          "prompt": "True or False: Retrieval precision measures how fast the database searches through millions of vectors.",
+          "options": [
+            {
+              "id": "t1",
+              "text": "True",
+              "correct": false
+            },
+            {
+              "id": "f1",
+              "text": "False",
+              "correct": true
+            }
+          ],
+          "explain": "Retrieval precision measures how many of the retrieved documents are actually relevant to the user's query, minimizing useless noise."
+        },
+        {
+          "id": "p3",
+          "type": "fill_blank",
+          "xp": 2,
+          "prompt": "Fill in the missing term to describe the metric that prevents LLM hallucinations:",
+          "sentence": "We measure grounding fidelity to ensure the LLM only uses facts present in the retrieved chunks.",
+          "blank": "grounding fidelity",
+          "words": [
+            "grounding fidelity",
+            "chunking quality",
+            "retrieval precision"
+          ],
+          "explain": "Grounding fidelity measures how accurately the model sticks only to the provided documents without hallucinating external details."
+        },
+        {
+          "id": "p4",
+          "type": "spot_the_ai",
+          "xp": 2,
+          "prompt": "Which of these responses shows an AI failing at 'grounding fidelity' by hallucinating details?",
+          "options": [
+            {
+              "id": "sai1",
+              "text": "System: 'Based on the provided safety manual, wear safety goggles in zone A.' (The manual explicitly says: 'Safety goggles are mandatory in Zone A.')",
+              "correct": false
+            },
+            {
+              "id": "sai2",
+              "text": "System: 'I cannot answer that question because the provided document does not mention the shipping costs to Europe.' (The document only lists US rates.)",
+              "correct": false
+            },
+            {
+              "id": "sai3",
+              "text": "System: 'We offer free drone shipping worldwide!' (The retrieved context only says: 'We offer standard ground shipping in the continental US.')",
+              "correct": true
+            }
+          ],
+          "explain": "Option C highlights the typical behavior of an ungrounded LLM that hallucinates details not present in the provided source document."
+        }
+      ]
+    },
+    {
+      "type": "boss",
+      "exercises": [
+        {
+          "id": "b1",
+          "type": "multiple_choice",
+          "xp": 5,
+          "prompt": "You built a RAG chatbot that works great for three test documents, but it completely fails when loaded with 10,000 corporate PDFs by mixing up facts and hallucinating. What is the correct engineering approach to fix this?",
+          "options": [
+            {
+              "id": "b1",
+              "text": "Switching to a model with a smaller context window to limit the data it reads",
+              "correct": false
+            },
+            {
+              "id": "b2",
+              "text": "Fine-tuning the LLM so it no longer needs any external retrieval documents",
+              "correct": false
+            },
+            {
+              "id": "b3",
+              "text": "Optimizing document chunking, improving retrieval precision, and verifying grounding fidelity",
+              "correct": true
+            },
+            {
+              "id": "b4",
+              "text": "Increasing the temperature of the LLM to make it guess missing facts creatively",
+              "correct": false
+            }
+          ],
+          "explain": "Moving RAG from a demo to production requires solving a chain of potential failure points: preparing the documents cleanly (chunking), finding only the relevant text (retrieval precision), and ensuring the LLM doesn't make up details based on that text (grounding fidelity)."
+        }
+      ]
+    }
+  ]
+}

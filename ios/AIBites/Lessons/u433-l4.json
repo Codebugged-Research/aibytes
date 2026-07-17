@@ -1,0 +1,222 @@
+{
+  "id": "u433-l4",
+  "unit": 433,
+  "day": 2169,
+  "tier": "LLM Application Engineering",
+  "tierIcon": "🔌",
+  "title": "Metadata for Filtering vs Metadata for Display",
+  "icon": "🏷️",
+  "concept": "Distinguishing fields used to narrow a search from fields just shown to the user in a citation.",
+  "xp": 15,
+  "hearts": 3,
+  "estMinutes": 7,
+  "segments": [
+    {
+      "type": "warmup",
+      "exercises": [
+        {
+          "id": "w1",
+          "type": "multiple_choice",
+          "xp": 1,
+          "prompt": "In our last lesson, we learned about Contextual Chunk Headers. Why do we prepend chunks with their original document title and section headings?",
+          "options": [
+            {
+              "id": "a",
+              "text": "It makes the chunks smaller to save database space.",
+              "correct": false
+            },
+            {
+              "id": "b",
+              "text": "It ensures chunks retain their context when retrieved individually.",
+              "correct": true
+            },
+            {
+              "id": "c",
+              "text": "It automatically translates the text into multiple languages.",
+              "correct": false
+            }
+          ],
+          "explain": "Prependings chunks with headers (like document title and section) keeps them self-describing even when retrieved out of context."
+        }
+      ]
+    },
+    {
+      "type": "teach",
+      "cards": [
+        {
+          "kind": "hook",
+          "icon": "💡",
+          "title": "The Metadata Dilemma",
+          "body": "When building a RAG application, not all metadata is created equal. If you index every single piece of information, your database slows to a crawl, yet leaving out key details makes your search results useless to the end user."
+        },
+        {
+          "kind": "definition",
+          "icon": "🔍",
+          "title": "Filtering vs. Display Metadata",
+          "body": "Metadata fields fall into two categories: filtering metadata (indexed fields used to narrow down search results, like category or date) and display metadata (non-indexed fields shown to the user in the final citation, like URLs or titles)."
+        },
+        {
+          "kind": "analogy",
+          "icon": "📚",
+          "title": "The Library Spine vs. The Cover",
+          "body": "Think of a library book. The category label on the spine is for filtering (finding the right shelf), while the beautiful cover illustration is for display (showing you what the book looks like once you pull it off the shelf)."
+        },
+        {
+          "kind": "example",
+          "icon": "🛒",
+          "title": "Behind the Scenes vs. On the Screen",
+          "body": "In an e-commerce QA bot, the product ID 'prod_9982' is used behind the scenes to filter search results. The product image URL and promotional text are display metadata, rendered in the chat UI for the user."
+        },
+        {
+          "kind": "mythbust",
+          "icon": "🚫",
+          "title": "The Indexing Trap",
+          "body": "Many beginners think every piece of metadata must be indexed for search. In reality, indexing fields you only want to display wastes database memory and slows down query times. Keep them separate!"
+        },
+        {
+          "kind": "visual",
+          "icon": "⚖️",
+          "title": "Two Roles of Metadata",
+          "body": "We divide metadata into two paths: one for finding the document, and one for showing the source.",
+          "compare": {
+            "left": {
+              "emoji": "⚙️",
+              "tag": "Filtering",
+              "text": "Used to restrict search. Indexed, structured data like dates, tags, and IDs."
+            },
+            "right": {
+              "emoji": "🖥️",
+              "tag": "Display",
+              "text": "Used to show users. Unindexed data like URLs, titles, and thumbnails."
+            }
+          }
+        }
+      ]
+    },
+    {
+      "type": "practice",
+      "exercises": [
+        {
+          "id": "p1",
+          "type": "multiple_choice",
+          "xp": 2,
+          "prompt": "Which of the following is the best use case for display metadata rather than filtering metadata?",
+          "options": [
+            {
+              "id": "a",
+              "text": "To restrict the search to a specific product category.",
+              "correct": false
+            },
+            {
+              "id": "b",
+              "text": "To sort search results by date.",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "To show the user a clickable link to the source document.",
+              "correct": true
+            },
+            {
+              "id": "d",
+              "text": "To filter out documents updated before 2023.",
+              "correct": false
+            }
+          ],
+          "explain": "Display metadata is meant for human eyes to verify where the information came from, so showing the original document's URL is a classic display use-case."
+        },
+        {
+          "id": "p2",
+          "type": "true_false",
+          "xp": 2,
+          "prompt": "True or False: Every piece of metadata attached to a document chunk must be indexed in your vector database.",
+          "options": [
+            {
+              "id": "true",
+              "text": "True",
+              "correct": true
+            },
+            {
+              "id": "false",
+              "text": "False",
+              "correct": false
+            }
+          ],
+          "explain": "Filtering metadata must be indexed so the database can quickly narrow down the candidates. Display-only metadata does not need to be indexed, saving memory and processing power."
+        },
+        {
+          "id": "p3",
+          "type": "fill_blank",
+          "xp": 2,
+          "prompt": "Fill in the blank to complete the rule for search efficiency.",
+          "sentence": "Use filtering metadata to restrict your search space, and use display metadata to render user citations.",
+          "blank": "filtering",
+          "words": [
+            "filtering",
+            "display",
+            "embedding"
+          ],
+          "explain": "Filtering metadata is used to restrict the search database to matching documents, whereas display metadata is only used to show helpful info on the screen."
+        },
+        {
+          "id": "p4",
+          "type": "spot_the_ai",
+          "xp": 2,
+          "prompt": "Identify which response represents an LLM system prompt utilizing display metadata for citations.",
+          "options": [
+            {
+              "id": "a",
+              "text": "Filter the documents where the publication date is greater than January 2022.",
+              "correct": false
+            },
+            {
+              "id": "b",
+              "text": "Answer the user's question using the provided context. Context: [Text: 'Apples are red.'] Source URL: 'https://fruits.com/apple' (Use the URL for display citations).",
+              "correct": true
+            },
+            {
+              "id": "c",
+              "text": "Def custom_filter(doc): return doc.metadata['author'] == 'Alice'",
+              "correct": false
+            }
+          ],
+          "explain": "Option B is the only generation that clearly represents a RAG prompt containing both retrieved text and separate source URLs meant for user citation display."
+        }
+      ]
+    },
+    {
+      "type": "boss",
+      "exercises": [
+        {
+          "id": "b1",
+          "type": "multiple_choice",
+          "xp": 5,
+          "prompt": "You are designing a search interface for a legal database. Lawyers need to filter cases by 'Year' and 'Jurisdiction', and then view the 'Judge\\'s Summary' and 'Courtroom Notes' on the screen. How should you treat these metadata fields?",
+          "options": [
+            {
+              "id": "opt_1",
+              "text": "Filtering fields need structured data types for database indexing; display fields can be raw text for visual citation.",
+              "correct": true
+            },
+            {
+              "id": "opt_2",
+              "text": "All metadata fields must be indexed to make the retrieval process faster.",
+              "correct": false
+            },
+            {
+              "id": "opt_3",
+              "text": "Display metadata is used by the vector database to compute similarity scores.",
+              "correct": false
+            },
+            {
+              "id": "opt_4",
+              "text": "Filtering metadata is sent to the LLM, while display metadata is hidden from the LLM.",
+              "correct": false
+            }
+          ],
+          "explain": "Filtering metadata must match a query exactly or via specific logic (like numeric ranges), so it needs structured types (e.g., lists of IDs or numbers). Display metadata is only shown to the user as a citation helper, so it can be unindexed raw strings or rich markdown."
+        }
+      ]
+    }
+  ]
+}

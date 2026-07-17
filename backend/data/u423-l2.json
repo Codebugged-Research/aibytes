@@ -1,0 +1,222 @@
+{
+  "id": "u423-l2",
+  "unit": 423,
+  "day": 2117,
+  "tier": "LLM Application Engineering",
+  "tierIcon": "🔌",
+  "title": "How Prompt Caching Works",
+  "icon": "🗝️",
+  "concept": "Caching the model's internal key-value state for a shared context prefix so only new tokens are processed.",
+  "xp": 15,
+  "hearts": 3,
+  "estMinutes": 7,
+  "segments": [
+    {
+      "type": "warmup",
+      "exercises": [
+        {
+          "id": "w1",
+          "type": "multiple_choice",
+          "xp": 1,
+          "prompt": "Quick recap: why does reprocessing the same long system prompt on every single API call waste money?",
+          "options": [
+            {
+              "id": "a",
+              "text": "Because the model charges extra for using the word 'system'",
+              "correct": false
+            },
+            {
+              "id": "b",
+              "text": "Because the model redoes the same compute work on identical text it already processed before, instead of reusing that work",
+              "correct": true
+            },
+            {
+              "id": "c",
+              "text": "Because long prompts always contain grammar errors that confuse the model",
+              "correct": false
+            }
+          ],
+          "explain": "Right! If the same long text shows up again and again, redoing all that processing every time is wasted compute — and wasted money. That's exactly the problem caching solves."
+        }
+      ]
+    },
+    {
+      "type": "teach",
+      "cards": [
+        {
+          "kind": "hook",
+          "icon": "⚡",
+          "title": "Same start, every time",
+          "body": "Ever notice how a cached webpage loads instantly the second time? Language models can do something similar with text they've already 'read' before, as long as the beginning stays exactly the same."
+        },
+        {
+          "kind": "definition",
+          "icon": "🗄️",
+          "title": "What gets cached, exactly?",
+          "body": "When a model reads text, it builds an internal 'key-value' map for every token — like notes on what each word means in context. Prompt caching saves this map for a shared prefix (like a system prompt) so it doesn't have to rebuild it next time."
+        },
+        {
+          "kind": "analogy",
+          "icon": "📖",
+          "title": "A bookmark, not a re-read",
+          "body": "Imagine reading a 300-page book every single time before answering a new question about it. Annoying, right? A bookmark lets you skip straight to where you left off. Prompt caching is that bookmark for the model's 'understanding' of your shared text."
+        },
+        {
+          "kind": "example",
+          "icon": "🧾",
+          "title": "Same intro, new question",
+          "body": "You send a 1,500-token set of instructions plus a new 10-token question, over and over. The model caches the key-value state for those 1,500 instruction tokens once. Each new call only processes the fresh 10 tokens, using the cached state for the rest."
+        },
+        {
+          "kind": "mythbust",
+          "icon": "🚫",
+          "title": "Myth: The model 'memorizes' the text forever",
+          "body": "Caching isn't the model learning or storing facts permanently — it's a temporary shortcut. The cached key-value state usually expires after a short time or if the prefix changes even slightly, and then it must be rebuilt."
+        },
+        {
+          "kind": "visual",
+          "icon": "🔁",
+          "title": "Without vs. with caching",
+          "body": "Same document, same question format, very different amount of work each call.",
+          "compare": {
+            "left": {
+              "emoji": "🐢",
+              "tag": "No caching",
+              "text": "Every call: reprocess all 2,000 prefix tokens + new question tokens from scratch"
+            },
+            "right": {
+              "emoji": "🐇",
+              "tag": "With caching",
+              "text": "Every call: reuse cached state for 2,000 prefix tokens, only process the new question tokens"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "type": "practice",
+      "exercises": [
+        {
+          "id": "p1",
+          "type": "multiple_choice",
+          "xp": 2,
+          "prompt": "What specifically does prompt caching save and reuse?",
+          "options": [
+            {
+              "id": "a",
+              "text": "The final text answer the model gave last time",
+              "correct": false
+            },
+            {
+              "id": "b",
+              "text": "The internal key-value state built from processing the shared prefix tokens",
+              "correct": true
+            },
+            {
+              "id": "c",
+              "text": "A compressed summary of the document written by a human",
+              "correct": false
+            },
+            {
+              "id": "d",
+              "text": "The user's account settings and billing history",
+              "correct": false
+            }
+          ],
+          "explain": "Caching saves the model's internal key-value computations for the prefix tokens it already processed, not the final answer text or any external data. That's why only the new tokens after the shared prefix need fresh processing."
+        },
+        {
+          "id": "p2",
+          "type": "true_false",
+          "xp": 2,
+          "prompt": "True or False: Prompt caching means the model reprocesses the entire prompt from scratch every time, but just does it faster.",
+          "options": [
+            {
+              "id": "a",
+              "text": "True",
+              "correct": false
+            },
+            {
+              "id": "b",
+              "text": "False",
+              "correct": true
+            }
+          ],
+          "explain": "False — caching means the model skips reprocessing the shared prefix entirely by reusing saved key-value state. It's not a faster full re-read; it's avoiding the re-read altogether for the unchanged part."
+        },
+        {
+          "id": "p3",
+          "type": "fill_blank",
+          "xp": 2,
+          "prompt": "Fill in the blank:",
+          "sentence": "Prompt caching stores the key-value state for a shared prefix so only new tokens need to be processed.",
+          "blank": "key-value",
+          "words": [
+            "key-value",
+            "alphabetical",
+            "random"
+          ],
+          "explain": "The 'key-value' state is the internal representation the model builds while reading text. Caching it means that work doesn't need to be redone for the same prefix."
+        },
+        {
+          "id": "p4",
+          "type": "spot_the_ai",
+          "xp": 2,
+          "prompt": "Which of these three explanations of prompt caching sounds AI-generated (overly generic, vague technical filler)?",
+          "options": [
+            {
+              "id": "a",
+              "text": "Prompt caching leverages advanced computational paradigms to holistically optimize and synergize the model's contextual understanding for enhanced throughput.",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "Prompt caching saves the key-value state from processing a shared prefix, so the model skips recomputing that part on later calls with the same prefix.",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "When your system prompt stays the same across calls, caching lets the model reuse its earlier work on that text instead of reprocessing it every time.",
+              "correct": false
+            }
+          ],
+          "explain": "Option A is full of vague buzzwords ('leverages', 'paradigms', 'holistically synergize') that sound impressive but explain nothing concrete about how caching actually works. The other two options give a clear, specific mechanism."
+        }
+      ]
+    },
+    {
+      "type": "boss",
+      "exercises": [
+        {
+          "id": "b1",
+          "type": "multiple_choice",
+          "xp": 5,
+          "prompt": "A customer support bot sends the SAME 2,000-token policy document plus a NEW 20-token customer question on every single call, all in one API request. How does caching make this efficient?",
+          "options": [
+            {
+              "id": "a",
+              "text": "The model deletes the policy document after the first use so it never has to think about it again",
+              "correct": false
+            },
+            {
+              "id": "b",
+              "text": "The model caches the internal key-value state built from processing the 2,000-token policy prefix once, then only processes the new ~20-token question on each call, reusing the cached state",
+              "correct": true
+            },
+            {
+              "id": "c",
+              "text": "The model compresses the policy document into a shorter document so it has fewer tokens to read next time",
+              "correct": false
+            },
+            {
+              "id": "d",
+              "text": "The model answers from memory without reading the question at all, since it already knows the policy",
+              "correct": false
+            }
+          ],
+          "explain": "Caching works by saving the key-value state the model computes while reading the shared prefix (the policy doc) the first time. On every later call, as long as that prefix is unchanged, the model reuses the saved state instead of recomputing it, and only does fresh work on the new tokens (the question). Nothing is deleted, compressed, or skipped from understanding — the heavy lifting for the repeated part is just reused instead of redone. You've now finished this unit's core ideas: caching saves money by reusing work, and it works by storing key-value state for shared prefixes so only new tokens need processing."
+        }
+      ]
+    }
+  ]
+}

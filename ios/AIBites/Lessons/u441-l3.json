@@ -1,0 +1,222 @@
+{
+  "id": "u441-l3",
+  "unit": 441,
+  "day": 2208,
+  "tier": "LLM Application Engineering",
+  "tierIcon": "🔌",
+  "title": "Incremental Updates at Scale",
+  "icon": "📥",
+  "concept": "Handling continuous inserts and deletes on a live index without full rebuilds.",
+  "xp": 15,
+  "hearts": 3,
+  "estMinutes": 7,
+  "segments": [
+    {
+      "type": "warmup",
+      "exercises": [
+        {
+          "id": "w1",
+          "type": "multiple_choice",
+          "xp": 1,
+          "prompt": "How does replication (covered in the last lesson) help a vector database handle high read traffic?",
+          "options": [
+            {
+              "id": "warmup_1",
+              "text": "By copying the index across multiple nodes to share the query load.",
+              "correct": true
+            },
+            {
+              "id": "warmup_2",
+              "text": "By dividing a single index into small horizontal slices.",
+              "correct": false
+            },
+            {
+              "id": "warmup_3",
+              "text": "By rebuilding the index from scratch every minute.",
+              "correct": false
+            }
+          ],
+          "explain": "Replication duplicates the index across multiple nodes to handle more read queries simultaneously, boosting read throughput."
+        }
+      ]
+    },
+    {
+      "type": "teach",
+      "cards": [
+        {
+          "kind": "hook",
+          "icon": "⚡",
+          "title": "The Live Database Challenge",
+          "body": "When you run a live AI app, users add new documents and delete old ones every second. If you had to rebuild your entire vector index from scratch every time someone uploaded a PDF, your system would freeze up instantly!"
+        },
+        {
+          "kind": "definition",
+          "icon": "🔄",
+          "title": "What are Incremental Updates?",
+          "body": "Incremental updates allow a vector database to insert, delete, or update vector records on the fly. Instead of rebuilding the entire complex search index from scratch (which is slow and expensive), the database uses write buffers and background merging."
+        },
+        {
+          "kind": "analogy",
+          "icon": "🗂️",
+          "title": "The Sticky-Note System",
+          "body": "Imagine your vector database is like a physical library card catalog. Instead of printing a brand-new drawer of cards every time a new book arrives, you write a temporary sticky note and place it in a front tray, later merging it into the main drawers during quiet hours."
+        },
+        {
+          "kind": "example",
+          "icon": "📰",
+          "title": "Real-World Dynamic Feed",
+          "body": "When a streaming news site inserts 100 new articles per minute, the vector database writes these embeddings to a temporary in-memory index immediately. Search queries scan both the historical base index and this tiny active memory buffer to return live results instantly."
+        },
+        {
+          "kind": "mythbust",
+          "icon": "👻",
+          "title": "Deletes Aren't Instant Erasures",
+          "body": "You might think deleting a vector removes it from disk instantly. In reality, databases use 'tombstones' to mark records as deleted in memory, actual cleanup happens later during background compaction to save immediate processing power."
+        },
+        {
+          "kind": "visual",
+          "icon": "📊",
+          "title": "Two Ways to Update",
+          "body": "Instead of making one giant update, we split the index into a large static base and a tiny active buffer for instant updates.",
+          "compare": {
+            "left": {
+              "emoji": "🐌",
+              "tag": "Full Rebuild",
+              "text": "Re-indexing 10,000,000 vectors for 1 new insert."
+            },
+            "right": {
+              "emoji": "🚀",
+              "tag": "Incremental Update",
+              "text": "Writing the new insert to a fast, temporary memory buffer."
+            }
+          }
+        }
+      ]
+    },
+    {
+      "type": "practice",
+      "exercises": [
+        {
+          "id": "p1",
+          "type": "multiple_choice",
+          "xp": 2,
+          "prompt": "Why don't we just rebuild the entire vector index every time a new vector is inserted?",
+          "options": [
+            {
+              "id": "mc_1",
+              "text": "It ensures the database is always 100% compressed.",
+              "correct": false
+            },
+            {
+              "id": "mc_2",
+              "text": "It is too slow and computationally expensive to do for every small change.",
+              "correct": true
+            },
+            {
+              "id": "mc_3",
+              "text": "It blocks read replicas from answering any queries.",
+              "correct": false
+            },
+            {
+              "id": "mc_4",
+              "text": "Vector databases cannot be rebuilt once created.",
+              "correct": false
+            }
+          ],
+          "explain": "Rebuilding a massive vector index is computationally expensive. Running a full rebuild for every single change would overwhelm the CPU and cause massive search delays."
+        },
+        {
+          "id": "p2",
+          "type": "true_false",
+          "xp": 2,
+          "prompt": "True or False: A vector database can serve searches on newly inserted vectors before they are permanently merged into the main index on disk.",
+          "options": [
+            {
+              "id": "tf_true",
+              "text": "True",
+              "correct": true
+            },
+            {
+              "id": "tf_false",
+              "text": "False",
+              "correct": false
+            }
+          ],
+          "explain": "By querying both the historical main index and the live in-memory buffer, users can find newly added vectors immediately."
+        },
+        {
+          "id": "p3",
+          "type": "fill_blank",
+          "xp": 2,
+          "prompt": "Fill in the blank to describe how vector databases mark deleted items without immediately rebuilding files.",
+          "sentence": "Instead of rebuilding index files instantly, systems flag deleted vectors with tombstones for background cleanup.",
+          "blank": "tombstones",
+          "words": [
+            "tombstones",
+            "replicas",
+            "shards"
+          ],
+          "explain": "Deletes are marked with placeholders called tombstones to avoid costly disk re-writes, letting the system clean them up later during quiet hours."
+        },
+        {
+          "id": "p4",
+          "type": "spot_the_ai",
+          "xp": 2,
+          "prompt": "Which approach describes a real-time, production-ready AI agent updating a vector index?",
+          "options": [
+            {
+              "id": "sai_1",
+              "text": "We take the database offline every night at midnight to run a script that imports new vectors.",
+              "correct": false
+            },
+            {
+              "id": "sai_2",
+              "text": "We write incoming vectors to a small active memory segment, then merge these segments into the main index in the background.",
+              "correct": true
+            },
+            {
+              "id": "sai_3",
+              "text": "We append new vectors to a text log file and make users search that text file manually.",
+              "correct": false
+            }
+          ],
+          "explain": "Option B describes an automated, modern database architecture that separates hot writes from historical data and merges them asynchronously. Options A and C describe manual or primitive strategies."
+        }
+      ]
+    },
+    {
+      "type": "boss",
+      "exercises": [
+        {
+          "id": "b1",
+          "type": "multiple_choice",
+          "xp": 5,
+          "prompt": "To design a production-grade vector database that handles millions of streaming inserts and deletes daily without degrading search performance, which write architecture should you implement?",
+          "options": [
+            {
+              "id": "opt_1",
+              "text": "Collect changes in a fast memory buffer, flush them to disk as small segments, and merge them in the background.",
+              "correct": true
+            },
+            {
+              "id": "opt_2",
+              "text": "Lock the entire index, perform a full reconstruction on every insert, and unlock it.",
+              "correct": false
+            },
+            {
+              "id": "opt_3",
+              "text": "Write all changes directly to a single massive flat file without using memory buffers or segments.",
+              "correct": false
+            },
+            {
+              "id": "opt_4",
+              "text": "Reject all delete requests and only allow inserts when the server is restarted.",
+              "correct": false
+            }
+          ],
+          "explain": "An in-memory write buffer (like a MemTable) allows instant acknowledgement of new vector inserts. Periodically, these buffers are flushed to disk as immutable index segments. A background process merges these segments (Compaction) to clean up deleted items and optimize search speeds."
+        }
+      ]
+    }
+  ]
+}

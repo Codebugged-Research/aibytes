@@ -1,0 +1,222 @@
+{
+  "id": "u464-l3",
+  "unit": 464,
+  "day": 2323,
+  "tier": "LLM Application Engineering",
+  "tierIcon": "🔌",
+  "title": "Routing to Retrieval vs No Retrieval",
+  "icon": "🗺️",
+  "concept": "Deciding when a query needs grounding at all versus when the model can answer directly from parametric knowledge.",
+  "xp": 15,
+  "hearts": 3,
+  "estMinutes": 7,
+  "segments": [
+    {
+      "type": "warmup",
+      "exercises": [
+        {
+          "id": "w1",
+          "type": "multiple_choice",
+          "xp": 1,
+          "prompt": "In the last lesson, we learned about building a query router. What is its primary responsibility-based query router. What is its primary function?",
+          "options": [
+            {
+              "id": "warmup_1",
+              "text": "To direct a query to the most relevant data index or tool.",
+              "correct": true
+            },
+            {
+              "id": "warmup_2",
+              "text": "To compress large documents into smaller vectors.",
+              "correct": false
+            },
+            {
+              "id": "warmup_3",
+              "text": "To permanently delete old documents from a vector store.",
+              "correct": false
+            }
+          ],
+          "explain": "A query router analyzes the user's intent to decide which index, tool, or database is best suited to answer their specific question."
+        }
+      ]
+    },
+    {
+      "type": "teach",
+      "cards": [
+        {
+          "kind": "hook",
+          "icon": "⚡",
+          "title": "To Search or Not to Search?",
+          "body": "Every RAG database lookup costs time, money, and computing power. If a user asks a simple question like 'Say hello in Spanish', why waste resources querying your internal database? Smart routers bypass RAG entirely when it isn't needed."
+        },
+        {
+          "kind": "definition",
+          "icon": "🚦",
+          "title": "What is Retrieval Routing?",
+          "body": "Routing to retrieval vs. no retrieval means analyzing an incoming query to decide if it requires fresh, external documents (Retrieval) or if it can be answered using only the LLM's built-in, pre-trained memory (Parametric Knowledge)."
+        },
+        {
+          "kind": "analogy",
+          "icon": "🧠",
+          "title": "The Librarian's Memory",
+          "body": "Think of it like a librarian. If you ask them 'What is your name?', they answer instantly from memory. But if you ask 'What was the temperature in Tokyo last Tuesday?', they must stop and look it up in a database."
+        },
+        {
+          "kind": "example",
+          "icon": "📝",
+          "title": "Real-World Routing Decisions",
+          "body": "Asking 'How do I reset my password on your platform?' routes to Retrieval to fetch current docs. Asking 'Explain the concept of gravity in simple terms' routes to No Retrieval, letting the LLM answer directly."
+        },
+        {
+          "kind": "mythbust",
+          "icon": "🚫",
+          "title": "More Context Isn't Always Better",
+          "body": "Many assume that retrieving documents for every single query makes the LLM smarter. In reality, retrieving documents for simple greetings or general knowledge adds latency, increases costs, and can confuse the model with irrelevant context."
+        },
+        {
+          "kind": "visual",
+          "icon": "⚖️",
+          "title": "Routing Pathways",
+          "body": "Compare how a router handles a database query versus a general conversational greeting.",
+          "compare": {
+            "left": {
+              "emoji": "📚",
+              "tag": "Retrieval Route",
+              "text": "For dynamic or private info. Example: 'What is my account balance?'"
+            },
+            "right": {
+              "emoji": "💬",
+              "tag": "No-Retrieval Route",
+              "text": "For general logic. Example: 'Write a poem about trees.'"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "type": "practice",
+      "exercises": [
+        {
+          "id": "p1",
+          "type": "multiple_choice",
+          "xp": 2,
+          "prompt": "Which of the following user queries MUST be routed to retrieval?",
+          "options": [
+            {
+              "id": "q1_opt_1",
+              "text": "Write a short story about a brave knight.",
+              "correct": false
+            },
+            {
+              "id": "q1_opt_2",
+              "text": "Translate 'good morning' into French.",
+              "correct": false
+            },
+            {
+              "id": "q1_opt_3",
+              "text": "What is the current status of flight AA123?",
+              "correct": true
+            },
+            {
+              "id": "q1_opt_4",
+              "text": "What is the capital city of Japan?",
+              "correct": false
+            }
+          ],
+          "explain": "A query asking for real-time, dynamic information (like current flight status) cannot be answered by static, pre-trained parametric knowledge and must be routed to retrieval."
+        },
+        {
+          "id": "p2",
+          "type": "true_false",
+          "xp": 2,
+          "prompt": "True or False: Routing a general query directly to the LLM (bypassing retrieval) decreases response latency.",
+          "options": [
+            {
+              "id": "tf_opt_1",
+              "text": "True",
+              "correct": true
+            },
+            {
+              "id": "tf_opt_2",
+              "text": "False",
+              "correct": false
+            }
+          ],
+          "explain": "Bypassing retrieval for simple or general queries reduces the time it takes to respond (latency) because the system doesn't have to search a vector database first."
+        },
+        {
+          "id": "p3",
+          "type": "fill_blank",
+          "xp": 2,
+          "prompt": "Fill in the blank to describe the LLM's built-in memory.",
+          "sentence": "When an LLM answers a general question without searching external databases, it relies entirely on its parametric knowledge.",
+          "blank": "parametric knowledge",
+          "words": [
+            "parametric knowledge",
+            "vector database",
+            "semantic search"
+          ],
+          "explain": "Queries about general concepts can be answered using the LLM's own internal parametric knowledge, bypassing the database to save time and API costs."
+        },
+        {
+          "id": "p4",
+          "type": "spot_the_ai",
+          "xp": 2,
+          "prompt": "Identify the output generated by the AI agent managing the query routing system:",
+          "options": [
+            {
+              "id": "sai_opt_1",
+              "text": "Can you explain what quantum computing is?",
+              "correct": false
+            },
+            {
+              "id": "sai_opt_2",
+              "text": "Tell me a joke about programming.",
+              "correct": false
+            },
+            {
+              "id": "sai_opt_3",
+              "text": "[Route: No-Retrieval] Quantum computing is a field of study focused on...",
+              "correct": true
+            }
+          ],
+          "explain": "Option C is generated by an AI assistant trying to handle routing. Options A and B represent raw user inputs that would be routed."
+        }
+      ]
+    },
+    {
+      "type": "boss",
+      "exercises": [
+        {
+          "id": "b1",
+          "type": "multiple_choice",
+          "xp": 5,
+          "prompt": "You need to route two user queries: 'What is the current stock price of Apple?' and 'Can you write a poem about autumn?'. Which routing strategy is most efficient?",
+          "options": [
+            {
+              "id": "opt_1",
+              "text": "Retrieve for the recipe, but use parametric knowledge for the stock price.",
+              "correct": false
+            },
+            {
+              "id": "opt_2",
+              "text": "Retrieve for the stock price, but use parametric knowledge for the recipe.",
+              "correct": true
+            },
+            {
+              "id": "opt_3",
+              "text": "Retrieve for both queries to ensure maximum accuracy.",
+              "correct": false
+            },
+            {
+              "id": "opt_4",
+              "text": "Use parametric knowledge for both queries to save API costs.",
+              "correct": false
+            }
+          ],
+          "explain": "If a query asks for dynamic, real-time, or private external data (like a specific stock price or user account balance), we must route to retrieval. For static, common-sense, or standard creative tasks, the LLM's parametric knowledge is faster and cheaper."
+        }
+      ]
+    }
+  ]
+}

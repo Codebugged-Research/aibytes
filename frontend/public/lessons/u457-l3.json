@@ -1,0 +1,222 @@
+{
+  "id": "u457-l3",
+  "unit": 457,
+  "day": 2288,
+  "tier": "LLM Application Engineering",
+  "tierIcon": "🔌",
+  "title": "Incremental Indexing",
+  "icon": "⚡",
+  "concept": "Detecting changed or new documents and re-indexing only what's needed instead of rebuilding everything.",
+  "xp": 15,
+  "hearts": 3,
+  "estMinutes": 7,
+  "segments": [
+    {
+      "type": "warmup",
+      "exercises": [
+        {
+          "id": "w1",
+          "type": "multiple_choice",
+          "xp": 1,
+          "prompt": "Recall the indexing pipeline stages from the last lesson. What is the correct sequence of steps to prepare raw files for a vector store?",
+          "options": [
+            {
+              "id": "w_opt_1",
+              "text": "Embedding the raw file, chunking the vectors, and then parsing the output.",
+              "correct": false
+            },
+            {
+              "id": "w_opt_2",
+              "text": "Parsing the raw files, chunking the text, enriching with metadata, and embedding.",
+              "correct": true
+            },
+            {
+              "id": "w_opt_3",
+              "text": "Writing raw files directly to the vector store without parsing or chunking.",
+              "correct": false
+            }
+          ],
+          "explain": "The standard indexing pipeline stages sequence is: Parse (extract text), Chunk (split text), Enrich (add metadata), Embed (generate vectors), and Write (save to store)."
+        }
+      ]
+    },
+    {
+      "type": "teach",
+      "cards": [
+        {
+          "kind": "hook",
+          "icon": "⏳",
+          "title": "The Cost of Starting Over",
+          "body": "When your source documents change, re-processing thousands of pages from scratch wastes time and money. How do we keep our search index fresh without burning through our API budget?"
+        },
+        {
+          "kind": "definition",
+          "icon": "🔄",
+          "title": "What is Incremental Indexing?",
+          "body": "Incremental indexing is the process of updating your vector database by detecting which source documents are new, modified, or deleted, and only processing those specific changes instead of rebuilding the entire database."
+        },
+        {
+          "kind": "analogy",
+          "icon": "📖",
+          "title": "The Sticky-Note Upgrade",
+          "body": "Imagine updating a physical phone book. Instead of reprinting the entire massive book every time one person moves, you just print a tiny sticker sheet of updates and paste them over the old entries."
+        },
+        {
+          "kind": "example",
+          "icon": "💡",
+          "title": "Nightly Wiki Sync",
+          "body": "A company wiki runs an nightly sync. The pipeline compares document modification timestamps. It finds 5 new pages and 2 edited pages out of 10,000. It only parses, chunks, and embeds those 7 pages, saving thousands of API calls."
+        },
+        {
+          "kind": "mythbust",
+          "icon": "🚫",
+          "title": "The Duplicate Danger",
+          "body": "You might think vector databases handle updates automatically. In reality, unless you build an incremental pipeline, sending the same document again will create duplicate chunks and redundant vectors, cluttering your database."
+        },
+        {
+          "kind": "visual",
+          "icon": "📊",
+          "title": "Pipeline Efficiency",
+          "body": "Compare the wastefulness of rebuilding an index vs the speed of incremental updates.",
+          "compare": {
+            "left": {
+              "emoji": "🔄",
+              "tag": "Full Rebuild",
+              "text": "Reprocesses all 1,000 documents every time a single typo is fixed."
+            },
+            "right": {
+              "emoji": "⚡",
+              "tag": "Incremental",
+              "text": "Detects the single changed document and updates only its chunks."
+            }
+          }
+        }
+      ]
+    },
+    {
+      "type": "practice",
+      "exercises": [
+        {
+          "id": "p1",
+          "type": "multiple_choice",
+          "xp": 2,
+          "prompt": "What is the primary benefit of designing an incremental indexing pipeline?",
+          "options": [
+            {
+              "id": "q1_a1",
+              "text": "It improves the accuracy of the embedding models.",
+              "correct": false
+            },
+            {
+              "id": "q1_a2",
+              "text": "It avoids wasting computational power and API costs on unchanged documents.",
+              "correct": true
+            },
+            {
+              "id": "q1_a3",
+              "text": "It completely eliminates the need to chunk text.",
+              "correct": false
+            },
+            {
+              "id": "q1_a4",
+              "text": "It stores documents in plain text instead of vectors.",
+              "correct": false
+            }
+          ],
+          "explain": "Rebuilding the entire database from scratch on every minor change scales poorly and incurs high computing and API costs. Incremental indexing targets only what changed."
+        },
+        {
+          "id": "p2",
+          "type": "true_false",
+          "xp": 2,
+          "prompt": "True or False: An incremental indexing pipeline must also track deleted source documents to remove their corresponding vectors from the index.",
+          "options": [
+            {
+              "id": "tf_true",
+              "text": "True",
+              "correct": true
+            },
+            {
+              "id": "tf_false",
+              "text": "False",
+              "correct": false
+            }
+          ],
+          "explain": "Deleted documents must be removed from the vector database to prevent the LLM from retrieving outdated or non-existent information."
+        },
+        {
+          "id": "p3",
+          "type": "fill_blank",
+          "xp": 2,
+          "prompt": "Fill in the blank to complete the explanation of change detection.",
+          "sentence": "To detect changes, pipelines often store and compare unique content hashes for each source document.",
+          "blank": "hashes",
+          "words": [
+            "hashes",
+            "folders",
+            "formats"
+          ],
+          "explain": "By comparing the current content hashes against previously saved hashes, the pipeline quickly spots which documents actually changed without running expensive embedding models."
+        },
+        {
+          "id": "p4",
+          "type": "spot_the_ai",
+          "xp": 2,
+          "prompt": "Identify the implementation of an incremental indexing check.",
+          "options": [
+            {
+              "id": "sai_1",
+              "text": "Every night, our script runs a cron job that completely wipes the database table and uploads all 50,000 PDF files again.",
+              "correct": false
+            },
+            {
+              "id": "sai_2",
+              "text": "def should_index(doc):\\n    return get_current_hash(doc) != db.get_stored_hash(doc.id)",
+              "correct": true
+            },
+            {
+              "id": "sai_3",
+              "text": "We manually check the shared folder every Friday afternoon and write down the names of new documents in a spreadsheet.",
+              "correct": false
+            }
+          ],
+          "explain": "Option B shows an AI attempting to write a simple change-detection check by comparing a document's current hash against a record of previously indexed hashes to determine if it should be skipped."
+        }
+      ]
+    },
+    {
+      "type": "boss",
+      "exercises": [
+        {
+          "id": "b1",
+          "type": "multiple_choice",
+          "xp": 5,
+          "prompt": "You are designing an incremental indexing pipeline for a knowledge base with millions of pages. API costs for embedding models are high. Which strategy is the most efficient way to detect updates and prevent redundant embedding API calls?",
+          "options": [
+            {
+              "id": "opt_b1",
+              "text": "Store cryptographic hashes of raw documents and only process a document if its current hash differs from the stored hash.",
+              "correct": true
+            },
+            {
+              "id": "opt_b2",
+              "text": "Re-embed every document on every run but only write to the database if the vector changes.",
+              "correct": false
+            },
+            {
+              "id": "opt_b3",
+              "text": "Delete the entire database index and rebuild it daily at midnight during low traffic hours.",
+              "correct": false
+            },
+            {
+              "id": "opt_b4",
+              "text": "Use a random number generator to select 10% of the documents to refresh during each pipeline run.",
+              "correct": false
+            }
+          ],
+          "explain": "Incremental indexing relies on hashing the original content or tracking update timestamps. If the hash of a document matches the stored hash in the index, we can safely skip chunking, embedding, and writing, saving massive amounts of API costs and time."
+        }
+      ]
+    }
+  ]
+}

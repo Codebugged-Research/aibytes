@@ -1,0 +1,222 @@
+{
+  "id": "u444-l2",
+  "unit": 444,
+  "day": 2222,
+  "tier": "LLM Application Engineering",
+  "tierIcon": "🔌",
+  "title": "Index + Filter + Scale, Combined",
+  "icon": "🗺️",
+  "concept": "Putting HNSW indexing, metadata filtering, and sharding together into one coherent design.",
+  "xp": 15,
+  "hearts": 3,
+  "estMinutes": 7,
+  "segments": [
+    {
+      "type": "warmup",
+      "exercises": [
+        {
+          "id": "w1",
+          "type": "multiple_choice",
+          "xp": 1,
+          "prompt": "When designing a custom vector store, what is the very first step we covered in the last lesson?",
+          "options": [
+            {
+              "id": "w_1",
+              "text": "Determining scale, latency targets, filtering needs, and update frequency",
+              "correct": true
+            },
+            {
+              "id": "w_2",
+              "text": "Writing the raw python code for a cosine similarity function",
+              "correct": false
+            },
+            {
+              "id": "w_3",
+              "text": "Buying the most expensive GPU server available without checking requirements",
+              "correct": false
+            }
+          ],
+          "explain": "Before building, you must gather requirements like dataset size (scale), search speed (latency), filters needed, and how often vectors update."
+        }
+      ]
+    },
+    {
+      "type": "teach",
+      "cards": [
+        {
+          "kind": "hook",
+          "icon": "⚡",
+          "title": "The Triple Challenge",
+          "body": "When you have billions of vectors, searching through them is hard. If you also need to filter by price, date, or category instantly, you need a system where indexing, filtering, and database scaling work together without slowing down."
+        },
+        {
+          "kind": "definition",
+          "icon": "🧩",
+          "title": "Unified Vector Architectures",
+          "body": "A unified vector pipeline combines high-speed graph searches (HNSW) with metadata constraints (like category or date) while distributed across multiple servers (shards) to handle massive scale."
+        },
+        {
+          "kind": "analogy",
+          "icon": "🏢",
+          "title": "The Department Store Blueprint",
+          "body": "Imagine a giant, multi-floor department store. Sharding is splitting the departments onto separate floors. HNSW indexing is like setting up escalators that bypass random racks to get you to the right section fast, and metadata filtering is the signpost at each rack telling you only to look at items in your size."
+        },
+        {
+          "kind": "example",
+          "icon": "👟",
+          "title": "E-Commerce Search in Action",
+          "body": "In an e-commerce vector database, a user searches for shoes similar to a photo. The system sends the request to all shards, filters out anything not in 'Size 9', searches the HNSW graph of the remaining shoes, and returns the top matches."
+        },
+        {
+          "kind": "mythbust",
+          "icon": "🚫",
+          "title": "The Post-Filter Trap",
+          "body": "You might think you can just run HNSW first, get the top 100 results, and then filter out what you don't need. But if all top 100 results fail your filter, you end up with zero results! Doing both at the same time at scale is required."
+        },
+        {
+          "kind": "visual",
+          "icon": "⚖️",
+          "title": "Parallel Distributed Search",
+          "body": "We can visualize how metadata filters and HNSW graphs live inside distributed shards.",
+          "compare": {
+            "left": {
+              "emoji": "🖥️",
+              "tag": "Shard A",
+              "text": "HNSW Graph A + Local Metadata Filter A (Processed in Parallel)"
+            },
+            "right": {
+              "emoji": "🖥️",
+              "tag": "Shard B",
+              "text": "HNSW Graph B + Local Metadata Filter B (Processed in Parallel)"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "type": "practice",
+      "exercises": [
+        {
+          "id": "p1",
+          "type": "multiple_choice",
+          "xp": 2,
+          "prompt": "Why do we combine sharding, metadata filtering, and HNSW in a production vector database?",
+          "options": [
+            {
+              "id": "mc_1",
+              "text": "It slows down searches because the database has to check too many different indexes.",
+              "correct": false
+            },
+            {
+              "id": "mc_2",
+              "text": "It partitions data (sharding), narrows candidates (filtering), and finds matches fast (HNSW).",
+              "correct": true
+            },
+            {
+              "id": "mc_3",
+              "text": "It replaces the need for vector embeddings entirely by using text indexes.",
+              "correct": false
+            },
+            {
+              "id": "mc_4",
+              "text": "It forces all data to be stored on a single massive computer.",
+              "correct": false
+            }
+          ],
+          "explain": "Sharding splits the dataset across servers, metadata filtering restricts the search scope to relevant categories, and HNSW enables rapid nearest-neighbor navigation on the remaining vectors."
+        },
+        {
+          "id": "p2",
+          "type": "true_false",
+          "xp": 2,
+          "prompt": "True or False: In a sharded vector database, each individual shard typically maintains its own local HNSW index.",
+          "options": [
+            {
+              "id": "tf_true",
+              "text": "True",
+              "correct": true
+            },
+            {
+              "id": "tf_false",
+              "text": "False",
+              "correct": false
+            }
+          ],
+          "explain": "Each shard acts as a mini vector database with its own HNSW graph, allowing searches to run in parallel across multiple machines."
+        },
+        {
+          "id": "p3",
+          "type": "fill_blank",
+          "xp": 2,
+          "prompt": "Fill in the blank to describe the process of applying metadata rules before traversing the vector graph.",
+          "sentence": "To ensure we do not return empty results after a search, we use pre-filtering to remove invalid vectors before searching the index.",
+          "blank": "pre-filtering",
+          "words": [
+            "pre-filtering",
+            "post-filtering",
+            "sharding"
+          ],
+          "explain": "Pre-filtering ensures we only traverse the HNSW index for vectors that actually meet our metadata criteria, preventing empty search results."
+        },
+        {
+          "id": "p4",
+          "type": "spot_the_ai",
+          "xp": 2,
+          "prompt": "Which explanation describes the industry-standard way to combine indexing, filtering, and scaling?",
+          "options": [
+            {
+              "id": "sai_1",
+              "text": "We just load all the vectors into memory and run a standard SQL join with our metadata table.",
+              "correct": false
+            },
+            {
+              "id": "sai_2",
+              "text": "We shard our data across nodes, apply metadata pre-filtering on each node, and traverse the local HNSW graph.",
+              "correct": true
+            },
+            {
+              "id": "sai_3",
+              "text": "The system uses blockchain consensus to verify vector indexes before filtering them through a neural network.",
+              "correct": false
+            }
+          ],
+          "explain": "Option B is correct because it uses correct vector search terminology (HNSW, metadata filtering, sharding) to explain the unified pipeline, whereas Option A is generic database talk and Option C is gibberish."
+        }
+      ]
+    },
+    {
+      "type": "boss",
+      "exercises": [
+        {
+          "id": "b1",
+          "type": "multiple_choice",
+          "xp": 5,
+          "prompt": "You are designing a distributed vector search engine for a global retail app. How should you route and execute a query for 'leather jackets' (metadata category) similar to a reference photo (vector) at scale?",
+          "options": [
+            {
+              "id": "opt_1",
+              "text": "Query a single master shard, apply HNSW, and then filter metadata on the client side",
+              "correct": false
+            },
+            {
+              "id": "opt_2",
+              "text": "Distribute the query to all shards, apply local metadata pre-filtering, search the local HNSW index, and merge results",
+              "correct": true
+            },
+            {
+              "id": "opt_3",
+              "text": "Disable HNSW indexes on all shards and rely solely on metadata filtering to save memory",
+              "correct": false
+            },
+            {
+              "id": "opt_4",
+              "text": "Run HNSW globally across all raw data, then shard the resulting matches based on metadata tags",
+              "correct": false
+            }
+          ],
+          "explain": "To minimize network overhead, we should filter local shards first before merging results. Pre-filtering on each shard ensures we only calculate HNSW distances for items that meet the metadata criteria, and distributed queries let us process these shards in parallel."
+        }
+      ]
+    }
+  ]
+}

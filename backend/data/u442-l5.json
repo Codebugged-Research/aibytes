@@ -1,0 +1,222 @@
+{
+  "id": "u442-l5",
+  "unit": 442,
+  "day": 2215,
+  "tier": "LLM Application Engineering",
+  "tierIcon": "🔌",
+  "title": "Migration Between Vector Databases",
+  "icon": "🚚",
+  "concept": "The practical steps and pitfalls of moving an existing embedding index from one store to another.",
+  "xp": 15,
+  "hearts": 3,
+  "estMinutes": 7,
+  "segments": [
+    {
+      "type": "warmup",
+      "exercises": [
+        {
+          "id": "w1",
+          "type": "multiple_choice",
+          "xp": 1,
+          "prompt": "When selecting a vector database (recap from last lesson), what should you focus on to what should you pay), what is a key feature comparison lesson), what should lookback from our prior lesson), what should be your primary focus?",
+          "options": [
+            {
+              "id": "opt_1",
+              "text": "Evaluating features like hybrid search support and ecosystem integration.",
+              "correct": true
+            },
+            {
+              "id": "opt_2",
+              "text": "Picking the database with the prettiest logo.",
+              "correct": false
+            },
+            {
+              "id": "opt_3",
+              "text": "Assuming all vector databases have the exact same metadata filtering syntax.",
+              "correct": false
+            }
+          ],
+          "explain": "In the prior lesson, we covered criteria like filtering support, hybrid search capabilities, scaling models, and ecosystem integration to choose the right database."
+        }
+      ]
+    },
+    {
+      "type": "teach",
+      "cards": [
+        {
+          "kind": "hook",
+          "icon": "🧳",
+          "title": "The Migration Challenge",
+          "body": "Choosing the perfect vector database is great, but what happens when your application outgrows it? Moving millions of high-dimensional vectors to a new home requires careful planning to avoid data loss and massive API bills."
+        },
+        {
+          "kind": "definition",
+          "icon": "🔄",
+          "title": "Vector Database Migration",
+          "body": "Vector database migration is the process of moving vector embeddings, their unique IDs, and associated metadata from one storage provider to another without losing data structure or indexing details."
+        },
+        {
+          "kind": "analogy",
+          "icon": "📦",
+          "title": "The Library Relocation",
+          "body": "Think of migrating your database like moving physical books to a new library. You don't just dump them in a pile; you must preserve the catalogs (metadata), keep track of the genre sections (namespaces), and ensure the shelving layout (index structure) fits the new building."
+        },
+        {
+          "kind": "example",
+          "icon": "🚀",
+          "title": "A Real-World Migration Setup",
+          "body": "When moving from an self-hosted instance to a managed cloud service, engineers write a script to paginated-read vectors from the source, map the metadata schema to fit the new provider's format, and batch-upload them in chunks."
+        },
+        {
+          "kind": "mythbust",
+          "icon": "💸",
+          "title": "The Re-embedding Myth",
+          "body": "You don't need to pay OpenAI or your model provider to re-embed all your text from scratch! If you keep the exact same embedding model, you can directly export the raw coordinate arrays and upload them to your new database."
+        },
+        {
+          "kind": "visual",
+          "icon": "🗺️",
+          "title": "Metadata Translation",
+          "body": "A migration requires mapping not just the vectors, but also the metadata that enables precise filtering.",
+          "compare": {
+            "left": {
+              "emoji": "🏷️",
+              "tag": "Source Database",
+              "text": "Metadata: {\"user_id\": 123, \"category\": \"tech\"}"
+            },
+            "right": {
+              "emoji": "🏷️",
+              "tag": "Target Database",
+              "text": "Metadata: {\"user\": \"123\", \"tags\": [\"tech\"]}"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "type": "practice",
+      "exercises": [
+        {
+          "id": "p1",
+          "type": "multiple_choice",
+          "xp": 2,
+          "prompt": "Under what condition is it absolutely mandatory to re-generate all your vector embeddings from scratch during a migration?",
+          "options": [
+            {
+              "id": "opt_1",
+              "text": "The new database has a different default port number.",
+              "correct": false
+            },
+            {
+              "id": "opt_2",
+              "text": "You decide to change the underlying embedding model during the transition.",
+              "correct": true
+            },
+            {
+              "id": "opt_3",
+              "text": "The vector database is hosted on a different cloud provider.",
+              "correct": false
+            },
+            {
+              "id": "opt_4",
+              "text": "The migration is done in batches rather than all at once.",
+              "correct": false
+            }
+          ],
+          "explain": "Because embedding models output fixed-size dimensions, changing the model changes the vector size and semantic space, making old vectors incompatible with new ones."
+        },
+        {
+          "id": "p2",
+          "type": "true_false",
+          "xp": 2,
+          "prompt": "Is it a best practice to write new data to both the old and new vector databases simultaneously during the migration transition?",
+          "options": [
+            {
+              "id": "opt_t",
+              "text": "True",
+              "correct": true
+            },
+            {
+              "id": "opt_f",
+              "text": "False",
+              "correct": false
+            }
+          ],
+          "explain": "Running a dual-write phase allows you to test the new database's accuracy and performance under live production traffic before shutting down the old system."
+        },
+        {
+          "id": "p3",
+          "type": "fill_blank",
+          "xp": 2,
+          "prompt": "Fill in the blank: Different vector databases have varying rules for how payload data is filtered, requiring you to carefully map your metadata formats.",
+          "sentence": "You must map metadata schemas to ensure your filters still work in the new database.",
+          "blank": "metadata schemas",
+          "words": [
+            "metadata schemas",
+            "vector models",
+            "network speeds"
+          ],
+          "explain": "Different vector databases represent payload filtering and metadata schemas in unique ways, meaning you must translate these formats during migration."
+        },
+        {
+          "id": "p4",
+          "type": "spot_the_ai",
+          "xp": 2,
+          "prompt": "Identify which migration strategy is actually AI-generated nonsense:",
+          "options": [
+            {
+              "id": "opt_1",
+              "text": "Extract raw vectors using a paginated scan, map the metadata fields, and use batch insertion to load them into the new index.",
+              "correct": false
+            },
+            {
+              "id": "opt_2",
+              "text": "Convert the vectors into Universal Vector Object Notation (UVON) files, which automatically translates the mathematical dimensions between incompatible models.",
+              "correct": true
+            },
+            {
+              "id": "opt_3,text:",
+              "text": "Keep the old database running in read-only mode while the new database is populated and validated to prevent downtime.",
+              "correct": false
+            }
+          ],
+          "explain": "Option B shows typical AI-generated hallucination/nonsense, inventing a fake standard called 'Universal Vector Object Notation' which does not exist in database engineering."
+        }
+      ]
+    },
+    {
+      "type": "boss",
+      "exercises": [
+        {
+          "id": "b1",
+          "type": "multiple_choice",
+          "xp": 5,
+          "prompt": "You are migrating 10 million pre-calculated embeddings from an old database to a new one. Both databases support the exact same embedding model. What is the most efficient and cost-effective strategy?",
+          "options": [
+            {
+              "id": "opt_1",
+              "text": "Always re-generate all embeddings using a newer model to ensure compatibility.",
+              "correct": false
+            },
+            {
+              "id": "opt_2",
+              "text": "Discard all metadata and recreate it manually in the new database.",
+              "correct": false
+            },
+            {
+              "id": "opt_3",
+              "text": "Extract raw vector arrays and metadata, then write them directly to the new database if using the same model.",
+              "correct": true
+            },
+            {
+              "id": "opt_4",
+              "text": "Convert the vectors into text documents and let the new database automatically vectorise them.",
+              "correct": false
+            }
+          ],
+          "explain": "Re-generating embeddings is the most expensive and time-consuming route. If you keep the original model, you can export the raw vector coordinates directly alongside their ID and metadata, saving massive amounts of API costs and computation time."
+        }
+      ]
+    }
+  ]
+}

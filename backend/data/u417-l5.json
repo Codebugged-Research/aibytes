@@ -1,0 +1,222 @@
+{
+  "id": "u417-l5",
+  "unit": 417,
+  "day": 2090,
+  "tier": "LLM Application Engineering",
+  "tierIcon": "🔌",
+  "title": "Context Templates for Agents",
+  "icon": "🗂️",
+  "concept": "A reusable structural skeleton for assembling tool results, memory, and instructions consistently every turn.",
+  "xp": 15,
+  "hearts": 3,
+  "estMinutes": 7,
+  "segments": [
+    {
+      "type": "warmup",
+      "exercises": [
+        {
+          "id": "w1",
+          "type": "multiple_choice",
+          "xp": 1,
+          "prompt": "Quick recap: when deciding where to place information in the context window, what's the difference between ordering by relevance vs recency?",
+          "options": [
+            {
+              "id": "a",
+              "text": "Relevance orders by how closely info relates to the query; recency orders by how recently it appeared",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "Relevance and recency always produce the exact same ordering",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "Recency means placing the most important facts first, regardless of timing",
+              "correct": false
+            }
+          ],
+          "explain": "Relevance-based ordering asks 'how related is this to what's being asked right now?' while recency-based ordering asks 'how recently did this appear?' They often disagree — an old highly-relevant fact vs. a brand-new but off-topic message — which is why picking the right strategy matters."
+        }
+      ]
+    },
+    {
+      "type": "teach",
+      "cards": [
+        {
+          "kind": "hook",
+          "icon": "🗂️",
+          "title": "Why Does Every Turn Feel Different?",
+          "body": "If your agent builds its context window a slightly different way each turn — sometimes memory first, sometimes tool results first, sometimes instructions missing — it starts acting inconsistent and forgetful. What if you gave it the same reliable 'form' to fill out every time?"
+        },
+        {
+          "kind": "definition",
+          "icon": "🧩",
+          "title": "What Is a Context Template?",
+          "body": "A context template is a fixed, repeatable layout — like a form with labeled sections — for building the context window every single turn. It always has the same slots (instructions, memory, tool results, user query) in the same order, so assembly is predictable instead of improvised."
+        },
+        {
+          "kind": "analogy",
+          "icon": "🍔",
+          "title": "Think: Assembly Line, Not Freehand Cooking",
+          "body": "A burger chain doesn't reinvent the burger every order — they use the same stacking order every time: bun, sauce, patty, toppings, bun. A context template does this for your agent: the same slots, filled fresh each turn, so nothing gets forgotten or shuffled randomly."
+        },
+        {
+          "kind": "example",
+          "icon": "🛠️",
+          "title": "A Simple Agent Template",
+          "body": "1) SYSTEM: role + rules (always included, always first). 2) MEMORY: key facts from earlier in the conversation. 3) TOOL RESULTS: latest search/API outputs, labeled clearly. 4) USER QUERY: the current question. Every turn, the agent code fills these four slots fresh — same order, same labels — before sending to the model."
+        },
+        {
+          "kind": "mythbust",
+          "icon": "🚫",
+          "title": "Myth: Templates Make Agents Rigid",
+          "body": "A template doesn't mean every turn looks identical in content — it means the STRUCTURE (which slots exist, their order, their labels) stays consistent while the CONTENT inside each slot changes freely. It's a skeleton, not a straitjacket."
+        },
+        {
+          "kind": "visual",
+          "icon": "📐",
+          "title": "Freeform vs Templated Assembly",
+          "body": "Without a template, every turn's context is built ad hoc, and small code changes cause inconsistent agent behavior. With a template, the skeleton is locked in, so behavior stays stable even as the actual content shifts.",
+          "compare": {
+            "left": {
+              "emoji": "🎲",
+              "tag": "No Template",
+              "text": "Slots appear in random order, sometimes missing instructions, sometimes duplicating memory — the model gets confused turn to turn."
+            },
+            "right": {
+              "emoji": "🗂️",
+              "tag": "With Template",
+              "text": "Same labeled slots every turn: SYSTEM, MEMORY, TOOLS, QUERY — content changes, structure never does, so the model reliably knows where to look."
+            }
+          }
+        }
+      ]
+    },
+    {
+      "type": "practice",
+      "exercises": [
+        {
+          "id": "p1",
+          "type": "multiple_choice",
+          "xp": 2,
+          "prompt": "What is the main purpose of a reusable context template for an agent?",
+          "options": [
+            {
+              "id": "a",
+              "text": "To make every conversation's content identical word-for-word",
+              "correct": false
+            },
+            {
+              "id": "b",
+              "text": "To consistently assemble instructions, memory, and tool results into the same structural slots every turn",
+              "correct": true
+            },
+            {
+              "id": "c",
+              "text": "To remove the need for a system prompt entirely",
+              "correct": false
+            },
+            {
+              "id": "d",
+              "text": "To guarantee the model never runs out of context space",
+              "correct": false
+            }
+          ],
+          "explain": "A template's job is structural consistency — the same labeled slots (instructions, memory, tool results, query) in the same order every turn — not identical content, not eliminating prompts, and not solving space limits (that's what priority/trimming rules inside the template handle)."
+        },
+        {
+          "id": "p2",
+          "type": "true_false",
+          "xp": 2,
+          "prompt": "True or False: Once you decide whether to order context by relevance or recency, you no longer need any overall template for assembling the context window.",
+          "options": [
+            {
+              "id": "a",
+              "text": "True",
+              "correct": false
+            },
+            {
+              "id": "b",
+              "text": "False",
+              "correct": true
+            }
+          ],
+          "explain": "Ordering rules (relevance vs recency) decide how items WITHIN a section get sequenced. A template is the bigger structural layer above that — it defines the sections themselves (instructions, memory, tools, query), their labels, and their priority. You need both working together."
+        },
+        {
+          "id": "p3",
+          "type": "fill_blank",
+          "xp": 2,
+          "prompt": "Fill in the blank:",
+          "sentence": "A context template keeps the same slots and order every turn, so context assembly is predictable instead of improvised.",
+          "blank": "predictable",
+          "words": [
+            "predictable",
+            "random",
+            "expensive"
+          ],
+          "explain": "The core benefit of a template is predictability: instructions, memory, and tool results always land in the same labeled place, so the model (and your debugging brain) always knows where to look."
+        },
+        {
+          "id": "p4",
+          "type": "spot_the_ai",
+          "xp": 2,
+          "prompt": "Which of these three context-building approaches was most likely written by an AI generating 'clean-looking but shallow' agent code, versus a human who understands template design?",
+          "options": [
+            {
+              "id": "a",
+              "text": "A function with clearly named slots (SYSTEM, MEMORY, TOOLS, QUERY), each with its own priority and trimming rule when space runs low",
+              "correct": false
+            },
+            {
+              "id": "b",
+              "text": "A function that concatenates every message, tool call, and memory note in the exact order they occurred, with no labels, structure, or priority — just one long unbroken blob",
+              "correct": true
+            },
+            {
+              "id": "c",
+              "text": "A function that assembles labeled sections in a fixed order, and drops lowest-priority sections first if the total exceeds the context limit",
+              "correct": false
+            }
+          ],
+          "explain": "Option B is a giveaway pattern: it looks like code but skips the actual design work — no labels, no priority, no trimming logic. That's the kind of superficially plausible but structurally empty output you get when depth wasn't actually considered. A and C both show deliberate slot design and prioritization, the hallmark of real template thinking."
+        }
+      ]
+    },
+    {
+      "type": "boss",
+      "exercises": [
+        {
+          "id": "b1",
+          "type": "multiple_choice",
+          "xp": 5,
+          "prompt": "Your agent occasionally forgets its safety instructions when a tool result is very long. What is the BEST template-based fix?",
+          "options": [
+            {
+              "id": "a",
+              "text": "Delete safety instructions since they rarely matter",
+              "correct": false
+            },
+            {
+              "id": "b",
+              "text": "Pin the system instructions in a fixed slot the template always preserves in full, regardless of how big other sections get",
+              "correct": true
+            },
+            {
+              "id": "c",
+              "text": "Move instructions to the very end so they're freshest",
+              "correct": false
+            },
+            {
+              "id": "d",
+              "text": "Ask the model to remember the instructions from a previous turn",
+              "correct": false
+            }
+          ],
+          "explain": "This is the whole point of a template: certain slots (like core instructions) are treated as non-negotiable and always included in full, while other slots (like tool output) are the ones you trim or summarize when space is tight. If instructions live in an unprotected slot, they get squeezed out first — exactly what's going wrong here. A good template assigns priority per slot, not just an order."
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,222 @@
+{
+  "id": "u459-l3",
+  "unit": 459,
+  "day": 2298,
+  "tier": "LLM Application Engineering",
+  "tierIcon": "🔌",
+  "title": "Handling 'I Don't Know'",
+  "icon": "🤐",
+  "concept": "Explicitly instructing the model to admit when retrieved context doesn't contain the answer, instead of guessing.",
+  "xp": 15,
+  "hearts": 3,
+  "estMinutes": 7,
+  "segments": [
+    {
+      "type": "warmup",
+      "exercises": [
+        {
+          "id": "w1",
+          "type": "multiple_choice",
+          "xp": 1,
+          "prompt": "In our last lesson on Source Attribution, how did we ensure the model didn't just write whatever it wanted?",
+          "options": [
+            {
+              "id": "w_opt_1",
+              "text": "By forcing the model to write code instead of English text.",
+              "correct": false
+            },
+            {
+              "id": "w_opt_2",
+              "text": "By demanding the model explicitly reference which specific document chunk supports its claim.",
+              "correct": true
+            },
+            {
+              "id": "w_opt_3",
+              "text": "By letting the model summarize its entire pre-trained database.",
+              "correct": false
+            }
+          ],
+          "explain": "In the previous lesson, we learned that requiring citations (such as [Doc 1]) forces the model to justify its answers using specific retrieved fragments."
+        }
+      ]
+    },
+    {
+      "type": "teach",
+      "cards": [
+        {
+          "kind": "hook",
+          "icon": "🤷",
+          "title": "The Trap of Polite Lying",
+          "body": "When we build search assistants, we give them documents to read. But what happens when the user asks something that isn't in those documents? Without a backup plan, the model will cheerfully make up a fake answer to satisfy you!"
+        },
+        {
+          "kind": "definition",
+          "icon": "🛑",
+          "title": "The Exit Strategy",
+          "body": "Handling 'I Don't Know' is the practice of giving your model a clear exit route. By explicitly instructing it to decline to answer when the retrieved documents lack the necessary info, you stop the model from hallucinating."
+        },
+        {
+          "kind": "analogy",
+          "icon": "🏫",
+          "title": "The Honest Librarian",
+          "body": "Think of a librarian who is asked a highly specific question. If they don't have the book containing the answer, a helpful librarian says, 'I cannot find that in our collection,' rather than guessing a wrong answer to be polite."
+        },
+        {
+          "kind": "example",
+          "icon": "📝",
+          "title": "Writing the Fallback Rule",
+          "body": "Instead of letting the model guess, we add this to our prompt: 'If the retrieved context does not contain the answer, say \"I do not have enough information to answer this question.\"'"
+        },
+        {
+          "kind": "mythbust",
+          "icon": "🔍",
+          "title": "The 'Helpful' Trap",
+          "body": "People assume LLMs naturally know when they lack information. In reality, LLMs are trained to be helpful assistants and will default to guessing unless they are explicitly commanded to admit ignorance."
+        },
+        {
+          "kind": "visual",
+          "icon": "⚖️",
+          "title": "Uncontrolled vs. Guarded Answers",
+          "body": "Compare a model without a fallback rule to a model with an explicit safety valve instruction.",
+          "compare": {
+            "left": {
+              "emoji": "❌",
+              "tag": "No Fallback Rule",
+              "text": "User: 'What is my code?' Context: [Empty]. Model: 'Your code is 1234.' (Guessing!)"
+            },
+            "right": {
+              "emoji": "✅",
+              "tag": "Explicit Fallback",
+              "text": "User: 'What is my code?' Context: [Empty]. Model: 'I do not have access to that information.'"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "type": "practice",
+      "exercises": [
+        {
+          "id": "p1",
+          "type": "multiple_choice",
+          "xp": 2,
+          "prompt": "What is the best way to prevent a RAG system from hallucinating an answer when the retrieved context is irrelevant?",
+          "options": [
+            {
+              "id": "opt_a",
+              "text": "Ask the model to write a longer, more creative story.",
+              "correct": false
+            },
+            {
+              "id": "opt_b",
+              "text": "Instruct the model to reply with a specific fallback phrase if the context doesn't contain the answer.",
+              "correct": true
+            },
+            {
+              "id": "opt_c",
+              "text": "Remove all context and force the model to rely only on its training data.",
+              "correct": false
+            },
+            {
+              "id": "opt_d",
+              "text": "Increase the temperature setting to make the model more confident.",
+              "correct": false
+            }
+          ],
+          "explain": "Prompting the model to confess its ignorance when the context is insufficient is the most direct and reliable way to stop it from generating false information (hallucinations)."
+        },
+        {
+          "id": "p2",
+          "type": "true_false",
+          "xp": 2,
+          "prompt": "True or False: Forcing an LLM to admit when it lacks information makes your application more trustworthy.",
+          "options": [
+            {
+              "id": "opt_true",
+              "text": "True",
+              "correct": true
+            },
+            {
+              "id": "opt_false",
+              "text": "False",
+              "correct": false
+            }
+          ],
+          "explain": "Forcing a model to say 'I don't know' helps keep the system truthful and prevents it from inventing false facts (hallucinating)."
+        },
+        {
+          "id": "p3",
+          "type": "fill_blank",
+          "xp": 2,
+          "prompt": "Fill in the blank to complete the design principle for reliable LLM responses:",
+          "sentence": "To stop models from making up facts when context is missing, developers must write negative constraints that forbid guessing.",
+          "blank": "negative constraints",
+          "words": [
+            "negative constraints",
+            "creative prompts",
+            "longer context windows"
+          ],
+          "explain": "Providing 'negative constraints' (instructions on what NOT to do, like not guessing) is crucial for enforcing honesty in grounded generation tasks."
+        },
+        {
+          "id": "p4",
+          "type": "spot_the_ai",
+          "xp": 2,
+          "prompt": "Identify which response demonstrates an LLM failing to handle missing information properly:",
+          "options": [
+            {
+              "id": "opt_1",
+              "text": "'Based on the provided document, the store hours are 9 AM to 5 PM daily.'",
+              "correct": false
+            },
+            {
+              "id": "opt_2",
+              "text": "'I am sorry, but the provided text does not mention the store's weekend hours.'",
+              "correct": false
+            },
+            {
+              "id": "opt_3",
+              "text": "'The document doesn't mention the founder, but it was definitely founded in 1892 by John Smith in Chicago.'",
+              "correct": true
+            }
+          ],
+          "explain": "Option C shows the classic AI behavior of making up a plausible-sounding but totally fabricated fact (hallucinating) when it doesn't actually have the source text to verify the claim."
+        }
+      ]
+    },
+    {
+      "type": "boss",
+      "exercises": [
+        {
+          "id": "b1",
+          "type": "multiple_choice",
+          "xp": 5,
+          "prompt": "You are building a customer support bot for a bank. To ensure absolute accuracy when the retrieved documents don't answer a user's balance inquiry, which combination of system prompt instructions and LLM parameters should you use?",
+          "options": [
+            {
+              "id": "opt_1",
+              "text": "Set temperature to 0.0 and provide an explicit negative fallback instruction in the prompt.",
+              "correct": true
+            },
+            {
+              "id": "opt_2",
+              "text": "Increase temperature to 1.0 to let the model guess creatively from its internal memory.",
+              "correct": false
+            },
+            {
+              "id": "opt_3",
+              "text": "Allow the model to write citations even if it has to invent fictional sources.",
+              "correct": false
+            },
+            {
+              "id": "opt_4",
+              "text": "Remove the context completely and let the model rely solely on its pre-trained weights.",
+              "correct": false
+            }
+          ],
+          "explain": "By setting temperature to 0.0, we make the model's choices deterministic and less creative, reducing the chance of random guesses. Combining this with explicit negative constraints (like telling it to say 'I don't know') is the industry standard for preventing hallucinated information when context is missing."
+        }
+      ]
+    }
+  ]
+}

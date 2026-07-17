@@ -1,0 +1,222 @@
+{
+  "id": "u437-l4",
+  "unit": 437,
+  "day": 2189,
+  "tier": "LLM Application Engineering",
+  "tierIcon": "🔌",
+  "title": "HNSW Tuning Parameters",
+  "icon": "🎚️",
+  "concept": "M (connections per node), efConstruction, and efSearch and how each trades build time, memory, and recall.",
+  "xp": 15,
+  "hearts": 3,
+  "estMinutes": 7,
+  "segments": [
+    {
+      "type": "warmup",
+      "exercises": [
+        {
+          "id": "w1",
+          "type": "multiple_choice",
+          "xp": 1,
+          "prompt": "How does HNSW search navigate the multi-layer graph structure to find neighbors quickly?",
+          "options": [
+            {
+              "id": "w1",
+              "text": "By searching every node in the bottom layer first, then moving up.",
+              "correct": false
+            },
+            {
+              "id": "w2",
+              "text": "By starting at the top sparse layer and descending to find near neighbors in denser layers.",
+              "correct": true
+            },
+            {
+              "id": "w3",
+              "text": "By converting the entire graph back into a flat array for a linear scan.",
+              "correct": false
+            }
+          ],
+          "explain": "HNSW search works by starting at the top sparse layer (where steps are long and fast) and descending layer-by-layer to zoom in on the target in the dense bottom layer."
+        }
+      ]
+    },
+    {
+      "type": "teach",
+      "cards": [
+        {
+          "kind": "hook",
+          "icon": "🎛️",
+          "title": "The Performance Tightrope",
+          "body": "An HNSW graph isn't one-size-fits-all. If you don't configure its tuning knobs, your vector search could either eat up all your server's RAM or miss the closest matches entirely!"
+        },
+        {
+          "kind": "definition",
+          "icon": "⚙️",
+          "title": "The Big Three Parameters",
+          "body": "HNSW relies on three parameters: M controls maximum connections per node; efConstruction limits the search size when building the graph; efSearch limits the search size when querying. Tuning these balances search speed, memory usage, and accuracy."
+        },
+        {
+          "kind": "analogy",
+          "icon": "👥",
+          "title": "The Social Network Analogy",
+          "body": "Think of M as the number of friends each person has on social media, efConstruction as how thoroughly a party planner designs a seating chart, and efSearch as how many potential candidates you interview before picking a candidate."
+        },
+        {
+          "kind": "example",
+          "icon": "📊",
+          "title": "Tuning in Action",
+          "body": "If you set M=16, efConstruction=200, and efSearch=50, you get a balanced index. If you suddenly raise efSearch to 500, your search queries will slow down slightly but will find the absolute closest neighbors with much higher accuracy."
+        },
+        {
+          "kind": "mythbust",
+          "icon": "🚫",
+          "title": "The Build-Time Myth",
+          "body": "Many believe that increasing efConstruction slows down your search speed at query time. In reality, efConstruction only affects how long it takes to build the index; search speed is controlled by efSearch!"
+        },
+        {
+          "kind": "visual",
+          "icon": "⚖️",
+          "title": "Visualizing the Trade-off",
+          "body": "Adjusting HNSW parameters shifts the balance between resource consumption and accuracy.",
+          "compare": {
+            "left": {
+              "emoji": "🚀",
+              "tag": "Low M & efSearch",
+              "text": "Blazing fast query speeds and tiny memory footprint, but lower recall accuracy."
+            },
+            "right": {
+              "emoji": "🎯",
+              "tag": "High M & efSearch",
+              "text": "Highly accurate search results, but uses much more RAM and query time."
+            }
+          }
+        }
+      ]
+    },
+    {
+      "type": "practice",
+      "exercises": [
+        {
+          "id": "p1",
+          "type": "multiple_choice",
+          "xp": 2,
+          "prompt": "What does the parameter 'M' represent in an HNSW index, and what is its primary resource trade-off?",
+          "options": [
+            {
+              "id": "q1_a",
+              "text": "It controls the number of entry points in the top layer.",
+              "correct": false
+            },
+            {
+              "id": "q1_b",
+              "text": "It sets the maximum connection links per node, directly affecting memory usage.",
+              "correct": true
+            },
+            {
+              "id": "q1_c",
+              "text": "It controls the query-time beam search size.",
+              "correct": false
+            },
+            {
+              "id": "q1_d",
+              "text": "It represents the number of layers in the skip-list.",
+              "correct": false
+            }
+          ],
+          "explain": "M defines the maximum number of bidirectional connection links established for each new node added to the graph layers. A larger M means more links, which uses more memory."
+        },
+        {
+          "id": "p2",
+          "type": "true_false",
+          "xp": 2,
+          "prompt": "True or False: Increasing the value of efConstruction will make your live search queries run slower.",
+          "options": [
+            {
+              "id": "t1_a",
+              "text": "True",
+              "correct": false
+            },
+            {
+              "id": "t2_b",
+              "text": "False",
+              "correct": true
+            }
+          ],
+          "explain": "efConstruction is only used when the index is being built (inserted). It has no effect on the speed of queries once the index is deployed."
+        },
+        {
+          "id": "p3",
+          "type": "fill_blank",
+          "xp": 2,
+          "prompt": "Fill in the blank with the query-time parameter that controls the trade-off between search speed and recall accuracy.",
+          "sentence": "To get higher quality search results at the cost of query latency, you should increase the value of efSearch.",
+          "blank": "efSearch",
+          "words": [
+            "efSearch",
+            "efConstruction",
+            "M"
+          ],
+          "explain": "The efSearch parameter controls how many candidate nodes are evaluated during a live query. Increasing it yields higher accuracy (recall) but takes more time."
+        },
+        {
+          "id": "p4",
+          "type": "spot_the_ai",
+          "xp": 2,
+          "prompt": "Identify which of the following parameter explanations was generated by an AI assistant using a generic template.",
+          "options": [
+            {
+              "id": "s1",
+              "text": "Think of efSearch as your search light's beam width. A wider beam spots more objects but takes longer to sweep.",
+              "correct": false
+            },
+            {
+              "id": "s2",
+              "text": "Here are the key parameters: 1. M: Connections per node. 2. efConstruction: Construction search depth. 3. efSearch: Query search depth. Tuning these optimizes HNSW performance.",
+              "correct": true
+            },
+            {
+              "id": "s3",
+              "text": "If you have a tight RAM budget, keep M low. Just remember that the graph will have fewer paths to travel during a search.",
+              "correct": false
+            }
+          ],
+          "explain": "Writing style B sounds like a standard AI assistant using bulleted lists and rigid definitions, whereas A and C sound like curated educational material. Option B is AI-generated."
+        }
+      ]
+    },
+    {
+      "type": "boss",
+      "exercises": [
+        {
+          "id": "b1",
+          "type": "multiple_choice",
+          "xp": 5,
+          "prompt": "Imagine you are deploying an HNSW index for a critical medical search engine. Accuracy (recall) is your top priority, but you are also concerned about RAM usage. Which parameter combination trade-off is correct?",
+          "options": [
+            {
+              "id": "b1",
+              "text": "Increase both M and efSearch, which increases memory usage and search time but maximizes accuracy.",
+              "correct": true
+            },
+            {
+              "id": "b2",
+              "text": "Decrease M and increase efSearch, which keeps memory tiny and always guarantees 100% recall.",
+              "correct": false
+            },
+            {
+              "id": "b3",
+              "text": "Set efSearch lower than M to force the search to terminate instantly with perfect recall.",
+              "correct": false
+            },
+            {
+              "id": "b4",
+              "text": "Increase efConstruction while setting M to zero to build a graph without connections.",
+              "correct": false
+            }
+          ],
+          "explain": "To maximize search accuracy (recall) on a massive dataset, you need to search more candidates during query time (high efSearch) and allow nodes to have enough connections to not get isolated (high M). However, increasing M increases the memory footprint because each node must store more neighbor pointers."
+        }
+      ]
+    }
+  ]
+}

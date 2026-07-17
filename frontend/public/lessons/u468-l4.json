@@ -1,0 +1,222 @@
+{
+  "id": "u468-l4",
+  "unit": 468,
+  "day": 2344,
+  "tier": "LLM Application Engineering",
+  "tierIcon": "🔌",
+  "title": "Error Handling in a Server",
+  "icon": "🚨",
+  "concept": "Returning structured errors instead of crashing, so the host can gracefully recover or inform the user.",
+  "xp": 15,
+  "hearts": 3,
+  "estMinutes": 7,
+  "segments": [
+    {
+      "type": "warmup",
+      "exercises": [
+        {
+          "id": "w1",
+          "type": "multiple_choice",
+          "xp": 1,
+          "prompt": "In the previous lesson, we exposed Resources from our MCP server. What is the primary purpose of a resource?",
+          "options": [
+            {
+              "id": "opt_1",
+              "text": "They let the client execute arbitrary shell commands.",
+              "correct": false
+            },
+            {
+              "id": "opt_2",
+              "text": "They expose read-only data, like database records or files, via URI patterns.",
+              "correct": true
+            },
+            {
+              "id": "opt_3",
+              "text": "They dynamically install third-party libraries.",
+              "correct": false
+            }
+          ],
+          "explain": "In the prior lesson, we learned that MCP resources act like read-only endpoints (like URLs) that expose structured data or files to the client."
+        }
+      ]
+    },
+    {
+      "type": "teach",
+      "cards": [
+        {
+          "kind": "hook",
+          "icon": "⚠️",
+          "title": "When Things Go Wrong",
+          "body": "When a tool fails in a database or a file is missing, a bad server crashes and terminates the connection. A good server replies with a structured error, letting the AI try a different strategy."
+        },
+        {
+          "kind": "definition",
+          "icon": "🛡️",
+          "title": "Structured Error Responses",
+          "body": "Error handling in an MCP server involves catching issues like missing tools or offline databases, and returning standard JSON-RPC error responses. This keeps the server running and tells the LLM exactly what went wrong."
+        },
+        {
+          "kind": "analogy",
+          "icon": "🍽️",
+          "title": "The Polite Waiter",
+          "body": "Imagine a waiter at a restaurant. If they run out of soup, they don't faint on the floor; they politely tell you it's unavailable so you can order something else. In MCP, your server should act like that waiter, returning a clear message instead of crashing."
+        },
+        {
+          "kind": "example",
+          "icon": "📝",
+          "title": "A Clean Refusal",
+          "body": "If a tool asks to read '/secret.txt' and gets a permission error, the server responds with code -32602 (Invalid Params) and a message 'File access denied', allowing the LLM client to explain the block to the user."
+        },
+        {
+          "kind": "mythbust",
+          "icon": "🚫",
+          "title": "Crashing is Not Error Handling",
+          "body": "You might think that throwing a standard code error (like throw new Error()) is enough. However, unless you catch it and format it into a JSON-RPC error response, the host application will just see a disconnected stream and fail."
+        },
+        {
+          "kind": "visual",
+          "icon": "🔄",
+          "title": "Crash vs. Handle",
+          "body": "Compare a server that crashes when a resource is missing versus one that handles the error gracefully.",
+          "compare": {
+            "left": {
+              "emoji": "💥",
+              "tag": "Server Crash",
+              "text": "Process exits immediately. Connection closed, causing the host application to fail."
+            },
+            "right": {
+              "emoji": "🩹",
+              "tag": "Structured Error",
+              "text": "Sends error code -32000. Connection stays open, allowing the LLM to recover."
+            }
+          }
+        }
+      ]
+    },
+    {
+      "type": "practice",
+      "exercises": [
+        {
+          "id": "p1",
+          "type": "multiple_choice",
+          "xp": 2,
+          "prompt": "What happens if your MCP server experiences an unhandled exception and crashes instead of returning an error message?",
+          "options": [
+            {
+              "id": "opt_1",
+              "text": "The host application will automatically fix the server code.",
+              "correct": false
+            },
+            {
+              "id": "opt_2",
+              "text": "The connection terminates abruptly, causing the LLM session to fail.",
+              "correct": true
+            },
+            {
+              "id": "opt_3",
+              "text": "The server automatically ignores the error and retries the task.",
+              "correct": false
+            },
+            {
+              "id": "opt_4",
+              "text": "The user is shown a clean message explaining the missing database.",
+              "correct": false
+            }
+          ],
+          "explain": "If the server crashes, the entire connection dies and the host application (or LLM) cannot continue the session gracefully."
+        },
+        {
+          "id": "p2",
+          "type": "true_false",
+          "xp": 2,
+          "prompt": "True or False: Sending a clear error message instead of crashing allows the LLM to try a different approach or inform the user.",
+          "options": [
+            {
+              "id": "opt_1",
+              "text": "True",
+              "correct": true
+            },
+            {
+              "id": "opt_2",
+              "text": "False",
+              "correct": false
+            }
+          ],
+          "explain": "Returning structured errors allows the LLM to learn why the tool failed (e.g., 'File not found') and adapt, perhaps by asking the user for a different file name."
+        },
+        {
+          "id": "p3",
+          "type": "fill_blank",
+          "xp": 2,
+          "prompt": "Fill in the missing concept about how MCP servers communicate issues:",
+          "sentence": "To prevent the host application from crashing, our server must send a structured JSON-RPC error response back to the client.",
+          "blank": "JSON-RPC error response",
+          "words": [
+            "JSON-RPC error response",
+            "hard system reboot",
+            "blank text file"
+          ],
+          "explain": "Instead of shutting down, the server packages the error into a JSON-RPC error response, which preserves the connection and informs the caller."
+        },
+        {
+          "id": "p4",
+          "type": "spot_the_ai",
+          "xp": 2,
+          "prompt": "Which of the following represents a structured error response that an MCP server should send back to a client?",
+          "options": [
+            {
+              "id": "opt_1",
+              "text": "SystemError: DB_OFFLINE at server.js:42:11 (Process terminated with code 1)",
+              "correct": false
+            },
+            {
+              "id": "opt_2",
+              "text": "{ \"jsonrpc\": \"2.0\", \"error\": { \"code\": -32000, \"message\": \"Database connection timed out\" }, \"id\": 4 }",
+              "correct": true
+            },
+            {
+              "id": "opt_3",
+              "text": "{ \"result\": { \"data\": \"Something failed, but we are not sure what.\" } }",
+              "correct": false
+            }
+          ],
+          "explain": "Option B represents a structured, standard error response format that allows the calling client to handle the issue programmatically without crashing. Option A is a raw system trace, and Option C is an empty mock response."
+        }
+      ]
+    },
+    {
+      "type": "boss",
+      "exercises": [
+        {
+          "id": "b1",
+          "type": "multiple_choice",
+          "xp": 5,
+          "prompt": "When an MCP server encounters an unsupported tool call or a missing database connection, what is the best way to handle it to ensure a resilient system?",
+          "options": [
+            {
+              "id": "opt_1",
+              "text": "Throwing a generic language exception so the server immediately restarts.",
+              "correct": false
+            },
+            {
+              "id": "opt_2",
+              "text": "Returning a JSON-RPC error response with a specific error code and message.",
+              "correct": true
+            },
+            {
+              "id": "opt_3",
+              "text": "Ignoring the error completely and returning empty data.",
+              "correct": false
+            },
+            {
+              "id": "opt_4",
+              "text": "Shutting down the host application using an emergency system exit.",
+              "correct": false
+            }
+          ],
+          "explain": "Returning an error code like METHOD_NOT_FOUND or INVALID_PARAMS inside a JSON-RPC response allows the LLM client to understand what went wrong and try a different approach, rather than crashing the entire session."
+        }
+      ]
+    }
+  ]
+}

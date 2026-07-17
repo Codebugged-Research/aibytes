@@ -1,0 +1,222 @@
+{
+  "id": "u422-l4",
+  "unit": 422,
+  "day": 2114,
+  "tier": "LLM Application Engineering",
+  "tierIcon": "🔌",
+  "title": "Entity & Fact Tracking Across Turns",
+  "icon": "📌",
+  "concept": "Extracting durable facts (name, preference, decision) from conversation and carrying them forward independent of raw history.",
+  "xp": 15,
+  "hearts": 3,
+  "estMinutes": 7,
+  "segments": [
+    {
+      "type": "warmup",
+      "exercises": [
+        {
+          "id": "w1",
+          "type": "multiple_choice",
+          "xp": 1,
+          "prompt": "Quick recap: in the 'Summarize-and-Forget' strategy from last lesson, what happens to older turns in the conversation?",
+          "options": [
+            {
+              "id": "a",
+              "text": "They get compressed into a summary while recent turns stay verbatim",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "They are translated into a different language for storage",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "They are duplicated and sent twice to the model for emphasis",
+              "correct": false
+            }
+          ],
+          "explain": "Summarize-and-Forget periodically condenses older messages into a compact summary, while keeping the most recent turns word-for-word — giving a hybrid of long-term gist and short-term detail."
+        }
+      ]
+    },
+    {
+      "type": "teach",
+      "cards": [
+        {
+          "kind": "hook",
+          "icon": "🕵️",
+          "title": "The Case of the Forgotten Name",
+          "body": "You tell a chatbot your name on Monday. By Thursday, after a hundred messages, it's long gone from the recent window — but you never told it again. Should it really have forgotten? A smarter system pulls out key facts the moment they're said, so they never get lost in the shuffle."
+        },
+        {
+          "kind": "definition",
+          "icon": "📌",
+          "title": "What Is Entity & Fact Tracking?",
+          "body": "It's the process of pulling out durable, reusable pieces of information — like a user's name, preferences, or decisions — from the conversation as it happens. These facts get stored separately and carried forward, so the model doesn't need the original messages to remember them."
+        },
+        {
+          "kind": "analogy",
+          "icon": "🗂️",
+          "title": "The Sticky Note Board",
+          "body": "Instead of re-reading every past conversation to remember your friend's birthday, you write it on a sticky note and stick it on a board. Next time you need it, you glance at the board — not the whole conversation history. Fact tracking is that sticky note board for your chatbot."
+        },
+        {
+          "kind": "example",
+          "icon": "💬",
+          "title": "Turn by Turn",
+          "body": "Turn 1: 'Hi, I'm Marcus.' → store name: Marcus. Turn 5: 'I hate spicy food.' → store preference: no-spicy. Turn 12: 'Let's book the 3pm slot.' → store decision: appointment=3pm. Even if turns 1-11 get deleted or summarized, those three facts stay available forever."
+        },
+        {
+          "kind": "mythbust",
+          "icon": "🚫",
+          "title": "Myth: 'More history = better memory'",
+          "body": "Keeping every raw message doesn't guarantee the model remembers what matters — a fact can get buried under thousands of irrelevant words. Explicitly extracting and storing facts is more reliable than hoping the model spots them in a giant transcript."
+        },
+        {
+          "kind": "visual",
+          "icon": "⚖️",
+          "title": "Raw History vs. Fact Store",
+          "body": "One approach makes the model search through everything ever said; the other gives it a clean, always-current cheat sheet.",
+          "compare": {
+            "left": {
+              "emoji": "📜",
+              "tag": "Raw History Only",
+              "text": "Model must scan hundreds of messages hoping to spot 'my name is...' buried somewhere in turn 47"
+            },
+            "right": {
+              "emoji": "🗃️",
+              "tag": "Fact Store",
+              "text": "Model checks a tiny structured record: name=Marcus, diet=vegan, appointment=3pm — instantly available, always current"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "type": "practice",
+      "exercises": [
+        {
+          "id": "p1",
+          "type": "multiple_choice",
+          "xp": 2,
+          "prompt": "Which of these is the BEST example of a 'durable fact' worth extracting and storing separately?",
+          "options": [
+            {
+              "id": "a",
+              "text": "User's favorite color, mentioned once and unlikely to change",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "A filler word like 'um' the user said in turn 3",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "The exact timestamp the message was sent",
+              "correct": false
+            },
+            {
+              "id": "d",
+              "text": "A typo the user made and then corrected in the same message",
+              "correct": false
+            }
+          ],
+          "explain": "Durable facts are meaningful, reusable pieces of info — like preferences, names, or decisions — that stay relevant across many future turns. Filler words, typos, and timestamps aren't useful long-term knowledge about the user."
+        },
+        {
+          "id": "p2",
+          "type": "true_false",
+          "xp": 2,
+          "prompt": "True or False: If a summarization step (like from the previous lesson) compresses old turns away, any facts not explicitly extracted before that point could be lost forever.",
+          "options": [
+            {
+              "id": "true",
+              "text": "True",
+              "correct": true
+            },
+            {
+              "id": "false",
+              "text": "False",
+              "correct": false
+            }
+          ],
+          "explain": "This is exactly why fact tracking matters alongside summarization — a summary might drop small but important details. Extracting facts as they're mentioned protects them from ever being lost, even if the raw conversation is compressed or deleted."
+        },
+        {
+          "id": "p3",
+          "type": "fill_blank",
+          "xp": 2,
+          "prompt": "Fill in the blank.",
+          "sentence": "When a user says 'Actually, I switched jobs,' a fact-tracking system should update the stored decision instead of just appending it to the raw history.",
+          "blank": "update",
+          "words": [
+            "update",
+            "delete",
+            "ignore"
+          ],
+          "explain": "The whole point of fact tracking is that facts can change — the system should overwrite the old value with the new one, not just pile up contradictory statements in history."
+        },
+        {
+          "id": "p4",
+          "type": "spot_the_ai",
+          "xp": 2,
+          "prompt": "Here are three fact-store entries after a long conversation. Which one looks like it was generated sloppily by an AI without proper fact management?",
+          "options": [
+            {
+              "id": "a",
+              "text": "{name: 'Ana', diet: 'gluten-free', timezone: 'EST'} — each field holds one clean current value",
+              "correct": false
+            },
+            {
+              "id": "b",
+              "text": "{name: 'Ana', diet: 'vegetarian... wait no vegan... actually she said gluten-free too?? maybe all three', timezone: 'EST'} — the diet field is a messy pile of every version ever mentioned",
+              "correct": true
+            },
+            {
+              "id": "c",
+              "text": "{name: 'Ana', diet: 'gluten-free', timezone: 'unknown'} — a field is marked unknown because it was never mentioned",
+              "correct": false
+            }
+          ],
+          "explain": "The messy pile-up in option B shows a system that never resolved contradictions or updates — it just crammed every mention together instead of tracking the current, correct value. Clean fact tracking keeps one clear value per fact, updating it when new info arrives."
+        }
+      ]
+    },
+    {
+      "type": "boss",
+      "exercises": [
+        {
+          "id": "b1",
+          "type": "multiple_choice",
+          "xp": 5,
+          "prompt": "A user chats with a bot across many sessions: 'My name is Priya' (session 1), 'I prefer vegetarian recipes' (session 2), 'Actually, switch me to vegan' (session 3). What should the bot's fact store look like when generating a recipe in session 4?",
+          "options": [
+            {
+              "id": "a",
+              "text": "Name: Priya; Diet preference: vegan (with vegetarian marked as outdated/overwritten)",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "Name: Priya; Diet preference: vegetarian AND vegan stored equally, letting the model pick randomly",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "No facts stored — the model should re-read all three raw sessions every time",
+              "correct": false
+            },
+            {
+              "id": "d",
+              "text": "Only the most recent message is kept: 'switch me to vegan', with the name forgotten",
+              "correct": false
+            }
+          ],
+          "explain": "Good fact tracking means each fact has a single current value that gets updated when the user changes their mind, while unrelated facts (like their name) stay put. The vegan preference should overwrite vegetarian, not sit alongside it — otherwise the model might contradict the user's latest wish. And you don't need the raw transcripts at all if the facts are extracted and stored properly. This wraps up Multi-Turn Memory Management: you now know how to keep chats short (summarizing), keep recent detail (hybrid windows), and keep the truth straight (fact tracking) — that's the full toolkit for engineering memory that scales."
+        }
+      ]
+    }
+  ]
+}

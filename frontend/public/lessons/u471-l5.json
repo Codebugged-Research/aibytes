@@ -1,0 +1,222 @@
+{
+  "id": "u471-l5",
+  "unit": 471,
+  "day": 2360,
+  "tier": "LLM Application Engineering",
+  "tierIcon": "🔌",
+  "title": "Choosing a Transport",
+  "icon": "⚖️",
+  "concept": "A practical decision guide matching transport choice to deployment model and latency needs.",
+  "xp": 15,
+  "hearts": 3,
+  "estMinutes": 7,
+  "segments": [
+    {
+      "type": "warmup",
+      "exercises": [
+        {
+          "id": "w1",
+          "type": "multiple_choice",
+          "xp": 1,
+          "prompt": "In our last lesson on securing remote servers, what is the standard method used to authenticate a client connecting to an SSE-based MCP server?",
+          "options": [
+            {
+              "id": "w_1",
+              "text": "Using filesystem permissions on the socket pipe.",
+              "correct": false
+            },
+            {
+              "id": "w_2",
+              "text": "Passing bearer tokens in the HTTP headers of the SSE connection request.",
+              "correct": true
+            },
+            {
+              "id": "w_3",
+              "text": "Encrypting the stdin stream with a pre-shared SSH key.",
+              "correct": false
+            }
+          ],
+          "explain": "For remote MCP servers operating over web protocols, HTTP headers (like Authorization) are the standard way to pass security tokens. Stdio runs locally and does not use HTTP headers."
+        }
+      ]
+    },
+    {
+      "type": "teach",
+      "cards": [
+        {
+          "kind": "hook",
+          "icon": "🚦",
+          "title": "The Right Connection",
+          "body": "Now that you know how to build and secure MCP servers, how do you decide how they should talk? Picking the wrong transport can lead to slow response times or broken connections when deploying your AI tools."
+        },
+        {
+          "kind": "definition",
+          "icon": "⚙️",
+          "title": "Defining Transport Choice",
+          "body": "Transport selection is the process of matching your MCP communication layer to your hosting environment. We weigh local speed against remote accessibility to choose between Stdio and SSE."
+        },
+        {
+          "kind": "analogy",
+          "icon": "🚚",
+          "title": "The Courier Analogy",
+          "body": "Think of choosing your transport like choosing how to send a package. If you are inside the same building (local process), you can just pass it directly down the hall (Stdio). If you are sending it across the city (remote server), you need a courier service with proper tracking (SSE/HTTP)."
+        },
+        {
+          "kind": "example",
+          "icon": "💡",
+          "title": "Real-World Matchups",
+          "body": "If you build a local developer tool that reads files on your laptop, use Stdio for instant, zero-setup speed. If you deploy a shared database-connector tool to the cloud, use SSE so multiple remote LLM clients can connect over HTTP."
+        },
+        {
+          "kind": "mythbust",
+          "icon": "🔓",
+          "title": "Web Isn't Always Best",
+          "body": "Many developers think SSE is always superior because it is web-based. In reality, Stdio is much faster and simpler for local desktop apps because it bypasses the entire network stack and security configurations."
+        },
+        {
+          "kind": "visual",
+          "icon": "📊",
+          "title": "Stdio vs. SSE",
+          "body": "Compare the trade-offs between the two primary transport styles to make the right architectural decision.",
+          "compare": {
+            "left": {
+              "emoji": "💻",
+              "tag": "Stdio",
+              "text": "Local process execution, zero network overhead, lowest latency, process-bound."
+            },
+            "right": {
+              "emoji": "☁️",
+              "tag": "SSE (HTTP)",
+              "text": "Remote network hosting, routes through firewalls, supports standard web auth."
+            }
+          }
+        }
+      ]
+    },
+    {
+      "type": "practice",
+      "exercises": [
+        {
+          "id": "p1",
+          "type": "multiple_choice",
+          "xp": 2,
+          "prompt": "Which transport mechanism is easiest to route through standard web firewalls and reverse proxies?",
+          "options": [
+            {
+              "id": "mc_1",
+              "text": "Stdio, because it natively supports web ports.",
+              "correct": false
+            },
+            {
+              "id": "mc_2",
+              "text": "SSE, because it operates over standard HTTP/HTTPS.",
+              "correct": true
+            },
+            {
+              "id": "mc_3",
+              "text": "Local pipes, because they bypass the internet entirely.",
+              "correct": false
+            },
+            {
+              "id": "mc_4",
+              "text": "Shared memory, which is designed for cloud routing.",
+              "correct": false
+            }
+          ],
+          "explain": "SSE (Server-Sent Events) runs over HTTP, making it the standard choice for routing messages through firewalls and web proxies to remote servers."
+        },
+        {
+          "id": "p2",
+          "type": "true_false",
+          "xp": 2,
+          "prompt": "True or False: Stdio transport is the ideal choice for connecting an LLM client to a third-party server hosted in a completely different cloud network.",
+          "options": [
+            {
+              "id": "tf_true",
+              "text": "True",
+              "correct": false
+            },
+            {
+              "id": "tf_false",
+              "text": "False",
+              "correct": true
+            }
+          ],
+          "explain": "Stdio requires the client to launch the server as a child process. This is only possible if the server binary or script is accessible on the same host machine."
+        },
+        {
+          "id": "p3",
+          "type": "fill_blank",
+          "xp": 2,
+          "prompt": "Fill in the blank with the transport type that provides the lowest latency for local desktop applications.",
+          "sentence": "For local tools running on the same machine, Stdio offers the lowest latency by avoiding network overhead.",
+          "blank": "Stdio",
+          "words": [
+            "Stdio",
+            "SSE",
+            "HTTP"
+          ],
+          "explain": "Stdio is the fastest choice for local apps because communication happens directly between processes on the same machine without using the network loopback."
+        },
+        {
+          "id": "p4",
+          "type": "spot_the_ai",
+          "xp": 2,
+          "prompt": "Identify the correct statement about securing different MCP transports.",
+          "options": [
+            {
+              "id": "sai_1",
+              "text": "When using Stdio, you should always secure the connection by setting up JWT tokens and SSL certificates on the pipe.",
+              "correct": false
+            },
+            {
+              "id": "sai_2",
+              "text": "Remote SSE servers can be secured using standard web auth like OAuth or API keys, while Stdio servers rely on host OS access controls.",
+              "correct": true
+            },
+            {
+              "id": "sai_3",
+              "text": "Stdio requires setting up a reverse proxy like Nginx to handle the incoming stdin streams safely.",
+              "correct": false
+            }
+          ],
+          "explain": "Option B is correct because SSE uses HTTP headers (like Authorization) to secure remote connections, while Stdio relies entirely on local process permissions."
+        }
+      ]
+    },
+    {
+      "type": "boss",
+      "exercises": [
+        {
+          "id": "b1",
+          "type": "multiple_choice",
+          "xp": 5,
+          "prompt": "You are deploying a remote MCP server to AWS ECS that will serve multiple client applications across the internet. Which transport mechanism should you choose, and why?",
+          "options": [
+            {
+              "id": "opt_1",
+              "text": "Stdio, because local standard input/output naturally routes through cloud load balancers.",
+              "correct": false
+            },
+            {
+              "id": "opt_2",
+              "text": "SSE over HTTP, because it fits standard web hosting, routing, and HTTP authentication standards.",
+              "correct": true
+            },
+            {
+              "id": "opt_3",
+              "text": "SSE over HTTP, because it has zero latency and runs directly inside the client process.",
+              "correct": false
+            },
+            {
+              "id": "opt_4",
+              "text": "Stdio, because it supports built-in CORS headers and HTTPS out of the box.",
+              "correct": false
+            }
+          ],
+          "explain": "SSE over HTTP is the ideal choice for remote, cloud-deployed MCP servers because HTTP makes it easy to route traffic, handle load balancing, and apply standard auth (like bearer tokens). Stdio cannot cross network boundaries directly without extra SSH/tunneling wrappers."
+        }
+      ]
+    }
+  ]
+}

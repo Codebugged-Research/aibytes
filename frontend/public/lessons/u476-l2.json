@@ -1,0 +1,222 @@
+{
+  "id": "u476-l2",
+  "unit": 476,
+  "day": 2382,
+  "tier": "LLM Application Engineering",
+  "tierIcon": "🔌",
+  "title": "Reducing Embedding Costs",
+  "icon": "📉",
+  "concept": "Batching embedding calls, caching, and choosing a smaller embedding model where quality allows.",
+  "xp": 15,
+  "hearts": 3,
+  "estMinutes": 7,
+  "segments": [
+    {
+      "type": "warmup",
+      "exercises": [
+        {
+          "id": "w1",
+          "type": "multiple_choice",
+          "xp": 1,
+          "prompt": "In our last lesson, we looked at where the cost goes in a search system. Which of these statement is true?",
+          "options": [
+            {
+              "id": "opt_1",
+              "text": "Only the LLM generation tokens cost money.",
+              "correct": false
+            },
+            {
+              "id": "opt_2",
+              "text": "Embedding APIs, vector storage, and reranking all contribute to the bill.",
+              "correct": true
+            },
+            {
+              "id": "opt_3",
+              "text": "Vector databases are always free to use.",
+              "correct": false
+            }
+          ],
+          "explain": "Vector databases charge for storing the generated vectors, while embedding and reranking APIs charge for processing the text. All of these contribute to the total cost."
+        }
+      ]
+    },
+    {
+      "type": "teach",
+      "cards": [
+        {
+          "kind": "hook",
+          "icon": "💸",
+          "title": "Stop Wasting Vectors",
+          "body": "Converting text into vectors for search can quickly get expensive if your app embeds the same text repeatedly or uses a massive model when a tiny, cheap one would work just as well. Let's learn how to slash those costs."
+        },
+        {
+          "kind": "definition",
+          "icon": "✂️",
+          "title": "Three Ways to Save",
+          "body": "To reduce embedding costs, you can group texts together (batching), save previous results so you never compute them twice (caching), or swap to a smaller, cheaper model if it still gets the job done."
+        },
+        {
+          "kind": "analogy",
+          "icon": "📚",
+          "title": "The Busy Translator",
+          "body": "Think of embedding like translation. If you translate sentences one by one as they arrive, you waste time and money. If you wait and translate them in a single batch, or reuse previous translations from a dictionary, you save effort."
+        },
+        {
+          "kind": "example",
+          "icon": "💡",
+          "title": "Real-World Efficiency",
+          "body": "Instead of calling an embedding API 100 times for 100 individual sentences, you group them into a single batch request of 100 sentences. Then, if a user searches for 'API pricing' twice, you serve the second search result instantly from a local cache."
+        },
+        {
+          "kind": "mythbust",
+          "icon": "🔍",
+          "title": "Is Bigger Always Better?",
+          "body": "Many think you always need the biggest, most expensive embedding model for good search. In reality, smaller models are often 10x cheaper and perform nearly as well for basic search and classification tasks."
+        },
+        {
+          "kind": "visual",
+          "icon": "⚖️",
+          "title": "Naive vs. Optimized",
+          "body": "Compare the expensive, repetitive approach with an optimized, cost-aware approach.",
+          "compare": {
+            "left": {
+              "emoji": "🐌",
+              "tag": "Naive Way",
+              "text": "Embedding every single sentence one-by-one, paying full price for duplicate queries."
+            },
+            "right": {
+              "emoji": "⚡",
+              "tag": "Optimized Way",
+              "text": "Batching texts together, caching frequent queries, and using a right-sized model."
+            }
+          }
+        }
+      ]
+    },
+    {
+      "type": "practice",
+      "exercises": [
+        {
+          "id": "p1",
+          "type": "multiple_choice",
+          "xp": 2,
+          "prompt": "What does 'batching' mean in the context of embedding generation?",
+          "options": [
+            {
+              "id": "opt_a",
+              "text": "It makes the vectors shorter.",
+              "correct": false
+            },
+            {
+              "id": "opt_b",
+              "text": "It groups multiple texts into a single API request to reduce overhead.",
+              "correct": true
+            },
+            {
+              "id": "opt_c",
+              "text": "It deletes old vectors automatically.",
+              "correct": false
+            },
+            {
+              "id": "opt_d",
+              "text": "It switches models depending on the language.",
+              "correct": false
+            }
+          ],
+          "explain": "Batching combines multiple texts into a single API request, which minimizes network connection overhead and often qualifies for cheaper bulk processing."
+        },
+        {
+          "id": "p2",
+          "type": "true_false",
+          "xp": 2,
+          "prompt": "True or False: Choosing a smaller embedding model reduces both embedding generation costs and vector database storage costs.",
+          "options": [
+            {
+              "id": "opt_true",
+              "text": "True",
+              "correct": true
+            },
+            {
+              "id": "opt_false",
+              "text": "False",
+              "correct": false
+            }
+          ],
+          "explain": "Smaller embedding models produce smaller vectors, which reduces both the generation API cost and the storage cost in your vector database."
+        },
+        {
+          "id": "p3",
+          "type": "fill_blank",
+          "xp": 2,
+          "prompt": "Fill in the blank to complete the rule for saving money on repetitive user queries.",
+          "sentence": "You should check the cache before sending a repeat query to the API.",
+          "blank": "cache",
+          "words": [
+            "cache",
+            "database",
+            "model"
+          ],
+          "explain": "Caching stores previously calculated vectors so you do not have to pay the API provider to embed the exact same text again."
+        },
+        {
+          "id": "p4",
+          "type": "spot_the_ai",
+          "xp": 2,
+          "prompt": "Identify the response that looks like an AI developer optimizing their application's workflow:",
+          "options": [
+            {
+              "id": "opt_1",
+              "text": "Batching is when you send multiple texts at once to the model.",
+              "correct": false
+            },
+            {
+              "id": "opt_2",
+              "text": "Caching keeps a copy of your vectors in memory.",
+              "correct": false
+            },
+            {
+              "id": "opt_3",
+              "text": "Since many users ask 'What are your store hours?' every day, we should cache that vector.",
+              "correct": true
+            }
+          ],
+          "explain": "The third option represents a typical AI chatbot query that benefits from caching, whereas the other options are direct definitions of optimization concepts."
+        }
+      ]
+    },
+    {
+      "type": "boss",
+      "exercises": [
+        {
+          "id": "b1",
+          "type": "multiple_choice",
+          "xp": 5,
+          "prompt": "Imagine you are running a search engine with millions of daily queries. Which combined strategy will reduce your embedding API bill the most without sacrificing core functionality?",
+          "options": [
+            {
+              "id": "opt_1",
+              "text": "Using a larger model to embed the queries faster",
+              "correct": false
+            },
+            {
+              "id": "opt_2",
+              "text": "Disabling the cache to ensure real-time accuracy",
+              "correct": false
+            },
+            {
+              "id": "opt_3",
+              "text": "Caching frequent queries, batching documents, and using a smaller model",
+              "correct": true
+            },
+            {
+              "id": "opt_4",
+              "text": "Vectorizing documents one by one using the most expensive API",
+              "correct": false
+            }
+          ],
+          "explain": "Combining strategies yields the best savings. Downsizing the model cuts the baseline cost of every run, batching minimizes API request overhead, and caching avoids paying for identical queries entirely."
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,222 @@
+{
+  "id": "u412-l5",
+  "unit": 412,
+  "day": 2065,
+  "tier": "LLM Application Engineering",
+  "tierIcon": "🔌",
+  "title": "Cost vs Reliability Tradeoffs",
+  "icon": "💰",
+  "concept": "N calls means N times the cost and latency; deciding when ensembling is worth it.",
+  "xp": 15,
+  "hearts": 3,
+  "estMinutes": 7,
+  "segments": [
+    {
+      "type": "warmup",
+      "exercises": [
+        {
+          "id": "w1",
+          "type": "multiple_choice",
+          "xp": 1,
+          "prompt": "Quick recap: what was 'prompt ensembling' about?",
+          "options": [
+            {
+              "id": "a",
+              "text": "Asking the same question with several differently-worded prompts and combining the answers",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "Making the prompt as short as possible to save money",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "Training a brand new model from scratch",
+              "correct": false
+            }
+          ],
+          "explain": "Prompt ensembling means rephrasing your question a few different ways and combining the results, so the answer doesn't depend too heavily on any one exact wording. Today we look at what that extra reliability actually costs you."
+        }
+      ]
+    },
+    {
+      "type": "teach",
+      "cards": [
+        {
+          "kind": "hook",
+          "icon": "💸",
+          "title": "Reliability isn't free",
+          "body": "Asking an AI model 5 times instead of once can make answers more trustworthy — but it also means 5x the bill and possibly 5x the wait. When is that trade actually worth making?"
+        },
+        {
+          "kind": "definition",
+          "icon": "⚖️",
+          "title": "The core tradeoff",
+          "body": "If you call the model N times instead of once, you pay roughly N times the money and N times the wait (or more, if calls run one after another). Ensembling boosts reliability, but only makes sense when that extra reliability is worth the extra cost."
+        },
+        {
+          "kind": "analogy",
+          "icon": "🏥",
+          "title": "Getting a second (or fifth) medical opinion",
+          "body": "One doctor's opinion is fast and free but might be wrong. Five specialists agreeing costs more money and time, but you trust the diagnosis a lot more. You wouldn't get 5 opinions for a common cold, but you might for a risky surgery."
+        },
+        {
+          "kind": "example",
+          "icon": "🧾",
+          "title": "Doing the math",
+          "body": "One API call costs $0.01 and takes 2 seconds. If you sample 5 times for self-consistency, that's about $0.05 and up to 10 seconds (or 2 seconds if run in parallel, but still 5x the cost). For a homework helper app with a million questions a day, that jump adds up fast — so you'd only do it where accuracy really matters."
+        },
+        {
+          "kind": "mythbust",
+          "icon": "🚫",
+          "title": "Myth: More calls = always better",
+          "body": "It's tempting to think 'more samples, more accuracy, so just always do it.' But past a certain point, extra calls give tiny accuracy gains for a lot more cost and delay. And for many everyday questions, one good call is already accurate enough — the extra calls just burn money."
+        },
+        {
+          "kind": "visual",
+          "icon": "🔀",
+          "title": "Single call vs ensembled calls",
+          "body": "Picture the two paths side by side: one is quick and cheap but riskier, the other is slower and pricier but safer.",
+          "compare": {
+            "left": {
+              "emoji": "🎯",
+              "tag": "1 call",
+              "text": "Cheap, fast, but a wrong answer slips through more often"
+            },
+            "right": {
+              "emoji": "🛡️",
+              "tag": "5 calls + vote",
+              "text": "5x cost and slower, but wrong answers get outvoted more often"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "type": "practice",
+      "exercises": [
+        {
+          "id": "p1",
+          "type": "multiple_choice",
+          "xp": 2,
+          "prompt": "For which task is ensembling (multiple calls) MOST worth its extra cost?",
+          "options": [
+            {
+              "id": "a",
+              "text": "Autocompleting a casual text message",
+              "correct": false
+            },
+            {
+              "id": "b",
+              "text": "Diagnosing a medical symptom where a wrong answer could cause real harm",
+              "correct": true
+            },
+            {
+              "id": "c",
+              "text": "Suggesting an emoji for a chat reaction",
+              "correct": false
+            },
+            {
+              "id": "d",
+              "text": "Generating a random fun fact for a loading screen",
+              "correct": false
+            }
+          ],
+          "explain": "Ensembling is worth it when mistakes are costly and accuracy really matters, like medical or legal advice. For low-stakes, casual tasks, one call is fast, cheap, and good enough — the extra reliability from more calls isn't worth the extra cost."
+        },
+        {
+          "id": "p2",
+          "type": "true_false",
+          "xp": 2,
+          "prompt": "True or False: If you run 3 model calls in parallel (at the same time) instead of one after another, you still pay 3x the money even though you might not wait 3x as long.",
+          "options": [
+            {
+              "id": "a",
+              "text": "True",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "False",
+              "correct": false
+            }
+          ],
+          "explain": "Running calls in parallel can save time, but it doesn't save money — you're still making 3 separate API calls, so you're still charged for all 3. Cost scales with the number of calls regardless of how they're scheduled."
+        },
+        {
+          "id": "p3",
+          "type": "fill_blank",
+          "xp": 2,
+          "prompt": "Fill in the blank:",
+          "sentence": "Calling a model N times instead of once means paying roughly N times the cost and latency.",
+          "blank": "latency",
+          "words": [
+            "latency",
+            "accuracy",
+            "creativity"
+          ],
+          "explain": "Latency means how long you wait for a response. Running N calls (especially one after another) takes roughly N times as long, on top of costing N times as much money."
+        },
+        {
+          "id": "p4",
+          "type": "spot_the_ai",
+          "xp": 2,
+          "prompt": "Which explanation of the cost/reliability tradeoff sounds AI-generated (overly generic and padded, not concretely useful)?",
+          "options": [
+            {
+              "id": "a",
+              "text": "It is imperative to recognize that the multifaceted interplay between computational resource allocation and epistemic confidence necessitates a nuanced, holistic evaluation framework.",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "Use more calls when being wrong is expensive; use one call when speed and cost matter more than squeezing out extra accuracy.",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "5 calls costs about 5x as much as 1 call — only worth it if the accuracy boost matters for that specific task.",
+              "correct": false
+            }
+          ],
+          "explain": "The first option is stuffed with vague, fancy-sounding phrases ('multifaceted interplay,' 'epistemic confidence,' 'holistic evaluation framework') that sound impressive but say very little concretely. The other two options give clear, practical, specific guidance you could actually act on."
+        }
+      ]
+    },
+    {
+      "type": "boss",
+      "exercises": [
+        {
+          "id": "b1",
+          "type": "multiple_choice",
+          "xp": 5,
+          "prompt": "Your app answers simple FAQ questions AND rare, high-stakes legal questions. Budget is limited. What's the smartest ensembling strategy?",
+          "options": [
+            {
+              "id": "a",
+              "text": "Use 5 calls for every single question to be safe",
+              "correct": false
+            },
+            {
+              "id": "b",
+              "text": "Never use ensembling anywhere, since it always costs too much",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "Use 1 call for easy FAQ questions, and multiple calls (self-consistency or ensembling) only for the rare high-stakes legal questions",
+              "correct": true
+            },
+            {
+              "id": "d",
+              "text": "Only use ensembling for the FAQ questions since those are asked most often",
+              "correct": false
+            }
+          ],
+          "explain": "Smart cost/reliability tradeoffs mean matching your spending to the stakes. Easy, low-risk questions don't need extra calls — one answer is fine and saves money. Rare but high-stakes questions (like legal advice) are exactly where the extra cost of multiple calls pays off, because a mistake there is expensive. This targeted approach gets you most of the reliability benefit without paying N times the cost everywhere. This wraps up Unit 412 on Self-Consistency & Ensembling — you now know how to boost reliability with multiple calls AND when it's actually worth the cost."
+        }
+      ]
+    }
+  ]
+}

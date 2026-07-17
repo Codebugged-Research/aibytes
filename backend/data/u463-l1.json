@@ -1,0 +1,222 @@
+{
+  "id": "u463-l1",
+  "unit": 463,
+  "day": 2316,
+  "tier": "LLM Application Engineering",
+  "tierIcon": "🔌",
+  "title": "Questions That Need Multiple Retrievals",
+  "icon": "🔍",
+  "concept": "Queries where the answer to one sub-question is required before the next retrieval can even be formed.",
+  "xp": 15,
+  "hearts": 3,
+  "estMinutes": 7,
+  "segments": [
+    {
+      "type": "warmup",
+      "exercises": [
+        {
+          "id": "w1",
+          "type": "multiple_choice",
+          "xp": 1,
+          "prompt": "What is the primary purpose of Retrieval-Augmented Generation (RAG) in LLM applications?",
+          "options": [
+            {
+              "id": "w_opt1",
+              "text": "Retrieving relevant documents from a database to ground the LLM's response.",
+              "correct": true
+            },
+            {
+              "id": "w_opt2",
+              "text": "Fine-tuning the LLM's internal weights on new domain data.",
+              "correct": false
+            },
+            {
+              "id": "w_opt3",
+              "text": "Translating natural language queries directly into raw SQL code.",
+              "correct": false
+            }
+          ],
+          "explain": "To understand multi-hop retrieval, we must first look at standard RAG, which retrieves documents from a vector database to help the LLM answer a query with external context."
+        }
+      ]
+    },
+    {
+      "type": "teach",
+      "cards": [
+        {
+          "kind": "hook",
+          "icon": "🔑",
+          "title": "The Hidden Clue Problem",
+          "body": "Standard search engines fail when one question is hidden inside another. To answer complex questions, AIs need to perform a chain-reaction of searches, using the first answer to unlock the next query."
+        },
+        {
+          "kind": "definition",
+          "icon": "🪜",
+          "title": "What is Multi-Hop Retrieval?",
+          "body": "Multi-Hop RAG is a technique where an AI breaks down a complex question, retrieves information for the first part, and uses that new information to search for the next part. Without this, standard single-shot searches fail because they don't know what to look for next."
+        },
+        {
+          "kind": "analogy",
+          "icon": "🗺️",
+          "title": "The Scavenger Hunt Analogy",
+          "body": "Think of it like a scavenger hunt where each clue is sealed. You cannot search for Clue B until you find and open Clue A to read the directions."
+        },
+        {
+          "kind": "example",
+          "icon": "🎬",
+          "title": "Step-by-Step in Action",
+          "body": "If you ask 'Who is the spouse of the director of Inception?', a standard search looks for 'spouse director Inception' all at once. A multi-hop system first retrieves the director (Christopher Nolan) and then performs a second search for 'spouse of Christopher Nolan'."
+        },
+        {
+          "kind": "mythbust",
+          "icon": "🚫",
+          "title": "Myth: Bigger Prompts Solve Everything",
+          "body": "Many believe that simply feed-forwarding a complex prompt to a database will return the right answer. In reality, if the key search terms rely on intermediate answers, a single-step search will miss the target entirely."
+        },
+        {
+          "kind": "visual",
+          "icon": "↕️",
+          "title": "Direct Jump vs. Stepwise Climbing",
+          "body": "Standard RAG tries to jump directly to the answer in one leap, whereas Multi-Hop RAG takes calculated, sequential steps.",
+          "compare": {
+            "left": {
+              "emoji": "🏃‍♂️",
+              "tag": "Single-Hop RAG",
+              "text": "Searches for 'spouse of director of Inception' in one go, often returning irrelevant results about the movie cast."
+            },
+            "right": {
+              "emoji": "🧗‍♂️",
+              "tag": "Multi-Hop RAG",
+              "text": "Finds 'Christopher Nolan' first, then searches for his spouse, ensuring an accurate final answer."
+            }
+          }
+        }
+      ]
+    },
+    {
+      "type": "practice",
+      "exercises": [
+        {
+          "id": "p1",
+          "type": "multiple_choice",
+          "xp": 2,
+          "prompt": "Why does traditional single-hop RAG fail on questions like \"What is the capital of the country where the writer of 'Norwegian Wood' was born?\"",
+          "options": [
+            {
+              "id": "q1_a1",
+              "text": "It uses database indexing to speed up the response.",
+              "correct": false
+            },
+            {
+              "id": "q1_a2",
+              "text": "It only does one search step, failing when the second search term is unknown.",
+              "correct": true
+            },
+            {
+              "id": "q1_a3",
+              "text": "It requires millions of parameters to run.",
+              "correct": false
+            },
+            {
+              "id": "q1_a4",
+              "text": "It cannot read PDF documents.",
+              "correct": false
+            }
+          ],
+          "explain": "Standard RAG retrieves documents in a single step using the raw query, which fails when the query contains hidden dependencies that must be resolved first."
+        },
+        {
+          "id": "p2",
+          "type": "true_false",
+          "xp": 2,
+          "prompt": "True or False: In a multi-hop RAG system, all search queries can be executed simultaneously in parallel to save time.",
+          "options": [
+            {
+              "id": "tf_true",
+              "text": "True",
+              "correct": false
+            },
+            {
+              "id": "tf_false",
+              "text": "False",
+              "correct": true
+            }
+          ],
+          "explain": "Multi-hop queries must be resolved sequentially because the terms for the second query are not known until the first query returns a result."
+        },
+        {
+          "id": "p3",
+          "type": "fill_blank",
+          "xp": 2,
+          "prompt": "Fill in the blank to describe the relationship between search steps in multi-hop RAG.",
+          "sentence": "A multi-hop query creates a search dependency because you cannot run the second query without the first answer.",
+          "blank": "dependency",
+          "words": [
+            "dependency",
+            "shortcut",
+            "parallelism"
+          ],
+          "explain": "In multi-hop retrieval, the output of the first search acts as a prerequisite for the second, creating a strict dependency between steps."
+        },
+        {
+          "id": "p4",
+          "type": "spot_the_ai",
+          "xp": 2,
+          "prompt": "Identify which agent output represents an automated multi-hop query formulation plan.",
+          "options": [
+            {
+              "id": "sai_1",
+              "text": "AI Search Planner: 'Step 1: Retrieve writer of Norwegian Wood. Step 2: Use retrieved name [Haruki Murakami] to search for birth country. Step 3: Search for capital of that country.'",
+              "correct": true
+            },
+            {
+              "id": "sai_2",
+              "text": "User: 'Can you tell me who wrote Norwegian Wood and where they were born?'",
+              "correct": false
+            },
+            {
+              "id": "sai_3",
+              "text": "Database: 'Haruki Murakami, born in Kyoto, Japan, wrote Norwegian Wood in 1987.'",
+              "correct": false
+            }
+          ],
+          "explain": "Option B mimics a human-written question, and Option C is a simple look-up. Option A is characteristic of an AI orchestrating a multi-hop retrieval plan by generating intermediate search queries."
+        }
+      ]
+    },
+    {
+      "type": "boss",
+      "exercises": [
+        {
+          "id": "b1",
+          "type": "multiple_choice",
+          "xp": 5,
+          "prompt": "Imagine you are building a customer support assistant. Which of the following queries represents a true multi-hop retrieval task where the second search depends on the result of the first?",
+          "options": [
+            {
+              "id": "opt_b1",
+              "text": "Find the CEO of the company that won the 2023 Clean Energy Award.",
+              "correct": true
+            },
+            {
+              "id": "opt_b2",
+              "text": "List the top three clean energy companies of 2023.",
+              "correct": false
+            },
+            {
+              "id": "opt_b3",
+              "text": "Summarize the biography of the CEO of Tesla.",
+              "correct": false
+            },
+            {
+              "id": "opt_b4",
+              "text": "Compare the 2023 revenues of Tesla and Ford.",
+              "correct": false
+            }
+          ],
+          "explain": "A multi-hop query requires solving an intermediate query first because the parameters of the second search depend entirely on the output of the first. Searching for the CEO of a company whose name you don't yet know is the classic definition of a multi-hop dependency."
+        }
+      ]
+    }
+  ]
+}

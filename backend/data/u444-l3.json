@@ -1,0 +1,222 @@
+{
+  "id": "u444-l3",
+  "unit": 444,
+  "day": 2223,
+  "tier": "LLM Application Engineering",
+  "tierIcon": "🔌",
+  "title": "Common Vector DB Mistakes",
+  "icon": "🚫",
+  "concept": "Wrong distance metric, no filtering plan, ignoring re-indexing cost, and premature scaling.",
+  "xp": 15,
+  "hearts": 3,
+  "estMinutes": 7,
+  "segments": [
+    {
+      "type": "warmup",
+      "exercises": [
+        {
+          "id": "w1",
+          "type": "multiple_choice",
+          "xp": 1,
+          "prompt": "In our last lesson, we learned how to design a production-ready vector search pipeline. What is the correct way to combine these concepts?",
+          "options": [
+            {
+              "id": "w_1",
+              "text": "Combine HNSW indexing, metadata filtering, and sharding.",
+              "correct": true
+            },
+            {
+              "id": "w_2",
+              "text": "Use random projection instead of HNSW and skip metadata entirely.",
+              "correct": false
+            },
+            {
+              "id": "w_3",
+              "text": "Store vectors in a standard flat text file and read it sequentially on one machine.",
+              "correct": false
+            }
+          ],
+          "explain": "Combining HNSW indexes (for fast vector search), metadata filtering (to narrow down category/user constraints), and sharding (to split the data across machines) is the standard recipe for scalable production vector searches."
+        }
+      ]
+    },
+    {
+      "type": "teach",
+      "cards": [
+        {
+          "kind": "hook",
+          "icon": "🔍",
+          "title": "The Invisible Bugs",
+          "body": "Building a vector database system looks easy until it goes live. A single wrong setting can make your search engine return random junk or cost ten times more than expected."
+        },
+        {
+          "kind": "definition",
+          "icon": "⚠️",
+          "title": "Vector DB Pitfalls",
+          "body": "Vector databases require matching distance metrics, smart metadata filtering, and planned re-indexing. Making mistakes in these areas leads to sluggish search, high cloud bills, and irrelevant results."
+        },
+        {
+          "kind": "analogy",
+          "icon": "📐",
+          "title": "The Ruler and the Thermometer",
+          "body": "Using the wrong distance metric is like using a thermometer to measure how tall you are. Both give you numbers, but the scale doesn't fit the data, leading to nonsensical rankings."
+        },
+        {
+          "kind": "example",
+          "icon": "🔥",
+          "title": "The Re-indexing Meltdown",
+          "body": "A developer launches an app with HNSW indexing and changes the vector size daily. The server crashes because the system spends all its CPU constantly rebuilding the complex index tree from scratch."
+        },
+        {
+          "kind": "mythbust",
+          "icon": "🛑",
+          "title": "More Nodes, More Problems",
+          "body": "Many believe you should scale to a multi-node distributed cluster immediately. In reality, premature scaling adds massive network lag and complexity; a single optimized node can often hold millions of vectors."
+        },
+        {
+          "kind": "visual",
+          "icon": "⚖️",
+          "title": "Right Way vs. Wrong Way",
+          "body": "Matching your database setup to your embedding model and workload prevents catastrophic bottlenecks.",
+          "compare": {
+            "left": {
+              "emoji": "🧩",
+              "tag": "Correct Fit",
+              "text": "Matched distance metrics + planned pre-filtering + single-node prototype."
+            },
+            "right": {
+              "emoji": "💥",
+              "tag": "Mismatched Fit",
+              "text": "Wrong metric (L2 instead of Cosine) + post-filtering + premature sharding."
+            }
+          }
+        }
+      ]
+    },
+    {
+      "type": "practice",
+      "exercises": [
+        {
+          "id": "p1",
+          "type": "multiple_choice",
+          "xp": 2,
+          "prompt": "What is the primary danger of having 'no filtering plan' and relying on post-query filtering?",
+          "options": [
+            {
+              "id": "mc_1",
+              "text": "It speeds up the query by bypassing the vector index entirely.",
+              "correct": false
+            },
+            {
+              "id": "mc_2",
+              "text": "It can return fewer results than requested if the top vector matches are discarded by the filter.",
+              "correct": true
+            },
+            {
+              "id": "mc_3",
+              "text": "It guarantees that the distance metric is automatically converted to Cosine similarity.",
+              "correct": false
+            },
+            {
+              "id": "mc_4",
+              "text": "It eliminates the need for any index building.",
+              "correct": false
+            }
+          ],
+          "explain": "Filtering vectors after performing the vector search (post-filtering) often leaves you with too few results (or zero) if the top matches don't fit the filter. You must plan for pre-filtering or single-stage filtering."
+        },
+        {
+          "id": "p2",
+          "type": "true_false",
+          "xp": 2,
+          "prompt": "True or False: To ensure the best performance, you should always scale to a distributed sharded cluster before launching your prototype.",
+          "options": [
+            {
+              "id": "tf_true",
+              "text": "True",
+              "correct": false
+            },
+            {
+              "id": "tf_false",
+              "text": "False",
+              "correct": true
+            }
+          ],
+          "explain": "Vector databases are memory-hungry and complex; scaling them prematurely before optimizing your index parameters or query structure adds unnecessary cost and latency."
+        },
+        {
+          "id": "p3",
+          "type": "fill_blank",
+          "xp": 2,
+          "prompt": "Fill in the missing concept regarding database maintenance overhead:",
+          "sentence": "When you update your vectors frequently, ignoring the re-indexing cost can exhaust your CPU resources.",
+          "blank": "re-indexing cost",
+          "words": [
+            "re-indexing cost",
+            "metadata filtering",
+            "dimension mismatch"
+          ],
+          "explain": "Re-indexing is highly CPU-intensive because the database must rebuild the navigation graphs (like HNSW) for all vectors. Ignoring this cost causes performance bottlenecks when data changes frequently."
+        },
+        {
+          "id": "p4",
+          "type": "spot_the_ai",
+          "xp": 2,
+          "prompt": "Which of the following describes a developer making a common vector database configuration mistake?",
+          "options": [
+            {
+              "id": "sai_1",
+              "text": "A engineer configures pre-filtering on metadata to narrow down documents by publication year before searching vectors.",
+              "correct": false
+            },
+            {
+              "id": "sai_2",
+              "text": "A system administrator monitors memory usage and shards the database across two nodes when RAM limits are reached.",
+              "correct": false
+            },
+            {
+              "id": "sai_3",
+              "text": "A developer calculates Cosine similarity embeddings but configures the vector index to use Euclidean distance, causing incorrect search results.",
+              "correct": true
+            }
+          ],
+          "explain": "Using L2 (Euclidean) distance on vectors that were normalized and designed for Cosine similarity is a classic configuration mismatch mistake that degrades search accuracy. The other options describe normal operations."
+        }
+      ]
+    },
+    {
+      "type": "boss",
+      "exercises": [
+        {
+          "id": "b1",
+          "type": "multiple_choice",
+          "xp": 5,
+          "prompt": "You deploy an embedding model trained to compare angles (Cosine similarity), but configure your vector database to use Euclidean distance (L2) for nearest neighbor search. Why will your search results be poor?",
+          "options": [
+            {
+              "id": "opt_1",
+              "text": "Cosine similarity ranking matches the model's design, whereas L2 distance compares absolute spatial distances and yields incorrect rankings.",
+              "correct": true
+            },
+            {
+              "id": "opt_2",
+              "text": "L2 distance requires metadata filtering before query execution, which causes a system crash.",
+              "correct": false
+            },
+            {
+              "id": "opt_3",
+              "text": "Cosine similarity automatically reduces the vector dimensions to save memory during index rebuilds.",
+              "correct": false
+            },
+            {
+              "id": "opt_4",
+              "text": "L2 distance is only compatible with dense flat indexes and cannot be used with HNSW.",
+              "correct": false
+            }
+          ],
+          "explain": "Choosing Euclidean distance (L2) for vectors that were trained and normalized for Cosine similarity ignores the directional nature of the embeddings. L2 measures absolute spatial distance, which will produce incorrect similarity rankings if the vector lengths vary or if the model expected angle-based comparison."
+        }
+      ]
+    }
+  ]
+}

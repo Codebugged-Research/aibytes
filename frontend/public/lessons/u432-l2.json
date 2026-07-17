@@ -1,0 +1,222 @@
+{
+  "id": "u432-l2",
+  "unit": 432,
+  "day": 2162,
+  "tier": "LLM Application Engineering",
+  "tierIcon": "🔌",
+  "title": "Parent-Child Chunk Structures",
+  "icon": "🗂️",
+  "concept": "Indexing small child chunks for retrieval while returning their larger parent chunk as the actual context.",
+  "xp": 15,
+  "hearts": 3,
+  "estMinutes": 7,
+  "segments": [
+    {
+      "type": "warmup",
+      "exercises": [
+        {
+          "id": "w1",
+          "type": "multiple_choice",
+          "xp": 1,
+          "prompt": "What is the main drawback of using only very small chunks for LLM retrieval?",
+          "options": [
+            {
+              "id": "wu_1",
+              "text": "They take up too much storage in vector databases.",
+              "correct": false
+            },
+            {
+              "id": "wu_2",
+              "text": "They lack the surrounding context needed for the LLM to answer well.",
+              "correct": true
+            },
+            {
+              "id": "wu_3",
+              "text": "They make search queries slower to process.",
+              "correct": false
+            }
+          ],
+          "explain": "While small chunks make it easy to find specific terms, they lack the surrounding context the LLM needs to write a coherent, accurate response."
+        }
+      ]
+    },
+    {
+      "type": "teach",
+      "cards": [
+        {
+          "kind": "hook",
+          "icon": "🔀",
+          "title": "Decoupling Search from Context",
+          "body": "Searching small text snippets is fast and accurate, but LLMs struggle when they receive snippets without context. How do we get the best of both worlds: precise searching and rich context? We decouple them!"
+        },
+        {
+          "kind": "definition",
+          "icon": "🌳",
+          "title": "Parent-Child Chunking",
+          "body": "A Parent-Child chunk structure divides a document into large parent chunks, and then splits each parent into smaller child chunks. You search the child chunks to find matches, but feed the parent chunk to the LLM."
+        },
+        {
+          "kind": "analogy",
+          "icon": "🏷️",
+          "title": "The Library Barcode Analogy",
+          "body": "Think of library books. You search for a book using a tiny barcode sticker on the cover (the small child chunk), but you actually take the entire book home to read (the large parent chunk) so you get the full story."
+        },
+        {
+          "kind": "example",
+          "icon": "🍞",
+          "title": "Baking Guide Example",
+          "body": "A parent chunk might be a full page about 'How to bake sourdough bread'. Its child chunks are individual sentences about temperature, kneading, and yeast. A search for 'oven temperature' matches the temperature child chunk, but pulls the whole page for the LLM."
+        },
+        {
+          "kind": "mythbust",
+          "icon": "🔍",
+          "title": "The 'Same Input, Same Output' Myth",
+          "body": "You might think that whatever text chunk you search must be the exact text you send to the LLM. In reality, modern search engines can index a small snippet but point to a much larger block of text for the final output."
+        },
+        {
+          "kind": "visual",
+          "icon": "👁️",
+          "title": "Search Match vs. LLM Context",
+          "body": "Compare what gets searched vs. what the LLM actually reads during a parent-child retrieval flow.",
+          "compare": {
+            "left": {
+              "emoji": "🎯",
+              "tag": "Child Chunk",
+              "text": "Small, highly specific snippet used to match the user's search query."
+            },
+            "right": {
+              "emoji": "📖",
+              "tag": "Parent Chunk",
+              "text": "Large surrounding document section sent to the LLM to provide context."
+            }
+          }
+        }
+      ]
+    },
+    {
+      "type": "practice",
+      "exercises": [
+        {
+          "id": "p1",
+          "type": "multiple_choice",
+          "xp": 2,
+          "prompt": "How does a Parent-Child retriever solve the small-chunk, big-context problem?",
+          "options": [
+            {
+              "id": "mc_1",
+              "text": "It allows the LLM to generate answers faster by using less data.",
+              "correct": false
+            },
+            {
+              "id": "mc_2",
+              "text": "It uses small child chunks for precise matching and large parent chunks for LLM context.",
+              "correct": true
+            },
+            {
+              "id": "mc_3",
+              "text": "It compresses large documents into short summaries before search.",
+              "correct": false
+            },
+            {
+              "id": "mc_4",
+              "text": "It prevents the LLM from seeing any parent data to save money.",
+              "correct": false
+            }
+          ],
+          "explain": "The child chunk is optimized for matching the search query, while the parent chunk contains the rich details the LLM needs to generate a complete answer."
+        },
+        {
+          "id": "p2",
+          "type": "true_false",
+          "xp": 2,
+          "prompt": "True or False: In a parent-child structure, the chunk used for search index matching can be different from the chunk sent to the LLM.",
+          "options": [
+            {
+              "id": "tf_1",
+              "text": "True",
+              "correct": true
+            },
+            {
+              "id": "tf_2",
+              "text": "False",
+              "correct": false
+            }
+          ],
+          "explain": "Yes! Decoupling means the chunk we run the search query against (child) does not have to be the exact same chunk we feed to the LLM (parent)."
+        },
+        {
+          "id": "p3",
+          "type": "fill_blank",
+          "xp": 2,
+          "prompt": "Fill in the missing term to complete the retrieval strategy:",
+          "sentence": "To give the LLM the best context, we index the child chunks but retrieve the parent chunk.",
+          "blank": "parent chunk",
+          "words": [
+            "parent chunk",
+            "sentence index",
+            "raw file"
+          ],
+          "explain": "We index the tiny child chunks to get a highly accurate search match, but we return the parent chunk to give the LLM the broader context."
+        },
+        {
+          "id": "p4",
+          "type": "spot_the_ai",
+          "xp": 2,
+          "prompt": "Identify the response that demonstrates a Parent-Child chunking retrieval process:",
+          "options": [
+            {
+              "id": "sai_1",
+              "text": "Query: 'oil change steps'. System returns 5 small sentences from random pages of the car manual.",
+              "correct": false
+            },
+            {
+              "id": "sai_2",
+              "text": "Query: 'spark plug gap size'. System matches a 20-word child chunk, but feeds the entire 'Engine Maintenance' section to the LLM.",
+              "correct": true
+            },
+            {
+              "id": "sai_3",
+              "text": "Query: 'tire pressure'. System searches a table of contents and redirects the user to page 12 of a PDF.",
+              "correct": false
+            }
+          ],
+          "explain": "Option B shows an AI-generated retrieval result where the specific match (child) correctly swaps in its broader context (parent) for the LLM. The other options show basic chunking or unrelated database joins."
+        }
+      ]
+    },
+    {
+      "type": "boss",
+      "exercises": [
+        {
+          "id": "b1",
+          "type": "multiple_choice",
+          "xp": 5,
+          "prompt": "You are building a pipeline using a Parent-Child retriever. Which configuration correctly balances search precision with rich LLM context?",
+          "options": [
+            {
+              "id": "opt_1",
+              "text": "Search the parent chunk directly and pass the child chunks to the LLM.",
+              "correct": false
+            },
+            {
+              "id": "opt_2",
+              "text": "Search the child chunks for retrieval but pass the parent chunk to the LLM.",
+              "correct": true
+            },
+            {
+              "id": "opt_3",
+              "text": "Search child chunks and only pass those same child chunks to the LLM.",
+              "correct": false
+            },
+            {
+              "id": "opt_4",
+              "text": "Discard child chunks entirely and only use parent chunks for both steps.",
+              "correct": false
+            }
+          ],
+          "explain": "Retrieval targets child chunks because their narrow focus makes them easier to match with search queries. However, the system returns the larger parent chunk to the LLM to prevent the loss of surrounding details (context)."
+        }
+      ]
+    }
+  ]
+}

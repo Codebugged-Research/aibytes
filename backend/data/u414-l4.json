@@ -1,0 +1,222 @@
+{
+  "id": "u414-l4",
+  "unit": 414,
+  "day": 2074,
+  "tier": "LLM Application Engineering",
+  "tierIcon": "🔌",
+  "title": "Model Upgrades Break Prompts",
+  "icon": "🔄",
+  "concept": "Why a prompt tuned for one model version can silently regress after a model upgrade; re-testing on upgrade.",
+  "xp": 15,
+  "hearts": 3,
+  "estMinutes": 7,
+  "segments": [
+    {
+      "type": "warmup",
+      "exercises": [
+        {
+          "id": "w1",
+          "type": "multiple_choice",
+          "xp": 1,
+          "prompt": "In the last lesson, prompt diffing meant carefully reviewing...",
+          "options": [
+            {
+              "id": "a",
+              "text": "exactly what changed between two prompt versions before deploying",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "how much a prompt costs to run in dollars",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "how fast the model responds to a prompt",
+              "correct": false
+            }
+          ],
+          "explain": "Prompt diffing is about comparing two versions of a prompt side-by-side to spot exactly what wording changed before you ship an update, which helps you predict and catch behavior shifts early."
+        }
+      ]
+    },
+    {
+      "type": "teach",
+      "cards": [
+        {
+          "kind": "hook",
+          "icon": "⚠️",
+          "title": "Nothing Changed... Except Everything",
+          "body": "You didn't touch a single word of your prompt. But last Tuesday, your AI app started giving weird answers. What happened? The model underneath got upgraded overnight."
+        },
+        {
+          "kind": "definition",
+          "icon": "📉",
+          "title": "Silent Regression",
+          "body": "A silent regression is when your prompt's output quality quietly gets worse after a model upgrade, with no error message or warning. The prompt text stays identical, but the model behind it now interprets instructions differently."
+        },
+        {
+          "kind": "analogy",
+          "icon": "🚗",
+          "title": "Same Keys, New Car",
+          "body": "Your prompt is like a set of driving instructions. If your car (the model) gets swapped for a new model overnight, the same instructions might make the new car swerve because pedals, sensors, and handling all changed underneath you."
+        },
+        {
+          "kind": "example",
+          "icon": "🧾",
+          "title": "The JSON Formatter That Broke",
+          "body": "A prompt said 'respond only in JSON, no extra text.' On the old model this always worked. After an upgrade, the new model started adding a friendly sentence before the JSON, breaking every automated parser downstream, until someone noticed and re-tested."
+        },
+        {
+          "kind": "mythbust",
+          "icon": "🚫",
+          "title": "Myth: Newer Model Always Means Better Output",
+          "body": "A newer, smarter model isn't automatically better for YOUR specific prompt. It might follow instructions differently, use new default behaviors, or interpret edge cases in a new way, so 'improved' overall can still mean 'worse' for your exact use case."
+        },
+        {
+          "kind": "visual",
+          "icon": "🔬",
+          "title": "Before vs After Upgrade",
+          "body": "Same prompt, same input, two different model versions, two different outputs. This is why pinning a model version and re-testing on every upgrade is part of good prompt management.",
+          "compare": {
+            "left": {
+              "emoji": "✅",
+              "tag": "Model A (old)",
+              "text": "Returns clean JSON with no extra commentary, exactly as instructed."
+            },
+            "right": {
+              "emoji": "❌",
+              "tag": "Model B (new, upgraded)",
+              "text": "Adds a friendly intro sentence before the JSON, silently breaking the parser downstream."
+            }
+          }
+        }
+      ]
+    },
+    {
+      "type": "practice",
+      "exercises": [
+        {
+          "id": "p1",
+          "type": "multiple_choice",
+          "xp": 2,
+          "prompt": "Why can the exact same prompt text produce worse results after a model version upgrade?",
+          "options": [
+            {
+              "id": "a",
+              "text": "The prompt text secretly gets corrupted during the upgrade",
+              "correct": false
+            },
+            {
+              "id": "b",
+              "text": "The new model version may interpret instructions, formatting, and edge cases differently than the old one",
+              "correct": true
+            },
+            {
+              "id": "c",
+              "text": "Model upgrades always reset your account settings",
+              "correct": false
+            },
+            {
+              "id": "d",
+              "text": "Upgrades only affect image models, not text models",
+              "correct": false
+            }
+          ],
+          "explain": "The prompt text itself is unchanged, but the model's internal behavior, training, and defaults can shift with a new version, so it may follow the same instructions in a subtly different way, which is why re-testing is necessary rather than assumed unnecessary."
+        },
+        {
+          "id": "p2",
+          "type": "true_false",
+          "xp": 2,
+          "prompt": "True or False: If your prompt text hasn't changed at all, you can safely assume its output quality hasn't changed either.",
+          "options": [
+            {
+              "id": "a",
+              "text": "True",
+              "correct": false
+            },
+            {
+              "id": "b",
+              "text": "False",
+              "correct": true
+            }
+          ],
+          "explain": "False. The model itself can be upgraded behind the scenes by the provider, and even identical prompt text can produce different results on a new model version, so quality should always be re-verified after any upgrade."
+        },
+        {
+          "id": "p3",
+          "type": "fill_blank",
+          "xp": 2,
+          "prompt": "Fill in the blank.",
+          "sentence": "After a model upgrade, teams should re-test their prompts because a silent regression can happen even when the prompt text never changed.",
+          "blank": "silent regression",
+          "words": [
+            "silent regression",
+            "syntax error",
+            "network outage"
+          ],
+          "explain": "A silent regression is the exact term for quality quietly dropping with no visible error, which is why re-testing after upgrades is essential even when nothing in your own code changed."
+        },
+        {
+          "id": "p4",
+          "type": "spot_the_ai",
+          "xp": 2,
+          "prompt": "Which of these three team update logs was most likely written by an AI assistant summarizing a changelog, rather than a human engineer?",
+          "options": [
+            {
+              "id": "a",
+              "text": "Upgraded to v3, output looks fine to me on the two examples I tried, shipping it now.",
+              "correct": false
+            },
+            {
+              "id": "b",
+              "text": "This update represents a significant enhancement, delivering improved capabilities and a more robust, delightful user experience across the board.",
+              "correct": true
+            },
+            {
+              "id": "c",
+              "text": "Re-ran our 40-case eval suite after the v3 upgrade, JSON formatting broke on 6 cases, holding the release until fixed.",
+              "correct": false
+            }
+          ],
+          "explain": "The vague, promotional language full of generic praise like 'significant enhancement' and 'delightful user experience' with no concrete details is a classic sign of AI-generated filler text, while the other two options mention specific, believable engineering details like exact test counts and honest results."
+        }
+      ]
+    },
+    {
+      "type": "boss",
+      "exercises": [
+        {
+          "id": "b1",
+          "type": "multiple_choice",
+          "xp": 5,
+          "prompt": "Your team's summarizer prompt scored 95% quality on GPT-Model-A for six months. The vendor auto-upgrades everyone to GPT-Model-B overnight with no code changes on your end. What's the SAFEST engineering move?",
+          "options": [
+            {
+              "id": "a",
+              "text": "Assume quality is fine since the prompt text never changed",
+              "correct": false
+            },
+            {
+              "id": "b",
+              "text": "Immediately rewrite the entire prompt from scratch to be safe",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "Re-run your test suite and eval metrics against Model B before trusting it in production",
+              "correct": true
+            },
+            {
+              "id": "d",
+              "text": "Downgrade back to Model A permanently and never upgrade again",
+              "correct": false
+            }
+          ],
+          "explain": "Model upgrades can silently change how a model interprets the exact same prompt text, so the only reliable way to know if quality held up is to re-run your saved test cases and eval scores against the new model version before trusting it live. Assuming it's fine risks silent regressions reaching users, and rewriting from scratch or refusing to upgrade are overreactions when a quick re-test tells you exactly what changed. This is the core discipline of prompt versioning: pin your model version, and whenever it changes, re-test like it's a new release. You've completed the LLM Application Engineering phase — get ready for what's next!"
+        }
+      ]
+    }
+  ]
+}

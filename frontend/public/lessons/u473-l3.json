@@ -1,0 +1,222 @@
+{
+  "id": "u473-l3",
+  "unit": 473,
+  "day": 2368,
+  "tier": "LLM Application Engineering",
+  "tierIcon": "🔌",
+  "title": "Generation Metrics: Faithfulness & Relevance",
+  "icon": "🧪",
+  "concept": "Scoring whether a generated answer is actually supported by retrieved context and whether it addresses the question.",
+  "xp": 15,
+  "hearts": 3,
+  "estMinutes": 7,
+  "segments": [
+    {
+      "type": "warmup",
+      "exercises": [
+        {
+          "id": "w1",
+          "type": "multiple_choice",
+          "xp": 1,
+          "prompt": "In the previous lesson, we learned about NDCG. How does NDCG reward a search retriever?",
+          "options": [
+            {
+              "id": "w_a",
+              "text": "It ignores the order of results and only counts if the correct document is present.",
+              "correct": false
+            },
+            {
+              "id": "w_b",
+              "text": "It rewards the system more when highly relevant documents are placed at the very top of the list.",
+              "correct": true
+            },
+            {
+              "id": "w_c",
+              "text": "It measures the speed of the retrieval process.",
+              "correct": false
+            }
+          ],
+          "explain": "NDCG (Normalized Discounted Cumulative Gain) uses graded relevance and penalizes highly relevant documents if they appear lower down in the search results."
+        }
+      ]
+    },
+    {
+      "type": "teach",
+      "cards": [
+        {
+          "kind": "hook",
+          "icon": "🎣",
+          "title": "When Retrieval is Perfect, but the Answer Fails",
+          "body": "Even if your retriever finds the perfect documents, the LLM might hallucinate details or completely ignore the user's actual question. We need automated ways to grade the generator's homework!"
+        },
+        {
+          "kind": "definition",
+          "icon": "🎯",
+          "title": "Faithfulness & Relevance",
+          "body": "Generation metrics evaluate the quality of the LLM's final response. Faithfulness measures if the generated answer is strictly grounded in the retrieved documents, while Relevance measures how directly the answer addresses the user's initial question."
+        },
+        {
+          "kind": "analogy",
+          "icon": "📚",
+          "title": "The Open-Book Exam Analogy",
+          "body": "Think of Faithfulness like a student writing an open-book essay: they must only use facts from the provided pages, not make things up. Relevance is like checking if the student actually answered the prompt instead of writing a beautiful but off-topic essay."
+        },
+        {
+          "kind": "example",
+          "icon": "💡",
+          "title": "Real-World Generation Audit",
+          "body": "If a user asks 'What is the capital of France?' and the retrieved text is about Paris, an answer of 'Paris is the capital' is both faithful and relevant. An answer of 'Paris has a great soccer team' is faithful to the text but has low relevance to the question."
+        },
+        {
+          "kind": "mythbust",
+          "icon": "🚫",
+          "title": "The Factuality Trap",
+          "body": "You might think that if an answer is factually correct in the real world, it is faithful. However, in RAG, Faithfulness only cares if the information exists in the retrieved context; external truths do not count."
+        },
+        {
+          "kind": "visual",
+          "icon": "⚖️",
+          "title": "Faithfulness vs. Relevance",
+          "body": "Comparing the two pillars of RAG generation quality. One looks backward at the source; the other looks forward to the user's intent.",
+          "compare": {
+            "left": {
+              "emoji": "🛡️",
+              "tag": "Faithfulness",
+              "text": "Checks if the answer is strictly derived from the retrieved documents. Prevents hallucinations."
+            },
+            "right": {
+              "emoji": "🎯",
+              "tag": "Relevance",
+              "text": "Checks if the answer directly solves the user's query. Prevents off-topic rambling."
+            }
+          }
+        }
+      ]
+    },
+    {
+      "type": "practice",
+      "exercises": [
+        {
+          "id": "p1",
+          "type": "multiple_choice",
+          "xp": 2,
+          "prompt": "Which metric evaluates if the generated response directly answers the user's query, rather than going off-topic?",
+          "options": [
+            {
+              "id": "q2_a",
+              "text": "NDCG",
+              "correct": false
+            },
+            {
+              "id": "q2_b",
+              "text": "Faithfulness",
+              "correct": false
+            },
+            {
+              "id": "q2_c",
+              "text": "Answer Relevance",
+              "correct": true
+            },
+            {
+              "id": "q2_d",
+              "text": "Context Recall",
+              "correct": false
+            }
+          ],
+          "explain": "Answer Relevance focuses entirely on whether the generated output directly addresses the user's question, ignoring whether the information is fully grounded."
+        },
+        {
+          "id": "p2",
+          "type": "true_false",
+          "xp": 2,
+          "prompt": "True or False: A generated answer can have high Faithfulness but very low Answer Relevance.",
+          "options": [
+            {
+              "id": "q1_t",
+              "text": "True",
+              "correct": true
+            },
+            {
+              "id": "q1_f",
+              "text": "False",
+              "correct": false
+            }
+          ],
+          "explain": "An answer can easily be 100% faithful (only using facts from the text) but completely irrelevant if it answers a different question than the one the user asked."
+        },
+        {
+          "id": "p3",
+          "type": "fill_blank",
+          "xp": 2,
+          "prompt": "Fill in the missing metric name that ensures the LLM did not make up facts outside the retrieved text.",
+          "sentence": "We use Faithfulness to ensure the generator does not hallucinate information outside of the retrieved documents.",
+          "blank": "Faithfulness",
+          "words": [
+            "Faithfulness",
+            "Recall",
+            "Precision"
+          ],
+          "explain": "Faithfulness is the metric that checks if the generated answer is strictly based on the provided context, preventing hallucination."
+        },
+        {
+          "id": "p4",
+          "type": "spot_the_ai",
+          "xp": 2,
+          "prompt": "Identify how modern AI-assisted evaluation tools programmatically calculate Faithfulness.",
+          "options": [
+            {
+              "id": "q3_a",
+              "text": "We ask a human annotator to read the answer and rate it from 1 to 5 stars based on their personal feelings.",
+              "correct": false
+            },
+            {
+              "id": "q3_b",
+              "text": "We compare the exact character length of the generated answer to the retrieved text length.",
+              "correct": false
+            },
+            {
+              "id": "q3_c",
+              "text": "An LLM parses the response into statements: 'Claim 1: Paris is in France. Source Context: Paris is France's capital. Verdict: Supported.' and calculates a score.",
+              "correct": true
+            }
+          ],
+          "explain": "Option C mimics a classic LLM evaluator output, breaking down the response into individual claims and cross-referencing them against the retrieved source facts."
+        }
+      ]
+    },
+    {
+      "type": "boss",
+      "exercises": [
+        {
+          "id": "b1",
+          "type": "multiple_choice",
+          "xp": 5,
+          "prompt": "Imagine your RAG system retrieves a document about cats, but the user asked about dogs. The generator outputs a highly accurate essay about cats based on the document. How would you evaluate this output using Faithfulness and Relevance?",
+          "options": [
+            {
+              "id": "q4_a",
+              "text": "Faithfulness measures truthfulness to the context; Relevance measures how well the question is addressed.",
+              "correct": true
+            },
+            {
+              "id": "q4_b",
+              "text": "Faithfulness measures user satisfaction; Relevance measures retrieval speed.",
+              "correct": false
+            },
+            {
+              "id": "q4_c",
+              "text": "Faithfulness guarantees the answer is factually correct in the real world, even if not in the documents.",
+              "correct": false
+            },
+            {
+              "id": "q4_d",
+              "text": "Both metrics measure the exact same aspect of the generator's output.",
+              "correct": false
+            }
+          ],
+          "explain": "Faithfulness measures if the answer is grounded *only* in the retrieved context (preventing hallucination). Answer Relevance measures if the answer directly addresses the user's question, regardless of whether it is true or false. Both are vital for a trustworthy RAG system."
+        }
+      ]
+    }
+  ]
+}

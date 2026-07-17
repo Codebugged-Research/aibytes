@@ -1,0 +1,222 @@
+{
+  "id": "u434-l1",
+  "unit": 434,
+  "day": 2171,
+  "tier": "LLM Application Engineering",
+  "tierIcon": "🔌",
+  "title": "Why Tables Break Naive Chunking",
+  "icon": "📉",
+  "concept": "Splitting a table by character count destroys row/column relationships that carry the actual meaning.",
+  "xp": 15,
+  "hearts": 3,
+  "estMinutes": 7,
+  "segments": [
+    {
+      "type": "warmup",
+      "exercises": [
+        {
+          "id": "w1",
+          "type": "multiple_choice",
+          "xp": 1,
+          "prompt": "What is the main limitation of basic, text-only chunking strategies used in early RAG systems?",
+          "options": [
+            {
+              "id": "w1",
+              "text": "They assume documents are just flat, continuous strings of simple text.",
+              "correct": true
+            },
+            {
+              "id": "w2",
+              "text": "They require a GPU to split basic paragraphs.",
+              "correct": false
+            },
+            {
+              "id": "w3",
+              "text": "They only work on mathematical equations.",
+              "correct": false
+            }
+          ],
+          "explain": "This unit focuses on advanced document formats. In simple text applications, we usually assume plain sentences, but real documents contain complex layouts like tables and images."
+        }
+      ]
+    },
+    {
+      "type": "teach",
+      "cards": [
+        {
+          "kind": "hook",
+          "icon": "🧩",
+          "title": "The Broken Grid Problem",
+          "body": "LLMs love structured data, but standard text splitters are blind to structure. When we chop a PDF table into fixed-size chunks, we scramble the columns and rows, leaving the LLM with disconnected numbers and no context."
+        },
+        {
+          "kind": "definition",
+          "icon": "📊",
+          "title": "What is Naive Chunking?",
+          "body": "Naive chunking divides text into fixed-size segments solely based on character or token counts. When applied to tables, this arbitrary splitting tears rows away from their headers and columns away from their neighbors, destroying the structural relationships."
+        },
+        {
+          "kind": "analogy",
+          "icon": "✂️",
+          "title": "The Comic Strip Cut",
+          "body": "Imagine slicing a comic strip page into equal-sized square pieces using scissors. If a scissor cut runs right down the middle of a panel, you split characters and text bubbles, making the story impossible to follow. Naive chunking does this to tables."
+        },
+        {
+          "kind": "example",
+          "icon": "📱",
+          "title": "A Broken Phone Comparison",
+          "body": "If you have a table comparing phone models and prices, a naive 100-character chunk might end up containing just 'iPhone 15 | Pro |' in Chunk 1, and '$999 | $1199' in Chunk 2. Neither chunk has both the model name and the price together."
+        },
+        {
+          "kind": "mythbust",
+          "icon": "🚫",
+          "title": "The Overlap Myth",
+          "body": "You might think that keeping a small character overlap between chunks will save the table's meaning. In reality, overlap only duplicates a few arbitrary characters and does not restore the grid relationships or column headers needed for understanding."
+        },
+        {
+          "kind": "visual",
+          "icon": "👁️",
+          "title": "Visualizing the Split",
+          "body": "See how naive splitting isolates data, whereas structure-aware splitting preserves context.",
+          "compare": {
+            "left": {
+              "emoji": "✂️",
+              "tag": "Naive Chunking",
+              "text": "Splits mid-row. Chunk A has headers, Chunk B has numbers with no labels."
+            },
+            "right": {
+              "emoji": "📐",
+              "tag": "Structure-Aware",
+              "text": "Keeps the whole table intact or appends headers to every row chunk."
+            }
+          }
+        }
+      ]
+    },
+    {
+      "type": "practice",
+      "exercises": [
+        {
+          "id": "p1",
+          "type": "multiple_choice",
+          "xp": 2,
+          "prompt": "What is the main limitation of 'naive' chunking when handling documents?",
+          "options": [
+            {
+              "id": "mc1",
+              "text": "It optimizes tables for faster SQL queries.",
+              "correct": false
+            },
+            {
+              "id": "mc2",
+              "text": "It splits text purely by character counts without understanding document structure.",
+              "correct": true
+            },
+            {
+              "id": "mc3",
+              "text": "It automatically translates markdown tables into visual images.",
+              "correct": false
+            },
+            {
+              "id": "mc4",
+              "text": "It cleans up dirty data in spreadsheet cells.",
+              "correct": false
+            }
+          ],
+          "explain": "Naive chunking operates strictly on character or token counts and is completely unaware of document structures like tables, paragraphs, or lists."
+        },
+        {
+          "id": "p2",
+          "type": "true_false",
+          "xp": 2,
+          "prompt": "True or False: Naive chunking often separates table headers from the actual data rows they describe.",
+          "options": [
+            {
+              "id": "t1",
+              "text": "True",
+              "correct": true
+            },
+            {
+              "id": "f1",
+              "text": "False",
+              "correct": false
+            }
+          ],
+          "explain": "Because naive chunking splits text purely by character counts, it regularly separates headers from their corresponding data rows, making the tables unreadable for LLMs."
+        },
+        {
+          "id": "p3",
+          "type": "fill_blank",
+          "xp": 2,
+          "prompt": "Fill in the missing word to complete the description of table chunking:",
+          "sentence": "Naive chunking destroys the relationships between rows and columns.",
+          "blank": "relationships",
+          "words": [
+            "relationships",
+            "lengths",
+            "colors"
+          ],
+          "explain": "Tables carry meaning through the horizontal and vertical relationships between cells; splitting them arbitrarily destroys this structure."
+        },
+        {
+          "id": "p4",
+          "type": "spot_the_ai",
+          "xp": 2,
+          "prompt": "Which of the following text snippets shows a table that has been ruined by naive chunking?",
+          "options": [
+            {
+              "id": "sai1",
+              "text": "'The company earned 120 million in Q1 and 450 million in Q2, showing a steady growth trajectory.'",
+              "correct": false
+            },
+            {
+              "id": "sai2",
+              "text": "'| 120 | 450 | \\n--- New Chunk --- \\n| Q3 | Q4 |'",
+              "correct": true
+            },
+            {
+              "id": "sai3",
+              "text": "'Here is the quarterly summary: Q1 revenue was 120, Q2 was 450.'",
+              "correct": false
+            }
+          ],
+          "explain": "Option B represents an AI-generated chunk where a table has been blindly cut in half by character limits, leaving numbers isolated from their column headers (e.g., 'Q3' and 'Q4' are missing, and we don't know what '120' or '450' refer to)."
+        }
+      ]
+    },
+    {
+      "type": "boss",
+      "exercises": [
+        {
+          "id": "b1",
+          "type": "multiple_choice",
+          "xp": 5,
+          "prompt": "A system chunks a financial PDF by splitting text every 500 characters. If a large table showing 'Revenue by Department' is split right in the middle, why will the LLM struggle to answer questions about the second half of the table?",
+          "options": [
+            {
+              "id": "b1",
+              "text": "The character count of a table is too large for the LLM's context window.",
+              "correct": false
+            },
+            {
+              "id": "b2",
+              "text": "Tables contain special HTML tags that cause the LLM API to crash.",
+              "correct": false
+            },
+            {
+              "id": "b3",
+              "text": "Splitting rows across chunks separates data cells from their headers, destroying the relationships needed for reasoning.",
+              "correct": true
+            },
+            {
+              "id": "b4",
+              "text": "Naive chunking automatically converts all numeric table data into random text.",
+              "correct": false
+            }
+          ],
+          "explain": "When naive chunking splits a table halfway through, it creates chunks that lack the headers (column names) or context of the surrounding rows. Without this relational context, the LLM cannot tell what a specific number or cell refers to, leading to hallucinated or incorrect answers."
+        }
+      ]
+    }
+  ]
+}

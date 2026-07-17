@@ -1,0 +1,222 @@
+{
+  "id": "u474-l1",
+  "unit": 474,
+  "day": 2371,
+  "tier": "LLM Application Engineering",
+  "tierIcon": "🔌",
+  "title": "The RAG Failure Taxonomy",
+  "icon": "🏷️",
+  "concept": "Classifying failures as retrieval failures, ranking failures, context failures, or generation failures.",
+  "xp": 15,
+  "hearts": 3,
+  "estMinutes": 7,
+  "segments": [
+    {
+      "type": "warmup",
+      "exercises": [
+        {
+          "id": "w1",
+          "type": "multiple_choice",
+          "xp": 1,
+          "prompt": "How does a Retrieval-Augmented Generation (RAG) system generally work to improve LLM answers?",
+          "options": [
+            {
+              "id": "w_a",
+              "text": "It retrieves external data to ground the LLM's answers in facts.",
+              "correct": true
+            },
+            {
+              "id": "w_b",
+              "text": "It speeds up the GPU training process of the LLM.",
+              "correct": false
+            },
+            {
+              "id": "w_c",
+              "text": "It compresses the LLM's parameters to save memory.",
+              "correct": false
+            }
+          ],
+          "explain": "Before debugging failures, remember that Retrieval-Augmented Generation (RAG) combines external knowledge retrieval with LLM text generation to ground the model's answers in facts."
+        }
+      ]
+    },
+    {
+      "type": "teach",
+      "cards": [
+        {
+          "kind": "hook",
+          "icon": "🕵️‍♂️",
+          "title": "Where Did It Go Wrong?",
+          "body": "When a RAG system gives a bad answer, it's easy to just blame the LLM. But the error could be in the search database, the sorting algorithm, or the prompt template. Breaking down failures helps you pinpoint exactly what to fix."
+        },
+        {
+          "kind": "definition",
+          "icon": "🔍",
+          "title": "The Four Failure Pillars",
+          "body": "To fix RAG systems, we categorize errors into four stages: Retrieval (getting the wrong documents), Ranking (sorting them poorly), Context (formatting or truncating the information badly), and Generation (the LLM hallucinating despite having the right data)."
+        },
+        {
+          "kind": "analogy",
+          "icon": "📚",
+          "title": "The Library Analogy",
+          "body": "Think of a librarian helping a student. If the librarian grabs the wrong book, that's a Retrieval failure. If they grab the right book but hand the student the wrong page, that's a Ranking failure. If they give the right page but the student can't read the messy print, that's a Context failure."
+        },
+        {
+          "kind": "example",
+          "icon": "💡",
+          "title": "Real-World Breakdown",
+          "body": "When a user asks 'How do I reset my password?' and the system retrieves articles about creating a new account, a Retrieval failure has occurred because the search query pulled irrelevant documents."
+        },
+        {
+          "kind": "mythbust",
+          "icon": "👾",
+          "title": "Don't Blame the Brain",
+          "body": "Many developers think a bad RAG answer always means the LLM needs fine-tuning. In reality, more than 70% of RAG bugs are actually data retrieval or sorting issues, not LLM intelligence issues."
+        },
+        {
+          "kind": "visual",
+          "icon": "📊",
+          "title": "Retrieval vs. Ranking",
+          "body": "Visualizing how data flows and where the pipeline can break.",
+          "compare": {
+            "left": {
+              "emoji": "🚫",
+              "tag": "Retrieval Error",
+              "text": "Database returns empty or completely irrelevant documents."
+            },
+            "right": {
+              "emoji": "🔄",
+              "tag": "Ranking Error",
+              "text": "Database finds the right documents but ranks them in the wrong order."
+            }
+          }
+        }
+      ]
+    },
+    {
+      "type": "practice",
+      "exercises": [
+        {
+          "id": "p1",
+          "type": "multiple_choice",
+          "xp": 2,
+          "prompt": "If your vector database returns documents about cats when the user asked about coding in Python, what kind of failure has occurred?",
+          "options": [
+            {
+              "id": "q1_a",
+              "text": "Retrieval failure",
+              "correct": true
+            },
+            {
+              "id": "q1_b",
+              "text": "Ranking failure",
+              "correct": false
+            },
+            {
+              "id": "q1_c",
+              "text": "Generation failure",
+              "correct": false
+            },
+            {
+              "id": "q1_d",
+              "text": "Context failure",
+              "correct": false
+            }
+          ],
+          "explain": "Retrieval failures occur when the search query fails to match and fetch the relevant documents from the vector database."
+        },
+        {
+          "id": "p2",
+          "type": "true_false",
+          "xp": 2,
+          "prompt": "True or False: A ranking failure means the system was completely unable to find any relevant documents in the database.",
+          "options": [
+            {
+              "id": "tf_t",
+              "text": "True",
+              "correct": false
+            },
+            {
+              "id": "tf_f",
+              "text": "False",
+              "correct": true
+            }
+          ],
+          "explain": "Ranking failures happen when the correct documents are retrieved but ordered poorly, causing the LLM to miss them. If no relevant documents are found at all, that is a retrieval failure."
+        },
+        {
+          "id": "p3",
+          "type": "fill_blank",
+          "xp": 2,
+          "prompt": "Fill in the blank to complete the sentence about LLM output errors:",
+          "sentence": "When the database retrieves the perfect facts but the LLM still invents a false answer, we call this a Generation failure.",
+          "blank": "Generation",
+          "words": [
+            "Generation",
+            "Retrieval",
+            "Ranking"
+          ],
+          "explain": "Even if you retrieve the perfect context, the LLM itself can still hallucinate or ignore the facts, resulting in a Generation failure."
+        },
+        {
+          "id": "p4",
+          "type": "spot_the_ai",
+          "xp": 2,
+          "prompt": "Which of the following demonstrates an AI Generation failure, where the LLM has the correct facts in its context but outputs incorrect information?",
+          "options": [
+            {
+              "id": "sai_a",
+              "text": "User: 'What is the refund policy?' Context: 'Refunds are given within 30 days.' Model: 'You can get a refund within 30 days.'",
+              "correct": false
+            },
+            {
+              "id": "sai_b",
+              "text": "User: 'What is the refund policy?' Context: 'Empty context.' Model: 'I do not have the information to answer that.'",
+              "correct": false
+            },
+            {
+              "id": "sai_c",
+              "text": "User: 'What is the refund policy?' Context: 'Refunds are given within 30 days.' Model: 'Refunds are strictly forbidden under any circumstances.'",
+              "correct": true
+            }
+          ],
+          "explain": "Option C shows the AI hallucinating and contradicting the retrieved facts, which is a classic generation failure. Options A and B show the model correctly using or refusing based on the facts provided."
+        }
+      ]
+    },
+    {
+      "type": "boss",
+      "exercises": [
+        {
+          "id": "b1",
+          "type": "multiple_choice",
+          "xp": 5,
+          "prompt": "A RAG system successfully pulls 50 documents related to a user query. However, the most relevant 2 documents are sorted at the very end of the list. The LLM completely ignores them and gives a wrong answer. What type of failure is this?",
+          "options": [
+            {
+              "id": "b1",
+              "text": "Retrieval failure because the database was completely empty",
+              "correct": false
+            },
+            {
+              "id": "b2",
+              "text": "Ranking failure because the critical documents were pushed to the bottom of the list",
+              "correct": true
+            },
+            {
+              "id": "b3",
+              "text": "Generation failure because the LLM generated toxic content",
+              "correct": false
+            },
+            {
+              "id": "b4",
+              "text": "Context failure because the system ran out of token limits and crashed",
+              "correct": false
+            }
+          ],
+          "explain": "Because the engine found the correct documents but shoved them to the very bottom of a huge pile, the LLM missed them due to the 'lost in the middle' effect. This is a classic ranking/filtering failure where the retrieval system retrieved the data but failed to present it in the optimal order."
+        }
+      ]
+    }
+  ]
+}

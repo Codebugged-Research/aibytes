@@ -1,0 +1,222 @@
+{
+  "id": "u477-l1",
+  "unit": 477,
+  "day": 2386,
+  "tier": "LLM Application Engineering",
+  "tierIcon": "🔌",
+  "title": "What to Log in a RAG Pipeline",
+  "icon": "🪵",
+  "concept": "Query, retrieved chunks with scores, final context, generated answer, and latency at every stage.",
+  "xp": 15,
+  "hearts": 3,
+  "estMinutes": 7,
+  "segments": [
+    {
+      "type": "warmup",
+      "exercises": [
+        {
+          "id": "w1",
+          "type": "multiple_choice",
+          "xp": 1,
+          "prompt": "When building advanced LLM applications, how can developers inspect why a system is behaving poorly or running slowly?",
+          "options": [
+            {
+              "id": "w1",
+              "text": "By logging and measuring every step of the pipeline.",
+              "correct": true
+            },
+            {
+              "id": "w2",
+              "text": "By asking users to rate every single chat message.",
+              "correct": false
+            },
+            {
+              "id": "w3",
+              "text": "By making the LLM write its own code updates.",
+              "correct": false
+            }
+          ],
+          "explain": "This is the first lesson of the unit on Monitoring & Observability, introducing why we need to track internal pipeline steps to understand system behavior."
+        }
+      ]
+    },
+    {
+      "type": "teach",
+      "cards": [
+        {
+          "kind": "hook",
+          "icon": "🩺",
+          "title": "Diagnosing LLMs",
+          "body": "When your AI app gives a wrong or slow answer, you can't just guess what went wrong. You need a clear paper trail of what the AI read, what it searched for, and how long each step took."
+        },
+        {
+          "kind": "definition",
+          "icon": "📝",
+          "title": "RAG Logging",
+          "body": "Logging in a RAG pipeline means saving the inputs, intermediate search results (chunks and similarity scores), final outputs, and time taken (latency) for every single step of a user request."
+        },
+        {
+          "kind": "analogy",
+          "icon": "🍳",
+          "title": "The Kitchen Inspection",
+          "body": "Think of a RAG pipeline like a restaurant kitchen. If a customer gets the wrong dish, you don't just blame the chef; you check the order ticket (query), the ingredients retrieved from the pantry (chunks and scores), and how long each step took (latency) to find where things went wrong."
+        },
+        {
+          "kind": "example",
+          "icon": "🔍",
+          "title": "A Complete Log Entry",
+          "body": "When a user asks 'How to reset a password?', we log the query, the 3 retrieved document chunks with their 0.85 similarity scores, the assembled prompt, the LLM's final answer, and that retrieval took 50ms while generation took 800ms."
+        },
+        {
+          "kind": "mythbust",
+          "icon": "🚫",
+          "title": "The Final Answer Trap",
+          "body": "Many think logging just the final chatbot answer is enough. But without logging the retrieved chunks and latency at each step, you cannot tell if a bad answer was caused by poor search results or a confused LLM."
+        },
+        {
+          "kind": "visual",
+          "icon": "👁️",
+          "title": "Blind vs. Complete Logging",
+          "body": "Compare what you see when logging only the final answer versus logging the entire RAG pipeline process.",
+          "compare": {
+            "left": {
+              "emoji": "🙈",
+              "tag": "Final Answer Only",
+              "text": "You only see 'Sorry, I don't know.' You have no idea if the database search failed or if the LLM ignored the data."
+            },
+            "right": {
+              "emoji": "🔬",
+              "tag": "Full Pipeline Logs",
+              "text": "You see that search returned empty chunks (score 0.1) in 12ms. You instantly know the database retrieval is the problem!"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "type": "practice",
+      "exercises": [
+        {
+          "id": "p1",
+          "type": "multiple_choice",
+          "xp": 2,
+          "prompt": "Which of the following is essential to log from the retrieval stage of a RAG pipeline?",
+          "options": [
+            {
+              "id": "mc1",
+              "text": "The user's IP address.",
+              "correct": false
+            },
+            {
+              "id": "mc2",
+              "text": "The retrieved chunks and their similarity scores.",
+              "correct": true
+            },
+            {
+              "id": "mc3",
+              "text": "The name of the database software.",
+              "correct": false
+            },
+            {
+              "id": "mc4",
+              "text": "The total number of users online.",
+              "correct": false
+            }
+          ],
+          "explain": "Retrieval similarity scores tell you how relevant the database search thinks the retrieved chunks are to the user query. Without this, you cannot judge retrieval quality."
+        },
+        {
+          "id": "p2",
+          "type": "true_false",
+          "xp": 2,
+          "prompt": "True or False: To save space, you should discard the raw user query and only log the generated response.",
+          "options": [
+            {
+              "id": "tf_true",
+              "text": "True",
+              "correct": false
+            },
+            {
+              "id": "tf_false",
+              "text": "False",
+              "correct": true
+            }
+          ],
+          "explain": "Logging the raw user query is essential because it allows developers to see exactly what the user asked and reproduce any errors."
+        },
+        {
+          "id": "p3",
+          "type": "fill_blank",
+          "xp": 2,
+          "prompt": "Fill in the blank to complete the statement about tracking pipeline performance.",
+          "sentence": "To find out why a chatbot is slow, you must measure the latency of the retrieval and generation steps.",
+          "blank": "latency",
+          "words": [
+            "latency",
+            "accuracy",
+            "volume"
+          ],
+          "explain": "Logging the latency (time taken) at every stage is crucial to find out if the bottleneck is in the database search or the LLM generation."
+        },
+        {
+          "id": "p4",
+          "type": "spot_the_ai",
+          "xp": 2,
+          "prompt": "Which of these looks like a structured log generated by an AI observability system tracking a RAG pipeline?",
+          "options": [
+            {
+              "id": "sai1",
+              "text": "We checked the database and it is running normally. The response time seems fine for most active users today.",
+              "correct": false
+            },
+            {
+              "id": "sai2",
+              "text": "{ \"query\": \"Cancel plan\", \"retrieved_chunks\": [{\"id\": 4, \"score\": 0.91}], \"generation\": \"Click settings to cancel.\", \"retrieval_latency_ms\": 45 }",
+              "correct": true
+            },
+            {
+              "id": "sai3",
+              "text": "User query was submitted successfully. The system generated a response in less than a second using standard search parameters.",
+              "correct": false
+            }
+          ],
+          "explain": "Option B is a clean, structured log capturing the query, retrieved context with relevance scores, generated answer, and latency metrics. The others are just general descriptions or irrelevant metrics."
+        }
+      ]
+    },
+    {
+      "type": "boss",
+      "exercises": [
+        {
+          "id": "b1",
+          "type": "multiple_choice",
+          "xp": 5,
+          "prompt": "You are building a dashboard to debug a slow and inaccurate RAG chatbot. Which set of logged data gives you the complete picture to solve both problems?",
+          "options": [
+            {
+              "id": "b1",
+              "text": "Only the final generated answer and the total time taken.",
+              "correct": false
+            },
+            {
+              "id": "b2",
+              "text": "Only the user query and the retrieved database documents.",
+              "correct": false
+            },
+            {
+              "id": "b3",
+              "text": "Every stage's latency, the query, the retrieved chunks with scores, and the generated response.",
+              "correct": true
+            },
+            {
+              "id": "b4",
+              "text": "Only the similarity scores of the retrieved database chunks.",
+              "correct": false
+            }
+          ],
+          "explain": "To troubleshoot why a system is slow or incorrect, you need both the performance metrics (latency at each step) and the actual data (query, chunks, and final response) to pinpoint the exact failure location."
+        }
+      ]
+    }
+  ]
+}

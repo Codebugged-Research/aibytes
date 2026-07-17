@@ -1,0 +1,222 @@
+{
+  "id": "u436-l4",
+  "unit": 436,
+  "day": 2184,
+  "tier": "LLM Application Engineering",
+  "tierIcon": "🔌",
+  "title": "Hashing-Based ANN Methods",
+  "icon": "🗂️",
+  "concept": "Locality-sensitive hashing (LSH) bucketing similar vectors together for fast approximate lookup.",
+  "xp": 15,
+  "hearts": 3,
+  "estMinutes": 7,
+  "segments": [
+    {
+      "type": "warmup",
+      "exercises": [
+        {
+          "id": "w1",
+          "type": "multiple_choice",
+          "xp": 1,
+          "prompt": "In the last lesson, we learned that tree-based ANN methods degrade in performance when dealing with high-dimensional embeddings. Why does this happen?",
+          "options": [
+            {
+              "id": "w_1",
+              "text": "They require too much GPU memory to store the tree branches.",
+              "correct": false
+            },
+            {
+              "id": "w_2",
+              "text": "High-dimensional spaces suffer from the curse of dimensionality, making search trees degrade to exhaustive scans.",
+              "correct": true
+            },
+            {
+              "id": "w_3",
+              "text": "Tree-based methods only work for text embeddings, not image embeddings.",
+              "correct": false
+            }
+          ],
+          "explain": "In high-dimensional spaces, the volume of the space grows exponentially, causing search trees (like KD-trees) to perform no better than a slow, exhaustive linear scan."
+        }
+      ]
+    },
+    {
+      "type": "teach",
+      "cards": [
+        {
+          "kind": "hook",
+          "icon": "🔑",
+          "title": "The Power of Purposeful Collisions",
+          "body": "In high dimensions, traditional search trees fall apart, forcing us to compare our query to every single vector. What if we could use a magic hash function that deliberately groups similar vectors into the same bucket, bypassing the search tree entirely?"
+        },
+        {
+          "kind": "definition",
+          "icon": "🏷️",
+          "title": "What is Locality-Sensitive Hashing?",
+          "body": "Locality-Sensitive Hashing (LSH) is an algorithm that uses special mathematical hash functions to group similar high-dimensional vectors into the same 'buckets' with high probability. Unlike traditional hashing, which avoids collisions, LSH relies on collisions to find near-neighbors quickly."
+        },
+        {
+          "kind": "analogy",
+          "icon": "📦",
+          "title": "The Color-Coded Packing Boxes",
+          "body": "Think of sorting books by their main cover color. Instead of reading every book's description, you quickly toss all blue covers into one box, and all red covers into another. Even if you miss some subtle themes, similar-looking books end up in the same bucket instantly."
+        },
+        {
+          "kind": "example",
+          "icon": "🎵",
+          "title": "LSH in Action",
+          "body": "In a music recommender system, LSH converts a song's 512-dimensional audio embedding into a short hash code like '1011'. Songs with matching codes are grouped together, letting the system suggest similar tracks in milliseconds."
+        },
+        {
+          "kind": "mythbust",
+          "icon": "🛡️",
+          "title": "Not Your Average Hash Function",
+          "body": "Traditional hashes like MD5 are designed to give completely different outputs for similar inputs to ensure security. LSH does the exact opposite: it is designed to maximize collisions for similar inputs so they land in the same bucket."
+        },
+        {
+          "kind": "visual",
+          "icon": "⚖️",
+          "title": "Standard Hash vs. LSH",
+          "body": "Comparing traditional hashing used for database indexing with locality-sensitive hashing used for similarity search.",
+          "compare": {
+            "left": {
+              "emoji": "🔒",
+              "tag": "Standard Hash",
+              "text": "Slightly different inputs yield completely different hash keys. No collisions allowed."
+            },
+            "right": {
+              "emoji": "🤝",
+              "tag": "LSH Hash",
+              "text": "Similar inputs yield the same hash key. Collisions are actively encouraged."
+            }
+          }
+        }
+      ]
+    },
+    {
+      "type": "practice",
+      "exercises": [
+        {
+          "id": "p1",
+          "type": "multiple_choice",
+          "xp": 2,
+          "prompt": "How does Locality-Sensitive Hashing (LSH) differ from standard cryptographic hashing?",
+          "options": [
+            {
+              "id": "mc_1",
+              "text": "LSH uses cryptographic SHA-256 hashes to guarantee data security.",
+              "correct": false
+            },
+            {
+              "id": "mc_2",
+              "text": "Standard hashes want different outputs for similar inputs, while LSH wants the same output for similar inputs.",
+              "correct": true
+            },
+            {
+              "id": "mc_3",
+              "text": "LSH is much slower than standard hashing because it requires sorting.",
+              "correct": false
+            },
+            {
+              "id": "mc_4",
+              "text": "There is no difference; they are mathematically identical.",
+              "correct": false
+            }
+          ],
+          "explain": "Standard cryptographic hashes (like SHA-256) are designed to make even tiny changes in input produce totally different outputs. LSH is specifically designed to keep similar inputs together."
+        },
+        {
+          "id": "p2",
+          "type": "true_false",
+          "xp": 2,
+          "prompt": "True or False: Because LSH is highly efficient, it is guaranteed to always find the absolute closest nearest neighbor.",
+          "options": [
+            {
+              "id": "tf_1",
+              "text": "True",
+              "correct": false
+            },
+            {
+              "id": "tf_2",
+              "text": "False",
+              "correct": true
+            }
+          ],
+          "explain": "Because LSH is an approximate method, it only checks vectors in the same bucket. It is possible that the absolute closest vector landed in a different bucket and is missed."
+        },
+        {
+          "id": "p3",
+          "type": "fill_blank",
+          "xp": 2,
+          "prompt": "Fill in the missing word to describe how LSH groups similar items together:",
+          "sentence": "LSH works by deliberately encouraging collisions for items that are close to each other in the vector space.",
+          "blank": "collisions",
+          "words": [
+            "collisions",
+            "errors",
+            "dimensions"
+          ],
+          "explain": "LSH relies on collisions, which mean similar vectors get assigned the exact same hash code and end up in the same search bucket."
+        },
+        {
+          "id": "p4",
+          "type": "spot_the_ai",
+          "xp": 2,
+          "prompt": "Identify the description of how LSH creates hash buckets using random projections:",
+          "options": [
+            {
+              "id": "sai_1",
+              "text": "We slice the high-dimensional space with random planes. If a vector is above a plane, it gets a '1', and if below, it gets a '0', forming a binary signature bucket.",
+              "correct": true
+            },
+            {
+              "id": "sai_2",
+              "text": "We draw a circle around the center of the dataset and split it into concentric rings of equal area to balance the search tree.",
+              "correct": false
+            },
+            {
+              "id": "sai_3",
+              "text": "We compute the absolute distance from every point to the origin and sort them in a one-dimensional array.",
+              "correct": false
+            }
+          ],
+          "explain": "The first prompt shows an AI-generated explanation of LSH projection, where random planes partition the vector space into binary regions (hashes). The others describe exact tree traversals or clustering algorithms."
+        }
+      ]
+    },
+    {
+      "type": "boss",
+      "exercises": [
+        {
+          "id": "b1",
+          "type": "multiple_choice",
+          "xp": 5,
+          "prompt": "Why does Locality-Sensitive Hashing (LSH) successfully solve the speed bottleneck of searching high-dimensional vector spaces?",
+          "options": [
+            {
+              "id": "opt_1",
+              "text": "It guarantees finding the absolute closest vector by building an exact binary search tree.",
+              "correct": false
+            },
+            {
+              "id": "opt_2",
+              "text": "It groups similar vectors into the same hash buckets to limit distance calculations to a fraction of the dataset.",
+              "correct": true
+            },
+            {
+              "id": "opt_3",
+              "text": "It reduces the number of dimensions to zero, eliminating the need for distance metrics entirely.",
+              "correct": false
+            },
+            {
+              "id": "opt_4",
+              "text": "It trains a deep neural network to predict the exact coordinates of the nearest neighbor.",
+              "correct": false
+            }
+          ],
+          "explain": "LSH prioritizes query speed by bucketing vectors into hash buckets using random projections. This achieves sub-linear search time because we only calculate exact distances for vectors sharing the same bucket, rather than scanning the entire high-dimensional dataset."
+        }
+      ]
+    }
+  ]
+}

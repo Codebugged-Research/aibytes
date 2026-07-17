@@ -1,0 +1,222 @@
+{
+  "id": "u439-l5",
+  "unit": 439,
+  "day": 2200,
+  "tier": "LLM Application Engineering",
+  "tierIcon": "🔌",
+  "title": "Vector Database Foundations Capstone",
+  "icon": "🏆",
+  "concept": "Choosing and justifying an index strategy for three different scale/latency scenarios; 'Next up: Vector Databases in Practice.'.",
+  "xp": 15,
+  "hearts": 3,
+  "estMinutes": 7,
+  "segments": [
+    {
+      "type": "warmup",
+      "exercises": [
+        {
+          "id": "w1",
+          "type": "multiple_choice",
+          "xp": 1,
+          "prompt": "According to the Index Selection Decision Framework, what are the primary inputs used to choose an index?",
+          "options": [
+            {
+              "id": "w_1",
+              "text": "The color of the vectors and the programming language used.",
+              "correct": false
+            },
+            {
+              "id": "w_2",
+              "text": "Dataset size, latency budget, update frequency, and memory limits.",
+              "correct": true
+            },
+            {
+              "id": "w_3",
+              "text": "The number of LLM parameters and the temperature setting.",
+              "correct": false
+            }
+          ],
+          "explain": "Our decision framework teaches that dataset size, update frequency, latency budget, and memory constraints are the four key factors for choosing the right index."
+        }
+      ]
+    },
+    {
+      "type": "teach",
+      "cards": [
+        {
+          "kind": "hook",
+          "icon": "🏗️",
+          "title": "Putting it All Together",
+          "body": "We've explored different index structures, but how do we tie them all together? When building real applications, you must trade off memory, speed, and accuracy based on your system's scale."
+        },
+        {
+          "kind": "definition",
+          "icon": "🎯",
+          "title": "Indexing Strategy Decision",
+          "body": "A Vector Database Indexing Strategy is the deliberate selection of search structures (like IVF, HNSW, or Flat) paired with compression techniques to meet specific requirements for query speed, accuracy, and hardware costs."
+        },
+        {
+          "kind": "analogy",
+          "icon": "📚",
+          "title": "The Indexing Library",
+          "body": "Choosing a vector index is like organizing a massive physical library. You could hire a team to sort books in precise, nested categories (IVF), build a complex network of overhead zip-lines connecting related shelves (HNSW), or just scan every single shelf manually with a flashlight (Flat) when you have very few books."
+        },
+        {
+          "kind": "example",
+          "icon": "🎧",
+          "title": "Real-World Tradeoffs",
+          "body": "An e-commerce site with 10,000 products chooses a Flat index for perfect accuracy. Meanwhile, a global streaming app search engine with 50 million songs uses HNSW paired with Product Quantization to keep search times under 15 milliseconds."
+        },
+        {
+          "kind": "mythbust",
+          "icon": "🚫",
+          "title": "HNSW is Not Always Best",
+          "body": "While HNSW is incredibly fast, it requires holding the entire graph structure in RAM, making it extremely expensive for massive datasets unless paired with quantization. Flat is actually better for small datasets under 50,000 vectors."
+        },
+        {
+          "kind": "visual",
+          "icon": "📊",
+          "title": "Scale Comparison",
+          "body": "Compare how different scales demand completely different index setups to balance cost and performance.",
+          "compare": {
+            "left": {
+              "emoji": "🔍",
+              "tag": "Small Scale",
+              "text": "Flat Index. High accuracy, slow search on big data, zero build time, low RAM overhead."
+            },
+            "right": {
+              "emoji": "⚡",
+              "tag": "Large Scale",
+              "text": "HNSW + Quantization. High speed, fast search on big data, long build time, optimized RAM."
+            }
+          }
+        }
+      ]
+    },
+    {
+      "type": "practice",
+      "exercises": [
+        {
+          "id": "p1",
+          "type": "multiple_choice",
+          "xp": 2,
+          "prompt": "If your primary goal is the absolute lowest query latency on a large dataset, which index type should you prioritize?",
+          "options": [
+            {
+              "id": "mc_1",
+              "text": "Flat Index",
+              "correct": false
+            },
+            {
+              "id": "mc_2",
+              "text": "HNSW Index",
+              "correct": true
+            },
+            {
+              "id": "mc_3",
+              "text": "IVF-only Index with no cache",
+              "correct": false
+            },
+            {
+              "id": "mc_4",
+              "text": "Linear Scan Index",
+              "correct": false
+            }
+          ],
+          "explain": "HNSW builds a multi-layer graph that allows fast routing, making it the top choice when speed is the absolute highest priority, despite its higher memory cost."
+        },
+        {
+          "id": "p2",
+          "type": "true_false",
+          "xp": 2,
+          "prompt": "True or False: Using quantization reduces memory consumption but may slightly decrease search recall accuracy.",
+          "options": [
+            {
+              "id": "tf_1",
+              "text": "True",
+              "correct": true
+            },
+            {
+              "id": "tf_2",
+              "text": "False",
+              "correct": false
+            }
+          ],
+          "explain": "Quantization compresses vector data (for example, converting 32-bit floats to 8-bit integers), which significantly reduces memory usage but can slightly lower search accuracy."
+        },
+        {
+          "id": "p3",
+          "type": "fill_blank",
+          "xp": 2,
+          "prompt": "Fill in the blank to complete the statement about high-accuracy search.",
+          "sentence": "For small datasets where accuracy is critical, a Flat index is the best choice because it performs no approximation.",
+          "blank": "Flat index",
+          "words": [
+            "Flat index",
+            "HNSW graph",
+            "IVF list"
+          ],
+          "explain": "A Flat index performs an exhaustive search, checking every single vector. This guarantees 100% accuracy but becomes too slow for larger datasets."
+        },
+        {
+          "id": "p4",
+          "type": "spot_the_ai",
+          "xp": 2,
+          "prompt": "Which explanation of indexing choices sounds like it was written by an AI?",
+          "options": [
+            {
+              "id": "sai_1",
+              "text": "For small datasets under 20k vectors, keep it simple and use a Flat index. Don't waste memory on complex graphs.",
+              "correct": false
+            },
+            {
+              "id": "sai_2",
+              "text": "In this scenario, we choose IVF to partition the space, which optimizes search times by limiting comparison vectors.",
+              "correct": true
+            },
+            {
+              "id": "sai_3",
+              "text": "If you are running out of RAM, you must apply quantization (compression) to your HNSW or IVF index.",
+              "correct": false
+            }
+          ],
+          "explain": "Option B is generated by an AI. It uses overly formal structure and typical generic phrasing ('This strategy optimizes...', 'In this scenario...'), whereas Options A and C focus on direct, practical rules of thumb."
+        }
+      ]
+    },
+    {
+      "type": "boss",
+      "exercises": [
+        {
+          "id": "b1",
+          "type": "multiple_choice",
+          "xp": 5,
+          "prompt": "You are designing a search system for a company with 100 million user profiles. The search must take under 10 milliseconds, but memory cost is a major constraint. Which index strategy fits best?",
+          "options": [
+            {
+              "id": "opt_1",
+              "text": "Use Flat indexing to guarantee 100% accuracy at massive scale.",
+              "correct": false
+            },
+            {
+              "id": "opt_2",
+              "text": "Use HNSW combined with Scalar Quantization (SQ) to balance speed and memory.",
+              "correct": true
+            },
+            {
+              "id": "opt_3",
+              "text": "Use raw IVF with no quantization to minimize memory footprint.",
+              "correct": false
+            },
+            {
+              "id": "opt_4",
+              "text": "Use Flat indexing with high quantization to maximize query speed.",
+              "correct": false
+            }
+          ],
+          "explain": "For a massive scale dataset with extremely tight latency requirements, HNSW provides the fast graph traversal needed, while Scalar Quantization (SQ) shrinks the vectors to fit within memory limits. Flat is too slow, and pure IVF without quantization might exceed memory capacity at this scale. Next up: Vector Databases in Practice."
+        }
+      ]
+    }
+  ]
+}

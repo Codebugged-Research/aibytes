@@ -1,0 +1,222 @@
+{
+  "id": "u451-l3",
+  "unit": 451,
+  "day": 2258,
+  "tier": "LLM Application Engineering",
+  "tierIcon": "🔌",
+  "title": "Why Cross-Encoders Can't Index Ahead of Time",
+  "icon": "🐢",
+  "concept": "Cross-encoder scores require the query at inference time, making them too slow for searching millions of documents directly.",
+  "xp": 15,
+  "hearts": 3,
+  "estMinutes": 7,
+  "segments": [
+    {
+      "type": "warmup",
+      "exercises": [
+        {
+          "id": "w1",
+          "type": "multiple_choice",
+          "xp": 1,
+          "prompt": "How does a Cross-Encoder compare a query and a document to achieve high accuracy?",
+          "options": [
+            {
+              "id": "w_1",
+              "text": "By embedding the query and document separately and doing a dot product.",
+              "correct": false
+            },
+            {
+              "id": "w_2",
+              "text": "By feeding the query and document together into the model to allow direct attention.",
+              "correct": true
+            },
+            {
+              "id": "w_3",
+              "text": "By ignoring the query and only analyzing the document's keywords.",
+              "correct": false
+            }
+          ],
+          "explain": "A Cross-Encoder feeds the query and document together as a single input, allowing attention mechanisms to compare them word-for-word."
+        }
+      ]
+    },
+    {
+      "type": "teach",
+      "cards": [
+        {
+          "kind": "hook",
+          "icon": "🚦",
+          "title": "The Speed Bottleneck",
+          "body": "We know Cross-Encoders are incredibly accurate because they compare queries and documents word-for-word. But there is a massive catch: this superpower makes them incredibly slow for searching large databases. Let's find out why."
+        },
+        {
+          "kind": "definition",
+          "icon": "⏳",
+          "title": "No Pre-Computation allowed",
+          "body": "Unlike Bi-Encoders, which let us pre-calculate and store vector embeddings for documents, a Cross-Encoder must process the query and document together. This means we cannot index our documents ahead of time, because the model needs the query to output any score."
+        },
+        {
+          "kind": "analogy",
+          "icon": "✉️",
+          "title": "The Live Translator Analogy",
+          "body": "Imagine a translator who must read a unique letter and a specific response together to score how well they match. They cannot prepare any scores beforehand because they don't know what the letter will say until it arrives."
+        },
+        {
+          "kind": "example",
+          "icon": "🍞",
+          "title": "Real-time Evaluation",
+          "body": "If a user searches for 'How to bake bread?', a Cross-Encoder cannot just look up a pre-baked vector for a recipe page. It must actively feed 'How to bake bread?' alongside each recipe page through the entire transformer network to get a relevance score."
+        },
+        {
+          "kind": "mythbust",
+          "icon": "🚫",
+          "title": "The Vector Database Trap",
+          "body": "You might think we can just save time by pre-running the Cross-Encoder on our documents. But because the model relies on the interaction between the query and document words, there are no individual document vectors to save ahead of time!"
+        },
+        {
+          "kind": "visual",
+          "icon": "📊",
+          "title": "Pre-indexing vs. Run-time Computation",
+          "body": "See how Bi-encoders let us prepare beforehand, while Cross-encoders force us to do all the heavy lifting at the very last second.",
+          "compare": {
+            "left": {
+              "emoji": "⚡",
+              "tag": "Bi-Encoder",
+              "text": "Pre-computes and saves document vectors ahead of time. Fast lookup."
+            },
+            "right": {
+              "emoji": "🐢",
+              "tag": "Cross-Encoder",
+              "text": "Must process query + document together at run-time. No pre-computing."
+            }
+          }
+        }
+      ]
+    },
+    {
+      "type": "practice",
+      "exercises": [
+        {
+          "id": "p1",
+          "type": "multiple_choice",
+          "xp": 2,
+          "prompt": "Why is it impossible to index documents ahead of time using a Cross-Encoder?",
+          "options": [
+            {
+              "id": "mc_1",
+              "text": "They are not compatible with modern GPU acceleration.",
+              "correct": false
+            },
+            {
+              "id": "mc_2",
+              "text": "They require the query at run-time to perform any similarity calculations.",
+              "correct": true
+            },
+            {
+              "id": "mc_3",
+              "text": "They compress documents too much, losing vital details.",
+              "correct": false
+            },
+            {
+              "id": "mc_4",
+              "text": "They only work with short, one-word documents.",
+              "correct": false
+            }
+          ],
+          "explain": "Cross-encoders cannot pre-calculate and store document embeddings because they require both the query and the document together as a single input to produce a score."
+        },
+        {
+          "id": "p2",
+          "type": "true_false",
+          "xp": 2,
+          "prompt": "True or False: Cross-encoders are the best tool for directly searching through millions of documents in less than a millisecond.",
+          "options": [
+            {
+              "id": "tf_true",
+              "text": "True",
+              "correct": false
+            },
+            {
+              "id": "tf_false",
+              "text": "False",
+              "correct": true
+            }
+          ],
+          "explain": "Because Cross-Encoders cannot pre-compute document vectors, running them against millions of documents at query time is too slow for real-time applications."
+        },
+        {
+          "id": "p3",
+          "type": "fill_blank",
+          "xp": 2,
+          "prompt": "Fill in the missing concept about when Cross-Encoder calculations must occur.",
+          "sentence": "Because we cannot pre-calculate scores, a Cross-Encoder must perform all heavy model computations at inference time.",
+          "blank": "inference time",
+          "words": [
+            "inference time",
+            "indexing time",
+            "training time"
+          ],
+          "explain": "Cross-encoders need both inputs simultaneously, meaning all calculations must happen at inference time when the user runs their query."
+        },
+        {
+          "id": "p4",
+          "type": "spot_the_ai",
+          "xp": 2,
+          "prompt": "Identify which statement accurately explains the indexing limitation of Cross-Encoders.",
+          "options": [
+            {
+              "id": "sai_1",
+              "text": "Cross-encoders pre-calculate embeddings for all documents and store them in a database, allowing sub-millisecond search over billions of items.",
+              "correct": false
+            },
+            {
+              "id": "sai_2",
+              "text": "Because a Cross-Encoder needs both the query and document simultaneously to calculate a score, it cannot pre-index documents and is too slow to evaluate millions of documents at query time.",
+              "correct": true
+            },
+            {
+              "id": "sai_3",
+              "text": "Cross-encoders do not use neural networks, which makes them fast to index but highly inaccurate compared to Bi-Encoders.",
+              "correct": false
+            }
+          ],
+          "explain": "The AI text correctly identifies the fundamental limitation of Cross-Encoders: they must compare the query and document together at query time, making them too slow to search millions of documents directly."
+        }
+      ]
+    },
+    {
+      "type": "boss",
+      "exercises": [
+        {
+          "id": "b1",
+          "type": "multiple_choice",
+          "xp": 5,
+          "prompt": "If you want to search a database of 10 million documents using only a Cross-Encoder, what slow operation must you perform for every single search?",
+          "options": [
+            {
+              "id": "opt_1",
+              "text": "Store the document embeddings in a vector database before the query arrives",
+              "correct": false
+            },
+            {
+              "id": "opt_2",
+              "text": "Calculate the query embedding once and compare it using simple dot product math",
+              "correct": false
+            },
+            {
+              "id": "opt_3",
+              "text": "Run the Cross-Encoder model on the query paired with every single document at search time",
+              "correct": true
+            },
+            {
+              "id": "opt_4",
+              "text": "Pre-compute all possible query-document pairs in an offline database",
+              "correct": false
+            }
+          ],
+          "explain": "Because Cross-Encoders require both the query and the document to be fed into the network together, you cannot pre-calculate document embeddings or index them in a vector database. Computing scores for millions of documents at query-time is computationally impossible for real-time search."
+        }
+      ]
+    }
+  ]
+}

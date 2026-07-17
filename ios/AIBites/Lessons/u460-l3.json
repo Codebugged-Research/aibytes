@@ -1,0 +1,222 @@
+{
+  "id": "u460-l3",
+  "unit": 460,
+  "day": 2303,
+  "tier": "LLM Application Engineering",
+  "tierIcon": "🔌",
+  "title": "Tool-Calling Retrieval",
+  "icon": "🛠️",
+  "concept": "Exposing search as a callable function so the model can invoke it mid-reasoning, agent-style.",
+  "xp": 15,
+  "hearts": 3,
+  "estMinutes": 7,
+  "segments": [
+    {
+      "type": "warmup",
+      "exercises": [
+        {
+          "id": "w1",
+          "type": "multiple_choice",
+          "xp": 1,
+          "prompt": "In our last lesson on Iterative Retrieval Loops, how does the agent handle a key concept was: Retrieval Loops, how did we handle cases where the first search returned information was incomplete information was returned?",
+          "options": [
+            {
+              "id": "w1",
+              "text": "Running one single search and summarizing it.",
+              "correct": false
+            },
+            {
+              "id": "w2",
+              "text": "Evaluating if the retrieved data is enough, and running a refined search if it isn't.",
+              "correct": true
+            },
+            {
+              "id": "w3",
+              "text": "Caching the user's query to skip searching next time.",
+              "correct": false
+            }
+          ],
+          "explain": "Iterative retrieval loops evaluate the results of a search and, if they are insufficient, refine the search query and search again."
+        }
+      ]
+    },
+    {
+      "type": "teach",
+      "cards": [
+        {
+          "kind": "hook",
+          "icon": "🔍",
+          "title": "AI with a Search License",
+          "body": "Imagine an AI that doesn't just guess or blindly search before talking. What if it could look at your question, realize it's missing some facts, and choose to call a search tool on its own?"
+        },
+        {
+          "kind": "definition",
+          "icon": "🔌",
+          "title": "What is Tool-Calling Retrieval?",
+          "body": "Tool-Calling Retrieval treats your search engine or database as a function (a tool) that the LLM can call. Instead of forcing a search beforehand, the LLM receives the user's query, decides if it needs external data, and outputs a structured request (like JSON) to run the search."
+        },
+        {
+          "kind": "analogy",
+          "icon": "🧰",
+          "title": "The Smart Mechanic",
+          "body": "Think of the AI like a mechanic. Traditional RAG hands the mechanic a wrench before they even open the hood. Tool-calling RAG lets the mechanic inspect the engine first, decide they need a 10mm socket, and reach into their toolbox to grab it themselves."
+        },
+        {
+          "kind": "example",
+          "icon": "💡",
+          "title": "An Agent in Action",
+          "body": "An assistant is asked: 'Did our company launch any new APIs in 2023?' The LLM decides it needs facts, outputs `search(query=\"API launches\", year=2023)`, runs the tool, and uses the returned list of APIs to write its final answer."
+        },
+        {
+          "kind": "mythbust",
+          "icon": "🚫",
+          "title": "The LLM Doesn't Run the Search",
+          "body": "People think the LLM magically searches the database itself. In reality, the LLM only outputs a text instruction saying 'I want to run this search.' Your application code intercepts this, runs the actual search, and feeds the results back to the LLM."
+        },
+        {
+          "kind": "visual",
+          "icon": "📊",
+          "title": "Control Flow Comparison",
+          "body": "Compare how search is initiated: traditional RAG forces it upfront, while tool-calling RAG lets the LLM decide when and what parameters to search with.",
+          "compare": {
+            "left": {
+              "emoji": "⛓️",
+              "tag": "Traditional RAG",
+              "text": "Search is run automatically on the user's input before the LLM reads it."
+            },
+            "right": {
+              "emoji": "🧠",
+              "tag": "Tool-Calling RAG",
+              "text": "LLM analyzes the query and decides to call the search function with custom arguments."
+            }
+          }
+        }
+      ]
+    },
+    {
+      "type": "practice",
+      "exercises": [
+        {
+          "id": "p1",
+          "type": "multiple_choice",
+          "xp": 2,
+          "prompt": "How does Tool-Calling Retrieval differ from traditional pre-retrieval RAG?",
+          "options": [
+            {
+              "id": "mc1",
+              "text": "It runs a search query before the LLM ever sees the user's prompt.",
+              "correct": false
+            },
+            {
+              "id": "mc2",
+              "text": "The LLM outputs a structured request to call the search tool only when it needs more information.",
+              "correct": true
+            },
+            {
+              "id": "mc3",
+              "text": "It converts the entire vector database into LLM weights.",
+              "correct": false
+            },
+            {
+              "id": "mc4",
+              "text": "It prevents the LLM from using any external tools or APIs.",
+              "correct": false
+            }
+          ],
+          "explain": "Tool-calling retrieval allows the agent to dynamically decide whether it needs to search at all, and it can call the search tool with specific arguments it extracts from the user's input."
+        },
+        {
+          "id": "p2",
+          "type": "true_false",
+          "xp": 2,
+          "prompt": "True or False: In tool-calling retrieval, the LLM can choose not to call the search tool if the user's question can be answered without external data.",
+          "options": [
+            {
+              "id": "tf1",
+              "text": "True",
+              "correct": true
+            },
+            {
+              "id": "tf2",
+              "text": "False",
+              "correct": false
+            }
+          ],
+          "explain": "The LLM decides whether a search is necessary based on the conversation history. If it already has the answer in its context, it can skip calling the tool entirely."
+        },
+        {
+          "id": "p3",
+          "type": "fill_blank",
+          "xp": 2,
+          "prompt": "Fill in the missing concept describing how the LLM knows a search function exists:",
+          "sentence": "An agent knows how to use a search function because we provide a tool declaration.",
+          "blank": "tool declaration",
+          "words": [
+            "tool declaration",
+            "vector database",
+            "prompt template"
+          ],
+          "explain": "The LLM learns what parameters a search tool accepts through a tool declaration, which describes the tool's name, purpose, and required arguments in detail."
+        },
+        {
+          "id": "p4",
+          "type": "spot_the_ai",
+          "xp": 2,
+          "prompt": "Identify the output generated by an AI agent performing tool-calling retrieval mid-reasoning:",
+          "options": [
+            {
+              "id": "sai1",
+              "text": "Let me search the database for company policies regarding remote work in 2023.",
+              "correct": false
+            },
+            {
+              "id": "sai2",
+              "text": "I found two policies regarding remote work. One is from 2023 and the other is from 2024.",
+              "correct": false
+            },
+            {
+              "id": "sai3",
+              "text": "{ \"name\": \"search_database\", \"arguments\": { \"query\": \"remote work policy\", \"year\": 2023 } }",
+              "correct": true
+            }
+          ],
+          "explain": "The third choice shows an agent generating a structured function call request (JSON payload requesting to invoke the search tool) instead of final conversational text."
+        }
+      ]
+    },
+    {
+      "type": "boss",
+      "exercises": [
+        {
+          "id": "b1",
+          "type": "multiple_choice",
+          "xp": 5,
+          "prompt": "When designing a search tool for an agent, why is it crucial to define structured tool parameters, such as a 'query' string and 'date_limit' integer?",
+          "options": [
+            {
+              "id": "opt1",
+              "text": "It forces the LLM to search at the beginning of every turn.",
+              "correct": false
+            },
+            {
+              "id": "opt2",
+              "text": "It translates the user's natural query directly to vector math without LLM reasoning.",
+              "correct": false
+            },
+            {
+              "id": "opt3",
+              "text": "It lets the LLM construct structured arguments and decide if a search is even needed.",
+              "correct": true
+            },
+            {
+              "id": "opt4",
+              "text": "It eliminates the need for vector databases entirely.",
+              "correct": false
+            }
+          ],
+          "explain": "Exposing search as a callable tool gives the agent agency over when and how to search. Defining clear, descriptive parameters (like 'search_query' and 'publication_year') allows the model to extract the exact arguments it needs from the conversation to run a precise query."
+        }
+      ]
+    }
+  ]
+}

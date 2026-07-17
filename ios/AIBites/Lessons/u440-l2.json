@@ -1,0 +1,222 @@
+{
+  "id": "u440-l2",
+  "unit": 440,
+  "day": 2202,
+  "tier": "LLM Application Engineering",
+  "tierIcon": "🔌",
+  "title": "Pre-Filtering vs Post-Filtering",
+  "icon": "⏳",
+  "concept": "Filtering candidates before ANN search versus filtering after retrieval, and how each affects recall.",
+  "xp": 15,
+  "hearts": 3,
+  "estMinutes": 7,
+  "segments": [
+    {
+      "type": "warmup",
+      "exercises": [
+        {
+          "id": "w1",
+          "type": "multiple_choice",
+          "xp": 1,
+          "prompt": "What is the primary goal of metadata filtering alongside vector search?",
+          "options": [
+            {
+              "id": "w1",
+              "text": "It replaces vector embeddings completely with keywords.",
+              "correct": false
+            },
+            {
+              "id": "w2",
+              "text": "It combines vector similarity queries with structured constraints like dates or tags.",
+              "correct": true
+            },
+            {
+              "id": "w3",
+              "text": "It only works on image databases, not text databases.",
+              "correct": false
+            }
+          ],
+          "explain": "In the previous lesson, we learned that metadata filtering allows us to combine unstructured vector search with structured criteria like categories, dates, or permissions."
+        }
+      ]
+    },
+    {
+      "type": "teach",
+      "cards": [
+        {
+          "kind": "hook",
+          "icon": "🔀",
+          "title": "Order of Operations Matter",
+          "body": "When combining metadata filters with vector search, the order of operations changes everything. Doing it in the wrong order can make your database return zero results, even when matching documents exist!"
+        },
+        {
+          "kind": "definition",
+          "icon": "🔍",
+          "title": "Pre-filtering vs. Post-filtering",
+          "body": "Pre-filtering narrows down the search space to only matching metadata before performing the vector search. Post-filtering performs the vector search on the entire database first, and then discards results that do not match the metadata criteria."
+        },
+        {
+          "kind": "analogy",
+          "icon": "👕",
+          "title": "The Red Shirt Search",
+          "body": "Imagine searching for a specific red shirt in a messy bedroom. Pre-filtering is like putting on special glasses that make everything except red clothes vanish, then searching the room. Post-filtering is like grabbing the 10 closest pieces of clothing to you, and then throwing away the ones that aren't red."
+        },
+        {
+          "kind": "example",
+          "icon": "💡",
+          "title": "The Search in Action",
+          "body": "If you have 1 million documents and filter for 'Year: 2023' first, you might search through only 50,000 documents (pre-filtering). If you search the whole million first, return the top 10, and then throw away any not from 2023, you might end up with only 1 or 2 documents left (post-filtering)."
+        },
+        {
+          "kind": "mythbust",
+          "icon": "🚫",
+          "title": "The 'Good Enough' Myth",
+          "body": "Many believe post-filtering is always fine because 'the best matches will bubble up anyway.' In reality, if your metadata filter is highly restrictive (like a specific user ID), the top vector matches will rarely overlap with that filter, resulting in empty search results."
+        },
+        {
+          "kind": "visual",
+          "icon": "📊",
+          "title": "Visualizing the Pipeline",
+          "body": "See how the sequence of filtering changes what actually gets evaluated by the vector search.",
+          "compare": {
+            "left": {
+              "emoji": "🛡️",
+              "tag": "Pre-filtering",
+              "text": "Filter matches -> Search remaining candidates. Safe & accurate."
+            },
+            "right": {
+              "emoji": "🗑️",
+              "tag": "Post-filtering",
+              "text": "Search all -> Filter results. High risk of empty results."
+            }
+          }
+        }
+      ]
+    },
+    {
+      "type": "practice",
+      "exercises": [
+        {
+          "id": "p1",
+          "type": "multiple_choice",
+          "xp": 2,
+          "prompt": "Which filtering strategy is highly likely to return empty or very few results if your metadata filter is strict?",
+          "options": [
+            {
+              "id": "mc1",
+              "text": "Pre-filtering",
+              "correct": false
+            },
+            {
+              "id": "mc2",
+              "text": "Post-filtering",
+              "correct": true
+            },
+            {
+              "id": "mc3",
+              "text": "Hybrid indexing",
+              "correct": false
+            },
+            {
+              "id": "mc4",
+              "text": "Dense retrieval",
+              "correct": false
+            }
+          ],
+          "explain": "Post-filtering runs the vector search on the whole database first, and then filters the small list of results. If none of those top results match the filter, they are all discarded, leaving the user with nothing."
+        },
+        {
+          "id": "p2",
+          "type": "true_false",
+          "xp": 2,
+          "prompt": "True or False: Pre-filtering generally yields higher recall than post-filtering because it prevents valid candidates from being ignored during the vector search.",
+          "options": [
+            {
+              "id": "t1",
+              "text": "True",
+              "correct": true
+            },
+            {
+              "id": "f1",
+              "text": "False",
+              "correct": false
+            }
+          ],
+          "explain": "Pre-filtering ensures that 100% of the candidates evaluated during the vector search phase already meet the metadata criteria, preserving recall."
+        },
+        {
+          "id": "p3",
+          "type": "fill_blank",
+          "xp": 2,
+          "prompt": "Fill in the blank to complete the definition of the most reliable filtering order.",
+          "sentence": "To guarantee we get the requested number of relevant, filtered results, we should use pre-filtering to eliminate invalid documents first.",
+          "blank": "pre-filtering",
+          "words": [
+            "pre-filtering",
+            "post-filtering",
+            "no filtering"
+          ],
+          "explain": "Pre-filtering removes non-matching documents before we calculate vector similarities, ensuring we don't waste slots on invalid candidates."
+        },
+        {
+          "id": "p4",
+          "type": "spot_the_ai",
+          "xp": 2,
+          "prompt": "Identify the description that represents a correct Pre-filtering process.",
+          "options": [
+            {
+              "id": "sai1",
+              "text": "We search all library books for similarity, take the top 5, and then check if they are written in French.",
+              "correct": false
+            },
+            {
+              "id": "sai2",
+              "text": "We translate the query into French metadata, search only English books, and then merge the vector scores.",
+              "correct": false
+            },
+            {
+              "id": "sai3",
+              "text": "We isolate only the French books using database indexes, and then perform a vector search exclusively on those books.",
+              "correct": true
+            }
+          ],
+          "explain": "Option B shows a hallucinated or incorrect process. Option C is the correct AI-style retrieval logic: it filters the metadata space first (reducing the candidates to only 'books') and then performs the similarity search on that subset."
+        }
+      ]
+    },
+    {
+      "type": "boss",
+      "exercises": [
+        {
+          "id": "b1",
+          "type": "multiple_choice",
+          "xp": 5,
+          "prompt": "Why does post-filtering often lead to a severe drop in 'recall' (finding all relevant matches) compared to pre-filtering?",
+          "options": [
+            {
+              "id": "b1",
+              "text": "Post-filtering guarantees we get exactly the number of results we asked for.",
+              "correct": false
+            },
+            {
+              "id": "b2",
+              "text": "Post-filtering can leave us with zero results if the top retrieved items don't match our metadata filter.",
+              "correct": true
+            },
+            {
+              "id": "b3",
+              "text": "Pre-filtering is slower because it has to search the entire database twice.",
+              "correct": false
+            },
+            {
+              "id": "b4",
+              "text": "Both methods yield the exact same recall and accuracy in all scenarios.",
+              "correct": false
+            }
+          ],
+          "explain": "With post-filtering, if you ask for the top 5 documents and filter for 'Category: Finance' after the vector search, all top 5 retrieved documents might belong to 'Sports'. Applying the filter afterwards leaves you with 0 results, destroying your recall. Pre-filtering avoids this by only searching within the 'Finance' subset."
+        }
+      ]
+    }
+  ]
+}

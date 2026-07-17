@@ -1,0 +1,222 @@
+{
+  "id": "u475-l3",
+  "unit": 475,
+  "day": 2378,
+  "tier": "LLM Application Engineering",
+  "tierIcon": "🔌",
+  "title": "Streaming Generation",
+  "icon": "🌊",
+  "concept": "Streaming tokens to the user as they're generated instead of waiting for the full response, to improve perceived latency.",
+  "xp": 15,
+  "hearts": 3,
+  "estMinutes": 7,
+  "segments": [
+    {
+      "type": "warmup",
+      "exercises": [
+        {
+          "id": "w1",
+          "type": "multiple_choice",
+          "xp": 1,
+          "prompt": "In our last lesson, we learned about parallelizing pipeline stages. If we need to fetch documents from three different vector databases, what is the fastest way to do it?",
+          "options": [
+            {
+              "id": "opt1",
+              "text": "Fetch from the first, wait for it to finish, then fetch from the second, and so on.",
+              "correct": false
+            },
+            {
+              "id": "opt2",
+              "text": "Send requests to all three databases at the same time and collect the results as they arrive.",
+              "correct": true
+            },
+            {
+              "id": "opt3",
+              "text": "Merge the databases into one massive file on a single hard drive before searching.",
+              "correct": false
+            }
+          ],
+          "explain": "Parallelizing independent tasks (like querying different databases at the same time) cuts down our waiting time to the speed of the single slowest query, rather than the sum of all three."
+        }
+      ]
+    },
+    {
+      "type": "teach",
+      "cards": [
+        {
+          "kind": "hook",
+          "icon": "⏳",
+          "title": "The Pain of Waiting",
+          "body": "Imagine waiting 10 seconds for an AI to finish writing a whole paragraph before you see a single word. It feels slow, boring, and broken, even if the computer is working as fast as it can."
+        },
+        {
+          "kind": "definition",
+          "icon": "🌊",
+          "title": "What is Streaming?",
+          "body": "Streaming generation means sending words (tokens) to the user's screen one by one as they are created by the model, instead of waiting for the entire response to finish rendering on the server."
+        },
+        {
+          "kind": "analogy",
+          "icon": "🍣",
+          "title": "The Sushi Conveyor Belt",
+          "body": "Waiting for a full response is like waiting for a chef to make a 20-piece party platter before you can eat. Streaming is like sitting at a conveyor belt where the chef slides each piece of sushi to you the second it is ready!"
+        },
+        {
+          "kind": "example",
+          "icon": "⚡",
+          "title": "Perceived vs. Real Latency",
+          "body": "While the total time to generate 100 words remains exactly the same, showing the first word in 0.2 seconds makes your app feel instantly responsive compared to showing all 100 words at once after 5 seconds."
+        },
+        {
+          "kind": "mythbust",
+          "icon": "🧙",
+          "title": "Does Streaming Save Compute?",
+          "body": "It is easy to think streaming makes the AI model run faster. It does not! The AI still does the same amount of math; we are just changing how quickly we share the intermediate results with the user."
+        },
+        {
+          "kind": "visual",
+          "icon": "📊",
+          "title": "Traditional vs. Streaming",
+          "body": "Compare how data flows from the server to the client's screen under both methods.",
+          "compare": {
+            "left": {
+              "emoji": "📦",
+              "tag": "Traditional (Buffer)",
+              "text": "Server holds the text until the final period, then sends one massive block of text."
+            },
+            "right": {
+              "emoji": "💧",
+              "tag": "Streaming (Chunked)",
+              "text": "Server sends each word immediately over a continuous connection."
+            }
+          }
+        }
+      ]
+    },
+    {
+      "type": "practice",
+      "exercises": [
+        {
+          "id": "p1",
+          "type": "multiple_choice",
+          "xp": 2,
+          "prompt": "Why does streaming generation improve the user experience of a RAG application?",
+          "options": [
+            {
+              "id": "opt1",
+              "text": "It reduces the actual computational workload of the LLM on the server.",
+              "correct": false
+            },
+            {
+              "id": "opt2",
+              "text": "It lowers the perceived latency by showing the user progress almost instantly.",
+              "correct": true
+            },
+            {
+              "id": "opt3",
+              "text": "It completely eliminates the need to retrieve documents from a database.",
+              "correct": false
+            },
+            {
+              "id": "opt4",
+              "text": "It makes the generated answer more factually accurate.",
+              "correct": false
+            }
+          ],
+          "explain": "Streaming does not change the total time the model takes to generate a full response, but it dramatically lowers 'perceived latency' because the user starts reading right away."
+        },
+        {
+          "id": "p2",
+          "type": "true_false",
+          "xp": 2,
+          "prompt": "Streaming tokens reduces the total amount of energy and mathematical calculations required by the LLM.",
+          "options": [
+            {
+              "id": "opt1",
+              "text": "True",
+              "correct": false
+            },
+            {
+              "id": "opt2",
+              "text": "False",
+              "correct": true
+            }
+          ],
+          "explain": "False. The LLM still generates the exact same tokens using the same computational steps; we are just transmitting them piece-by-piece instead of waiting until the end."
+        },
+        {
+          "id": "p3",
+          "type": "fill_blank",
+          "xp": 2,
+          "prompt": "Fill in the blank to complete this sentence about user perception of application speed.",
+          "sentence": "By sending tokens instantly, we improve perceived latency even if the total generation time remains the same.",
+          "blank": "perceived latency",
+          "words": [
+            "perceived latency",
+            "database storage",
+            "vector dimensions"
+          ],
+          "explain": "Perceived latency is how fast the application feels to the user. Showing the first few words instantly makes the system feel much faster."
+        },
+        {
+          "id": "p4",
+          "type": "spot_the_ai",
+          "xp": 2,
+          "prompt": "Which of the following developers is explaining how to handle a streaming LLM response on a frontend application interface?",
+          "options": [
+            {
+              "id": "opt1",
+              "text": "We store the incoming chunks in a database, run a sorting algorithm on the keys, and then render the sorted array to the UI.",
+              "correct": false
+            },
+            {
+              "id": "opt2",
+              "text": "We listen to the response stream chunk by chunk, appending each new text token directly to the end of our active UI text box.",
+              "correct": true
+            },
+            {
+              "id": "opt3",
+              "text": "We wait for the entire stream to finish, compress it into a ZIP file, and then unpack it for the user to read at their own pace.",
+              "correct": false
+            }
+          ],
+          "explain": "To stream in a frontend UI, you listen to a server-sent events stream and continuously append each new token chunk to the displayed text as it arrives."
+        }
+      ]
+    },
+    {
+      "type": "boss",
+      "exercises": [
+        {
+          "id": "b1",
+          "type": "multiple_choice",
+          "xp": 5,
+          "prompt": "You are building a RAG chatbot. The retrieval step takes 0.5 seconds, and generating the full 150-word answer takes 3.0 seconds (with the first word generated at 0.7 seconds). If you implement streaming, what is the new perceived time-to-first-token for the user?",
+          "options": [
+            {
+              "id": "opt1",
+              "text": "3.5 seconds, because the user must wait for both retrieval and full generation.",
+              "correct": false
+            },
+            {
+              "id": "opt2",
+              "text": "0.5 seconds, because retrieval finishes and the user can see the source documents immediately.",
+              "correct": false
+            },
+            {
+              "id": "opt3",
+              "text": "0.7 seconds, because the user sees the first generated token as soon as it is produced.",
+              "correct": true
+            },
+            {
+              "id": "opt4",
+              "text": "3.0 seconds, because streaming doesn't affect the initial startup overhead of the pipeline.",
+              "correct": false
+            }
+          ],
+          "explain": "Without streaming, the user waits 3.5 seconds (0.5s retrieval + 3.0s full generation) to see anything. With streaming, the user sees the first token at 0.7 seconds (0.5s retrieval + 0.2s to generate the first token), reducing the perceived wait time by 80%!"
+        }
+      ]
+    }
+  ]
+}

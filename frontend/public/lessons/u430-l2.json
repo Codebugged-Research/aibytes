@@ -1,0 +1,222 @@
+{
+  "id": "u430-l2",
+  "unit": 430,
+  "day": 2152,
+  "tier": "LLM Application Engineering",
+  "tierIcon": "🔌",
+  "title": "The Chunking Tradeoff",
+  "icon": "⚖️",
+  "concept": "Small chunks retrieve precisely but lose context; large chunks keep context but retrieve imprecisely.",
+  "xp": 15,
+  "hearts": 3,
+  "estMinutes": 7,
+  "segments": [
+    {
+      "type": "warmup",
+      "exercises": [
+        {
+          "id": "w1",
+          "type": "multiple_choice",
+          "xp": 1,
+          "prompt": "Why shouldn't we embed an entire 50-page PDF document as one single vector?",
+          "options": [
+            {
+              "id": "w_1",
+              "text": "It exceeds model token limits and washes out specific details.",
+              "correct": true
+            },
+            {
+              "id": "w_2",
+              "text": "It makes the vector database run out of physical hard drive space instantly.",
+              "correct": false
+            },
+            {
+              "id": "w_3",
+              "text": "Embedding models can only read documents written in lowercase.",
+              "correct": false
+            }
+          ],
+          "explain": "Embedding models have strict input token limits, and compressing an entire large document into a single vector smushes too much information together, losing specific details."
+        }
+      ]
+    },
+    {
+      "type": "teach",
+      "cards": [
+        {
+          "kind": "hook",
+          "icon": "✂️",
+          "title": "Goldilocks and the Text Slices",
+          "body": "If you slice a document too thin, you get precise fragments but lose the big picture. If you slice it too thick, your search gets muddy and expensive. Finding the sweet spot is key."
+        },
+        {
+          "kind": "definition",
+          "icon": "⚖️",
+          "title": "The Chunking Tradeoff",
+          "body": "The chunking tradeoff is the balance between small and large chunks. Small chunks give precise search results but lack context, while large chunks preserve full context but dilute search precision and waste LLM token limits."
+        },
+        {
+          "kind": "analogy",
+          "icon": "📚",
+          "title": "The Cookbook Dilemma",
+          "body": "Imagine searching for a recipe. Small chunks are like ripping out index cards with single steps: easy to read, but you miss what oven temperature to use. Large chunks are like dragging the entire physical cookbook to the kitchen counter: you get all the context, but it is heavy and cluttered."
+        },
+        {
+          "kind": "example",
+          "icon": "🛍️",
+          "title": "Context in Action",
+          "body": "If you search 'What is the return policy?' in small 10-word chunks, you might retrieve 'Refunds take 5 days.' but miss that it only applies to 'unopened electronics.' Larger chunks keep these details linked together."
+        },
+        {
+          "kind": "mythbust",
+          "icon": "🚫",
+          "title": "Is Smaller Always Better?",
+          "body": "You might think that making chunks as tiny as possible is always best for finding exact matches. However, tiny chunks often strip away pronouns and crucial background info, making the text useless to the LLM."
+        },
+        {
+          "kind": "visual",
+          "icon": "👁️",
+          "title": "Size Comparison",
+          "body": "Compare how chunk size affects what your retrieval system actually 'sees' and sends to the LLM.",
+          "compare": {
+            "left": {
+              "emoji": "🔎",
+              "tag": "Small Chunks",
+              "text": "High precision search, but the LLM gets fragments without context."
+            },
+            "right": {
+              "emoji": "📖",
+              "tag": "Large Chunks",
+              "text": "Rich context for the LLM, but search is less precise and uses more tokens."
+            }
+          }
+        }
+      ]
+    },
+    {
+      "type": "practice",
+      "exercises": [
+        {
+          "id": "p1",
+          "type": "multiple_choice",
+          "xp": 2,
+          "prompt": "What is the main drawback of using extremely small chunks (e.g., single sentences) in a RAG system?",
+          "options": [
+            {
+              "id": "q1_a",
+              "text": "They consume too many LLM tokens.",
+              "correct": false
+            },
+            {
+              "id": "q1_b",
+              "text": "They find precise matches but lack surrounding context.",
+              "correct": true
+            },
+            {
+              "id": "q1_c",
+              "text": "They cannot be converted into vector embeddings at all.",
+              "correct": false
+            },
+            {
+              "id": "q1_d",
+              "text": "They make the vector database crash.",
+              "correct": false
+            }
+          ],
+          "explain": "Small chunks are highly focused, allowing the vector search to find exact sentence matches, but they fail to provide the surrounding context the LLM needs to fully understand the information."
+        },
+        {
+          "id": "p2",
+          "type": "true_false",
+          "xp": 2,
+          "prompt": "True or False: Large chunks make it easier to retrieve highly specific, single-sentence details from a vector search.",
+          "options": [
+            {
+              "id": "tf_true",
+              "text": "True",
+              "correct": false
+            },
+            {
+              "id": "tf_false",
+              "text": "False",
+              "correct": true
+            }
+          ],
+          "explain": "Larger chunks contain more diverse information, which averages out the vector representation and makes it harder to match specific, granular search queries."
+        },
+        {
+          "id": "p3",
+          "type": "fill_blank",
+          "xp": 2,
+          "prompt": "Fill in the blank to complete the rule of thumb for large chunks:",
+          "sentence": "Large chunks keep context but retrieve imprecisely.",
+          "blank": "imprecisely",
+          "words": [
+            "imprecisely",
+            "quickly",
+            "cheaply"
+          ],
+          "explain": "Large chunks keep all the surrounding context but make searches less precise because too many different topics get blended into a single vector."
+        },
+        {
+          "id": "p4",
+          "type": "spot_the_ai",
+          "xp": 2,
+          "prompt": "Which of these explanations about chunking strategies is AI-generated?",
+          "options": [
+            {
+              "id": "sai_1",
+              "text": "Choosing a chunk size of 500 tokens is a common middle-ground starting point for standard text documents.",
+              "correct": false
+            },
+            {
+              "id": "sai_2",
+              "text": "If your LLM needs to compare multiple distant facts, larger chunks or metadata tags are often necessary.",
+              "correct": false
+            },
+            {
+              "id": "sai_3",
+              "text": "You can use semantic quantum shifting to make a chunk infinitely small yet retain 100% of the document's global context.",
+              "correct": true
+            }
+          ],
+          "explain": "Option C is generated by an AI because it hallucinates a bizarre, non-existent technique called 'semantic quantum shifting' and makes unrealistic claims about bypassing physics. Options A and B describe real, standard engineering tradeoffs."
+        }
+      ]
+    },
+    {
+      "type": "boss",
+      "exercises": [
+        {
+          "id": "b1",
+          "type": "multiple_choice",
+          "xp": 5,
+          "prompt": "Advanced systems often use 'Parent Document Retrieval' to solve the chunking tradeoff. How does this strategy work?",
+          "options": [
+            {
+              "id": "opt_1",
+              "text": "It forces the LLM to write shorter answers.",
+              "correct": false
+            },
+            {
+              "id": "opt_2",
+              "text": "It finds matching information using small chunks, but passes the larger parent chunks to the LLM for context.",
+              "correct": true
+            },
+            {
+              "id": "opt_3",
+              "text": "It converts all text into images to bypass chunk size limits entirely.",
+              "correct": false
+            },
+            {
+              "id": "opt_4",
+              "text": "It randomizes chunk sizes dynamically during every search.",
+              "correct": false
+            }
+          ],
+          "explain": "A hybrid approach uses small chunks for the vector search so it is highly accurate, but retrieves the surrounding larger parent chunk to feed to the LLM so it has the full context. This solves the tradeoff by using the strengths of both small and large sizes."
+        }
+      ]
+    }
+  ]
+}

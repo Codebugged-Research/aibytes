@@ -1,0 +1,222 @@
+{
+  "id": "u426-l5",
+  "unit": 426,
+  "day": 2135,
+  "tier": "LLM Application Engineering",
+  "tierIcon": "🔌",
+  "title": "Normalization Before Search",
+  "icon": "📏",
+  "concept": "Why L2-normalizing vectors before indexing keeps distance metrics consistent and comparable.",
+  "xp": 15,
+  "hearts": 3,
+  "estMinutes": 7,
+  "segments": [
+    {
+      "type": "warmup",
+      "exercises": [
+        {
+          "id": "w1",
+          "type": "multiple_choice",
+          "xp": 1,
+          "prompt": "What happens if you use a similarity metric that does not match how your embedding model was trained?",
+          "options": [
+            {
+              "id": "w_1",
+              "text": "It speeds up the search process.",
+              "correct": false
+            },
+            {
+              "id": "w_2",
+              "text": "It silently degrades the quality of search results.",
+              "correct": true
+            },
+            {
+              "id": "w_3",
+              "text": "It throws a system error and stops the application.",
+              "correct": false
+            }
+          ],
+          "explain": "Using a metric different from what the model was trained on (like using Euclidean distance on a model trained for Cosine similarity) will cause poor search results."
+        }
+      ]
+    },
+    {
+      "type": "teach",
+      "cards": [
+        {
+          "kind": "hook",
+          "icon": "🎛️",
+          "title": "The Length Problem",
+          "body": "Have you ever tried to compare two things, but one was measured in giant steps and the other in tiny inches? In vector databases, if your vectors have wildly different lengths, your search metrics will get confused and return bad matches."
+        },
+        {
+          "kind": "definition",
+          "icon": "📏",
+          "title": "What is Vector Normalization?",
+          "body": "Normalization rescales every vector so that its total length (magnitude) equals exactly 1.0. This ensures that only the direction of the vector matters during search, making different similarity metrics behave consistently."
+        },
+        {
+          "kind": "analogy",
+          "icon": "🔦",
+          "title": "The Flashlight Alignment",
+          "body": "Imagine comparing the brightness of different flashlights. If some flashlights are massive searchlights and others are tiny keychains, it's hard to compare just their color. Normalizing vectors is like making every flashlight have the exact same battery power so you only compare their direction."
+        },
+        {
+          "kind": "example",
+          "icon": "💡",
+          "title": "Normalization in Action",
+          "body": "If you have a vector [3.0, 4.0], its length is 5.0. By dividing each number by 5.0, you get the normalized vector [0.6, 0.8], which now has a length of exactly 1.0 but points in the same direction."
+        },
+        {
+          "kind": "mythbust",
+          "icon": "🚫",
+          "title": "Myth: Normalization Destroys Data",
+          "body": "People often think normalizing vectors loses important information. In reality, modern text embedding models pack all semantic meaning into the direction the vector points, meaning length is just useless noise."
+        },
+        {
+          "kind": "visual",
+          "icon": "👁️‍🗨️",
+          "title": "Raw vs. Normalized Vectors",
+          "body": "Comparing raw vectors of different lengths can distort search results, whereas normalized vectors align on a shared boundary for fair comparison.",
+          "compare": {
+            "left": {
+              "emoji": "📈",
+              "tag": "Raw Vectors",
+              "text": "Vectors have different lengths; a long vector can seem 'far' even if pointing in the right direction."
+            },
+            "right": {
+              "emoji": "🎯",
+              "tag": "Normalized Vectors",
+              "text": "All vectors end at the unit circle (length 1.0); only the direction determines similarity."
+            }
+          }
+        }
+      ]
+    },
+    {
+      "type": "practice",
+      "exercises": [
+        {
+          "id": "p1",
+          "type": "multiple_choice",
+          "xp": 2,
+          "prompt": "What is the main benefit of normalizing your vectors before indexing them in a database?",
+          "options": [
+            {
+              "id": "mc_1",
+              "text": "It makes different metrics like Euclidean distance and Cosine similarity equivalent and consistent.",
+              "correct": true
+            },
+            {
+              "id": "mc_2",
+              "text": "It increases the number of dimensions in the vector.",
+              "correct": false
+            },
+            {
+              "id": "mc_3",
+              "text": "It encrypts the vectors for security.",
+              "correct": false
+            },
+            {
+              "id": "mc_4",
+              "text": "It converts float numbers to binary integers.",
+              "correct": false
+            }
+          ],
+          "explain": "When vectors are normalized to a length of 1.0, Euclidean distance and Cosine similarity become mathematically equivalent, making search results consistent and predictable."
+        },
+        {
+          "id": "p2",
+          "type": "true_false",
+          "xp": 2,
+          "prompt": "True or False: Normalizing a vector changes its length to 1.0 but preserves its original direction.",
+          "options": [
+            {
+              "id": "tf_true",
+              "text": "True",
+              "correct": true
+            },
+            {
+              "id": "tf_false",
+              "text": "False",
+              "correct": false
+            }
+          ],
+          "explain": "True! Normalizing a vector changes its length to 1.0 but keeps its direction exactly the same. Since semantic meaning is stored in the direction, no meaning is lost."
+        },
+        {
+          "id": "p3",
+          "type": "fill_blank",
+          "xp": 2,
+          "prompt": "Fill in the missing word to describe the primary effect of vector normalization.",
+          "sentence": "Normalization rescales a vector so that its length is exactly one.",
+          "blank": "length",
+          "words": [
+            "length",
+            "dimension",
+            "angle"
+          ],
+          "explain": "Vector normalization shrinks or stretches every vector so its length becomes exactly 1.0, preserving only the direction."
+        },
+        {
+          "id": "p4",
+          "type": "spot_the_ai",
+          "xp": 2,
+          "prompt": "Identify which description represents an AI assistant demonstrating a correct vector preprocessing step for search consistency.",
+          "options": [
+            {
+              "id": "sai_1",
+              "text": "We query the vector database using the raw embedding returned directly by the API.",
+              "correct": false
+            },
+            {
+              "id": "sai_2",
+              "text": "Before indexing, we divide each vector by its Euclidean norm to guarantee a unit length of 1.0 across the dataset.",
+              "correct": true
+            },
+            {
+              "id": "sai_3",
+              "text": "Cosine similarity measures the angle between two lines, while Euclidean distance measures the straight line between two points.",
+              "correct": false
+            }
+          ],
+          "explain": "Option B shows a typical automated pipeline step where vectors are explicitly normalized (divided by their L2 norm) before database insertion to ensure consistent search results. Option A is a basic database query, and Option C is an explanation of metrics."
+        }
+      ]
+    },
+    {
+      "type": "boss",
+      "exercises": [
+        {
+          "id": "b1",
+          "type": "multiple_choice",
+          "xp": 5,
+          "prompt": "Why do high-performance vector databases often require you to L2-normalize vectors before using Euclidean (L2) distance search?",
+          "options": [
+            {
+              "id": "opt_1",
+              "text": "It allows fast L2 (Euclidean) distance search engines to return the exact same ranking as Cosine Similarity.",
+              "correct": true
+            },
+            {
+              "id": "opt_2",
+              "text": "It doubles the number of dimensions in the vector database to store metadata.",
+              "correct": false
+            },
+            {
+              "id": "opt_3",
+              "text": "It automatically translates text embeddings between different language models.",
+              "correct": false
+            },
+            {
+              "id": "opt_4",
+              "text": "It guarantees that all vector coordinates become positive integers.",
+              "correct": false
+            }
+          ],
+          "explain": "Cosine similarity only cares about the angle between vectors, ignoring their lengths. If we scale all database vectors to a length of 1.0 (normalization), the Euclidean distance (L2) directly mirrors the cosine similarity, allowing us to use ultra-fast, hardware-optimized L2 search engines to get perfect cosine results!"
+        }
+      ]
+    }
+  ]
+}

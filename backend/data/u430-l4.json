@@ -1,0 +1,222 @@
+{
+  "id": "u430-l4",
+  "unit": 430,
+  "day": 2154,
+  "tier": "LLM Application Engineering",
+  "tierIcon": "🔌",
+  "title": "Bad Chunking, Bad Retrieval",
+  "icon": "🧩",
+  "concept": "A worked example showing how splitting mid-sentence or mid-table corrupts the meaning of a retrieved chunk.",
+  "xp": 15,
+  "hearts": 3,
+  "estMinutes": 7,
+  "segments": [
+    {
+      "type": "warmup",
+      "exercises": [
+        {
+          "id": "w1",
+          "type": "multiple_choice",
+          "xp": 1,
+          "prompt": "In the previous lesson, we learned about 'overlap'. What is the main purpose of using an overlap window when chunking?",
+          "options": [
+            {
+              "id": "w_1",
+              "text": "It makes the vector search run twice as fast.",
+              "correct": false
+            },
+            {
+              "id": "w_2",
+              "text": "It helps preserve context by sharing tokens across the boundaries of neighboring chunks.",
+              "correct": true
+            },
+            {
+              "id": "w_3",
+              "text": "It compresses the document size to save storage space in the vector database.",
+              "correct": false
+            }
+          ],
+          "explain": "An overlap window ensures that consecutive chunks share some tokens, preventing context from being completely severed at the boundaries."
+        }
+      ]
+    },
+    {
+      "type": "teach",
+      "cards": [
+        {
+          "kind": "hook",
+          "icon": "✂️",
+          "title": "The Cost of a Bad Cut",
+          "body": "What happens when we split our data poorly? If we slice a document right in the middle of a critical sentence or a financial table, we feed incomplete, misleading puzzle pieces to our LLM."
+        },
+        {
+          "kind": "definition",
+          "icon": "💔",
+          "title": "What is Bad Chunking?",
+          "body": "Bad chunking happens when text is split in ways that destroy structural meaning, such as cutting in the middle of a sentence, a code block, or a data table, leaving fragments that lose their original context."
+        },
+        {
+          "kind": "analogy",
+          "icon": "🗺️",
+          "title": "The Sliced Map Analogy",
+          "body": "Imagine cutting a physical map of a city into perfect squares. If a street name or highway is sliced right down the middle, a delivery driver looking at just one square won't be able to read the full street name and will get lost."
+        },
+        {
+          "kind": "example",
+          "icon": "📝",
+          "title": "A Dangerous Split",
+          "body": "If the sentence 'We do not recommend using Database A because it leaks data' is split after 'Database A', the first chunk reads 'We do not recommend using Database A'. The second chunk reads 'because it leaks data'. A search for 'leaks data' retrieves the second chunk, but the LLM won't know which database is leaking!"
+        },
+        {
+          "kind": "mythbust",
+          "icon": "🚫",
+          "title": "LLMs Aren't Mind Readers",
+          "body": "Many believe that smart LLMs can always reconstruct the missing context of a broken sentence. In reality, if the retrieval step only fetches a fragmented chunk, the LLM has no way of knowing what was in the missing portion."
+        },
+        {
+          "kind": "visual",
+          "icon": "🔍",
+          "title": "Good vs. Bad Chunk Splits",
+          "body": "See how the location of the cut changes the usefulness of the retrieved text.",
+          "compare": {
+            "left": {
+              "emoji": "🟢",
+              "tag": "Smart Cut",
+              "text": "'Chunk 1: ...use Database A. Chunk 2: Database A leaks data.' (Both chunks retain clear, complete meaning)"
+            },
+            "right": {
+              "emoji": "🔴",
+              "tag": "Bad Cut",
+              "text": "'Chunk 1: ...use Database A because it. Chunk 2: leaks data.' (Chunk 2 has no subject and loses all meaning)"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "type": "practice",
+      "exercises": [
+        {
+          "id": "p1",
+          "type": "multiple_choice",
+          "xp": 2,
+          "prompt": "If the sentence 'You should NOT buy Product X' is split exactly before 'NOT', why does the second chunk ('NOT buy Product X') fail during search?",
+          "options": [
+            {
+              "id": "mc_1",
+              "text": "The chunk will be too long for the LLM's context window.",
+              "correct": false
+            },
+            {
+              "id": "mc_2",
+              "text": "The chunk loses its context and cannot be matched accurately to relevant user queries.",
+              "correct": true
+            },
+            {
+              "id": "mc_3",
+              "text": "The vector database will reject the chunk because it contains short words.",
+              "correct": false
+            },
+            {
+              "id": "mc_4",
+              "text": "The chunk's characters will be scrambled during embedding creation.",
+              "correct": false
+            }
+          ],
+          "explain": "A chunk containing only 'not' is completely stripped of the subject and action, making it impossible for the embedding model to match it to a user's question about product recommendations."
+        },
+        {
+          "id": "p2",
+          "type": "true_false",
+          "xp": 2,
+          "prompt": "True or False: Using a standard token overlap completely guarantees that complex tables will never be split or corrupted during chunking.",
+          "options": [
+            {
+              "id": "tf_1",
+              "text": "True",
+              "correct": false
+            },
+            {
+              "id": "tf_2",
+              "text": "False",
+              "correct": true
+            }
+          ],
+          "explain": "Even with overlap, splitting mid-table can break structural syntax, and if the overlap isn't large enough, vital context like table headers will still be lost."
+        },
+        {
+          "id": "p3",
+          "type": "fill_blank",
+          "xp": 2,
+          "prompt": "Fill in the blank to complete the explanation of why bad chunking harms retrieval:",
+          "sentence": "When you split text in the middle of a sentence, you destroy the meaning of the retrieved chunk.",
+          "blank": "meaning",
+          "words": [
+            "meaning",
+            "speed",
+            "formatting"
+          ],
+          "explain": "Splitting text at arbitrary character limits without looking at boundaries can ruin the meaning, making it impossible for the LLM to answer correctly."
+        },
+        {
+          "id": "p4",
+          "type": "spot_the_ai",
+          "xp": 2,
+          "prompt": "An LLM is fed a broken chunk that says: '...is not secure and leaks private user data.' Which response shows the AI hallucinating because of this bad chunk?",
+          "options": [
+            {
+              "id": "sai_1",
+              "text": "Based on the provided document, the warning states that Database X is prone to leaking data.",
+              "correct": false
+            },
+            {
+              "id": "sai_2",
+              "text": "I cannot determine which database leaks data because the retrieved text fragment is cut off.",
+              "correct": false
+            },
+            {
+              "id": "sai_3",
+              "text": "According to the system files, Database Null is highly dangerous and leaks data constantly.",
+              "correct": true
+            }
+          ],
+          "explain": "Option C shows a classic robotic hallucination pattern where it invents a fake database name ('Database Null') because the input chunk was cut off mid-sentence and lacked the actual subject."
+        }
+      ]
+    },
+    {
+      "type": "boss",
+      "exercises": [
+        {
+          "id": "b1",
+          "type": "multiple_choice",
+          "xp": 5,
+          "prompt": "Imagine a chunk boundary slices directly through the middle of a Markdown table containing employee salaries. Why does this ruin the LLM's answer when it reads only the second chunk?",
+          "options": [
+            {
+              "id": "opt_1",
+              "text": "The LLM will automatically query the vector database to retrieve the missing half of the table.",
+              "correct": false
+            },
+            {
+              "id": "opt_2",
+              "text": "The semantic embedding vector will become longer, making the retrieval step faster.",
+              "correct": false
+            },
+            {
+              "id": "opt_3",
+              "text": "The table formatting breaks, stripping away the column headers and leading to corrupted data analysis.",
+              "correct": true
+            },
+            {
+              "id": "opt_4",
+              "text": "The embedding model will automatically repair the broken syntax using machine learning.",
+              "correct": false
+            }
+          ],
+          "explain": "If you split a dataset directly in the middle of a data structure like a markdown table, you destroy the structural syntax (like headers and column dividers). The LLM will receive fragmented rows without context, failing to extract the correct relationship."
+        }
+      ]
+    }
+  ]
+}

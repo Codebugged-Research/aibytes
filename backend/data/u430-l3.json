@@ -1,0 +1,222 @@
+{
+  "id": "u430-l3",
+  "unit": 430,
+  "day": 2153,
+  "tier": "LLM Application Engineering",
+  "tierIcon": "🔌",
+  "title": "Chunk Size & Overlap",
+  "icon": "🧩",
+  "concept": "Choosing a token/character chunk size and an overlap window so context isn't severed at chunk boundaries.",
+  "xp": 15,
+  "hearts": 3,
+  "estMinutes": 7,
+  "segments": [
+    {
+      "type": "warmup",
+      "exercises": [
+        {
+          "id": "w1",
+          "type": "multiple_choice",
+          "xp": 1,
+          "prompt": "In our last lesson, we learned about the chunking tradeoff. Which of the following best-of-both-worlds tradeoff. Which statement best summarizes it?",
+          "options": [
+            {
+              "id": "w_1",
+              "text": "Small chunks always result in higher accuracy because they fit more information.",
+              "correct": false
+            },
+            {
+              "id": "w_2",
+              "text": "Small chunks retrieve precise facts but lack context; large chunks keep context but lose precision.",
+              "correct": true
+            },
+            {
+              "id": "w_3",
+              "text": "Large chunks are always better because vector databases can search them faster.",
+              "correct": false
+            }
+          ],
+          "explain": "Small chunks pinpoint specific facts but strip away the surrounding context; large chunks keep context but introduce noise and lower retrieval precision."
+        }
+      ]
+    },
+    {
+      "type": "teach",
+      "cards": [
+        {
+          "kind": "hook",
+          "icon": "✂️",
+          "title": "The Broken Sentence Dilemma",
+          "body": "What happens if a critical sentence gets split right in the middle, with half in one chunk and half in another? The LLM might completely miss the connection, leading to incorrect or incomplete answers."
+        },
+        {
+          "kind": "definition",
+          "icon": "📏",
+          "title": "Size and Overlap Defined",
+          "body": "Chunk size is the maximum number of characters or tokens in each piece of text. Overlap is the number of tokens shared between adjacent chunks, which prevents important information from being cut in half at the boundary."
+        },
+        {
+          "kind": "analogy",
+          "icon": "🥖",
+          "title": "The Sandwich Slice Analogy",
+          "body": "Imagine slicing a long loaf of French bread to make sandwiches. If you cut it straight down, the ingredients at the edge might fall out. Instead, you overlap the cuts slightly, ensuring every slice contains a complete, delicious bite of the filling."
+        },
+        {
+          "kind": "example",
+          "icon": "📝",
+          "title": "Bridging the Gap",
+          "body": "If you set a chunk size of 100 words and an overlap of 20 words, Chunk 1 contains words 1 to 100. Chunk 2 starts at word 81 and goes to 180. The 20-word overlap acts as a bridge so facts aren't lost in the crack."
+        },
+        {
+          "kind": "mythbust",
+          "icon": "🕵️",
+          "title": "Is Overlap Wasteful?",
+          "body": "People often think that adding overlap is wasteful because it duplicates text. In reality, a small amount of duplicate text at the edges is essential for preserving the semantic meaning of sentences that span the boundaries."
+        },
+        {
+          "kind": "visual",
+          "icon": "👁️",
+          "title": "Visualizing the Boundary",
+          "body": "See how introducing an overlap ensures that sentences crossing the boundary aren't broken into pieces that lose their meaning.",
+          "compare": {
+            "left": {
+              "emoji": "❌",
+              "tag": "No Overlap",
+              "text": "Chunk A ends at 'The key code is...' and Chunk B starts with '...1234.' The connection is lost."
+            },
+            "right": {
+              "emoji": "✅",
+              "tag": "With Overlap",
+              "text": "Chunk A ends with 'key code is 1234.' Chunk B starts with 'code is 1234. Keep it secret.' The context is preserved."
+            }
+          }
+        }
+      ]
+    },
+    {
+      "type": "practice",
+      "exercises": [
+        {
+          "id": "p1",
+          "type": "multiple_choice",
+          "xp": 2,
+          "prompt": "What is the primary risk of using a very small chunk size with zero overlap?",
+          "options": [
+            {
+              "id": "mc_1",
+              "text": "The search engine will run much faster.",
+              "correct": false
+            },
+            {
+              "id": "mc_2",
+              "text": "Sentences get cut in half, destroying their meaning.",
+              "correct": true
+            },
+            {
+              "id": "mc_3",
+              "text": "The database will automatically merge them back together.",
+              "correct": false
+            },
+            {
+              "id": "mc_4",
+              "text": "The LLM will refuse to read the chunks.",
+              "correct": false
+            }
+          ],
+          "explain": "When chunk size is too small and there is no overlap, sentences are cut off mid-thought, destroying the context the LLM needs to understand the passage."
+        },
+        {
+          "id": "p2",
+          "type": "true_false",
+          "xp": 2,
+          "prompt": "True or False: A common rule of thumb is to set the overlap size to about 10% to 20% of your total chunk size.",
+          "options": [
+            {
+              "id": "tf_true",
+              "text": "True",
+              "correct": true
+            },
+            {
+              "id": "tf_false",
+              "text": "False",
+              "correct": false
+            }
+          ],
+          "explain": "An overlap of 10% to 20% of the chunk size is a very common starting point in engineering to balance context preservation with vector database storage efficiency."
+        },
+        {
+          "id": "p3",
+          "type": "fill_blank",
+          "xp": 2,
+          "prompt": "Fill in the missing term that helps connect two adjacent chunks:",
+          "sentence": "To prevent losing context at the boundaries of your chunks, you should include a small overlap between them.",
+          "blank": "overlap",
+          "words": [
+            "overlap",
+            "gap",
+            "divider"
+          ],
+          "explain": "An overlap window duplicates a small portion of text from the end of one chunk to the start of the next to preserve context."
+        },
+        {
+          "id": "p4",
+          "type": "spot_the_ai",
+          "xp": 2,
+          "prompt": "Which explanation of chunk overlap sounds like it was generated by an AI trying to sound overly academic?",
+          "options": [
+            {
+              "id": "sai_1",
+              "text": "I usually start with a chunk size of 500 characters and a 50-character overlap, then adjust based on how long my average paragraphs are.",
+              "correct": false
+            },
+            {
+              "id": "sai_2",
+              "text": "Without overlap, if a name is at the very end of chunk one and their phone number is at the start of chunk two, the database won't connect them.",
+              "correct": false
+            },
+            {
+              "id": "sai_3",
+              "text": "Utilizing highly-overlapping windowing architectures ensures the semantic preservation of tokenized boundary instances across vector databases.",
+              "correct": true
+            }
+          ],
+          "explain": "Option C contains unnatural phrasing ('highly-overlapping windowing architectures') and reads like an AI trying to sound overly technical about a simple parameter setting. Options A and B are natural, developer-centric explanations."
+        }
+      ]
+    },
+    {
+      "type": "boss",
+      "exercises": [
+        {
+          "id": "b1",
+          "type": "multiple_choice",
+          "xp": 5,
+          "prompt": "You are designing a RAG system for long legal contracts. You want to extract detailed clauses without losing the surrounding paragraph's context. Which configuration balance is most appropriate?",
+          "options": [
+            {
+              "id": "opt_1",
+              "text": "Chunk size 100 tokens, overlap 100 tokens",
+              "correct": false
+            },
+            {
+              "id": "opt_2",
+              "text": "Chunk size 1000 tokens, overlap 200 tokens",
+              "correct": true
+            },
+            {
+              "id": "opt_3",
+              "text": "Chunk size 1000 tokens, overlap 0 tokens",
+              "correct": false
+            },
+            {
+              "id": "opt_4",
+              "text": "Chunk size 50 tokens, overlap 5 tokens",
+              "correct": false
+            }
+          ],
+          "explain": "An overlap of 200 tokens (20%) is large enough to keep the context of sentences that span the boundary of a 1000-token chunk, while leaving 80% new content in each chunk to cover the document efficiently without excessive redundancy."
+        }
+      ]
+    }
+  ]
+}

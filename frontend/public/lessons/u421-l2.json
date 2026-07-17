@@ -1,0 +1,222 @@
+{
+  "id": "u421-l2",
+  "unit": 421,
+  "day": 2107,
+  "tier": "LLM Application Engineering",
+  "tierIcon": "🔌",
+  "title": "Greedy Selection Under a Budget",
+  "icon": "🎒",
+  "concept": "A knapsack-style greedy algorithm for filling a fixed token budget with the highest-value context first.",
+  "xp": 15,
+  "hearts": 3,
+  "estMinutes": 7,
+  "segments": [
+    {
+      "type": "warmup",
+      "exercises": [
+        {
+          "id": "w1",
+          "type": "multiple_choice",
+          "xp": 1,
+          "prompt": "Quick recap: what did we do BEFORE deciding which context pieces make it into the budget?",
+          "options": [
+            {
+              "id": "a",
+              "text": "We assigned each candidate a relevance score",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "We deleted all the candidates",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "We asked the model to guess randomly",
+              "correct": false
+            }
+          ],
+          "explain": "Right! Last lesson we learned to score each candidate piece of context for relevance. This lesson builds on that by using those scores to decide what actually fits in our limited token budget."
+        }
+      ]
+    },
+    {
+      "type": "teach",
+      "cards": [
+        {
+          "kind": "hook",
+          "icon": "🧳",
+          "title": "Too Much Stuff, Too Little Room",
+          "body": "Imagine you scored 20 pieces of context as 'highly relevant' — but your model only has room for 5 of them. Which ones actually make it in? That's the problem greedy selection solves."
+        },
+        {
+          "kind": "definition",
+          "icon": "📥",
+          "title": "Greedy Selection Under a Budget",
+          "body": "Once every candidate has a relevance score, sort them from highest to lowest. Then walk down the list, adding each piece to your context window only if it still fits in your token budget — skipping any that don't."
+        },
+        {
+          "kind": "analogy",
+          "icon": "🎒",
+          "title": "Packing a Backpack for a Trip",
+          "body": "You have a small backpack and a pile of items you WISH you could bring. You grab the most valuable stuff first, item by item, until the backpack is full. That's greedy selection: highest value first, until the budget runs out."
+        },
+        {
+          "kind": "example",
+          "icon": "📄",
+          "title": "Filling a 500-Token Window",
+          "body": "Say you scored 5 documents and have 500 tokens to spend. You sort them best-to-worst: Doc C (score 9, 200 tokens), Doc A (score 8, 350 tokens), Doc E (score 7, 100 tokens). Greedy adds Doc C (200 used), tries Doc A but 200+350=550 is too big so it's skipped, then adds Doc E (200+100=300, fits!). Final context: Doc C + Doc E."
+        },
+        {
+          "kind": "mythbust",
+          "icon": "🚫",
+          "title": "Myth: More Relevant Always Means Included",
+          "body": "You might think 'just include everything above a relevance threshold.' But if those items together are bigger than your token budget, some must be cut. Greedy selection is how you decide which ones to keep when space runs out."
+        },
+        {
+          "kind": "visual",
+          "icon": "⚖️",
+          "title": "Greedy vs. Grab Everything",
+          "body": "Greedy selection respects the budget by checking fit before adding. Grabbing everything relevant ignores the budget entirely and can blow past your limit.",
+          "compare": {
+            "left": {
+              "emoji": "🎒",
+              "tag": "Greedy Under Budget",
+              "text": "Sorts by score, adds items only if they still fit — nothing overflows."
+            },
+            "right": {
+              "emoji": "💥",
+              "tag": "Grab Everything Relevant",
+              "text": "Includes all high-scoring items regardless of size — budget overflows, gets truncated messily."
+            }
+          }
+        }
+      ]
+    },
+    {
+      "type": "practice",
+      "exercises": [
+        {
+          "id": "p1",
+          "type": "multiple_choice",
+          "xp": 2,
+          "prompt": "You have a 1000-token budget. After sorting by relevance score, the top item takes 900 tokens and the second item takes 150 tokens. What does greedy selection do?",
+          "options": [
+            {
+              "id": "a",
+              "text": "Includes the top item (900) and skips the second (150 won't fit in the remaining 100)",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "Includes both items no matter what, since they're both high scoring",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "Skips the top item and only includes the second item",
+              "correct": false
+            },
+            {
+              "id": "d",
+              "text": "Refuses to include anything since neither is a perfect fit",
+              "correct": false
+            }
+          ],
+          "explain": "Greedy takes the highest-scored item first (900 tokens, using most of the budget), leaving only 100 tokens remaining. The second item needs 150 tokens, which doesn't fit, so it's skipped — even though it's still a decent candidate."
+        },
+        {
+          "id": "p2",
+          "type": "true_false",
+          "xp": 2,
+          "prompt": "True or False: Greedy selection always finds the absolute best combination of context that fits the token budget.",
+          "options": [
+            {
+              "id": "a",
+              "text": "True",
+              "correct": false
+            },
+            {
+              "id": "b",
+              "text": "False",
+              "correct": true
+            }
+          ],
+          "explain": "False! Greedy selection is fast and simple, but it's an approximation. Sometimes skipping a big high-scored item in favor of two smaller lower-scored items would pack the budget better — greedy doesn't look ahead to check that, it just goes down the sorted list."
+        },
+        {
+          "id": "p3",
+          "type": "fill_blank",
+          "xp": 2,
+          "prompt": "Fill in the blank.",
+          "sentence": "Greedy selection sorts candidates by score and adds each one only if it still fits the token budget.",
+          "blank": "budget",
+          "words": [
+            "budget",
+            "score",
+            "backpack"
+          ],
+          "explain": "The whole point of greedy selection under a budget is checking whether each candidate still fits inside the remaining token budget before adding it."
+        },
+        {
+          "id": "p4",
+          "type": "spot_the_ai",
+          "xp": 2,
+          "prompt": "Which of these descriptions was likely written by an AI trying to sound impressive but actually gets greedy selection wrong?",
+          "options": [
+            {
+              "id": "a",
+              "text": "Greedy selection sorts context by relevance score, then adds items one by one while they still fit the token budget, skipping ones that don't.",
+              "correct": false
+            },
+            {
+              "id": "b",
+              "text": "Greedy selection guarantees the absolute best possible combination of context by exhaustively trying every possible mathematical arrangement of the token space-time continuum.",
+              "correct": true
+            },
+            {
+              "id": "c",
+              "text": "Greedy selection is a simple, fast way to pick context, though it may skip a slightly-lower-scored item that would have fit better than a higher-scored one.",
+              "correct": false
+            }
+          ],
+          "explain": "Option B uses fancy-sounding but meaningless jargon ('space-time continuum') and makes a false claim — greedy selection is a fast approximation, NOT a guarantee of the best possible combination. The other two options accurately describe how greedy selection works and its real limitations."
+        }
+      ]
+    },
+    {
+      "type": "boss",
+      "exercises": [
+        {
+          "id": "b1",
+          "type": "multiple_choice",
+          "xp": 5,
+          "prompt": "You're building a context window with a 1000-token budget. You have candidates scored: A(score 9, 300 tokens), B(score 8, 800 tokens), C(score 7, 400 tokens), D(score 6, 200 tokens). Using greedy selection by score, which items get included?",
+          "options": [
+            {
+              "id": "a",
+              "text": "A and B only, since those are the two highest scores",
+              "correct": false
+            },
+            {
+              "id": "b",
+              "text": "A, C, and D — B is skipped because it doesn't fit after A is taken",
+              "correct": true
+            },
+            {
+              "id": "c",
+              "text": "Just B, because it has the second-highest score and is the biggest item",
+              "correct": false
+            },
+            {
+              "id": "d",
+              "text": "All four items, since the budget doesn't really matter",
+              "correct": false
+            }
+          ],
+          "explain": "Greedy selection sorts by score (A=9, B=8, C=7, D=6) and adds items in that order as long as they fit. A (300) fits, using 300/1000. Next is B (800), but 300+800=1100 exceeds 1000, so B is skipped. Next is C (400): 300+400=700, fits! Next is D (200): 700+200=900, fits! Final picks: A, C, D using 900 of 1000 tokens. This shows why greedy isn't just 'take the top scorers' — it's 'take the next-best thing that still fits,' skipping over anything too big for the remaining space."
+        }
+      ]
+    }
+  ]
+}

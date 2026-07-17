@@ -1,0 +1,222 @@
+{
+  "id": "u418-l5",
+  "unit": 418,
+  "day": 2095,
+  "tier": "LLM Application Engineering",
+  "tierIcon": "🔌",
+  "title": "Lossy Compression Risks",
+  "icon": "🕳️",
+  "concept": "How over-aggressive compression silently drops facts the model later needs, and how to detect it.",
+  "xp": 15,
+  "hearts": 3,
+  "estMinutes": 7,
+  "segments": [
+    {
+      "type": "warmup",
+      "exercises": [
+        {
+          "id": "w1",
+          "type": "multiple_choice",
+          "xp": 1,
+          "prompt": "Quick recap: what does a rolling conversation summary do?",
+          "options": [
+            {
+              "id": "a",
+              "text": "Periodically collapses older turns into a running summary so the context doesn't grow forever",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "Deletes the entire conversation after every message",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "Translates the conversation into another language",
+              "correct": false
+            }
+          ],
+          "explain": "Right — rolling summaries keep long conversations manageable by periodically compressing older turns into a shorter running summary, so the model doesn't need to hold every single past message in full."
+        }
+      ]
+    },
+    {
+      "type": "teach",
+      "cards": [
+        {
+          "kind": "hook",
+          "icon": "🕳️",
+          "title": "The bug that never throws an error",
+          "body": "Your summarizer runs perfectly, no errors, no warnings — and yet the model gives a wrong answer because a fact vanished during compression. That's the scary part: lossy compression fails silently, not loudly."
+        },
+        {
+          "kind": "definition",
+          "icon": "📉",
+          "title": "What is lossy compression risk?",
+          "body": "Lossy compression means some information is permanently gone after squeezing — you can't get it back. In context management, this happens when a summary or truncation quietly drops a fact the model needed for a later answer, and nobody notices until the answer is wrong."
+        },
+        {
+          "kind": "analogy",
+          "icon": "🧳",
+          "title": "Packing for a trip, but too small a bag",
+          "body": "Imagine cramming a week's clothes into a tiny backpack. You leave out your charger 'to save space' — fine until your phone dies on day 3. Over-aggressive summarization does the same: it throws away a 'small' detail that turns out to be essential later."
+        },
+        {
+          "kind": "example",
+          "icon": "📝",
+          "title": "A silent drop in action",
+          "body": "A user says 'I'm allergic to peanuts' in turn 2. By turn 40, the rolling summary has been rewritten five times and that detail got trimmed as 'minor.' Later the assistant suggests a recipe with peanut butter — the compression didn't crash, it just quietly forgot something critical."
+        },
+        {
+          "kind": "mythbust",
+          "icon": "🚫",
+          "title": "Myth: 'Shorter summary = better summary'",
+          "body": "Not true. A summary that's short but missing a critical fact is worse than a longer one that keeps it. The goal isn't minimal length — it's keeping everything the model will actually need later, even if that means being a bit less aggressive."
+        },
+        {
+          "kind": "visual",
+          "icon": "⚖️",
+          "title": "Safe compression vs. risky compression",
+          "body": "The difference isn't about length — it's about what survives the squeeze.",
+          "compare": {
+            "left": {
+              "emoji": "✅",
+              "tag": "Safe compression",
+              "text": "Drops filler ('um, so anyway...') but keeps facts like names, IDs, allergies, decisions made"
+            },
+            "right": {
+              "emoji": "⚠️",
+              "tag": "Risky compression",
+              "text": "Shrinks text by cutting whatever seems 'least recent,' even if that's the one fact the model will need 30 turns later"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "type": "practice",
+      "exercises": [
+        {
+          "id": "p1",
+          "type": "multiple_choice",
+          "xp": 2,
+          "prompt": "Which of these is the BEST way to detect that a summarization pipeline is losing important facts?",
+          "options": [
+            {
+              "id": "a",
+              "text": "Assume it's fine as long as the summary is grammatically correct",
+              "correct": false
+            },
+            {
+              "id": "b",
+              "text": "Periodically compare model answers (or the summary) against the original full transcript to check if key facts survived",
+              "correct": true
+            },
+            {
+              "id": "c",
+              "text": "Make the summary shorter so there's less to check",
+              "correct": false
+            },
+            {
+              "id": "d",
+              "text": "Only test the system once before launch and never again",
+              "correct": false
+            }
+          ],
+          "explain": "Since lossy compression fails silently, you have to actively audit for it — spot-checking summaries against the original conversation (or testing whether the model still knows key facts) is how you catch drops before they cause bad answers in production."
+        },
+        {
+          "id": "p2",
+          "type": "true_false",
+          "xp": 2,
+          "prompt": "True or False: If a summarization system runs without any errors, you can be confident no important information was lost.",
+          "options": [
+            {
+              "id": "a",
+              "text": "True",
+              "correct": false
+            },
+            {
+              "id": "b",
+              "text": "False",
+              "correct": true
+            }
+          ],
+          "explain": "False — lossy compression is silent by nature. The code can run perfectly with zero errors while still dropping a fact the model needed later. Absence of errors tells you the code worked, not that the content survived."
+        },
+        {
+          "id": "p3",
+          "type": "fill_blank",
+          "xp": 2,
+          "prompt": "Fill in the blank:",
+          "sentence": "Lossy compression is risky because it can drop important facts silently, with no warning that anything went wrong.",
+          "blank": "silently",
+          "words": [
+            "silently",
+            "loudly",
+            "instantly"
+          ],
+          "explain": "The defining danger of lossy compression is that it doesn't throw an error or warning — it just silently removes information, so the failure only shows up later as a wrong or confused answer."
+        },
+        {
+          "id": "p4",
+          "type": "spot_the_ai",
+          "xp": 2,
+          "prompt": "Which of these summary snippets was likely written by an AI that over-compressed and dropped a critical detail?",
+          "options": [
+            {
+              "id": "a",
+              "text": "'User discussed dietary needs, including a peanut allergy, and asked for dinner ideas.'",
+              "correct": false
+            },
+            {
+              "id": "b",
+              "text": "'User asked about dinner ideas and mentioned some food preferences.'",
+              "correct": true
+            },
+            {
+              "id": "c",
+              "text": "'User has a peanut allergy and wants quick, nut-free dinner recipes.'",
+              "correct": false
+            }
+          ],
+          "explain": "Option B is vague and drops the specific, safety-critical fact (peanut allergy) into a fuzzy phrase like 'some food preferences.' That's the classic sign of over-aggressive summarization: it sounds fine but silently discarded the one detail that actually mattered."
+        }
+      ]
+    },
+    {
+      "type": "boss",
+      "exercises": [
+        {
+          "id": "b1",
+          "type": "multiple_choice",
+          "xp": 5,
+          "prompt": "Your support-bot summarizes conversations every 10 turns to save tokens. A user reports: 'I told it my account was on the Enterprise plan, but 20 turns later it recommended a Starter-plan-only feature and acted like it didn't know my plan.' What's the BEST fix?",
+          "options": [
+            {
+              "id": "a",
+              "text": "Summarize even more aggressively so the bot moves faster",
+              "correct": false
+            },
+            {
+              "id": "b",
+              "text": "Extract and pin key facts (like plan tier, account ID) outside the rolling summary so they can't be dropped, and audit summaries for silent fact loss",
+              "correct": true
+            },
+            {
+              "id": "c",
+              "text": "Tell the user to repeat their plan tier every message",
+              "correct": false
+            },
+            {
+              "id": "d",
+              "text": "Switch to a bigger font in the chat UI",
+              "correct": false
+            }
+          ],
+          "explain": "This is exactly the lossy compression trap: a fact that matters long-term (account plan) got silently squeezed out during summarization. The fix isn't more compression or blaming the user — it's identifying which facts are load-bearing and protecting them (e.g., a structured 'key facts' slot alongside the summary) plus regularly checking summaries against the original transcript to catch silent drops before they cause bad answers. That's the end of this unit on Context Compression — nice work! You've now got the full toolkit: chunking, retrieval, summarization, and knowing when compression is safe versus risky."
+        }
+      ]
+    }
+  ]
+}

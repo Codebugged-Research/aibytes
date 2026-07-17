@@ -1,0 +1,222 @@
+{
+  "id": "u413-l4",
+  "unit": 413,
+  "day": 2069,
+  "tier": "LLM Application Engineering",
+  "tierIcon": "🔌",
+  "title": "Error Propagation in Chains",
+  "icon": "\"⚠️\"",
+  "concept": "How a mistake in step one silently corrupts every downstream step; the need for intermediate validation.",
+  "xp": 15,
+  "hearts": 3,
+  "estMinutes": 7,
+  "segments": [
+    {
+      "type": "warmup",
+      "exercises": [
+        {
+          "id": "w1",
+          "type": "multiple_choice",
+          "xp": 1,
+          "prompt": "Quick recap: In map-reduce prompting, what happens in the 'map' phase?",
+          "options": [
+            {
+              "id": "a",
+              "text": "The same prompt is applied separately to many chunks of data",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "All results are combined into one final summary",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "The model draws a literal map of the data",
+              "correct": false
+            }
+          ],
+          "explain": "In the 'map' phase, you apply the same prompt across many chunks in parallel — like summarizing each chapter of a book separately. The 'reduce' phase is what comes after, combining all those individual results into one final output."
+        }
+      ]
+    },
+    {
+      "type": "teach",
+      "cards": [
+        {
+          "kind": "hook",
+          "icon": "🎯",
+          "title": "The Silent Saboteur",
+          "body": "You run a 5-step prompt chain and the final answer looks confident and polished. But step one made a tiny mistake — and now that mistake is hiding inside every step after it, dressed up to look correct."
+        },
+        {
+          "kind": "definition",
+          "icon": "📉",
+          "title": "Error Propagation",
+          "body": "Error propagation is when a mistake made in an early step of a prompt chain doesn't stay contained — it silently flows into every step after it, getting reused, restated, and sometimes amplified along the way."
+        },
+        {
+          "kind": "analogy",
+          "icon": "🥪",
+          "title": "The Assembly Line Sandwich",
+          "body": "Imagine a sandwich assembly line: one worker adds meat, the next adds cheese, the next adds sauce. If the first worker grabs spoiled meat, every single sandwich down the line is ruined — even though the other workers did their jobs perfectly."
+        },
+        {
+          "kind": "example",
+          "icon": "🧾",
+          "title": "One Wrong Number, Big Mess",
+          "body": "Step 1 extracts 'total sales: $4,500' from a report but misreads it as '$45,000'. Step 2 calculates a 10% bonus using that number. Step 3 writes a congratulatory email about the 'huge bonus.' Nobody typed anything wrong — the chain just faithfully carried the original error forward."
+        },
+        {
+          "kind": "mythbust",
+          "icon": "🚫",
+          "title": "Myth: Later Steps Will Catch Early Mistakes",
+          "body": "Many assume a later step in the chain will notice if something is off. In reality, each step usually just trusts the input it receives and builds on it — LLMs rarely question upstream data unless you explicitly instruct them to check it."
+        },
+        {
+          "kind": "visual",
+          "icon": "🔗",
+          "title": "Unchecked Chain vs. Validated Chain",
+          "body": "Compare a chain with no checks against one that verifies each handoff.",
+          "compare": {
+            "left": {
+              "emoji": "💥",
+              "tag": "No Validation",
+              "text": "Step 1 error → Step 2 trusts it → Step 3 trusts it → confident but wrong final answer"
+            },
+            "right": {
+              "emoji": "✅",
+              "tag": "With Validation",
+              "text": "Step 1 output checked → error caught → fixed before Step 2 even runs"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "type": "practice",
+      "exercises": [
+        {
+          "id": "p1",
+          "type": "multiple_choice",
+          "xp": 2,
+          "prompt": "Why is error propagation especially dangerous in prompt chains?",
+          "options": [
+            {
+              "id": "a",
+              "text": "Because each step's output becomes the next step's input, so errors compound instead of staying isolated",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "Because LLMs run out of memory after step one",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "Because prompt chains always use more tokens than single prompts",
+              "correct": false
+            },
+            {
+              "id": "d",
+              "text": "Because chains can only have two steps maximum",
+              "correct": false
+            }
+          ],
+          "explain": "In a chain, each step depends on the previous one's output. If step one is wrong, step two builds on that wrong foundation, step three builds on step two, and so on — the mistake doesn't just persist, it can get restated as fact and even amplified."
+        },
+        {
+          "id": "p2",
+          "type": "true_false",
+          "xp": 2,
+          "prompt": "True or False: If a prompt chain's final output looks polished and confident, that means all the intermediate steps were correct.",
+          "options": [
+            {
+              "id": "a",
+              "text": "True",
+              "correct": false
+            },
+            {
+              "id": "b",
+              "text": "False",
+              "correct": true
+            }
+          ],
+          "explain": "False. LLMs write confidently even when working from bad or wrong intermediate data. Polished phrasing tells you nothing about whether the underlying facts were correct — that's exactly why intermediate validation matters."
+        },
+        {
+          "id": "p3",
+          "type": "fill_blank",
+          "xp": 2,
+          "prompt": "Fill in the blank:",
+          "sentence": "Without checkpoints, a small mistake in step one can silently corrupt every downstream step in the chain.",
+          "blank": "downstream",
+          "words": [
+            "downstream",
+            "upstream",
+            "final"
+          ],
+          "explain": "'Downstream' describes steps that come after the error — like water flowing down a river, the mistake flows forward into every later step, not backward."
+        },
+        {
+          "id": "p4",
+          "type": "spot_the_ai",
+          "xp": 2,
+          "prompt": "Which explanation of error propagation sounds AI-generated (generic and vague, not concretely explaining the mechanism)?",
+          "options": [
+            {
+              "id": "a",
+              "text": "Error propagation is a nuanced phenomenon that leverages sequential dependencies to holistically impact overall system output quality.",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "If step 1 mislabels a review as positive, step 2 will summarize it as positive, and step 3 will draft a reply thanking a customer who actually complained.",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "A wrong date extracted in step 1 gets used to calculate a due date in step 2, and that wrong due date shows up in the final reminder email.",
+              "correct": false
+            }
+          ],
+          "explain": "Option A is stuffed with vague buzzwords ('leverages,' 'holistically,' 'nuanced phenomenon') but never explains an actual mechanism — that's a classic AI-filler pattern. The other two options give a specific, traceable example of exactly how one error causes the next."
+        }
+      ]
+    },
+    {
+      "type": "boss",
+      "exercises": [
+        {
+          "id": "b1",
+          "type": "multiple_choice",
+          "xp": 5,
+          "prompt": "A 4-step chain: (1) extract customer complaints from reviews, (2) categorize each complaint, (3) summarize categories, (4) draft a response email. Step 1 accidentally extracts compliments instead of complaints. What's the BEST fix strategy going forward?",
+          "options": [
+            {
+              "id": "a",
+              "text": "Rewrite step 4's prompt to be more polite",
+              "correct": false
+            },
+            {
+              "id": "b",
+              "text": "Add a validation check after step 1 to confirm outputs are actually complaints before continuing",
+              "correct": true
+            },
+            {
+              "id": "c",
+              "text": "Run the whole chain twice and hope one attempt is correct",
+              "correct": false
+            },
+            {
+              "id": "d",
+              "text": "Combine all 4 steps into one giant prompt so errors can't happen",
+              "correct": false
+            }
+          ],
+          "explain": "The error started at step 1, so that's exactly where you need a checkpoint — a quick validation that catches 'these aren't complaints' before the mistake flows into categorizing, summarizing, and emailing. Fixing later steps (like step 4's tone) does nothing because the wrong data is already baked in by then. Merging everything into one giant prompt doesn't add error-catching, it just hides the problem in a bigger black box. The lesson: validate early, validate at every handoff, and you stop garbage from traveling downstream."
+        }
+      ]
+    }
+  ]
+}

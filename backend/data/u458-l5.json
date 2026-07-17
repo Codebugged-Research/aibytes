@@ -1,0 +1,222 @@
+{
+  "id": "u458-l5",
+  "unit": 458,
+  "day": 2295,
+  "tier": "LLM Application Engineering",
+  "tierIcon": "🔌",
+  "title": "Retrieval Pipeline Observability",
+  "icon": "📊",
+  "concept": "Logging what was retrieved, at what scores, so failures can be traced back to a specific pipeline stage.",
+  "xp": 15,
+  "hearts": 3,
+  "estMinutes": 7,
+  "segments": [
+    {
+      "type": "warmup",
+      "exercises": [
+        {
+          "id": "w1",
+          "type": "multiple_choice",
+          "xp": 1,
+          "prompt": "What is the primary goal of Multi-Source Retrieval, which we covered in a retrieval pipeline?",
+          "options": [
+            {
+              "id": "opt_1",
+              "text": "Running the same search query multiple times on the same vector database.",
+              "correct": false
+            },
+            {
+              "id": "opt_2",
+              "text": "Querying different types of databases (like vector, keyword, and code indexes) and merging the results.",
+              "correct": true
+            },
+            {
+              "id": "opt_3",
+              "text": "Using multiple LLMs to write different parts of a single document.",
+              "correct": false
+            }
+          ],
+          "explain": "Multi-Source Retrieval merges matches from different search indexes (like vector databases and keyword indexes) into a unified list to provide richer context for the LLM."
+        }
+      ]
+    },
+    {
+      "type": "teach",
+      "cards": [
+        {
+          "kind": "hook",
+          "icon": "🔦",
+          "title": "The Black Box Problem",
+          "body": "When an LLM gives a bad or outdated response, how do you know if it's the LLM's fault, or if the search engine failed to find the right documents in the first place? Without logging the middle steps, you're debugging in the dark."
+        },
+        {
+          "kind": "definition",
+          "icon": "🔍",
+          "title": "What is Retrieval Observability?",
+          "body": "Retrieval Pipeline Observability means logging the exact inputs, retrieved document IDs, similarity scores, and final rankings at every stage of your search process. This helps you pinpoint exactly where your search system failed to fetch the right information."
+        },
+        {
+          "kind": "analogy",
+          "icon": "📦",
+          "title": "The Shipping Tracker Analogy",
+          "body": "Think of observability like a shipping tracker for a package. If your package goes missing, you don't just want to know it's gone; you want a history log showing exactly when it left the warehouse, which truck it was on, and where it went off-course."
+        },
+        {
+          "kind": "example",
+          "icon": "📝",
+          "title": "Tracing a Query",
+          "body": "When a user searches for 'API key setup', the system logs that the vector search returned Doc A (score 0.85) and Doc B (score 0.42), but after the reranker processed them, Doc B was boosted to score 0.91 because it was more relevant."
+        },
+        {
+          "kind": "mythbust",
+          "icon": "🛡️",
+          "title": "The Myth of the Perfect Search",
+          "body": "It is tempting to think that if your end-to-end system tests pass, your pipeline is fine. In reality, retrieval performance drifts over time as new data is added, and only continuous logging of retrieval scores will catch these silent drops in quality."
+        },
+        {
+          "kind": "visual",
+          "icon": "👁️",
+          "title": "Blind vs. Observable Pipelines",
+          "body": "Compare a blind pipeline where you only see the final text, to an observable pipeline where every step is tracked with scores.",
+          "compare": {
+            "left": {
+              "emoji": "🙈",
+              "tag": "Blind Pipeline",
+              "text": "User Query -> [Black Box Search] -> LLM Answer. If the answer is wrong, you have no idea why."
+            },
+            "right": {
+              "emoji": "👁️",
+              "tag": "Observable Pipeline",
+              "text": "User Query -> Vector Match (0.62) -> Reranked (0.88) -> LLM. Easy to spot where the score dropped."
+            }
+          }
+        }
+      ]
+    },
+    {
+      "type": "practice",
+      "exercises": [
+        {
+          "id": "p1",
+          "type": "multiple_choice",
+          "xp": 2,
+          "prompt": "If you only log the final output sent to the LLM, what problem do you face when debugging a multi-stage retrieval pipeline?",
+          "options": [
+            {
+              "id": "opt_1",
+              "text": "You can easily guess which stage failed by looking at the LLM's final response.",
+              "correct": false
+            },
+            {
+              "id": "opt_2",
+              "text": "You won't know if the document was never retrieved at all, or if it was retrieved but ranked too low.",
+              "correct": true
+            },
+            {
+              "id": "opt_3",
+              "text": "The database will automatically self-correct if you do not log the steps.",
+              "correct": false
+            },
+            {
+              "id": "opt_4",
+              "text": "The LLM will refuse to answer queries if logging is disabled.",
+              "correct": false
+            }
+          ],
+          "explain": "Without logging the intermediate stages, you cannot tell if the retrieval step failed to find the document, or if the reranking step mistakenly demoted it. Every stage must be logged."
+        },
+        {
+          "id": "p2",
+          "type": "true_false",
+          "xp": 2,
+          "prompt": "True or False: Logging retrieval scores helps detect when the search quality degrades over time as new documents are added.",
+          "options": [
+            {
+              "id": "opt_1",
+              "text": "True",
+              "correct": true
+            },
+            {
+              "id": "opt_2",
+              "text": "False",
+              "correct": false
+            }
+          ],
+          "explain": "Logging the raw search scores lets you set up alerts if the average match quality drops, allowing you to catch retrieval degradation before users start seeing bad LLM answers."
+        },
+        {
+          "id": "p3",
+          "type": "fill_blank",
+          "xp": 2,
+          "prompt": "Fill in the missing term to complete the best practice for search debugging:",
+          "sentence": "To debug poor search results, you must log both the retrieved document IDs and their similarity scores.",
+          "blank": "similarity scores",
+          "words": [
+            "similarity scores",
+            "CSS stylesheets",
+            "random seeds"
+          ],
+          "explain": "Logging the similarity scores alongside the document IDs is critical because it tells you how confident the search system was before the LLM even saw the data."
+        },
+        {
+          "id": "p4",
+          "type": "spot_the_ai",
+          "xp": 2,
+          "prompt": "Which of the following represents automated, structured observability logs from a retrieval pipeline?",
+          "options": [
+            {
+              "id": "opt_1",
+              "text": "{\"query\": \"reset password\", \"stage\": \"vector_search\", \"top_k\": [{\"id\": \"doc_99\", \"score\": 0.89}], \"stage\": \"reranker\", \"top_k\": [{\"id\": \"doc_99\", \"score\": 0.95}]}",
+              "correct": true
+            },
+            {
+              "id": "opt_2",
+              "text": "We searched for some files and the user got a password reset email shortly after. Everything looked okay.",
+              "correct": false
+            },
+            {
+              "id": "opt_3",
+              "text": "SELECT * FROM users WHERE email = 'reset@password.com' AND status = 'active';",
+              "correct": false
+            }
+          ],
+          "explain": "The first option represents an automated logging system recording the structured inputs, outputs, and scores of the retrieval pipeline, which is typical of an AI-driven observability system."
+        }
+      ]
+    },
+    {
+      "type": "boss",
+      "exercises": [
+        {
+          "id": "b1",
+          "type": "multiple_choice",
+          "xp": 5,
+          "prompt": "You notice your LLM is hallucinating answers because the perfect source document is ranked #15 in retrieval, but your prompt template only takes the top 3. How should you design your observability logging to isolate and debug this specific ranking issue?",
+          "options": [
+            {
+              "id": "opt_1",
+              "text": "Log the top-K retrieved document IDs before and after the reranking step, along with their raw and adjusted scores.",
+              "correct": true
+            },
+            {
+              "id": "opt_2",
+              "text": "Increase the vector database size and retrain the embedding model from scratch.",
+              "correct": false
+            },
+            {
+              "id": "opt_3",
+              "text": "Hide the search results from the logs to save memory space and avoid processing overhead.",
+              "correct": false
+            },
+            {
+              "id": "opt_4",
+              "text": "Only log the final text answer generated by the LLM at the very end of the pipeline.",
+              "correct": false
+            }
+          ],
+          "explain": "To fix a retrieval pipeline where the correct document exists but is ranked too low, you must inspect both the raw retrieval step (did it fetch the document?) and the reranking stage (did it score it too low?). Logging these intermediate scores and ranks is essential for debugging."
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,222 @@
+{
+  "id": "u464-l4",
+  "unit": 464,
+  "day": 2324,
+  "tier": "LLM Application Engineering",
+  "tierIcon": "🔌",
+  "title": "Merging Results Across Sources",
+  "icon": "🥞",
+  "concept": "Combining and deduplicating context pulled from multiple distinct indexes into one coherent context window.",
+  "xp": 15,
+  "hearts": 3,
+  "estMinutes": 7,
+  "segments": [
+    {
+      "type": "warmup",
+      "exercises": [
+        {
+          "id": "w1",
+          "type": "multiple_choice",
+          "xp": 1,
+          "prompt": "What did we cover in the previous lesson about 'Routing to Retrieval vs No Retrieval'?",
+          "options": [
+            {
+              "id": "warm_1",
+              "text": "It merges SQL tables into vector databases.",
+              "correct": false
+            },
+            {
+              "id": "warm_2",
+              "text": "Deciding whether a query requires retrieving external facts or can be answered directly from the LLM's own knowledge.",
+              "correct": true
+            },
+            {
+              "id": "warm_3",
+              "text": "Adding emojis to the LLM's generated response to make it friendlier.",
+              "correct": false
+            }
+          ],
+          "explain": "In the previous lesson, we learned that a router decides whether a query needs external facts (retrieval) or can be answered directly using the model's built-in (parametric) knowledge."
+        }
+      ]
+    },
+    {
+      "type": "teach",
+      "cards": [
+        {
+          "kind": "hook",
+          "icon": "🎣",
+          "title": "Two Streams, One River",
+          "body": "When your query router searches multiple places at once—like a SQL database and a vector index—you get back a messy pile of overlapping documents. How do we clean this pile up so the LLM gets only the best, non-repetitive facts?"
+        },
+        {
+          "kind": "definition",
+          "icon": "🔀",
+          "title": "What is Result Merging?",
+          "body": "Result merging is the process of combining retrieved documents from different databases, removing duplicate or highly redundant information, and sorting them so the most relevant facts fit into the LLM's limited context window."
+        },
+        {
+          "kind": "analogy",
+          "icon": "📝",
+          "title": "The Guest List Cleaner",
+          "body": "Think of query merging like planning a wedding guest list. If the bride's family and the groom's family both write down their invitees on separate papers, you'll end up with duplicate names. Merging is the process of combining both lists, removing duplicates, and selecting only the top guests who will fit inside the reception hall."
+        },
+        {
+          "kind": "example",
+          "icon": "💡",
+          "title": "Merging in Action",
+          "body": "If a query about 'API refunds' pulls a billing policy document from your Vector DB and the exact same billing policy text from your SQL database, you deduplicate them. You keep only one copy and place it at the top of the prompt."
+        },
+        {
+          "kind": "mythbust",
+          "icon": "🚫",
+          "title": "More is Not Always Better",
+          "body": "You might think that feeding duplicate documents to an LLM makes it remember them better. In reality, duplicates waste valuable prompt space and can confuse the model, causing it to overemphasize repetitive points."
+        },
+        {
+          "kind": "visual",
+          "icon": "📊",
+          "title": "Raw Sources vs. Merged Prompt",
+          "body": "We combine multiple raw search streams, clean out the duplicates, and pack only the best unique items into the LLM's final prompt.",
+          "compare": {
+            "left": {
+              "emoji": "📥",
+              "tag": "Raw Streams",
+              "text": "SQL database + Vector search results containing redundant copies of the same files."
+            },
+            "right": {
+              "emoji": "🧹",
+              "tag": "Merged Context",
+              "text": "A cleaned, ranked, unique list of documents that perfectly fits the LLM token limit."
+            }
+          }
+        }
+      ]
+    },
+    {
+      "type": "practice",
+      "exercises": [
+        {
+          "id": "p1",
+          "type": "multiple_choice",
+          "xp": 2,
+          "prompt": "What is a major risk of directly appending results from two different databases into an LLM prompt without merging and cleaning them?",
+          "options": [
+            {
+              "id": "q1_1",
+              "text": "It automatically updates the underlying source databases.",
+              "correct": false
+            },
+            {
+              "id": "q1_2",
+              "text": "The prompt might overflow the LLM's token limit or contain wasteful, repetitive info.",
+              "correct": true
+            },
+            {
+              "id": "q1_3",
+              "text": "The LLM will refuse to answer any questions.",
+              "correct": false
+            },
+            {
+              "id": "q1_4",
+              "text": "The system will run out of storage space.",
+              "correct": false
+            }
+          ],
+          "explain": "If you don't deduplicate or limit the combined results, the prompt will quickly become too large for the LLM to process, or it will be filled with redundant, wasteful text."
+        },
+        {
+          "id": "p2",
+          "type": "true_false",
+          "xp": 2,
+          "prompt": "Is it common to get identical or highly similar documents when you search across multiple different data sources at the same time?",
+          "options": [
+            {
+              "id": "tf_true",
+              "text": "True",
+              "correct": true
+            },
+            {
+              "id": "tf_false",
+              "text": "False",
+              "correct": false
+            }
+          ],
+          "explain": "Deduplication is crucial because different databases (like SQL and Vector) often contain overlapping or identical information for the same query."
+        },
+        {
+          "id": "p3",
+          "type": "fill_blank",
+          "xp": 2,
+          "prompt": "Fill in the blank to describe the cleaning step needed when combining multiple database outputs:",
+          "sentence": "When we combine documents from two different databases, we must deduplicate the list to remove repeating text before building the prompt.",
+          "blank": "deduplicate",
+          "words": [
+            "deduplicate",
+            "scramble",
+            "ignore"
+          ],
+          "explain": "To avoid wasting token space and confusing the LLM, we must deduplicate the results, leaving only unique passages before sending them to the prompt."
+        },
+        {
+          "id": "p4",
+          "type": "spot_the_ai",
+          "xp": 2,
+          "prompt": "Which of the following describes an AI system performing 'result merging' in a Multi-Source RAG pipeline?",
+          "options": [
+            {
+              "id": "sai_1",
+              "text": "Retrieve items from Index A and Index B, deduplicate them based on document ID, and take the top 5 most relevant items to fit the prompt.",
+              "correct": true
+            },
+            {
+              "id": "sai_2",
+              "text": "Run a background database migration to merge two user account tables into a new cloud system.",
+              "correct": false
+            },
+            {
+              "id": "sai_3",
+              "text": "Display two separate search result pages to the user and let them click on the link they like best.",
+              "correct": false
+            }
+          ],
+          "explain": "The first option represents a classic LLM pipeline step for combining and organizing raw source outputs into a clean context window. The others are unrelated database or UI functions."
+        }
+      ]
+    },
+    {
+      "type": "boss",
+      "exercises": [
+        {
+          "id": "b1",
+          "type": "multiple_choice",
+          "xp": 5,
+          "prompt": "Imagine you have retrieved 5 documents from a vector database and 5 from a SQL database. How should you prepare this combined information before passing it into a single, size-limited LLM prompt?",
+          "options": [
+            {
+              "id": "opt_1",
+              "text": "Keep all retrieved items from both sources and let the LLM handle the overflow automatically.",
+              "correct": false
+            },
+            {
+              "id": "opt_2",
+              "text": "Convert all texts to numbers and multiply their scores to create new mock documents.",
+              "correct": false
+            },
+            {
+              "id": "opt_3",
+              "text": "Deduplicate the items by unique ID or content similarity, rank them, and trim the list to fit the model's token limit.",
+              "correct": true
+            },
+            {
+              "id": "opt_4",
+              "text": "Route the query to a third database and ignore the first two databases to avoid conflicts.",
+              "correct": false
+            }
+          ],
+          "explain": "Merging retrieved sources requires aligning the context into a single window. We must remove duplicates (using unique IDs or content hashes) and rank/truncate the final list to fit the LLM's token limit, otherwise the prompt will overflow or lose the most relevant information."
+        }
+      ]
+    }
+  ]
+}

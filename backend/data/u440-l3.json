@@ -1,0 +1,222 @@
+{
+  "id": "u440-l3",
+  "unit": 440,
+  "day": 2203,
+  "tier": "LLM Application Engineering",
+  "tierIcon": "🔌",
+  "title": "The Over-Filtering Trap",
+  "icon": "🕳️",
+  "concept": "How a strict filter combined with a small candidate pool can return too few or zero results after ANN search.",
+  "xp": 15,
+  "hearts": 3,
+  "estMinutes": 7,
+  "segments": [
+    {
+      "type": "warmup",
+      "exercises": [
+        {
+          "id": "w1",
+          "type": "multiple_choice",
+          "xp": 1,
+          "prompt": "What is the main difference between pre-filtering and post-filtering in metadata search?",
+          "options": [
+            {
+              "id": "opt_1",
+              "text": "Post-filtering filters items before the vector search begins.",
+              "correct": false
+            },
+            {
+              "id": "opt_2",
+              "text": "Pre-filtering limits the search space to matching metadata before finding nearest neighbors.",
+              "correct": true
+            },
+            {
+              "id": "opt_3",
+              "text": "Both methods guarantee the exact same search speed and recall results.",
+              "correct": false
+            }
+          ],
+          "explain": "Pre-filtering removes non-matching metadata records before running the vector search, ensuring all returned candidates match the criteria. Post-filtering applies the filter after the vector search has already selected the top candidates."
+        }
+      ]
+    },
+    {
+      "type": "teach",
+      "cards": [
+        {
+          "kind": "hook",
+          "icon": "🔍",
+          "title": "Where Did My Results Go?",
+          "body": "Have you ever searched a streaming app for an action movie and got absolutely zero results, even though you know they have thousands of films? You likely fell victim to the over-filtering trap!"
+        },
+        {
+          "kind": "definition",
+          "icon": "🥅",
+          "title": "What is the Over-Filtering Trap?",
+          "body": "The Over-Filtering Trap happens when we combine strict filters with a small search candidate pool. When the filter criteria are too narrow, the few items retrieved by the vector database are completely filtered out, returning zero results to the user."
+        },
+        {
+          "kind": "analogy",
+          "icon": "📚",
+          "title": "The Empty Library Shelf",
+          "body": "Imagine searching for a book in a library. If you first pick only books on a tiny single shelf (small candidate pool) and then strictly require them to be written in a specific dialect of medieval Latin (strict filter), you will leave empty-handed."
+        },
+        {
+          "kind": "example",
+          "icon": "🎬",
+          "title": "The Silent Zero Results",
+          "body": "A user searches a movie app for 'space battles' with a strict filter for 'released in 1942'. Because the vector search only pulled the top 10 space movies, and none were made in 1942, the app returns nothing, even though 1940s movies exist."
+        },
+        {
+          "kind": "mythbust",
+          "icon": "🕵️‍♀️",
+          "title": "The 'Keep K Small' Myth",
+          "body": "Many developers think retrieving more vector results (larger k) is always inefficient. In reality, increasing your initial candidate pool is often the easiest way to prevent strict filters from wiping out all your search results."
+        },
+        {
+          "kind": "visual",
+          "icon": "📊",
+          "title": "Pool Size vs. Filter Success",
+          "body": "See how candidate pool size affects your final results when applying strict filters.",
+          "compare": {
+            "left": {
+              "emoji": "🗑️",
+              "tag": "Small Pool (K=3)",
+              "text": "3 items fetched -> filter eliminates all 3 -> 0 results returned."
+            },
+            "right": {
+              "emoji": "✅",
+              "tag": "Large Pool (K=50)",
+              "text": "50 items fetched -> filter eliminates 45 -> 5 good results returned."
+            }
+          }
+        }
+      ]
+    },
+    {
+      "type": "practice",
+      "exercises": [
+        {
+          "id": "p1",
+          "type": "multiple_choice",
+          "xp": 2,
+          "prompt": "Why does combining post-filtering with a small candidate pool often return zero results?",
+          "options": [
+            {
+              "id": "mc_1",
+              "text": "Pre-filtering ignores the metadata entirely.",
+              "correct": false
+            },
+            {
+              "id": "mc_2",
+              "text": "A small candidate pool retrieved before post-filtering may contain zero items that match the strict metadata filter.",
+              "correct": true
+            },
+            {
+              "id": "mc_3",
+              "text": "Vector search databases automatically disable strict filters.",
+              "correct": false
+            },
+            {
+              "id": "mc_4",
+              "text": "Strict filters automatically increase the size of the retrieved pool.",
+              "correct": false
+            }
+          ],
+          "explain": "Post-filtering applies criteria after retrieving a set number of items. If none of those retrieved items match the strict criteria, you are left with zero results."
+        },
+        {
+          "id": "p2",
+          "type": "true_false",
+          "xp": 2,
+          "prompt": "True or False: Using a larger candidate pool (higher K) helps prevent the over-filtering trap in post-filtering.",
+          "options": [
+            {
+              "id": "tf_true",
+              "text": "True",
+              "correct": true
+            },
+            {
+              "id": "tf_false",
+              "text": "False",
+              "correct": false
+            }
+          ],
+          "explain": "A small candidate pool (like retrieving only the top 3 matches) is highly likely to be completely wiped out by a strict filter, whereas a larger pool increases the chances of matches."
+        },
+        {
+          "id": "p3",
+          "type": "fill_blank",
+          "xp": 2,
+          "prompt": "Fill in the missing outcome when candidate pools are too small for strict filters:",
+          "sentence": "Retrieving too few candidates before applying a strict filter often leads to zero results for the user.",
+          "blank": "zero results",
+          "words": [
+            "zero results",
+            "faster speed",
+            "duplicate items"
+          ],
+          "explain": "If you pull a tiny group of candidates and apply a strict filter, there is a high chance none will match, leading to zero results."
+        },
+        {
+          "id": "p4",
+          "type": "spot_the_ai",
+          "xp": 2,
+          "prompt": "Which of these scenarios describes an AI system falling into the Over-Filtering Trap?",
+          "options": [
+            {
+              "id": "sai_1",
+              "text": "We pre-filtered the database for the 'Python' tag, and then successfully found the 5 closest vector matches within that category.",
+              "correct": false
+            },
+            {
+              "id": "sai_2",
+              "text": "We retrieved the top 5 vector matches for the query, but after applying the strict metadata filter 'price < $1', all 5 matches were discarded, leaving the user with an empty list.",
+              "correct": true
+            },
+            {
+              "id": "sai_3",
+              "text": "The database crashed because the vector dimension size was set too high for our metadata tags to index properly.",
+              "correct": false
+            }
+          ],
+          "explain": "The second description correctly identifies how post-filtering on a small retrieved candidate pool leads to empty results because none of the top candidates match the strict tag filter. The others describe pre-filtering success or unrelated database errors."
+        }
+      ]
+    },
+    {
+      "type": "boss",
+      "exercises": [
+        {
+          "id": "b1",
+          "type": "multiple_choice",
+          "xp": 5,
+          "prompt": "Your team deploys a search engine that retrieves the top 5 nearest neighbors (K=5) and then filters out any items not published in the last 24 hours. Users complain they are getting empty search results. Which combination is the root cause?",
+          "options": [
+            {
+              "id": "opt_boss_1",
+              "text": "A post-filtering strategy with a small K-value and a highly restrictive metadata filter.",
+              "correct": true
+            },
+            {
+              "id": "opt_boss_2",
+              "text": "A pre-filtering strategy combined with an extremely large database size.",
+              "correct": false
+            },
+            {
+              "id": "opt_boss_3",
+              "text": "A post-filtering strategy with a K-value larger than the entire database.",
+              "correct": false
+            },
+            {
+              "id": "opt_boss_4",
+              "text": "A pre-filtering strategy that does not use any metadata constraints.",
+              "correct": false
+            }
+          ],
+          "explain": "When post-filtering is used, you retrieve a fixed number of items (k) first. If your post-filter is highly restrictive and your initial k-pool is small, it is highly likely that few or none of those k items will pass the filter, resulting in zero results for the user."
+        }
+      ]
+    }
+  ]
+}

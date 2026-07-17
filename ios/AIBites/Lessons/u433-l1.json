@@ -1,0 +1,222 @@
+{
+  "id": "u433-l1",
+  "unit": 433,
+  "day": 2166,
+  "tier": "LLM Application Engineering",
+  "tierIcon": "🔌",
+  "title": "Why Attach Metadata to Chunks",
+  "icon": "🏷️",
+  "concept": "Source, section title, author, date, and page number as filterable fields alongside the vector.",
+  "xp": 15,
+  "hearts": 3,
+  "estMinutes": 7,
+  "segments": [
+    {
+      "type": "warmup",
+      "exercises": [
+        {
+          "id": "w1",
+          "type": "multiple_choice",
+          "xp": 1,
+          "prompt": "What is the primary way a standard vector database matches user queries to text chunks?",
+          "options": [
+            {
+              "id": "w1",
+              "text": "Semantic similarity based on overall meaning",
+              "correct": true
+            },
+            {
+              "id": "w2",
+              "text": "Strict alphabetical ordering of words",
+              "correct": false
+            },
+            {
+              "id": "w3",
+              "text": "The exact date the document was uploaded",
+              "correct": false
+            }
+          ],
+          "explain": "Before diving into metadata, we must remember that vector databases find chunks based on semantic similarity (meaning), but they struggle with exact structural rules without metadata."
+        }
+      ]
+    },
+    {
+      "type": "teach",
+      "cards": [
+        {
+          "kind": "hook",
+          "icon": "🔍",
+          "title": "The Limits of Pure Vector Search",
+          "body": "Searching by meaning is great, but what if you only want answers from a specific PDF page, a certain author, or documents written after 2022? Pure math vectors can't easily restrict results by dates or pages without extra help."
+        },
+        {
+          "kind": "definition",
+          "icon": "🏷️",
+          "title": "What is Chunk Metadata?",
+          "body": "Metadata is extra structured information attached to text chunks—like author, date, source, page number, or section title. It allows databases to filter chunks using precise rules alongside semantic search."
+        },
+        {
+          "kind": "analogy",
+          "icon": "📚",
+          "title": "The Library Without Covers",
+          "body": "Imagine library books stripped of their covers, pages scattered. Finding a page about 'marsupials' is hard enough, but finding one written by 'Dr. Smith' in '2023' is impossible without the book's cover information. Metadata is that cover."
+        },
+        {
+          "kind": "example",
+          "icon": "📄",
+          "title": "Metadata in Action",
+          "body": "In a legal search app, a chunk of text contains safety rules. By attaching 'page_number: 14' and 'author: OSHA', we can easily limit our search to official safety manuals rather than internal company emails."
+        },
+        {
+          "kind": "mythbust",
+          "icon": "🚫",
+          "title": "Vectors Aren't Mind Readers",
+          "body": "People think vector embeddings automatically understand dates and document structures. In reality, embeddings capture general meaning, not exact filters like 'Page 5' or 'written by Alice'. We must add those explicitly."
+        },
+        {
+          "kind": "visual",
+          "icon": "⚖️",
+          "title": "Plain Text vs. Enriched Chunk",
+          "body": "Metadata adds structure to raw text chunks, transforming them from plain strings into searchable database records with clear attributes.",
+          "compare": {
+            "left": {
+              "emoji": "📝",
+              "tag": "Plain Chunk",
+              "text": "'Section 2: Wear safety glasses at all times on the factory floor.'"
+            },
+            "right": {
+              "emoji": "🏷️",
+              "tag": "Enriched Chunk",
+              "text": "'Text: ... | section: Safety | page: 12 | author: Operations Team'"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "type": "practice",
+      "exercises": [
+        {
+          "id": "p1",
+          "type": "multiple_choice",
+          "xp": 2,
+          "prompt": "What happens if you run a search using vectors but have no metadata attached to your text chunks?",
+          "options": [
+            {
+              "id": "mc1",
+              "text": "The LLM will stop working and return empty answers.",
+              "correct": false
+            },
+            {
+              "id": "mc2",
+              "text": "The LLM cannot cite the exact document name or page number where it found the answer.",
+              "correct": true
+            },
+            {
+              "id": "mc3",
+              "text": "The vector database will corrupt the raw text.",
+              "correct": false
+            },
+            {
+              "id": "mc4",
+              "text": "The similarity score will always be zero.",
+              "correct": false
+            }
+          ],
+          "explain": "Without metadata like page numbers or source names, the LLM might answer the user's question but will be unable to cite the exact source or page it pulled the answer from."
+        },
+        {
+          "id": "p2",
+          "type": "true_false",
+          "xp": 2,
+          "prompt": "True or False: You can combine vector similarity search with metadata filters in the same database query.",
+          "options": [
+            {
+              "id": "t1",
+              "text": "True",
+              "correct": true
+            },
+            {
+              "id": "f1",
+              "text": "False",
+              "correct": false
+            }
+          ],
+          "explain": "Metadata and vectors work together. You can query a database using vector search to find matching concepts, while using metadata to restrict results to a specific author or date range."
+        },
+        {
+          "id": "p3",
+          "type": "fill_blank",
+          "xp": 2,
+          "prompt": "Fill in the blank to specify the metadata field responsible for tracking the document origin.",
+          "sentence": "To help users trust the answer, we store the source of the document as metadata.",
+          "blank": "source",
+          "words": [
+            "source",
+            "vector",
+            "embedding"
+          ],
+          "explain": "The 'source' metadata field keeps track of where the text came from, allowing the app to show a link or reference to the original document."
+        },
+        {
+          "id": "p4",
+          "type": "spot_the_ai",
+          "xp": 2,
+          "prompt": "Identify the response that demonstrates an LLM application using metadata to construct its output.",
+          "options": [
+            {
+              "id": "sai1",
+              "text": "Can you search for mentions of revenue in the quarterly reports?",
+              "correct": false
+            },
+            {
+              "id": "sai2",
+              "text": "I only want to see documents written by the finance team last week.",
+              "correct": false
+            },
+            {
+              "id": "sai3",
+              "text": "Based on page 4 of the 2023 Audit by Jane Doe, the revenue increased by 10%.",
+              "correct": true
+            }
+          ],
+          "explain": "Option C showcases a typical AI assistant response that leverages metadata (author, date, page) to provide a precise, filtered answer with citations. Options A and B are standard user queries."
+        }
+      ]
+    },
+    {
+      "type": "boss",
+      "exercises": [
+        {
+          "id": "b1",
+          "type": "multiple_choice",
+          "xp": 5,
+          "prompt": "Why is filtering by metadata fields (like 'date' and 'category') before performing a vector search so powerful for an LLM application?",
+          "options": [
+            {
+              "id": "b1",
+              "text": "It filters out irrelevant documents (like wrong years or categories) before or during the vector search, keeping results accurate.",
+              "correct": true
+            },
+            {
+              "id": "b2",
+              "text": "It compresses the vector embeddings so they take up less space in the database.",
+              "correct": false
+            },
+            {
+              "id": "b3",
+              "text": "It automatically translates the text chunk into multiple languages for global search.",
+              "correct": false
+            },
+            {
+              "id": "b4",
+              "text": "It allows the LLM to run without using any vector similarity algorithms at all.",
+              "correct": false
+            }
+          ],
+          "explain": "Attaching metadata like date and category allows you to apply hard structured filters first (e.g., matching the category and date range), leaving a much smaller, highly relevant set of vectors to search through using semantic similarity."
+        }
+      ]
+    }
+  ]
+}

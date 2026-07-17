@@ -1,0 +1,222 @@
+{
+  "id": "u416-l5",
+  "unit": 416,
+  "day": 2085,
+  "tier": "LLM Application Engineering",
+  "tierIcon": "🔌",
+  "title": "Measuring Context Rot in Your System",
+  "icon": "📐",
+  "concept": "Needle-in-a-haystack style diagnostic tests to quantify how much a specific pipeline degrades with context length.",
+  "xp": 15,
+  "hearts": 3,
+  "estMinutes": 7,
+  "segments": [
+    {
+      "type": "warmup",
+      "exercises": [
+        {
+          "id": "w1",
+          "type": "multiple_choice",
+          "xp": 1,
+          "prompt": "Quick recap: to counteract attention bias in long contexts, where should you place the most critical facts?",
+          "options": [
+            {
+              "id": "a",
+              "text": "Near the start or end of the context",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "Exactly in the middle of the context",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "It doesn't matter where facts are placed",
+              "correct": false
+            }
+          ],
+          "explain": "Right! Models tend to pay more attention to the beginning and end of a context window, so placing critical facts there helps counteract the 'lost in the middle' effect covered in the last lesson."
+        }
+      ]
+    },
+    {
+      "type": "teach",
+      "cards": [
+        {
+          "kind": "hook",
+          "icon": "🔍",
+          "title": "Is Your Pipeline Actually Failing?",
+          "body": "You've heard that models forget things buried in the middle of long context — but does YOUR specific chatbot, on YOUR documents, actually have this problem? Guessing isn't good enough. You need to measure it."
+        },
+        {
+          "kind": "definition",
+          "icon": "📏",
+          "title": "What Is a Needle-in-a-Haystack Test?",
+          "body": "It's a diagnostic where you hide a specific fact (the 'needle') at a known position inside a large block of filler text (the 'haystack'), then ask your pipeline to retrieve it. By repeating this at different context lengths and positions, you get a map of exactly where and when your system starts forgetting."
+        },
+        {
+          "kind": "analogy",
+          "icon": "🏥",
+          "title": "Like a Hearing Checkup",
+          "body": "An audiologist doesn't just ask 'can you hear?' — they play beeps at different pitches and volumes to map exactly where your hearing drops off. A needle-in-a-haystack test does the same thing for your LLM pipeline: it plays 'beeps' (facts) at different depths and context lengths to map exactly where your system goes deaf."
+        },
+        {
+          "kind": "example",
+          "icon": "🧪",
+          "title": "A Simple Test Setup",
+          "body": "Take a 50,000-token document, insert the sentence 'The secret code is 4471' at the 25% mark, then ask your app 'What is the secret code?' Repeat this at depths of 10%, 25%, 50%, 75%, 90%, and at lengths of 5k, 20k, 50k, 100k tokens. Plot accuracy as a heatmap — cold spots show exactly where your pipeline rots."
+        },
+        {
+          "kind": "mythbust",
+          "icon": "🚫",
+          "title": "Myth: 'It Works in Testing, So It's Fine'",
+          "body": "Testing with short prompts or facts placed near the start tells you nothing about longer, real-world documents. A pipeline can pass every quick manual check yet completely fail once you feed it a 40-page contract with the key clause buried in the middle. Only systematic needle tests catch this."
+        },
+        {
+          "kind": "visual",
+          "icon": "📈",
+          "title": "Guessing vs. Measuring Rot",
+          "body": "Without testing, you only have a hunch that long context 'feels risky.' A needle-in-a-haystack sweep turns that hunch into a precise chart you can act on and track over time.",
+          "compare": {
+            "left": {
+              "emoji": "🌫️",
+              "tag": "Vague Worry",
+              "text": "'Long context might be unreliable somewhere, not sure where or how bad'"
+            },
+            "right": {
+              "emoji": "📊",
+              "tag": "Measured Fact",
+              "text": "'Accuracy is 95% up to 20k tokens, but drops to 60% at 50k+ tokens when key facts sit in the middle'"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "type": "practice",
+      "exercises": [
+        {
+          "id": "p1",
+          "type": "multiple_choice",
+          "xp": 2,
+          "prompt": "Why should a needle-in-a-haystack test vary BOTH the position of the needle AND the total context length?",
+          "options": [
+            {
+              "id": "a",
+              "text": "Because varying only one of them wastes compute and gives no useful information at all",
+              "correct": false
+            },
+            {
+              "id": "b",
+              "text": "Because rot can depend on the combination of the two — a needle at the middle might be fine at short lengths but fail badly at long lengths, so testing only one dimension hides that interaction",
+              "correct": true
+            },
+            {
+              "id": "c",
+              "text": "Because the model always performs best when the needle is at the very middle, regardless of length",
+              "correct": false
+            },
+            {
+              "id": "d",
+              "text": "Because position and length are actually the same variable in an LLM's context window",
+              "correct": false
+            }
+          ],
+          "explain": "Rot is often an interaction effect: a fact at 50% depth might be retrieved perfectly at 4k tokens but missed at 80k tokens. If you only test one length or one position, you'll miss this pattern entirely, so a full grid of position x length is needed for an accurate map."
+        },
+        {
+          "id": "p2",
+          "type": "true_false",
+          "xp": 2,
+          "prompt": "True or False: A needle-in-a-haystack test only needs to be run once, since context rot behaves identically across every model, prompt format, and document type.",
+          "options": [
+            {
+              "id": "a",
+              "text": "True",
+              "correct": false
+            },
+            {
+              "id": "b",
+              "text": "False",
+              "correct": true
+            }
+          ],
+          "explain": "False — context rot varies by model, prompt structure, and even document type, so tests should be re-run whenever you change your model, prompt template, or the kind of data your pipeline processes. A result from one setup doesn't automatically transfer to another."
+        },
+        {
+          "id": "p3",
+          "type": "fill_blank",
+          "xp": 2,
+          "prompt": "Fill in the blank.",
+          "sentence": "In a needle-in-a-haystack test, you hide a specific fact called the needle inside a large block of filler text called the haystack.",
+          "blank": "needle",
+          "words": [
+            "needle",
+            "filler",
+            "haystack"
+          ],
+          "explain": "The 'needle' is the small, specific fact you're testing whether the model can find; the 'haystack' is the large surrounding context it's buried in."
+        },
+        {
+          "id": "p4",
+          "type": "spot_the_ai",
+          "xp": 2,
+          "prompt": "Which of these three results is most likely AI-generated (i.e., made up rather than from a real measured test)?",
+          "options": [
+            {
+              "id": "a",
+              "text": "'Accuracy dropped from 96% to 42% specifically when the needle was placed between 40-60% depth at contexts over 30k tokens' — reported with a heatmap chart from 200 real trials",
+              "correct": false
+            },
+            {
+              "id": "b",
+              "text": "'Our model has perfect recall at all context lengths and positions with zero exceptions, as proven by common sense'",
+              "correct": true
+            },
+            {
+              "id": "c",
+              "text": "'At 8k tokens, accuracy was 98% across all depths, but at 64k tokens it fell to 55% only at mid-document positions, based on 150 sampled queries'",
+              "correct": false
+            }
+          ],
+          "explain": "Real measurements come with specifics: sample sizes, exact percentages, and patterns tied to position/length. A claim of 'perfect recall with zero exceptions, proven by common sense' has no data behind it and contradicts everything we know about lost-in-the-middle effects — that's a red flag for an unverified or fabricated claim."
+        }
+      ]
+    },
+    {
+      "type": "boss",
+      "exercises": [
+        {
+          "id": "b1",
+          "type": "multiple_choice",
+          "xp": 5,
+          "prompt": "You run a needle-in-a-haystack test on your RAG chatbot at context lengths of 2k, 8k, 32k, and 100k tokens, with the needle placed at 10%, 50%, and 90% depth each time. Results: accuracy is 95%+ everywhere EXCEPT at 32k and 100k with the needle at 50% depth, where it drops to around 40%. What should you conclude and do?",
+          "options": [
+            {
+              "id": "a",
+              "text": "The model is broken and should never be used again for anything",
+              "correct": false
+            },
+            {
+              "id": "b",
+              "text": "Your pipeline has a lost-in-the-middle weakness that only shows up at longer contexts, so you should shorten contexts when possible and place critical facts near the start/end, especially past 32k tokens",
+              "correct": true
+            },
+            {
+              "id": "c",
+              "text": "Since accuracy is fine at short lengths, context length doesn't matter and you can ignore the 32k/100k results",
+              "correct": false
+            },
+            {
+              "id": "d",
+              "text": "The test is invalid because accuracy should be identical at every depth and length",
+              "correct": false
+            }
+          ],
+          "explain": "This is exactly the diagnostic payoff of needle-in-a-haystack testing: it reveals a specific, measurable weak spot — middle-of-context recall degrades as length grows — that you'd never notice from casual testing. The fix isn't panic or denial, it's targeted engineering: trim context where you can, and use what you learned in the prior lesson (position critical facts near the start or end) especially once you cross the length where rot appears. That's the whole point of measuring: turning a vague worry ('long context feels unreliable') into a concrete, actionable number your team can track and improve over time."
+        }
+      ]
+    }
+  ]
+}

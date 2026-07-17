@@ -1,0 +1,222 @@
+{
+  "id": "u471-l2",
+  "unit": 471,
+  "day": 2357,
+  "tier": "LLM Application Engineering",
+  "tierIcon": "🔌",
+  "title": "HTTP + SSE Transport",
+  "icon": "📡",
+  "concept": "Connecting to a remote server over HTTP with server-sent events for streaming responses.",
+  "xp": 15,
+  "hearts": 3,
+  "estMinutes": 7,
+  "segments": [
+    {
+      "type": "warmup",
+      "exercises": [
+        {
+          "id": "w1",
+          "type": "multiple_choice",
+          "xp": 1,
+          "prompt": "Recap: What transport medium does the 'stdio' MCP transport use to communicate with a server?",
+          "options": [
+            {
+              "id": "a",
+              "text": "Standard input and output (stdin/stdout) of a local process",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "TCP network sockets on port 8080",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "Shared memory buffers in the OS kernel",
+              "correct": false
+            }
+          ],
+          "explain": "In the previous lesson, we learned that stdio transport uses the local system's standard input and output channels (stdin/stdout) to pass messages to a local subprocess."
+        }
+      ]
+    },
+    {
+      "type": "teach",
+      "cards": [
+        {
+          "kind": "hook",
+          "icon": "⚡",
+          "title": "Going Beyond Your Machine",
+          "body": "Local stdio transport is great when the tool runs on your own machine. But what if you want to connect to a shared tool running on a remote cloud server? We need a way to stream data across the web."
+        },
+        {
+          "kind": "definition",
+          "icon": "🌐",
+          "title": "What is HTTP + SSE Transport?",
+          "body": "HTTP + SSE transport allows an MCP client to connect to a remote server over the internet. The client receives a continuous stream of events from the server over a single HTTP connection, while sending messages back using standard HTTP POST requests."
+        },
+        {
+          "kind": "analogy",
+          "icon": "🍔",
+          "title": "The Drive-Thru Conveyor Belt",
+          "body": "Imagine a drive-thru window where you place your order (HTTP POST), and instead of waiting at the window, the kitchen runs a long, flexible conveyor belt (SSE) directly to your car, continuously dropping food items onto it as they are cooked."
+        },
+        {
+          "kind": "example",
+          "icon": "💻",
+          "title": "Remote Tool Integration",
+          "body": "An AI coding assistant connects to a remote database tool hosted on another server. The assistant opens an SSE connection to watch for schema changes, and sends queries over HTTP POST."
+        },
+        {
+          "kind": "mythbust",
+          "icon": "🛠️",
+          "title": "It's Just HTTP!",
+          "body": "You might think SSE requires complex WebSockets. In reality, Server-Sent Events are just standard HTTP connections kept open for streaming text, making them much simpler to set up and scale through web firewalls."
+        },
+        {
+          "kind": "visual",
+          "icon": "👁️",
+          "title": "Local Pipes vs. Web Streams",
+          "body": "Compare how stdio relies on local operating system pipes, whereas HTTP + SSE relies on standard web protocols to cross network boundaries.",
+          "compare": {
+            "left": {
+              "emoji": "💻",
+              "tag": "stdio",
+              "text": "Uses stdin/stdout. Requires the server to run locally on your own computer."
+            },
+            "right": {
+              "emoji": "☁️",
+              "tag": "HTTP + SSE",
+              "text": "Uses web ports. Connects to tools running anywhere in the world."
+            }
+          }
+        }
+      ]
+    },
+    {
+      "type": "practice",
+      "exercises": [
+        {
+          "id": "p1",
+          "type": "multiple_choice",
+          "xp": 2,
+          "prompt": "What is the primary advantage of HTTP + SSE transport over stdio transport in MCP?",
+          "options": [
+            {
+              "id": "a",
+              "text": "It runs faster by executing local binaries directly.",
+              "correct": false
+            },
+            {
+              "id": "b",
+              "text": "It allows clients to connect to tools hosted on remote cloud servers.",
+              "correct": true
+            },
+            {
+              "id": "c",
+              "text": "It completely removes the need for HTTP headers.",
+              "correct": false
+            },
+            {
+              "id": "d",
+              "text": "It relies on standard input and output pipes.",
+              "correct": false
+            }
+          ],
+          "explain": "HTTP + SSE is designed for remote cloud communication, whereas stdio is limited to local subprocesses on the same machine."
+        },
+        {
+          "id": "p2",
+          "type": "true_false",
+          "xp": 2,
+          "prompt": "Is the Server-Sent Events (SSE) channel in MCP bidirectional, allowing the client to send messages back through the same stream?",
+          "options": [
+            {
+              "id": "true",
+              "text": "True",
+              "correct": false
+            },
+            {
+              "id": "false",
+              "text": "False",
+              "correct": true
+            }
+          ],
+          "explain": "SSE is unidirectional. The server streams events to the client, but the client must send its own requests back using separate HTTP POST requests."
+        },
+        {
+          "id": "p3",
+          "type": "fill_blank",
+          "xp": 2,
+          "prompt": "Fill in the missing term that represents the streaming channel from the server to the client:",
+          "sentence": "In remote MCP, the server pushes events to the client using Server-Sent Events while the client talks back using POST requests.",
+          "blank": "Server-Sent Events",
+          "words": [
+            "stdio",
+            "Server-Sent Events",
+            "WebSockets"
+          ],
+          "explain": "Server-Sent Events (SSE) provide a lightweight, unidirectional stream from the remote server to the client, while standard HTTP POST requests go the other way."
+        },
+        {
+          "id": "p4",
+          "type": "spot_the_ai",
+          "xp": 2,
+          "prompt": "Which of these describes how an MCP client actually connects to a remote server using HTTP + SSE?",
+          "options": [
+            {
+              "id": "a",
+              "text": "We launch the remote server as a local system process and pipe raw stdin text to its cloud IP address.",
+              "correct": false
+            },
+            {
+              "id": "b",
+              "text": "We establish a connection to the server's SSE endpoint to listen for messages, and send client requests via HTTP POST.",
+              "correct": true
+            },
+            {
+              "id": "c",
+              "text": "We compile the remote MCP server into a WebAssembly binary and run it directly in our client's browser local memory.",
+              "correct": false
+            }
+          ],
+          "explain": "The AI option includes the standard elements of remote MCP transport: establishing an SSE endpoint to receive events and using POST for sending JSON-RPC payloads."
+        }
+      ]
+    },
+    {
+      "type": "boss",
+      "exercises": [
+        {
+          "id": "b1",
+          "type": "multiple_choice",
+          "xp": 5,
+          "prompt": "Which of the following best describes the structural lifecycle of an MCP session running over HTTP + SSE?",
+          "options": [
+            {
+              "id": "a",
+              "text": "The client establishes a local stdio pipe to execute the remote server's binary.",
+              "correct": false
+            },
+            {
+              "id": "b",
+              "text": "The client and server open a bidirectional raw TCP socket where both send raw text.",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "The client receives events via a long-lived GET request (SSE) and sends commands via separate POST requests.",
+              "correct": true
+            },
+            {
+              "id": "d",
+              "text": "The server initiates a POST request to the client's local port whenever a tool completes.",
+              "correct": false
+            }
+          ],
+          "explain": "HTTP + SSE splits the workload: the client sends commands as standard HTTP POST requests, while the server pushes events back over a single, long-lived SSE connection. This bypasses the need for local subprocesses or heavy bidirectional WebSocket overhead."
+        }
+      ]
+    }
+  ]
+}

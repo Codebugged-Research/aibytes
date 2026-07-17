@@ -1,0 +1,222 @@
+{
+  "id": "u471-l4",
+  "unit": 471,
+  "day": 2359,
+  "tier": "LLM Application Engineering",
+  "tierIcon": "🔌",
+  "title": "Authentication for Remote Servers",
+  "icon": "🔒",
+  "concept": "Securing a remote MCP server so only authorized hosts and users can invoke its tools.",
+  "xp": 15,
+  "hearts": 3,
+  "estMinutes": 7,
+  "segments": [
+    {
+      "type": "warmup",
+      "exercises": [
+        {
+          "id": "w1",
+          "type": "multiple_choice",
+          "xp": 1,
+          "prompt": "Recapping our last lesson: why do remote MCP servers require stricter security setups (and different) security measures compared to local MCP transport security) security setups compared to local MCP servers require explicit authentication mechanisms?",
+          "options": [
+            {
+              "id": "w_1",
+              "text": "Local servers require complex OAuth tokens, while remote servers do not.",
+              "correct": false
+            },
+            {
+              "id": "w_2",
+              "text": "Local servers use secure stdio channels; remote servers use network-exposed HTTP or SSE.",
+              "correct": true
+            },
+            {
+              "id": "w_3",
+              "text": "Local servers are always faster and can support millions of simultaneous users.",
+              "correct": false
+            }
+          ],
+          "explain": "Local MCP servers communicate via standard input/output (stdio), which is safe because it stays on the same machine. Remote servers communicate over networks (like HTTP/SSE), which exposes them to outside traffic and requires authentication."
+        }
+      ]
+    },
+    {
+      "type": "teach",
+      "cards": [
+        {
+          "kind": "hook",
+          "icon": "🌐",
+          "title": "The Open Door Problem",
+          "body": "When an MCP server runs on your local machine, it inherits your local security. But the moment you move that server to the cloud, anyone on the internet can try to connect. Without authentication, random strangers could trigger your server's tools!"
+        },
+        {
+          "kind": "definition",
+          "icon": "🔑",
+          "title": "What is Remote Auth?",
+          "body": "MCP Remote Authentication is the process of verifying the identity of a client (like an LLM app) before allowing it to connect to a remote MCP server. It ensures that only trusted clients can list, read, or execute sensitive tools on the host system."
+        },
+        {
+          "kind": "analogy",
+          "icon": "🎟️",
+          "title": "The Digital Wristband",
+          "body": "Think of MCP authentication like a VIP club. The remote server is the club, and the client is a guest. Instead of letting anyone walk in and order tools, the bouncer (auth handler) checks for a special digital wristband (token) before letting you speak to the DJ."
+        },
+        {
+          "kind": "example",
+          "icon": "💻",
+          "title": "Securing an SSE Connection",
+          "body": "When configuring your MCP client to connect to a remote server over Server-Sent Events (SSE), you add an 'Authorization' header containing a Bearer Token. The server inspects this token, verifies it, and only then exposes its 'run_database_query' tool."
+        },
+        {
+          "kind": "mythbust",
+          "icon": "🛡️",
+          "title": "No Custom Crypto Needed",
+          "body": "Many think that because MCP is designed for LLMs, it uses a new, custom security protocol. In reality, MCP rides on top of standard web security like HTTPS, token authorization (JWTs), and API keys. You don't need to reinvent the security wheel!"
+        },
+        {
+          "kind": "visual",
+          "icon": "👁️‍🗨️",
+          "title": "Auth vs Encryption",
+          "body": "Authentication determines if a client is allowed in, while HTTPS ensures that the data they send cannot be read by interceptors along the way.",
+          "compare": {
+            "left": {
+              "emoji": "🛂",
+              "tag": "Authentication",
+              "text": "Verifies the identity of the client using tokens or API keys."
+            },
+            "right": {
+              "emoji": "🕵️‍♂️",
+              "tag": "HTTPS Encryption",
+              "text": "Scrambles the messages so hackers cannot read them in transit."
+            }
+          }
+        }
+      ]
+    },
+    {
+      "type": "practice",
+      "exercises": [
+        {
+          "id": "p1",
+          "type": "multiple_choice",
+          "xp": 2,
+          "prompt": "What is the primary risk of exposing an MCP server to the public internet without setting up an authentication layer?",
+          "options": [
+            {
+              "id": "mc_1",
+              "text": "The server will automatically encrypt all local files for safety.",
+              "correct": false
+            },
+            {
+              "id": "mc_2",
+              "text": "Anyone on the internet could invoke the server's tools and access its resources.",
+              "correct": true
+            },
+            {
+              "id": "mc_3",
+              "text": "The LLM client will refuse to connect due to safety guards.",
+              "correct": false
+            },
+            {
+              "id": "mc_4",
+              "text": "The server's tools will run in read-only mode by default.",
+              "correct": false
+            }
+          ],
+          "explain": "If you host an MCP server on a public cloud without authentication, malicious actors can discover the endpoint and execute any tools (like deleting databases or reading files) that the server exposes."
+        },
+        {
+          "id": "p2",
+          "type": "true_false",
+          "xp": 2,
+          "prompt": "True or False: Using HTTPS (SSL/TLS) for your remote MCP server completely eliminates the need for token-based authentication.",
+          "options": [
+            {
+              "id": "tf_t",
+              "text": "True",
+              "correct": false
+            },
+            {
+              "id": "tf_f",
+              "text": "False",
+              "correct": true
+            }
+          ],
+          "explain": "Even with HTTPS encrypting the transit data, you still need authentication (like tokens) to prove WHO is accessing the server. Encryption prevents eavesdropping; it does not check permissions."
+        },
+        {
+          "id": "p3",
+          "type": "fill_blank",
+          "xp": 2,
+          "prompt": "Fill in the missing word to complete the security rule:",
+          "sentence": "To protect your credentials, always send authentication tokens inside the connection headers rather than the query parameters.",
+          "blank": "headers",
+          "words": [
+            "headers",
+            "payloads",
+            "comments"
+          ],
+          "explain": "When setting up an SSE (Server-Sent Events) transport channel, credentials like API keys are typically sent inside the HTTP headers to keep them secure and separate from the message payload."
+        },
+        {
+          "id": "p4",
+          "type": "spot_the_ai",
+          "xp": 2,
+          "prompt": "Identify the code snippet that correctly sets up a secured remote MCP client connection:",
+          "options": [
+            {
+              "id": "sai_1",
+              "text": "mcp.connect(\"https://api.remotemcp.com\", { send_password_via_system_prompt: true })",
+              "correct": false
+            },
+            {
+              "id": "sai_2",
+              "text": "const server = new McpServer({ password: \"admin\", transport: \"local-bypass\" });",
+              "correct": false
+            },
+            {
+              "id": "sai_3",
+              "text": "const client = new McpClient({ transport: new SseTransport(\"https://api.remotemcp.com/sse\", { headers: { \"Authorization\": \"Bearer mcp_sec_987x\" } }) });",
+              "correct": true
+            }
+          ],
+          "explain": "Option C represents a realistic configuration payload for an authenticated MCP client connection using standard SSE transport headers. Options A and B use invalid formats or insecure prompt-based parameters."
+        }
+      ]
+    },
+    {
+      "type": "boss",
+      "exercises": [
+        {
+          "id": "b1",
+          "type": "multiple_choice",
+          "xp": 5,
+          "prompt": "You are building a production-grade LLM agent that needs to call tools on a remote MCP server hosted in the cloud. How should you design the authentication flow so the agent can safely run automated background tasks?",
+          "options": [
+            {
+              "id": "opt_1",
+              "text": "Use cryptographically signed bearer tokens in the SSE connection headers",
+              "correct": true
+            },
+            {
+              "id": "opt_2",
+              "text": "Embed the server's master password directly in the LLM's system prompt",
+              "correct": false
+            },
+            {
+              "id": "opt_3",
+              "text": "Require interactive OAuth logins every time the LLM decides to call a tool",
+              "correct": false
+            },
+            {
+              "id": "opt_4",
+              "text": "Disable authentication and restrict access solely by obscure port numbers",
+              "correct": false
+            }
+          ],
+          "explain": "To securely authenticate an automated LLM client connecting to a remote MCP server without human intervention, asymmetric API keys (or bearer tokens) passed in the connection handshake/headers are ideal. Storing credentials in plain text is insecure, and interactive OAuth is meant for human-in-the-loop flows, not seamless background LLM tool execution."
+        }
+      ]
+    }
+  ]
+}

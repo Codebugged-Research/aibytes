@@ -1,0 +1,222 @@
+{
+  "id": "u428-l4",
+  "unit": 428,
+  "day": 2144,
+  "tier": "LLM Application Engineering",
+  "tierIcon": "🔌",
+  "title": "Building a Fine-Tuning Dataset",
+  "icon": "📥",
+  "concept": "Sourcing query-document pairs from real user interactions or synthetic generation for domain adaptation.",
+  "xp": 15,
+  "hearts": 3,
+  "estMinutes": 7,
+  "segments": [
+    {
+      "type": "warmup",
+      "exercises": [
+        {
+          "id": "w1",
+          "type": "multiple_choice",
+          "xp": 1,
+          "prompt": "In the context of embedding models, what is a 'hard negative'?",
+          "options": [
+            {
+              "id": "warm_1",
+              "text": "Randomly chosen documents that have nothing to do with the query.",
+              "correct": false
+            },
+            {
+              "id": "warm_2",
+              "text": "Incorrect documents that are highly similar to the target query.",
+              "correct": true
+            },
+            {
+              "id": "warm_3",
+              "text": "Queries that contain typos or grammatical errors.",
+              "correct": false
+            }
+          ],
+          "explain": "Hard negatives are incorrect documents that look very similar to the correct document, helping the model learn to distinguish subtle differences."
+        }
+      ]
+    },
+    {
+      "type": "teach",
+      "cards": [
+        {
+          "kind": "hook",
+          "icon": "🧲",
+          "title": "Data is the Key",
+          "body": "To teach an embedding model to find domain-specific answers, we must feed it examples of what users actually ask and where the answers live. But where do we get these pairs?"
+        },
+        {
+          "kind": "definition",
+          "icon": "📂",
+          "title": "Query-Document Pairs",
+          "body": "To fine-tune an embedding model, you need a dataset of query-document pairs. These represent actual searches and the corresponding target text chunks that contain the correct answer."
+        },
+        {
+          "kind": "analogy",
+          "icon": "🃏",
+          "title": "The Matching Pairs Game",
+          "body": "Think of a dataset like a matching game memory card set. You need pairs of cards that belong together (a real question and its actual answer) along with some mismatching cards, so the model learns exactly how to pair them up."
+        },
+        {
+          "kind": "example",
+          "icon": "🛍️",
+          "title": "Real-World Search Logs",
+          "body": "An online store uses search history to pair the user query 'how do I return a shirt?' with the help article 'Return Policy & Return Labels'. This pair is saved to train their custom search model."
+        },
+        {
+          "kind": "mythbust",
+          "icon": "🤖",
+          "title": "The Synthetic Data Shortcut",
+          "body": "You don't need millions of manual labels. If you lack real user logs, you can use a powerful LLM to read your documents and generate realistic synthetic questions for them."
+        },
+        {
+          "kind": "visual",
+          "icon": "🔄",
+          "title": "Sourcing Your Dataset",
+          "body": "We can source our training pairs directly from real user actions or generate them synthetically.",
+          "compare": {
+            "left": {
+              "emoji": "👤",
+              "tag": "Real Users",
+              "text": "Logs of actual searches paired with the articles users clicked on."
+            },
+            "right": {
+              "emoji": "🤖",
+              "tag": "Synthetic LLM",
+              "text": "An LLM reads documents and generates realistic questions for them."
+            }
+          }
+        }
+      ]
+    },
+    {
+      "type": "practice",
+      "exercises": [
+        {
+          "id": "p1",
+          "type": "multiple_choice",
+          "xp": 2,
+          "prompt": "What primary type of data is required to fine-tune an embedding model for search tasks?",
+          "options": [
+            {
+              "id": "mc_1",
+              "text": "Image files and audio transcriptions",
+              "correct": false
+            },
+            {
+              "id": "mc_2",
+              "text": "Queries matched with their relevant target documents",
+              "correct": true
+            },
+            {
+              "id": "mc_3",
+              "text": "Random sentences paired with dictionary definitions",
+              "correct": false
+            },
+            {
+              "id": "mc_4",
+              "text": "Python functions paired with their unit tests",
+              "correct": false
+            }
+          ],
+          "explain": "Query-document pairs are the fundamental training unit for retrieval fine-tuning, showing the model which questions and answers belong close together in the vector space."
+        },
+        {
+          "id": "p2",
+          "type": "true_false",
+          "xp": 2,
+          "prompt": "True or False: LLMs can be used to generate synthetic queries for your documents if you don't have real user search logs.",
+          "options": [
+            {
+              "id": "tf_true",
+              "text": "True",
+              "correct": true
+            },
+            {
+              "id": "tf_false",
+              "text": "False",
+              "correct": false
+            }
+          ],
+          "explain": "Synthetic query generation using an LLM is a widely accepted and highly effective method for bootstrapping search datasets when real user data is missing."
+        },
+        {
+          "id": "p3",
+          "type": "fill_blank",
+          "xp": 2,
+          "prompt": "Fill in the blank to complete the statement about creating training pairs when user logs are unavailable.",
+          "sentence": "We can use synthetic generation to create questions for our documents.",
+          "blank": "synthetic generation",
+          "words": [
+            "synthetic generation",
+            "random guessing",
+            "manual copying"
+          ],
+          "explain": "When real user data is scarce, synthetic generation allows you to create high-quality training pairs by asking an LLM to write questions for your documents."
+        },
+        {
+          "id": "p4",
+          "type": "spot_the_ai",
+          "xp": 2,
+          "prompt": "Identify the query-document pair that was synthetically generated by an LLM for training.",
+          "options": [
+            {
+              "id": "sai_1",
+              "text": "User Search: 'how to change password' -> Doc: 'Go to settings and click reset password.'",
+              "correct": false
+            },
+            {
+              "id": "sai_2",
+              "text": "User Search: 'refund time' -> Doc: 'Refunds take 5-7 business days.'",
+              "correct": false
+            },
+            {
+              "id": "sai_3",
+              "text": "Generated Query: 'What is the standard latency of the API?' based on Doc: 'The API responds in 50ms.'",
+              "correct": true
+            }
+          ],
+          "explain": "Option C is synthetic query generation where an LLM acts as a user asking a question based on a specific context chunk. Options A and B are simple human-written logs."
+        }
+      ]
+    },
+    {
+      "type": "boss",
+      "exercises": [
+        {
+          "id": "b1",
+          "type": "multiple_choice",
+          "xp": 5,
+          "prompt": "You are launching a specialized search engine for medical legal documents, but you have zero real-world user search logs. What is the most effective way to build your initial fine-tuning dataset?",
+          "options": [
+            {
+              "id": "opt_boss_1",
+              "text": "Use a powerful LLM to generate diverse user queries matching your document chunks.",
+              "correct": true
+            },
+            {
+              "id": "opt_boss_2",
+              "text": "Manually write thousands of identical queries to save time.",
+              "correct": false
+            },
+            {
+              "id": "opt_boss_3",
+              "text": "Only use random strings of text as queries to save computational power.",
+              "correct": false
+            },
+            {
+              "id": "opt_boss_4",
+              "text": "Copy queries directly from unrelated public web searches.",
+              "correct": false
+            }
+          ],
+          "explain": "Synthetic generation using a strong LLM is highly effective for bootstrapping domain-specific training data. It allows you to create diverse, realistic query-document pairs even if you don't have thousands of active users yet."
+        }
+      ]
+    }
+  ]
+}

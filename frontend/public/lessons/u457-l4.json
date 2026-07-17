@@ -1,0 +1,222 @@
+{
+  "id": "u457-l4",
+  "unit": 457,
+  "day": 2289,
+  "tier": "LLM Application Engineering",
+  "tierIcon": "🔌",
+  "title": "Handling Deletions & Stale Content",
+  "icon": "🗑️",
+  "concept": "Removing outdated documents from the index so RAG doesn't retrieve and ground on obsolete information.",
+  "xp": 15,
+  "hearts": 3,
+  "estMinutes": 7,
+  "segments": [
+    {
+      "type": "warmup",
+      "exercises": [
+        {
+          "id": "w1",
+          "type": "multiple_choice",
+          "xp": 1,
+          "prompt": "In the last lesson, we learned about incremental indexing. What is its main goal?",
+          "options": [
+            {
+              "id": "wu_1",
+              "text": "Rebuilding the entire database from scratch every time a single word changes.",
+              "correct": false
+            },
+            {
+              "id": "wu_2",
+              "text": "Using hashes or timestamps to identify and update only modified or new documents.",
+              "correct": true
+            },
+            {
+              "id": "wu_3",
+              "text": "Disabling all updates to ensure the vector database remains completely static.",
+              "correct": false
+            }
+          ],
+          "explain": "Incremental indexing tracks changes (using timestamps or hashes) so that you only process new or modified documents, saving computing power."
+        }
+      ]
+    },
+    {
+      "type": "teach",
+      "cards": [
+        {
+          "kind": "hook",
+          "icon": "🧹",
+          "title": "Retrieving Ghosts",
+          "body": "Imagine asking a RAG chatbot for the current Wi-Fi password, and it confidently gives you the one from three years ago. Why? Because the old document was deleted from the company drive, but its vector chunks were left behind in the database!"
+        },
+        {
+          "kind": "definition",
+          "icon": "🗑️",
+          "title": "Active Index Purging",
+          "body": "Stale content handling is the process of removing or updating vectors in a database when their original source documents are deleted or modified, ensuring the LLM doesn't retrieve outdated facts."
+        },
+        {
+          "kind": "analogy",
+          "icon": "🗃️",
+          "title": "The Ghost Library Catalog",
+          "body": "Think of your vector index like a physical library's card catalog. If a book is permanently thrown away but you leave its card in the catalog, readers will waste time looking for a book that is no longer on the shelves."
+        },
+        {
+          "kind": "example",
+          "icon": "📄",
+          "title": "The Outdated HR Policy Trap",
+          "body": "A company updates its remote work policy, deleting the 2022 PDF and uploading a 2024 version. If the old PDF chunks aren't deleted from the vector store, the HR chatbot might still quote the old 2022 policy."
+        },
+        {
+          "kind": "mythbust",
+          "icon": "🚫",
+          "title": "Deletions Aren't Automatic",
+          "body": "Many believe that if you delete a file from your cloud storage, it automatically disappears from your vector database. In reality, vector databases are completely separate and require explicit deletion commands (tombstoning or ID-based deletes) to stay in sync."
+        },
+        {
+          "kind": "visual",
+          "icon": "🔄",
+          "title": "Syncing Source vs. Index",
+          "body": "Keeping your vector index aligned with your actual source documents is critical for accurate retrieval.",
+          "compare": {
+            "left": {
+              "emoji": "📁❌ -> 🗄️✅",
+              "tag": "Stale Index",
+              "text": "Source document is deleted, but its old vector chunks still exist in the database, causing bad retrievals."
+            },
+            "right": {
+              "emoji": "📁❌ -> 🗄️❌",
+              "tag": "Clean Index",
+              "text": "Source document is deleted, and its corresponding vector IDs are immediately purged from the index."
+            }
+          }
+        }
+      ]
+    },
+    {
+      "type": "practice",
+      "exercises": [
+        {
+          "id": "p1",
+          "type": "multiple_choice",
+          "xp": 2,
+          "prompt": "What happens if you delete a document from your storage folder but forget to delete its vectors from the vector database?",
+          "options": [
+            {
+              "id": "mc_1",
+              "text": "The vector database automatically detects the source file is gone and deletes the chunks.",
+              "correct": false
+            },
+            {
+              "id": "mc_2",
+              "text": "The old chunks remain in the vector index and can still be retrieved by the RAG pipeline.",
+              "correct": true
+            },
+            {
+              "id": "mc_3",
+              "text": "The LLM will automatically recognize that the retrieved information is old and ignore it.",
+              "correct": false
+            },
+            {
+              "id": "mc_4",
+              "text": "The query search speed increases because there is less active data in the source drive.",
+              "correct": false
+            }
+          ],
+          "explain": "If you do not explicitly delete the chunks associated with the old document ID, they remain in the vector space and can still be retrieved during semantic search."
+        },
+        {
+          "id": "p2",
+          "type": "true_false",
+          "xp": 2,
+          "prompt": "True or False: Storing the original document ID as metadata on each vector chunk makes it easier to delete all associated chunks at once.",
+          "options": [
+            {
+              "id": "tf_true",
+              "text": "True",
+              "correct": true
+            },
+            {
+              "id": "tf_false",
+              "text": "False",
+              "correct": false
+            }
+          ],
+          "explain": "Using parent document IDs as metadata on your chunks allows you to easily find and delete all child chunks when the parent document is deleted."
+        },
+        {
+          "id": "p3",
+          "type": "fill_blank",
+          "xp": 2,
+          "prompt": "Fill in the blank to complete the rule for maintaining index freshness:",
+          "sentence": "If we do not sync deletions, our retriever will fetch stale data and feed incorrect facts to the LLM.",
+          "blank": "stale data",
+          "words": [
+            "stale data",
+            "new vectors",
+            "more chunks"
+          ],
+          "explain": "When source documents are deleted, we must explicitly remove their corresponding vectors from the index to prevent the RAG system from retrieving stale data."
+        },
+        {
+          "id": "p4",
+          "type": "spot_the_ai",
+          "xp": 2,
+          "prompt": "Which explanation of vector database deletion handling contains AI-generated misinformation?",
+          "options": [
+            {
+              "id": "sai_1",
+              "text": "To handle deletions, track document IDs and issue a delete call to the vector database for all chunk IDs associated with a removed document.",
+              "correct": false
+            },
+            {
+              "id": "sai_2",
+              "text": "Because vector databases monitor your hard drive directly, deleting a file locally triggers an instant physical purge of the vectors using magnetic resonance.",
+              "correct": true
+            },
+            {
+              "id": "sai_3",
+              "text": "You can use a 'tombstone' or soft-delete flag in your document database to mark files for removal during the next indexing pipeline run.",
+              "correct": false
+            }
+          ],
+          "explain": "Option B is typical AI-generated hallucination output because it incorrectly claims that vector databases automatically delete vectors when the physical file is deleted from local disk space. Vector databases must be explicitly told to delete IDs."
+        }
+      ]
+    },
+    {
+      "type": "boss",
+      "exercises": [
+        {
+          "id": "b1",
+          "type": "multiple_choice",
+          "xp": 5,
+          "prompt": "You are designing a deletion sync worker for an enterprise knowledge base. If a user deletes a document in the source database, what is the safest and most reliable way to propagate this deletion to your vector index without leaving 'ghost' vectors?",
+          "options": [
+            {
+              "id": "opt_b1",
+              "text": "Mark the database record as 'deleted', query for those IDs to delete them from the vector store, then purge them from the database.",
+              "correct": true
+            },
+            {
+              "id": "opt_b2",
+              "text": "Delete the document from the source database first, which automatically triggers a deletion in the vector database.",
+              "correct": false
+            },
+            {
+              "id": "opt_b3",
+              "text": "Keep the stale vectors in the index but instruct the LLM to ignore them if they contain old dates.",
+              "correct": false
+            },
+            {
+              "id": "opt_b4",
+              "text": "Rebuild the entire vector index from scratch every time a single document is deleted from the source database.",
+              "correct": false
+            }
+          ],
+          "explain": "A soft-delete flag lets the sync worker identify which IDs to remove from the vector database (preventing stale retrievals) and then safely purge them from both the source database and the index."
+        }
+      ]
+    }
+  ]
+}

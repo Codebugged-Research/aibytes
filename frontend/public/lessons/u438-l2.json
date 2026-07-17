@@ -1,0 +1,222 @@
+{
+  "id": "u438-l2",
+  "unit": 438,
+  "day": 2192,
+  "tier": "LLM Application Engineering",
+  "tierIcon": "🔌",
+  "title": "The nprobe Parameter",
+  "icon": "🔍",
+  "concept": "How many partitions to search at query time and its direct tradeoff between recall and latency.",
+  "xp": 15,
+  "hearts": 3,
+  "estMinutes": 7,
+  "segments": [
+    {
+      "type": "warmup",
+      "exercises": [
+        {
+          "id": "w1",
+          "type": "multiple_choice",
+          "xp": 1,
+          "prompt": "How does an Inverted File (IVF) index speed up vector searches?",
+          "options": [
+            {
+              "id": "w1",
+              "text": "By grouping similar vectors into clusters and searching only the closest ones",
+              "correct": true
+            },
+            {
+              "id": "w2",
+              "text": "By compressing vector dimensions using matrix multiplication",
+              "correct": false
+            },
+            {
+              "id": "w3",
+              "text": "By storing vectors in a simple alphabetical sorted list",
+              "correct": false
+            }
+          ],
+          "explain": "Inverted File Index (IVF) works by grouping similar vectors into clusters (partitions) to avoid comparing a query vector against every single vector in the database."
+        }
+      ]
+    },
+    {
+      "type": "teach",
+      "cards": [
+        {
+          "kind": "hook",
+          "icon": "🎯",
+          "title": "Finding the Sweet Spot",
+          "body": "Clustering vectors into neat little groups is great, but how do we decide how many groups to look inside when a user asks a question? If we check too few, we miss results; if we check too many, the search becomes slow."
+        },
+        {
+          "kind": "definition",
+          "icon": "⚙️",
+          "title": "What is nprobe?",
+          "body": "The nprobe parameter controls how many clustered partitions (centroids) the vector database searches during a query. By adjusting nprobe, you decide the balance between query speed and search accuracy."
+        },
+        {
+          "kind": "analogy",
+          "icon": "📚",
+          "title": "The Library Searcher",
+          "body": "Imagine your vector database is a massive library divided into 100 themed rooms. If you only search the single best room, you might miss a book misfiled next door. Checking more rooms increases your chances of finding every matching book, but you'll spend much more time walking around."
+        },
+        {
+          "kind": "example",
+          "icon": "⏱️",
+          "title": "Speed vs. Accuracy in Action",
+          "body": "With nprobe=1, the database only searches the absolute closest cluster, returning results in 2 milliseconds but missing 20% of the true nearest neighbors. Raising nprobe to 5 searches the top 5 closest clusters, increasing search time to 8 milliseconds but finding 98% of the correct neighbors."
+        },
+        {
+          "kind": "mythbust",
+          "icon": "🛑",
+          "title": "More is Not Always Better",
+          "body": "You might think setting nprobe to a higher number always improves user experience. In reality, setting it too high turns your fast clustered index back into a slow, exhaustive brute-force search."
+        },
+        {
+          "kind": "visual",
+          "icon": "⚖️",
+          "title": "Visualizing nprobe Search Scope",
+          "body": "Visualizing how nprobe alters the scope of your search across clustered vector spaces.",
+          "compare": {
+            "left": {
+              "emoji": "⚡",
+              "tag": "Low nprobe (e.g., 1)",
+              "text": "Searches only the single closest cluster. Extremely fast, but lower recall."
+            },
+            "right": {
+              "emoji": "🎯",
+              "tag": "High nprobe (e.g., 10)",
+              "text": "Searches multiple nearby clusters. Slower query speed, but much higher recall."
+            }
+          }
+        }
+      ]
+    },
+    {
+      "type": "practice",
+      "exercises": [
+        {
+          "id": "p1",
+          "type": "multiple_choice",
+          "xp": 2,
+          "prompt": "What is the direct consequence of increasing the nprobe parameter?",
+          "options": [
+            {
+              "id": "mc1",
+              "text": "Lower recall and lower latency",
+              "correct": false
+            },
+            {
+              "id": "mc2",
+              "text": "Lower recall and higher latency",
+              "correct": false
+            },
+            {
+              "id": "mc3",
+              "text": "Higher recall and higher latency",
+              "correct": true
+            },
+            {
+              "id": "mc4",
+              "text": "Higher recall and lower latency",
+              "correct": false
+            }
+          ],
+          "explain": "Increasing nprobe directs the database to search more clusters, which naturally takes more time (higher latency) but finds more of the true nearest neighbors (higher recall)."
+        },
+        {
+          "id": "p2",
+          "type": "true_false",
+          "xp": 2,
+          "prompt": "True or False: If nprobe is set to the total number of clusters, the search becomes equivalent to an exhaustive flat search.",
+          "options": [
+            {
+              "id": "t1",
+              "text": "True",
+              "correct": true
+            },
+            {
+              "id": "f1",
+              "text": "False",
+              "correct": false
+            }
+          ],
+          "explain": "An IVF index restricts the search to only the most relevant partitions. If you set nprobe to equal the total number of clusters, you end up searching every single partition, which is equivalent to a brute-force search."
+        },
+        {
+          "id": "p3",
+          "type": "fill_blank",
+          "xp": 2,
+          "prompt": "Fill in the missing word describing the relationship between speed and accuracy:",
+          "sentence": "Adjusting the nprobe parameter manages the direct tradeoff between search latency and recall.",
+          "blank": "tradeoff",
+          "words": [
+            "tradeoff",
+            "balance",
+            "distance"
+          ],
+          "explain": "The core relationship governed by nprobe is the trade-off between search speed (latency) and the quality of results (recall)."
+        },
+        {
+          "id": "p4",
+          "type": "spot_the_ai",
+          "xp": 2,
+          "prompt": "Which of the following describes the role of the nprobe parameter?",
+          "options": [
+            {
+              "id": "sai1",
+              "text": "It changes the total number of clusters created during the indexing phase.",
+              "correct": false
+            },
+            {
+              "id": "sai2",
+              "text": "It determines the number of nearby partitions to search through at query time.",
+              "correct": true
+            },
+            {
+              "id": "sai3",
+              "text": "It compresses the dimensions of the vector embeddings to save memory.",
+              "correct": false
+            }
+          ],
+          "explain": "The prompt specifically asks for the impact of nprobe on search behavior, which is to look inside more cluster partitions rather than changing the total number of clusters in the database."
+        }
+      ]
+    },
+    {
+      "type": "boss",
+      "exercises": [
+        {
+          "id": "b1",
+          "type": "multiple_choice",
+          "xp": 5,
+          "prompt": "You have clustered your vector database into 100 partitions. At query time, you want to retrieve highly accurate results quickly without scanning the entire database. Which nprobe setting offers the best balance?",
+          "options": [
+            {
+              "id": "b1",
+              "text": "nprobe = 1, because it guarantees the absolute highest recall rate",
+              "correct": false
+            },
+            {
+              "id": "b2",
+              "text": "nprobe = 10, because it balances high recall with low search latency",
+              "correct": true
+            },
+            {
+              "id": "b3",
+              "text": "nprobe = 100, because it is the fastest way to get an approximate match",
+              "correct": false
+            },
+            {
+              "id": "b4",
+              "text": "nprobe = 0, because it bypasses the clustering index entirely to save RAM",
+              "correct": false
+            }
+          ],
+          "explain": "Setting nprobe to 10 is a balanced compromise: it searches 10% of the clusters (10 out of 100), which significantly boosts recall compared to nprobe=1, while keeping latency low by avoiding a search through all 100 clusters. Setting nprobe to 100 defeats the purpose of indexing by doing a full scan."
+        }
+      ]
+    }
+  ]
+}

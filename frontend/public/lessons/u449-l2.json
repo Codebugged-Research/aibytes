@@ -1,0 +1,222 @@
+{
+  "id": "u449-l2",
+  "unit": 449,
+  "day": 2247,
+  "tier": "LLM Application Engineering",
+  "tierIcon": "🔌",
+  "title": "Combining Hybrid Search with Query Rewriting",
+  "icon": "🔀",
+  "concept": "Layering HyDE or LLM-rewritten queries on top of a hybrid dense+sparse retriever.",
+  "xp": 15,
+  "hearts": 3,
+  "estMinutes": 7,
+  "segments": [
+    {
+      "type": "warmup",
+      "exercises": [
+        {
+          "id": "w1",
+          "type": "multiple_choice",
+          "xp": 1,
+          "prompt": "When matching your retrieval strategy to the query type, which of the following is true?",
+          "options": [
+            {
+              "id": "opt_1",
+              "text": "Sparse search is best for conceptual queries, while dense search is best for exact serial numbers.",
+              "correct": false
+            },
+            {
+              "id": "opt_2",
+              "text": "Sparse search is best for specific terms/IDs, while dense search is best for general concepts.",
+              "correct": true
+            },
+            {
+              "id": "opt_3",
+              "text": "Hybrid search is only used when vector search completely fails to find any matches.",
+              "correct": false
+            }
+          ],
+          "explain": "In the last lesson, we learned that sparse (keyword) search is best for precise matching like error codes, while dense (vector) search excels at matching abstract concepts."
+        }
+      ]
+    },
+    {
+      "type": "teach",
+      "cards": [
+        {
+          "kind": "hook",
+          "icon": "🎣",
+          "title": "The Search Supercharger",
+          "body": "Sometimes, a user's query is too short or uses the wrong terminology. By rewriting the query first and then performing a hybrid search, we can retrieve highly accurate documents even if the user didn't know the exact technical words."
+        },
+        {
+          "kind": "definition",
+          "icon": "⚙️",
+          "title": "Hybrid Search + Query Rewriting",
+          "body": "Combining hybrid search with query rewriting means using an LLM to expand or rewrite a user's prompt (like creating a hypothetical answer with HyDE) before sending it to both keyword (sparse) and vector (dense) retrieval systems."
+        },
+        {
+          "kind": "analogy",
+          "icon": "🔍",
+          "title": "The Helpful Librarian",
+          "body": "Think of query rewriting like asking a librarian to translate your vague question. Instead of searching a database for 'bad laptop screen', the librarian generates a description of a 'damaged LCD panel with vertical lines' to search both keyword and concept indexes."
+        },
+        {
+          "kind": "example",
+          "icon": "💡",
+          "title": "From Blue Screen to Kernel Panic",
+          "body": "A user asks 'Why is my screen blue?' An LLM rewrites this to include words like 'BSOD, crash dump, kernel panic'. This rewritten text is then used to search a vector database for semantic meaning and a keyword database for the exact error code."
+        },
+        {
+          "kind": "mythbust",
+          "icon": "🚫",
+          "title": "Not Just for Vector Databases",
+          "body": "You might think query rewriting is only useful for vector search. In reality, it is incredibly powerful for keyword search too, as it generates synonyms and technical jargon that map directly to exact words in your documents."
+        },
+        {
+          "kind": "visual",
+          "icon": "📊",
+          "title": "Visualizing Query Expansion",
+          "body": "Comparing search inputs with and without query rewriting before running a hybrid search.",
+          "compare": {
+            "left": {
+              "emoji": "🔍",
+              "tag": "Raw Query",
+              "text": "'Python speed' -> Searches only for exact term 'speed' and general Python concepts."
+            },
+            "right": {
+              "emoji": "🚀",
+              "tag": "Rewritten Query",
+              "text": "'Python execution time, performance, bottleneck, CPython' -> Searches for exact terms AND deep performance concepts."
+            }
+          }
+        }
+      ]
+    },
+    {
+      "type": "practice",
+      "exercises": [
+        {
+          "id": "p1",
+          "type": "multiple_choice",
+          "xp": 2,
+          "prompt": "Why do we apply query rewriting before performing a hybrid dense+sparse search?",
+          "options": [
+            {
+              "id": "opt_a",
+              "text": "It replaces the need for database indexes entirely.",
+              "correct": false
+            },
+            {
+              "id": "opt_b",
+              "text": "It expands the query with synonyms and context to improve both keyword and vector matching.",
+              "correct": true
+            },
+            {
+              "id": "opt_c",
+              "text": "It compresses the query down to a single keyword to speed up searches.",
+              "correct": false
+            },
+            {
+              "id": "opt_d",
+              "text": "It prevents the vector database from returning irrelevant matches.",
+              "correct": false
+            }
+          ],
+          "explain": "Query rewriting helps bridge the vocabulary gap by generating synonyms and detailed explanations, which benefits both keyword (sparse) matching and concept-based (dense) matching."
+        },
+        {
+          "id": "p2",
+          "type": "true_false",
+          "xp": 2,
+          "prompt": "True or False: When combining query rewriting with hybrid search, you run the rewritten query through both the keyword retriever and the vector retriever.",
+          "options": [
+            {
+              "id": "opt_true",
+              "text": "True",
+              "correct": true
+            },
+            {
+              "id": "opt_false",
+              "text": "False",
+              "correct": false
+            }
+          ],
+          "explain": "Hybrid search combines keyword (sparse) and vector (dense) search. Combining this with query rewriting means we rewrite the query first, then run both search types."
+        },
+        {
+          "id": "p3",
+          "type": "fill_blank",
+          "xp": 2,
+          "prompt": "Fill in the blank with the abbreviation for the technique that generates a mock answer to search with:",
+          "sentence": "We can use HyDE to generate a realistic response template before starting our hybrid search.",
+          "blank": "HyDE",
+          "words": [
+            "HyDE",
+            "RAG",
+            "RRF"
+          ],
+          "explain": "HyDE (Hypothetical Document Embeddings) is a query rewriting technique where an LLM generates a fake answer to the query first, which is then used to search the database."
+        },
+        {
+          "id": "p4",
+          "type": "spot_the_ai",
+          "xp": 2,
+          "prompt": "Identify which explanation of the hybrid search pipeline was written by an AI:",
+          "options": [
+            {
+              "id": "opt_a",
+              "text": "First, generate a hypothetical answer using the LLM. Next, send that text to both BM25 and vector retrievers.",
+              "correct": false
+            },
+            {
+              "id": "opt_b",
+              "text": "The utility of leveraging a prior LLM synthesis step is to optimize the semantic alignment vector representations while concurrently preserving lexical overlap parameters during subsequent dual-channel execution.",
+              "correct": true
+            },
+            {
+              "id": "opt_c",
+              "text": "To set this up, pass the rewritten user query through both the dense vector search and the sparse keyword search, then combine the ranks.",
+              "correct": false
+            }
+          ],
+          "explain": "Option B sounds like a generic, slightly robotic explanation generated by an AI explaining a hybrid pipeline, whereas A and C are concise instructions."
+        }
+      ]
+    },
+    {
+      "type": "boss",
+      "exercises": [
+        {
+          "id": "b1",
+          "type": "multiple_choice",
+          "xp": 5,
+          "prompt": "You want to implement the ultimate retrieval pipeline for a complex technical support system. What is the correct order of operations to combine Query Rewriting (HyDE) with Hybrid Search?",
+          "options": [
+            {
+              "id": "opt_1",
+              "text": "1. Rewrite query into a hypothetical document -> 2. Search via Dense + Sparse -> 3. Combine results using RRF",
+              "correct": true
+            },
+            {
+              "id": "opt_2",
+              "text": "1. Run keyword search -> 2. Generate a vector from results -> 3. Rewrite the vector using an LLM",
+              "correct": false
+            },
+            {
+              "id": "opt_3",
+              "text": "1. Dense search -> 2. Sparse search -> 3. Use HyDE to select the single best document from the dense list",
+              "correct": false
+            },
+            {
+              "id": "opt_4",
+              "text": "1. Rewrite query -> 2. Run dense search only -> 3. Run sparse search only on the rewrite's metadata",
+              "correct": false
+            }
+          ],
+          "explain": "First, we rewrite the user's brief query into a detailed hypothetical document (HyDE) to expand the concept space. Then, we execute both vector (dense) and keyword (sparse) searches on this expanded text to ensure we catch both deep semantic meanings and exact system terms, combining them using Reciprocal Rank Fusion (RRF)."
+        }
+      ]
+    }
+  ]
+}

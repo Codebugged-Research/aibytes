@@ -1,0 +1,222 @@
+{
+  "id": "u437-l2",
+  "unit": 437,
+  "day": 2187,
+  "tier": "LLM Application Engineering",
+  "tierIcon": "🔌",
+  "title": "How HNSW Builds Its Graph",
+  "icon": "🏗️",
+  "concept": "Inserting a new vector by connecting it to its nearest existing neighbors across multiple graph layers.",
+  "xp": 15,
+  "hearts": 3,
+  "estMinutes": 7,
+  "segments": [
+    {
+      "type": "warmup",
+      "exercises": [
+        {
+          "id": "w1",
+          "type": "multiple_choice",
+          "xp": 1,
+          "prompt": "How does HNSW speed up nearest-neighbor search compared to a flat vector scan?",
+          "options": [
+            {
+              "id": "w1",
+              "text": "A flat, single-layer list that requires checking every vector one by one.",
+              "correct": false
+            },
+            {
+              "id": "w2",
+              "text": "A multi-layer graph structure that allows fast, greedy traversal from sparse top layers to dense bottom layers.",
+              "correct": true
+            },
+            {
+              "id": "w3",
+              "text": "A tree structure that splits data using axis-aligned hyperplanes.",
+              "correct": false
+            }
+          ],
+          "explain": "HNSW uses a multi-layer graph where upper layers have longer, sparser connections (highways) and lower layers have shorter, denser connections (local roads) to speed up searching."
+        }
+      ]
+    },
+    {
+      "type": "teach",
+      "cards": [
+        {
+          "kind": "hook",
+          "icon": "🛣️",
+          "title": "Adding to the Web",
+          "body": "We know HNSW is structured like a multi-layer highway system. But how does a brand new city get connected to this highway network without causing a traffic jam or ruining the shortcuts?"
+        },
+        {
+          "kind": "definition",
+          "icon": "🕸️",
+          "title": "Layer-by-Layer Insertion",
+          "body": "When a new vector joins an HNSW graph, it is assigned a random maximum layer. The algorithm then searches from the top layer down, finding the nearest existing nodes at each level and creating links to them."
+        },
+        {
+          "kind": "analogy",
+          "icon": "✈️",
+          "title": "The Airport Connection",
+          "body": "Think of building an HNSW graph like placing a new airport on a map. You first connect it to major international hubs on the top layer, then to regional airports in the middle layer, and finally to local airstrips at the very bottom."
+        },
+        {
+          "kind": "example",
+          "icon": "📝",
+          "title": "Step-by-Step Build",
+          "body": "If a new vector is assigned to start at Layer 1, the algorithm finds its closest neighbor on Layer 2 to use as an entry point, then drops to Layer 1 to find and link to its closest neighbors there, and finally does the same at Layer 0."
+        },
+        {
+          "kind": "mythbust",
+          "icon": "🚫",
+          "title": "Not a Web of Everyone",
+          "body": "You might think a new vector connects to every single node on its assigned layers. In reality, it only connects to a small, limited number of its nearest neighbors (defined by a parameter 'M') to keep the graph sparse and fast."
+        },
+        {
+          "kind": "visual",
+          "icon": "👁️",
+          "title": "Visualizing the Insertion Hierarchy",
+          "body": "See how a new node finds its place in the hierarchy, linking to close peers at its assigned levels while ignoring layers above its limit.",
+          "compare": {
+            "left": {
+              "emoji": "🏔️",
+              "tag": "Top Layer (Sparse)",
+              "text": "Only long-range highway nodes. The new node might skip this layer entirely if its random height is low."
+            },
+            "right": {
+              "emoji": "🏡",
+              "tag": "Bottom Layer (Dense)",
+              "text": "All nodes exist here. The new node links to its closest local neighbors to form tight clusters."
+            }
+          }
+        }
+      ]
+    },
+    {
+      "type": "practice",
+      "exercises": [
+        {
+          "id": "p1",
+          "type": "multiple_choice",
+          "xp": 2,
+          "prompt": "How does HNSW decide the maximum layer (or height) at which a new vector is inserted?",
+          "options": [
+            {
+              "id": "mc1",
+              "text": "A probability distribution that makes higher layers much sparser than lower layers",
+              "correct": true
+            },
+            {
+              "id": "mc2",
+              "text": "It is always placed on the absolute top layer only",
+              "correct": false
+            },
+            {
+              "id": "mc3",
+              "text": "Every vector is automatically inserted into every single layer of the graph",
+              "correct": false
+            },
+            {
+              "id": "mc4",
+              "text": "It is decided by the user manually for each vector",
+              "correct": false
+            }
+          ],
+          "explain": "HNSW uses an exponential decay probability distribution to assign a maximum layer to each new vector, making lower layers crowded and upper layers very sparse."
+        },
+        {
+          "id": "p2",
+          "type": "true_false",
+          "xp": 2,
+          "prompt": "True or False: A new vector is connected to neighbors on every single layer of the HNSW graph, even those above its randomly assigned maximum layer.",
+          "options": [
+            {
+              "id": "tf_t",
+              "text": "True",
+              "correct": false
+            },
+            {
+              "id": "tf_f",
+              "text": "False",
+              "correct": true
+            }
+          ],
+          "explain": "If a node's maximum layer is Layer 1, it will have connections on Layer 1 and Layer 0, but it will not exist or have links on Layer 2 or above."
+        },
+        {
+          "id": "p3",
+          "type": "fill_blank",
+          "xp": 2,
+          "prompt": "Fill in the missing phrase to describe how HNSW links new nodes:",
+          "sentence": "During insertion, the new node links to its nearest neighbors at each allowed layer.",
+          "blank": "nearest neighbors",
+          "words": [
+            "nearest neighbors",
+            "random points",
+            "top layers"
+          ],
+          "explain": "By connecting only to its nearest neighbors at each level, the graph maintains local clusters while preserving the overall highway structure."
+        },
+        {
+          "id": "p4",
+          "type": "spot_the_ai",
+          "xp": 2,
+          "prompt": "Identify the correct description of the HNSW insertion search process.",
+          "options": [
+            {
+              "id": "sai1",
+              "text": "The vector is blindly attached to the center node of the graph on all layers without running any search.",
+              "correct": false
+            },
+            {
+              "id": "sai2",
+              "text": "The algorithm searches from the bottom layer upward, adding connections until it hits a layer that is completely full.",
+              "correct": false
+            },
+            {
+              "id": "sai3",
+              "text": "The algorithm performs a top-down greedy search, using the closest node found on a higher layer as the entry point to search the next layer down.",
+              "correct": true
+            }
+          ],
+          "explain": "The AI response correctly identifies the top-down traversal process where search results at upper layers act as the starting points for searching the next layer down during insertion."
+        }
+      ]
+    },
+    {
+      "type": "boss",
+      "exercises": [
+        {
+          "id": "b1",
+          "type": "multiple_choice",
+          "xp": 5,
+          "prompt": "When a new vector is inserted into an HNSW graph, how does the algorithm determine which existing nodes to connect it to across the different layers?",
+          "options": [
+            {
+              "id": "opt1",
+              "text": "It connects only to the single absolute closest vector at the bottom layer and ignores upper layers.",
+              "correct": false
+            },
+            {
+              "id": "opt2",
+              "text": "It searches greedily from the top down, and at layers below its birth level, it finds and links to its nearest neighbors.",
+              "correct": true
+            },
+            {
+              "id": "opt3",
+              "text": "It randomly selects points on all layers without using any search algorithm to speed up insertion.",
+              "correct": false
+            },
+            {
+              "id": "opt4",
+              "text": "It completely rebuilds the entire multi-layer graph from scratch for every single new vector.",
+              "correct": false
+            }
+          ],
+          "explain": "When inserting a new vector, HNSW performs a greedy search at each layer starting from the entry point of the layer above. Once it reaches the insertion threshold ($l \\le L$), it finds the closest neighbors at that layer, connects to them, and uses those connections as the entry points for the next layer down. This ensures the graph remains navigable and connected at all scales."
+        }
+      ]
+    }
+  ]
+}

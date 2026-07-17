@@ -1,0 +1,222 @@
+{
+  "id": "u477-l3",
+  "unit": 477,
+  "day": 2388,
+  "tier": "LLM Application Engineering",
+  "tierIcon": "🔌",
+  "title": "Detecting Silent Quality Regressions",
+  "icon": "🔍",
+  "concept": "Monitoring retrieval score distributions and answer-length patterns to catch drift before users complain.",
+  "xp": 15,
+  "hearts": 3,
+  "estMinutes": 7,
+  "segments": [
+    {
+      "type": "warmup",
+      "exercises": [
+        {
+          "id": "w1",
+          "type": "multiple_choice",
+          "xp": 1,
+          "prompt": "In the previous lesson, we learned how to follow a request through multiple microservices. What identifier ties together the retrieval, reranking, and generation logs for a single user query?",
+          "options": [
+            {
+              "id": "api_key",
+              "text": "An API Key",
+              "correct": false
+            },
+            {
+              "id": "trace_id",
+              "text": "A Trace ID",
+              "correct": true
+            },
+            {
+              "id": "user_ip",
+              "text": "A User IP Address",
+              "correct": false
+            }
+          ],
+          "explain": "A trace ID acts as a unique thread, connecting every step from the initial search retrieval to the final LLM response generation, allowing developers to debug the entire lifecycle of a single request."
+        }
+      ]
+    },
+    {
+      "type": "teach",
+      "cards": [
+        {
+          "kind": "hook",
+          "icon": "🔇",
+          "title": "The Silent Failure Mode",
+          "body": "An LLM application can fail completely without ever throwing an error code. If the database returns irrelevant documents, the LLM will still happily generate a polite, formatted, but entirely wrong answer."
+        },
+        {
+          "kind": "definition",
+          "icon": "📉",
+          "title": "What is a Silent Regression?",
+          "body": "Silent quality regressions occur when an LLM application continues to return HTTP 200 success codes, but the quality of the generated answers or retrieved search results quietly degrades over time."
+        },
+        {
+          "kind": "analogy",
+          "icon": "🍲",
+          "title": "The Slow Recipe Drift",
+          "body": "Think of silent quality regressions like a restaurant slowly serving smaller portions or slightly less fresh ingredients. Customers don't walk out immediately, but if you measure the average plate weight and ingredient freshness scores daily, you catch the drop before the dining room goes empty."
+        },
+        {
+          "kind": "example",
+          "icon": "📊",
+          "title": "Signals in the Noise",
+          "body": "If your system's average retrieval confidence score drops from 0.85 to 0.61, or if output lengths suddenly shrink from 150 words to 12 words, your application is likely serving incomplete or irrelevant answers."
+        },
+        {
+          "kind": "mythbust",
+          "icon": "🛑",
+          "title": "Green Dashboards Can Lie",
+          "body": "System uptime and API error rates are great, but they don't tell you if your LLM has started hallucinating or if your search index has corrupted. You must monitor content-level distribution metrics too."
+        },
+        {
+          "kind": "visual",
+          "icon": "📊",
+          "title": "Visualizing System Drift",
+          "body": "Comparing healthy retrieval metrics against a system experiencing silent regression.",
+          "compare": {
+            "left": {
+              "emoji": "📈",
+              "tag": "Healthy System",
+              "text": "High similarity scores (average 0.88) and expected answer length distributions."
+            },
+            "right": {
+              "emoji": "📉",
+              "tag": "Silent Drift",
+              "text": "Low similarity scores (average 0.52) and abnormally short, repetitive answers."
+            }
+          }
+        }
+      ]
+    },
+    {
+      "type": "practice",
+      "exercises": [
+        {
+          "id": "p1",
+          "type": "multiple_choice",
+          "xp": 2,
+          "prompt": "Which of the following is a key metric used to detect silent LLM quality drift without reading every single response manually?",
+          "options": [
+            {
+              "id": "latency",
+              "text": "Network latency spikes",
+              "correct": false
+            },
+            {
+              "id": "length_drift",
+              "text": "A sudden drop in average generated answer length",
+              "correct": true
+            },
+            {
+              "id": "memory",
+              "text": "System RAM utilization",
+              "correct": false
+            },
+            {
+              "id": "api_calls",
+              "text": "The number of API calls per minute",
+              "correct": false
+            }
+          ],
+          "explain": "Answer-length tracking is a simple, effective proxy metric. If the average response length suddenly drops, it often indicates the model is hitting token limits, erroring out early, or giving brief, unhelpful answers."
+        },
+        {
+          "id": "p2",
+          "type": "true_false",
+          "xp": 2,
+          "prompt": "True or False: If your LLM application has a 100% uptime and 0% error rate, you can guarantee that users are receiving high-quality answers.",
+          "options": [
+            {
+              "id": "true_val",
+              "text": "True",
+              "correct": false
+            },
+            {
+              "id": "false_val",
+              "text": "False",
+              "correct": true
+            }
+          ],
+          "explain": "Even if the application is fully online and returns 200 OK statuses, the retrieved content can be irrelevant, resulting in polite but useless answers."
+        },
+        {
+          "id": "p3",
+          "type": "fill_blank",
+          "xp": 2,
+          "prompt": "Fill in the missing concept to complete the monitoring strategy:",
+          "sentence": "To catch search quality degradation early, we track retrieval score distributions over time.",
+          "blank": "score distributions",
+          "words": [
+            "score distributions",
+            "CPU limits",
+            "memory leaks"
+          ],
+          "explain": "Tracking score distributions helps you see if the overall quality of retrieved documents is shifting downward, even if the system isn't throwing errors."
+        },
+        {
+          "id": "p4",
+          "type": "spot_the_ai",
+          "xp": 2,
+          "prompt": "Which of these monitoring tasks represents an observability system built specifically to catch silent quality regressions?",
+          "options": [
+            {
+              "id": "human_1",
+              "text": "Alert the developer team if the API returns a 500 error code on three consecutive user requests.",
+              "correct": false
+            },
+            {
+              "id": "human_2",
+              "text": "Monitor the hosting server's memory usage and trigger an auto-restart if it exceeds 90%.",
+              "correct": false
+            },
+            {
+              "id": "ai_1",
+              "text": "Run a daily statistical test comparing the distribution of vector search similarity scores against last week's baseline to flag shifts.",
+              "correct": true
+            }
+          ],
+          "explain": "Option C represents an automated statistical check designed to flag silent quality regressions in data retrieval before users notice. Options A and B are traditional software health metrics."
+        }
+      ]
+    },
+    {
+      "type": "boss",
+      "exercises": [
+        {
+          "id": "b1",
+          "type": "multiple_choice",
+          "xp": 5,
+          "prompt": "You deploy a new chunking strategy for your vector database. Which metric visualization would most reliably warn you that your retrieval quality has degraded across all queries before users start reporting bad answers?",
+          "options": [
+            {
+              "id": "dist_shift",
+              "text": "A leftward shift in the entire retrieval score distribution curve",
+              "correct": true
+            },
+            {
+              "id": "cpu_spike",
+              "text": "A sudden spike in database CPU usage",
+              "correct": false
+            },
+            {
+              "id": "token_increase",
+              "text": "An increase in the maximum output token count for a few outlier users",
+              "correct": false
+            },
+            {
+              "id": "error_rate",
+              "text": "An increase in 500 internal server error responses",
+              "correct": false
+            }
+          ],
+          "explain": "By plotting the entire distribution of retrieval scores, you can spot if a change in the data pipeline or embedding model causes a bulk shift toward lower relevance, even if individual outlier queries still look fine. Average numbers often hide these shifts."
+        }
+      ]
+    }
+  ]
+}

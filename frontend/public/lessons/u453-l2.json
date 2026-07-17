@@ -1,0 +1,222 @@
+{
+  "id": "u453-l2",
+  "unit": 453,
+  "day": 2267,
+  "tier": "LLM Application Engineering",
+  "tierIcon": "🔌",
+  "title": "The RRF Formula",
+  "icon": "➕",
+  "concept": "Scoring each document by the sum of 1/(k + rank) across all source lists it appears in.",
+  "xp": 15,
+  "hearts": 3,
+  "estMinutes": 7,
+  "segments": [
+    {
+      "type": "warmup",
+      "exercises": [
+        {
+          "id": "w1",
+          "type": "multiple_choice",
+          "xp": 1,
+          "prompt": "Why is it challenging to combine ranked lists from sparse (BM25) and dense (vector) retrievers by simply adding their raw scores?",
+          "options": [
+            {
+              "id": "wu_same_scale",
+              "text": "They output identical score ranges that can be added directly.",
+              "correct": false
+            },
+            {
+              "id": "wu_diff_scale",
+              "text": "They output scores on entirely different scales that cannot be compared directly.",
+              "correct": true
+            },
+            {
+              "id": "wu_no_scores",
+              "text": "They do not output any scores, only unstructured text.",
+              "correct": false
+            }
+          ],
+          "explain": "In hybrid search, we retrieve documents using different systems (like BM25 sparse search and vector dense search). Because their raw scores are on completely different scales, we must normalize or merge them."
+        }
+      ]
+    },
+    {
+      "type": "teach",
+      "cards": [
+        {
+          "kind": "hook",
+          "icon": "🍎",
+          "title": "Forget the Raw Scores",
+          "body": "How do you merge a list scored in search relevance percentages with a list scored in vector distance decimals? You don't! Instead of comparing apples to oranges, RRF throws away the raw scores and only looks at the rank positions."
+        },
+        {
+          "kind": "definition",
+          "icon": "🧮",
+          "title": "The RRF Formula",
+          "body": "Reciprocal Rank Fusion (RRF) scores each document by adding up 1 / (k + rank) for every list it appears in. Here, 'rank' is the 1-based position in a list, and 'k' is a small constant (usually 60) that stops top-ranked items from completely overpowering everything else."
+        },
+        {
+          "kind": "analogy",
+          "icon": "🏆",
+          "title": "The Tournament Leaderboard",
+          "body": "Think of RRF like scoring a multi-stage tournament. Instead of averaging raw points (which might be biased), we reward a player simply for finishing high up in each stage. Finishing 1st gets the biggest slice, while finishing 100th gets next to nothing."
+        },
+        {
+          "kind": "example",
+          "icon": "📝",
+          "title": "A Quick Calculation",
+          "body": "If a document is ranked 2nd in a keyword search and 5th in a vector search, and we use k = 60, its RRF score is 1/(60 + 2) + 1/(60 + 5). This equals 1/62 + 1/65, which is roughly 0.0161 + 0.0153 = 0.0314."
+        },
+        {
+          "kind": "mythbust",
+          "icon": "🛡️",
+          "title": "Why Not Just Add Ranks?",
+          "body": "You might think we should just add the raw ranks directly (like 1st + 5th = 6). But doing this penalizes documents that fail to appear in one of the lists. RRF naturally handles missing items by giving them a reciprocal score of 0 for that list."
+        },
+        {
+          "kind": "visual",
+          "icon": "📊",
+          "title": "Visualizing the Math",
+          "body": "RRF converts list positions into fractional points. The constant 'k' smooths the curve so that rank 1 doesn't completely obliterate rank 2.",
+          "compare": {
+            "left": {
+              "emoji": "🥇",
+              "tag": "Rank 1 (k=60)",
+              "text": "1 / (60 + 1) = 0.01639 points"
+            },
+            "right": {
+              "emoji": "🥈",
+              "tag": "Rank 2 (k=60)",
+              "text": "1 / (60 + 2) = 0.01612 points"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "type": "practice",
+      "exercises": [
+        {
+          "id": "p1",
+          "type": "multiple_choice",
+          "xp": 2,
+          "prompt": "In the RRF formula 1 / (k + rank), what happens to the score contribution of a document as its rank position gets worse (larger)?",
+          "options": [
+            {
+              "id": "mc_decrease",
+              "text": "The score contribution decreases significantly.",
+              "correct": true
+            },
+            {
+              "id": "mc_increase",
+              "text": "The score contribution increases.",
+              "correct": false
+            },
+            {
+              "id": "mc_constant",
+              "text": "The score contribution remains exactly the same.",
+              "correct": false
+            },
+            {
+              "id": "mc_negative",
+              "text": "The score contribution becomes negative.",
+              "correct": false
+            }
+          ],
+          "explain": "As the rank number grows larger (e.g., from 1 to 100), the denominator (k + rank) increases, which makes the fraction 1 / (k + rank) much smaller. This gives less weight to poorly ranked items."
+        },
+        {
+          "id": "p2",
+          "type": "true_false",
+          "xp": 2,
+          "prompt": "True or False: RRF can easily score a document even if it only appears in one of the source lists.",
+          "options": [
+            {
+              "id": "tf_true",
+              "text": "True",
+              "correct": true
+            },
+            {
+              "id": "tf_false",
+              "text": "False",
+              "correct": false
+            }
+          ],
+          "explain": "If a document is missing from a list, it does not get a rank for that list, so its reciprocal contribution for that list is 0. We simply sum the contributions from the lists it does appear in."
+        },
+        {
+          "id": "p3",
+          "type": "fill_blank",
+          "xp": 2,
+          "prompt": "Fill in the missing word to describe how ranks are transformed in the RRF formula:",
+          "sentence": "The RRF formula uses the reciprocal value of the rank so that top results get the highest scores.",
+          "blank": "reciprocal",
+          "words": [
+            "reciprocal",
+            "multiplied",
+            "squared"
+          ],
+          "explain": "By placing the rank in the denominator (1 / rank), we are taking its reciprocal. This ensures that high ranks (like 1st) produce much larger numbers than low ranks (like 100th)."
+        },
+        {
+          "id": "p4",
+          "type": "spot_the_ai",
+          "xp": 2,
+          "prompt": "Which of the following Python functions correctly implements the reciprocal rank fusion score calculation for a document across its ranks?",
+          "options": [
+            {
+              "id": "sai_correct",
+              "text": "def rrf_score(ranks, k=60):\\n    return sum(1.0 / (k + r) for r in ranks)",
+              "correct": true
+            },
+            {
+              "id": "sai_wrong_1",
+              "text": "def rrf_score(ranks, k=60):\\n    return sum(k / r for r in ranks if r > 0)",
+              "correct": false
+            },
+            {
+              "id": "sai_wrong_2",
+              "text": "def rrf_score(ranks, k=60):\\n    return sum(1.0 / (k * r) for r in ranks)",
+              "correct": false
+            }
+          ],
+          "explain": "The first option correctly calculates RRF scores by summing 1/(60+rank) for each list a document appears in. The other options show incorrect formulas or hallucinated scoring logics."
+        }
+      ]
+    },
+    {
+      "type": "boss",
+      "exercises": [
+        {
+          "id": "b1",
+          "type": "multiple_choice",
+          "xp": 5,
+          "prompt": "Let's calculate a fusion! You have two ranked lists (Sparse and Dense) with k = 60. Doc A is ranked 1st in Sparse and 2nd in Dense. Doc B is ranked 1st in Dense but does not appear in Sparse. Who wins, and what are their approximate scores?",
+          "options": [
+            {
+              "id": "opt_a_wins",
+              "text": "Doc A wins with a score of approx 0.0325, while Doc B gets approx 0.0164.",
+              "correct": true
+            },
+            {
+              "id": "opt_b_wins",
+              "text": "Doc B wins because it has the absolute highest single rank (1st place).",
+              "correct": false
+            },
+            {
+              "id": "opt_equal",
+              "text": "Both docs tie because they both achieved a 1st place rank in one of the lists.",
+              "correct": false
+            },
+            {
+              "id": "opt_k_zero",
+              "text": "The scores cannot be calculated because the constant k is set to 0.",
+              "correct": false
+            }
+          ],
+          "explain": "RRF uses the formula 1 / (k + rank) for each list. For Doc A, the ranks are 1 (sparse) and 2 (dense). With k = 60, its score is 1/(60+1) + 1/(60+2) = 1/61 + 1/62 ≈ 0.01639 + 0.01612 = 0.03251. For Doc B, the rank is 1 (dense) and it doesn't appear in the sparse list (rank infinity, giving 0). Its score is 1/(60+1) = 1/61 ≈ 0.01639. Thus, Doc A wins because it appeared high up in both lists."
+        }
+      ]
+    }
+  ]
+}

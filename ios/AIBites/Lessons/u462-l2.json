@@ -1,0 +1,222 @@
+{
+  "id": "u462-l2",
+  "unit": 462,
+  "day": 2312,
+  "tier": "LLM Application Engineering",
+  "tierIcon": "🔌",
+  "title": "Building a Knowledge Graph from Documents",
+  "icon": "🏗️",
+  "concept": "Extracting entities and relationships from text to construct a graph layered alongside the vector index.",
+  "xp": 15,
+  "hearts": 3,
+  "estMinutes": 7,
+  "segments": [
+    {
+      "type": "warmup",
+      "exercises": [
+        {
+          "id": "w1",
+          "type": "multiple_choice",
+          "xp": 1,
+          "prompt": "In our last lesson, we learned why flat chunks struggle with complex queries. What is the main limitation of traditional vector search?",
+          "options": [
+            {
+              "id": "a",
+              "text": "Vector databases cannot store text chunks longer than ten words.",
+              "correct": false
+            },
+            {
+              "id": "b",
+              "text": "Vector search looks at individual chunks in isolation, missing relationships scattered across different documents.",
+              "correct": true
+            },
+            {
+              "id": "c",
+              "text": "Vector search uses too many complex graph paths to find simple answers.",
+              "correct": false
+            }
+          ],
+          "explain": "Standard vector search looks for general semantic similarity inside individual chunks, but it struggles to follow multi-hop connections that cross different, unrelated text chunks."
+        }
+      ]
+    },
+    {
+      "type": "teach",
+      "cards": [
+        {
+          "kind": "hook",
+          "icon": "🗺️",
+          "title": "Connecting the Dots",
+          "body": "Traditional RAG stores text in isolated blocks, completely blind to how information in Document A connects to Document B. By extracting entities and relationships, we can build a connected map that lets the AI trace connections across your entire database."
+        },
+        {
+          "kind": "definition",
+          "icon": "🕸️",
+          "title": "Constructing the Graph",
+          "body": "Building a Knowledge Graph involves reading documents, using an LLM to identify key concepts (entities), and linking them together with labeled lines (relationships) to form a structured map."
+        },
+        {
+          "kind": "analogy",
+          "icon": "📌",
+          "title": "The Detective's Yarn Wall",
+          "body": "Think of this process like reading a detective novel and pinning clues to a corkboard. Instead of just storing page clippings in folders (like raw vector search), you draw yarn lines between characters and clues to map out who knows whom and where they went."
+        },
+        {
+          "kind": "example",
+          "icon": "🏢",
+          "title": "From Text to Nodes and Edges",
+          "body": "If your document says 'Alice works at Acme Corp in Boston', the LLM extracts 'Alice' and 'Acme Corp' as nodes, and 'WORKS_IN' as the connecting edge. It might also link 'Acme Corp' to 'Boston' with an 'LOCATED_IN' edge."
+        },
+        {
+          "kind": "mythbust",
+          "icon": "🤖",
+          "title": "Myth: Graphs Must Be Hand-Built",
+          "body": "Many believe that knowledge graphs must be built manually by human experts. In modern GraphRAG, we use LLMs to automatically read raw text and extract entities and relationships, saving thousands of hours of manual labor."
+        },
+        {
+          "kind": "visual",
+          "icon": "📊",
+          "title": "Vectors vs. Graphs",
+          "body": "Vector databases store text chunks as coordinates in space. Knowledge graphs store exact, labeled connections between concepts.",
+          "compare": {
+            "left": {
+              "emoji": "📍",
+              "tag": "Vector Index",
+              "text": "Stores 'Alice' and 'Acme Corp' as nearby points in space based on word meaning."
+            },
+            "right": {
+              "emoji": "🔗",
+              "tag": "Knowledge Graph",
+              "text": "Explicitly draws a line labeled 'WORKS_AT' directly connecting Alice to Acme Corp."
+            }
+          }
+        }
+      ]
+    },
+    {
+      "type": "practice",
+      "exercises": [
+        {
+          "id": "p1",
+          "type": "multiple_choice",
+          "xp": 2,
+          "prompt": "How do we typically extract entities and relationships from raw text documents in a GraphRAG pipeline?",
+          "options": [
+            {
+              "id": "a",
+              "text": "A math formula that counts how many times the letters 'A' and 'B' appear.",
+              "correct": false
+            },
+            {
+              "id": "b",
+              "text": "An LLM prompted to identify nouns as nodes and verbs/connections as edges.",
+              "correct": true
+            },
+            {
+              "id": "c",
+              "text": "A simple script that splits every sentence exactly in half.",
+              "correct": false
+            },
+            {
+              "id": "d",
+              "text": "An external web search engine that scrapes Wikipedia.",
+              "correct": false
+            }
+          ],
+          "explain": "An LLM acts as the parser, reading the raw, unstructured text and identifying the nouns (entities) and verbs/connections (relationships) to format them for the graph database."
+        },
+        {
+          "id": "p2",
+          "type": "true_false",
+          "xp": 2,
+          "prompt": "True or False: When building a GraphRAG system, you must delete your vector index entirely because the knowledge graph replaces it.",
+          "options": [
+            {
+              "id": "a",
+              "text": "True",
+              "correct": false
+            },
+            {
+              "id": "b",
+              "text": "False",
+              "correct": true
+            }
+          ],
+          "explain": "A graph index is layered alongside the vector index; we keep the vector index because it is excellent at finding general semantic similarity and themes, which complements the precise relationships in the graph."
+        },
+        {
+          "id": "p3",
+          "type": "fill_blank",
+          "xp": 2,
+          "prompt": "Fill in the missing step of the GraphRAG construction process:",
+          "sentence": "To construct a knowledge graph from raw text, we use an LLM to extract entities and relationships and save them to a graph database.",
+          "blank": "entities and relationships",
+          "words": [
+            "entities and relationships",
+            "raw files and code",
+            "vectors and math"
+          ],
+          "explain": "Extracting entities (like people or places) and their relationships (how they connect) is the core process of building a Knowledge Graph from unstructured text."
+        },
+        {
+          "id": "p4",
+          "type": "spot_the_ai",
+          "xp": 2,
+          "prompt": "Identify the output format generated by an AI agent designed to extract structured graph data from a text document.",
+          "options": [
+            {
+              "id": "a",
+              "text": "Alice -> [Works At] -> Acme Corp. Acme Corp -> [Located In] -> Boston.",
+              "correct": false
+            },
+            {
+              "id": "b",
+              "text": "{\"nodes\": [{\"id\": \"Alice\", \"type\": \"Person\"}, {\"id\": \"Acme Corp\", \"type\": \"Company\"}], \"edges\": [{\"source\": \"Alice\", \"target\": \"Acme Corp\", \"relation\": \"WORKS_AT\"}]}",
+              "correct": true
+            },
+            {
+              "id": "c",
+              "text": "Relationship found: Alice is a text string that relates to Acme Corp via random vector similarity score 0.82.",
+              "correct": false
+            }
+          ],
+          "explain": "Option C shows typical LLM hallucination or robotic formatting that mixes up entity names and relationship tags, whereas human-written extraction or correct schemas are clean. Option B represents the ideal structured JSON extraction an LLM would produce for a graph database."
+        }
+      ]
+    },
+    {
+      "type": "boss",
+      "exercises": [
+        {
+          "id": "b1",
+          "type": "multiple_choice",
+          "xp": 5,
+          "prompt": "Why do advanced GraphRAG systems build a 'hybrid' index that layers a knowledge graph directly alongside a traditional vector index?",
+          "options": [
+            {
+              "id": "a",
+              "text": "It combines vector search for semantic similarity with graph search for structured connections.",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "It replaces the LLM entirely, allowing database lookups to write responses directly.",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "It deletes the vector index to save memory and only uses node queries.",
+              "correct": false
+            },
+            {
+              "id": "d",
+              "text": "It runs keyword matching on external search engines instead of using local documents.",
+              "correct": false
+            }
+          ],
+          "explain": "A hybrid Search Index combines the semantic search capabilities of vectors (ideal for finding general themes or synonyms) with the explicit, exact connections of a Knowledge Graph (ideal for tracking precise relationships between entities across documents)."
+        }
+      ]
+    }
+  ]
+}

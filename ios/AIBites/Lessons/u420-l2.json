@@ -1,0 +1,222 @@
+{
+  "id": "u420-l2",
+  "unit": 420,
+  "day": 2102,
+  "tier": "LLM Application Engineering",
+  "tierIcon": "🔌",
+  "title": "Conditional Context Inclusion",
+  "icon": "🚦",
+  "concept": "Including or omitting entire context sections based on query type, user state, or retrieved confidence.",
+  "xp": 15,
+  "hearts": 3,
+  "estMinutes": 7,
+  "segments": [
+    {
+      "type": "warmup",
+      "exercises": [
+        {
+          "id": "w1",
+          "type": "multiple_choice",
+          "xp": 1,
+          "prompt": "In the last lesson, why did we assemble the context window fresh for every request instead of reusing one static template?",
+          "options": [
+            {
+              "id": "a",
+              "text": "Because the live query and situation change each time, so a fixed template can't fit every case well",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "Because static templates are illegal to use in production apps",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "Because fresh assembly makes the model run twice as slow every time",
+              "correct": false
+            }
+          ],
+          "explain": "A static template can't adapt to what's actually being asked. Building context fresh per request lets you pull in exactly what's relevant to that specific query — which sets up today's lesson: deciding WHICH pieces to include based on conditions."
+        }
+      ]
+    },
+    {
+      "type": "teach",
+      "cards": [
+        {
+          "kind": "hook",
+          "icon": "🚪",
+          "title": "Should that section even be in the room?",
+          "body": "Imagine a doctor's office that hands every patient the SAME giant folder — allergy history, dental records, eye exam notes — even if you're just there for a flu shot. Most of it is useless clutter. Good context assembly means only bringing in the folder pages that actually matter for THIS visit."
+        },
+        {
+          "kind": "definition",
+          "icon": "🚦",
+          "title": "What is conditional context inclusion?",
+          "body": "It's the practice of deciding WHICH sections go into the prompt based on rules — like the type of question asked, whether the user is logged in, or how confident your search results are. Instead of always including everything, you only add a section if it passes the check."
+        },
+        {
+          "kind": "analogy",
+          "icon": "🧳",
+          "title": "Packing for the trip, not the whole closet",
+          "body": "A smart traveler doesn't pack every item they own — they check the weather and destination first, then include rain gear only if it might rain. Conditional context works the same way: you check the situation, then decide which chunks of info earn a spot in the suitcase."
+        },
+        {
+          "kind": "example",
+          "icon": "🔍",
+          "title": "Confidence check example",
+          "body": "A user asks a question, and your retrieval system searches documents for an answer. If the top result scores 90% confidence, include it in the prompt. If the best match only scores 20% confidence, skip it entirely — including a weak, irrelevant snippet would just confuse the model more than help it."
+        },
+        {
+          "kind": "mythbust",
+          "icon": "🚫",
+          "title": "Myth: More context sections = safer bet",
+          "body": "Adding a section 'just in case' feels safe, but it isn't free. Irrelevant sections eat up token budget, slow responses, raise cost, and can distract the model into using the wrong info. Conditional inclusion means being deliberate: each section must earn its place."
+        },
+        {
+          "kind": "visual",
+          "icon": "⚖️",
+          "title": "Always-include vs. conditional-include",
+          "body": "Always-include treats every request the same, bloating the prompt. Conditional-include tailors the prompt shape to the situation, keeping it lean and focused.",
+          "compare": {
+            "left": {
+              "emoji": "📚",
+              "tag": "Always-Include",
+              "text": "Every prompt gets user profile + order history + FAQ + policy docs, even for a one-word greeting"
+            },
+            "right": {
+              "emoji": "🎯",
+              "tag": "Conditional-Include",
+              "text": "A greeting gets almost nothing; a refund question pulls in order history + policy docs only"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "type": "practice",
+      "exercises": [
+        {
+          "id": "p1",
+          "type": "multiple_choice",
+          "xp": 2,
+          "prompt": "A user is NOT logged in and asks 'What's my order status?' Using conditional context inclusion, what should the system do?",
+          "options": [
+            {
+              "id": "a",
+              "text": "Include a fake order history so the model has something to say",
+              "correct": false
+            },
+            {
+              "id": "b",
+              "text": "Skip the order-history section (since there's no logged-in user to fetch it for) and instead include a prompt asking the user to log in",
+              "correct": true
+            },
+            {
+              "id": "c",
+              "text": "Include the full company product catalog just in case it helps",
+              "correct": false
+            },
+            {
+              "id": "d",
+              "text": "Always include every user's order history from the whole database",
+              "correct": false
+            }
+          ],
+          "explain": "User state (logged in vs. not) is exactly the kind of condition that should control what's included. Without a logged-in user, there's no valid order history to pull — so the system should skip that section and prompt for login instead of inventing or leaking irrelevant data."
+        },
+        {
+          "id": "p2",
+          "type": "true_false",
+          "xp": 2,
+          "prompt": "True or False: Conditional context inclusion means you decide what to leave OUT of the prompt just as much as what to put IN.",
+          "options": [
+            {
+              "id": "a",
+              "text": "True",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "False",
+              "correct": false
+            }
+          ],
+          "explain": "Exactly — conditional inclusion is really a two-way decision. Choosing to omit an irrelevant or low-confidence section is just as important as choosing to include a relevant one."
+        },
+        {
+          "id": "p3",
+          "type": "fill_blank",
+          "xp": 2,
+          "prompt": "Fill in the blank:",
+          "sentence": "If the retrieved document's confidence score is too low, the best move is often to skip it rather than include a weak or irrelevant snippet.",
+          "blank": "skip it",
+          "words": [
+            "skip it",
+            "translate it",
+            "duplicate it"
+          ],
+          "explain": "Low-confidence retrieved content can mislead the model more than help it, so omitting it is often the safer, cleaner choice."
+        },
+        {
+          "id": "p4",
+          "type": "spot_the_ai",
+          "xp": 2,
+          "prompt": "Which of these three system designs was most likely generated by an AI that misunderstood 'conditional context inclusion' as 'include conditions as extra text' rather than 'decide what to include'?",
+          "options": [
+            {
+              "id": "a",
+              "text": "The system checks query type, and only pulls billing docs in for billing-related questions",
+              "correct": false
+            },
+            {
+              "id": "b",
+              "text": "The system always includes ALL possible sections, but adds a note at the top saying 'Only use the billing section if this is a billing question' and leaves the decision to the model",
+              "correct": true
+            },
+            {
+              "id": "c",
+              "text": "The system checks retrieval confidence, and drops any snippet scoring below a threshold before building the prompt",
+              "correct": false
+            }
+          ],
+          "explain": "Option B misses the point — it still stuffs everything into the prompt and just tells the model to 'ignore' irrelevant parts via instructions. True conditional inclusion filters sections OUT before assembly, saving tokens and reducing confusion, rather than dumping everything in and hoping the model self-filters."
+        }
+      ]
+    },
+    {
+      "type": "boss",
+      "exercises": [
+        {
+          "id": "b1",
+          "type": "multiple_choice",
+          "xp": 5,
+          "prompt": "Your support bot handles three kinds of messages: casual greetings, billing questions, and technical troubleshooting. Which context strategy best uses conditional inclusion?",
+          "options": [
+            {
+              "id": "a",
+              "text": "Always send the same full context (account history + billing docs + tech manuals) for every message, no matter what it says",
+              "correct": false
+            },
+            {
+              "id": "b",
+              "text": "Detect the query type first, then only pull in billing docs for billing questions and tech manuals for tech questions, skipping both for a simple greeting",
+              "correct": true
+            },
+            {
+              "id": "c",
+              "text": "Randomly include or exclude sections each time so the model sees something different for variety",
+              "correct": false
+            },
+            {
+              "id": "d",
+              "text": "Never include any reference docs, and just let the model guess based on general knowledge",
+              "correct": false
+            }
+          ],
+          "explain": "Conditional inclusion means checking the query type (or user state, or retrieval confidence) BEFORE building the prompt, and only including the sections that are actually relevant. A greeting doesn't need billing docs; a billing question doesn't need tech manuals. This keeps prompts smaller, cheaper, faster, and less confusing for the model — while still assembling everything fresh per request, exactly like you learned in the last lesson. You've now finished this concept — nice work leveling up your context-engineering skills!"
+        }
+      ]
+    }
+  ]
+}

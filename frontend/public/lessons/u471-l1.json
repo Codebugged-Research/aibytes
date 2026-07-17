@@ -1,0 +1,222 @@
+{
+  "id": "u471-l1",
+  "unit": 471,
+  "day": 2356,
+  "tier": "LLM Application Engineering",
+  "tierIcon": "🔌",
+  "title": "stdio Transport",
+  "icon": "📥",
+  "concept": "Running a server as a local subprocess and communicating over standard input/output, ideal for local tools.",
+  "xp": 15,
+  "hearts": 3,
+  "estMinutes": 7,
+  "segments": [
+    {
+      "type": "warmup",
+      "exercises": [
+        {
+          "id": "w1",
+          "type": "multiple_choice",
+          "xp": 1,
+          "prompt": "In the Model Context Protocol (MCP), what is the primary role of a 'Transport'?",
+          "options": [
+            {
+              "id": "w1",
+              "text": "A database to store model weights",
+              "correct": false
+            },
+            {
+              "id": "w2",
+              "text": "The connection channel that carries messages between clients and servers",
+              "correct": true
+            },
+            {
+              "id": "w3",
+              "text": "A tool that translates python code into javascript",
+              "correct": false
+            }
+          ],
+          "explain": "An MCP transport layer provides the actual communication medium (like pipes or network sockets) to move messages between the LLM client and the tool servers."
+        }
+      ]
+    },
+    {
+      "type": "teach",
+      "cards": [
+        {
+          "kind": "hook",
+          "icon": "🔌",
+          "title": "Instant Local Connections",
+          "body": "When you run an AI tool locally on your computer, you don't need complex web servers or internet connections. By using the standard input and output streams your computer already provides, tools can talk to LLMs instantly and securely."
+        },
+        {
+          "kind": "definition",
+          "icon": "📟",
+          "title": "What is stdio Transport?",
+          "body": "The stdio (Standard Input/Output) transport is a way for a client application to run an MCP server as a local child process. They communicate instantly by reading and writing structured text directly to each other's input and output channels."
+        },
+        {
+          "kind": "analogy",
+          "icon": "✉️",
+          "title": "The Shared Note-Passer",
+          "body": "Imagine two workers sitting next to each other, passing handwritten notes through a slot in a shared wall. They don't need a phone line or the internet; as long as both are in the same building, they can talk directly and instantly."
+        },
+        {
+          "kind": "example",
+          "icon": "💻",
+          "title": "Local Tool Execution",
+          "body": "When you connect an LLM client to a local filesystem tool, the client launches the tool as a subprocess. When the LLM needs to list files, it writes a JSON-RPC message to the tool's standard input, and the tool writes the file list back to its standard output."
+        },
+        {
+          "kind": "mythbust",
+          "icon": "🕵️",
+          "title": "Isn't stdio Too Simple?",
+          "body": "You might think stdio is too simple for complex structured data. In reality, MCP formats every message as JSON-RPC, meaning complete structured objects, parameters, and errors travel seamlessly through these basic text streams."
+        },
+        {
+          "kind": "visual",
+          "icon": "🔄",
+          "title": "Local vs. Network",
+          "body": "Comparing how stdio transport differs from web-based network transport for local tools.",
+          "compare": {
+            "left": {
+              "emoji": "📟",
+              "tag": "stdio Transport",
+              "text": "Launches a local subprocess. Zero network setup. Extremely secure and fast."
+            },
+            "right": {
+              "emoji": "🌐",
+              "tag": "Network Transport",
+              "text": "Requires open ports, firewalls, and network packets even on the same machine."
+            }
+          }
+        }
+      ]
+    },
+    {
+      "type": "practice",
+      "exercises": [
+        {
+          "id": "p1",
+          "type": "multiple_choice",
+          "xp": 2,
+          "prompt": "Which two primary channels does the stdio transport use for communication between the client and server?",
+          "options": [
+            {
+              "id": "q1_a",
+              "text": "Standard Input (stdin) and Standard Output (stdout)",
+              "correct": true
+            },
+            {
+              "id": "q1_b",
+              "text": "HTTP requests and WebSockets",
+              "correct": false
+            },
+            {
+              "id": "q1_c",
+              "text": "Bluetooth and Wi-Fi Direct",
+              "correct": false
+            },
+            {
+              "id": "q1_d",
+              "text": "Shared database tables",
+              "correct": false
+            }
+          ],
+          "explain": "Standard Input (stdin) and Standard Output (stdout) are the default channels used by local subprocesses to receive and send data streams."
+        },
+        {
+          "id": "p2",
+          "type": "true_false",
+          "xp": 2,
+          "prompt": "True or False: The stdio transport mechanism requires the MCP client and server to run on the same local computer.",
+          "options": [
+            {
+              "id": "t1",
+              "text": "True",
+              "correct": true
+            },
+            {
+              "id": "t2",
+              "text": "False",
+              "correct": false
+            }
+          ],
+          "explain": "Because stdio transport relies on running the server as a local subprocess, both the client and the server must run on the same physical machine."
+        },
+        {
+          "id": "p3",
+          "type": "fill_blank",
+          "xp": 2,
+          "prompt": "Fill in the blank to describe how the server is executed:",
+          "sentence": "Under the hood, the client starts the MCP server as a local subprocess and communicates using standard streams.",
+          "blank": "subprocess",
+          "words": [
+            "subprocess",
+            "webpage",
+            "container"
+          ],
+          "explain": "The stdio transport model works by spawning the server as a local subprocess, allowing direct communication without network ports."
+        },
+        {
+          "id": "p4",
+          "type": "spot_the_ai",
+          "xp": 2,
+          "prompt": "Which of these payloads represents an AI client sending an MCP request over a stdio stream?",
+          "options": [
+            {
+              "id": "sai1",
+              "text": "run-tool --name get_weather --location \"Seattle\"",
+              "correct": false
+            },
+            {
+              "id": "sai2",
+              "text": "{\"jsonrpc\": \"2.0\", \"method\": \"tools/call\", \"params\": {\"name\": \"get_weather\", \"arguments\": {\"location\": \"Seattle\"}}, \"id\": 1}",
+              "correct": true
+            },
+            {
+              "id": "sai3",
+              "text": "SELECT * FROM tools WHERE name = 'get_weather';",
+              "correct": false
+            }
+          ],
+          "explain": "Option B shows a typical JSON-RPC request format sent over a stream to invoke an MCP tool locally. Options A and C look like raw CLI commands or database queries rather than transport messages."
+        }
+      ]
+    },
+    {
+      "type": "boss",
+      "exercises": [
+        {
+          "id": "b1",
+          "type": "multiple_choice",
+          "xp": 5,
+          "prompt": "If a desktop LLM application wants to connect to a local database tool using the MCP stdio transport, how does it actually send a query to the database server?",
+          "options": [
+            {
+              "id": "b1",
+              "text": "It creates a local HTTP server that listens on port 8080.",
+              "correct": false
+            },
+            {
+              "id": "b2",
+              "text": "It spawns the server as a subprocess and writes JSON-RPC messages directly to its standard input.",
+              "correct": true
+            },
+            {
+              "id": "b3",
+              "text": "It uploads the server code to a cloud function and triggers it via webhook.",
+              "correct": false
+            },
+            {
+              "id": "b4",
+              "text": "It writes files to a shared folder and waits for the server to read them.",
+              "correct": false
+            }
+          ],
+          "explain": "Running a server via stdio transport starts it as a local child process. The parent application (like an LLM runner) sends structured JSON-RPC requests to the child's stdin, and receives responses back from the child's stdout, bypassing network overhead entirely."
+        }
+      ]
+    }
+  ]
+}

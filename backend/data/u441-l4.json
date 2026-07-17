@@ -1,0 +1,222 @@
+{
+  "id": "u441-l4",
+  "unit": 441,
+  "day": 2209,
+  "tier": "LLM Application Engineering",
+  "tierIcon": "🔌",
+  "title": "Index Rebuilding & Compaction",
+  "icon": "🗜️",
+  "concept": "Why deleted vectors linger as tombstones and periodic compaction is needed to reclaim space and speed.",
+  "xp": 15,
+  "hearts": 3,
+  "estMinutes": 7,
+  "segments": [
+    {
+      "type": "warmup",
+      "exercises": [
+        {
+          "id": "w1",
+          "type": "multiple_choice",
+          "xp": 1,
+          "prompt": "How do scalable vector databases handle incremental updates without causing massive downtime?",
+          "options": [
+            {
+              "id": "w_1",
+              "text": "Rebuilding the entire database index from scratch on every single write.",
+              "correct": false
+            },
+            {
+              "id": "w_2",
+              "text": "Inserting new vectors into temporary buffers or segments to keep the database live.",
+              "correct": true
+            },
+            {
+              "id": "w_3",
+              "text": "Freezing all incoming search queries while new vectors are being indexed.",
+              "correct": false
+            }
+          ],
+          "explain": "Incremental updates allow databases to write new vectors to temporary buffers or small index segments so queries can run without waiting for a full, slow index rebuild."
+        }
+      ]
+    },
+    {
+      "type": "teach",
+      "cards": [
+        {
+          "kind": "hook",
+          "icon": "🪦",
+          "title": "The Ghost Vectors",
+          "body": "When you delete a vector from a database, it doesn't vanish immediately. Instead, it leaves behind a 'tombstone' placeholder, which can slow down your searches over time if left unmanaged."
+        },
+        {
+          "kind": "definition",
+          "icon": "🧹",
+          "title": "What is Compaction?",
+          "body": "Compaction is a background process that permanently removes deleted vectors (tombstones) from the disk and rebuilds the index. This keeps searches fast and prevents memory waste."
+        },
+        {
+          "kind": "analogy",
+          "icon": "📖",
+          "title": "The Sticky Note Notebook",
+          "body": "Imagine writing edits in a physical book by pasting sticky notes over old paragraphs. If you do this too much, the book gets thick, heavy, and hard to flip through. Compaction is like reprinting the book cleanly, removing the covered text completely."
+        },
+        {
+          "kind": "example",
+          "icon": "⏱️",
+          "title": "Compaction in Action",
+          "body": "In a system updating thousands of customer profiles daily, deleted profiles are flagged as tombstones. At midnight, a compaction job runs, purging the old profiles and reducing search latency by 25%."
+        },
+        {
+          "kind": "mythbust",
+          "icon": "🕵️",
+          "title": "The Myth of Instant Deletion",
+          "body": "You might think deleting a vector immediately frees up disk space and speeds up your database. In reality, immediate deletion is too slow for real-time indexes, so databases rely on lazy deletion followed by scheduled compaction."
+        },
+        {
+          "kind": "visual",
+          "icon": "📊",
+          "title": "Visualizing Compaction",
+          "body": "Comparing a cluttered index full of deleted placeholders versus a clean, compacted index.",
+          "compare": {
+            "left": {
+              "emoji": "🗑️",
+              "tag": "With Tombstones",
+              "text": "Index contains active vectors mixed with inactive tombstones, slowing down search path traversal."
+            },
+            "right": {
+              "emoji": "✨",
+              "tag": "After Compaction",
+              "text": "Tombstones are purged and index paths are rebuilt, resulting in fast searches and minimal memory footprint."
+            }
+          }
+        }
+      ]
+    },
+    {
+      "type": "practice",
+      "exercises": [
+        {
+          "id": "p1",
+          "type": "multiple_choice",
+          "xp": 2,
+          "prompt": "What is the main purpose of using tombstones during vector deletion?",
+          "options": [
+            {
+              "id": "mc_1",
+              "text": "They speed up vector similarity math.",
+              "correct": false
+            },
+            {
+              "id": "mc_2",
+              "text": "They flag deleted vectors to be ignored during search and cleaned up later.",
+              "correct": true
+            },
+            {
+              "id": "mc_3",
+              "text": "They encrypt sensitive vector data.",
+              "correct": false
+            },
+            {
+              "id": "mc_4",
+              "text": "They compress vectors into smaller dimensions.",
+              "correct": false
+            }
+          ],
+          "explain": "Tombstones are placeholder marks placed on deleted data so the system knows to ignore them during searches without performing a slow, immediate deletion."
+        },
+        {
+          "id": "p2",
+          "type": "true_false",
+          "xp": 2,
+          "prompt": "True or False: Accumulating too many tombstones without compaction will slow down vector search queries.",
+          "options": [
+            {
+              "id": "tf_true",
+              "text": "True",
+              "correct": true
+            },
+            {
+              "id": "tf_false",
+              "text": "False",
+              "correct": false
+            }
+          ],
+          "explain": "True. Over time, tombstones accumulate, cluttering the search paths and increasing query latency until a compaction job cleans them up."
+        },
+        {
+          "id": "p3",
+          "type": "fill_blank",
+          "xp": 2,
+          "prompt": "Fill in the blank to describe what lingers in the database before compaction occurs.",
+          "sentence": "Before compaction clean up, deleted vectors linger as tombstones in the index.",
+          "blank": "tombstones",
+          "words": [
+            "tombstones",
+            "caches",
+            "duplicates"
+          ],
+          "explain": "Vectors marked as tombstones are only hidden, not deleted, meaning they still take up space until compaction runs."
+        },
+        {
+          "id": "p4",
+          "type": "spot_the_ai",
+          "xp": 2,
+          "prompt": "Identify the explanation that sounds like it was written by a generic AI assistant rather than a human engineer.",
+          "options": [
+            {
+              "id": "sai_1",
+              "text": "We run compaction during low-traffic hours because rebuilding index segments uses heavy CPU and disk I/O, which could slow down user queries.",
+              "correct": false
+            },
+            {
+              "id": "sai_2",
+              "text": "Compaction is highly beneficial because it optimizes resources. It is vital to schedule it periodically to ensure that database health is maintained at all times.",
+              "correct": true
+            },
+            {
+              "id": "sai_3",
+              "text": "Without compaction, the index size grows continuously because deleted vectors still occupy memory and storage slots.",
+              "correct": false
+            }
+          ],
+          "explain": "Option B displays typical robotic phrasing and an unnecessary, generic summary sentence, indicating it was AI-generated. Options A and C focus on direct engineering explanations."
+        }
+      ]
+    },
+    {
+      "type": "boss",
+      "exercises": [
+        {
+          "id": "b1",
+          "type": "multiple_choice",
+          "xp": 5,
+          "prompt": "Why do we need a separate compaction process instead of just deleting vectors immediately from the index structure?",
+          "options": [
+            {
+              "id": "opt_1",
+              "text": "Tombstones immediately delete the vector data and automatically rewire all index paths without performance loss.",
+              "correct": false
+            },
+            {
+              "id": "opt_2",
+              "text": "Tombstones act as placeholders that keep the index structure intact, but require compaction to reclaim memory and clean up search paths.",
+              "correct": true
+            },
+            {
+              "id": "opt_3",
+              "text": "Compaction is only used to add new vectors and does not affect already deleted vector placeholders.",
+              "correct": false
+            },
+            {
+              "id": "opt_4",
+              "text": "Index rebuilding must run after every single vector deletion to prevent the database from crashing.",
+              "correct": false
+            }
+          ],
+          "explain": "When a vector database marks vectors as tombstones, the index structure (like HNSW graphs) still contains routing paths through them. Compaction reconstructs these paths directly between active vectors, resolving the bloated search times and reclaiming physical memory."
+        }
+      ]
+    }
+  ]
+}

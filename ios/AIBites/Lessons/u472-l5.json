@@ -1,0 +1,222 @@
+{
+  "id": "u472-l5",
+  "unit": 472,
+  "day": 2365,
+  "tier": "LLM Application Engineering",
+  "tierIcon": "🔌",
+  "title": "Trusting Third-Party MCP Servers",
+  "icon": "🔌",
+  "concept": "The supply-chain risk of connecting to a server you didn't build, and vetting practices to mitigate it.",
+  "xp": 15,
+  "hearts": 3,
+  "estMinutes": 7,
+  "segments": [
+    {
+      "type": "warmup",
+      "exercises": [
+        {
+          "id": "w1",
+          "type": "multiple_choice",
+          "xp": 1,
+          "prompt": "In the previous lesson on Prompt Injection via Tool Results, how does the malicious payload reach the LLM?",
+          "options": [
+            {
+              "id": "warmup_1",
+              "text": "The server's code crashes due to an unhandled memory leak.",
+              "correct": false
+            },
+            {
+              "id": "warmup_2",
+              "text": "A tool returns malicious data that hijacks the LLM's behavior.",
+              "correct": true
+            },
+            {
+              "id": "warmup_3",
+              "text": "The user types a prompt telling the LLM to ignore its system prompt.",
+              "correct": false
+            }
+          ],
+          "explain": "Prompt injection via tool results occurs when a tool retrieves untrusted external data (like a webpage or document) containing instructions that hijack the LLM's next action."
+        }
+      ]
+    },
+    {
+      "type": "teach",
+      "cards": [
+        {
+          "kind": "hook",
+          "icon": "🕵️‍♂️",
+          "title": "Who Do You Trust?",
+          "body": "Connecting to a new MCP server is incredibly easy, but you are essentially running someone else's code on your computer. Let's learn how to spot malicious servers before they compromise your entire application."
+        },
+        {
+          "kind": "definition",
+          "icon": "🛡️",
+          "title": "What is MCP Supply-Chain Risk?",
+          "body": "Third-party MCP servers are tools built by external developers. Because these servers execute code directly on your machine or access your private APIs, they introduce supply-chain risks like data theft, unauthorized system execution, and hidden malware."
+        },
+        {
+          "kind": "analogy",
+          "icon": "🔑",
+          "title": "The Contractor Analogy",
+          "body": "Think of connecting a third-party MCP server like hiring a freelance contractor for your home. You wouldn't hand your house keys to a stranger without checking their references, verifying their identity, and limiting their access to your personal files."
+        },
+        {
+          "kind": "example",
+          "icon": "⚠️",
+          "title": "A Silent Attack Example",
+          "body": "A developer installs an open-source MCP server for 'weather updates'. However, the server's hidden code silently scans the host's directory for '.env' files containing API keys and transmits them to an external server."
+        },
+        {
+          "kind": "mythbust",
+          "icon": "🛑",
+          "title": "The LLM Guardian Myth",
+          "body": "Many assume that because MCP runs through an LLM, the LLM will catch and block malicious server behavior. In reality, the LLM cannot see the internal code execution of the server; it only sees the output, leaving your backend completely exposed."
+        },
+        {
+          "kind": "visual",
+          "icon": "⚖️",
+          "title": "Host Run vs. Sandboxing",
+          "body": "Compare the security posture of running a third-party server directly on your host machine versus isolating it.",
+          "compare": {
+            "left": {
+              "emoji": "🔓",
+              "tag": "Direct Host Run",
+              "text": "The server has full access to your local files, shell commands, and system network."
+            },
+            "right": {
+              "emoji": "🔒",
+              "tag": "Sandboxed Run",
+              "text": "The server is isolated in a container with zero access to your files or internal network."
+            }
+          }
+        }
+      ]
+    },
+    {
+      "type": "practice",
+      "exercises": [
+        {
+          "id": "p1",
+          "type": "multiple_choice",
+          "xp": 2,
+          "prompt": "Which of the following is a recommended vetting practice before integrating a third-party MCP server?",
+          "options": [
+            {
+              "id": "mc_1",
+              "text": "Assume the server is safe if it has a high rating on a public marketplace.",
+              "correct": false
+            },
+            {
+              "id": "mc_2",
+              "text": "Trust the server as long as the LLM interface looks clean and professional.",
+              "correct": false
+            },
+            {
+              "id": "mc_3",
+              "text": "Review the server's source code, pin the exact version, and host the code yourself.",
+              "correct": true
+            },
+            {
+              "id": "mc_4",
+              "text": "Allow the server full read and write permissions to simplify its setup process.",
+              "correct": false
+            }
+          ],
+          "explain": "Before running an external MCP server, you should inspect its source code, check its package dependencies for known vulnerabilities, and host it yourself to prevent silent, malicious updates."
+        },
+        {
+          "id": "p2",
+          "type": "true_false",
+          "xp": 2,
+          "prompt": "True or False: A compromised third-party MCP server can potentially steal local environment variables or private files.",
+          "options": [
+            {
+              "id": "tf_true",
+              "text": "True",
+              "correct": true
+            },
+            {
+              "id": "tf_false",
+              "text": "False",
+              "correct": false
+            }
+          ],
+          "explain": "Because MCP servers execute code locally or in your cloud environment, a malicious server can access files, run commands, or make unauthorized API calls with the permissions of the host process."
+        },
+        {
+          "id": "p3",
+          "type": "fill_blank",
+          "xp": 2,
+          "prompt": "Fill in the blank to complete the security rule:",
+          "sentence": "Always run third-party tools in a restricted sandbox until their source code has been thoroughly vetted.",
+          "blank": "vetted",
+          "words": [
+            "vetted",
+            "ignored",
+            "published"
+          ],
+          "explain": "To keep your system safe, you must inspect the source code and source code repositories of third-party MCP servers, ensuring they are vetted before integration."
+        },
+        {
+          "id": "p4",
+          "type": "spot_the_ai",
+          "xp": 2,
+          "prompt": "Identify which of the following MCP server tool behaviors is an AI-generated signature of a supply-chain attack:",
+          "options": [
+            {
+              "id": "sai_1",
+              "text": "An MCP server that reads a local file and returns the line count to the user.",
+              "correct": false
+            },
+            {
+              "id": "sai_2",
+              "text": "An MCP server that silently reads your .env file and sends a POST request with the content to a random IP address.",
+              "correct": true
+            },
+            {
+              "id": "sai_3",
+              "text": "An MCP server that takes a city name and fetches current temperature data from a public weather API.",
+              "correct": false
+            }
+          ],
+          "explain": "Option B represents a classic AI-generated malicious server payload designed to silently steal sensitive credentials (.env file containing private keys) and exfiltrate them."
+        }
+      ]
+    },
+    {
+      "type": "boss",
+      "exercises": [
+        {
+          "id": "b1",
+          "type": "multiple_choice",
+          "xp": 5,
+          "prompt": "You want to integrate a community-built MCP server that formats local spreadsheets, but the source code is complex and not fully audited. What is the safest deployment architecture to mitigate supply-chain risk?",
+          "options": [
+            {
+              "id": "opt_boss_1",
+              "text": "Run the third-party server inside a local sandboxed container with restricted filesystem and network permissions.",
+              "correct": true
+            },
+            {
+              "id": "opt_boss_2",
+              "text": "Run the server locally with root/administrator access to ensure it has enough speed to process requests.",
+              "correct": false
+            },
+            {
+              "id": "opt_boss_3",
+              "text": "Only run the server when your LLM is using a basic system prompt that tells it not to trust tools.",
+              "correct": false
+            },
+            {
+              "id": "opt_boss_4",
+              "text": "Rely on the host operating system's default antivirus software to block malicious tool behaviors.",
+              "correct": false
+            }
+          ],
+          "explain": "Connecting to an unverified third-party server exposes your environment to extreme risk. Using a local container sandbox with minimal filesystem and network permissions isolates the server, preventing it from exfiltrating sensitive data or executing host commands."
+        }
+      ]
+    }
+  ]
+}

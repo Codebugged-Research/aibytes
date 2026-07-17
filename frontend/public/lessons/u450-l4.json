@@ -1,0 +1,222 @@
+{
+  "id": "u450-l4",
+  "unit": 450,
+  "day": 2254,
+  "tier": "LLM Application Engineering",
+  "tierIcon": "🔌",
+  "title": "Measuring Reranking's Impact",
+  "icon": "📊",
+  "concept": "Before/after comparisons showing how reranking improves the position of truly relevant documents.",
+  "xp": 15,
+  "hearts": 3,
+  "estMinutes": 7,
+  "segments": [
+    {
+      "type": "warmup",
+      "exercises": [
+        {
+          "id": "w1",
+          "type": "multiple_choice",
+          "xp": 1,
+          "prompt": "In the last lesson, we learned why vector similarity alone isn't enough. What is its main limitation?",
+          "options": [
+            {
+              "id": "opt_w1",
+              "text": "It is too slow to run on large vector databases.",
+              "correct": false
+            },
+            {
+              "id": "opt_w2",
+              "text": "It measures general conceptual similarity, which can miss precise query-document relevance.",
+              "correct": true
+            },
+            {
+              "id": "opt_w3",
+              "text": "It only works with short sentences and fails on multi-word documents.",
+              "correct": false
+            }
+          ],
+          "explain": "Embedding similarity is a fast, coarse filter that finds conceptually related text, but it is not a direct measure of precise query-document relevance. Reranking acts as the fine-grained second pass."
+        }
+      ]
+    },
+    {
+      "type": "teach",
+      "cards": [
+        {
+          "kind": "hook",
+          "icon": "🎯",
+          "title": "The Gold Standard Shift",
+          "body": "If a library retrieves 10 books on your topic, but the perfect chapter is buried at the bottom of the stack, you might never find it. Reranking changes the order of these books so that the gold standard resource is always sitting right on top."
+        },
+        {
+          "kind": "definition",
+          "icon": "📏",
+          "title": "Measuring Rank Lift",
+          "body": "To measure reranking's impact, we compare the positions of truly relevant documents before and after the reranker runs. A successful reranker lifts highly specific, matching documents from lower ranks (like position 15) straight to the top 3 spots."
+        },
+        {
+          "kind": "analogy",
+          "icon": "📚",
+          "title": "The Library Inspector",
+          "body": "Think of your search engine like a fast-sorting library assistant. Embedding similarity is like quickly grabbing books with similar cover designs. Reranking is like opening those books to make sure the key chapters actually answer your specific question, pulling the perfect page to the absolute top."
+        },
+        {
+          "kind": "example",
+          "icon": "💡",
+          "title": "The Subscription Query",
+          "body": "A user asks 'How do I cancel my subscription?'. Initial search places a general document about 'Account Settings' at #1 and the specific 'How to Cancel' guide at #18. After running the reranker, the 'How to Cancel' guide jumps directly to #1."
+        },
+        {
+          "kind": "mythbust",
+          "icon": "🚫",
+          "title": "Myth: We Must Rerank Everything",
+          "body": "You might think a reranker needs to reorder hundreds of thousands of files to make a difference. In reality, it only needs to reorder the top 20 to 100 candidates returned by the initial search to dramatically improve what the user actually sees."
+        },
+        {
+          "kind": "visual",
+          "icon": "👁️",
+          "title": "Visualizing the Rank Boost",
+          "body": "Notice how the most relevant result (indicated by the star ⭐) moves from a hidden position to the very top after applying the reranking step.",
+          "compare": {
+            "left": {
+              "emoji": "🔍",
+              "tag": "Vector Search Only",
+              "text": "1. Similar Doc 📄\\n2. Similar Doc 📄\\n3. Target Doc ⭐"
+            },
+            "right": {
+              "emoji": "✨",
+              "tag": "After Reranking",
+              "text": "1. Target Doc ⭐\\n2. Similar Doc 📄\\n3. Similar Doc 📄"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "type": "practice",
+      "exercises": [
+        {
+          "id": "p1",
+          "type": "multiple_choice",
+          "xp": 2,
+          "prompt": "Which of the following is the most direct way to measure if a reranker is successfully helping users find answers faster?",
+          "options": [
+            {
+              "id": "opt_mc1",
+              "text": "Counting the total number of words in the vector database.",
+              "correct": false
+            },
+            {
+              "id": "opt_mc2",
+              "text": "Comparing the average position of relevant documents before and after reranking.",
+              "correct": true
+            },
+            {
+              "id": "opt_mc3",
+              "text": "Measuring how fast the vector database can perform index generation.",
+              "correct": false
+            },
+            {
+              "id": "opt_mc4",
+              "text": "Discarding all documents that do not contain exact keyword matches.",
+              "correct": false
+            }
+          ],
+          "explain": "By calculating the average position (rank) of the target document before and after reranking, we get a direct, quantifiable measure of how much closer the relevant answers moved to the top."
+        },
+        {
+          "id": "p2",
+          "type": "true_false",
+          "xp": 2,
+          "prompt": "True or False: A reranker improves search quality by searching the entire database again to retrieve completely new documents.",
+          "options": [
+            {
+              "id": "opt_tf1",
+              "text": "True",
+              "correct": false
+            },
+            {
+              "id": "opt_tf2",
+              "text": "False",
+              "correct": true
+            }
+          ],
+          "explain": "Rerankers do not retrieve new documents; they re-order the existing candidate documents that have already been retrieved by the initial search phase."
+        },
+        {
+          "id": "p3",
+          "type": "fill_blank",
+          "xp": 2,
+          "prompt": "Fill in the blank to complete the explanation of why reranking succeeds.",
+          "sentence": "Rerankers succeed because they evaluate the specific query-document relevance instead of just general vector similarity.",
+          "blank": "relevance",
+          "words": [
+            "relevance",
+            "speed",
+            "length"
+          ],
+          "explain": "Initial vector search relies on overall conceptual similarity, but rerankers specialize in calculating a highly precise relevance score for the query-document pair."
+        },
+        {
+          "id": "p4",
+          "type": "spot_the_ai",
+          "xp": 2,
+          "prompt": "Identify which of these retrieval optimization reports was written by an AI application engineer focusing on reranking impact.",
+          "options": [
+            {
+              "id": "opt_sai1",
+              "text": "We loaded all user queries into a MySQL table and ran a SELECT statement with wildcard filters to find similar words.",
+              "correct": false
+            },
+            {
+              "id": "opt_sai2",
+              "text": "Our system uses a simple embedding model to calculate cosine similarity across all document chunks in our vector database.",
+              "correct": false
+            },
+            {
+              "id": "opt_sai3",
+              "text": "By running a cross-encoder over the top 25 candidates, we improved our NDCG@5 from 0.42 to 0.78, bringing the most relevant user guides directly to the top spot.",
+              "correct": true
+            }
+          ],
+          "explain": "Option C uses a specific reranking metric (NDCG@5) and shows a realistic optimization scenario where a cross-encoder evaluates candidate documents. Options A and B are generic search or database descriptions."
+        }
+      ]
+    },
+    {
+      "type": "boss",
+      "exercises": [
+        {
+          "id": "b1",
+          "type": "multiple_choice",
+          "xp": 5,
+          "prompt": "Why does reranking have a massive impact on user experience metrics like NDCG (Normalized Discounted Cumulative Gain) even if the total set of retrieved documents remains unchanged?",
+          "options": [
+            {
+              "id": "opt_b1",
+              "text": "It guarantees that every single document in the database is perfectly ordered.",
+              "correct": false
+            },
+            {
+              "id": "opt_b2",
+              "text": "It raises ranking metrics like NDCG@k by pushing the few highly relevant documents to the very top.",
+              "correct": true
+            },
+            {
+              "id": "opt_b3",
+              "text": "It increases the total count of documents retrieved from the vector database.",
+              "correct": false
+            },
+            {
+              "id": "opt_b4",
+              "text": "It decreases the time complexity of the initial vector search query.",
+              "correct": false
+            }
+          ],
+          "explain": "Reranking focuses on optimizing the top of the list (like NDCG@10 or Precision@k) because users rarely look past the first few results. While average recall measures how many total relevant documents were retrieved somewhere in the top 100, ranking metrics show whether the best answers were immediately visible to the user."
+        }
+      ]
+    }
+  ]
+}

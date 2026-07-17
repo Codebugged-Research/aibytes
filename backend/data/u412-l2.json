@@ -1,0 +1,222 @@
+{
+  "id": "u412-l2",
+  "unit": 412,
+  "day": 2062,
+  "tier": "LLM Application Engineering",
+  "tierIcon": "🔌",
+  "title": "Why Majority Voting Improves Accuracy",
+  "icon": "🗳️",
+  "concept": "Independent errors cancel out across samples while the correct reasoning path recurs more often.",
+  "xp": 15,
+  "hearts": 3,
+  "estMinutes": 7,
+  "segments": [
+    {
+      "type": "warmup",
+      "exercises": [
+        {
+          "id": "w1",
+          "type": "multiple_choice",
+          "xp": 1,
+          "prompt": "Quick recap: In self-consistency sampling, how does the model generate multiple reasoning paths for the same question?",
+          "options": [
+            {
+              "id": "a",
+              "text": "By sampling at nonzero temperature multiple times, so each run can reason slightly differently",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "By asking a different, separate AI model each time",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "By running the exact same greedy (temperature zero) generation repeatedly, which always gives an identical answer",
+              "correct": false
+            }
+          ],
+          "explain": "Self-consistency sampling uses nonzero temperature to let the model generate several DIFFERENT reasoning paths for the same question, then takes a majority vote on the final answers. Today we dig into WHY that voting trick actually boosts accuracy."
+        }
+      ]
+    },
+    {
+      "type": "teach",
+      "cards": [
+        {
+          "kind": "hook",
+          "icon": "🗳️",
+          "title": "Why Trust the Crowd?",
+          "body": "If one AI answer can be wrong, why would asking the SAME AI the same question many times and voting actually help? The magic is in how errors behave differently from correct answers."
+        },
+        {
+          "kind": "definition",
+          "icon": "📐",
+          "title": "Why Voting Works",
+          "body": "If each reasoning path has a good chance of being correct, and mistakes happen for different, unrelated reasons each time, then the correct answer will show up more often than any single wrong answer. Counting votes lets the common correct answer rise to the top."
+        },
+        {
+          "kind": "analogy",
+          "icon": "🎯",
+          "title": "Ask 20 Friends, Not Just One",
+          "body": "Imagine asking 20 friends to guess the answer to a tricky trivia question. Most know the topic well, so many independently land on the right answer. The few who guess wrong tend to guess DIFFERENT wrong answers, so no single wrong answer builds a crowd. The right answer wins by sheer numbers."
+        },
+        {
+          "kind": "example",
+          "icon": "🧮",
+          "title": "Ten Tries at a Word Problem",
+          "body": "An LLM solves a tricky word problem 10 times at nonzero temperature. 7 runs correctly get '24' by different but valid reasoning steps. The other 3 runs each make a different arithmetic slip, landing on '19', '30', and '22'. Since no wrong answer repeats, '24' easily wins the majority vote."
+        },
+        {
+          "kind": "mythbust",
+          "icon": "🚫",
+          "title": "Myth: More Samples Always Means More Right Answers Piling Up",
+          "body": "It's not that correct answers magically multiply — it's that WRONG answers fail to agree with each other. If a model's errors were all the SAME mistake every time, voting wouldn't help at all. Voting works because errors are scattered, not because correctness is 'louder'."
+        },
+        {
+          "kind": "visual",
+          "icon": "⚖️",
+          "title": "Scattered Errors vs. Clustered Truth",
+          "body": "Picture the votes lining up: one tall bar for the correct answer, and many short, separate bars for each different mistake.",
+          "compare": {
+            "left": {
+              "emoji": "✅",
+              "tag": "Correct Answers",
+              "text": "Many paths, different reasoning, but same destination — votes stack up into one tall bar"
+            },
+            "right": {
+              "emoji": "❌",
+              "tag": "Wrong Answers",
+              "text": "Each mistake is different from the next — votes spread thin across many short bars, none winning"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "type": "practice",
+      "exercises": [
+        {
+          "id": "p1",
+          "type": "multiple_choice",
+          "xp": 2,
+          "prompt": "Why does majority voting across multiple reasoning paths tend to improve accuracy?",
+          "options": [
+            {
+              "id": "a",
+              "text": "Because generating more text always makes a model smarter",
+              "correct": false
+            },
+            {
+              "id": "b",
+              "text": "Because correct paths tend to agree on the same answer, while wrong paths tend to make different, scattered mistakes that don't reinforce each other",
+              "correct": true
+            },
+            {
+              "id": "c",
+              "text": "Because the model remembers its previous answers and improves each time",
+              "correct": false
+            },
+            {
+              "id": "d",
+              "text": "Because higher temperature always produces more accurate individual answers",
+              "correct": false
+            }
+          ],
+          "explain": "Correct reasoning paths, even if they take different routes, tend to converge on the same right answer since there's usually one correct answer. Wrong paths fail in varied, unrelated ways, so their errors spread thin across many different wrong answers instead of clustering on one, letting the true answer win by count."
+        },
+        {
+          "id": "p2",
+          "type": "true_false",
+          "xp": 2,
+          "prompt": "True or False: Majority voting only helps if the model is right more than 50% of the time on any single reasoning path.",
+          "options": [
+            {
+              "id": "a",
+              "text": "True",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "False",
+              "correct": false
+            }
+          ],
+          "explain": "Roughly speaking, if a model is correct more often than any single specific wrong answer, and errors are spread across many different wrong answers rather than one repeated mistake, the correct answer tends to accumulate the most votes. If the model were wrong more than half the time in a consistent way, voting could actually reinforce the wrong answer instead."
+        },
+        {
+          "id": "p3",
+          "type": "fill_blank",
+          "xp": 2,
+          "prompt": "Fill in the blank:",
+          "sentence": "Majority voting improves accuracy because wrong reasoning paths tend to make different, independent mistakes, while correct paths tend to converge on the same answer.",
+          "blank": "independent",
+          "words": [
+            "independent",
+            "identical",
+            "impossible"
+          ],
+          "explain": "The key word is 'independent' — when errors are independent (unrelated to each other), they scatter across many different wrong answers instead of piling onto one, letting the recurring correct answer win the vote."
+        },
+        {
+          "id": "p4",
+          "type": "spot_the_ai",
+          "xp": 2,
+          "prompt": "Which explanation of why self-consistency works was most likely written by AI trying to sound smart but getting the core idea backwards?",
+          "options": [
+            {
+              "id": "a",
+              "text": "Self-consistency works because independent sampling causes errors to scatter across different wrong answers, while the correct answer keeps recurring since there are usually fewer ways to be right than wrong.",
+              "correct": false
+            },
+            {
+              "id": "b",
+              "text": "Self-consistency achieves optimal convergence through recursive backpropagation of latent embeddings, which synchronizes all sampled tokens into a unified gradient consensus that mathematically guarantees the correct answer.",
+              "correct": true
+            },
+            {
+              "id": "c",
+              "text": "Since each sampled reasoning path can make different mistakes, running many samples and voting means no single wrong answer usually gets enough votes to beat the answer most paths agree on.",
+              "correct": false
+            }
+          ],
+          "explain": "Option B is nonsense dressed up in real-sounding jargon: self-consistency doesn't involve backpropagation, gradients, or 'token synchronization' at all — it's simple sampling and vote-counting at inference time, with no training or gradient math involved. It's a classic AI-generated red flag: fancy words with no real logic connecting them."
+        }
+      ]
+    },
+    {
+      "type": "boss",
+      "exercises": [
+        {
+          "id": "b1",
+          "type": "multiple_choice",
+          "xp": 5,
+          "prompt": "An AI model samples 15 reasoning paths for a hard math word problem. 9 paths reach the answer '42', and the other 6 paths are split across 5 different wrong answers. What does this pattern suggest, and what should self-consistency do?",
+          "options": [
+            {
+              "id": "a",
+              "text": "The paths disagree completely, so the model should give up and refuse to answer",
+              "correct": false
+            },
+            {
+              "id": "b",
+              "text": "Since 42 is the most frequent answer among independently generated paths, self-consistency should output 42 as the final answer, because scattered independent errors rarely stack up to beat a real recurring signal",
+              "correct": true
+            },
+            {
+              "id": "c",
+              "text": "The model should pick a wrong answer at random since there are more wrong paths combined than right ones",
+              "correct": false
+            },
+            {
+              "id": "d",
+              "text": "The model should average all 15 numeric answers together, including the wrong ones, to get a blended final answer",
+              "correct": false
+            }
+          ],
+          "explain": "This is self-consistency in action: 9 out of 15 paths (a clear plurality) converged on 42 through independent reasoning, while the wrong answers scattered across 5 different values with no single one repeating much. That scattering is the key sign of independent, non-correlated errors — they don't reinforce each other, so no wrong answer builds a strong crowd. Majority voting correctly picks 42. This wraps up our dive into self-consistency and ensembling — you now understand both HOW to sample multiple reasoning paths and WHY voting across them boosts accuracy. Up next, you'll move into a new unit that builds on this foundation!"
+        }
+      ]
+    }
+  ]
+}

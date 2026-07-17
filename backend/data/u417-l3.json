@@ -1,0 +1,222 @@
+{
+  "id": "u417-l3",
+  "unit": 417,
+  "day": 2088,
+  "tier": "LLM Application Engineering",
+  "tierIcon": "🔌",
+  "title": "Deduplicating Context",
+  "icon": "🧹",
+  "concept": "Removing near-duplicate retrieved passages that waste tokens without adding information.",
+  "xp": 15,
+  "hearts": 3,
+  "estMinutes": 7,
+  "segments": [
+    {
+      "type": "warmup",
+      "exercises": [
+        {
+          "id": "w1",
+          "type": "multiple_choice",
+          "xp": 1,
+          "prompt": "In the last lesson, why did we label each chunk of context with its source?",
+          "options": [
+            {
+              "id": "a",
+              "text": "So the model knows where info came from and how much to trust it",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "So the chunks look prettier when printed",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "So the model can delete chunks it doesn't like",
+              "correct": false
+            }
+          ],
+          "explain": "Labeling sources helps the model weigh information appropriately — a peer-reviewed source might be trusted more than a random forum post. This lesson builds on that by tackling a different problem: repeated information."
+        }
+      ]
+    },
+    {
+      "type": "teach",
+      "cards": [
+        {
+          "kind": "hook",
+          "icon": "📋",
+          "title": "Why say the same thing three times?",
+          "body": "Imagine asking a friend for directions and three people repeat the exact same turn-by-turn instructions. It doesn't help you get there faster — it just wastes your time. Your context window can suffer the same problem."
+        },
+        {
+          "kind": "definition",
+          "icon": "🧹",
+          "title": "What is deduplication?",
+          "body": "Deduplication means finding retrieved passages that say almost the same thing and removing the extra copies. You keep one good version instead of paying token cost for several near-identical ones."
+        },
+        {
+          "kind": "analogy",
+          "icon": "📰",
+          "title": "Like reading five copies of the same newspaper",
+          "body": "If five people hand you the same news story with slightly different wording, you don't need to read all five to understand it. You skim one and toss the rest. Deduplication does this for your context window."
+        },
+        {
+          "kind": "example",
+          "icon": "🔍",
+          "title": "Same fact, different wrapper",
+          "body": "Imagine your retriever pulls: 'Paris is the capital of France' from Wikipedia, 'The capital city of France is Paris' from a travel blog, and 'France's capital: Paris' from a quiz site. All three say the same thing. Keep one, drop the other two, and use the saved tokens for something new."
+        },
+        {
+          "kind": "mythbust",
+          "icon": "🚫",
+          "title": "Myth: more retrieved chunks always means a smarter answer",
+          "body": "Not true! If half your retrieved chunks just repeat the same fact in different words, you're not adding knowledge — you're just burning tokens and pushing out room for genuinely new information. Quality and variety beat raw quantity."
+        },
+        {
+          "kind": "visual",
+          "icon": "⚖️",
+          "title": "Bloated vs. lean context",
+          "body": "Compare a context window stuffed with repeats versus one that's been deduplicated.",
+          "compare": {
+            "left": {
+              "emoji": "📚",
+              "tag": "Before dedup",
+              "text": "5 chunks, 3 of them repeating 'the meeting is at 3pm' in different words — tokens wasted, less room for other facts"
+            },
+            "right": {
+              "emoji": "📄",
+              "tag": "After dedup",
+              "text": "2 unique chunks kept, one clear meeting-time fact plus room for a new, different piece of information"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "type": "practice",
+      "exercises": [
+        {
+          "id": "p1",
+          "type": "multiple_choice",
+          "xp": 2,
+          "prompt": "Why should you deduplicate near-identical retrieved passages before sending them to the model?",
+          "options": [
+            {
+              "id": "a",
+              "text": "Because duplicate passages are always false and must be removed",
+              "correct": false
+            },
+            {
+              "id": "b",
+              "text": "Because they waste token space without adding new information",
+              "correct": true
+            },
+            {
+              "id": "c",
+              "text": "Because the model cannot read more than one passage at a time",
+              "correct": false
+            },
+            {
+              "id": "d",
+              "text": "Because duplicates always confuse the model into giving wrong answers",
+              "correct": false
+            }
+          ],
+          "explain": "The main problem with near-duplicate passages isn't that they're false or unreadable — it's that they take up valuable token space while repeating information the model already has. Removing them frees up room for new, useful content."
+        },
+        {
+          "id": "p2",
+          "type": "true_false",
+          "xp": 2,
+          "prompt": "True or False: Two passages can be considered near-duplicates even if they use completely different wording, as long as they convey the same core information.",
+          "options": [
+            {
+              "id": "a",
+              "text": "True",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "False",
+              "correct": false
+            }
+          ],
+          "explain": "True! Deduplication isn't about matching exact text — it's about matching meaning. 'The sky is blue' and 'Blue is the color of the sky' are near-duplicates even though the words are arranged differently."
+        },
+        {
+          "id": "p3",
+          "type": "fill_blank",
+          "xp": 2,
+          "prompt": "Fill in the blank:",
+          "sentence": "Deduplication removes near-identical passages so the context window has room for genuinely new information.",
+          "blank": "near-identical",
+          "words": [
+            "near-identical",
+            "longer",
+            "untrustworthy"
+          ],
+          "explain": "Deduplication specifically targets passages that are near-identical in meaning, even if worded differently, so the model isn't wasting space on repeated facts."
+        },
+        {
+          "id": "p4",
+          "type": "spot_the_ai",
+          "xp": 2,
+          "prompt": "A teammate shows you three chunk-cleaning summaries generated by an AI assistant. Which one is describing deduplication (not just labeling or filtering)?",
+          "options": [
+            {
+              "id": "a",
+              "text": "'I tagged each chunk with its source website and a trust score from 1-10.'",
+              "correct": false
+            },
+            {
+              "id": "b",
+              "text": "'I compared chunks by meaning and removed ones that repeated facts already covered by another chunk.'",
+              "correct": true
+            },
+            {
+              "id": "c",
+              "text": "'I removed any chunk written in a language other than English.'",
+              "correct": false
+            }
+          ],
+          "explain": "Option b is deduplication: it compares chunk meanings and removes redundant repeats. Option a describes source labeling from the previous lesson, and option c describes language filtering, which is a different kind of context cleaning."
+        }
+      ]
+    },
+    {
+      "type": "boss",
+      "exercises": [
+        {
+          "id": "b1",
+          "type": "multiple_choice",
+          "xp": 5,
+          "prompt": "Your retriever returns 12 chunks for a user's question. 7 of them are near-duplicate paragraphs from mirrored copies of the same FAQ page. What's the best combination of practices from this unit to build a clean context window?",
+          "options": [
+            {
+              "id": "a",
+              "text": "Label each chunk's source, then deduplicate near-identical chunks before sending only the unique, well-labeled ones to the model",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "Send all 12 chunks unlabeled so the model has maximum raw information",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "Delete all 12 chunks since duplicates mean the retriever failed",
+              "correct": false
+            },
+            {
+              "id": "d",
+              "text": "Keep only the first chunk retrieved and ignore the other 11 entirely",
+              "correct": false
+            }
+          ],
+          "explain": "The real skill in structuring a context window is combining techniques: labeling sources tells the model where information came from and how much to trust it, while deduplication removes redundant near-copies so tokens aren't wasted repeating the same fact. Sending everything unlabeled (b) buries useful signals in noise. Deleting everything (c) throws away real information just because some of it repeats. Keeping only the first chunk (d) is too aggressive — some of those 12 chunks might contain unique details even if most are near-duplicates. The smart approach: label first, then dedupe, then feed the model a lean, trustworthy context. This wraps up your training on structuring the context window — nice work! You're ready to move to the next skill in your LLM Application Engineering journey."
+        }
+      ]
+    }
+  ]
+}

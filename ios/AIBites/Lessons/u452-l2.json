@@ -1,0 +1,222 @@
+{
+  "id": "u452-l2",
+  "unit": 452,
+  "day": 2262,
+  "tier": "LLM Application Engineering",
+  "tierIcon": "🔌",
+  "title": "LLM-Based Reranking",
+  "icon": "🤖",
+  "concept": "Prompting an LLM to score or reorder candidate documents by relevance to the query directly.",
+  "xp": 15,
+  "hearts": 3,
+  "estMinutes": 7,
+  "segments": [
+    {
+      "type": "warmup",
+      "exercises": [
+        {
+          "id": "w1",
+          "type": "multiple_choice",
+          "xp": 1,
+          "prompt": "How did the off-the-shelf cross-encoder models we learned about in the last lesson calculate relevance?",
+          "options": [
+            {
+              "id": "opt_joint",
+              "text": "They feed the query and document together into the model at the same time.",
+              "correct": true
+            },
+            {
+              "id": "opt_separate",
+              "text": "They embed the query and documents separately, then calculate cosine similarity.",
+              "correct": false
+            },
+            {
+              "id": "opt_keyword",
+              "text": "They count matching keywords between the query and documents.",
+              "correct": false
+            }
+          ],
+          "explain": "Cross-encoders take a pair of texts (the query and a document) and feed them together into the model to predict a relevance score directly."
+        }
+      ]
+    },
+    {
+      "type": "teach",
+      "cards": [
+        {
+          "kind": "hook",
+          "icon": "🎯",
+          "title": "Why Use a Generative LLM?",
+          "body": "While cross-encoders are fast, they lack the deep reasoning of large models. By using a generative LLM as your reranker, you can instruct it to look for specific nuances, logic, or tone in your search results."
+        },
+        {
+          "kind": "definition",
+          "icon": "🧠",
+          "title": "LLM-Based Reranking",
+          "body": "LLM-Based Reranking uses a generative Large Language Model to evaluate how well a search result matches a query. You feed the query and a document into the prompt and ask the LLM to output a relevance score."
+        },
+        {
+          "kind": "analogy",
+          "icon": "🧑‍🏫",
+          "title": "The Expert Reviewer",
+          "body": "Think of using an LLM like having a human expert read through your top pile of books. Instead of just looking at the indexes, they read the pages and tell you exactly which ones answer your question best."
+        },
+        {
+          "kind": "example",
+          "icon": "📝",
+          "title": "Relevance Prompting",
+          "body": "We prompt the LLM: 'Rate the relevance of this document to the query: \"How to fix a leaky pipe\". Document: \"Plumbing basics: tighten the loose slip nut under the sink.\" Score from 1-10.' The LLM outputs '9'."
+        },
+        {
+          "kind": "mythbust",
+          "icon": "💸",
+          "title": "The Speed Trap",
+          "body": "Actually, LLMs are much slower and more expensive than cross-encoders. Use them selectively, only reranking the top 5 to 10 most promising documents to keep your app fast and cost-effective."
+        },
+        {
+          "kind": "visual",
+          "icon": "⚖️",
+          "title": "Cross-Encoder vs. LLM",
+          "body": "Comparing how classic cross-encoders and generative LLMs handle the reranking step.",
+          "compare": {
+            "left": {
+              "emoji": "⚡",
+              "tag": "Cross-Encoder",
+              "text": "Fast, specialized model that outputs a raw similarity score."
+            },
+            "right": {
+              "emoji": "💬",
+              "tag": "LLM Reranker",
+              "text": "Slower, but can follow complex rules and reasoning in plain English."
+            }
+          }
+        }
+      ]
+    },
+    {
+      "type": "practice",
+      "exercises": [
+        {
+          "id": "p1",
+          "type": "multiple_choice",
+          "xp": 2,
+          "prompt": "What is a major advantage of using an LLM for reranking compared to a fixed cross-encoder?",
+          "options": [
+            {
+              "id": "opt1",
+              "text": "It is much faster than using a bi-encoder search.",
+              "correct": false
+            },
+            {
+              "id": "opt2",
+              "text": "It requires training a new neural network from scratch.",
+              "correct": false
+            },
+            {
+              "id": "opt3",
+              "text": "You can customize the ranking criteria using natural language instructions.",
+              "correct": true
+            },
+            {
+              "id": "opt4",
+              "text": "It completely replaces the need for an initial vector search database.",
+              "correct": false
+            }
+          ],
+          "explain": "LLM-based reranking allows you to write natural language instructions (like 'ignore outdated articles'), which is impossible with standard bi-encoders or simple cross-encoders."
+        },
+        {
+          "id": "p2",
+          "type": "true_false",
+          "xp": 2,
+          "prompt": "True or False: You should send all 1,000 search results to the LLM at once for reranking to get the absolute best speed.",
+          "options": [
+            {
+              "id": "opt_true",
+              "text": "True",
+              "correct": false
+            },
+            {
+              "id": "opt_false",
+              "text": "False",
+              "correct": true
+            }
+          ],
+          "explain": "Because LLMs process tokens sequentially and have high latency, passing dozens of documents to an LLM for reranking will make your search feature very slow."
+        },
+        {
+          "id": "p3",
+          "type": "fill_blank",
+          "xp": 2,
+          "prompt": "Fill in the missing part to describe where we define the LLM's evaluation rules:",
+          "sentence": "We define the scoring rules in the system prompt to guide the LLM's evaluation behavior.",
+          "blank": "system prompt",
+          "words": [
+            "system prompt",
+            "vector index",
+            "database query"
+          ],
+          "explain": "Setting the persona and scoring instructions in the system prompt ensures the LLM acts as an objective evaluator for the search results."
+        },
+        {
+          "id": "p4",
+          "type": "spot_the_ai",
+          "xp": 2,
+          "prompt": "Which of these represents an LLM-based reranking implementation?",
+          "options": [
+            {
+              "id": "opt_a",
+              "text": "import cohere; co = cohere.Client(); co.rerank(query='leaky pipe', documents=docs)",
+              "correct": false
+            },
+            {
+              "id": "opt_b",
+              "text": "SELECT * FROM documents WHERE content LIKE '%pipe%' ORDER BY date DESC;",
+              "correct": false
+            },
+            {
+              "id": "opt_c",
+              "text": "System Prompt: 'You are a search grader. Rate the following document's relevance to the user's query from 1 to 5.'",
+              "correct": true
+            }
+          ],
+          "explain": "Option C mimics a realistic LLM system prompt designed to grade document relevance based on a specific query."
+        }
+      ]
+    },
+    {
+      "type": "boss",
+      "exercises": [
+        {
+          "id": "b1",
+          "type": "multiple_choice",
+          "xp": 5,
+          "prompt": "When prompting an LLM to act as a reranker, which technique is most helpful for reliably sorting the documents in your backend code?",
+          "options": [
+            {
+              "id": "opt_json",
+              "text": "Request the output in structured JSON format with numeric scores",
+              "correct": true
+            },
+            {
+              "id": "opt_freeform",
+              "text": "Ask the LLM to write a free-form essay about each document",
+              "correct": false
+            },
+            {
+              "id": "opt_boolean",
+              "text": "Limit the LLM to only outputting 'yes' or 'no' for each document",
+              "correct": false
+            },
+            {
+              "id": "opt_tokens",
+              "text": "Count the total number of characters in the LLM's response",
+              "correct": false
+            }
+          ],
+          "explain": "Prompting LLMs to output structured scores directly (like JSON) makes it much easier to parse the numbers programmatically and use them for sorting the documents in your code."
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,222 @@
+{
+  "id": "u470-l4",
+  "unit": 470,
+  "day": 2354,
+  "tier": "LLM Application Engineering",
+  "tierIcon": "🔌",
+  "title": "When Plain Function Calling Is Enough",
+  "icon": "💡",
+  "concept": "Single-app, single-tool integrations where the overhead of a separate protocol server isn't justified.",
+  "xp": 15,
+  "hearts": 3,
+  "estMinutes": 7,
+  "segments": [
+    {
+      "type": "warmup",
+      "exercises": [
+        {
+          "id": "w1",
+          "type": "multiple_choice",
+          "xp": 1,
+          "prompt": "What is the primary benefit of MCP's portability that we learned in the previous lesson?",
+          "options": [
+            {
+              "id": "wu_1",
+              "text": "It allows a single tool server to work across different host apps without code modifications.",
+              "correct": true
+            },
+            {
+              "id": "wu_2",
+              "text": "It guarantees that the LLM will never make a hallucination error.",
+              "correct": false
+            },
+            {
+              "id": "wu_3",
+              "text": "It replaces the need to write any local helper code whatsoever.",
+              "correct": false
+            }
+          ],
+          "explain": "The Model Context Protocol (MCP) shines because it creates a standard interface, allowing a single tool server to be plugged into any supporting LLM app (like Claude Desktop or a custom web UI) without rewriting the glue code."
+        }
+      ]
+    },
+    {
+      "type": "teach",
+      "cards": [
+        {
+          "kind": "hook",
+          "icon": "🪝",
+          "title": "Is MCP Always Best?",
+          "body": "MCP is incredibly powerful for sharing tools across different apps, but it comes with a cost. There are times when spinning up an entire MCP server is like hiring a construction crew just to hang a single picture frame. Let's learn when to keep it simple."
+        },
+        {
+          "kind": "definition",
+          "icon": "🔧",
+          "title": "Direct Tooling vs. Protocol Overhead",
+          "body": "Traditional function calling allows an LLM to directly request execution of a function defined inside your application code. For small, single-purpose apps with just one or two local helper tools, this avoids the need to build, deploy, and maintain a separate Model Context Protocol (MCP) server."
+        },
+        {
+          "kind": "analogy",
+          "icon": "🎛️",
+          "title": "The Light Switch Analogy",
+          "body": "Think of traditional function calling as a direct, hardwired light switch in your bedroom. An MCP server is like a smart-home wireless hub. If you only have one single light to turn on, running wires directly is much faster and simpler than setting up an entire wireless smart hub system."
+        },
+        {
+          "kind": "example",
+          "icon": "📝",
+          "title": "The Local PDF Summarizer",
+          "body": "If you are writing a simple Python script to summarize PDF reports and want a helper tool to extract metadata, you can write a standard Python function and pass its schema directly to the OpenAI or Anthropic API client. You don't need a separate server process or communication protocol for just one script."
+        },
+        {
+          "kind": "mythbust",
+          "icon": "🛡️",
+          "title": "The Modular Trap",
+          "body": "While MCP is the modern standard for modular systems, it is not always better. For simple, monolithic applications, plain function calling is faster to write, easier to debug, has lower latency, and doesn't introduce extra network or process management overhead."
+        },
+        {
+          "kind": "visual",
+          "icon": "📊",
+          "title": "Architecture Comparison",
+          "body": "Compare the architectural footprint of direct function calling versus an MCP setup.",
+          "compare": {
+            "left": {
+              "emoji": "🔌",
+              "tag": "Direct Calling",
+              "text": "App calls LLM -> LLM requests local function -> App runs it instantly. Simple & fast."
+            },
+            "right": {
+              "emoji": "🌐",
+              "tag": "MCP Setup",
+              "text": "App -> Host Client -> Protocol Translation -> MCP Server -> Tool. Heavy but modular."
+            }
+          }
+        }
+      ]
+    },
+    {
+      "type": "practice",
+      "exercises": [
+        {
+          "id": "p1",
+          "type": "multiple_choice",
+          "xp": 2,
+          "prompt": "Why does traditional function calling have lower setup and runtime complexity for a simple app?",
+          "options": [
+            {
+              "id": "mc_1",
+              "text": "It bypasses the need for the LLM to generate any JSON schemas.",
+              "correct": false
+            },
+            {
+              "id": "mc_2",
+              "text": "It runs tools directly inside the host app without requiring a separate server process.",
+              "correct": true
+            },
+            {
+              "id": "mc_3",
+              "text": "It automatically translates Python code into JavaScript.",
+              "correct": false
+            },
+            {
+              "id": "mc_4",
+              "text": "It eliminates the need to use an API key for the LLM provider.",
+              "correct": false
+            }
+          ],
+          "explain": "Traditional function calling passes the tool definitions directly in the API call payload and executes them in the same application memory, requiring no separate protocol translation or external server processes."
+        },
+        {
+          "id": "p2",
+          "type": "true_false",
+          "xp": 2,
+          "prompt": "True or False: Every LLM application, no matter how small or simple, should use an MCP server to handle tools.",
+          "options": [
+            {
+              "id": "tf_1",
+              "text": "True",
+              "correct": false
+            },
+            {
+              "id": "tf_2",
+              "text": "False",
+              "correct": true
+            }
+          ],
+          "explain": "MCP is highly valuable for sharing tools across multiple applications, but for a single app using a single local tool, direct function calling is much simpler to implement."
+        },
+        {
+          "id": "p3",
+          "type": "fill_blank",
+          "xp": 2,
+          "prompt": "Complete the sentence to explain why direct function calling is preferred in simple, single-app setups.",
+          "sentence": "Using a full protocol server for a single local tool introduces unnecessary architecture overhead.",
+          "blank": "overhead",
+          "words": [
+            "overhead",
+            "security",
+            "portability"
+          ],
+          "explain": "For a single, isolated application with a single tool, setting up a separate MCP server adds unnecessary complexity and process overhead compared to a direct function call."
+        },
+        {
+          "id": "p4",
+          "type": "spot_the_ai",
+          "xp": 2,
+          "prompt": "Identify the option that represents an AI assistant showing a direct, traditional function-calling implementation.",
+          "options": [
+            {
+              "id": "sai_1",
+              "text": "We recommend using MCP because it decouples the LLM from the tool implementation, making it easier to scale across enterprise applications.",
+              "correct": false
+            },
+            {
+              "id": "sai_2",
+              "text": "To configure the system, run 'npx @modelcontextprotocol/server-postgres' to expose your database to any host client.",
+              "correct": false
+            },
+            {
+              "id": "sai_3",
+              "text": "Passing 'tools=[{\"name\": \"get_weather\", \"description\": \"Get current weather\", \"parameters\": {...}}]' directly in the chat completion call is simple and requires no separate server.",
+              "correct": true
+            }
+          ],
+          "explain": "Option C is generated by an AI attempting to write a simple local tools payload for an LLM client, demonstrating direct inline definition of tool parameters without an external protocol server."
+        }
+      ]
+    },
+    {
+      "type": "boss",
+      "exercises": [
+        {
+          "id": "b1",
+          "type": "multiple_choice",
+          "xp": 5,
+          "prompt": "In which of the following scenarios is traditional, direct function calling the most appropriate choice over MCP?",
+          "options": [
+            {
+              "id": "opt_1",
+              "text": "A public chatbot platform where users can dynamically plug in external web APIs.",
+              "correct": false
+            },
+            {
+              "id": "opt_2",
+              "text": "A private local CLI tool that uses one local helper function to format markdown tables.",
+              "correct": true
+            },
+            {
+              "id": "opt_3",
+              "text": "An enterprise suite where three different internal tools must share a single database interface.",
+              "correct": false
+            },
+            {
+              "id": "opt_4",
+              "text": "A multi-agent system where agents dynamically hand off tasks to modular external services.",
+              "correct": false
+            }
+          ],
+          "explain": "When you control both the LLM client application and the tools, and you only need a single tool (like a simple local calculation helper) that won't be shared with other apps, traditional function calling is best. It keeps the architecture simple by avoiding the network overhead and setup complexity of an independent MCP server."
+        }
+      ]
+    }
+  ]
+}

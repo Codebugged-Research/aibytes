@@ -1,0 +1,222 @@
+{
+  "id": "u410-l3",
+  "unit": 410,
+  "day": 2053,
+  "tier": "LLM Application Engineering",
+  "tierIcon": "🔌",
+  "title": "System Prompt Length Tradeoffs",
+  "icon": "📏",
+  "concept": "A bloated system prompt eats context budget on every single turn; keeping it lean and high-signal.",
+  "xp": 15,
+  "hearts": 3,
+  "estMinutes": 7,
+  "segments": [
+    {
+      "type": "warmup",
+      "exercises": [
+        {
+          "id": "w1",
+          "type": "multiple_choice",
+          "xp": 1,
+          "prompt": "Quick recap: which of these belongs in the SYSTEM prompt rather than being repeated by the user every time?",
+          "options": [
+            {
+              "id": "a",
+              "text": "'Please always respond in a formal tone and never use slang' (a persistent behavior rule)",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "'What's the weather in Tokyo today?' (a one-off question)",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "'Summarize the article I just pasted' (a one-time task on new content)",
+              "correct": false
+            }
+          ],
+          "explain": "Persistent behavior like tone and constraints belongs in the system prompt so it applies automatically to every turn, while one-off questions or tasks are exactly what user prompts are for."
+        }
+      ]
+    },
+    {
+      "type": "teach",
+      "cards": [
+        {
+          "kind": "hook",
+          "icon": "🐢",
+          "title": "Why Is My Chatbot So Slow?",
+          "body": "A team wrote a 3,000-word system prompt packed with rules, examples, and backstory. Every single message got slower and pricier — even simple ones like 'hi'. Turns out the whole system prompt gets resent every single turn."
+        },
+        {
+          "kind": "definition",
+          "icon": "📏",
+          "title": "System Prompt Length Tradeoff",
+          "body": "Because the system prompt gets resent on every single turn, every extra sentence in it costs context budget forever, not just once. A lean, high-signal system prompt keeps only what truly needs to persist across the whole conversation."
+        },
+        {
+          "kind": "analogy",
+          "icon": "🎒",
+          "title": "A Backpack You Carry Every Class",
+          "body": "Your system prompt is like a backpack you're forced to carry into every single class, all day, every day. Pack it with only the essentials you truly need everywhere, and you move fast. Stuff it with random junk 'just in case,' and you're exhausted before class even starts."
+        },
+        {
+          "kind": "example",
+          "icon": "🧾",
+          "title": "Bloated vs Lean",
+          "body": "Bloated: 'You are a helpful assistant. Here are 20 example questions and answers. Also here's our full 500-item catalog. Also remember to be polite.' Lean: 'You are a polite customer support agent. Never share internal pricing. Keep answers under 3 sentences.' The lean version repeats far less junk every turn."
+        },
+        {
+          "kind": "mythbust",
+          "icon": "🚫",
+          "title": "Myth: More Instructions = Better Behavior",
+          "body": "Piling on instructions doesn't guarantee better results — past a point, the model starts losing track of what matters most, and you're paying (in tokens, latency, and cost) for that bloat on every single turn, not just once."
+        },
+        {
+          "kind": "visual",
+          "icon": "⚖️",
+          "title": "Lean vs Bloated Every Turn",
+          "body": "Picture the same backpack being repacked before every class of the day. A light, essentials-only pack stays fast turn after turn, while an overstuffed one drags you down every single time — not just once.",
+          "compare": {
+            "left": {
+              "emoji": "🪶",
+              "tag": "Lean System Prompt",
+              "text": "Few core rules, resent cheaply every turn, model stays focused on the user's real question"
+            },
+            "right": {
+              "emoji": "🧳",
+              "tag": "Bloated System Prompt",
+              "text": "Tons of examples/history, resent in full every turn, eats budget and can bury key instructions"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "type": "practice",
+      "exercises": [
+        {
+          "id": "p1",
+          "type": "multiple_choice",
+          "xp": 2,
+          "prompt": "Why is a very long system prompt more costly than a very long one-time user message?",
+          "options": [
+            {
+              "id": "a",
+              "text": "Because the system prompt is resent and reprocessed on every single turn of the conversation",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "Because system prompts are written in a slower programming language",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "Because the model reads system prompts twice as slowly as user prompts",
+              "correct": false
+            },
+            {
+              "id": "d",
+              "text": "Because long system prompts are illegal in most APIs",
+              "correct": false
+            }
+          ],
+          "explain": "A user message is typically sent once for that turn, but the system prompt rides along with EVERY turn of the whole conversation. So its length gets multiplied by however many turns happen, making bloat far more expensive over time."
+        },
+        {
+          "id": "p2",
+          "type": "true_false",
+          "xp": 2,
+          "prompt": "True or False: A longer system prompt with more detail always produces better, more reliable model behavior.",
+          "options": [
+            {
+              "id": "a",
+              "text": "True",
+              "correct": false
+            },
+            {
+              "id": "b",
+              "text": "False",
+              "correct": true
+            }
+          ],
+          "explain": "False. Longer isn't automatically better — bloated system prompts eat context budget every turn, can bury the truly important rules under noise, and may even confuse the model about priorities. High-signal beats high-volume."
+        },
+        {
+          "id": "p3",
+          "type": "fill_blank",
+          "xp": 2,
+          "prompt": "Fill in the blank.",
+          "sentence": "Because the system prompt is resent on every turn, a bloated one eats context budget again and again, so it should stay lean and high-signal.",
+          "blank": "lean and high-signal",
+          "words": [
+            "lean and high-signal",
+            "as long as possible",
+            "full of examples"
+          ],
+          "explain": "Keeping the system prompt lean and high-signal means every repeated token is actually earning its place, since it gets paid for on every single turn of the conversation."
+        },
+        {
+          "id": "p4",
+          "type": "spot_the_ai",
+          "xp": 2,
+          "prompt": "Which of these system prompts shows a human engineer who understands the length tradeoff, versus an AI-generated one that just piled on 'more is better' content?",
+          "options": [
+            {
+              "id": "a",
+              "text": "'You are a support agent. Be concise, polite, and never reveal internal pricing.'",
+              "correct": false
+            },
+            {
+              "id": "b",
+              "text": "'You are a support agent. Please note the following 40 rules, 12 example dialogues, our company's founding story, and a complete history of every product update since 2015, to be considered on every response.'",
+              "correct": true
+            },
+            {
+              "id": "c",
+              "text": "'You are a support agent for a software company. Keep replies under 4 sentences and escalate billing issues to a human.'",
+              "correct": false
+            }
+          ],
+          "explain": "Option B has the telltale sign of AI over-generation: it dumps everything imaginable into the system prompt with no regard for the fact that all of it gets resent every turn. A thoughtful engineer trims to only what's persistently needed, like options A and C."
+        }
+      ]
+    },
+    {
+      "type": "boss",
+      "exercises": [
+        {
+          "id": "b1",
+          "type": "multiple_choice",
+          "xp": 5,
+          "prompt": "A team's system prompt is 4,000 tokens long and includes company history, 15 example conversations, detailed formatting rules, and a full list of every product ever sold. Users complain the bot is slow and sometimes ignores their actual question. What's the BEST fix?",
+          "options": [
+            {
+              "id": "a",
+              "text": "Make the system prompt even longer so the model has more context to work with",
+              "correct": false
+            },
+            {
+              "id": "b",
+              "text": "Trim the system prompt down to the core persistent rules, tone, and constraints that truly apply every turn, and move situational details elsewhere",
+              "correct": true
+            },
+            {
+              "id": "c",
+              "text": "Delete the system prompt entirely and put everything in the user prompt instead",
+              "correct": false
+            },
+            {
+              "id": "d",
+              "text": "Keep the system prompt as is, since length never affects performance",
+              "correct": false
+            }
+          ],
+          "explain": "The system prompt resends its full content on EVERY turn, silently eating into the context budget the model has for the user's actual question and conversation history. A bloated prompt full of one-time or rarely-needed info (like exhaustive product lists or excess examples) wastes that budget repeatedly and can crowd out or distract from what matters right now. The fix isn't zero system prompt or a longer one — it's a lean, high-signal system prompt that keeps only the truly persistent, every-turn-relevant instructions, while situational or lookup-style info gets fetched or injected only when needed (e.g., via retrieval or user-turn context). This keeps responses fast, focused, and less likely to ignore the user's real question."
+        }
+      ]
+    }
+  ]
+}

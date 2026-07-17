@@ -1,0 +1,222 @@
+{
+  "id": "u437-l3",
+  "unit": 437,
+  "day": 2188,
+  "tier": "LLM Application Engineering",
+  "tierIcon": "🔌",
+  "title": "Searching an HNSW Graph",
+  "icon": "🎯",
+  "concept": "Greedy descent from the top sparse layer down to the dense bottom layer to find near neighbors quickly.",
+  "xp": 15,
+  "hearts": 3,
+  "estMinutes": 7,
+  "segments": [
+    {
+      "type": "warmup",
+      "exercises": [
+        {
+          "id": "w1",
+          "type": "multiple_choice",
+          "xp": 1,
+          "prompt": "How does HNSW insert a new vector into its multi-layered graph structure?",
+          "options": [
+            {
+              "id": "w_o1",
+              "text": "By placing them only in the bottom layer without any connections.",
+              "correct": false
+            },
+            {
+              "id": "w_o2",
+              "text": "By connecting them to their nearest neighbors across multiple designated layers.",
+              "correct": true
+            },
+            {
+              "id": "w_o3",
+              "text": "By rebuilding the entire multi-layer graph from scratch for every new vector.",
+              "correct": false
+            }
+          ],
+          "explain": "In the prior lesson, we learned that new vectors are assigned a maximum layer using a probability decay function, and are then inserted by connecting them to their nearest neighbors at each level they belong to."
+        }
+      ]
+    },
+    {
+      "type": "teach",
+      "cards": [
+        {
+          "kind": "hook",
+          "icon": "⚡",
+          "title": "Skip the Lines",
+          "body": "Imagine searching through millions of files in milliseconds. HNSW doesn't search everything; it acts like an express elevator, letting you bypass almost the entire database by jumping down through layers of increasing detail."
+        },
+        {
+          "kind": "definition",
+          "icon": "🔍",
+          "title": "Greedy Layer Descent",
+          "body": "Searching an HNSW graph uses greedy search. Starting at the top layer, you jump from node to node, always choosing the neighbor closest to your query vector until you can't get any closer. Then, you drop down to the next layer and resume the search from that same position."
+        },
+        {
+          "kind": "analogy",
+          "icon": "🗺️",
+          "title": "The Skip-List Expressway",
+          "body": "Imagine a multi-tier map of a country. You start on the top map showing only major highways, zooming from New York to California in one step. Then you drop down to the regional map, and finally the local street map to find your destination."
+        },
+        {
+          "kind": "example",
+          "icon": "🐕",
+          "title": "Tracking the Query",
+          "body": "When searching for the concept 'puppy' in a 3-layer HNSW graph, you start at the top layer, jump from 'animal' to 'dog', drop to the middle layer to find 'young dog', and finally drop to the bottom layer to land on 'puppy'."
+        },
+        {
+          "kind": "mythbust",
+          "icon": "🛡️",
+          "title": "No Dead Ends Here",
+          "body": "People think greedy search gets stuck in local traps on HNSW graphs. In reality, because the upper layers have long-range links and the graph is built with high connectivity, the algorithm almost always finds the true near-neighbors."
+        },
+        {
+          "kind": "visual",
+          "icon": "↕️",
+          "title": "Top-Layer Express vs. Bottom-Layer Local",
+          "body": "See how search efficiency changes as we move from the sparse top layer down to the dense bottom layer.",
+          "compare": {
+            "left": {
+              "emoji": "✈️",
+              "tag": "Top Layer",
+              "text": "Few nodes, huge jumps, fast rough direction."
+            },
+            "right": {
+              "emoji": "🚶‍♂️",
+              "tag": "Bottom Layer",
+              "text": "All nodes, tiny steps, precise final location."
+            }
+          }
+        }
+      ]
+    },
+    {
+      "type": "practice",
+      "exercises": [
+        {
+          "id": "p1",
+          "type": "multiple_choice",
+          "xp": 2,
+          "prompt": "At which layer does an HNSW search query always begin its journey?",
+          "options": [
+            {
+              "id": "q1_o1",
+              "text": "The bottom layer (Layer 0) where all data points exist",
+              "correct": false
+            },
+            {
+              "id": "q1_o2",
+              "text": "The top layer (highest level) with the sparsest nodes",
+              "correct": true
+            },
+            {
+              "id": "q1_o3",
+              "text": "A random layer selected by the database engine",
+              "correct": false
+            },
+            {
+              "id": "q1_o4",
+              "text": "The layer with the absolute most connections",
+              "correct": false
+            }
+          ],
+          "explain": "The search begins at the very top layer, which has the fewest, most widely spaced nodes, serving as an express highway."
+        },
+        {
+          "id": "p2",
+          "type": "true_false",
+          "xp": 2,
+          "prompt": "True or False: The top layer of an HNSW graph contains every single vector in the database.",
+          "options": [
+            {
+              "id": "tf_true",
+              "text": "True",
+              "correct": false
+            },
+            {
+              "id": "tf_false",
+              "text": "False",
+              "correct": true
+            }
+          ],
+          "explain": "The top layer contains only a small subset of nodes with long-range links, acting as a high-speed highway. The bottom layer contains all the nodes."
+        },
+        {
+          "id": "p3",
+          "type": "fill_blank",
+          "xp": 2,
+          "prompt": "Fill in the missing search strategy used to navigate HNSW layers.",
+          "sentence": "We use greedy search to find the closest node in a layer before dropping down.",
+          "blank": "greedy search",
+          "words": [
+            "greedy search",
+            "binary search",
+            "random walk"
+          ],
+          "explain": "Greedy search moves step-by-step to the closest neighbor at the current level before dropping down to the next layer."
+        },
+        {
+          "id": "p4",
+          "type": "spot_the_ai",
+          "xp": 2,
+          "prompt": "Which of the following describes the correct AI-like logic for transitioning between layers during an HNSW search?",
+          "options": [
+            {
+              "id": "sai_o1",
+              "text": "The algorithm randomly teleports between layers until it hits a node that matches the query's hash value.",
+              "correct": false
+            },
+            {
+              "id": "sai_o2",
+              "text": "The search descends to the next layer only when it reaches a local minimum where no neighbors in the current layer are closer to the query.",
+              "correct": true
+            },
+            {
+              "id": "sai_o3",
+              "text": "The search scans all nodes at the current level, averages their distances, and uses that average to jump directly to the bottom layer.",
+              "correct": false
+            }
+          ],
+          "explain": "The option discussing local minimum transition accurately describes HNSW's layer-dropping search mechanic. The other options describe grid searches or random jumps that don't match HNSW's logic."
+        }
+      ]
+    },
+    {
+      "type": "boss",
+      "exercises": [
+        {
+          "id": "b1",
+          "type": "multiple_choice",
+          "xp": 5,
+          "prompt": "How does the search algorithm navigate through the HNSW multi-layered graph structure to find the nearest neighbor?",
+          "options": [
+            {
+              "id": "opt_1",
+              "text": "Start at Layer 0, find the target, and search upwards to verify it is correct.",
+              "correct": false
+            },
+            {
+              "id": "opt_2",
+              "text": "Search all layers in parallel and merge the results using a voting system.",
+              "correct": false
+            },
+            {
+              "id": "opt_3",
+              "text": "Perform a greedy search at the top layer, drop down to the next layer at the local minimum, and repeat until Layer 0.",
+              "correct": true
+            },
+            {
+              "id": "opt_4",
+              "text": "Calculate the distance from the query to every single node in the bottom layer.",
+              "correct": false
+            }
+          ],
+          "explain": "To find the nearest neighbor in HNSW, we perform a greedy search at the top layer. Once we hit a local minimum where no neighbor is closer to our query than our current node, we drop down to the corresponding node in the next layer down and repeat the process until we reach layer 0."
+        }
+      ]
+    }
+  ]
+}

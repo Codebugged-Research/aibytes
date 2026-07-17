@@ -1,0 +1,222 @@
+{
+  "id": "u440-l4",
+  "unit": 440,
+  "day": 2204,
+  "tier": "LLM Application Engineering",
+  "tierIcon": "🔌",
+  "title": "Multi-Tenant Isolation via Filtering",
+  "icon": "🔑",
+  "concept": "Using metadata filters to guarantee one tenant's query never surfaces another tenant's private vectors.",
+  "xp": 15,
+  "hearts": 3,
+  "estMinutes": 7,
+  "segments": [
+    {
+      "type": "warmup",
+      "exercises": [
+        {
+          "id": "w1",
+          "type": "multiple_choice",
+          "xp": 1,
+          "prompt": "In our last lesson, we discussed the 'Over-Filtering Trap'. What happens when we apply post-filtering to a small candidate pool (low K)?",
+          "options": [
+            {
+              "id": "opt_1",
+              "text": "The vector database crashes due to too many matching metadata tags.",
+              "correct": false
+            },
+            {
+              "id": "opt_2",
+              "text": "We get zero or too few results because our strict filter eliminated the few candidates returned by the ANN search.",
+              "correct": true
+            },
+            {
+              "id": "opt_3",
+              "text": "The LLM hallucinates new metadata tags to bypass the query filters.",
+              "correct": false
+            }
+          ],
+          "explain": "The over-filtering trap occurs when we set strict metadata filters, but retrieve too few initial candidates (small K) during the vector search phase, leaving us with zero or very few final results."
+        }
+      ]
+    },
+    {
+      "type": "teach",
+      "cards": [
+        {
+          "kind": "hook",
+          "icon": "🏢",
+          "title": "Sharing the Space, Protecting the Walls",
+          "body": "In a multi-tenant app, different users or companies share the same database infrastructure. How do we keep their private data completely separated without paying for hundreds of individual database instances? We use metadata filters."
+        },
+        {
+          "kind": "definition",
+          "icon": "🔒",
+          "title": "What is Multi-Tenant Isolation?",
+          "body": "Multi-tenant isolation ensures that in a shared database, users can only search and access their own data. By attaching a tenant identifier to every vector's metadata, we can apply a strict filter on every query to block unauthorized data access."
+        },
+        {
+          "kind": "analogy",
+          "icon": "🗄️",
+          "title": "The Color-Coded Filing Cabinet",
+          "body": "Imagine a giant shared filing cabinet where every folder has a colored sticker for its owner. Even if a search dog smells a matching document, a lock physically blocks the drawer unless the color sticker matches your key."
+        },
+        {
+          "kind": "example",
+          "icon": "📝",
+          "title": "A Safe Search Query",
+          "body": "When User-456 searches their notes, the system automatically appends `{\"tenant_id\": \"user-456\"}` to the query. Even if User-111 has a note that is highly similar to the query, the database filters it out completely before returning any results."
+        },
+        {
+          "kind": "mythbust",
+          "icon": "🛡️",
+          "title": "Do We Need Separate Databases?",
+          "body": "You might think you need a separate vector database for every single customer to keep data safe. In reality, using metadata filters to partition a single shared database is highly secure, much cheaper, and easier to maintain."
+        },
+        {
+          "kind": "visual",
+          "icon": "⚖️",
+          "title": "Secure vs. Insecure Access",
+          "body": "Comparing secure isolation using database-level metadata filters versus risky post-filtering or no filtering at all.",
+          "compare": {
+            "left": {
+              "emoji": "🟢",
+              "tag": "Filtered Database Search",
+              "text": "Only tenant_id 'A' vectors are evaluated. Complete security boundary."
+            },
+            "right": {
+              "emoji": "🔴",
+              "tag": "Unfiltered Search + LLM",
+              "text": "All vectors evaluated; risks exposing Tenant B's data to the prompt."
+            }
+          }
+        }
+      ]
+    },
+    {
+      "type": "practice",
+      "exercises": [
+        {
+          "id": "p1",
+          "type": "multiple_choice",
+          "xp": 2,
+          "prompt": "What is the safest way to prevent Tenant A from seeing Tenant B's data in a shared vector database?",
+          "options": [
+            {
+              "id": "opt_1",
+              "text": "Feed all data to the LLM and ask it nicely to ignore other tenants' data.",
+              "correct": false
+            },
+            {
+              "id": "opt_2",
+              "text": "Apply a hard metadata filter on the tenant ID during the database query.",
+              "correct": true
+            },
+            {
+              "id": "opt_3",
+              "text": "Run a normal search and hope the similarity score of other tenants is low.",
+              "correct": false
+            },
+            {
+              "id": "opt_4",
+              "text": "Manually inspect every search result with human moderators before display.",
+              "correct": false
+            }
+          ],
+          "explain": "Relying on the LLM to sort out privacy is dangerous and leads to leaks. We must filter out unauthorized data at the database level before the LLM ever sees it."
+        },
+        {
+          "id": "p2",
+          "type": "true_false",
+          "xp": 2,
+          "prompt": "True or False: Metadata filtering can completely prevent data leaks between tenants even if all tenant vectors live in the same index.",
+          "options": [
+            {
+              "id": "opt_true",
+              "text": "True",
+              "correct": true
+            },
+            {
+              "id": "opt_false",
+              "text": "False",
+              "correct": false
+            }
+          ],
+          "explain": "If the filter is applied correctly at the database level, the database will never look at or return vectors belonging to other tenants, preventing any data leaks."
+        },
+        {
+          "id": "p3",
+          "type": "fill_blank",
+          "xp": 2,
+          "prompt": "Fill in the missing filter parameter to ensure User-A only retrieves their own files:",
+          "sentence": "To isolate search results, the query must include a metadata filter matching the user's tenant_id.",
+          "blank": "tenant_id",
+          "words": [
+            "tenant_id",
+            "vector_size",
+            "similarity_score"
+          ],
+          "explain": "Injecting the tenant_id directly into the query's metadata filter is the standard way to enforce strict data isolation at the database level."
+        },
+        {
+          "id": "p4",
+          "type": "spot_the_ai",
+          "xp": 2,
+          "prompt": "Which of these search strategies is generated by an AI making a security mistake rather than a robust database engineering rule?",
+          "options": [
+            {
+              "id": "opt_1",
+              "text": "We append a strict metadata filter `tenant_id == 'company_xyz'` to all vector database queries.",
+              "correct": false
+            },
+            {
+              "id": "opt_2",
+              "text": "We let the AI read all vectors and decide if the context feels like it belongs to the current user's department.",
+              "correct": true
+            },
+            {
+              "id": "opt_3",
+              "text": "We configure database partition keys to automatically scope the search index to the current user's workspace.",
+              "correct": false
+            }
+          ],
+          "explain": "The second option shows an AI trying to guess privacy rules based on text meaning, which is insecure, whereas the others describe structured developer-defined database filtering."
+        }
+      ]
+    },
+    {
+      "type": "boss",
+      "exercises": [
+        {
+          "id": "b1",
+          "type": "multiple_choice",
+          "xp": 5,
+          "prompt": "You are designing a secure medical chatbot where Tenant A (Clinic A) and Tenant B (Clinic B) share the same vector index. How does metadata filtering guarantee that Clinic A's patients never see Clinic B's private medical data?",
+          "options": [
+            {
+              "id": "opt_1",
+              "text": "The vector database engine applies the metadata filter at the database level, preventing tenant B's vectors from ever entering the query's candidate pool.",
+              "correct": true
+            },
+            {
+              "id": "opt_2",
+              "text": "The application retrieves all matches first, and then relies on client-side Javascript to discard tenant B's results.",
+              "correct": false
+            },
+            {
+              "id": "opt_3",
+              "text": "The system prompts the LLM to ignore any retrieved context that looks like it belongs to another user.",
+              "correct": false
+            },
+            {
+              "id": "opt_4",
+              "text": "The database encrypts tenant A's queries using tenant B's public key, causing tenant B's vectors to automatically self-destruct.",
+              "correct": false
+            }
+          ],
+          "explain": "Filtering is applied directly at the database layer during index traversal or immediate post-retrieval. If the database engine ensures no records lacking `tenant_id: 'tenant_A'` are ever read or returned, tenant B's data is mathematically excluded, maintaining security boundaries even within a single shared database index."
+        }
+      ]
+    }
+  ]
+}

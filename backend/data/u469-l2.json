@@ -1,0 +1,222 @@
+{
+  "id": "u469-l2",
+  "unit": 469,
+  "day": 2347,
+  "tier": "LLM Application Engineering",
+  "tierIcon": "🔌",
+  "title": "Listing Available Capabilities",
+  "icon": "📋",
+  "concept": "The client-side call that discovers what tools, resources, and prompts a connected server offers.",
+  "xp": 15,
+  "hearts": 3,
+  "estMinutes": 7,
+  "segments": [
+    {
+      "type": "warmup",
+      "exercises": [
+        {
+          "id": "w1",
+          "type": "multiple_choice",
+          "xp": 1,
+          "prompt": "Before we can list a server's capabilities, what must the client do first?",
+          "options": [
+            {
+              "id": "opt1",
+              "text": "Running the actual tools.",
+              "correct": false
+            },
+            {
+              "id": "opt2",
+              "text": "Performing the connection handshake and protocol negotiation.",
+              "correct": true
+            },
+            {
+              "id": "opt3",
+              "text": "Generating user responses with an LLM.",
+              "correct": false
+            }
+          ],
+          "explain": "The initial connection handshake establishes the protocol version and capabilities that both client and server support before any tools are listed."
+        }
+      ]
+    },
+    {
+      "type": "teach",
+      "cards": [
+        {
+          "kind": "hook",
+          "icon": "🃏",
+          "title": "What Can You Do?",
+          "body": "Once your client is connected to an MCP server, how does it know what it can actually do? It doesn't guess; it asks the server to show its full deck of cards."
+        },
+        {
+          "kind": "definition",
+          "icon": "🔍",
+          "title": "Discovering Server Capabilities",
+          "body": "Listing capabilities is the discovery process where an MCP client calls specific list endpoints (like listing tools, prompts, or resources) to find out exactly what actions and data the server supports."
+        },
+        {
+          "kind": "analogy",
+          "icon": "📜",
+          "title": "The Menu Analogy",
+          "body": "Think of listing capabilities like a waiter handing you a menu. Before ordering, you need to read the menu to see what dishes (tools), daily specials (prompts), and ingredients (resources) are available."
+        },
+        {
+          "kind": "example",
+          "icon": "💻",
+          "title": "Listing in Action",
+          "body": "In code, an MCP client uses functions like `list_tools()` or `list_prompts()` immediately after connecting to dynamically build a list of options that can be fed into an LLM."
+        },
+        {
+          "kind": "mythbust",
+          "icon": "🚫",
+          "title": "No Hardcoded Lists Required",
+          "body": "You might think a client has to know all tools in advance. In reality, MCP clients are dynamic; they query the server at runtime, meaning you can add new tools to the server without changing your client code."
+        },
+        {
+          "kind": "visual",
+          "icon": "👀",
+          "title": "From Blind to Informed",
+          "body": "Comparing how a client understands capabilities before and after calling the discovery endpoints.",
+          "compare": {
+            "left": {
+              "emoji": "❓",
+              "tag": "Before Discovery",
+              "text": "Connected, but blind to what tools or resources the server actually hosts."
+            },
+            "right": {
+              "emoji": "📋",
+              "tag": "After Discovery",
+              "text": "Receives a clean list of tool names, descriptions, and required arguments."
+            }
+          }
+        }
+      ]
+    },
+    {
+      "type": "practice",
+      "exercises": [
+        {
+          "id": "p1",
+          "type": "multiple_choice",
+          "xp": 2,
+          "prompt": "When a client requests the list of capabilities from an MCP server, what does the server return?",
+          "options": [
+            {
+              "id": "opt1",
+              "text": "An empty string.",
+              "correct": false
+            },
+            {
+              "id": "opt2",
+              "text": "A compiled binary file.",
+              "correct": false
+            },
+            {
+              "id": "opt3",
+              "text": "A list of schemas detailing the tools, prompts, and resources.",
+              "correct": true
+            },
+            {
+              "id": "opt4",
+              "text": "A list of username and password credentials.",
+              "correct": false
+            }
+          ],
+          "explain": "The server returns a structured schema (JSON) that describes what each tool does and what parameters it expects, allowing the client to pass this information directly to an LLM."
+        },
+        {
+          "id": "p2",
+          "type": "true_false",
+          "xp": 2,
+          "prompt": "True or False: An MCP server can expose both tools (actions) and resources (data) at the same time to a client.",
+          "options": [
+            {
+              "id": "opt1",
+              "text": "True",
+              "correct": true
+            },
+            {
+              "id": "opt2",
+              "text": "False",
+              "correct": false
+            }
+          ],
+          "explain": "A single server can expose multiple types of capabilities, including prompts, resources, and tools, which can all be listed by the client."
+        },
+        {
+          "id": "p3",
+          "type": "fill_blank",
+          "xp": 2,
+          "prompt": "Fill in the missing method name used to query the server's tools.",
+          "sentence": "To discover what functions are available on the server, the client calls the list_tools method.",
+          "blank": "list_tools",
+          "words": [
+            "list_tools",
+            "execute_code",
+            "delete_server"
+          ],
+          "explain": "The client calls the list_tools method to dynamically fetch the schema of all tools the server currently supports."
+        },
+        {
+          "id": "p4",
+          "type": "spot_the_ai",
+          "xp": 2,
+          "prompt": "How does an MCP client determine which tools are available on a newly connected server?",
+          "options": [
+            {
+              "id": "opt1",
+              "text": "AI: An MCP client queries the server's list endpoints dynamically at runtime to build its tool definitions.",
+              "correct": true
+            },
+            {
+              "id": "opt2",
+              "text": "Human: You must write a local Python dictionary containing all tool names before you run the client.",
+              "correct": false
+            },
+            {
+              "id": "opt3",
+              "text": "Human: The client parses the server's source code files line-by-line to extract the functions.",
+              "correct": false
+            }
+          ],
+          "explain": "Option 1 is correct because standard MCP clients retrieve capabilities dynamically using list commands, rather than relying on hardcoded local client configuration files."
+        }
+      ]
+    },
+    {
+      "type": "boss",
+      "exercises": [
+        {
+          "id": "b1",
+          "type": "multiple_choice",
+          "xp": 5,
+          "prompt": "Once your MCP client successfully lists the available capabilities from a server, how does it typically use this information in an LLM agent loop?",
+          "options": [
+            {
+              "id": "opt1",
+              "text": "The client forces the server to download new tools from a package manager.",
+              "correct": false
+            },
+            {
+              "id": "opt2",
+              "text": "The client discovers the capabilities, shares them with the LLM, and lets the LLM decide which tool to call.",
+              "correct": true
+            },
+            {
+              "id": "opt3",
+              "text": "The client bypasses the server and executes python code locally without permission.",
+              "correct": false
+            },
+            {
+              "id": "opt4",
+              "text": "The client shuts down the server to ensure no tools are running.",
+              "correct": false
+            }
+          ],
+          "explain": "To build a complete interactive agent, the client first establishes a connection (handshake), lists the available tools/prompts/resources (discovery), and then provides those choices to the LLM so it can decide which capability to execute."
+        }
+      ]
+    }
+  ]
+}

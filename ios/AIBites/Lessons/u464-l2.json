@@ -1,0 +1,222 @@
+{
+  "id": "u464-l2",
+  "unit": 464,
+  "day": 2322,
+  "tier": "LLM Application Engineering",
+  "tierIcon": "🔌",
+  "title": "Building a Query Router",
+  "icon": "🚦",
+  "concept": "Using a lightweight classifier or LLM call to decide which index or tool a query should be sent to.",
+  "xp": 15,
+  "hearts": 3,
+  "estMinutes": 7,
+  "segments": [
+    {
+      "type": "warmup",
+      "exercises": [
+        {
+          "id": "w1",
+          "type": "multiple_choice",
+          "xp": 1,
+          "prompt": "In our previous lesson, we learned that sending every user query to one giant, single index can lead to irrelevant answers. Why is this?",
+          "options": [
+            {
+              "id": "a",
+              "text": "It mixes unrelated documents, diluting search results with distracting, irrelevant context.",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "Vector databases can physically only hold one type of document at a time.",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "Retrieval becomes too fast for the LLM to process in real time.",
+              "correct": false
+            }
+          ],
+          "explain": "When we combine different types of data (like technical code and HR policy) into one big index, search results get noisy. Separating them into specialized indexes yields cleaner, more accurate context."
+        }
+      ]
+    },
+    {
+      "type": "teach",
+      "cards": [
+        {
+          "kind": "hook",
+          "icon": "📞",
+          "title": "The Intelligent Switchboard",
+          "body": "Imagine calling a company and having a human operator immediately forward your call to Billing, Tech Support, or Sales based on what you ask. A query router does exactly this for your RAG system, analyzing the incoming prompt to send it to the absolute best data source."
+        },
+        {
+          "kind": "definition",
+          "icon": "🧠",
+          "title": "What is a Query Router?",
+          "body": "A query router is a decision-making layer that sits in front of your databases. It uses a fast LLM call or a lightweight classifier to inspect a user's question, determine its intent, and choose which specific tool, index, or database to query."
+        },
+        {
+          "kind": "analogy",
+          "icon": "📦",
+          "title": "The Mailroom Clerk",
+          "body": "Think of a query router like a mailroom clerk sorting incoming packages. Instead of opening every box and dumping the contents into a single massive pile, the clerk reads the label and sends the package straight to the specific department that needs it."
+        },
+        {
+          "kind": "example",
+          "icon": "💻",
+          "title": "Routing in Action",
+          "body": "If a user asks 'How do I reset my password?', the router identifies this as an 'Account Support' intent and sends it to the customer FAQ index. If they ask 'Show me the API syntax for login', the router shifts gears and sends it to the Developer API docs index."
+        },
+        {
+          "kind": "mythbust",
+          "icon": "🚫",
+          "title": "Do We Need a Giant Model?",
+          "body": "You don't need a massive, expensive LLM like GPT-4 just to route queries. A tiny, fine-tuned classifier, or a highly optimized prompt on a cheap, fast model, is usually faster and much more cost-effective for making this simple routing decision."
+        },
+        {
+          "kind": "visual",
+          "icon": "📊",
+          "title": "Router vs. No Router",
+          "body": "Let's compare what happens to a coding query when we use a router versus when we search a single combined database.",
+          "compare": {
+            "left": {
+              "emoji": "🗄️",
+              "tag": "No Router (Combined Index)",
+              "text": "Query matches both Python code files and company vacation policy PDFs, returning a messy, confused mix of text."
+            },
+            "right": {
+              "emoji": "🚦",
+              "tag": "With Query Router",
+              "text": "Router detects 'Code Intent', bypassing the HR index entirely to fetch only precise Python documentation."
+            }
+          }
+        }
+      ]
+    },
+    {
+      "type": "practice",
+      "exercises": [
+        {
+          "id": "p1",
+          "type": "multiple_choice",
+          "xp": 2,
+          "prompt": "Which of the following is the most efficient and common way to implement a query router?",
+          "options": [
+            {
+              "id": "a",
+              "text": "Running a brute-force keyword match across all documents in all databases simultaneously.",
+              "correct": false
+            },
+            {
+              "id": "b",
+              "text": "Using a lightweight classifier or a fast LLM call to output a destination key (like 'code_docs' or 'hr_docs') based on the query text.",
+              "correct": true
+            },
+            {
+              "id": "c",
+              "text": "Asking the user to manually select their database from a dropdown menu before every single question.",
+              "correct": false
+            },
+            {
+              "id": "d",
+              "text": "Embedding the entire database into the prompt history of the router model.",
+              "correct": false
+            }
+          ],
+          "explain": "Using a lightweight classification model or a quick LLM call to map user queries to pre-defined destination labels keeps the system automated, fast, and highly accurate."
+        },
+        {
+          "id": "p2",
+          "type": "true_false",
+          "xp": 2,
+          "prompt": "A query router must always use vector search to decide where to send a query.",
+          "options": [
+            {
+              "id": "true",
+              "text": "True",
+              "correct": false
+            },
+            {
+              "id": "false",
+              "text": "False",
+              "correct": true
+            }
+          ],
+          "explain": "Query routers can use simple text classification, rule-based keyword matching, or LLM-based logical decision making. They do not rely solely on vector search to choose a path."
+        },
+        {
+          "id": "p3",
+          "type": "fill_blank",
+          "xp": 2,
+          "prompt": "Fill in the missing word to complete the description of a router's primary job.",
+          "sentence": "The query router acts as an intelligent decision-making layer that selects the correct index for a query.",
+          "blank": "index",
+          "words": [
+            "index",
+            "embedding",
+            "chunk"
+          ],
+          "explain": "The query router's job is to inspect the user input and direct it to the most relevant index or data source, preventing irrelevant documents from polluting the LLM's context."
+        },
+        {
+          "id": "p4",
+          "type": "spot_the_ai",
+          "xp": 2,
+          "prompt": "Identify the AI-generated query routing logic designed for a multi-source RAG system.",
+          "options": [
+            {
+              "id": "a",
+              "text": "def route(query):\n    if len(query) > 100:\n        return 'long_db'\n    else:\n        return 'short_db'",
+              "correct": false
+            },
+            {
+              "id": "b",
+              "text": "def route(query):\n    response = llm.predict(f\"Classify this query into 'support' or 'api': {query}\")\n    return 'support_index' if 'support' in response.lower() else 'api_index'",
+              "correct": true
+            },
+            {
+              "id": "c",
+              "text": "def route(query):\n    user_input = input('Which index would you like to search? (1 for FAQ, 2 for Docs): ')\n    return 'faq' if user_input == '1' else 'docs'",
+              "correct": false
+            }
+          ],
+          "explain": "Option B uses an LLM to dynamically classify the query's intent and programmatically route it to the appropriate specialized index, which is the hallmark of an AI query router."
+        }
+      ]
+    },
+    {
+      "type": "boss",
+      "exercises": [
+        {
+          "id": "b1",
+          "type": "multiple_choice",
+          "xp": 5,
+          "prompt": "You are building a customer support bot. A user asks: 'Do you have a Python SDK, and what is your refund policy?' How should an advanced query router handle this multi-intent query?",
+          "options": [
+            {
+              "id": "a",
+              "text": "It should crash because a query router can only ever choose a single destination path.",
+              "correct": false
+            },
+            {
+              "id": "b",
+              "text": "It should route to a generic global index and hope the embedding search sorts it out.",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "It should split or clone the query, routing it to both the developer docs index and the billing index, then combine the retrieved contexts.",
+              "correct": true
+            },
+            {
+              "id": "d",
+              "text": "It should ignore the refund policy since technical questions always take priority in RAG systems.",
+              "correct": false
+            }
+          ],
+          "explain": "Advanced query routers are not limited to one path. If a query contains multiple distinct intents, the router can duplicate or split the query, fetch context from multiple specialized sources (like developer docs and billing), and merge the results for the final LLM response."
+        }
+      ]
+    }
+  ]
+}

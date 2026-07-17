@@ -1,0 +1,222 @@
+{
+  "id": "u467-l5",
+  "unit": 467,
+  "day": 2340,
+  "tier": "LLM Application Engineering",
+  "tierIcon": "🔌",
+  "title": "Choosing Tool vs Resource vs Prompt",
+  "icon": "🚦",
+  "concept": "A practical decision guide for which primitive fits a given integration need.",
+  "xp": 15,
+  "hearts": 3,
+  "estMinutes": 7,
+  "segments": [
+    {
+      "type": "warmup",
+      "exercises": [
+        {
+          "id": "w1",
+          "type": "multiple_choice",
+          "xp": 1,
+          "prompt": "In the last lesson, we learned about 'Capability Discovery'. What does this process allow an LLM client to do?",
+          "options": [
+            {
+              "id": "opt1",
+              "text": "Hardcoding all capabilities directly into the LLM weights",
+              "correct": false
+            },
+            {
+              "id": "opt2",
+              "text": "Querying the server's listed capabilities so the client knows what is available",
+              "correct": true
+            },
+            {
+              "id": "opt3",
+              "text": "Encrypting the prompt templates so the user cannot read them",
+              "correct": false
+            }
+          ],
+          "explain": "Capability discovery allows a client to query the server using a handshake protocol to find out what prompts, resources, and tools are available."
+        }
+      ]
+    },
+    {
+      "type": "teach",
+      "cards": [
+        {
+          "kind": "hook",
+          "icon": "🤔",
+          "title": "Which Tool for the Job?",
+          "body": "Now that we know how to list all capabilities, how do we decide when to write a Prompt, share a Resource, or build a Tool? Making the right choice keeps your LLM app safe and efficient."
+        },
+        {
+          "kind": "definition",
+          "icon": "🗺️",
+          "title": "The Three-Way Decision Guide",
+          "body": "To build clean LLM applications, map static templates to Prompts, data-reading endpoints to Resources, and action-taking operations to Tools. choosing the wrong primitive makes your architecture messy and hard to secure."
+        },
+        {
+          "kind": "analogy",
+          "icon": "🍳",
+          "title": "The Kitchen Blueprint",
+          "body": "Think of a Prompt as a template recipe, a Resource as a fixed ingredient in the pantry, and a Tool as a kitchen appliance like a blender that actually processes inputs and changes things."
+        },
+        {
+          "kind": "example",
+          "icon": "🛍️",
+          "title": "Shopping Assistant Architecture",
+          "body": "If your LLM needs to read a database of product prices, expose it as a Resource. If the LLM needs to place an order and charge a credit card, implement that as a Tool."
+        },
+        {
+          "kind": "mythbust",
+          "icon": "🛡️",
+          "title": "The Danger of 'Tool-Only' Systems",
+          "body": "You might think you can just make everything a Tool so the LLM has maximum power. However, giving an LLM tool access to read-only data exposes your system to unnecessary side-effects and safety risks."
+        },
+        {
+          "kind": "visual",
+          "icon": "⚖️",
+          "title": "Resource vs Tool",
+          "body": "Select your architectural primitive based on whether it is a template, a dataset, or an active operation.",
+          "compare": {
+            "left": {
+              "emoji": "📦",
+              "tag": "Resource",
+              "text": "Read-only context like files or database tables."
+            },
+            "right": {
+              "emoji": "⚙️",
+              "tag": "Tool",
+              "text": "Read-write action that changes the system state."
+            }
+          }
+        }
+      ]
+    },
+    {
+      "type": "practice",
+      "exercises": [
+        {
+          "id": "p1",
+          "type": "multiple_choice",
+          "xp": 2,
+          "prompt": "Which of the following integration needs is best modeled as a Tool?",
+          "options": [
+            {
+              "id": "a",
+              "text": "A read-only configuration file",
+              "correct": false
+            },
+            {
+              "id": "b",
+              "text": "A reusable translation instruction template",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "A function that deletes a user account",
+              "correct": true
+            },
+            {
+              "id": "d",
+              "text": "A list of historical weather data",
+              "correct": false
+            }
+          ],
+          "explain": "Tools are designed for actions that modify the system or external world, such as sending emails, writing files, or updating databases."
+        },
+        {
+          "id": "p2",
+          "type": "true_false",
+          "xp": 2,
+          "prompt": "True or False: If you need to supply a changing database of live inventory to your LLM, a Prompt template is the best primitive to choose.",
+          "options": [
+            {
+              "id": "true",
+              "text": "True",
+              "correct": false
+            },
+            {
+              "id": "false",
+              "text": "False",
+              "correct": true
+            }
+          ],
+          "explain": "Prompts act as templates or guidelines, but they do not dynamically fetch external datasets or perform actions on their own."
+        },
+        {
+          "id": "p3",
+          "type": "fill_blank",
+          "xp": 2,
+          "prompt": "Fill in the blank: To let an LLM safely read your read-only product catalog without taking actions, you should register it as a...",
+          "sentence": "You should register a read-only product catalog as a Resource.",
+          "blank": "Resource",
+          "words": [
+            "Resource",
+            "Tool",
+            "Prompt"
+          ],
+          "explain": "A product catalog is read-only information, so it should be exposed as a Resource rather than an active Tool."
+        },
+        {
+          "id": "p4",
+          "type": "spot_the_ai",
+          "xp": 2,
+          "prompt": "Which design suggestion sounds like it was written by an AI hallucinating an over-complicated architectural pattern?",
+          "options": [
+            {
+              "id": "a",
+              "text": "We need to expose our company wiki to the AI. Since it's read-only document search, let's expose it as a Resource.",
+              "correct": false
+            },
+            {
+              "id": "b",
+              "text": "To implement the user lookup, we will define a schema with <tool_call_schema> tag using write-back permissions to read the database.",
+              "correct": true
+            },
+            {
+              "id": "c",
+              "text": "For our customer service bot, we'll write a Prompt template for tone guidelines, and a Tool to process refunds.",
+              "correct": false
+            }
+          ],
+          "explain": "Option B is clearly written by an AI because it creates a fake, overly elaborate XML tool schema for a simple read-only data lookup, which should instead be a Resource."
+        }
+      ]
+    },
+    {
+      "type": "boss",
+      "exercises": [
+        {
+          "id": "b1",
+          "type": "multiple_choice",
+          "xp": 5,
+          "prompt": "You are building a Calendar integration. You need to: 1) Provide a reusable email template for meeting minutes, 2) Let the LLM view the user's agenda for today, and 3) Let the LLM schedule a new meeting. How should you model these?",
+          "options": [
+            {
+              "id": "opt1",
+              "text": "Tool for the template, Resource for adding the event, Prompt for reading the agenda",
+              "correct": false
+            },
+            {
+              "id": "opt2",
+              "text": "Prompt for the template, Resource for reading the agenda, Tool for adding the event",
+              "correct": true
+            },
+            {
+              "id": "opt3",
+              "text": "Resource for the template, Tool for reading the agenda, Prompt for adding the event",
+              "correct": false
+            },
+            {
+              "id": "opt4",
+              "text": "Tool for all three since they all happen inside a calendar app",
+              "correct": false
+            }
+          ],
+          "explain": "Creating a calendar event is an action that modifies state in the real world, which makes it a Tool. Reading the user's existing agenda is fetching static/dynamic context, which is a Resource. Offering a template for a meeting recap is a Prompt."
+        }
+      ]
+    }
+  ]
+}

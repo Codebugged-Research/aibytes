@@ -1,0 +1,222 @@
+{
+  "id": "u412-l1",
+  "unit": 412,
+  "day": 2061,
+  "tier": "LLM Application Engineering",
+  "tierIcon": "🔌",
+  "title": "Self-Consistency Sampling",
+  "icon": "🗳️",
+  "concept": "Generating multiple reasoning paths at nonzero temperature and taking a majority vote on the final answer.",
+  "xp": 15,
+  "hearts": 3,
+  "estMinutes": 7,
+  "segments": [
+    {
+      "type": "warmup",
+      "exercises": [
+        {
+          "id": "w1",
+          "type": "multiple_choice",
+          "xp": 1,
+          "prompt": "Quick recap: when you ask an LLM to 'think step by step' before answering, what is that technique generally called?",
+          "options": [
+            {
+              "id": "a",
+              "text": "Chain-of-thought prompting",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "Zero-shot classification",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "Tokenization",
+              "correct": false
+            }
+          ],
+          "explain": "Chain-of-thought prompting asks the model to write out its reasoning steps before giving a final answer, which usually improves accuracy on tricky problems. Today we build on that idea by generating several of these reasoning chains at once."
+        }
+      ]
+    },
+    {
+      "type": "teach",
+      "cards": [
+        {
+          "kind": "hook",
+          "icon": "🤔",
+          "title": "One Answer Isn't Always Right",
+          "body": "If you ask an LLM a tricky math word problem once, it might get it wrong. But what if you asked it the same question five different times and let the answers vote on the winner?"
+        },
+        {
+          "kind": "definition",
+          "icon": "📖",
+          "title": "What Is Self-Consistency Sampling?",
+          "body": "Self-consistency sampling means asking the model to solve the same problem multiple times, using chain-of-thought and a nonzero temperature so each attempt reasons a bit differently. Then you take the final answer that shows up most often — a majority vote."
+        },
+        {
+          "kind": "analogy",
+          "icon": "🧑‍⚖️",
+          "title": "Like Asking a Panel of Judges",
+          "body": "Imagine five judges independently solve the same puzzle instead of just one. Some might make small mistakes along the way, but if most of them land on the same final answer, that answer is probably correct. You trust the crowd, not just one voice."
+        },
+        {
+          "kind": "example",
+          "icon": "🧮",
+          "title": "A Math Problem, Five Times",
+          "body": "Ask 'What is 17% of 240, then add 5?' five separate times at temperature 0.7. Reasoning paths differ slightly, but say 4 out of 5 runs land on '45.8' while 1 run makes an arithmetic slip and says '44'. You pick 45.8 since it's the majority answer."
+        },
+        {
+          "kind": "mythbust",
+          "icon": "🚫",
+          "title": "Myth: More Randomness Means Worse Answers",
+          "body": "It seems like turning up temperature (adding randomness) should hurt accuracy, but it's actually the point here. A little randomness makes each reasoning path explore the problem differently, so their mistakes don't all match — letting the majority vote cancel out random errors."
+        },
+        {
+          "kind": "visual",
+          "icon": "⚖️",
+          "title": "One Shot vs. Many Votes",
+          "body": "Compare relying on a single greedy answer versus sampling several reasoning paths and voting.",
+          "compare": {
+            "left": {
+              "emoji": "1️⃣",
+              "tag": "Single Greedy Pass",
+              "text": "One deterministic run at temperature 0. If that one reasoning path slips, you get a wrong final answer with no backup."
+            },
+            "right": {
+              "emoji": "🗳️",
+              "tag": "Self-Consistency",
+              "text": "Multiple sampled runs at higher temperature, then majority vote. Random slips in a few paths get outvoted by the correct answer appearing most often."
+            }
+          }
+        }
+      ]
+    },
+    {
+      "type": "practice",
+      "exercises": [
+        {
+          "id": "p1",
+          "type": "multiple_choice",
+          "xp": 2,
+          "prompt": "In self-consistency sampling, what determines the final answer the system returns?",
+          "options": [
+            {
+              "id": "a",
+              "text": "The very first reasoning path generated",
+              "correct": false
+            },
+            {
+              "id": "b",
+              "text": "The answer that appears most often across multiple sampled reasoning paths",
+              "correct": true
+            },
+            {
+              "id": "c",
+              "text": "The longest reasoning chain produced",
+              "correct": false
+            },
+            {
+              "id": "d",
+              "text": "A random pick among all generated answers",
+              "correct": false
+            }
+          ],
+          "explain": "Self-consistency works by generating many independent reasoning paths and then tallying their final answers. Whichever answer shows up most frequently is chosen, since it's less likely that many independent paths make the exact same mistake."
+        },
+        {
+          "id": "p2",
+          "type": "true_false",
+          "xp": 2,
+          "prompt": "True or False: Self-consistency sampling requires setting the temperature to 0 so every reasoning path is identical.",
+          "options": [
+            {
+              "id": "a",
+              "text": "True",
+              "correct": false
+            },
+            {
+              "id": "b",
+              "text": "False",
+              "correct": true
+            }
+          ],
+          "explain": "False — self-consistency needs a nonzero temperature so the model produces varied reasoning paths. If temperature were 0, every run would be identical and there'd be nothing to vote between."
+        },
+        {
+          "id": "p3",
+          "type": "fill_blank",
+          "xp": 2,
+          "prompt": "Fill in the blank.",
+          "sentence": "After sampling several reasoning paths, self-consistency picks the final answer with the most votes, known as the majority vote.",
+          "blank": "majority vote",
+          "words": [
+            "majority vote",
+            "single guess",
+            "random pick"
+          ],
+          "explain": "The technique is called self-consistency because it checks whether the model's reasoning is consistent across multiple tries, and the majority vote is how it picks the winning answer."
+        },
+        {
+          "id": "p4",
+          "type": "spot_the_ai",
+          "xp": 2,
+          "prompt": "Which of these three descriptions of a workflow is the AI-generated (i.e., correctly describes) self-consistency sampling?",
+          "options": [
+            {
+              "id": "a",
+              "text": "Generate one chain-of-thought at temperature 0.7, then output whatever it says without checking anything else.",
+              "correct": false
+            },
+            {
+              "id": "b",
+              "text": "Generate 10 chain-of-thought reasoning paths at temperature 0.7, extract the final answer from each, and return the answer that occurs most frequently.",
+              "correct": true
+            },
+            {
+              "id": "c",
+              "text": "Generate 10 chain-of-thought reasoning paths at temperature 0, average their token probabilities, and return the highest one.",
+              "correct": false
+            }
+          ],
+          "explain": "Option B correctly captures both key ingredients: multiple samples at nonzero temperature for diversity, plus a majority vote over final answers. The others either skip sampling multiple paths or misuse temperature 0, which produces identical outputs with nothing to vote on."
+        }
+      ]
+    },
+    {
+      "type": "boss",
+      "exercises": [
+        {
+          "id": "b1",
+          "type": "multiple_choice",
+          "xp": 5,
+          "prompt": "You're building a system to answer tricky logic puzzles. You sample 7 reasoning paths at temperature 0.8 for one puzzle. The final answers are: A, A, B, A, C, A, B. Using self-consistency, which answer should the system return, and why?",
+          "options": [
+            {
+              "id": "a",
+              "text": "B, because it appeared in two different reasoning styles",
+              "correct": false
+            },
+            {
+              "id": "b",
+              "text": "C, because it was the most creative or unique answer",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "A, because it appears most often (4 out of 7 times), making it the majority vote winner",
+              "correct": true
+            },
+            {
+              "id": "d",
+              "text": "Whichever answer came from the longest reasoning path",
+              "correct": false
+            }
+          ],
+          "explain": "Self-consistency sampling ignores how creative, long, or stylistically different a reasoning path is — it only cares about which final answer shows up most across all sampled paths. Here, A appears 4 times out of 7, more than B (2 times) or C (1 time), so A wins the majority vote. This approach helps cancel out occasional reasoning slips, since it's unlikely that multiple independent paths make the exact same error."
+        }
+      ]
+    }
+  ]
+}

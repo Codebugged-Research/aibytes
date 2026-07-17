@@ -1,0 +1,222 @@
+{
+  "id": "u443-l4",
+  "unit": 443,
+  "day": 2219,
+  "tier": "LLM Application Engineering",
+  "tierIcon": "🔌",
+  "title": "Versioning Vector Collections",
+  "icon": "🔄",
+  "concept": "Running old and new indexes side by side during a migration to avoid downtime or quality regressions.",
+  "xp": 15,
+  "hearts": 3,
+  "estMinutes": 7,
+  "segments": [
+    {
+      "type": "warmup",
+      "exercises": [
+        {
+          "id": "w1",
+          "type": "multiple_choice",
+          "xp": 1,
+          "prompt": "When upgrading your application to a new embedding model, what must you do with your existing corpus action model, what must you do to improve search quality, what must you do to do you need search quality, what must you do with the existing documents, why do you have to re-do list, what is the most critical step, what must you do to upgrade, what must you do to keep your search working with your existing vectors, what must you do to do you need to do-items, what must you do to keep search documents, what must transition to a new embedding model, what must you do with your existing vector representations, what is the required first step for its data, what is required?",
+          "options": [
+            {
+              "id": "opt_a",
+              "text": "Re-generate embeddings for all documents using the new model.",
+              "correct": true
+            },
+            {
+              "id": "opt_b",
+              "text": "Simply double the size of your existing vector database.",
+              "correct": false
+            },
+            {
+              "id": "opt_c",
+              "text": "Change the distance metric from Cosine to Euclidean.",
+              "correct": false
+            }
+          ],
+          "explain": "Upgrading your embedding model means you must generate new vector representations for your entire corpus, as vectors from different models cannot be compared."
+        }
+      ]
+    },
+    {
+      "type": "teach",
+      "cards": [
+        {
+          "kind": "hook",
+          "icon": "🚦",
+          "title": "The Upgrade Dilemma",
+          "body": "When you upgrade your embedding model, you can't just flip a switch instantly. Doing so would crash your search engine or return garbage results while the new index is building. How do we upgrade without turning off our app?"
+        },
+        {
+          "kind": "definition",
+          "icon": "🗂️",
+          "title": "What is Vector Collection Versioning?",
+          "body": "Versioning vector collections is the practice of running two or more versions of your database index side-by-side. This allows you to write to and test a new index without interrupting the live user-facing system."
+        },
+        {
+          "kind": "analogy",
+          "icon": "🌉",
+          "title": "The Blue-Green Bridge",
+          "body": "Think of versioning vector collections like building a new bridge next to an old one. Instead of closing the old bridge and leaving drivers stranded, you build the new one side-by-side. Once the new bridge is tested and ready, you smoothly redirect the traffic flow without a single car stopping."
+        },
+        {
+          "kind": "example",
+          "icon": "🛒",
+          "title": "Shadow Testing in E-Commerce",
+          "body": "An e-commerce site updates its search index from 'products-v1' to 'products-v2'. During the transition, users still query 'products-v1', while the backend team runs shadow queries against 'products-v2' to ensure search results are actually more accurate."
+        },
+        {
+          "kind": "mythbust",
+          "icon": "🛑",
+          "title": "Myth: In-Place Upgrades Are Safe",
+          "body": "Many developers assume they can just overwrite their existing vector index in place. In reality, doing this causes severe downtime or corrupted search results because old embeddings and new embeddings cannot mix in the same space."
+        },
+        {
+          "kind": "visual",
+          "icon": "⚖️",
+          "title": "Migration Strategies",
+          "body": "We compare the dangerous 'In-Place Overwrite' method with the safe 'Side-by-Side Versioning' method.",
+          "compare": {
+            "left": {
+              "emoji": "💥",
+              "tag": "In-Place Overwrite",
+              "text": "Overwriting the old index directly, leading to downtime, errors, and mixed dimension mismatches."
+            },
+            "right": {
+              "emoji": "🟢",
+              "tag": "Side-by-Side Versioning",
+              "text": "Keeping the old index live while building and validating the new index in isolation."
+            }
+          }
+        }
+      ]
+    },
+    {
+      "type": "practice",
+      "exercises": [
+        {
+          "id": "p1",
+          "type": "multiple_choice",
+          "xp": 2,
+          "prompt": "Why do engineers run old and new vector collections side-by-side during a model migration?",
+          "options": [
+            {
+              "id": "opt_1",
+              "text": "To save on cloud hosting costs.",
+              "correct": false
+            },
+            {
+              "id": "opt_2",
+              "text": "To prevent search downtime and allow testing of the new index before going live.",
+              "correct": true
+            },
+            {
+              "id": "opt_3",
+              "text": "Because vector databases can only hold one version of a model at a time.",
+              "correct": false
+            },
+            {
+              "id": "opt_4",
+              "text": "To encrypt the vectors during transmission.",
+              "correct": false
+            }
+          ],
+          "explain": "Running both indexes side-by-side (often called Blue-Green deployment) allows you to verify the performance and accuracy of the new index before routing user traffic to it."
+        },
+        {
+          "id": "p2",
+          "type": "true_false",
+          "xp": 2,
+          "prompt": "True or False: You can safely upload new vectors from a 768-dimension model directly into a collection built with a 384-dimension model.",
+          "options": [
+            {
+              "id": "opt_1",
+              "text": "True",
+              "correct": false
+            },
+            {
+              "id": "opt_2",
+              "text": "False",
+              "correct": true
+            }
+          ],
+          "explain": "Mixing different embedding models in a single index will ruin search quality, as different models map concepts to entirely different coordinates. A new index version must be created."
+        },
+        {
+          "id": "p3",
+          "type": "fill_blank",
+          "xp": 2,
+          "prompt": "Fill in the blank: To keep both collections updated during a migration, you should use a technique called...",
+          "sentence": "During a database migration, you should use dual-writing to send new vectors to both collections.",
+          "blank": "dual-writing",
+          "words": [
+            "dual-writing",
+            "single-pointing",
+            "hard-coding"
+          ],
+          "explain": "Dual-writing ensures that any new data added during the migration window is saved to both collections, keeping the new version up to date before it goes live."
+        },
+        {
+          "id": "p4",
+          "type": "spot_the_ai",
+          "xp": 2,
+          "prompt": "Which of the following logs represents an AI-driven migration workflow coordinator running a side-by-side collection update?",
+          "options": [
+            {
+              "id": "opt_1",
+              "text": "A database is a structured collection of data stored electronically in a computer system.",
+              "correct": false
+            },
+            {
+              "id": "opt_2",
+              "text": "System Log: Collection 'docs-v1' handling 100% read traffic. Collection 'docs-v2' successfully built and receiving dual-writes. Initiating 10% shadow read test on 'docs-v2'.",
+              "correct": true
+            },
+            {
+              "id": "opt_3",
+              "text": "Vectors are arrays of numbers representing coordinates in a high-dimensional space.",
+              "correct": false
+            }
+          ],
+          "explain": "Option B shows typical automated system messages log of a dual-collection migration process, indicating a validation step and then a traffic switch. Option A and C are generic database definitions."
+        }
+      ]
+    },
+    {
+      "type": "boss",
+      "exercises": [
+        {
+          "id": "b1",
+          "type": "multiple_choice",
+          "xp": 5,
+          "prompt": "You are migrating your production application's vector search database from v1 (using an old embedding model) to v2 (using a new, higher-dimension model). Which migration strategy ensures zero downtime and allows you to validate search quality before going fully live?",
+          "options": [
+            {
+              "id": "opt_1",
+              "text": "Dual-write incoming updates to both v1 and v2, read from v1, validate v2, and then update the read pointer to v2.",
+              "correct": true
+            },
+            {
+              "id": "opt_2",
+              "text": "Delete v1 immediately, write all new data to v2, and wait for the system to recover.",
+              "correct": false
+            },
+            {
+              "id": "opt_3",
+              "text": "Stop all incoming application traffic, copy v1 to v2, and restart the application pointing to v2.",
+              "correct": false
+            },
+            {
+              "id": "opt_4",
+              "text": "Read from both v1 and v2 simultaneously and let the application randomly choose which result to trust.",
+              "correct": false
+            }
+          ],
+          "explain": "To guarantee zero downtime and verify performance, you must write data to both collections (dual-writing), read from the old one until the new one is fully validated, and only then flip the read traffic pointer to the new collection."
+        }
+      ]
+    }
+  ]
+}

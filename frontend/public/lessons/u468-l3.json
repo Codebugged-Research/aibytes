@@ -1,0 +1,222 @@
+{
+  "id": "u468-l3",
+  "unit": 468,
+  "day": 2343,
+  "tier": "LLM Application Engineering",
+  "tierIcon": "🔌",
+  "title": "Exposing Resources from a Server",
+  "icon": "📤",
+  "concept": "Wiring a server to list and serve read-only resources like files or database records.",
+  "xp": 15,
+  "hearts": 3,
+  "estMinutes": 7,
+  "segments": [
+    {
+      "type": "warmup",
+      "exercises": [
+        {
+          "id": "w1",
+          "type": "multiple_choice",
+          "xp": 1,
+          "prompt": "Recap: When an MCP server receives a tool call request from a client, what does its handler do?",
+          "options": [
+            {
+              "id": "opt_result",
+              "text": "It executes custom logic and returns a structured result.",
+              "correct": true
+            },
+            {
+              "id": "opt_nothing",
+              "text": "It immediately crashes the server to prevent unauthorized writes.",
+              "correct": false
+            },
+            {
+              "id": "opt_webpage",
+              "text": "It opens a browser window on the client's desktop.",
+              "correct": false
+            }
+          ],
+          "explain": "In the prior lesson, we learned that a tool handler receives input arguments, processes them (performing actions), and returns a structured output result to the client."
+        }
+      ]
+    },
+    {
+      "type": "teach",
+      "cards": [
+        {
+          "kind": "hook",
+          "icon": "🔍",
+          "title": "Sharing Data Safely",
+          "body": "What if your AI assistant needs to inspect a system log or read a documentation file without changing it? Instead of writing complex tools, we can expose these directly as read-only resources."
+        },
+        {
+          "kind": "definition",
+          "icon": "📁",
+          "title": "What are Resources?",
+          "body": "Resources are read-only data sources that an MCP server exposes to clients. Unlike tools, which perform actions or changes, resources act like files or database records that the AI can open and inspect."
+        },
+        {
+          "kind": "analogy",
+          "icon": "📚",
+          "title": "The Reference Library Analogy",
+          "body": "Think of resources like books in a library's reference section. You can browse the catalog (list them) and read them on-site, but you aren't allowed to write in them or take them home."
+        },
+        {
+          "kind": "example",
+          "icon": "💻",
+          "title": "Exposing Log Files",
+          "body": "An MCP server can register a handler for 'resources/list' to show a list of database tables, and 'resources/read' to return the actual rows of a specific table when the client requests its unique URI."
+        },
+        {
+          "kind": "mythbust",
+          "icon": "🛡️",
+          "title": "Read-Only vs. Write Access",
+          "body": "You might think resources can be modified by the client. In MCP, resources are strictly read-only; if you need the AI to modify or delete data, you should use Tools instead."
+        },
+        {
+          "kind": "visual",
+          "icon": "⚖️",
+          "title": "Tools vs. Resources",
+          "body": "Understanding how resources differ from tools helps you design clean server capabilities.",
+          "compare": {
+            "left": {
+              "emoji": "🛠️",
+              "tag": "Tools",
+              "text": "Active commands that run code, modify state, or trigger external actions."
+            },
+            "right": {
+              "emoji": "📄",
+              "tag": "Resources",
+              "text": "Static, read-only data sources like log files, database rows, or documentation."
+            }
+          }
+        }
+      ]
+    },
+    {
+      "type": "practice",
+      "exercises": [
+        {
+          "id": "p1",
+          "type": "multiple_choice",
+          "xp": 2,
+          "prompt": "How does an MCP client point to and request a specific resource from the server?",
+          "options": [
+            {
+              "id": "opt_uri",
+              "text": "Using unique URIs (Uniform Resource Identifiers)",
+              "correct": true
+            },
+            {
+              "id": "opt_port",
+              "text": "Using random port numbers",
+              "correct": false
+            },
+            {
+              "id": "opt_tool",
+              "text": "By converting them into executable tool parameters",
+              "correct": false
+            },
+            {
+              "id": "opt_password",
+              "text": "By sending them as raw email attachments",
+              "correct": false
+            }
+          ],
+          "explain": "Resources are identified using standard Uniform Resource Identifiers (URIs), which act like unique web addresses for each piece of data."
+        },
+        {
+          "id": "p2",
+          "type": "true_false",
+          "xp": 2,
+          "prompt": "To fully expose resources, an MCP server typically needs to handle both 'list' and 'read' requests.",
+          "options": [
+            {
+              "id": "opt_true",
+              "text": "True",
+              "correct": true
+            },
+            {
+              "id": "opt_false",
+              "text": "False",
+              "correct": false
+            }
+          ],
+          "explain": "MCP servers must implement both listing (so the client discovers what resources exist) and reading (to retrieve the contents of a selected resource)."
+        },
+        {
+          "id": "p3",
+          "type": "fill_blank",
+          "xp": 2,
+          "prompt": "Fill in the blank to describe the access level of MCP resources:",
+          "sentence": "MCP resources are designed to be read-only data sources.",
+          "blank": "read-only",
+          "words": [
+            "read-only",
+            "read-write",
+            "executable"
+          ],
+          "explain": "Resources in the Model Context Protocol are designed to be read-only so that clients can inspect data without accidentally modifying it."
+        },
+        {
+          "id": "p4",
+          "type": "spot_the_ai",
+          "xp": 2,
+          "prompt": "Which of the following looks like an AI-generated mock response representing an exposed resource payload?",
+          "options": [
+            {
+              "id": "opt_a",
+              "text": "const server = new McpServer({ name: 'my-server', version: '1.0' });",
+              "correct": false
+            },
+            {
+              "id": "opt_b",
+              "text": "server.setRequestHandler(ListResourcesRequestSchema, async () => { ... });",
+              "correct": false
+            },
+            {
+              "id": "opt_c",
+              "text": "{ \"resources\": [{ \"uri\": \"file:///logs/app.log\", \"mimeType\": \"text/plain\", \"text\": \"System started successfully at 08:00 UTC.\" }] }",
+              "correct": true
+            }
+          ],
+          "explain": "Option C represents a typical AI-generated mock response simulating an MCP resource payload with a schema-compliant URI and text content. Options A and B are standard code configurations."
+        }
+      ]
+    },
+    {
+      "type": "boss",
+      "exercises": [
+        {
+          "id": "b1",
+          "type": "multiple_choice",
+          "xp": 5,
+          "prompt": "You want to build an MCP server that lets an AI assistant read local logs and configuration files. Which design steps must you take to expose these safely as resources?",
+          "options": [
+            {
+              "id": "opt_both",
+              "text": "Implement a handler to list available resources, and another handler to read a specific resource by its URI.",
+              "correct": true
+            },
+            {
+              "id": "opt_write",
+              "text": "Create a tool that allows the client to write new files directly into the server database.",
+              "correct": false
+            },
+            {
+              "id": "opt_only_list",
+              "text": "Only implement the list handler, as clients can guess the file contents from the titles.",
+              "correct": false
+            },
+            {
+              "id": "opt_random",
+              "text": "Return all files in a single flat text string whenever any tool is called.",
+              "correct": false
+            }
+          ],
+          "explain": "To expose read-only data, you must implement handlers for both listing (so the client knows what exists) and reading (so the client can fetch the actual content of a specific resource)."
+        }
+      ]
+    }
+  ]
+}

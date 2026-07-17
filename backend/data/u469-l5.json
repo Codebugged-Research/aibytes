@@ -1,0 +1,222 @@
+{
+  "id": "u469-l5",
+  "unit": 469,
+  "day": 2350,
+  "tier": "LLM Application Engineering",
+  "tierIcon": "🔌",
+  "title": "MCP Foundations Capstone",
+  "icon": "🏗️",
+  "concept": "Building a minimal end-to-end host-client-server MCP integration and tracing a full tool call; 'Next up: MCP in Practice & Evaluation.'.",
+  "xp": 15,
+  "hearts": 3,
+  "estMinutes": 7,
+  "segments": [
+    {
+      "type": "warmup",
+      "exercises": [
+        {
+          "id": "w1",
+          "type": "multiple_choice",
+          "xp": 1,
+          "prompt": "How does a host client expose discovered MCP tools to a language model?",
+          "options": [
+            {
+              "id": "opt_1",
+              "text": "Hardcode the server's raw Python code directly into the LLM's system prompt.",
+              "correct": false
+            },
+            {
+              "id": "opt_2",
+              "text": "Translate the discovered MCP tool schemas into the specific JSON format expected by the LLM API.",
+              "correct": true
+            },
+            {
+              "id": "opt_3",
+              "text": "Disable the LLM's reasoning engine so it only runs local server commands.",
+              "correct": false
+            }
+          ],
+          "explain": "To let the model use discovered MCP tools, the host client must translate the MCP schemas into the specific format (like JSON schema) that the target LLM's API expects."
+        }
+      ]
+    },
+    {
+      "type": "teach",
+      "cards": [
+        {
+          "kind": "hook",
+          "icon": "⚡",
+          "title": "Putting the Pieces Together",
+          "body": "You've learned how the client discovers tools and how the LLM chooses them. Now, let's tie it all together into a complete, working host-client-server loop where messages flow seamlessly!"
+        },
+        {
+          "kind": "definition",
+          "icon": "🔗",
+          "title": "End-to-End MCP Integration",
+          "body": "An end-to-end MCP integration links a client host, an LLM, and an external server. The client reads the server's tools, formats them for the LLM, catches the LLM's tool request, forwards it to the server, and returns the result to the LLM."
+        },
+        {
+          "kind": "analogy",
+          "icon": "📯",
+          "title": "The Postman Analogy",
+          "body": "Think of the MCP client as a translator and postman. It takes the user's letter, asks the server what services (tools) are available, translates those options for the LLM, and then carries the LLM's chosen command back to the server to execute."
+        },
+        {
+          "kind": "example",
+          "icon": "💻",
+          "title": "A Minimal Python Pipeline",
+          "body": "In Python, you initialize a StdioServerParameters object, start an McpClient session, query 'list_tools()', convert the tools into OpenAI function schemas, get a decision from the LLM, and run 'call_tool()' to execute it."
+        },
+        {
+          "kind": "mythbust",
+          "icon": "🛑",
+          "title": "The LLM Doesn't Talk Directly to the Server",
+          "body": "You might think the LLM directly talks to the MCP server. In reality, the LLM is completely isolated; the MCP client acts as the central coordinator, translating and passing messages back and forth."
+        },
+        {
+          "kind": "visual",
+          "icon": "↔️",
+          "title": "Visualizing the Coordination",
+          "body": "See how the client coordinates the flow of information between the LLM and the Server.",
+          "compare": {
+            "left": {
+              "emoji": "🤖",
+              "tag": "LLM API",
+              "text": "Receives custom tool definitions; outputs tool call request."
+            },
+            "right": {
+              "emoji": "⚙️",
+              "tag": "MCP Server",
+              "text": "Exposes raw tools; executes the code and returns the result."
+            }
+          }
+        }
+      ]
+    },
+    {
+      "type": "practice",
+      "exercises": [
+        {
+          "id": "p1",
+          "type": "multiple_choice",
+          "xp": 2,
+          "prompt": "Which of the following describes the correct order of data flow during an MCP tool execution?",
+          "options": [
+            {
+              "id": "opt_1",
+              "text": "The server bypasses the client and sends results directly to the user's screen.",
+              "correct": false
+            },
+            {
+              "id": "opt_2",
+              "text": "The client receives the tool request from the LLM, forwards it to the server, and returns the result to the LLM.",
+              "correct": true
+            },
+            {
+              "id": "opt_3",
+              "text": "The LLM calls the server directly without client intervention.",
+              "correct": false
+            },
+            {
+              "id": "opt_4",
+              "text": "The client terminates the connection once the LLM makes a decision.",
+              "correct": false
+            }
+          ],
+          "explain": "During a full tool call, the client acts as the router: it forwards the LLM's requested arguments to the server and feeds the server's response back to the LLM."
+        },
+        {
+          "id": "p2",
+          "type": "true_false",
+          "xp": 2,
+          "prompt": "True or False: The client is responsible for translating the MCP tool schema into the format expected by the specific LLM API being used.",
+          "options": [
+            {
+              "id": "opt_1",
+              "text": "True",
+              "correct": true
+            },
+            {
+              "id": "opt_2",
+              "text": "False",
+              "correct": false
+            }
+          ],
+          "explain": "The MCP client must dynamically format the server's tools into the format expected by your specific LLM provider (like OpenAI, Anthropic, or Google)."
+        },
+        {
+          "id": "p3",
+          "type": "fill_blank",
+          "xp": 2,
+          "prompt": "Fill in the missing word that describes the communication channel between the client and server:",
+          "sentence": "The client communicates with the server over a transport channel.",
+          "blank": "transport",
+          "words": [
+            "transport",
+            "database",
+            "compiler"
+          ],
+          "explain": "The transport layer (like Stdio) is the physical pipe through which the client and server send JSON-RPC messages back and forth."
+        },
+        {
+          "id": "p4",
+          "type": "spot_the_ai",
+          "xp": 2,
+          "prompt": "Identify the AI-generated implementation description that contains fake/hallucinated APIs:",
+          "options": [
+            {
+              "id": "opt_1",
+              "text": "We initialize the Stdio transport client, connect to the SQLite server, list its tools, map them to Gemini function declarations, and send the selected call payload back to the server.",
+              "correct": false
+            },
+            {
+              "id": "opt_2",
+              "text": "Create a client object and run client.run_llm_and_server_simultaneously() to automatically sync all inputs and outputs instantly.",
+              "correct": true
+            },
+            {
+              "id": "opt_3",
+              "text": "We start the client, read the tool definitions from the server, pass them to the Claude API, receive a tool call request, and execute call_tool on the client session.",
+              "correct": false
+            }
+          ],
+          "explain": "Option B is generated by an AI because it hallucinates a non-existent method 'client.run_llm_and_server_simultaneously()' which doesn't exist in standard MCP SDKs, and uses overly generic placeholders."
+        }
+      ]
+    },
+    {
+      "type": "boss",
+      "exercises": [
+        {
+          "id": "b1",
+          "type": "multiple_choice",
+          "xp": 5,
+          "prompt": "To successfully build a minimal end-to-end MCP client-server integration, which core component must you set up to handle the live communication tunnel between the host client and the server?",
+          "options": [
+            {
+              "id": "opt_1",
+              "text": "Establish a Stdio/SSE transport tunnel to coordinate tool discovery, LLM translation, and server-side execution.",
+              "correct": true
+            },
+            {
+              "id": "opt_2",
+              "text": "Hardcode all tool schemas directly into the LLM prompt bypasssing the transport layer entirely.",
+              "correct": false
+            },
+            {
+              "id": "opt_3",
+              "text": "Run the client and server on separate unconnected networks without any transport protocol.",
+              "correct": false
+            },
+            {
+              "id": "opt_4",
+              "text": "Compile the client and server into a single binary file to avoid runtime communication.",
+              "correct": false
+            }
+          ],
+          "explain": "A complete integration requires setting up the transport protocol (like Stdio or SSE) to establish the communication tunnel between the host client and the server, enabling tool discovery, model translation, and actual execution. Next up: MCP in Practice & Evaluation."
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,222 @@
+{
+  "id": "u422-l2",
+  "unit": 422,
+  "day": 2112,
+  "tier": "LLM Application Engineering",
+  "tierIcon": "🔌",
+  "title": "Sliding Window History",
+  "icon": "🪟",
+  "concept": "Keeping only the most recent N turns verbatim and dropping or summarizing the rest.",
+  "xp": 15,
+  "hearts": 3,
+  "estMinutes": 7,
+  "segments": [
+    {
+      "type": "warmup",
+      "exercises": [
+        {
+          "id": "w1",
+          "type": "multiple_choice",
+          "xp": 1,
+          "prompt": "Quick recap: why is it a problem to just keep appending every single turn to the conversation history forever?",
+          "options": [
+            {
+              "id": "a",
+              "text": "Because the token budget eventually gets blown, causing cost, slowdown, and 'context rot'",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "Because the AI will refuse to answer after 3 turns",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "Because appending turns makes the AI switch languages",
+              "correct": false
+            }
+          ],
+          "explain": "As we saw last lesson, endlessly appending every turn eventually overflows the context window, costs more tokens, and can cause the model to lose track of what matters most — a problem often called context rot."
+        }
+      ]
+    },
+    {
+      "type": "teach",
+      "cards": [
+        {
+          "kind": "hook",
+          "icon": "🎞️",
+          "title": "You Can't Watch the Whole Movie Again",
+          "body": "Imagine a friend recapping a TV show for you, but they only remember the last few episodes clearly. They don't replay the entire series every time — they just keep you caught up on what's recent. That's exactly the trick chatbots use to manage long conversations."
+        },
+        {
+          "kind": "definition",
+          "icon": "🪟",
+          "title": "What Is a Sliding Window?",
+          "body": "A sliding window keeps only the most recent N turns of a conversation exactly as they were said, and drops or summarizes everything older. As new turns come in, old ones slide out the back, like a queue with a size limit."
+        },
+        {
+          "kind": "analogy",
+          "icon": "📓",
+          "title": "The One-Page Notebook",
+          "body": "Imagine you can only ever see the last page of your notebook, not the whole stack. Every time you write a new note, the oldest note falls off the visible page. You lose the very first thing you wrote, but you always have room for what matters right now."
+        },
+        {
+          "kind": "example",
+          "icon": "💬",
+          "title": "N = 4 in Action",
+          "body": "Say the window size is 4 turns. After turn 5 happens, turn 1 gets dropped (or squeezed into a summary) so only turns 2 through 5 stay verbatim in context. By turn 20, only turns 17-20 remain word-for-word — everything before that is gone or summarized."
+        },
+        {
+          "kind": "mythbust",
+          "icon": "🚫",
+          "title": "Myth: Bigger Window Always Means Smarter Bot",
+          "body": "A huge window doesn't automatically make the AI smarter — it just means more tokens to pay for and process, and it still won't remember anything before the window's edge. A well-chosen smaller window plus smart summarization often beats a giant window that just wastes budget."
+        },
+        {
+          "kind": "visual",
+          "icon": "🔄",
+          "title": "Full History vs. Sliding Window",
+          "body": "Compare what the model actually 'sees' as the conversation grows.",
+          "compare": {
+            "left": {
+              "emoji": "📚",
+              "tag": "Full History (No Window)",
+              "text": "Every single turn ever spoken gets appended, growing token count endlessly until it overflows or slows down."
+            },
+            "right": {
+              "emoji": "🪟",
+              "tag": "Sliding Window",
+              "text": "Only the last N turns stay in context verbatim — old turns quietly drop off, keeping size stable and predictable."
+            }
+          }
+        }
+      ]
+    },
+    {
+      "type": "practice",
+      "exercises": [
+        {
+          "id": "p1",
+          "type": "multiple_choice",
+          "xp": 2,
+          "prompt": "What happens to conversation turns that fall outside a sliding window of size N?",
+          "options": [
+            {
+              "id": "a",
+              "text": "They are kept forever in full detail alongside the recent turns",
+              "correct": false
+            },
+            {
+              "id": "b",
+              "text": "They are dropped entirely or replaced with a summary, while the N most recent turns stay exact",
+              "correct": true
+            },
+            {
+              "id": "c",
+              "text": "They are translated into a different language",
+              "correct": false
+            },
+            {
+              "id": "d",
+              "text": "They are sent back to the user for approval",
+              "correct": false
+            }
+          ],
+          "explain": "The whole point of a sliding window is to bound the context size: turns older than the window either get discarded completely or compressed into a shorter summary, freeing up space for new turns."
+        },
+        {
+          "id": "p2",
+          "type": "true_false",
+          "xp": 2,
+          "prompt": "True or False: A sliding window approach can still lose important information if that information only appeared in a turn that has already scrolled out of the window.",
+          "options": [
+            {
+              "id": "a",
+              "text": "True",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "False",
+              "correct": false
+            }
+          ],
+          "explain": "True. Sliding windows only guarantee that recent turns are visible — anything important said earlier and not carried forward via summary is simply gone from the model's view."
+        },
+        {
+          "id": "p3",
+          "type": "fill_blank",
+          "xp": 2,
+          "prompt": "Fill in the blank:",
+          "sentence": "In a sliding window approach, only the most recent turns are kept verbatim, while older turns are dropped or summarized.",
+          "blank": "verbatim",
+          "words": [
+            "verbatim",
+            "encrypted",
+            "randomized"
+          ],
+          "explain": "Verbatim means 'word for word' — that's the key idea of a sliding window: recent turns stay exactly as spoken, while anything past the window edge gets cut or condensed."
+        },
+        {
+          "id": "p4",
+          "type": "spot_the_ai",
+          "xp": 2,
+          "prompt": "Which of these three explanations of 'sliding window history' sounds like it was written by an AI trying to sound impressive but is actually vague and circular?",
+          "options": [
+            {
+              "id": "a",
+              "text": "A sliding window keeps the last N turns of a conversation and drops or summarizes older ones so the context doesn't grow forever.",
+              "correct": false
+            },
+            {
+              "id": "b",
+              "text": "Sliding window history represents a paradigm-shifting synergy of contextual dynamics that holistically optimizes conversational continuity through adaptive temporal recall mechanisms.",
+              "correct": true
+            },
+            {
+              "id": "c",
+              "text": "Think of it like a queue with a size limit — new turns push old ones out once you hit N turns.",
+              "correct": false
+            }
+          ],
+          "explain": "Option B is stuffed with buzzwords ('paradigm-shifting synergy', 'holistically optimizes', 'adaptive temporal recall mechanisms') but never actually says anything concrete — that's a red flag for AI-generated filler text. The other two options clearly and simply explain the mechanism."
+        }
+      ]
+    },
+    {
+      "type": "boss",
+      "exercises": [
+        {
+          "id": "b1",
+          "type": "multiple_choice",
+          "xp": 5,
+          "prompt": "A customer support bot uses a sliding window of the last 6 turns. On turn 10, the user says 'what was the order number I gave you at the very start?' The order number was mentioned in turn 1. What will most likely happen, and what's the best fix?",
+          "options": [
+            {
+              "id": "a",
+              "text": "The bot will answer correctly because sliding windows never forget anything important",
+              "correct": false
+            },
+            {
+              "id": "b",
+              "text": "The bot will likely fail to recall it since turn 1 has been dropped from the window; a fix is to summarize or extract key facts (like order numbers) before they fall out of the window",
+              "correct": true
+            },
+            {
+              "id": "c",
+              "text": "The bot will crash because the window is full",
+              "correct": false
+            },
+            {
+              "id": "d",
+              "text": "The bot will automatically re-fetch turn 1 from the model's training data",
+              "correct": false
+            }
+          ],
+          "explain": "This is the classic tradeoff of pure sliding windows: they're simple and cheap, but they forget useful old info the moment it scrolls out of the window. The real-world fix is a hybrid approach — keep recent turns verbatim for natural flow, but pull out and persistently store important facts (like an order number) in a separate memory or summary so they survive even after the raw turn is gone. That's exactly the kind of system you'll keep building in this unit as we go beyond simple windows."
+        }
+      ]
+    }
+  ]
+}

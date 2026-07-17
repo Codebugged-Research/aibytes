@@ -1,0 +1,222 @@
+{
+  "id": "u440-l5",
+  "unit": 440,
+  "day": 2205,
+  "tier": "LLM Application Engineering",
+  "tierIcon": "🔌",
+  "title": "Filtered Search Performance",
+  "icon": "⏱️",
+  "concept": "How filter selectivity interacts with index structure to affect query latency.",
+  "xp": 15,
+  "hearts": 3,
+  "estMinutes": 7,
+  "segments": [
+    {
+      "type": "warmup",
+      "exercises": [
+        {
+          "id": "w1",
+          "type": "multiple_choice",
+          "xp": 1,
+          "prompt": "How did we guarantee multi-tenant isolation using metadata filters in the previous lesson?",
+          "options": [
+            {
+              "id": "w_1",
+              "text": "By encrypting the vector embeddings using different user passwords",
+              "correct": false
+            },
+            {
+              "id": "w_2",
+              "text": "By applying metadata filters matching the user's specific Tenant ID",
+              "correct": true
+            },
+            {
+              "id": "w_3",
+              "text": "By training a separate LLM model for every individual customer",
+              "correct": false
+            }
+          ],
+          "explain": "Multi-tenant isolation using metadata filters ensures that a tenant's query is pre-filtered or post-filtered to only include documents matching their specific Tenant ID, preventing cross-tenant data leaks."
+        }
+      ]
+    },
+    {
+      "type": "teach",
+      "cards": [
+        {
+          "kind": "hook",
+          "icon": "⚡",
+          "title": "Why is My Search Slow?",
+          "body": "When we combine metadata filters with vector search, the order and way we apply them drastically changes speed. If we filter first, we might break the index path; if we filter last, we might throw away all our results. How do we balance this?"
+        },
+        {
+          "kind": "definition",
+          "icon": "🔍",
+          "title": "What is Selectivity?",
+          "body": "Filter selectivity is the percentage of the database that matches your metadata filter. High selectivity means only a tiny fraction of vectors match, while low selectivity means almost the entire database matches."
+        },
+        {
+          "kind": "analogy",
+          "icon": "📚",
+          "title": "The Library Catalog",
+          "body": "Imagine a library database. If you search for 'books by Stephen King' (highly selective) and then look for horror, it's super fast. But if you search for 'books with pages' (low selectivity) and then search for horror, you waste time looking at almost every book in the library."
+        },
+        {
+          "kind": "example",
+          "icon": "💡",
+          "title": "Selectivity in Action",
+          "body": "If you search a vector database of 1,000,000 items with a filter for 'color: blue' (which matches 500,000 items), that is low selectivity. If you filter for 'serial_number: 99823' (matching 1 item), that is high selectivity and changes how the index navigates."
+        },
+        {
+          "kind": "mythbust",
+          "icon": "🚫",
+          "title": "The Pre-Filtering Myth",
+          "body": "Many believe that pre-filtering is always faster than post-filtering. In reality, if a filter matches 99% of the database (low selectivity), running a pre-filter index scan first adds unnecessary overhead compared to just doing a standard vector search."
+        },
+        {
+          "kind": "visual",
+          "icon": "📊",
+          "title": "Selectivity Visualized",
+          "body": "See how the filter's restrictiveness (selectivity) changes the amount of work the vector index has to do.",
+          "compare": {
+            "left": {
+              "emoji": "🎯",
+              "tag": "High Selectivity",
+              "text": "Filters out 99% of data. Only 1% of vectors need to be searched. Extremely fast query times."
+            },
+            "right": {
+              "emoji": "🌊",
+              "tag": "Low Selectivity",
+              "text": "Filters out only 5% of data. 95% of vectors must still be searched. High index workload."
+            }
+          }
+        }
+      ]
+    },
+    {
+      "type": "practice",
+      "exercises": [
+        {
+          "id": "p1",
+          "type": "multiple_choice",
+          "xp": 2,
+          "prompt": "In the context of database performance, what does 'high selectivity' mean?",
+          "options": [
+            {
+              "id": "mc_1",
+              "text": "A highly restrictive filter that matches only 0.1% of the database",
+              "correct": true
+            },
+            {
+              "id": "mc_2",
+              "text": "A loose filter that matches 95% of the database",
+              "correct": false
+            },
+            {
+              "id": "mc_3",
+              "text": "A filter that only checks for numerical values",
+              "correct": false
+            },
+            {
+              "id": "mc_4",
+              "text": "A filter applied only after the vector search is complete",
+              "correct": false
+            }
+          ],
+          "explain": "High selectivity means the filter is very restrictive, matching only a small fraction of the database. This significantly reduces the remaining search space for the vector step."
+        },
+        {
+          "id": "p2",
+          "type": "true_false",
+          "xp": 2,
+          "prompt": "True or False: Post-filtering performs best when the filter has extremely high selectivity (matching very few items).",
+          "options": [
+            {
+              "id": "tf_true",
+              "text": "True",
+              "correct": false
+            },
+            {
+              "id": "tf_false",
+              "text": "False",
+              "correct": true
+            }
+          ],
+          "explain": "Post-filtering performs the vector search first, then discards non-matching results. If the filter is highly selective, it might discard all retrieved results, requiring multiple expensive search rounds (lowering performance)."
+        },
+        {
+          "id": "p3",
+          "type": "fill_blank",
+          "xp": 2,
+          "prompt": "Fill in the blank to complete the definition of filter impact.",
+          "sentence": "The selectivity of a metadata filter determines what percentage of the database is discarded before or after the vector search.",
+          "blank": "selectivity",
+          "words": [
+            "selectivity",
+            "dimension",
+            "redundancy"
+          ],
+          "explain": "Filter selectivity measures the proportion of documents that pass the filter. High selectivity means very few documents match, which can drastically speed up searches if indexed correctly."
+        },
+        {
+          "id": "p4",
+          "type": "spot_the_ai",
+          "xp": 2,
+          "prompt": "Identify which explanation of index performance sounds like it was written by an AI.",
+          "options": [
+            {
+              "id": "sai_1",
+              "text": "When selectivity is high, the system only has to search a tiny fraction of the index, reducing CPU usage.",
+              "correct": false
+            },
+            {
+              "id": "sai_2",
+              "text": "The structural execution plan topology undergoes latency optimization because high-selectivity predicates truncate the index traversal graph.",
+              "correct": true
+            },
+            {
+              "id": "sai_3",
+              "text": "If selectivity is low, we end up checking almost every vector anyway, making the metadata filter index less useful.",
+              "correct": false
+            }
+          ],
+          "explain": "Option B is generated by an AI because it uses overly complex, repetitive jargon ('structural execution plan topology') to state a simple performance behavior, which is a common pattern in LLM-generated technical text."
+        }
+      ]
+    },
+    {
+      "type": "boss",
+      "exercises": [
+        {
+          "id": "b1",
+          "type": "multiple_choice",
+          "xp": 5,
+          "prompt": "You are designing a search system for millions of users where each user can only search their own documents (high selectivity). Which combination of filter strategy and selectivity describes the best way to keep query latency low?",
+          "options": [
+            {
+              "id": "opt_1",
+              "text": "Pre-filtering slows down because it requires a full database scan before looking at vectors",
+              "correct": false
+            },
+            {
+              "id": "opt_2",
+              "text": "High selectivity with pre-filtering yields low latency because it drastically reduces the vector search space upfront",
+              "correct": true
+            },
+            {
+              "id": "opt_3",
+              "text": "Post-filtering becomes faster as selectivity increases because more vectors are rejected",
+              "correct": false
+            },
+            {
+              "id": "opt_4",
+              "text": "Selectivity has no impact on latency when using HNSW indexes",
+              "correct": false
+            }
+          ],
+          "explain": "High-selectivity filters (like a unique Tenant ID) discard almost all data. In a post-filtering setup, this means you might discard all top-K vector matches, forcing the system to scan everything. In pre-filtering, it narrows the index to a tiny fraction, making the vector search incredibly fast and predictable."
+        }
+      ]
+    }
+  ]
+}

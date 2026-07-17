@@ -1,0 +1,222 @@
+{
+  "id": "u436-l1",
+  "unit": 436,
+  "day": 2181,
+  "tier": "LLM Application Engineering",
+  "tierIcon": "🔌",
+  "title": "Why Exact Search Doesn't Scale",
+  "icon": "⏳",
+  "concept": "Linear-scan cost against millions or billions of vectors, and why approximation becomes necessary.",
+  "xp": 15,
+  "hearts": 3,
+  "estMinutes": 7,
+  "segments": [
+    {
+      "type": "warmup",
+      "exercises": [
+        {
+          "id": "w1",
+          "type": "multiple_choice",
+          "xp": 1,
+          "prompt": "Before we can search for similar concepts, what must we first do with our raw text data?",
+          "options": [
+            {
+              "id": "a",
+              "text": "Convert the text into high-dimensional embedding vectors.",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "Store raw text strings directly in a relational SQL database.",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "Translate the text into another language to reduce file size.",
+              "correct": false
+            }
+          ],
+          "explain": "Before finding matching vectors, text must be converted into numerical vectors (embeddings) using an embedding model."
+        }
+      ]
+    },
+    {
+      "type": "teach",
+      "cards": [
+        {
+          "kind": "hook",
+          "icon": "🚀",
+          "title": "The Billions-Vector Problem",
+          "body": "Finding the most similar vector in a database of a few hundred items is instant. But what happens when your AI app grows to handle billions of user memories, documents, or products?"
+        },
+        {
+          "kind": "definition",
+          "icon": "🔍",
+          "title": "What is Exact Search?",
+          "body": "Exact search (or a linear scan) compares your query vector to every single vector in the database to find the absolute closest matches. As your database grows to millions of vectors, this brute-force approach becomes extremely slow."
+        },
+        {
+          "kind": "analogy",
+          "icon": "📚",
+          "title": "The Messy Library Analogy",
+          "body": "Imagine looking for a specific book in an unorganized library by reading every single page of every book. If you have only five books, it's fast; if you have millions, it's impossible."
+        },
+        {
+          "kind": "example",
+          "icon": "🎵",
+          "title": "The Scaling Wall",
+          "body": "A music app with 10,000 songs can instantly find the exact closest acoustic match. But when the catalog grows to 100 million songs, comparing a user's humming to every single song vector takes several seconds, causing lag."
+        },
+        {
+          "kind": "mythbust",
+          "icon": "🛑",
+          "title": "The Hardware Trap",
+          "body": "You might think buying faster servers solves the bottleneck. However, because exact search scales linearly (O(N)), doubling the database size always doubles the work, making hardware upgrades a temporary and expensive band-aid."
+        },
+        {
+          "kind": "visual",
+          "icon": "📊",
+          "title": "Exact vs. Approximate Search",
+          "body": "Comparing the scaling behavior of searching through an entire collection versus using shortcuts.",
+          "compare": {
+            "left": {
+              "emoji": "🐢",
+              "tag": "Exact Scan",
+              "text": "Compares query to all 1,000,000 vectors. Slow but 100% accurate."
+            },
+            "right": {
+              "emoji": "⚡",
+              "tag": "Approximate Search",
+              "text": "Compares query to a tiny subset of vectors. Ultra-fast and 99% accurate."
+            }
+          }
+        }
+      ]
+    },
+    {
+      "type": "practice",
+      "exercises": [
+        {
+          "id": "p1",
+          "type": "multiple_choice",
+          "xp": 2,
+          "prompt": "What is the main drawback of using exact nearest neighbor search on a database of 100 million vectors?",
+          "options": [
+            {
+              "id": "a",
+              "text": "The search gets faster as the dataset grows.",
+              "correct": false
+            },
+            {
+              "id": "b",
+              "text": "The time required grows linearly with the number of vectors.",
+              "correct": true
+            },
+            {
+              "id": "c",
+              "text": "The database automatically deletes old vectors to stay fast.",
+              "correct": false
+            },
+            {
+              "id": "d",
+              "text": "It requires complex quantum computing power to work at all.",
+              "correct": false
+            }
+          ],
+          "explain": "Exact search requires calculating the distance to every single item. If the number of items (N) grows from thousands to billions, the search time grows proportionally."
+        },
+        {
+          "id": "p2",
+          "type": "true_false",
+          "xp": 2,
+          "prompt": "True or False: To keep search speeds fast at scale, we must trade absolute accuracy for search speed.",
+          "options": [
+            {
+              "id": "true",
+              "text": "True",
+              "correct": true
+            },
+            {
+              "id": "false",
+              "text": "False",
+              "correct": false
+            }
+          ],
+          "explain": "Approximate search finds 'close enough' matches in a fraction of the time, which is essential for real-time applications at scale."
+        },
+        {
+          "id": "p3",
+          "type": "fill_blank",
+          "xp": 2,
+          "prompt": "Fill in the missing term to describe checking every item:",
+          "sentence": "Checking every vector one by one is called a linear scan.",
+          "blank": "linear scan",
+          "words": [
+            "linear scan",
+            "random projection",
+            "binary tree"
+          ],
+          "explain": "A linear scan (brute-force search) checks every single item one by one, which fails to scale when you have millions of vectors."
+        },
+        {
+          "id": "p4",
+          "type": "spot_the_ai",
+          "xp": 2,
+          "prompt": "Which option represents an AI developer's recommendation for handling millions of vectors?",
+          "options": [
+            {
+              "id": "a",
+              "text": "We should write a simple Python for-loop to compare our query to all 50 million database rows one by one.",
+              "correct": false
+            },
+            {
+              "id": "b",
+              "text": "To fix the speed issue, we should compress our vectors to 1-dimension and lose all semantic meaning.",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "Since exact search scales poorly, we need algorithms that trade a tiny bit of accuracy for massive speed gains.",
+              "correct": true
+            }
+          ],
+          "explain": "Option C represents an automated AI-like agent response that suggests sacrificing absolute perfection (exact match) for speed (approximation) to make the system scalable."
+        }
+      ]
+    },
+    {
+      "type": "boss",
+      "exercises": [
+        {
+          "id": "b1",
+          "type": "multiple_choice",
+          "xp": 5,
+          "prompt": "At scale, why must we abandon exact distance calculations (like exact cosine similarity) for every item in our vector database?",
+          "options": [
+            {
+              "id": "a",
+              "text": "Calculations become mathematically impossible to compute.",
+              "correct": false
+            },
+            {
+              "id": "b",
+              "text": "High-dimensional vectors automatically lose their meaning over time.",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "Scanning every single vector scales linearly, becoming too slow for real-time apps.",
+              "correct": true
+            },
+            {
+              "id": "d",
+              "text": "Exact search requires converting all text back into raw binary files.",
+              "correct": false
+            }
+          ],
+          "explain": "In vector databases with millions of high-dimensional embeddings, calculating the exact distance between your query and every single vector (linear scan) takes too much time and CPU power. Approximation is required to respond in milliseconds."
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,222 @@
+{
+  "id": "u452-l4",
+  "unit": 452,
+  "day": 2264,
+  "tier": "LLM Application Engineering",
+  "tierIcon": "🔌",
+  "title": "Reranking Latency Budgets",
+  "icon": "⏱️",
+  "concept": "Choosing how many candidates (top-K) to rerank based on the acceptable added latency for a request.",
+  "xp": 15,
+  "hearts": 3,
+  "estMinutes": 7,
+  "segments": [
+    {
+      "type": "warmup",
+      "exercises": [
+        {
+          "id": "w1",
+          "type": "multiple_choice",
+          "xp": 1,
+          "prompt": "What is the key difference between pointwise and listwise reranking covered in our last lesson?",
+          "options": [
+            {
+              "id": "a",
+              "text": "Pointwise reranking scores each document independently, while listwise compares them together.",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "Pointwise reranking only works on single-word queries.",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "Listwise reranking is always faster and uses less CPU than pointwise.",
+              "correct": false
+            }
+          ],
+          "explain": "Pointwise reranking evaluates each document individually (one-by-one), whereas listwise reranking looks at multiple documents together to determine their relative order."
+        }
+      ]
+    },
+    {
+      "type": "teach",
+      "cards": [
+        {
+          "kind": "hook",
+          "icon": "⚡",
+          "title": "The Need for Speed",
+          "body": "Rerankers make search results much more accurate, but they are computationally heavy. If you send too many documents to a reranker, your app will feel sluggish and frustrate users."
+        },
+        {
+          "kind": "definition",
+          "icon": "⏱️",
+          "title": "Reranking Latency Budget",
+          "body": "A latency budget is the maximum time your system is allowed to spend answering a user's query. When using a reranker, we must limit the number of candidates (top-K) we send to it so we do not exceed this time limit."
+        },
+        {
+          "kind": "analogy",
+          "icon": "🎟️",
+          "title": "The VIP Club Queue",
+          "body": "Think of reranking like a VIP club entrance. The bouncer (retriever) quickly grabs a crowd of 100 people from the street. The club owner (reranker) can only interview them one by one. If they interview all 100, the line stalls forever. If they only interview the top 5, they might miss someone great."
+        },
+        {
+          "kind": "example",
+          "icon": "📊",
+          "title": "Calculating top-K limits",
+          "body": "If your search engine needs to return results in 150 milliseconds, and retrieval takes 50 milliseconds, you have a 100-millisecond budget left. If your reranker takes 2 milliseconds per document, you can safely rerank a top-K of 50 candidates."
+        },
+        {
+          "kind": "mythbust",
+          "icon": "🛑",
+          "title": "More Isn't Always Better",
+          "body": "You might think reranking 500 documents always beats reranking 50. In reality, retrieval quality drops off quickly, and reranking hundreds of irrelevant documents wastes CPU time for almost zero accuracy gain."
+        },
+        {
+          "kind": "visual",
+          "icon": "⚖️",
+          "title": "Speed vs. Accuracy Tradeoff",
+          "body": "How the size of your candidate pool (top-K) changes the user experience.",
+          "compare": {
+            "left": {
+              "emoji": "🏎️",
+              "tag": "Small top-K (e.g. 20)",
+              "text": "Ultra-fast response time, but might miss relevant documents that were ranked lower by the retriever."
+            },
+            "right": {
+              "emoji": "🐢",
+              "tag": "Large top-K (e.g. 500)",
+              "text": "Catches rare documents, but causes noticeable lag as the reranker churns through the massive list."
+            }
+          }
+        }
+      ]
+    },
+    {
+      "type": "practice",
+      "exercises": [
+        {
+          "id": "p1",
+          "type": "multiple_choice",
+          "xp": 2,
+          "prompt": "Why does reranking introduce more latency to a search pipeline than initial vector retrieval?",
+          "options": [
+            {
+              "id": "a",
+              "text": "Rerankers use smaller database tables",
+              "correct": false
+            },
+            {
+              "id": "b",
+              "text": "Rerankers perform expensive deep learning computations per document",
+              "correct": true
+            },
+            {
+              "id": "c",
+              "text": "Rerankers bypass the GPU entirely",
+              "correct": false
+            },
+            {
+              "id": "d",
+              "text": "Rerankers only run on the user's local device",
+              "correct": false
+            }
+          ],
+          "explain": "Reranking models, especially cross-encoders, perform heavy neural network calculations for each document-query pair, which takes significantly more time than simple vector similarity search."
+        },
+        {
+          "id": "p2",
+          "type": "true_false",
+          "xp": 2,
+          "prompt": "True or False: Increasing the number of retrieved candidates sent to a reranker will generally increase the overall response time of your search app.",
+          "options": [
+            {
+              "id": "a",
+              "text": "True",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "False",
+              "correct": false
+            }
+          ],
+          "explain": "Reranking takes time. If you double the number of candidates you send to a pointwise reranker, it will take roughly twice as long to score them, increasing latency."
+        },
+        {
+          "id": "p3",
+          "type": "fill_blank",
+          "xp": 2,
+          "prompt": "Fill in the missing term that represents the number of candidates passed to the reranking model.",
+          "sentence": "We adjust the top-K to balance search accuracy with our latency budget.",
+          "blank": "top-K",
+          "words": [
+            "top-K",
+            "latency",
+            "embedding"
+          ],
+          "explain": "The 'top-K' represents the candidate pool size (e.g., top 50 documents) that we pass from the fast retriever to the slower reranker."
+        },
+        {
+          "id": "p4",
+          "type": "spot_the_ai",
+          "xp": 2,
+          "prompt": "Which of these approaches to managing search latency is generated by an AI making an impractical design choice?",
+          "options": [
+            {
+              "id": "a",
+              "text": "We measure the average time our reranker takes per document, then set our top-K candidate limit to fit within our remaining latency budget.",
+              "correct": false
+            },
+            {
+              "id": "b",
+              "text": "We cap the number of retrieved items sent to the reranking stage to ensure the system responds in under 200 milliseconds.",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "We train a secondary LLM to dynamically predict the latency budget of each query before executing the vector search.",
+              "correct": true
+            }
+          ],
+          "explain": "Option C shows a typical AI hallucination or overly complex phrasing that incorrectly suggests using an LLM to predict latency beforehand, rather than simply measuring actual latency per document to set a top-K limit."
+        }
+      ]
+    },
+    {
+      "type": "boss",
+      "exercises": [
+        {
+          "id": "b1",
+          "type": "multiple_choice",
+          "xp": 5,
+          "prompt": "Your retrieval step takes 30ms. Your total system latency budget is 100ms. If your cross-encoder reranker takes 2ms per candidate document, what is the maximum number of candidates (top-K) you can safely send to the rerank step?",
+          "options": [
+            {
+              "id": "a",
+              "text": "50 candidates",
+              "correct": false
+            },
+            {
+              "id": "b",
+              "text": "35 candidates",
+              "correct": true
+            },
+            {
+              "id": "c",
+              "text": "15 candidates",
+              "correct": false
+            },
+            {
+              "id": "d",
+              "text": "70 candidates",
+              "correct": false
+            }
+          ],
+          "explain": "The retrieve stage takes 30ms. With a 100ms budget, you have 70ms left. If each document takes 2ms to rerank, you can process at most 35 documents (70ms / 2ms) without violating your latency budget."
+        }
+      ]
+    }
+  ]
+}

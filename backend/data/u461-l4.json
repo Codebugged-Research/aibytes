@@ -1,0 +1,222 @@
+{
+  "id": "u461-l4",
+  "unit": 461,
+  "day": 2309,
+  "tier": "LLM Application Engineering",
+  "tierIcon": "🔌",
+  "title": "Retry & Fallback Strategies",
+  "icon": "🔄",
+  "concept": "Designing a decision tree: accept, refine query and retry, or escalate to a broader source when retrieval is weak.",
+  "xp": 15,
+  "hearts": 3,
+  "estMinutes": 7,
+  "segments": [
+    {
+      "type": "warmup",
+      "exercises": [
+        {
+          "id": "w1",
+          "type": "multiple_choice",
+          "xp": 1,
+          "prompt": "In the previous lesson on Corrective RAG (CRAG), how does the system handle documents that fail the relevance test?",
+          "options": [
+            {
+              "id": "w_1",
+              "text": "It automatically deletes irrelevant documents from the database.",
+              "correct": false
+            },
+            {
+              "id": "w_2",
+              "text": "It grades retrieved documents and triggers a fallback search if relevance is low.",
+              "correct": true
+            },
+            {
+              "id": "w_3",
+              "text": "It forces the LLM to memorize all external web pages.",
+              "correct": false
+            }
+          ],
+          "explain": "Corrective RAG (CRAG) evaluates retrieved documents and dynamically triggers an external web search fallback if the local documents are graded as irrelevant."
+        }
+      ]
+    },
+    {
+      "type": "teach",
+      "cards": [
+        {
+          "kind": "hook",
+          "icon": "🚧",
+          "title": "When Search Fails",
+          "body": "What happens when your AI assistant searches your private files but finds absolutely nothing useful? Instead of hallucinating a fake answer, it needs a plan B—and a plan C."
+        },
+        {
+          "kind": "definition",
+          "icon": "🌳",
+          "title": "Decision Trees in RAG",
+          "body": "Retry & Fallback Strategies are programmed decision paths that determine what an LLM agent should do when retrieved information is poor: accept it, rewrite the query to try again, or switch to an external search engine."
+        },
+        {
+          "kind": "analogy",
+          "icon": "📞",
+          "title": "The Customer Support Agent",
+          "body": "Think of it like calling a helpline. If the agent can't answer your specific billing question, they don't guess; they look up your profile (retry), ask a specialist (fallback), or transfer you to a manager (escalate)."
+        },
+        {
+          "kind": "example",
+          "icon": "📈",
+          "title": "Real-world Fallback",
+          "body": "If a user asks about 'latest stock price' and the local database only has historical data, the system flags the retrieval as outdated, reformulates the search query, and fetches live data from a web API fallback."
+        },
+        {
+          "kind": "mythbust",
+          "icon": "🚫",
+          "title": "The 'Local-Only' Trap",
+          "body": "Many think RAG systems must answer every query from the primary database. In reality, the best systems know when to admit their local search failed and seamlessly pivot to broader backups."
+        },
+        {
+          "kind": "visual",
+          "icon": "⚖️",
+          "title": "Blind Trust vs. Smart Fallbacks",
+          "body": "Compare how basic RAG and corrective RAG handle low-confidence search results.",
+          "compare": {
+            "left": {
+              "emoji": "👎",
+              "tag": "Basic RAG",
+              "text": "Accepts bad search results and generates a highly plausible but incorrect answer."
+            },
+            "right": {
+              "emoji": "👍",
+              "tag": "Corrective RAG",
+              "text": "Detects bad results, rewrites the search query, and pulls from a backup source."
+            }
+          }
+        }
+      ]
+    },
+    {
+      "type": "practice",
+      "exercises": [
+        {
+          "id": "p1",
+          "type": "multiple_choice",
+          "xp": 2,
+          "prompt": "What is the first logical step a RAG system should take if the retrieved documents are slightly off-topic?",
+          "options": [
+            {
+              "id": "q1_a",
+              "text": "Immediately shut down the LLM application",
+              "correct": false
+            },
+            {
+              "id": "q1_b",
+              "text": "Refine the query and attempt a retry on the local database",
+              "correct": true
+            },
+            {
+              "id": "q1_c",
+              "text": "Generate an answer using the LLM's outdated training data",
+              "correct": false
+            },
+            {
+              "id": "q1_d",
+              "text": "Delete the database index",
+              "correct": false
+            }
+          ],
+          "explain": "When the initial search returns irrelevant information, the system should first try to improve the search terms (query refinement) before looking elsewhere."
+        },
+        {
+          "id": "p2",
+          "type": "true_false",
+          "xp": 2,
+          "prompt": "True or False: Implementing fallback strategies helps reduce LLM hallucinations when local knowledge is missing.",
+          "options": [
+            {
+              "id": "tf_true",
+              "text": "True",
+              "correct": true
+            },
+            {
+              "id": "tf_false",
+              "text": "False",
+              "correct": false
+            }
+          ],
+          "explain": "Fallback strategies are designed to prevent hallucinations by redirecting the system to better sources when the primary source fails."
+        },
+        {
+          "id": "p3",
+          "type": "fill_blank",
+          "xp": 2,
+          "prompt": "Fill in the missing term to describe the structured routing logic used during RAG retrieval failures.",
+          "sentence": "To handle poor search results, the agent evaluates the document score and routes the query through a structured decision tree.",
+          "blank": "decision tree",
+          "words": [
+            "decision tree",
+            "neural network",
+            "random guess"
+          ],
+          "explain": "A decision tree maps out the precise logic paths (like rewriting the query or triggering a fallback) depending on the retrieval quality score."
+        },
+        {
+          "id": "p4",
+          "type": "spot_the_ai",
+          "xp": 2,
+          "prompt": "Which of the following system logs indicates an AI agent executing a retry and fallback strategy?",
+          "options": [
+            {
+              "id": "sai_1",
+              "text": "I couldn't find anything in the files, so I will just make up a reasonable answer for you.",
+              "correct": false
+            },
+            {
+              "id": "sai_2",
+              "text": "Error 404: File not found in local database. Exiting application.",
+              "correct": false
+            },
+            {
+              "id": "sai_3",
+              "text": "Confidence score is 0.3. Rewriting query to 'API authentication protocol' and retrying search on backup server...",
+              "correct": true
+            }
+          ],
+          "explain": "Option C demonstrates an automated decision logic (if confidence is low, rewrite query and search again) typical of an advanced RAG routing system."
+        }
+      ]
+    },
+    {
+      "type": "boss",
+      "exercises": [
+        {
+          "id": "b1",
+          "type": "multiple_choice",
+          "xp": 5,
+          "prompt": "You are building an enterprise customer support bot using Advanced RAG. If a customer asks a complex policy question, what is the safest and most efficient decision tree path to follow?",
+          "options": [
+            {
+              "id": "opt_1",
+              "text": "1. Assess quality -> 2. Rewrite query and retry -> 3. Fallback to web search -> 4. Escalate to human/fail gracefully",
+              "correct": true
+            },
+            {
+              "id": "opt_2",
+              "text": "1. Fallback to web search -> 2. Ask user for a new question -> 3. Run internal search",
+              "correct": false
+            },
+            {
+              "id": "opt_3",
+              "text": "1. Assess quality -> 2. Output whatever was found to save time -> 3. Restart server",
+              "correct": false
+            },
+            {
+              "id": "opt_4",
+              "text": "1. Assume retrieval is always correct -> 2. Generate response -> 3. Double-check with web search",
+              "correct": false
+            }
+          ],
+          "explain": "A robust RAG system follows a structured hierarchy: if the internal database fails to provide confident answers (low confidence), it retries with an optimized search query. If that still fails, it falls back to a broader web search before finally admitting defeat to the user."
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,222 @@
+{
+  "id": "u448-l1",
+  "unit": 448,
+  "day": 2241,
+  "tier": "LLM Application Engineering",
+  "tierIcon": "🔌",
+  "title": "Multi-Query Retrieval",
+  "icon": "🔄",
+  "concept": "Generating several rephrasings of one question and retrieving for each, then merging and deduplicating results.",
+  "xp": 15,
+  "hearts": 3,
+  "estMinutes": 7,
+  "segments": [
+    {
+      "type": "warmup",
+      "exercises": [
+        {
+          "id": "w1",
+          "type": "multiple_choice",
+          "xp": 1,
+          "prompt": "As a quick recap, what is the main goal of Retrieval-Augmented Generation (RAG)?",
+          "options": [
+            {
+              "id": "w1",
+              "text": "Retrieving relevant documents and adding them to the LLM's context window.",
+              "correct": true
+            },
+            {
+              "id": "w2",
+              "text": "Training a new foundation model from scratch using clean text data.",
+              "correct": false
+            },
+            {
+              "id": "w3",
+              "text": "Translating user prompts into SQL database queries.",
+              "correct": false
+            }
+          ],
+          "explain": "In standard RAG, we retrieve documents from a vector store based on the user's raw query and insert them directly into the LLM context to ground the generation."
+        }
+      ]
+    },
+    {
+      "type": "teach",
+      "cards": [
+        {
+          "kind": "hook",
+          "icon": "🎣",
+          "title": "The Phrasing Problem",
+          "body": "Users often write vague or poorly worded search queries. If their wording doesn't match the database document's exact phrasing, standard search fails. Multi-query retrieval solves this by rewriting the question first."
+        },
+        {
+          "kind": "definition",
+          "icon": "🔍",
+          "title": "What is Multi-Query Retrieval?",
+          "body": "Multi-Query Retrieval is a technique where an LLM is used to generate multiple variations of a user's prompt. The system runs vector searches for all these variations and combines the unique results."
+        },
+        {
+          "kind": "analogy",
+          "icon": "📚",
+          "title": "The Expert Librarian",
+          "body": "Think of a librarian who doesn't just search for 'how to fix a pipe' in the catalog. Instead, they search for 'plumbing repair', 'leaky pipe solutions', and 'fixing kitchen plumbing' to make sure they grab every useful book on the shelf."
+        },
+        {
+          "kind": "example",
+          "icon": "💡",
+          "title": "Multi-Query in Action",
+          "body": "If a user asks 'How do I cancel my plan?', the system generates 'How to terminate subscription?' and 'Where is the cancellation page?'. It queries all three and merges the hits."
+        },
+        {
+          "kind": "mythbust",
+          "icon": "💥",
+          "title": "Is It Too Slow?",
+          "body": "You might think querying multiple times will slow down your app or overload the LLM. In reality, LLM query generation is fast, vector database searches are highly parallelizable, and removing duplicates keeps the final context size small."
+        },
+        {
+          "kind": "visual",
+          "icon": "👁️",
+          "title": "Single vs. Multi-Query Search",
+          "body": "Standard search relies on one specific path, while multi-query casts a wider net by looking from multiple angles at once.",
+          "compare": {
+            "left": {
+              "emoji": "🎯",
+              "tag": "Single Query",
+              "text": "One search query. Misses documents using different words."
+            },
+            "right": {
+              "emoji": "🕸️",
+              "tag": "Multi-Query",
+              "text": "Multiple query variations. Catches documents using synonyms and related terms."
+            }
+          }
+        }
+      ]
+    },
+    {
+      "type": "practice",
+      "exercises": [
+        {
+          "id": "p1",
+          "type": "multiple_choice",
+          "xp": 2,
+          "prompt": "Why is deduplication a critical step in the Multi-Query Retrieval pipeline?",
+          "options": [
+            {
+              "id": "mc1",
+              "text": "To translate the documents into different languages.",
+              "correct": false
+            },
+            {
+              "id": "mc2",
+              "text": "To prevent sending identical documents multiple times to the LLM, which wastes context space.",
+              "correct": true
+            },
+            {
+              "id": "mc3",
+              "text": "To encrypt the documents for secure transmission.",
+              "correct": false
+            },
+            {
+              "id": "mc4",
+              "text": "To make the LLM read the same text multiple times to emphasize its importance.",
+              "correct": false
+            }
+          ],
+          "explain": "Because different phrasings of the same question point to similar concepts, different queries will often retrieve the exact same documents. Deduplication ensures only unique documents are sent."
+        },
+        {
+          "id": "p2",
+          "type": "true_false",
+          "xp": 2,
+          "prompt": "True or False: Multi-Query Retrieval typically uses an LLM to generate the alternative phrasings of the user's query.",
+          "options": [
+            {
+              "id": "tf1",
+              "text": "True",
+              "correct": true
+            },
+            {
+              "id": "tf2",
+              "text": "False",
+              "correct": false
+            }
+          ],
+          "explain": "An LLM is used to rewrite the user's initial query into several semantically similar variations, which are then used as the search inputs."
+        },
+        {
+          "id": "p3",
+          "type": "fill_blank",
+          "xp": 2,
+          "prompt": "Fill in the blank to complete the standard pipeline step for multi-query search.",
+          "sentence": "Once all search results are gathered from the different query variations, they must be deduplicated before being sent to the LLM.",
+          "blank": "deduplicated",
+          "words": [
+            "deduplicated",
+            "deleted",
+            "summarized"
+          ],
+          "explain": "After gathering documents from multiple query searches, we must remove duplicates (deduplicate) to avoid wasting the LLM's context window on repeated information."
+        },
+        {
+          "id": "p4",
+          "type": "spot_the_ai",
+          "xp": 2,
+          "prompt": "Which of the following describes a Multi-Query Retrieval system?",
+          "options": [
+            {
+              "id": "sai1",
+              "text": "A database system that uses a keyword index to find documents matching the exact words 'database scaling tips'.",
+              "correct": false
+            },
+            {
+              "id": "sai2",
+              "text": "A pipeline that takes 'how to scale databases', generates three synonyms, runs four vector searches, and merges the unique results.",
+              "correct": true
+            },
+            {
+              "id": "sai3",
+              "text": "A chatbot that asks the user to write their question three times using different words before answering.",
+              "correct": false
+            }
+          ],
+          "explain": "Option B demonstrates an automated system using an LLM to generate multiple diverse search terms from a single user prompt to perform parallel database lookups."
+        }
+      ]
+    },
+    {
+      "type": "boss",
+      "exercises": [
+        {
+          "id": "b1",
+          "type": "multiple_choice",
+          "xp": 5,
+          "prompt": "You are designing an enterprise search system. Why does combining Multi-Query Retrieval with a deduplication step improve the final prompt sent to the LLM?",
+          "options": [
+            {
+              "id": "b1",
+              "text": "It reduces the total number of documents retrieved to save token costs.",
+              "correct": false
+            },
+            {
+              "id": "b2",
+              "text": "It expands the search space using alternative phrasings, then merges and removes duplicate documents.",
+              "correct": true
+            },
+            {
+              "id": "b3",
+              "text": "It bypasses the vector database completely by querying a search engine.",
+              "correct": false
+            },
+            {
+              "id": "b4",
+              "text": "It forces the user to write three different prompts before getting an answer.",
+              "correct": false
+            }
+          ],
+          "explain": "Multi-query retrieval generates multiple alternative phrasings (which increases the total number of raw documents retrieved) and then merges and deduplicates them to present a clean, relevant set of unique documents to the LLM."
+        }
+      ]
+    }
+  ]
+}

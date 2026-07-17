@@ -1,0 +1,222 @@
+{
+  "id": "u458-l3",
+  "unit": 458,
+  "day": 2293,
+  "tier": "LLM Application Engineering",
+  "tierIcon": "🔌",
+  "title": "Retrieval Confidence & Thresholds",
+  "icon": "🛑",
+  "concept": "Deciding what to do when the best retrieved match still scores low — answer anyway, ask for clarification, or refuse.",
+  "xp": 15,
+  "hearts": 3,
+  "estMinutes": 7,
+  "segments": [
+    {
+      "type": "warmup",
+      "exercises": [
+        {
+          "id": "w1",
+          "type": "multiple_choice",
+          "xp": 1,
+          "prompt": "In the prior lesson, we discussed 'Top-K Selection'. What does this process involve?",
+          "options": [
+            {
+              "id": "a",
+              "text": "It calculates the semantic vector embeddings.",
+              "correct": false
+            },
+            {
+              "id": "b",
+              "text": "Filtering down candidates through retrieval, reranking, and final context selection stages.",
+              "correct": true
+            },
+            {
+              "id": "c",
+              "text": "Compressing the physical size of the database.",
+              "correct": false
+            }
+          ],
+          "explain": "The Top-K stages decide how many candidates to pull initially, how many to refine during reranking, and finally how many to feed into the LLM context."
+        }
+      ]
+    },
+    {
+      "type": "teach",
+      "cards": [
+        {
+          "kind": "hook",
+          "icon": "🤔",
+          "title": "The Danger of Bad Matches",
+          "body": "What happens when your search engine returns results that are barely related to the user's question? If you feed garbage, low-confidence documents directly to your LLM, it will confidently make up a fake answer!"
+        },
+        {
+          "kind": "definition",
+          "icon": "🎯",
+          "title": "Confidence Thresholds",
+          "body": "Retrieval confidence is a numerical score showing how well a retrieved document matches a user query. Setting a minimum score threshold helps your application decide whether to trust the search results or reject them to prevent AI hallucinations."
+        },
+        {
+          "kind": "analogy",
+          "icon": "🕴️",
+          "title": "The Club Bouncer Analogy",
+          "body": "Think of retrieval confidence like a bouncer at a VIP club. If a guest's ID is a blurry photocopy (low score), the bouncer doesn't just let them in; they either ask for a real ID (clarification) or turn them away (refusal) to keep the club safe."
+        },
+        {
+          "kind": "example",
+          "icon": "🏦",
+          "title": "Confidence in Action",
+          "body": "In a banking customer support bot, if a search for 'interest rates' only returns documents with low scores (under 0.50), the system displays: 'I'm not sure about that. Could you rephrase your question?' instead of guessing."
+        },
+        {
+          "kind": "mythbust",
+          "icon": "🚫",
+          "title": "The Top Match Fallacy",
+          "body": "Many believe that the 'top match' is always good enough to use. In reality, the top match might just be the 'least terrible' option in a database that contains no relevant information at all."
+        },
+        {
+          "kind": "visual",
+          "icon": "⚖️",
+          "title": "Filtered vs. Unfiltered Pipeline",
+          "body": "Compare how a system behaves with and without a confidence threshold filter.",
+          "compare": {
+            "left": {
+              "emoji": "🔓",
+              "tag": "No Threshold",
+              "text": "Passes a 0.20 score match to the LLM, resulting in wild hallucinations."
+            },
+            "right": {
+              "emoji": "🔒",
+              "tag": "With Threshold",
+              "text": "Blocks the 0.20 score match and triggers a polite refusal message."
+            }
+          }
+        }
+      ]
+    },
+    {
+      "type": "practice",
+      "exercises": [
+        {
+          "id": "p1",
+          "type": "multiple_choice",
+          "xp": 2,
+          "prompt": "Why is it important to set a confidence threshold for retrieved documents?",
+          "options": [
+            {
+              "id": "a",
+              "text": "It speeds up the vector database search time.",
+              "correct": false
+            },
+            {
+              "id": "b",
+              "text": "It prevents the LLM from hallucinating based on irrelevant, low-scoring context.",
+              "correct": true
+            },
+            {
+              "id": "c",
+              "text": "It automatically translates foreign language queries.",
+              "correct": false
+            },
+            {
+              "id": "d",
+              "text": "It increases the size of the vector embeddings.",
+              "correct": false
+            }
+          ],
+          "explain": "Setting a confidence threshold filters out weak, irrelevant search results before they reach the LLM, protecting it from generating answers based on wrong context."
+        },
+        {
+          "id": "p2",
+          "type": "true_false",
+          "xp": 2,
+          "prompt": "True or False: The top-ranked retrieved document (Rank 1) is always guaranteed to be relevant enough to answer the user's question.",
+          "options": [
+            {
+              "id": "true",
+              "text": "True",
+              "correct": false
+            },
+            {
+              "id": "false",
+              "text": "False",
+              "correct": true
+            }
+          ],
+          "explain": "Even if a document is the #1 search result, its absolute similarity score could be extremely low if the database contains nothing relevant to the query."
+        },
+        {
+          "id": "p3",
+          "type": "fill_blank",
+          "xp": 2,
+          "prompt": "Fill in the missing term that describes the backup plan when confidence is low:",
+          "sentence": "When retrieved matches fall below the threshold, the system triggers a fallback strategy to avoid guessing.",
+          "blank": "fallback strategy",
+          "words": [
+            "fallback strategy",
+            "vector index",
+            "top-k ranking"
+          ],
+          "explain": "A fallback strategy defines what the system does (like asking for clarification or refusing) when search scores are too low to trust."
+        },
+        {
+          "id": "p4",
+          "type": "spot_the_ai",
+          "xp": 2,
+          "prompt": "Identify the AI failure caused by not implementing a retrieval confidence threshold:",
+          "options": [
+            {
+              "id": "a",
+              "text": "System: 'I couldn't find any reliable documents matching your request. Could you please specify which account type you mean?'",
+              "correct": false
+            },
+            {
+              "id": "b",
+              "text": "LLM: 'Based on your search for \"dog food\", the interest rate for your savings account is 15%.'",
+              "correct": true
+            },
+            {
+              "id": "c",
+              "text": "System: 'Sorry, I don't have enough verified information to answer that question.'",
+              "correct": false
+            }
+          ],
+          "explain": "Option B shows a typical LLM hallucination where it invents a false positive answer because it was forced to use irrelevant context, whereas A and C represent correct system-level fallback responses."
+        }
+      ]
+    },
+    {
+      "type": "boss",
+      "exercises": [
+        {
+          "id": "b1",
+          "type": "multiple_choice",
+          "xp": 5,
+          "prompt": "You set a strict retrieval threshold of 0.85 to prevent hallucinations in a medical QA bot. A user asks a question, and the top retrieved document has a similarity score of 0.40. What is the safest action for your pipeline to take?",
+          "options": [
+            {
+              "id": "a",
+              "text": "Inject the 0.40 document anyway because it is the absolute best match available.",
+              "correct": false
+            },
+            {
+              "id": "b",
+              "text": "Refuse to answer or ask for clarification, as the score is far below the 0.85 safety threshold.",
+              "correct": true
+            },
+            {
+              "id": "c",
+              "text": "Dynamically lower the threshold to 0.30 so the document is accepted.",
+              "correct": false
+            },
+            {
+              "id": "d",
+              "text": "Send the query to a translator to see if the score increases.",
+              "correct": false
+            }
+          ],
+          "explain": "A threshold of 0.85 is high, meaning only highly relevant documents pass. Since the top match scored 0.40, it is far below the threshold. Instead of hallucinating an answer based on bad data, the pipeline should safely refuse to answer or ask the user to clarify."
+        }
+      ]
+    }
+  ]
+}

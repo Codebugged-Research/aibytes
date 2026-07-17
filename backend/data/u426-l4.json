@@ -1,0 +1,222 @@
+{
+  "id": "u426-l4",
+  "unit": 426,
+  "day": 2134,
+  "tier": "LLM Application Engineering",
+  "tierIcon": "🔌",
+  "title": "Choosing the Right Metric",
+  "icon": "⚖️",
+  "concept": "Matching the similarity metric to how the embedding model was trained; mismatches silently degrade retrieval.",
+  "xp": 15,
+  "hearts": 3,
+  "estMinutes": 7,
+  "segments": [
+    {
+      "type": "warmup",
+      "exercises": [
+        {
+          "id": "w1",
+          "type": "multiple_choice",
+          "xp": 1,
+          "prompt": "In the last lesson, we learned about Euclidean Distance. What does it specifically measure compared to angle-based metrics?",
+          "options": [
+            {
+              "id": "wu_angle",
+              "text": "The angle between vectors, ignoring their length.",
+              "correct": false
+            },
+            {
+              "id": "wu_straight_line",
+              "text": "The straight-line distance between points in space, which is sensitive to vector length.",
+              "correct": true
+            },
+            {
+              "id": "wu_dot_product",
+              "text": "The projection of one vector directly onto another.",
+              "correct": false
+            }
+          ],
+          "explain": "Euclidean distance measures the physical straight-line distance between two points in vector space, which changes depending on the length (magnitude) of the vectors."
+        }
+      ]
+    },
+    {
+      "type": "teach",
+      "cards": [
+        {
+          "kind": "hook",
+          "icon": "🕵️",
+          "title": "The Silent Degrader",
+          "body": "Using the wrong similarity metric won't trigger an error message; it will just quietly return slightly worse search results. It is the silent killer of search accuracy."
+        },
+        {
+          "kind": "definition",
+          "icon": "🎯",
+          "title": "Metric Alignment",
+          "body": "A similarity metric must match the loss function used to train the embedding model. If a model was trained using Cosine Similarity, your database must use Cosine Similarity to get accurate search results."
+        },
+        {
+          "kind": "analogy",
+          "icon": "🗺️",
+          "title": "The GPS Unit Mismatch",
+          "body": "Imagine using a map that measures distance in kilometers, but your GPS navigation instructions are written in miles. If you don't match the units, you will miss your turn even though both systems are correct on their own."
+        },
+        {
+          "kind": "example",
+          "icon": "💡",
+          "title": "Normalized Vector Shortcuts",
+          "body": "If you use OpenAI's text-embedding-ada-002, the vectors are normalized to length 1. For these vectors, Cosine Similarity and Dot Product are mathematically equivalent, making Dot Product faster to calculate."
+        },
+        {
+          "kind": "mythbust",
+          "icon": "🚫",
+          "title": "The 'Try and See' Trap",
+          "body": "You might think you can just swap metrics freely to see what 'looks best'. In reality, using a metric different from the model's training target distorts the semantic relationships, corrupting your search."
+        },
+        {
+          "kind": "visual",
+          "icon": "⚖️",
+          "title": "Matched vs. Mismatched",
+          "body": "Using the correct metric preserves the model's learned patterns, while a mismatched metric scrambles the retrieval rank.",
+          "compare": {
+            "left": {
+              "emoji": "✅",
+              "tag": "Matched Metric",
+              "text": "Model: Cosine Similarity. Database: Cosine Similarity. Perfect, relevant search results!"
+            },
+            "right": {
+              "emoji": "❌",
+              "tag": "Mismatched Metric",
+              "text": "Model: Cosine Similarity. Database: Euclidean. Irrelevant results creep in silently."
+            }
+          }
+        }
+      ]
+    },
+    {
+      "type": "practice",
+      "exercises": [
+        {
+          "id": "p1",
+          "type": "multiple_choice",
+          "xp": 2,
+          "prompt": "Why is it critical to match your similarity metric to the embedding model's training configuration?",
+          "options": [
+            {
+              "id": "mc_opt_1",
+              "text": "It aligns with how the model structured its vector space during training.",
+              "correct": true
+            },
+            {
+              "id": "mc_opt_2",
+              "text": "It compresses the vectors to take up less memory space.",
+              "correct": false
+            },
+            {
+              "id": "mc_opt_3",
+              "text": "It automatically translates the vector database into different languages.",
+              "correct": false
+            },
+            {
+              "id": "mc_opt_4",
+              "text": "It forces the model to generate shorter text responses.",
+              "correct": false
+            }
+          ],
+          "explain": "Embedding models shape their vector space during training based on a specific distance or similarity function. Changing this metric later invalidates the model's spatial logic."
+        },
+        {
+          "id": "p2",
+          "type": "true_false",
+          "xp": 2,
+          "prompt": "If you use the wrong similarity metric in your database, the code will fail to compile and throw a runtime error.",
+          "options": [
+            {
+              "id": "tf_true",
+              "text": "True",
+              "correct": false
+            },
+            {
+              "id": "tf_false",
+              "text": "False",
+              "correct": true
+            }
+          ],
+          "explain": "A mismatch between the embedding model's training metric and the database retrieval metric does not cause a crash; it just returns less relevant search results."
+        },
+        {
+          "id": "p3",
+          "type": "fill_blank",
+          "xp": 2,
+          "prompt": "What happens to search retrieval when there is a metric mismatch?",
+          "sentence": "Using the wrong similarity metric will silently degrade retrieval quality without throwing errors.",
+          "blank": "silently degrade",
+          "words": [
+            "silently degrade",
+            "crash instantly",
+            "improve performance"
+          ],
+          "explain": "Mismatched metrics do not throw system errors; instead, they silently degrade the quality of your retrieved search results, making the bug hard to spot."
+        },
+        {
+          "id": "p4",
+          "type": "spot_the_ai",
+          "xp": 2,
+          "prompt": "Which of the following statements about similarity metrics is AI-generated and false?",
+          "options": [
+            {
+              "id": "sai_opt_1",
+              "text": "Using Euclidean distance on models trained for Cosine Similarity yields suboptimal search results.",
+              "correct": false
+            },
+            {
+              "id": "sai_opt_2",
+              "text": "Vector databases allow you to choose different metrics, but choosing the wrong one degrades quality.",
+              "correct": false
+            },
+            {
+              "id": "sai_opt_3",
+              "text": "Modern vector databases automatically convert any metric to match the embedding model at runtime.",
+              "correct": true
+            }
+          ],
+          "explain": "Option C shows a typical AI hallucination where it assumes there is a dynamic conversion layer that negotiates different metrics automatically, which is false. Option A and B are factual."
+        }
+      ]
+    },
+    {
+      "type": "boss",
+      "exercises": [
+        {
+          "id": "b1",
+          "type": "multiple_choice",
+          "xp": 5,
+          "prompt": "You are setting up a vector database for a new LLM application. How should you decide which similarity metric to configure in your database?",
+          "options": [
+            {
+              "id": "opt_match_doc",
+              "text": "Check the embedding model's documentation to see how it was trained, and use that exact metric.",
+              "correct": true
+            },
+            {
+              "id": "opt_euclidean_always",
+              "text": "Always default to Euclidean distance because it is the most intuitive.",
+              "correct": false
+            },
+            {
+              "id": "opt_random",
+              "text": "Run a random similarity check on a few vectors and pick the one with the highest score.",
+              "correct": false
+            },
+            {
+              "id": "opt_largest_score",
+              "text": "Use Cosine Similarity because it is always mathematically superior for all models.",
+              "correct": false
+            }
+          ],
+          "explain": "Always match the metric to the model's training documentation. If a model was trained to maximize Cosine Similarity, using Euclidean distance can lead to retrieval errors because the vector spaces are optimized for angular alignment, not spatial distance."
+        }
+      ]
+    }
+  ]
+}

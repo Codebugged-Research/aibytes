@@ -1,0 +1,222 @@
+{
+  "id": "u422-l5",
+  "unit": 422,
+  "day": 2115,
+  "tier": "LLM Application Engineering",
+  "tierIcon": "🔌",
+  "title": "Session State vs Conversation History",
+  "icon": "🗂️",
+  "concept": "Separating structured application state from the raw chat transcript as two distinct context inputs.",
+  "xp": 15,
+  "hearts": 3,
+  "estMinutes": 7,
+  "segments": [
+    {
+      "type": "warmup",
+      "exercises": [
+        {
+          "id": "w1",
+          "type": "multiple_choice",
+          "xp": 1,
+          "prompt": "In the last lesson, we learned to extract durable facts like a user's name or preference from a conversation. Why do we pull these out instead of just re-reading the whole chat every time we need them?",
+          "options": [
+            {
+              "id": "a",
+              "text": "Because re-scanning the full chat every time is slower, costlier, and more error-prone than checking a saved fact",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "Because facts extracted from chat are always more accurate than anything the user actually said",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "Because conversation history gets deleted automatically after each turn",
+              "correct": false
+            }
+          ],
+          "explain": "Extracting durable facts (like a name or preference) once and reusing them is faster and more reliable than making the model re-read the entire conversation every single time it needs that info. This same idea — separating reliable extracted info from raw chat — leads right into today's lesson on state vs. history."
+        }
+      ]
+    },
+    {
+      "type": "teach",
+      "cards": [
+        {
+          "kind": "hook",
+          "icon": "🗂️",
+          "title": "One Chat, Two Files",
+          "body": "Every conversation your app has actually needs TWO kinds of memory living side by side: a messy transcript of what was said, and a tidy form of what's currently true. Confusing the two causes bugs and bloated prompts."
+        },
+        {
+          "kind": "definition",
+          "icon": "📋",
+          "title": "State vs. History",
+          "body": "Conversation history is the raw back-and-forth transcript of messages. Session state is a separate, structured set of fields (like a form) holding the current facts your app needs to function — cart items, current step, selected options. They're two different inputs you feed the model, each doing a different job."
+        },
+        {
+          "kind": "analogy",
+          "icon": "🧳",
+          "title": "Two Different Bags",
+          "body": "Conversation history is like a diary of everything said, page by page. Session state is like a packed suitcase with only the labeled items you need for the trip: 'destination: Paris', 'seat: window'. You don't dig through the diary to find your seat preference — you check the suitcase label."
+        },
+        {
+          "kind": "example",
+          "icon": "🛒",
+          "title": "Shopping Assistant",
+          "body": "History: 'User: I want a red shirt. Bot: size? User: medium, actually let's do large.' Session state (structured): {item: 'shirt', color: 'red', size: 'large'}. The state is clean and current — no need to replay the whole conversation to know the final size."
+        },
+        {
+          "kind": "mythbust",
+          "icon": "🚫",
+          "title": "Myth: One Big Log Is Enough",
+          "body": "Some think just feeding the model the full chat transcript covers everything an app needs. But apps need reliable structured values (like 'order status: shipped') that shouldn't depend on the model correctly re-reading old messages every single time — that's slow, costly, and error-prone."
+        },
+        {
+          "kind": "visual",
+          "icon": "⚖️",
+          "title": "Transcript vs. Form",
+          "body": "Think of two side-by-side documents feeding the model: a scrollable chat log, and a short structured summary card. They update differently and serve different purposes.",
+          "compare": {
+            "left": {
+              "emoji": "💬",
+              "tag": "Conversation History",
+              "text": "Raw messages in order — great for tone, phrasing, and context, but messy and grows huge"
+            },
+            "right": {
+              "emoji": "📝",
+              "tag": "Session State",
+              "text": "Structured fields like {step: 3, cart: [...], user_name: 'Sam'} — compact, current, and reliable for logic"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "type": "practice",
+      "exercises": [
+        {
+          "id": "p1",
+          "type": "multiple_choice",
+          "xp": 2,
+          "prompt": "Which of these is the BEST example of something that belongs in structured session state rather than raw conversation history?",
+          "options": [
+            {
+              "id": "a",
+              "text": "The user's exact joke about their dog's silly name",
+              "correct": false
+            },
+            {
+              "id": "b",
+              "text": "The currently selected shipping address for the order",
+              "correct": true
+            },
+            {
+              "id": "c",
+              "text": "A funny typo the user made three messages ago",
+              "correct": false
+            },
+            {
+              "id": "d",
+              "text": "The tone of voice the user used when greeting the bot",
+              "correct": false
+            }
+          ],
+          "explain": "The shipping address is a precise, current value the app must use correctly (to actually ship the package), so it needs to live as a clean structured field. Jokes, typos, and tone are conversational color best left in the natural transcript, not turned into rigid data fields."
+        },
+        {
+          "id": "p2",
+          "type": "true_false",
+          "xp": 2,
+          "prompt": "True or False: Conversation history and session state should always be merged into a single blob before sending to the model, since separating them adds complexity.",
+          "options": [
+            {
+              "id": "a",
+              "text": "True",
+              "correct": false
+            },
+            {
+              "id": "b",
+              "text": "False",
+              "correct": true
+            }
+          ],
+          "explain": "False — keeping them separate is exactly the point. History gives natural conversational context; state gives reliable structured facts. Merging them loses the clarity that lets your app trust specific fields (like an order total) instead of hoping the model reads them correctly from prose."
+        },
+        {
+          "id": "p3",
+          "type": "fill_blank",
+          "xp": 2,
+          "prompt": "Fill in the blank:",
+          "sentence": "The current step in a multi-step checkout flow should be tracked in structured session state, not buried in the raw conversation history.",
+          "blank": "session state",
+          "words": [
+            "session state",
+            "conversation history",
+            "training data"
+          ],
+          "explain": "A checkout step is a precise, current fact the app logic depends on (to decide what screen to show next), so it belongs in structured session state — not left for the model to infer by scanning old chat messages."
+        },
+        {
+          "id": "p4",
+          "type": "spot_the_ai",
+          "xp": 2,
+          "prompt": "Which of these three app designs is most likely AI-generated boilerplate that misunderstands the state-vs-history separation?",
+          "options": [
+            {
+              "id": "a",
+              "text": "A design that stores 'cart_total' as a structured field updated on every add/remove action",
+              "correct": false
+            },
+            {
+              "id": "b",
+              "text": "A design that re-sends the ENTIRE raw chat transcript every turn and asks the model to 'figure out the current cart total by reading through it'",
+              "correct": true
+            },
+            {
+              "id": "c",
+              "text": "A design that keeps a short chat transcript for tone plus a separate structured 'order' object for facts",
+              "correct": false
+            }
+          ],
+          "explain": "Option B is the red flag: relying on the model to re-derive a precise number from scattered chat messages every turn is slow, costly, and risks mistakes. A well-designed app keeps computed facts like totals in structured state that's updated directly, not re-guessed from prose each time."
+        }
+      ]
+    },
+    {
+      "type": "boss",
+      "exercises": [
+        {
+          "id": "b1",
+          "type": "multiple_choice",
+          "xp": 5,
+          "prompt": "A food delivery bot needs to know: (1) the user's exact wording when they joked about hating pineapple on pizza, and (2) the current order total to calculate tax. How should these two pieces of info be handled?",
+          "options": [
+            {
+              "id": "a",
+              "text": "Store both in conversation history only, since they both came from chat",
+              "correct": false
+            },
+            {
+              "id": "b",
+              "text": "Store both in session state, since both are important",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "The joke's wording belongs in conversation history (for tone/context); the order total belongs in session state (a structured, always-current field)",
+              "correct": true
+            },
+            {
+              "id": "d",
+              "text": "Delete both once the turn ends to save memory",
+              "correct": false
+            }
+          ],
+          "explain": "The exact joke is a flavor-of-conversation detail — useful for natural replies, but not something the app needs to compute with, so raw history is fine for it. The order total is a precise number the app relies on for math and logic (tax, checkout, receipts), so it must live in structured session state that's always accurate and easy to read programmatically. Mixing these up either bloats your state with fuzzy chat text or forces your app to 're-read' history just to find a number — both are fragile. Keeping them separate is the core skill of this lesson: structured state for what the app needs to *act on*, raw history for what the model needs to *sound natural about*."
+        }
+      ]
+    }
+  ]
+}

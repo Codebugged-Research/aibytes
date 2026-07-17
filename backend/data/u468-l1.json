@@ -1,0 +1,222 @@
+{
+  "id": "u468-l1",
+  "unit": 468,
+  "day": 2341,
+  "tier": "LLM Application Engineering",
+  "tierIcon": "🔌",
+  "title": "Defining a Tool on a Server",
+  "icon": "⚙️",
+  "concept": "Declaring a tool's name, description, and input schema so a client and model can understand how to call it.",
+  "xp": 15,
+  "hearts": 3,
+  "estMinutes": 7,
+  "segments": [
+    {
+      "type": "warmup",
+      "exercises": [
+        {
+          "id": "w1",
+          "type": "multiple_choice",
+          "xp": 1,
+          "prompt": "Recapping MCP basics: what is the relationship between an MCP server and an MCP client?",
+          "options": [
+            {
+              "id": "w1",
+              "text": "A server exposes tools, and a client connects to and uses them.",
+              "correct": true
+            },
+            {
+              "id": "w2",
+              "text": "A client hosts the tools, and the server asks permission to run them.",
+              "correct": false
+            },
+            {
+              "id": "w3",
+              "text": "Servers and clients are the exact same thing in the MCP ecosystem.",
+              "correct": false
+            }
+          ],
+          "explain": "In MCP, the server advertises tools, resources, and prompts, which the client applications and LLMs connect to and consume."
+        }
+      ]
+    },
+    {
+      "type": "teach",
+      "cards": [
+        {
+          "kind": "hook",
+          "icon": "🔌",
+          "title": "Giving LLMs Superpowers",
+          "body": "When you build an LLM application, how does the model know what external actions it can perform? It relies on tools advertised by a Model Context Protocol (MCP) server."
+        },
+        {
+          "kind": "definition",
+          "icon": "🛠️",
+          "title": "Declaring a Server Tool",
+          "body": "To let an LLM use a tool, your MCP server must declare its name, write a clear description explaining when to use it, and define an input schema outlining the exact variables and types it accepts."
+        },
+        {
+          "kind": "analogy",
+          "icon": "📖",
+          "title": "The Restaurant Menu Analogy",
+          "body": "Think of declaring a tool like writing a entry in a restaurant menu. You must list the dish's name, describe what ingredients it contains, and specify how the customer must order it (e.g., choosing a spice level)."
+        },
+        {
+          "kind": "example",
+          "icon": "💻",
+          "title": "A Real Tool Declaration",
+          "body": "To define a 'calculate_tax' tool, you set the name to 'calculate_tax', write a description like 'Calculates sales tax for a given state', and provide a JSON schema requiring a 'price' as a number and 'state' as a string."
+        },
+        {
+          "kind": "mythbust",
+          "icon": "🕵️‍♂️",
+          "title": "The LLM Cannot See Your Code",
+          "body": "You might think the LLM reads your code to figure out how a tool works. In reality, the LLM only sees the metadata (name, description, and schema) you expose; it never reads your actual backend code!"
+        },
+        {
+          "kind": "visual",
+          "icon": "👁️",
+          "title": "Interface vs. Implementation",
+          "body": "Compare what the LLM sees vs. what the Server actually does behind the scenes when a tool is defined.",
+          "compare": {
+            "left": {
+              "emoji": "📋",
+              "tag": "What the LLM Sees",
+              "text": "Metadata: Name, human description, and JSON schema of expected inputs."
+            },
+            "right": {
+              "emoji": "⚙️",
+              "tag": "What the Server Runs",
+              "text": "Execution: The actual code, database queries, or API calls that produce the result."
+            }
+          }
+        }
+      ]
+    },
+    {
+      "type": "practice",
+      "exercises": [
+        {
+          "id": "p1",
+          "type": "multiple_choice",
+          "xp": 2,
+          "prompt": "Why is it crucial to write a detailed, clear description for your MCP server tool?",
+          "options": [
+            {
+              "id": "q1_a",
+              "text": "To compile the server code faster",
+              "correct": false
+            },
+            {
+              "id": "q1_b",
+              "text": "To help the LLM understand when and why it should run this specific tool",
+              "correct": true
+            },
+            {
+              "id": "q1_c",
+              "text": "To store database credentials securely",
+              "correct": false
+            },
+            {
+              "id": "q1_d",
+              "text": "To generate user-facing documentation websites automatically",
+              "correct": false
+            }
+          ],
+          "explain": "The description is read directly by the LLM (the client model) to determine if this tool is appropriate for the user's current request."
+        },
+        {
+          "id": "p2",
+          "type": "true_false",
+          "xp": 2,
+          "prompt": "True or False: Declaring an input schema helps ensure the LLM sends arguments with the correct names and data types.",
+          "options": [
+            {
+              "id": "t1",
+              "text": "True",
+              "correct": true
+            },
+            {
+              "id": "t2",
+              "text": "False",
+              "correct": false
+            }
+          ],
+          "explain": "An input schema prevents the LLM from sending messy or incorrectly typed arguments, ensuring your server receives clean data."
+        },
+        {
+          "id": "p3",
+          "type": "fill_blank",
+          "xp": 2,
+          "prompt": "Fill in the blank to identify the standard format used to describe a tool's inputs:",
+          "sentence": "The MCP server defines tool parameters using a structured JSON Schema format.",
+          "blank": "JSON Schema",
+          "words": [
+            "JSON Schema",
+            "Python Class",
+            "HTML Form"
+          ],
+          "explain": "A JSON Schema is the standard format used to define the structure, types, and required fields for the tool's input parameters."
+        },
+        {
+          "id": "p4",
+          "type": "spot_the_ai",
+          "xp": 2,
+          "prompt": "Which of these tool definitions looks like a hallucinated, non-standard MCP configuration?",
+          "options": [
+            {
+              "id": "s1",
+              "text": "{ \"name\": \"fetch_news\", \"description\": \"Gets top news\", \"inputSchema\": { \"type\": \"object\", \"properties\": { \"category\": { \"type\": \"string\" } } } }",
+              "correct": false
+            },
+            {
+              "id": "s2",
+              "text": "{ \"name\": \"get_weather\", \"description\": \"Get current weather for a city\", \"inputSchema\": { \"type\": \"object\", \"properties\": { \"city\": { \"type\": \"string\" } }, \"required\": [\"city\"] } }",
+              "correct": false
+            },
+            {
+              "id": "s3",
+              "text": "{ \"name\": \"magic_tool\", \"llm_autopilot\": true, \"parameters\": \"Just ask for anything and I will guess the input format\" }",
+              "correct": true
+            }
+          ],
+          "explain": "Option C is typical of LLM-generated hallucinated code because 'llm_autopilot' is not a standard MCP parameter or schema format, whereas options A and B represent standard structured tool definitions."
+        }
+      ]
+    },
+    {
+      "type": "boss",
+      "exercises": [
+        {
+          "id": "b1",
+          "type": "multiple_choice",
+          "xp": 5,
+          "prompt": "Imagine you are building a custom weather tool for your MCP server. What are the three essential components you must define so an LLM can successfully locate, understand, and call your tool?",
+          "options": [
+            {
+              "id": "b1",
+              "text": "Only the tool name is required; the LLM automatically guesses the parameters.",
+              "correct": false
+            },
+            {
+              "id": "b2",
+              "text": "Name, description, and an input schema defining the exact parameter types and required fields.",
+              "correct": true
+            },
+            {
+              "id": "b3",
+              "text": "A Python function signature with no description or schemas.",
+              "correct": false
+            },
+            {
+              "id": "b4",
+              "text": "A raw text prompt template without any structured JSON formatting.",
+              "correct": false
+            }
+          ],
+          "explain": "A tool definition must include a clear name, a human-like description for the LLM to read, and a strict JSON Schema detailing the required and optional inputs. Without the schema, the LLM won't know how to format its arguments."
+        }
+      ]
+    }
+  ]
+}

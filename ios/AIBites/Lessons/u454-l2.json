@@ -1,0 +1,222 @@
+{
+  "id": "u454-l2",
+  "unit": 454,
+  "day": 2272,
+  "tier": "LLM Application Engineering",
+  "tierIcon": "🔌",
+  "title": "Pointwise, Pairwise, Listwise Approaches",
+  "icon": "🔀",
+  "concept": "Three families of ranking loss functions and how each frames the ranking problem differently.",
+  "xp": 15,
+  "hearts": 3,
+  "estMinutes": 7,
+  "segments": [
+    {
+      "type": "warmup",
+      "exercises": [
+        {
+          "id": "w1",
+          "type": "multiple_choice",
+          "xp": 1,
+          "prompt": "Quick recap: What is the main goal of a Learning to Rank (LTR) model?",
+          "options": [
+            {
+              "id": "a",
+              "text": "Predicting a continuous house price.",
+              "correct": false
+            },
+            {
+              "id": "b",
+              "text": "Optimizing the order of search results to match user relevance.",
+              "correct": true
+            },
+            {
+              "id": "c",
+              "text": "Classifying images into cats or dogs.",
+              "correct": false
+            }
+          ],
+          "explain": "Learning to Rank (LTR) is specifically designed to output an ordered list of items optimized for relevance, rather than predicting an independent category or a raw continuous value."
+        }
+      ]
+    },
+    {
+      "type": "teach",
+      "cards": [
+        {
+          "kind": "hook",
+          "icon": "🎯",
+          "title": "Framing the Ranking Problem",
+          "body": "When you ask a model to rank items, you need to define what a 'mistake' looks like. Depending on how you calculate this error, your model will either focus on grading individual items, comparing them in pairs, or optimizing the entire list's flow."
+        },
+        {
+          "kind": "definition",
+          "icon": "⚖️",
+          "title": "The Three Ranking Families",
+          "body": "Ranking approaches are divided into three families: Pointwise (predicting a score for one document at a time), Pairwise (comparing pairs to see which is better), and Listwise (optimizing the order of the entire list at once). Each changes how we calculate the model's loss during training."
+        },
+        {
+          "kind": "analogy",
+          "icon": "📚",
+          "title": "The Bookshelf Analogy",
+          "body": "Think of organizing your books. Pointwise is rating each book 1 to 5 stars in isolation. Pairwise is holding two books and deciding which one goes on top. Listwise is arranging the entire shelf to look perfect all at once."
+        },
+        {
+          "kind": "example",
+          "icon": "🔍",
+          "title": "Search Engine Implementations",
+          "body": "In a real search engine, a Pointwise system predicts a score of 4.5/5 for Doc A. A Pairwise system calculates that Doc A is more relevant than Doc B. A Listwise system takes a list of [Doc A, Doc B, Doc C] and calculates a loss based on the entire ordered sequence."
+        },
+        {
+          "kind": "mythbust",
+          "icon": "⚡",
+          "title": "The Complexity Trade-off",
+          "body": "You might think Listwise is always the only option since we want a ranked list. However, Pointwise is much faster to train and scale, which is why many production systems use Pointwise models first to filter items before using complex Listwise models."
+        },
+        {
+          "kind": "visual",
+          "icon": "👁️",
+          "title": "Pointwise vs. Pairwise",
+          "body": "Compare how Pointwise and Pairwise models process documents. Pointwise looks at single items, while Pairwise looks at couples.",
+          "compare": {
+            "left": {
+              "emoji": "📄",
+              "tag": "Pointwise",
+              "text": "Evaluates Doc A alone -> Score: 0.9. Evaluates Doc B alone -> Score: 0.7."
+            },
+            "right": {
+              "emoji": "⚖️",
+              "tag": "Pairwise",
+              "text": "Compares Doc A vs Doc B -> Decides A is better than B."
+            }
+          }
+        }
+      ]
+    },
+    {
+      "type": "practice",
+      "exercises": [
+        {
+          "id": "p1",
+          "type": "multiple_choice",
+          "xp": 2,
+          "prompt": "How does a Pointwise ranking model evaluate candidates?",
+          "options": [
+            {
+              "id": "a",
+              "text": "It predicts a relevance score for each individual document completely in isolation.",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "It compares pairs of documents to see which is better.",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "It optimizes the probability distribution of the entire sequence.",
+              "correct": false
+            },
+            {
+              "id": "d",
+              "text": "It ignores the documents and only ranks user profiles.",
+              "correct": false
+            }
+          ],
+          "explain": "Pointwise ranking treats each document in isolation, predicting a single relevance score or label for that document without looking at any others."
+        },
+        {
+          "id": "p2",
+          "type": "true_false",
+          "xp": 2,
+          "prompt": "True or False: Listwise ranking models take the entire sequence of search results into account to optimize the final order.",
+          "options": [
+            {
+              "id": "true",
+              "text": "True",
+              "correct": true
+            },
+            {
+              "id": "false",
+              "text": "False",
+              "correct": false
+            }
+          ],
+          "explain": "Listwise approaches look at the entire set of search results at once during training, which allows them to optimize directly for position-aware list metrics."
+        },
+        {
+          "id": "p3",
+          "type": "fill_blank",
+          "xp": 2,
+          "prompt": "Fill in the missing approach name that focuses on binary relative order:",
+          "sentence": "Pairwise ranking looks at pairs of items to determine which one is more relevant.",
+          "blank": "Pairwise",
+          "words": [
+            "Pointwise",
+            "Pairwise",
+            "Listwise"
+          ],
+          "explain": "The Pairwise approach evaluates pairs of documents, focusing on whether the relative order of the two documents is correct."
+        },
+        {
+          "id": "p4",
+          "type": "spot_the_ai",
+          "xp": 2,
+          "prompt": "Identify the AI-generated statement about ranking approaches:",
+          "options": [
+            {
+              "id": "a",
+              "text": "Pointwise ranking simplifies the problem by treating it as a standard regression task where each document gets its own score.",
+              "correct": false
+            },
+            {
+              "id": "b",
+              "text": "Pairwise ranking looks at two documents at a time to decide which one should be ordered higher in the search results.",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "Pointwise ranking utilizes granular regression vectors to map unique target parameters to isolated item weights.",
+              "correct": true
+            }
+          ],
+          "explain": "Option C is generated by an AI assistant trying to define pointwise ranking using overly complex, mismatched, or AI-typical generic phrasing like 'granular regression vectors' which is incorrect. Options A and B are clear human definitions."
+        }
+      ]
+    },
+    {
+      "type": "boss",
+      "exercises": [
+        {
+          "id": "b1",
+          "type": "multiple_choice",
+          "xp": 5,
+          "prompt": "Imagine you are building a search engine where getting the very first result wrong is a huge disaster, but errors further down the list don't matter much. Which ranking loss family is best suited to optimize for this position-sensitive, whole-list goal, and why?",
+          "options": [
+            {
+              "id": "a",
+              "text": "Pointwise loss, because it evaluates each document independently.",
+              "correct": false
+            },
+            {
+              "id": "b",
+              "text": "Pairwise loss, because it compares only two documents at a time.",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "Listwise loss, because it optimizes the entire list sequence and naturally prioritizes errors at the top of the list.",
+              "correct": true
+            },
+            {
+              "id": "d",
+              "text": "None of them, because ranking models can only predict absolute probability scores.",
+              "correct": false
+            }
+          ],
+          "explain": "Listwise approaches optimize for the ranking metric of the entire list (like NDCG) simultaneously. If the top item is wrong, it carries a massive penalty, whereas swapping the 99th and 100th items barely hurts the score. Pointwise and pairwise approaches cannot easily prioritize top-of-list mistakes over bottom-of-list mistakes because they look at items in isolation or isolated pairs."
+        }
+      ]
+    }
+  ]
+}

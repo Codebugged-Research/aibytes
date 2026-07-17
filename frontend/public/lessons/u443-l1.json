@@ -1,0 +1,222 @@
+{
+  "id": "u443-l1",
+  "unit": 443,
+  "day": 2216,
+  "tier": "LLM Application Engineering",
+  "tierIcon": "🔌",
+  "title": "Backup & Recovery",
+  "icon": "💾",
+  "concept": "Snapshotting a vector index and restoring it, and why re-embedding from scratch is the fallback of last resort.",
+  "xp": 15,
+  "hearts": 3,
+  "estMinutes": 7,
+  "segments": [
+    {
+      "type": "warmup",
+      "exercises": [
+        {
+          "id": "w1",
+          "type": "multiple_choice",
+          "xp": 1,
+          "prompt": "Welcome to Unit 443! Let's start with a quick concept check: What is the primary purpose of a vector database?",
+          "options": [
+            {
+              "id": "w_1",
+              "text": "Measuring semantic similarity using distance metrics.",
+              "correct": true
+            },
+            {
+              "id": "w_2",
+              "text": "Running traditional SQL keyword matching.",
+              "correct": false
+            },
+            {
+              "id": "w_3",
+              "text": "Compressing image files into JPEG format.",
+              "correct": false
+            }
+          ],
+          "explain": "In vector databases, distance metrics like cosine similarity or Euclidean distance are used to measure how closely related two vector embeddings are in the vector space."
+        }
+      ]
+    },
+    {
+      "type": "teach",
+      "cards": [
+        {
+          "kind": "hook",
+          "icon": "🛡️",
+          "title": "The Cost of Starting Over",
+          "body": "If your database crashes, recalculating millions of embeddings using OpenAI's API would cost thousands of dollars and take hours. We need a way to back up the pre-calculated vectors directly!"
+        },
+        {
+          "kind": "definition",
+          "icon": "💾",
+          "title": "What is a Vector Snapshot?",
+          "body": "A snapshot is a point-in-time copy of your vector database's index configuration and vector data. Restoring it recovers your index structure without running raw text back through an embedding model."
+        },
+        {
+          "kind": "analogy",
+          "icon": "🎮",
+          "title": "The Game Save Analogy",
+          "body": "Think of snapshotting like saving your progress in a giant open-world video game. Instead of replaying the entire game from the beginning, you instantly load the exact world state and player location from your save file."
+        },
+        {
+          "kind": "example",
+          "icon": "🚀",
+          "title": "Real-World Recovery",
+          "body": "In Pinecone or Milvus, instead of paying for API calls to re-embed 10 million product descriptions after a corrupt update, you trigger a restore command from your weekly snapshot bucket to recover the index in minutes."
+        },
+        {
+          "kind": "mythbust",
+          "icon": "🔍",
+          "title": "The 'Re-embed Everything' Trap",
+          "body": "Many believe they can just rely on raw text backups and re-generate embeddings if disaster strikes. While true, this is the slowest, most expensive option and should only be your ultimate safety net."
+        },
+        {
+          "kind": "visual",
+          "icon": "📊",
+          "title": "Restore vs. Re-embed",
+          "body": "Compare the speed and cost of restoring an index snapshot versus regenerating embeddings from raw data.",
+          "compare": {
+            "left": {
+              "emoji": "⚡",
+              "tag": "Snapshot Restore",
+              "text": "Instant recovery, zero API costs, loads pre-calculated vector index state."
+            },
+            "right": {
+              "emoji": "🐌",
+              "tag": "Re-embedding",
+              "text": "High API costs, hours of GPU time, recalculates every vector from text."
+            }
+          }
+        }
+      ]
+    },
+    {
+      "type": "practice",
+      "exercises": [
+        {
+          "id": "p1",
+          "type": "multiple_choice",
+          "xp": 2,
+          "prompt": "How does restoring a vector index snapshot save time and API costs?",
+          "options": [
+            {
+              "id": "mc_1",
+              "text": "It runs all raw text through the embedding model again automatically.",
+              "correct": false
+            },
+            {
+              "id": "mc_2",
+              "text": "It restores pre-computed vectors and index states without re-calculating embeddings.",
+              "correct": true
+            },
+            {
+              "id": "mc_3",
+              "text": "It only backs up the metadata, discarding the vectors.",
+              "correct": false
+            },
+            {
+              "id": "mc_4",
+              "text": "It converts high-dimensional vectors back into raw English text.",
+              "correct": false
+            }
+          ],
+          "explain": "A snapshot captures the pre-computed vectors and the index structure, meaning you don't need to call any LLM or embedding model APIs to rebuild it."
+        },
+        {
+          "id": "p2",
+          "type": "true_false",
+          "xp": 2,
+          "prompt": "True or False: A vector database snapshot captures both the vector embeddings and the index configuration.",
+          "options": [
+            {
+              "id": "tf_1",
+              "text": "True",
+              "correct": true
+            },
+            {
+              "id": "tf_2",
+              "text": "False",
+              "correct": false
+            }
+          ],
+          "explain": "A snapshot freezes the exact state of the vectors and index at a specific moment, allowing you to restore to that exact state later."
+        },
+        {
+          "id": "p3",
+          "type": "fill_blank",
+          "xp": 2,
+          "prompt": "Fill in the missing concept about rebuilding vector databases from raw text:",
+          "sentence": "Because re-generating millions of embeddings is slow and expensive, it is treated as a fallback of last resort.",
+          "blank": "fallback of last resort",
+          "words": [
+            "fallback of last resort",
+            "first line of defense",
+            "recommended daily routine"
+          ],
+          "explain": "Re-indexing from scratch is incredibly slow and expensive, making it the fallback of last resort when snapshots are unavailable."
+        },
+        {
+          "id": "p4",
+          "type": "spot_the_ai",
+          "xp": 2,
+          "prompt": "Which of the following describes an AI system engineer performing a vector backup operation?",
+          "options": [
+            {
+              "id": "sai_1",
+              "text": "\"To prevent data loss, we triggered a point-in-time snapshot of the HNSW index and exported the serialized segments to cold storage.\"",
+              "correct": true
+            },
+            {
+              "id": "sai_2",
+              "text": "\"We searched the vector database using a cosine similarity threshold of 0.85 and filtered the results by the 'backup' tag.\"",
+              "correct": false
+            },
+            {
+              "id": "sai_3",
+              "text": "\"I converted all raw text paragraphs into 1536-dimensional vectors using the text-embedding-3-small model.\"",
+              "correct": false
+            }
+          ],
+          "explain": "Option B describes a normal metadata query, and Option C describes initial index creation. Option A uses typical system-level backup language to describe creating a point-in-time image of the vector index."
+        }
+      ]
+    },
+    {
+      "type": "boss",
+      "exercises": [
+        {
+          "id": "b1",
+          "type": "multiple_choice",
+          "xp": 5,
+          "prompt": "Your vector database hosting millions of high-dimensional vectors crashes. Why is restoring a index snapshot heavily preferred over re-embedding the source documents from scratch?",
+          "options": [
+            {
+              "id": "boss_1",
+              "text": "Re-embedding is faster but costs more in storage fees.",
+              "correct": false
+            },
+            {
+              "id": "boss_2",
+              "text": "Re-embedding requires high GPU/API costs and time, while restoring a snapshot is fast and cheap.",
+              "correct": true
+            },
+            {
+              "id": "boss_3",
+              "text": "Snapshots are only useful if the embedding model changes.",
+              "correct": false
+            },
+            {
+              "id": "boss_4",
+              "text": "Vector databases automatically re-embed data for free during crashes.",
+              "correct": false
+            }
+          ],
+          "explain": "Re-embedding millions of documents requires massive API costs and GPU hours, whereas restoring from a snapshot is nearly instant and computationally cheap. Therefore, re-embedding is the costly fallback of last resort."
+        }
+      ]
+    }
+  ]
+}

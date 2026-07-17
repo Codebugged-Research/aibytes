@@ -1,0 +1,222 @@
+{
+  "id": "u438-l5",
+  "unit": 438,
+  "day": 2195,
+  "tier": "LLM Application Engineering",
+  "tierIcon": "🔌",
+  "title": "Quantization Accuracy Loss",
+  "icon": "📉",
+  "concept": "Measuring the recall drop introduced by compression and when it's an acceptable tradeoff for scale.",
+  "xp": 15,
+  "hearts": 3,
+  "estMinutes": 7,
+  "segments": [
+    {
+      "type": "warmup",
+      "exercises": [
+        {
+          "id": "w1",
+          "type": "multiple_choice",
+          "xp": 1,
+          "prompt": "How do IVF and PQ work together in a hybrid index to speed up vector searches?",
+          "options": [
+            {
+              "id": "a",
+              "text": "IVF compresses vectors into short codes while PQ clusters them.",
+              "correct": false
+            },
+            {
+              "id": "b",
+              "text": "IVF limits the search to a few clusters, and PQ compresses the vectors in those clusters to save memory.",
+              "correct": true
+            },
+            {
+              "id": "c",
+              "text": "IVF and PQ cannot be combined because they use conflicting mathematical spaces.",
+              "correct": false
+            }
+          ],
+          "explain": "IVF narrows down the search space to a few clusters, and PQ compresses the vectors inside those clusters to minimize memory and speed up distance calculations."
+        }
+      ]
+    },
+    {
+      "type": "teach",
+      "cards": [
+        {
+          "kind": "hook",
+          "icon": "⚖️",
+          "title": "The Cost of Compression",
+          "body": "When we compress billions of vectors to save memory, we lose some precision. But how do we measure what we lost, and how do we decide if saving millions of dollars in RAM is worth missing a few search results?"
+        },
+        {
+          "kind": "definition",
+          "icon": "📉",
+          "title": "What is Accuracy Loss?",
+          "body": "Quantization accuracy loss is the reduction in search quality (recall) that occurs when vectors are compressed. Because compression approximates vector values, the system might occasionally miss the true closest matches in favor of close approximations."
+        },
+        {
+          "kind": "analogy",
+          "icon": "📸",
+          "title": "The JPEG Tradeoff",
+          "body": "Think of PQ compression like saving a high-definition photo as a compressed JPEG. You save a massive amount of disk space, but if you zoom in closely, you will notice some pixelation and lose tiny details."
+        },
+        {
+          "kind": "example",
+          "icon": "🛒",
+          "title": "Acceptable Loss in Action",
+          "body": "An e-commerce app compresses product vectors to fit 10 million items on one server. They experience a 5% drop in search recall (some minor relevant items are missed), but gain a 10x reduction in RAM costs, making it a highly acceptable trade-off."
+        },
+        {
+          "kind": "mythbust",
+          "icon": "🤔",
+          "title": "The 100% Precision Myth",
+          "body": "Many believe quantization ruins search results entirely. In reality, modern LLM applications rarely need 100% perfect mathematical matches; a search that is 95% accurate is indistinguishable to users but runs at a fraction of the cost."
+        },
+        {
+          "kind": "visual",
+          "icon": "📊",
+          "title": "Accuracy vs. Scale",
+          "body": "Compare the trade-offs of storing vectors raw versus compressing them with IVF+PQ.",
+          "compare": {
+            "left": {
+              "emoji": "💾",
+              "tag": "Raw Vectors",
+              "text": "100% search accuracy, but massive RAM usage and high hosting costs."
+            },
+            "right": {
+              "emoji": "⚡",
+              "tag": "IVF + PQ Quantized",
+              "text": "90-95% search accuracy, but 90%+ RAM savings and ultra-fast queries."
+            }
+          }
+        }
+      ]
+    },
+    {
+      "type": "practice",
+      "exercises": [
+        {
+          "id": "p1",
+          "type": "multiple_choice",
+          "xp": 2,
+          "prompt": "Why does Product Quantization (PQ) introduce accuracy loss in the first place?",
+          "options": [
+            {
+              "id": "a",
+              "text": "It uses more memory than uncompressed flat indexes.",
+              "correct": false
+            },
+            {
+              "id": "b",
+              "text": "It is a lossy compression method, meaning fine details are discarded.",
+              "correct": true
+            },
+            {
+              "id": "c",
+              "text": "It requires expensive GPU hardware to run queries.",
+              "correct": false
+            },
+            {
+              "id": "d",
+              "text": "It only works on binary data.",
+              "correct": false
+            }
+          ],
+          "explain": "Lossy compression (quantization) discards fine details to save space, meaning the exact original vector cannot be perfectly reconstructed, leading to minor search errors."
+        },
+        {
+          "id": "p2",
+          "type": "true_false",
+          "xp": 2,
+          "prompt": "True or False: A 10% drop in recall is always unacceptable in production search systems.",
+          "options": [
+            {
+              "id": "true",
+              "text": "True",
+              "correct": false
+            },
+            {
+              "id": "false",
+              "text": "False",
+              "correct": true
+            }
+          ],
+          "explain": "Recall loss is highly dependent on the application. For casual recommendations, 85% recall is fine, but for critical medical or legal retrieval, high recall is mandatory."
+        },
+        {
+          "id": "p3",
+          "type": "fill_blank",
+          "xp": 2,
+          "prompt": "Fill in the blank to complete the definition of the primary accuracy metric.",
+          "sentence": "We measure quantization quality using recall to see what percentage of true neighbors were kept.",
+          "blank": "recall",
+          "words": [
+            "recall",
+            "latency",
+            "throughput"
+          ],
+          "explain": "Recall measures the proportion of true nearest neighbors retrieved after compression compared to a brute-force search."
+        },
+        {
+          "id": "p4",
+          "type": "spot_the_ai",
+          "xp": 2,
+          "prompt": "Which of these engineering statements was generated by an AI?",
+          "options": [
+            {
+              "id": "a",
+              "text": "Our recall dropped from 0.98 to 0.91 when switching to 8-bit PQ, but we reduced our server footprint from 4 instances to 1. This is a win for our budget.",
+              "correct": false
+            },
+            {
+              "id": "b",
+              "text": "Quantizing our vectors with PQ yielded a 100% recall rate while simultaneously speeding up queries by a factor of infinity due to zero-loss alignment.",
+              "correct": true
+            },
+            {
+              "id": "c",
+              "text": "We ran a grid search over different IVF cluster counts to find the sweet spot where recall stays above our target threshold of 90%.",
+              "correct": false
+            }
+          ],
+          "explain": "The second option mimics a human engineer evaluating the recall-to-memory tradeoff. The third option is generated by an AI making an implausible and mathematically nonsensical claim about lossy compression achieving 100% recall with infinite speed."
+        }
+      ]
+    },
+    {
+      "type": "boss",
+      "exercises": [
+        {
+          "id": "b1",
+          "type": "multiple_choice",
+          "xp": 5,
+          "prompt": "In production vector databases, why is 'Recall@K' the primary metric used to evaluate quantization accuracy loss, and what does a recall of 0.85 mean?",
+          "options": [
+            {
+              "id": "a",
+              "text": "It measures the exact Euclidean distance error for every vector in the index.",
+              "correct": false
+            },
+            {
+              "id": "b",
+              "text": "It measures the percentage of true top-K nearest neighbors successfully retrieved compared to an uncompressed search.",
+              "correct": true
+            },
+            {
+              "id": "c",
+              "text": "It calculates the speedup factor of the query phase in milliseconds.",
+              "correct": false
+            },
+            {
+              "id": "d",
+              "text": "It counts the total number of bytes saved during quantization.",
+              "correct": false
+            }
+          ],
+          "explain": "Recall is the standard metric because we care about finding the actual nearest neighbors. A recall of 0.85 means we successfully retrieved 85% of the true top-K matches that an uncompressed search would have found, which is often an excellent tradeoff for a 95% reduction in memory."
+        }
+      ]
+    }
+  ]
+}

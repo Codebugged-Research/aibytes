@@ -1,0 +1,222 @@
+{
+  "id": "u458-l1",
+  "unit": 458,
+  "day": 2291,
+  "tier": "LLM Application Engineering",
+  "tierIcon": "🔌",
+  "title": "The Query-Time Pipeline, Stage by Stage",
+  "icon": "🔄",
+  "concept": "Rewrite query, retrieve candidates, rerank, assemble context, and generate as the online request path.",
+  "xp": 15,
+  "hearts": 3,
+  "estMinutes": 7,
+  "segments": [
+    {
+      "type": "warmup",
+      "exercises": [
+        {
+          "id": "w1",
+          "type": "multiple_choice",
+          "xp": 1,
+          "prompt": "Before building a full pipeline, recall: What does vector-based retrieval primarily match queries-to-vector embedding search primary look for?",
+          "options": [
+            {
+              "id": "opt_w1",
+              "text": "Semantic meaning and concepts",
+              "correct": true
+            },
+            {
+              "id": "opt_w2",
+              "text": "Exact keyword matches only",
+              "correct": false
+            },
+            {
+              "id": "opt_w3",
+              "text": "Alphabetical order of documents",
+              "correct": false
+            }
+          ],
+          "explain": "In previous lessons on vector databases, we learned that semantic search uses embeddings to find matching concepts, not just exact word spellings."
+        }
+      ]
+    },
+    {
+      "type": "teach",
+      "cards": [
+        {
+          "kind": "hook",
+          "icon": "🔍",
+          "title": "Behind the Scenes of Search",
+          "body": "When you ask a ChatGPT-like assistant a question about today's news, it doesn't just guess. It instantly runs a multi-stage search and filtering process behind the scenes before it even starts writing a response."
+        },
+        {
+          "kind": "definition",
+          "icon": "⚙️",
+          "title": "The Query-Time Pipeline",
+          "body": "The query-time pipeline is the step-by-step path a user's question travels in real-time. It transforms a raw question into a highly accurate, context-rich prompt for the LLM by searching external data sources on the fly."
+        },
+        {
+          "kind": "analogy",
+          "icon": "🕵️‍♂️",
+          "title": "The Research Assistant Analogy",
+          "body": "Think of a retrieval pipeline like hiring a personal research assistant. Instead of running into a giant library empty-handed, they clarify your question, grab a stack of relevant books, sort them by usefulness, highlight the best parts, and summarize the answer for you."
+        },
+        {
+          "kind": "example",
+          "icon": "📝",
+          "title": "A Query in Action",
+          "body": "If a user asks 'How do I fix that login bug?', the pipeline first rewrites it to 'troubleshoot user session authentication error'. It then retrieves ten logs, reranks the best two to the top, pastes them into a prompt template, and sends it to the LLM to write the solution."
+        },
+        {
+          "kind": "mythbust",
+          "icon": "🚫",
+          "title": "Don't Just Search Raw Text",
+          "body": "You might think the system just searches the database directly with the user's exact words. In reality, raw user queries are often too vague or messy, so rewriting them first dramatically improves the search results."
+        },
+        {
+          "kind": "visual",
+          "icon": "⚖️",
+          "title": "Start vs. End of Pipeline",
+          "body": "Let's compare the beginning of the pipeline, where we clean up the user's input, with the end of the pipeline, where we construct the final package for the LLM.",
+          "compare": {
+            "left": {
+              "emoji": "✏️",
+              "tag": "Rewrite Stage",
+              "text": "Transforms raw user input into optimized search terms."
+            },
+            "right": {
+              "emoji": "📦",
+              "tag": "Assemble Stage",
+              "text": "Combines the best retrieved facts with the original query into a structured prompt."
+            }
+          }
+        }
+      ]
+    },
+    {
+      "type": "practice",
+      "exercises": [
+        {
+          "id": "p1",
+          "type": "multiple_choice",
+          "xp": 2,
+          "prompt": "What is the primary purpose of the 'Rewrite' stage in the query-time pipeline?",
+          "options": [
+            {
+              "id": "opt_mc1_1",
+              "text": "Reranking the final search results",
+              "correct": false
+            },
+            {
+              "id": "opt_mc1_2",
+              "text": "Generating the final text response",
+              "correct": false
+            },
+            {
+              "id": "opt_mc1_3",
+              "text": "Rewriting the user's query to improve search terms",
+              "correct": true
+            },
+            {
+              "id": "opt_mc1_4",
+              "text": "Structuring the final prompt template",
+              "correct": false
+            }
+          ],
+          "explain": "Query rewriting takes the user's raw input and improves it (e.g., resolving synonyms or pronouns) so that the search database can find better matches."
+        },
+        {
+          "id": "p2",
+          "type": "true_false",
+          "xp": 2,
+          "prompt": "True or False: The reranking stage is skipped because sorting candidate documents has no impact on the LLM's final response quality.",
+          "options": [
+            {
+              "id": "opt_tf_1",
+              "text": "True",
+              "correct": false
+            },
+            {
+              "id": "opt_tf_2",
+              "text": "False",
+              "correct": true
+            }
+          ],
+          "explain": "Reranking is a crucial step that sorts the retrieved documents so the most relevant ones are positioned optimally for the LLM."
+        },
+        {
+          "id": "p3",
+          "type": "fill_blank",
+          "xp": 2,
+          "prompt": "Fill in the missing step of the pipeline: Retrieve -> ______ -> Assemble.",
+          "sentence": "After we retrieve candidates, we must rerank them to ensure the most relevant documents are sent to the LLM.",
+          "blank": "rerank",
+          "words": [
+            "rerank",
+            "delete",
+            "translate"
+          ],
+          "explain": "We retrieve a broader set of candidate documents first, then rerank them using a more accurate but slower model to ensure the absolute best context is placed at the top."
+        },
+        {
+          "id": "p4",
+          "type": "spot_the_ai",
+          "xp": 2,
+          "prompt": "Identify which explanation of query rewriting was generated by an AI.",
+          "options": [
+            {
+              "id": "opt_sai_1",
+              "text": "Think of query rewriting like polishing a dusty lens before taking a photo; it clears up the picture so the search engine knows exactly what to look for.",
+              "correct": false
+            },
+            {
+              "id": "opt_sai_2",
+              "text": "Query reformulation optimizes informational retrieval protocols utilizing systemized query expansion methodologies.",
+              "correct": true
+            },
+            {
+              "id": "opt_sai_3",
+              "text": "If someone asks 'Who is he?', the rewrite stage updates 'he' to the actual name discussed earlier.",
+              "correct": false
+            }
+          ],
+          "explain": "Option B is clearly written by an AI because it uses robotic, generic filler text and reads like a dry dictionary definition rather than a helpful explanation."
+        }
+      ]
+    },
+    {
+      "type": "boss",
+      "exercises": [
+        {
+          "id": "b1",
+          "type": "multiple_choice",
+          "xp": 5,
+          "prompt": "Imagine a user asks your AI app a complex question. What is the correct chronological sequence of stages this query goes through in a modern retrieval-augmented generation (RAG) pipeline?",
+          "options": [
+            {
+              "id": "opt_b1",
+              "text": "Retrieve -> Rewrite -> Assemble -> Rerank -> Generate",
+              "correct": false
+            },
+            {
+              "id": "opt_b2",
+              "text": "Rewrite -> Retrieve -> Rerank -> Assemble -> Generate",
+              "correct": true
+            },
+            {
+              "id": "opt_b3",
+              "text": "Assemble -> Retrieve -> Rerank -> Rewrite -> Generate",
+              "correct": false
+            },
+            {
+              "id": "opt_b4",
+              "text": "Rewrite -> Rerank -> Retrieve -> Assemble -> Generate",
+              "correct": false
+            }
+          ],
+          "explain": "The pipeline follows a logical funnel: first rewrite the query for clarity, retrieve a broad list of candidates, rerank to find the absolute best matches, assemble the context, and finally generate the answer. Reranking happens after initial retrieval because sorting millions of documents with a heavy model is too slow; we do it only on the top candidate subset."
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,222 @@
+{
+  "id": "u475-l2",
+  "unit": 475,
+  "day": 2377,
+  "tier": "LLM Application Engineering",
+  "tierIcon": "🔌",
+  "title": "Parallelizing Pipeline Stages",
+  "icon": "🔀",
+  "concept": "Running independent retrieval sources concurrently instead of sequentially to cut end-to-end latency.",
+  "xp": 15,
+  "hearts": 3,
+  "estMinutes": 7,
+  "segments": [
+    {
+      "type": "warmup",
+      "exercises": [
+        {
+          "id": "w1",
+          "type": "multiple_choice",
+          "xp": 1,
+          "prompt": "Based on our breakdown of the RAG latency budget, which two stages typically consume the largest chunk of time?",
+          "options": [
+            {
+              "id": "w1",
+              "text": "Generating the user's initial query template.",
+              "correct": false
+            },
+            {
+              "id": "w2",
+              "text": "Document retrieval and LLM generation.",
+              "correct": true
+            },
+            {
+              "id": "w3",
+              "text": "Converting the final output string to uppercase.",
+              "correct": false
+            }
+          ],
+          "explain": "Retrieval and LLM generation typically consume the vast majority of a RAG pipeline's time budget because they involve database searches and complex text generation."
+        }
+      ]
+    },
+    {
+      "type": "teach",
+      "cards": [
+        {
+          "kind": "hook",
+          "icon": "⏳",
+          "title": "The Sequential Trap",
+          "body": "When you build a RAG pipeline, you often search multiple sources: local vectors, web search APIs, and internal databases. If you search them one after the other, your users will get tired of waiting. Let's speed things up!"
+        },
+        {
+          "kind": "definition",
+          "icon": "⚡",
+          "title": "Parallel Retrieval",
+          "body": "Parallel retrieval means launching multiple independent search queries at the exact same time using asynchronous programming. Instead of waiting for one search to finish before starting the next, we let them run concurrently to save time."
+        },
+        {
+          "kind": "analogy",
+          "icon": "🚴",
+          "title": "The Twin Delivery Drivers",
+          "body": "Imagine ordering dinner from two different restaurants. If you drive to the first, wait for the food, come home, and then drive to the second, it takes forever. Ordering both via two delivery drivers at the same time gets dinner on your table twice as fast!"
+        },
+        {
+          "kind": "example",
+          "icon": "💻",
+          "title": "Code in Action",
+          "body": "A customer support bot needs to search both a product manual database and a user history database. By using Python's asyncio to trigger both database queries at once, the system fetches all data in 150ms instead of 300ms."
+        },
+        {
+          "kind": "mythbust",
+          "icon": "🛡️",
+          "title": "Parallelism is for Everyone",
+          "body": "You might think running tasks in parallel requires buying expensive new servers. In reality, retrieval is mostly waiting on network databases, so a single server can easily handle multiple simultaneous requests without breaking a sweat."
+        },
+        {
+          "kind": "visual",
+          "icon": "📊",
+          "title": "Sequential vs. Parallel Time",
+          "body": "Compare how time is spent when fetching from two separate databases (A and B). Sequential stacks them; Parallel overlaps them.",
+          "compare": {
+            "left": {
+              "emoji": "⛓️",
+              "tag": "Sequential",
+              "text": "Search A (200ms) + Search B (200ms) = 400ms total wait time."
+            },
+            "right": {
+              "emoji": "🔀",
+              "tag": "Parallel",
+              "text": "Search A (200ms) & Search B (200ms) start together = 200ms total wait time."
+            }
+          }
+        }
+      ]
+    },
+    {
+      "type": "practice",
+      "exercises": [
+        {
+          "id": "p1",
+          "type": "multiple_choice",
+          "xp": 2,
+          "prompt": "If you have two independent database lookups that take 100ms and 200ms, how long does it take to get results from both if they are run in parallel?",
+          "options": [
+            {
+              "id": "mc1",
+              "text": "300ms, because the tasks still take the same total CPU cycles.",
+              "correct": false
+            },
+            {
+              "id": "mc2",
+              "text": "200ms, because both tasks run at the same time and we only wait for the longest one.",
+              "correct": true
+            },
+            {
+              "id": "mc3",
+              "text": "100ms, because the faster task cancels out the slower task.",
+              "correct": false
+            },
+            {
+              "id": "mc4",
+              "text": "150ms, which is the average of the two runtimes.",
+              "correct": false
+            }
+          ],
+          "explain": "In a sequential pipeline, the time of each step adds up (100 + 200 = 300ms). In a parallel pipeline, you only wait for the slowest task to finish (200ms)."
+        },
+        {
+          "id": "p2",
+          "type": "true_false",
+          "xp": 2,
+          "prompt": "True or False: You can parallelize every single stage of a RAG pipeline, including running the LLM generation before the retrieval step finishes.",
+          "options": [
+            {
+              "id": "t1",
+              "text": "True",
+              "correct": false
+            },
+            {
+              "id": "f1",
+              "text": "False",
+              "correct": true
+            }
+          ],
+          "explain": "You cannot run dependent steps in parallel because one step needs the output of the previous step to start (e.g., you must get the retrieved text before you can rerank it)."
+        },
+        {
+          "id": "p3",
+          "type": "fill_blank",
+          "xp": 2,
+          "prompt": "Fill in the blank to complete the rule of latency optimization:",
+          "sentence": "To reduce the time users spend waiting, run independent search queries in parallel rather than one after another.",
+          "blank": "parallel",
+          "words": [
+            "parallel",
+            "sequence",
+            "reverse"
+          ],
+          "explain": "Running tasks in parallel means they happen at the same time, which prevents the slow parts from stacking their waiting times on top of each other."
+        },
+        {
+          "id": "p4",
+          "type": "spot_the_ai",
+          "xp": 2,
+          "prompt": "Which of the following designs represents a correct parallelized retrieval flow?",
+          "options": [
+            {
+              "id": "sai1",
+              "text": "Query the vector database, wait for the results, send them to the LLM, and display the answer to the user.",
+              "correct": false
+            },
+            {
+              "id": "sai2",
+              "text": "Generate the final answer at the exact same time you start retrieving the documents from the database.",
+              "correct": false
+            },
+            {
+              "id": "sai3",
+              "text": "Kick off queries to the vector database and the web search API at the same time, merge the results, and then generate the answer.",
+              "correct": true
+            }
+          ],
+          "explain": "Option B is a typical AI hallucination or poor configuration because it attempts to run sequential steps (retrieval and generation) in parallel, which is impossible since generation requires the retrieved documents to start. Option C correctly parallelizes the independent retrieval sources first before passing them to the generator."
+        }
+      ]
+    },
+    {
+      "type": "boss",
+      "exercises": [
+        {
+          "id": "b1",
+          "type": "multiple_choice",
+          "xp": 5,
+          "prompt": "Your RAG pipeline needs to retrieve matching documents from three different vector databases (Docs, Wikis, and FAQs) which take 300ms, 150ms, and 200ms respectively. If you parallelize these three retrieval tasks, what is the new total time spent on this retrieval stage?",
+          "options": [
+            {
+              "id": "b1",
+              "text": "It will still take 650ms because all databases must finish.",
+              "correct": false
+            },
+            {
+              "id": "b2",
+              "text": "It will take 150ms because it optimizes for the fastest database.",
+              "correct": false
+            },
+            {
+              "id": "b3",
+              "text": "It will take 300ms because the tasks run at the same time.",
+              "correct": true
+            },
+            {
+              "id": "b4",
+              "text": "It will take 0ms because parallel requests bypass the search latency.",
+              "correct": false
+            }
+          ],
+          "explain": "By querying all three vector databases at the exact same time (in parallel) instead of waiting for each to finish one after the other (sequentially), the total time spent waiting for retrieval drops from the sum of all three (300ms + 150ms + 200ms = 650ms) to just the duration of the slowest single branch (300ms). This cuts the retrieval step's latency by more than half!"
+        }
+      ]
+    }
+  ]
+}

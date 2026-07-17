@@ -1,0 +1,222 @@
+{
+  "id": "u473-l5",
+  "unit": 473,
+  "day": 2370,
+  "tier": "LLM Application Engineering",
+  "tierIcon": "🔌",
+  "title": "Building a RAG Evaluation Dataset",
+  "icon": "🗂️",
+  "concept": "Curating question-context-answer triples that represent real user queries for repeatable regression testing.",
+  "xp": 15,
+  "hearts": 3,
+  "estMinutes": 7,
+  "segments": [
+    {
+      "type": "warmup",
+      "exercises": [
+        {
+          "id": "w1",
+          "type": "multiple_choice",
+          "xp": 1,
+          "prompt": "In the last lesson, we learned about automated frameworks like RAGAS. How do these frameworks evaluate a RAG system?",
+          "options": [
+            {
+              "id": "opt_w_1",
+              "text": "It requires manual human grading for every single query in real time.",
+              "correct": false
+            },
+            {
+              "id": "opt_w_2",
+              "text": "It uses an LLM-as-a-judge to programmatically score metrics like faithfulness and relevance.",
+              "correct": true
+            },
+            {
+              "id": "opt_w_3",
+              "text": "It completely replaces the vector database with a relational database.",
+              "correct": false
+            }
+          ],
+          "explain": "RAGAS uses automated LLM judges to calculate specific metrics like faithfulness (is the answer based on context?) and context precision (was the right info retrieved?) without needing manual human scoring for every run."
+        }
+      ]
+    },
+    {
+      "type": "teach",
+      "cards": [
+        {
+          "kind": "hook",
+          "icon": "🎯",
+          "title": "Why Guessing Fails",
+          "body": "When you tweak your RAG system's chunk size or retrieval algorithm, how do you know if you made it better or worse? You can't just guess—you need a fixed, high-quality test suite to run every time you change your code."
+        },
+        {
+          "kind": "definition",
+          "icon": "📁",
+          "title": "What is an Eval Dataset?",
+          "body": "An evaluation dataset is a curated collection of question-context-answer triples (often called 'golden datasets'). These represent real-world user queries and are used for repeatable regression testing to ensure system updates do not hurt response quality."
+        },
+        {
+          "kind": "analogy",
+          "icon": "🔑",
+          "title": "The Exam Key Analogy",
+          "body": "Think of a RAG evaluation dataset like a teacher's test key. You cannot grade a student's reading comprehension fairly unless you have a pre-written list of specific questions, the chapters they must read, and the exact correct answers to grade against."
+        },
+        {
+          "kind": "example",
+          "icon": "💡",
+          "title": "Real-World Triples",
+          "body": "A customer support RAG system uses a golden dataset containing questions like 'How do I refund a purchase?', paired with the exact refund policy text chunk (context) and the ideal response (ground-truth answer)."
+        },
+        {
+          "kind": "mythbust",
+          "icon": "🦖",
+          "title": "Size vs. Quality",
+          "body": "Many developers think they need millions of test cases to start. In reality, starting with 30 to 100 high-quality, hand-curated golden triples is far more effective for catching major regressions than thousands of noisy, auto-generated questions."
+        },
+        {
+          "kind": "visual",
+          "icon": "📊",
+          "title": "Ad-Hoc vs. Golden Dataset",
+          "body": "Compare testing with a random, shifting set of queries versus a structured, permanent evaluation dataset.",
+          "compare": {
+            "left": {
+              "emoji": "🎲",
+              "tag": "Random Testing",
+              "text": "Tests are generated on the fly, making it impossible to compare yesterday's performance with today's."
+            },
+            "right": {
+              "emoji": "📐",
+              "tag": "Golden Dataset",
+              "text": "Consistent, curated test cases run after every code change to measure exact progress."
+            }
+          }
+        }
+      ]
+    },
+    {
+      "type": "practice",
+      "exercises": [
+        {
+          "id": "p1",
+          "type": "multiple_choice",
+          "xp": 2,
+          "prompt": "Which of the following best describes the core components of a RAG evaluation dataset?",
+          "options": [
+            {
+              "id": "opt_1",
+              "text": "Just raw PDF documents with no questions.",
+              "correct": false
+            },
+            {
+              "id": "opt_2",
+              "text": "Triples of questions, source contexts, and ground-truth answers.",
+              "correct": true
+            },
+            {
+              "id": "opt_3",
+              "text": "A list of user names and their login times.",
+              "correct": false
+            },
+            {
+              "id": "opt_4",
+              "text": "Random web search queries scraped from public search engines.",
+              "correct": false
+            }
+          ],
+          "explain": "Question-context-answer triples (or golden triples) capture the input, the source knowledge, and the expected output, allowing you to isolate whether retrieval or generation failed."
+        },
+        {
+          "id": "p2",
+          "type": "true_false",
+          "xp": 2,
+          "prompt": "True or False: Using a fixed, curated evaluation dataset allows you to run repeatable regression tests whenever you update your RAG pipeline.",
+          "options": [
+            {
+              "id": "opt_true",
+              "text": "True",
+              "correct": true
+            },
+            {
+              "id": "opt_false",
+              "text": "False",
+              "correct": false
+            }
+          ],
+          "explain": "Regression testing relies on comparing system outputs against a stable, unchanging benchmark (the evaluation dataset) to verify that performance hasn't got worse."
+        },
+        {
+          "id": "p3",
+          "type": "fill_blank",
+          "xp": 2,
+          "prompt": "Fill in the missing term that represents a curated set of reference questions and answers:",
+          "sentence": "To perform reliable regression testing on our RAG system, we need to build a high-quality golden dataset.",
+          "blank": "golden dataset",
+          "words": [
+            "golden dataset",
+            "random sample",
+            "vector index"
+          ],
+          "explain": "A golden dataset is the standard term for a curated, high-quality set of ground-truth test cases used to evaluate machine learning and RAG systems."
+        },
+        {
+          "id": "p4",
+          "type": "spot_the_ai",
+          "xp": 2,
+          "prompt": "Identify the synthetic, AI-generated test triple that lacks the natural variation and concrete detail of a human-curated golden test case:",
+          "options": [
+            {
+              "id": "opt_1",
+              "text": "Q: 'How do I reset my password?' | C: 'Click the Forgot Password link on the login screen.' | A: 'Users should click the Forgot Password link on the login page.'",
+              "correct": false
+            },
+            {
+              "id": "opt_2",
+              "text": "Q: 'Query regarding user action 492' | C: '[Insert Context Here] System protocol dictates standard operational procedure.' | A: 'The user should follow the designated protocol described in the manual.'",
+              "correct": true
+            },
+            {
+              "id": "opt_3",
+              "text": "Q: 'What is the maximum baggage weight?' | C: 'Checked bags must weigh under 50 lbs.' | A: 'The maximum weight allowed for checked baggage is 50 lbs.'",
+              "correct": false
+            }
+          ],
+          "explain": "The second option is generated by an LLM, characterized by overly verbose phrasing, generic structure, and synthetic placeholder markers like '[Insert Context Here]'. The other options represent clean, human-curated target data."
+        }
+      ]
+    },
+    {
+      "type": "boss",
+      "exercises": [
+        {
+          "id": "b1",
+          "type": "multiple_choice",
+          "xp": 5,
+          "prompt": "You want to ensure that updating your vector database settings doesn't accidentally break your customer support chatbot. What is the most reliable way to set up repeatable testing for this?",
+          "options": [
+            {
+              "id": "opt_boss_1",
+              "text": "Compile a curated set of question-context-answer triples representing real user patterns.",
+              "correct": true
+            },
+            {
+              "id": "opt_boss_2",
+              "text": "Use a random generator to create 10,000 synthetic questions without any ground-truth answers.",
+              "correct": false
+            },
+            {
+              "id": "opt_boss_3",
+              "text": "Manually read and score every single live user query in real time during production.",
+              "correct": false
+            },
+            {
+              "id": "opt_boss_4",
+              "text": "Scrape the entire internet to find general knowledge trivia questions.",
+              "correct": false
+            }
+          ],
+          "explain": "A golden evaluation dataset should contain diverse, realistic queries, the specific target context chunks that contain the answer, and the ground-truth answers. Evaluating on these triples ensures that future system updates do not break performance on known, critical user needs."
+        }
+      ]
+    }
+  ]
+}

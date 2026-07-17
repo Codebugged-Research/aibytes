@@ -1,0 +1,222 @@
+{
+  "id": "u421-l3",
+  "unit": 421,
+  "day": 2108,
+  "tier": "LLM Application Engineering",
+  "tierIcon": "🔌",
+  "title": "Diversity-Aware Selection",
+  "icon": "🧩",
+  "concept": "Avoiding a context window filled with five near-identical high-scoring chunks that add little new information.",
+  "xp": 15,
+  "hearts": 3,
+  "estMinutes": 7,
+  "segments": [
+    {
+      "type": "warmup",
+      "exercises": [
+        {
+          "id": "w1",
+          "type": "multiple_choice",
+          "xp": 1,
+          "prompt": "In the previous lesson, greedy selection under a budget worked by...",
+          "options": [
+            {
+              "id": "a",
+              "text": "Filling the token budget with the highest-value chunks first, like packing a knapsack",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "Randomly shuffling chunks until the budget was full",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "Selecting only the single most relevant chunk and ignoring the rest of the budget",
+              "correct": false
+            }
+          ],
+          "explain": "Greedy selection under a budget works like packing a knapsack: you sort chunks by value (relevance) and keep adding the best ones until you run out of token budget. Today we'll see a wrinkle that pure greedy selection misses."
+        }
+      ]
+    },
+    {
+      "type": "teach",
+      "cards": [
+        {
+          "kind": "hook",
+          "icon": "🪞",
+          "title": "Five Mirrors, One Reflection",
+          "body": "You give the AI a 5-chunk context window. But all 5 chunks say almost the exact same sentence in slightly different words. The AI just read one idea five times — and missed everything else it could have known."
+        },
+        {
+          "kind": "definition",
+          "icon": "📐",
+          "title": "What Is Diversity-Aware Selection?",
+          "body": "It's a selection strategy that picks chunks which are both relevant AND different from each other, instead of just picking the single highest-scoring chunks over and over. The goal: cover more ground, not repeat the same point five times."
+        },
+        {
+          "kind": "analogy",
+          "icon": "🎤",
+          "title": "Five Copies of the Same Answer",
+          "body": "Imagine asking five friends for restaurant advice, but they all just repeat the exact same recommendation. You didn't get five opinions — you got one opinion, five times. Diversity-aware selection makes sure your 'friends' (chunks) actually say different things."
+        },
+        {
+          "kind": "example",
+          "icon": "📚",
+          "title": "Research Question Example",
+          "body": "A user asks 'What causes climate change?' The top 5 chunks by score are all near-identical paragraphs about CO2 emissions from one article. A diversity-aware selector would swap 2-3 of those for chunks about methane, deforestation, or ocean warming — still relevant, but adding new information instead of repeating."
+        },
+        {
+          "kind": "mythbust",
+          "icon": "🚫",
+          "title": "Myth: Highest Score Always Wins",
+          "body": "Myth: 'Just take the top-N highest-scoring chunks and you're done.' Truth: if the top-N are near-duplicates (common when a document repeats itself or many docs cover the same fact), you waste your budget. Smart systems check similarity between chunks, not just similarity to the query."
+        },
+        {
+          "kind": "visual",
+          "icon": "🎯",
+          "title": "Score-Only vs Diversity-Aware",
+          "body": "Score-only selection picks whatever ranks highest, even if they're clones of each other. Diversity-aware selection actively checks 'does this chunk add something NEW?' before including it.",
+          "compare": {
+            "left": {
+              "emoji": "📄📄📄📄📄",
+              "tag": "Score-Only Selection",
+              "text": "5 chunks, all near-identical paragraphs about the same single fact — lots of tokens, little new info"
+            },
+            "right": {
+              "emoji": "📄🔬🌍💧🔥",
+              "tag": "Diversity-Aware Selection",
+              "text": "5 chunks covering different angles: the core fact plus related causes, effects, and context"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "type": "practice",
+      "exercises": [
+        {
+          "id": "p1",
+          "type": "multiple_choice",
+          "xp": 2,
+          "prompt": "Why is a context window of 5 near-identical high-scoring chunks a problem?",
+          "options": [
+            {
+              "id": "a",
+              "text": "It uses up budget without adding much new information for the LLM",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "It makes the LLM's response too short",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "It causes the embedding model to crash",
+              "correct": false
+            },
+            {
+              "id": "d",
+              "text": "It always violates the token budget limit",
+              "correct": false
+            }
+          ],
+          "explain": "Near-identical chunks each cost tokens but barely add new content beyond what the first chunk already said. You're spending your limited context budget on repetition instead of coverage."
+        },
+        {
+          "id": "p2",
+          "type": "true_false",
+          "xp": 2,
+          "prompt": "True or False: Diversity-aware selection means you should always avoid picking the highest-scoring chunks.",
+          "options": [
+            {
+              "id": "a",
+              "text": "True",
+              "correct": false
+            },
+            {
+              "id": "b",
+              "text": "False",
+              "correct": true
+            }
+          ],
+          "explain": "False. Diversity-aware selection still values relevance — it just avoids picking multiple chunks that are all saying nearly the same thing. High-scoring chunks are still picked, but redundant ones among them get swapped for chunks that add new angles."
+        },
+        {
+          "id": "p3",
+          "type": "fill_blank",
+          "xp": 2,
+          "prompt": "Fill in the blank:",
+          "sentence": "If the top 5 chunks are all near-duplicates, diversity-aware selection swaps some out for chunks that add new information instead of just being relevant.",
+          "blank": "near-duplicates",
+          "words": [
+            "near-duplicates",
+            "random noise",
+            "empty strings"
+          ],
+          "explain": "The core problem diversity-aware selection solves is near-duplicate chunks — text that says the same thing in different words — crowding out useful, different information."
+        },
+        {
+          "id": "p4",
+          "type": "spot_the_ai",
+          "xp": 2,
+          "prompt": "Which of these three retrieval strategies is most likely AI-generated marketing copy (vague, buzzword-heavy, lacking real technical substance) rather than a genuine technical explanation?",
+          "options": [
+            {
+              "id": "a",
+              "text": "Our revolutionary AI-powered synergy engine intelligently curates hyper-relevant insights to unlock unprecedented contextual excellence for your enterprise.",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "We compute pairwise similarity between candidate chunks and penalize ones too similar to already-selected chunks, favoring variety.",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "We cap how many chunks can come from the same source document to avoid redundant duplicates in the context window.",
+              "correct": false
+            }
+          ],
+          "explain": "Option A is full of vague buzzwords ('synergy engine', 'unprecedented contextual excellence') with zero concrete mechanism explained — a hallmark of AI-generated filler copy. Options B and C describe specific, implementable techniques (similarity penalties, per-source caps), which is how real engineers talk."
+        }
+      ]
+    },
+    {
+      "type": "boss",
+      "exercises": [
+        {
+          "id": "b1",
+          "type": "multiple_choice",
+          "xp": 5,
+          "prompt": "A user asks 'How do I reset my password?' Your retriever returns 10 chunks. The top 5 are all near-duplicate paragraphs from the same FAQ page scoring 0.95-0.97 relevance. Chunks 6-8 (score 0.80-0.85) cover related but distinct topics: two-factor auth setup, account lockout, and security questions. What's the smartest context window to build with a 5-chunk budget?",
+          "options": [
+            {
+              "id": "a",
+              "text": "All 5 of the top-scoring near-duplicate chunks, since they scored highest",
+              "correct": false
+            },
+            {
+              "id": "b",
+              "text": "A mix: 2-3 of the top near-duplicates plus 2-3 of the diverse related chunks",
+              "correct": true
+            },
+            {
+              "id": "c",
+              "text": "Only chunk 1, since it alone should be enough",
+              "correct": false
+            },
+            {
+              "id": "d",
+              "text": "The 5 lowest-scoring chunks, to guarantee variety",
+              "correct": false
+            }
+          ],
+          "explain": "Greedy-by-score-alone would grab all 5 duplicates and waste your whole budget saying the same thing five times. But diversity-aware selection isn't 'ignore relevance' either — you still want the truly relevant top chunks. The smart move balances both: keep a couple of the strong duplicates (they ARE the core answer) but swap remaining slots for chunks that cover different, still-relevant angles (2FA, lockouts, security questions). That way your context window is both relevant AND informative, giving the LLM more useful ground to answer follow-up questions or edge cases. This wraps up Relevance-Based Prioritization — next you'll build on both budget-aware and diversity-aware selection together in real pipelines."
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,222 @@
+{
+  "id": "u474-l2",
+  "unit": 474,
+  "day": 2372,
+  "tier": "LLM Application Engineering",
+  "tierIcon": "🔌",
+  "title": "Retrieval Failure: Nothing Relevant Found",
+  "icon": "📭",
+  "concept": "Diagnosing whether the failure is a chunking problem, an embedding mismatch, or a genuine gap in the corpus.",
+  "xp": 15,
+  "hearts": 3,
+  "estMinutes": 7,
+  "segments": [
+    {
+      "type": "warmup",
+      "exercises": [
+        {
+          "id": "w1",
+          "type": "multiple_choice",
+          "xp": 1,
+          "prompt": "If your system fetches completely irrelevant documents before the LLM even reads them, which type of RAG failure has occurred?",
+          "options": [
+            {
+              "id": "w1",
+              "text": "Retrieval failure",
+              "correct": true
+            },
+            {
+              "id": "w2",
+              "text": "Generation failure",
+              "correct": false
+            },
+            {
+              "id": "w3",
+              "text": "Ranking failure",
+              "correct": false
+            }
+          ],
+          "explain": "Retrieval failures happen in the early stage of the RAG pipeline when the search engine fails to pull the correct documents from the database."
+        }
+      ]
+    },
+    {
+      "type": "teach",
+      "cards": [
+        {
+          "kind": "hook",
+          "icon": "🕵️",
+          "title": "Garbage In, Garbage Out",
+          "body": "Even the smartest LLM cannot answer a question if it is fed the wrong information. When your RAG system starts hallucinating or saying 'I don't know,' the culprit is often a silent failure in how we search for data."
+        },
+        {
+          "kind": "definition",
+          "icon": "🔍",
+          "title": "Retrieval Failure",
+          "body": "A retrieval failure happens when the system fails to fetch relevant context from the database. This is usually caused by bad chunking (slicing text too small or large), embedding mismatch (the query and documents don't align mathematically), or a corpus gap (the data isn't in the database)."
+        },
+        {
+          "kind": "analogy",
+          "icon": "📖",
+          "title": "The Cookbook Search",
+          "body": "Imagine looking for a recipe in a cookbook. If the pages are torn in half (poor chunking), the index uses French but the chapters are in English (embedding mismatch), or the book has no dessert section at all (corpus gap), you'll never find the cake recipe."
+        },
+        {
+          "kind": "example",
+          "icon": "💡",
+          "title": "A Real-world Missing File",
+          "body": "If a user asks 'How do I reset my account password?' and the system retrieves documents about marketing emails, this is a retrieval failure. Inspecting the database reveals the password reset guide was never uploaded, which is a classic corpus gap."
+        },
+        {
+          "kind": "mythbust",
+          "icon": "🚫",
+          "title": "The LLM Can't Fix Bad Data",
+          "body": "Many believe that upgrading to a bigger LLM will fix poor search results. In reality, if your retriever fetches irrelevant documents, even the most powerful LLM will generate incorrect or useless answers based on that bad context."
+        },
+        {
+          "kind": "visual",
+          "icon": "📊",
+          "title": "Mismatch vs. Gap",
+          "body": "Let's look at the difference between having the wrong search tool and simply not having the book on the shelf.",
+          "compare": {
+            "left": {
+              "emoji": "🧩",
+              "tag": "Embedding Mismatch",
+              "text": "The document exists, but your search query uses a different math model so it can't find it."
+            },
+            "right": {
+              "emoji": "🕳️",
+              "tag": "Corpus Gap",
+              "text": "The document was never uploaded to the database, so it is physically impossible to find."
+            }
+          }
+        }
+      ]
+    },
+    {
+      "type": "practice",
+      "exercises": [
+        {
+          "id": "p1",
+          "type": "multiple_choice",
+          "xp": 2,
+          "prompt": "Which issue occurs when documents are sliced into pieces so small that they lose their original context?",
+          "options": [
+            {
+              "id": "q1",
+              "text": "Corpus Gap",
+              "correct": false
+            },
+            {
+              "id": "q2",
+              "text": "Poor Chunking",
+              "correct": true
+            },
+            {
+              "id": "q3",
+              "text": "Prompt Injection",
+              "correct": false
+            },
+            {
+              "id": "q4",
+              "text": "LLM Hallucination",
+              "correct": false
+            }
+          ],
+          "explain": "When text is sliced into tiny sentences without context, the semantic search tool loses the core meaning of the document, leading to poor matches."
+        },
+        {
+          "id": "p2",
+          "type": "true_false",
+          "xp": 2,
+          "prompt": "True or False: If your database has a corpus gap, changing your search algorithm will solve the retrieval failure.",
+          "options": [
+            {
+              "id": "t1",
+              "text": "True",
+              "correct": false
+            },
+            {
+              "id": "t2",
+              "text": "False",
+              "correct": true
+            }
+          ],
+          "explain": "A corpus gap means the source information was never written or uploaded to the database in the first place, so no search algorithm can ever find it."
+        },
+        {
+          "id": "p3",
+          "type": "fill_blank",
+          "xp": 2,
+          "prompt": "Fill in the missing term to describe a mismatch in vector representations:",
+          "sentence": "Using different models for your search queries and database documents results in an embedding mismatch.",
+          "blank": "embedding mismatch",
+          "words": [
+            "embedding mismatch",
+            "corpus gap",
+            "chunking error"
+          ],
+          "explain": "An embedding mismatch occurs when the search query and the stored documents are processed by different algorithms, making them impossible to match correctly."
+        },
+        {
+          "id": "p4",
+          "type": "spot_the_ai",
+          "xp": 2,
+          "prompt": "A user asks: 'What is the refund policy for winter coats?' Which response indicates a retrieval failure?",
+          "options": [
+            {
+              "id": "sa1",
+              "text": "'Winter coats can be returned within 30 days of purchase for a full refund.'",
+              "correct": false
+            },
+            {
+              "id": "sa2",
+              "text": "'I am sorry, but I do not have access to the specific return policy for winter coats in the provided documents.'",
+              "correct": true
+            },
+            {
+              "id": "sa3",
+              "text": "'Our winter coats are made of waterproof materials and designed to keep you warm.'",
+              "correct": false
+            }
+          ],
+          "explain": "Option B represents an AI-generated attempt to bypass the question because the retriever failed to supply the necessary context document about the refund policy."
+        }
+      ]
+    },
+    {
+      "type": "boss",
+      "exercises": [
+        {
+          "id": "b1",
+          "type": "multiple_choice",
+          "xp": 5,
+          "prompt": "When debugging a RAG system that retrieves completely irrelevant chunks, what is the very first logical step you should take to isolate the root cause?",
+          "options": [
+            {
+              "id": "b1",
+              "text": "Switch immediately to a larger, more expensive LLM generator",
+              "correct": false
+            },
+            {
+              "id": "b2",
+              "text": "Verify if the required information actually exists in your raw document corpus",
+              "correct": true
+            },
+            {
+              "id": "b3",
+              "text": "Increase the top-k parameter to retrieve 100 chunks instead of 5",
+              "correct": false
+            },
+            {
+              "id": "b4",
+              "text": "Write a prompt instructing the LLM to guess the missing information",
+              "correct": false
+            }
+          ],
+          "explain": "Analyzing your document store's coverage directly helps you determine if the information is completely missing (a corpus gap). If the information exists but isn't found, you then investigate chunking size or embedding model alignment."
+        }
+      ]
+    }
+  ]
+}

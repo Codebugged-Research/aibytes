@@ -1,0 +1,222 @@
+{
+  "id": "u460-l2",
+  "unit": 460,
+  "day": 2302,
+  "tier": "LLM Application Engineering",
+  "tierIcon": "🔌",
+  "title": "Iterative Retrieval Loops",
+  "icon": "🔄",
+  "concept": "Retrieve, evaluate sufficiency, and retrieve again with a refined query if the first pass wasn't enough.",
+  "xp": 15,
+  "hearts": 3,
+  "estMinutes": 7,
+  "segments": [
+    {
+      "type": "warmup",
+      "exercises": [
+        {
+          "id": "w1",
+          "type": "multiple_choice",
+          "xp": 1,
+          "prompt": "In the previous lesson, we learned about 'Retrieval as a Tool'. What does this mean in practice?",
+          "options": [
+            {
+              "id": "w1",
+              "text": "It forces the database to search itself automatically every hour.",
+              "correct": false
+            },
+            {
+              "id": "w2",
+              "text": "It lets the LLM call the search tool dynamically when it needs data.",
+              "correct": true
+            },
+            {
+              "id": "w3",
+              "text": "It completely replaces the LLM with a traditional database search engine.",
+              "correct": false
+            }
+          ],
+          "explain": "Instead of hardcoding a search before the LLM runs, agentic RAG treats retrieval as a tool that the model decides to invoke only when it determines it needs external information."
+        }
+      ]
+    },
+    {
+      "type": "teach",
+      "cards": [
+        {
+          "kind": "hook",
+          "icon": "🎣",
+          "title": "Beyond the Single Shot",
+          "body": "In standard RAG, the system does a single search and hopes for the best. But what if the search results leave out the most crucial piece of the puzzle? By giving an agent the power to search, check its notes, and search again, we ensure it never has to guess the ending."
+        },
+        {
+          "kind": "definition",
+          "icon": "🔄",
+          "title": "Iterative Retrieval Loop",
+          "body": "An Iterative Retrieval Loop is a pattern where an agent queries a database, evaluates if the retrieved information is enough to answer the prompt, and if not, writes a new query to search again."
+        },
+        {
+          "kind": "analogy",
+          "icon": "🔍",
+          "title": "The Kitchen Pantry Search",
+          "body": "Think of it like cooking a complex recipe. If you open the pantry and can't find all your ingredients on the first try, you don't just give up; you look again, checking different shelves or searching for substitutes until you have what you need."
+        },
+        {
+          "kind": "example",
+          "icon": "💡",
+          "title": "Analyzing Competitor Policies",
+          "body": "A customer asks: 'How does our return policy compare to competitor X?' The agent first searches for its own return policy. Realizing it lacks competitor X's policy, it loops back to search specifically for 'Competitor X return policy' before answering."
+        },
+        {
+          "kind": "mythbust",
+          "icon": "🛡️",
+          "title": "The 'More is Better' Fallacy",
+          "body": "You might think searching multiple times is wasteful. However, doing a few targeted, small searches based on previous results is often much faster and cheaper than dumping thousands of irrelevant documents into the model's context window all at once."
+        },
+        {
+          "kind": "visual",
+          "icon": "📊",
+          "title": "Static vs. Iterative Retrieval",
+          "body": "Comparing static, one-shot retrieval with an intelligent, iterative loop.",
+          "compare": {
+            "left": {
+              "emoji": "📥",
+              "tag": "One-Shot RAG",
+              "text": "Search once -> Get results -> Hope they contain the answer."
+            },
+            "right": {
+              "emoji": "🔄",
+              "tag": "Iterative Loop",
+              "text": "Search -> Evaluate -> Search again with a better query if needed."
+            }
+          }
+        }
+      ]
+    },
+    {
+      "type": "practice",
+      "exercises": [
+        {
+          "id": "p1",
+          "type": "multiple_choice",
+          "xp": 2,
+          "prompt": "What does an agent do if its first retrieval pass does not contain enough information to answer a question?",
+          "options": [
+            {
+              "id": "mc1",
+              "text": "It asks the user to rewrite their original query.",
+              "correct": false
+            },
+            {
+              "id": "mc2",
+              "text": "It evaluates the results, identifies missing information, and searches again.",
+              "correct": true
+            },
+            {
+              "id": "mc3",
+              "text": "It stops execution and returns an error message.",
+              "correct": false
+            },
+            {
+              "id": "mc4",
+              "text": "It guesses the missing information using its pre-trained weights.",
+              "correct": false
+            }
+          ],
+          "explain": "Iterative loops allow the agent to inspect the search results and decide if it needs to formulate a new query to fill in missing information."
+        },
+        {
+          "id": "p2",
+          "type": "true_false",
+          "xp": 2,
+          "prompt": "True or False: An iterative retrieval loop must always run exactly three times for every user query.",
+          "options": [
+            {
+              "id": "t1",
+              "text": "True",
+              "correct": false
+            },
+            {
+              "id": "f1",
+              "text": "False",
+              "correct": true
+            }
+          ],
+          "explain": "Iterative loops are dynamic; the agent checks the retrieved context and only searches again if it detects that the current information is insufficient."
+        },
+        {
+          "id": "p3",
+          "type": "fill_blank",
+          "xp": 2,
+          "prompt": "Fill in the missing step in the agent's decision loop.",
+          "sentence": "After retrieving documents, the agent evaluates their sufficiency before answering the user.",
+          "blank": "sufficiency",
+          "words": [
+            "sufficiency",
+            "speed",
+            "formatting"
+          ],
+          "explain": "The agent must evaluate the sufficiency of the retrieved data before deciding whether to end the loop or search again."
+        },
+        {
+          "id": "p4",
+          "type": "spot_the_ai",
+          "xp": 2,
+          "prompt": "Which of the following logs demonstrates an agent running an iterative retrieval loop?",
+          "options": [
+            {
+              "id": "sai1",
+              "text": "'I searched the database for \"Widget price\" and found it is $10. Here is your answer.'",
+              "correct": false
+            },
+            {
+              "id": "sai2",
+              "text": "'Search results for \"Company history\" do not mention the founder's name. I will now search for \"Company founder name\".'",
+              "correct": true
+            },
+            {
+              "id": "sai3",
+              "text": "'Here is the search tool. Please type what you would like me to search next.'",
+              "correct": false
+            }
+          ],
+          "explain": "Option B shows an agentic loop evaluating the information gathered and actively deciding to execute another search tool call to resolve a missing detail."
+        }
+      ]
+    },
+    {
+      "type": "boss",
+      "exercises": [
+        {
+          "id": "b1",
+          "type": "multiple_choice",
+          "xp": 5,
+          "prompt": "An agent is asked: 'Compare the price of Widget A and Widget B.' The first retrieval only returns details about Widget A's features. How does the agent use an iterative retrieval loop to solve this?",
+          "options": [
+            {
+              "id": "b1",
+              "text": "It retrieves a massive amount of documents once to ensure nothing is missed.",
+              "correct": false
+            },
+            {
+              "id": "b2",
+              "text": "It hardcodes a sequence of three searches for every user question.",
+              "correct": false
+            },
+            {
+              "id": "b3",
+              "text": "It evaluates if the retrieved facts are sufficient, and runs a refined query if gaps remain.",
+              "correct": true
+            },
+            {
+              "id": "b4",
+              "text": "It bypasses the LLM and lets the database decide when the answer is complete.",
+              "correct": false
+            }
+          ],
+          "explain": "Iterative retrieval allows the agent to evaluate the gathered facts, realize what is missing (e.g., the price of the product, not just its features), and run a targeted second query to complete the picture before responding."
+        }
+      ]
+    }
+  ]
+}

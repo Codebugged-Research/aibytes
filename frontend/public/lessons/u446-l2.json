@@ -1,0 +1,222 @@
+{
+  "id": "u446-l2",
+  "unit": 446,
+  "day": 2232,
+  "tier": "LLM Application Engineering",
+  "tierIcon": "🔌",
+  "title": "Score Normalization",
+  "icon": "📏",
+  "concept": "Why raw BM25 scores and cosine similarity scores aren't directly comparable, and how to normalize before combining.",
+  "xp": 15,
+  "hearts": 3,
+  "estMinutes": 7,
+  "segments": [
+    {
+      "type": "warmup",
+      "exercises": [
+        {
+          "id": "w1",
+          "type": "multiple_choice",
+          "xp": 1,
+          "prompt": "In our last lesson, we learned that hybrid search combines which two types of retrieval systems?",
+          "options": [
+            {
+              "id": "opt_w1",
+              "text": "Running only keyword search and discarding semantic vectors entirely.",
+              "correct": false
+            },
+            {
+              "id": "opt_w2",
+              "text": "Running both sparse and dense retrieval systems and merging their results.",
+              "correct": true
+            },
+            {
+              "id": "opt_w3",
+              "text": "Using database indexes to speed up SQL queries.",
+              "correct": false
+            }
+          ],
+          "explain": "Hybrid search runs keyword search (sparse) and semantic search (dense) in parallel, then combines the results."
+        }
+      ]
+    },
+    {
+      "type": "teach",
+      "cards": [
+        {
+          "kind": "hook",
+          "icon": "🤔",
+          "title": "Comparing the Incomparable",
+          "body": "We know we need to combine keyword search and vector search to get the best results. But how do we merge their scores when one algorithm outputs '15.4' and the other outputs '0.82'?"
+        },
+        {
+          "kind": "definition",
+          "icon": "🎛️",
+          "title": "What is Score Normalization?",
+          "body": "Score normalization is the process of adjusting search scores from different algorithms (like BM25 and dense vectors) to a shared scale, usually between 0 and 1, so they can be combined fairly."
+        },
+        {
+          "kind": "analogy",
+          "icon": "⚖️",
+          "title": "The Apples and Oranges Rule",
+          "body": "Imagine comparing speed in miles per hour to temperature in Fahrenheit. To add them together fairly, you first need to scale both systems so they range from 0 to 1."
+        },
+        {
+          "kind": "example",
+          "icon": "📝",
+          "title": "Normalizing in Action",
+          "body": "If a document gets a BM25 score of 12.0 out of a maximum of 15.0, and a cosine similarity score of 0.8 out of a maximum of 1.0, we convert both to percentages (80%) before combining them."
+        },
+        {
+          "kind": "mythbust",
+          "icon": "🚫",
+          "title": "The Unbounded Score Trap",
+          "body": "You might think a higher BM25 score always means a better match than a lower cosine score. But BM25 scores are unbounded and depend on document length, meaning a score of 20 isn't automatically 'better' than a cosine score of 0.9."
+        },
+        {
+          "kind": "visual",
+          "icon": "📊",
+          "title": "Raw vs. Normalized",
+          "body": "Raw scores use completely different systems, but normalized scores share the exact same scale, making them easy to mix.",
+          "compare": {
+            "left": {
+              "emoji": "📏",
+              "tag": "Raw Scores",
+              "text": "BM25 = 14.5 (unbounded)\\nCosine = 0.88 (max 1.0)"
+            },
+            "right": {
+              "emoji": "⚖️",
+              "tag": "Normalized",
+              "text": "BM25 = 0.90 (scaled 0-1)\\nCosine = 0.88 (scaled 0-1)"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "type": "practice",
+      "exercises": [
+        {
+          "id": "p1",
+          "type": "multiple_choice",
+          "xp": 2,
+          "prompt": "Why can't we directly add a raw BM25 score to a raw cosine similarity score?",
+          "options": [
+            {
+              "id": "opt_1",
+              "text": "BM25 scores are always negative, while cosine scores are always positive.",
+              "correct": false
+            },
+            {
+              "id": "opt_2",
+              "text": "BM25 scores are unbounded and can go above 10, while cosine similarity is capped at 1.0.",
+              "correct": true
+            },
+            {
+              "id": "opt_3",
+              "text": "Cosine similarity measures term matching, while BM25 measures semantic meaning.",
+              "correct": false
+            },
+            {
+              "id": "opt_4",
+              "text": "BM25 is always more accurate than cosine similarity.",
+              "correct": false
+            }
+          ],
+          "explain": "BM25 scores can grow infinitely large depending on the text length and term frequencies, while cosine similarity is naturally capped between -1 and 1 (often 0 and 1 in search)."
+        },
+        {
+          "id": "p2",
+          "type": "true_false",
+          "xp": 2,
+          "prompt": "True or False: Min-Max normalization maps all scores to a range between 0 and 1.",
+          "options": [
+            {
+              "id": "opt_t1",
+              "text": "True",
+              "correct": true
+            },
+            {
+              "id": "opt_t2",
+              "text": "False",
+              "correct": false
+            }
+          ],
+          "explain": "Min-Max normalization rescales scores so that the lowest score becomes 0 and the highest score becomes 1, ensuring a level playing field."
+        },
+        {
+          "id": "p3",
+          "type": "fill_blank",
+          "xp": 2,
+          "prompt": "Fill in the blank to complete the explanation of score normalization:",
+          "sentence": "Without normalization, we cannot combine search scores because they do not share a common scale.",
+          "blank": "scale",
+          "words": [
+            "scale",
+            "database",
+            "language"
+          ],
+          "explain": "To combine scores, we must bring them to a common scale, typically between 0 and 1."
+        },
+        {
+          "id": "p4",
+          "type": "spot_the_ai",
+          "xp": 2,
+          "prompt": "Which of the following describes the correct approach to merging BM25 and semantic vector scores?",
+          "options": [
+            {
+              "id": "opt_s1",
+              "text": "Just multiply the cosine similarity score by 10 and add it to the BM25 score.",
+              "correct": false
+            },
+            {
+              "id": "opt_s2",
+              "text": "Ignore the BM25 scores and only use cosine similarity to rank the final search results.",
+              "correct": false
+            },
+            {
+              "id": "opt_s3",
+              "text": "Apply min-max normalization to project both the sparse BM25 scores and dense cosine scores into a 0 to 1 range before adding them.",
+              "correct": true
+            }
+          ],
+          "explain": "The third response correctly identifies that min-max scaling solves the scale discrepancy by mapping both sets of scores to a standard 0 to 1 range."
+        }
+      ]
+    },
+    {
+      "type": "boss",
+      "exercises": [
+        {
+          "id": "b1",
+          "type": "multiple_choice",
+          "xp": 5,
+          "prompt": "You are building a hybrid search engine and need to merge a list of BM25 scores (ranging from 0.0 to 18.5) and cosine similarity scores (ranging from 0.4 to 0.9). What is the standard way to apply Min-Max normalization before combining them?",
+          "options": [
+            {
+              "id": "opt_b1",
+              "text": "You add the raw BM25 score directly to the cosine similarity score without changes.",
+              "correct": false
+            },
+            {
+              "id": "opt_b2",
+              "text": "You multiply both scores by 100 to make them larger.",
+              "correct": false
+            },
+            {
+              "id": "opt_b3",
+              "text": "You scale both sets of scores so that their minimum value is 0 and their maximum value is 1.",
+              "correct": true
+            },
+            {
+              "id": "opt_b4",
+              "text": "You discard the BM25 scores entirely because they are too unpredictable.",
+              "correct": false
+            }
+          ],
+          "explain": "Min-max normalization scales both sets of scores to the [0, 1] range. The worst score becomes exactly 0, and the best score becomes exactly 1, allowing for a fair weighted combination."
+        }
+      ]
+    }
+  ]
+}

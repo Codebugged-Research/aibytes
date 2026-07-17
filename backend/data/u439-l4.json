@@ -1,0 +1,222 @@
+{
+  "id": "u439-l4",
+  "unit": 439,
+  "day": 2199,
+  "tier": "LLM Application Engineering",
+  "tierIcon": "🔌",
+  "title": "Index Selection Decision Framework",
+  "icon": "⚖️",
+  "concept": "A practical flowchart: dataset size, update frequency, latency budget, and memory constraints drive the index choice.",
+  "xp": 15,
+  "hearts": 3,
+  "estMinutes": 7,
+  "segments": [
+    {
+      "type": "warmup",
+      "exercises": [
+        {
+          "id": "w1",
+          "type": "multiple_choice",
+          "xp": 1,
+          "prompt": "In our last lesson, we estimated memory footprints. Why does an HNSW index typically require much more RAM than an IVF-PQ index for the same dataset?",
+          "options": [
+            {
+              "id": "w_opt_1",
+              "text": "IVF-PQ, because quantization duplicates vector data in memory.",
+              "correct": false
+            },
+            {
+              "id": "w_opt_2",
+              "text": "HNSW, because it stores an explicit graph structure of connections between vectors.",
+              "correct": true
+            },
+            {
+              "id": "w_opt_3",
+              "text": "Flat index, because it keeps no structures and searches everything from scratch.",
+              "correct": false
+            }
+          ],
+          "explain": "Because HNSW creates a dense web of multi-layer connections (graphs) between vectors, it requires significantly more memory (RAM) than IVF-PQ, which compresses vectors and groups them into clusters."
+        }
+      ]
+    },
+    {
+      "type": "teach",
+      "cards": [
+        {
+          "kind": "hook",
+          "icon": "🎯",
+          "title": "The Perfect Match",
+          "body": "No single vector index is best for every app. If you choose blindly, you might end up paying thousands of dollars for unnecessary RAM, or wait minutes for a search query that should take milliseconds. Let's learn how to choose systematically!"
+        },
+        {
+          "kind": "definition",
+          "icon": "🗺️",
+          "title": "The Decision Framework",
+          "body": "An Index Selection Decision Framework is a step-by-step checklist that weighs your data size, how often your data changes (updates), your target search speed (latency), and your RAM budget to choose the perfect vector index."
+        },
+        {
+          "kind": "analogy",
+          "icon": "🚗",
+          "title": "The Vehicle Matchup",
+          "body": "Think of picking an index like choosing a vehicle for a trip. If you have massive cargo (billions of vectors) and a tight budget, you take a cargo train (IVF-PQ) which is slower but fits everything. If you need to arrive instantly with a tiny backpack (small dataset), you take a sports car (HNSW)."
+        },
+        {
+          "kind": "example",
+          "icon": "🛍️",
+          "title": "E-Commerce Real-World Choice",
+          "body": "An e-commerce site with 50,000 products updates hourly. They use a Flat index because the dataset is small enough to fit in memory, queries are fast enough, and there is zero build time when products change."
+        },
+        {
+          "kind": "mythbust",
+          "icon": "💡",
+          "title": "The HNSW Myth",
+          "body": "Many developers believe HNSW is always the right answer because it is the fastest. In reality, if your dataset updates constantly or your RAM budget is low, HNSW can crash your server or break your budget due to its huge memory footprint and slow build times."
+        },
+        {
+          "kind": "visual",
+          "icon": "📊",
+          "title": "Speed vs. Memory trade-offs",
+          "body": "Compare the two extreme ends of the decision framework based on your project's primary bottleneck.",
+          "compare": {
+            "left": {
+              "emoji": "⚡",
+              "tag": "Latency Focus",
+              "text": "Choose HNSW. Uses massive RAM but offers ultra-fast queries for static datasets."
+            },
+            "right": {
+              "emoji": "💾",
+              "tag": "Memory/Cost Focus",
+              "text": "Choose IVF-PQ. Compresses data to fit tight budgets, accepting slightly slower speeds."
+            }
+          }
+        }
+      ]
+    },
+    {
+      "type": "practice",
+      "exercises": [
+        {
+          "id": "p1",
+          "type": "multiple_choice",
+          "xp": 2,
+          "prompt": "When is a Flat (brute-force) index actually the best choice for your system?",
+          "options": [
+            {
+              "id": "q1_opt_1",
+              "text": "When you have billions of vectors and need microsecond response times.",
+              "correct": false
+            },
+            {
+              "id": "q1_opt_2",
+              "text": "When you have a very small dataset (e.g., under 10,000 vectors) and need perfect accuracy.",
+              "correct": true
+            },
+            {
+              "id": "q1_opt_3",
+              "text": "When you have strict memory limits and millions of vectors.",
+              "correct": false
+            },
+            {
+              "id": "q1_opt_4",
+              "text": "When your data never changes and you want the highest throughput.",
+              "correct": false
+            }
+          ],
+          "explain": "Flat indexes perform a brute-force search over every single vector, which becomes incredibly slow as the dataset size grows. They are only suitable for very small datasets."
+        },
+        {
+          "id": "p2",
+          "type": "true_false",
+          "xp": 2,
+          "prompt": "True or False: Using Product Quantization (PQ) to save memory usually comes with a slight trade-off in search accuracy.",
+          "options": [
+            {
+              "id": "tf_opt_1",
+              "text": "True",
+              "correct": true
+            },
+            {
+              "id": "tf_opt_2",
+              "text": "False",
+              "correct": false
+            }
+          ],
+          "explain": "Quantization (like PQ) compresses vectors to save memory, but it loses some precision, which can slightly lower the accuracy (recall) of your search results."
+        },
+        {
+          "id": "p3",
+          "type": "fill_blank",
+          "xp": 2,
+          "prompt": "Fill in the missing factor that directly affects whether you should choose an index with fast rebuild times.",
+          "sentence": "When choosing a vector index, your update frequency determines whether you can afford slow index build times.",
+          "blank": "update frequency",
+          "words": [
+            "update frequency",
+            "color scheme",
+            "font size"
+          ],
+          "explain": "Update frequency is a critical constraint. If your index needs to change constantly, complex indexes like HNSW can become a bottleneck due to their long rebuild times."
+        },
+        {
+          "id": "p4",
+          "type": "spot_the_ai",
+          "xp": 2,
+          "prompt": "Identify the structured decision workflow designed by an AI architect to select a vector index.",
+          "options": [
+            {
+              "id": "sai_opt_1",
+              "text": "Just go with HNSW because it has the coolest name and everyone on social media uses it for LLMs.",
+              "correct": false
+            },
+            {
+              "id": "sai_opt_2",
+              "text": "First, check dataset size. If under 50k, use Flat. If larger, check RAM: if tight, use IVF-PQ to compress vectors; if abundant and latency is critical, use HNSW.",
+              "correct": true
+            },
+            {
+              "id": "sai_opt_3",
+              "text": "I will run a benchmark by uploading all my files to three different servers and seeing which one gets hot first.",
+              "correct": false
+            }
+          ],
+          "explain": "Option B is clearly AI-generated because it uses a structured, algorithmic checklist matching the framework to solve the scenario, whereas the others focus on manual guessing or irrelevant metrics."
+        }
+      ]
+    },
+    {
+      "type": "boss",
+      "exercises": [
+        {
+          "id": "b1",
+          "type": "multiple_choice",
+          "xp": 5,
+          "prompt": "You are designing a search system for a retail catalog containing 10 million product vectors. The catalog is updated hourly with new items, and you are on a tight cloud memory budget. Which index strategy fits best and why?",
+          "options": [
+            {
+              "id": "opt_1",
+              "text": "Pure HNSW because it has the fastest query speed for dynamic data",
+              "correct": false
+            },
+            {
+              "id": "opt_2",
+              "text": "IVF-PQ because hourly updates and high volume make HNSW's long build times and huge RAM footprint impractical",
+              "correct": true
+            },
+            {
+              "id": "opt_3",
+              "text": "Flat index because memory constraints and update frequencies do not affect linear search performance",
+              "correct": false
+            },
+            {
+              "id": "opt_4",
+              "text": "HNSW with Product Quantization because it completely eliminates index rebuild times for write-heavy workloads",
+              "correct": false
+            }
+          ],
+          "explain": "With 10 million vectors, memory is a major bottleneck, making HNSW without quantization too expensive. However, since the database is updated every hour, IVF-PQ is the best fit because HNSW has extremely slow build and insertion times, whereas IVF-PQ builds faster and keeps memory usage highly compressed."
+        }
+      ]
+    }
+  ]
+}

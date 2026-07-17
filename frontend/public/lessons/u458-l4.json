@@ -1,0 +1,222 @@
+{
+  "id": "u458-l4",
+  "unit": 458,
+  "day": 2294,
+  "tier": "LLM Application Engineering",
+  "tierIcon": "🔌",
+  "title": "Multi-Source Retrieval",
+  "icon": "🚥",
+  "concept": "Querying several different indexes (docs, code, tickets) in one request and merging their results.",
+  "xp": 15,
+  "hearts": 3,
+  "estMinutes": 7,
+  "segments": [
+    {
+      "type": "warmup",
+      "exercises": [
+        {
+          "id": "w1",
+          "type": "multiple_choice",
+          "xp": 1,
+          "prompt": "In our last lesson on Retrieval Confidence, what is the best practice when the highest-scoring retrieved document falls below your confidence threshold?",
+          "options": [
+            {
+              "id": "w1",
+              "text": "Accept the match anyway and let the LLM guess the answer.",
+              "correct": false
+            },
+            {
+              "id": "w2",
+              "text": "Refuse to answer or ask the user for clarification to avoid hallucinating.",
+              "correct": true
+            },
+            {
+              "id": "w3",
+              "text": "Lower the threshold to zero so all matches are considered highly confident.",
+              "correct": false
+            }
+          ],
+          "explain": "When retrieval scores fall below your set threshold, the confidence is too low to guarantee an accurate answer. Refusing to answer or asking for clarification prevents hallucinations."
+        }
+      ]
+    },
+    {
+      "type": "teach",
+      "cards": [
+        {
+          "kind": "hook",
+          "icon": "⚡",
+          "title": "Where is Your Data?",
+          "body": "In the real world, company knowledge isn't stored in just one place. It's scattered across Slack, Google Drive, and GitHub. To build an AI that actually knows everything, you need to search all of these sources simultaneously!"
+        },
+        {
+          "kind": "definition",
+          "icon": "🗄️",
+          "title": "What is Multi-Source Retrieval?",
+          "body": "Multi-Source Retrieval is the process of querying several distinct databases or search indexes simultaneously for a single user query, then combining the most relevant hits into one unified context package for the LLM."
+        },
+        {
+          "kind": "analogy",
+          "icon": "🕵️‍♂️",
+          "title": "The Multi-Expert Panel",
+          "body": "Think of multi-source retrieval like a detective solving a case by talking to different experts. Instead of only asking a librarian (text documents), they also consult an accountant (spreadsheets) and a programmer (code repository) to gather the full picture."
+        },
+        {
+          "kind": "example",
+          "icon": "💡",
+          "title": "A Unified Search in Action",
+          "body": "If a user asks, 'How do we reset our API key and why is my billing failing?', the pipeline searches the API developer docs index, the customer support ticket index, and the Stripe billing database all at once."
+        },
+        {
+          "kind": "mythbust",
+          "icon": "🚫",
+          "title": "The One-Big-Bucket Trap",
+          "body": "You might think you should dump all your documents, code files, and customer chats into one giant vector database. In practice, this ruins search quality because code and chat history need completely different chunking and search strategies."
+        },
+        {
+          "kind": "visual",
+          "icon": "📊",
+          "title": "Single-Source vs. Multi-Source",
+          "body": "Instead of limiting your search to one database, multi-source retrieval runs parallel queries across specialized databases and blends the best answers together.",
+          "compare": {
+            "left": {
+              "emoji": "🔍",
+              "tag": "Single-Source",
+              "text": "Queries only the vector database. Misses real-time customer tickets and raw code files."
+            },
+            "right": {
+              "emoji": "🚦",
+              "tag": "Multi-Source",
+              "text": "Queries vector database, Jira, and GitHub at once. Merges all hits for a complete answer."
+            }
+          }
+        }
+      ]
+    },
+    {
+      "type": "practice",
+      "exercises": [
+        {
+          "id": "p1",
+          "type": "multiple_choice",
+          "xp": 2,
+          "prompt": "What is a major challenge when combining search results from a vector database of docs and a keyword index of code files?",
+          "options": [
+            {
+              "id": "q1",
+              "text": "Vector databases cannot run at the same time as keyword databases.",
+              "correct": false
+            },
+            {
+              "id": "q2",
+              "text": "The search scores are on different scales and must be normalized before merging.",
+              "correct": true
+            },
+            {
+              "id": "q3",
+              "text": "LLMs can only read text that comes from vector databases.",
+              "correct": false
+            },
+            {
+              "id": "q4",
+              "text": "Keyword indexes automatically encrypt their data during retrieval.",
+              "correct": false
+            }
+          ],
+          "explain": "Because different databases use different ranking scales (e.g., BM25 scores vs. vector cosine similarity), simply sorting by raw score will mismatch them. We must normalize the scores first."
+        },
+        {
+          "id": "p2",
+          "type": "true_false",
+          "xp": 2,
+          "prompt": "True or False: Keeping code files and customer support tickets in separate, specialized indexes is generally better than dumping them into a single index.",
+          "options": [
+            {
+              "id": "t1",
+              "text": "True",
+              "correct": true
+            },
+            {
+              "id": "t2",
+              "text": "False",
+              "correct": false
+            }
+          ],
+          "explain": "Splitting data into dedicated indexes (like one for code and one for customer FAQs) allows you to optimize chunk size and search methods for each specific data type."
+        },
+        {
+          "id": "p3",
+          "type": "fill_blank",
+          "xp": 2,
+          "prompt": "Fill in the blank to complete the description of a multi-source retrieval pipeline's final step.",
+          "sentence": "After querying separate databases, a retrieval pipeline must merge results to rank the best context for the LLM.",
+          "blank": "merge results",
+          "words": [
+            "merge results",
+            "delete indexes",
+            "rewrite queries"
+          ],
+          "explain": "After fetching documents from different sources like Slack and Jira, the system must merge results and rank them so the LLM gets the most relevant context first."
+        },
+        {
+          "id": "p4",
+          "type": "spot_the_ai",
+          "xp": 2,
+          "prompt": "Identify which explanation of 'Reciprocal Rank Fusion (RRF)' in multi-source retrieval sounds like it was generated by an AI.",
+          "options": [
+            {
+              "id": "s1",
+              "text": "RRF is a simple way to combine search results by looking at their position in each list instead of comparing their raw scores directly.",
+              "correct": false
+            },
+            {
+              "id": "s2",
+              "text": "RRF leverages heterogeneous vector space alignment frameworks to synthesize multi-modal retrieval streams into a singular normalized tensor.",
+              "correct": true
+            },
+            {
+              "id": "s3",
+              "text": "RRF works by giving higher priority to items that appear near the top of any of the source search results.",
+              "correct": false
+            }
+          ],
+          "explain": "Option B is a typical AI-generated response using overly complex and vague technical jargon ('heterogeneous vector space alignment frameworks') instead of a simple, direct explanation."
+        }
+      ]
+    },
+    {
+      "type": "boss",
+      "exercises": [
+        {
+          "id": "b1",
+          "type": "multiple_choice",
+          "xp": 5,
+          "prompt": "When building a production-grade multi-source retrieval pipeline, why do we often use a 'Query Router' (a lightweight classifier) before searching all databases?",
+          "options": [
+            {
+              "id": "b1",
+              "text": "It translates all databases into a single SQL table first.",
+              "correct": false
+            },
+            {
+              "id": "b2",
+              "text": "It uses a router to send the query only to relevant sources, saving processing time and avoiding irrelevant context.",
+              "correct": true
+            },
+            {
+              "id": "b3",
+              "text": "It automatically deletes old databases to make room for new ones.",
+              "correct": false
+            },
+            {
+              "id": "b4",
+              "text": "It bypasses the LLM entirely to write answers itself using regex search.",
+              "correct": false
+            }
+          ],
+          "explain": "Multi-source retrieval query routers direct the search query only to the relevant systems (e.g., sending code queries to GitHub and billing questions to Salesforce), which prevents the final prompt from being cluttered with useless, irrelevant context."
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,222 @@
+{
+  "id": "u437-l1",
+  "unit": 437,
+  "day": 2186,
+  "tier": "LLM Application Engineering",
+  "tierIcon": "🔌",
+  "title": "Hierarchical Navigable Small Worlds",
+  "icon": "🌐",
+  "concept": "HNSW as a multi-layer graph structure enabling fast greedy nearest-neighbor traversal.",
+  "xp": 15,
+  "hearts": 3,
+  "estMinutes": 7,
+  "segments": [
+    {
+      "type": "warmup",
+      "exercises": [
+        {
+          "id": "w1",
+          "type": "multiple_choice",
+          "xp": 1,
+          "prompt": "To search through millions of high-dimensional vectors quickly, what kind of algorithms do vector databases rely on?",
+          "options": [
+            {
+              "id": "w1_a",
+              "text": "Approximate Nearest Neighbor (ANN) algorithms",
+              "correct": true
+            },
+            {
+              "id": "w1_b",
+              "text": "Exact linear scanning of all vectors",
+              "correct": false
+            },
+            {
+              "id": "w1_c",
+              "text": "Simple alphabetical sorting of coordinates",
+              "correct": false
+            }
+          ],
+          "explain": "To search vector databases at scale, we use Approximate Nearest Neighbor (ANN) algorithms, which trade a tiny amount of accuracy for massive speedups compared to scanning every vector."
+        }
+      ]
+    },
+    {
+      "type": "teach",
+      "cards": [
+        {
+          "kind": "hook",
+          "icon": "🛣️",
+          "title": "The Search Speed Bottleneck",
+          "body": "Imagine trying to find a single house in a massive country without highway signs. If you only had local streets, it would take forever. HNSW builds a multi-level highway system for your data vectors, making searches take milliseconds instead of minutes."
+        },
+        {
+          "kind": "definition",
+          "icon": "🧬",
+          "title": "What is HNSW?",
+          "body": "Hierarchical Navigable Small World (HNSW) is a multi-layer graph database structure. It allows search algorithms to quickly find the closest matching vectors (nearest neighbors) by starting at a high, coarse layer and zooming in through progressively denser layers."
+        },
+        {
+          "kind": "analogy",
+          "icon": "🗺️",
+          "title": "The Highway Network Analogy",
+          "body": "Think of HNSW like a highway map layered on top of local streets. The top layer has only a few major cities (nodes) far apart, letting you zoom across the state quickly. As you drop down layers, you get more detailed roads, ending at the bottom layer which contains every single house."
+        },
+        {
+          "kind": "example",
+          "icon": "🍞",
+          "title": "HNSW in Action",
+          "body": "When you search for a concept like 'recipes for baking bread' in a vector database, HNSW doesn't compare your query to millions of documents. It starts at a sparse top layer to find the general 'cooking' cluster, and then zooms down to find the exact 'sourdough bread' node."
+        },
+        {
+          "kind": "mythbust",
+          "icon": "🎯",
+          "title": "Speed Over Absolute Perfection",
+          "body": "People often think HNSW guarantees finding the absolute perfect nearest neighbor. In reality, it is an approximate method (ANN); it trades a tiny fraction of accuracy for massive gains in search speed."
+        },
+        {
+          "kind": "visual",
+          "icon": "🪜",
+          "title": "Layer Architecture",
+          "body": "Comparing the density and purpose of the top and bottom layers of an HNSW structure.",
+          "compare": {
+            "left": {
+              "emoji": "✈️",
+              "tag": "Top Layer",
+              "text": "Sparse network of nodes. Used for long-distance jumps across the data space."
+            },
+            "right": {
+              "emoji": "🚶",
+              "tag": "Bottom Layer",
+              "text": "Dense network containing all nodes. Used for local, precise, short-distance navigation."
+            }
+          }
+        }
+      ]
+    },
+    {
+      "type": "practice",
+      "exercises": [
+        {
+          "id": "p1",
+          "type": "multiple_choice",
+          "xp": 2,
+          "prompt": "How is data distributed across the different layers of an HNSW graph?",
+          "options": [
+            {
+              "id": "q1_a",
+              "text": "Only the top layer contains the actual data.",
+              "correct": false
+            },
+            {
+              "id": "q1_b",
+              "text": "The bottom layer contains every single data point.",
+              "correct": true
+            },
+            {
+              "id": "q1_c",
+              "text": "No layer contains all the points; they are randomly split.",
+              "correct": false
+            },
+            {
+              "id": "q1_d",
+              "text": "The layers are completely unconnected to each other.",
+              "correct": false
+            }
+          ],
+          "explain": "The bottom layer (Layer 0) in HNSW contains all the data points in the vector space, while higher layers contain only a subset of these points to act as fast-travel express routes."
+        },
+        {
+          "id": "p2",
+          "type": "true_false",
+          "xp": 2,
+          "prompt": "True or False: HNSW always guarantees 100% mathematical accuracy in finding the absolute closest vector.",
+          "options": [
+            {
+              "id": "tf_true",
+              "text": "True",
+              "correct": false
+            },
+            {
+              "id": "tf_false",
+              "text": "False",
+              "correct": true
+            }
+          ],
+          "explain": "HNSW is an Approximate Nearest Neighbor (ANN) algorithm. It is designed for speed and scale, meaning it is highly accurate but does not guarantee finding the absolute mathematical nearest neighbor every time."
+        },
+        {
+          "id": "p3",
+          "type": "fill_blank",
+          "xp": 2,
+          "prompt": "Fill in the blank: HNSW navigates through its layers using a simple pathfinding strategy.",
+          "sentence": "At each layer, HNSW performs a greedy search to find the node closest to the query before descending.",
+          "blank": "greedy search",
+          "words": [
+            "greedy search",
+            "random walk",
+            "brute force"
+          ],
+          "explain": "HNSW uses a greedy search at each level, moving to the neighbor closest to the query until no closer neighbor can be found, then moving down a layer."
+        },
+        {
+          "id": "p4",
+          "type": "spot_the_ai",
+          "xp": 2,
+          "prompt": "Which of the following describes how HNSW routes a query to find the nearest neighbor?",
+          "options": [
+            {
+              "id": "sai1_a",
+              "text": "HNSW divides the vector space into a grid of squares, searching through each square row by row.",
+              "correct": false
+            },
+            {
+              "id": "sai1_b",
+              "text": "HNSW sorts vectors alphabetically by their text labels and performs a binary search on the text strings.",
+              "correct": false
+            },
+            {
+              "id": "sai1_c",
+              "text": "HNSW routes queries by performing a greedy search at the top sparse layer, finding the closest node, and dropping to the next layer to repeat the process.",
+              "correct": true
+            }
+          ],
+          "explain": "Option C is the AI-generated text. It correctly explains the process of greedy routing: starting at the top layer, finding the local nearest neighbor, and then dropping down a level to refine the search. Options A and B describe flat or tree-based indexing rather than HNSW's layered graph navigation."
+        }
+      ]
+    },
+    {
+      "type": "boss",
+      "exercises": [
+        {
+          "id": "b1",
+          "type": "multiple_choice",
+          "xp": 5,
+          "prompt": "Why does HNSW's multi-layered structure make searching for similar items so much faster than looking through a flat list?",
+          "options": [
+            {
+              "id": "b1",
+              "text": "It searches every single node at the bottom layer first, then moves upward to verify.",
+              "correct": false
+            },
+            {
+              "id": "b2",
+              "text": "It starts at the top sparse layer to jump large distances, then descends to finer layers to locate the target.",
+              "correct": true
+            },
+            {
+              "id": "b3",
+              "text": "It randomly jumps between layers without any order until it hits a match.",
+              "correct": false
+            },
+            {
+              "id": "b4",
+              "text": "It ignores the bottom layer completely to save memory.",
+              "correct": false
+            }
+          ],
+          "explain": "HNSW achieves its lightning speed by starting search at the top layer, which has very few, widely spaced nodes. It quickly gets close to the target area, then drops down to the next layer to fine-tune the search, ending at the bottom layer. This avoids scanning millions of unrelated points."
+        }
+      ]
+    }
+  ]
+}

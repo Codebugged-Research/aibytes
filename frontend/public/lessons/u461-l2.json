@@ -1,0 +1,222 @@
+{
+  "id": "u461-l2",
+  "unit": 461,
+  "day": 2307,
+  "tier": "LLM Application Engineering",
+  "tierIcon": "🔌",
+  "title": "Reflection Tokens",
+  "icon": "🪙",
+  "concept": "Special output tokens that signal whether a retrieval was relevant or whether an answer is fully supported.",
+  "xp": 15,
+  "hearts": 3,
+  "estMinutes": 7,
+  "segments": [
+    {
+      "type": "warmup",
+      "exercises": [
+        {
+          "id": "w1",
+          "type": "multiple_choice",
+          "xp": 1,
+          "prompt": "How does Self-RAG improve generation quality compared to standard RAG?",
+          "options": [
+            {
+              "id": "opt_1",
+              "text": "By using a separate, larger model to proofread every single word.",
+              "correct": false
+            },
+            {
+              "id": "opt_2",
+              "text": "By critiquing its own retrieved context and generated answers to decide on revisions.",
+              "correct": true
+            },
+            {
+              "id": "opt_3",
+              "text": "By bypassing search retrieval entirely to rely on frozen weights.",
+              "correct": false
+            }
+          ],
+          "explain": "In the prior lesson, we learned that Self-RAG allows a model to critique its own retrieval and output, making decisions about whether to fetch more data or revise its drafts."
+        }
+      ]
+    },
+    {
+      "type": "teach",
+      "cards": [
+        {
+          "kind": "hook",
+          "icon": "🚨",
+          "title": "Self-Critique in Real-Time",
+          "body": "Imagine if an AI could output a secret 'check-engine' light directly in its text when it realizes its sources are bad. Instead of relying on external judge models, Self-RAG embeds these self-critique flags directly into the vocabulary!"
+        },
+        {
+          "kind": "definition",
+          "icon": "🏷️",
+          "title": "What are Reflection Tokens?",
+          "body": "Reflection tokens are special output tokens that a Self-RAG model generates to evaluate its own work. They flag whether a retrieved document is relevant, or if the generated answer is fully supported by the source text."
+        },
+        {
+          "kind": "analogy",
+          "icon": "⚽",
+          "title": "The Referee's Hand Signals",
+          "body": "Think of reflection tokens like referee hand signals in soccer. Instead of stopping the whole game to write a long report, the referee flashes a yellow card or points to the goal to instantly signal the status of the play."
+        },
+        {
+          "kind": "example",
+          "icon": "📝",
+          "title": "Tokens in Action",
+          "body": "When asked about a prompt template, the model generates '[Retrieve]' to trigger a search, reads the text, outputs '[Relevant]' to validate it, and finishes the response with '[Fully-Supported]' to confirm accuracy."
+        },
+        {
+          "kind": "mythbust",
+          "icon": "🕵️",
+          "title": "Not Just Regular Words",
+          "body": "People often think reflection tokens are just regular words the model guesses. In reality, they are dedicated control tokens added directly to the model's vocabulary, specifically trained to trigger system actions like routing or rewriting."
+        },
+        {
+          "kind": "visual",
+          "icon": "⚖️",
+          "title": "Reflection Tokens vs. Standard Generation",
+          "body": "How reflection tokens guide the system's workflow compared to standard generations.",
+          "compare": {
+            "left": {
+              "emoji": "🪙",
+              "tag": "Self-RAG Token",
+              "text": "Outputs '[Relevant]' to tell the system the document works, then continues."
+            },
+            "right": {
+              "emoji": "💬",
+              "tag": "Standard Token",
+              "text": "Outputs raw text only, leaving the system blind to whether the source was helpful."
+            }
+          }
+        }
+      ]
+    },
+    {
+      "type": "practice",
+      "exercises": [
+        {
+          "id": "p1",
+          "type": "multiple_choice",
+          "xp": 2,
+          "prompt": "What is the primary function of reflection tokens in a Self-RAG pipeline?",
+          "options": [
+            {
+              "id": "opt_1",
+              "text": "They encrypt the output so users cannot read it.",
+              "correct": false
+            },
+            {
+              "id": "opt_2",
+              "text": "They speed up token generation by skipping attention heads.",
+              "correct": false
+            },
+            {
+              "id": "opt_3",
+              "text": "They signal the relevance of retrieved documents and the supportiveness of the answer.",
+              "correct": true
+            },
+            {
+              "id": "opt_4",
+              "text": "They format the output into HTML automatically.",
+              "correct": false
+            }
+          ],
+          "explain": "Reflection tokens allow the model to output structured self-assessments (like checking if the text is relevant or if the generation is supported) directly in its output stream."
+        },
+        {
+          "id": "p2",
+          "type": "true_false",
+          "xp": 2,
+          "prompt": "True or False: External code can read these reflection tokens to decide whether to search again or accept the generated answer.",
+          "options": [
+            {
+              "id": "opt_true",
+              "text": "True",
+              "correct": true
+            },
+            {
+              "id": "opt_false",
+              "text": "False",
+              "correct": false
+            }
+          ],
+          "explain": "Yes! Reflection tokens like [Retrieve] or [No-Support] are designed to let the orchestration system know if it needs to trigger a new search or rewrite the answer."
+        },
+        {
+          "id": "p3",
+          "type": "fill_blank",
+          "xp": 2,
+          "prompt": "Fill in the blank to complete the explanation of where reflection tokens reside:",
+          "sentence": "Reflection tokens are special control symbols added directly to the model's vocabulary during training.",
+          "blank": "vocabulary",
+          "words": [
+            "vocabulary",
+            "database",
+            "hyperparameters"
+          ],
+          "explain": "Reflection tokens are explicitly added to the model's vocabulary during training so they can be predicted like normal words but act as system signals."
+        },
+        {
+          "id": "p4",
+          "type": "spot_the_ai",
+          "xp": 2,
+          "prompt": "Identify which output demonstrates a Self-RAG model using reflection tokens:",
+          "options": [
+            {
+              "id": "opt_1",
+              "text": "The capital of France is Paris. (Source: Wikipedia)",
+              "correct": false
+            },
+            {
+              "id": "opt_2",
+              "text": "Here is the answer, verified by our external moderator LLM: Paris.",
+              "correct": false
+            },
+            {
+              "id": "opt_3",
+              "text": "[Relevant] Paris is the capital of France. [Fully-Supported]",
+              "correct": true
+            }
+          ],
+          "explain": "Option C shows the classic Self-RAG format, where special bracketed reflection tokens like [Relevant] and [Fully-Supported] are generated inline to critique the context and answer."
+        }
+      ]
+    },
+    {
+      "type": "boss",
+      "exercises": [
+        {
+          "id": "b1",
+          "type": "multiple_choice",
+          "xp": 5,
+          "prompt": "How do reflection tokens actually work inside a Self-RAG pipeline to control the flow of information?",
+          "options": [
+            {
+              "id": "opt_1",
+              "text": "They are external API calls that check spelling errors.",
+              "correct": false
+            },
+            {
+              "id": "opt_2",
+              "text": "They are hidden mathematical vectors that cannot be parsed as text.",
+              "correct": false
+            },
+            {
+              "id": "opt_3",
+              "text": "They are special vocabulary tokens generated inline to signal retrieval quality and support.",
+              "correct": true
+            },
+            {
+              "id": "opt_4",
+              "text": "They are prompt instructions telling the user to reflect on their query.",
+              "correct": false
+            }
+          ],
+          "explain": "Reflection tokens are special vocabulary tokens (like [Relevant] or [Fully-Supported]) that the model generates inline. They allow downstream software to immediately parse the model's self-evaluation and decide whether to fetch new search results or accept the answer."
+        }
+      ]
+    }
+  ]
+}

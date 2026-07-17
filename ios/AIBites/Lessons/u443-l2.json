@@ -1,0 +1,222 @@
+{
+  "id": "u443-l2",
+  "unit": 443,
+  "day": 2217,
+  "tier": "LLM Application Engineering",
+  "tierIcon": "🔌",
+  "title": "Monitoring Query Latency & Recall",
+  "icon": "📈",
+  "concept": "Tracking p50/p99 query latency and periodically sampling recall against a ground-truth set.",
+  "xp": 15,
+  "hearts": 3,
+  "estMinutes": 7,
+  "segments": [
+    {
+      "type": "warmup",
+      "exercises": [
+        {
+          "id": "w1",
+          "type": "multiple_choice",
+          "xp": 1,
+          "prompt": "Why is restoring a vector index from a snapshot preferred over re-embedding raw data from scratch?",
+          "options": [
+            {
+              "id": "w1_a",
+              "text": "It is much faster and cheaper than paying to re-embed all raw text from scratch.",
+              "correct": true
+            },
+            {
+              "id": "w1_b",
+              "text": "Snapshots automatically update your database embeddings to a newer, better model.",
+              "correct": false
+            },
+            {
+              "id": "w1_c",
+              "text": "It is the only way to search database indexes across different clouds.",
+              "correct": false
+            }
+          ],
+          "explain": "Taking and storing index snapshots is much faster and cheaper than running raw text through an embedding model again, which consumes massive time and API costs."
+        }
+      ]
+    },
+    {
+      "type": "teach",
+      "cards": [
+        {
+          "kind": "hook",
+          "icon": "⚡",
+          "title": "Speed vs. Quality",
+          "body": "When you build a fast vector search engine, speed is only half the battle. If your database answers in 2 milliseconds but returns completely wrong results, your users suffer—so you must monitor both speed and accuracy."
+        },
+        {
+          "kind": "definition",
+          "icon": "📊",
+          "title": "Latency & Recall",
+          "body": "Monitoring query latency means tracking how long searches take (using p50 and p99 percentiles), while monitoring recall means measuring what fraction of the true closest matching vectors your database actually successfully retrieved."
+        },
+        {
+          "kind": "analogy",
+          "icon": "⏱️",
+          "title": "The Delivery Kitchen Analogy",
+          "body": "Think of query latency like food delivery: p50 is the normal time most customers wait, while p99 is the worst-case traffic delay. Recall is like checking if the kitchen actually put all the ingredients you ordered into the bag."
+        },
+        {
+          "kind": "example",
+          "icon": "🛍️",
+          "title": "Real-World Performance Check",
+          "body": "An e-commerce app monitors its vector search. The p50 latency is 15 milliseconds, but the p99 latency spikes to 800 milliseconds for complex queries. Meanwhile, a weekly test against a benchmark set shows recall has dropped from 95% to 80%, signaling the index needs tuning."
+        },
+        {
+          "kind": "mythbust",
+          "icon": "🚫",
+          "title": "The Fast-but-Wrong Trap",
+          "body": "Many believe that if query latency is low, the database is healthy. In reality, an index can become corrupted or misconfigured, giving lightning-fast responses that are completely incorrect (low recall)."
+        },
+        {
+          "kind": "visual",
+          "icon": "⚖️",
+          "title": "Latency vs. Recall",
+          "body": "Comparing speed metrics (latency percentiles) versus accuracy metrics (recall rates) in vector databases.",
+          "compare": {
+            "left": {
+              "emoji": "⏱️",
+              "tag": "Latency (p50/p99)",
+              "text": "Measures speed in milliseconds. High p99 indicates bottlenecks or server overload."
+            },
+            "right": {
+              "emoji": "🎯",
+              "tag": "Recall (Accuracy)",
+              "text": "Measures quality. Low recall means the database is returning irrelevant vectors."
+            }
+          }
+        }
+      ]
+    },
+    {
+      "type": "practice",
+      "exercises": [
+        {
+          "id": "p1",
+          "type": "multiple_choice",
+          "xp": 2,
+          "prompt": "What is the difference between p50 and p99 query latency?",
+          "options": [
+            {
+              "id": "q1_a",
+              "text": "p50 is the maximum time a query can take, while p99 is the absolute minimum.",
+              "correct": false
+            },
+            {
+              "id": "q1_b",
+              "text": "p50 represents the typical (median) response time, while p99 represents the worst-case slow response time.",
+              "correct": true
+            },
+            {
+              "id": "q1_c",
+              "text": "p50 measures accuracy out of 50 samples, while p99 measures accuracy out of 99 samples.",
+              "correct": false
+            },
+            {
+              "id": "q1_d",
+              "text": "p50 is used only during backup restoration, while p99 is used during live searches.",
+              "correct": false
+            }
+          ],
+          "explain": "p50 represents the median latency (50% of requests are faster, 50% are slower), while p99 represents the 99th percentile, which highlights the slowest 1% of requests."
+        },
+        {
+          "id": "p2",
+          "type": "true_false",
+          "xp": 2,
+          "prompt": "True or False: You can calculate exact recall on live production user queries without using a pre-calculated ground-truth test set.",
+          "options": [
+            {
+              "id": "tf_true",
+              "text": "True",
+              "correct": false
+            },
+            {
+              "id": "tf_false",
+              "text": "False",
+              "correct": true
+            }
+          ],
+          "explain": "Recall cannot be measured using live queries alone because you do not know the true mathematical nearest neighbors for random user queries. You must run queries where the exact correct answers are pre-calculated."
+        },
+        {
+          "id": "p3",
+          "type": "fill_blank",
+          "xp": 2,
+          "prompt": "Fill in the blank to complete the statement about worst-case response times:",
+          "sentence": "We track p99 latency to ensure that even the slowest one percent of our user queries still load within an acceptable time limit.",
+          "blank": "p99 latency",
+          "words": [
+            "p99 latency",
+            "p50 latency",
+            "recall rate"
+          ],
+          "explain": "The p99 latency represents the 99th percentile, meaning only 1% of queries take longer than this threshold. It is crucial for catching worst-case performance bugs."
+        },
+        {
+          "id": "p4",
+          "type": "spot_the_ai",
+          "xp": 2,
+          "prompt": "Which code snippet shows an AI-assisted pattern for evaluating vector database recall against a ground-truth dataset?",
+          "options": [
+            {
+              "id": "sai_1",
+              "text": "def search(query_vector):\\n    return db.query(query_vector, top_k=10)",
+              "correct": false
+            },
+            {
+              "id": "sai_2",
+              "text": "import time\\nstart = time.time()\\ndb.query(vec, top_k=10)\\nprint(f\"Time: {time.time() - start}\")",
+              "correct": false
+            },
+            {
+              "id": "sai_3",
+              "text": "def check_recall(test_cases):\\n    hits = 0\\n    for vec, true_neighbors in test_cases.items():\\n        results = [r.id for r in db.query(vec, top_k=len(true_neighbors))]\\n        hits += len(set(results) & set(true_neighbors))\\n    return hits / sum(len(n) for n in test_cases.values())",
+              "correct": true
+            }
+          ],
+          "explain": "Option C shows an automated evaluation script that compares the vector database's actual output against a pre-defined exact ground-truth dictionary to compute a recall metric. Option A is just a basic search, and Option B only checks timing."
+        }
+      ]
+    },
+    {
+      "type": "boss",
+      "exercises": [
+        {
+          "id": "b1",
+          "type": "multiple_choice",
+          "xp": 5,
+          "prompt": "If you want to verify that your vector database's search quality hasn't degraded after an index rebuild, how should you calculate its recall?",
+          "options": [
+            {
+              "id": "b1",
+              "text": "Run your queries on a pre-calculated golden test set of exact neighbors and compare the overlapping results.",
+              "correct": true
+            },
+            {
+              "id": "b2",
+              "text": "Check the CPU usage of your vector index during high-traffic hours.",
+              "correct": false
+            },
+            {
+              "id": "b3",
+              "text": "Subtract the p50 latency from the p99 latency to see the delta.",
+              "correct": false
+            },
+            {
+              "id": "b4",
+              "text": "Re-embed the entire dataset from scratch on a daily basis and count the duplicates.",
+              "correct": false
+            }
+          ],
+          "explain": "To measure recall, you need a pre-calculated golden test set (ground truth) where you already know the mathematically exact nearest neighbors. By comparing your production vector database's approximate search results to this ground truth, you can calculate the exact percentage of correct matches retrieved."
+        }
+      ]
+    }
+  ]
+}

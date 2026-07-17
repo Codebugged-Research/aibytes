@@ -1,0 +1,222 @@
+{
+  "id": "u419-l1",
+  "unit": 419,
+  "day": 2096,
+  "tier": "LLM Application Engineering",
+  "tierIcon": "🔌",
+  "title": "Auditing a Context Window",
+  "icon": "🕵️",
+  "concept": "Walking through a real context payload and identifying waste, redundancy, and misplacement.",
+  "xp": 15,
+  "hearts": 3,
+  "estMinutes": 7,
+  "segments": [
+    {
+      "type": "warmup",
+      "exercises": [
+        {
+          "id": "w1",
+          "type": "multiple_choice",
+          "xp": 1,
+          "prompt": "Quick recap: in a well-structured context window, where do you generally want to place the most important instruction or question so the model pays closest attention to it?",
+          "options": [
+            {
+              "id": "a",
+              "text": "Buried in the middle of a large document",
+              "correct": false
+            },
+            {
+              "id": "b",
+              "text": "Near the end, close to where the model starts generating its response",
+              "correct": true
+            },
+            {
+              "id": "c",
+              "text": "It doesn't matter where anything goes",
+              "correct": false
+            }
+          ],
+          "explain": "From earlier lessons in this unit: models tend to attend more strongly to content near the end of the context, right before they start generating. That's why placing key instructions or questions there — instead of burying them in the middle — leads to better responses. This positioning principle is exactly what we'll use today to audit real payloads."
+        }
+      ]
+    },
+    {
+      "type": "teach",
+      "cards": [
+        {
+          "kind": "hook",
+          "icon": "🗂️",
+          "title": "Your Prompt Is Secretly a Mess",
+          "body": "You've built context windows all unit long. Now it's time to put on your detective hat: open up a real payload and hunt for the junk that's quietly wasting tokens and confusing your model."
+        },
+        {
+          "kind": "definition",
+          "icon": "🔍",
+          "title": "What Is a Context Audit?",
+          "body": "A context audit is a step-by-step review of everything you're sending an LLM before you send it. You check each chunk and ask: Is this needed? Is it duplicated? Is it in the right spot? It's quality control for your prompt."
+        },
+        {
+          "kind": "analogy",
+          "icon": "🧳",
+          "title": "Packing a Suitcase for a Trip",
+          "body": "A context window is like a suitcase with limited space. If you pack three of the same shirt (redundancy), a snow jacket for a beach trip (waste), or bury your passport under towels (misplacement), you've wasted room and made things harder to find. A good packer audits the suitcase before zipping it shut."
+        },
+        {
+          "kind": "example",
+          "icon": "📄",
+          "title": "Spotting Problems in a Real Payload",
+          "body": "Imagine a coding assistant's context includes: the same file pasted twice under different variable names (redundancy), a 200-line unrelated config file (waste), and the actual bug report squeezed at the very top before all that clutter (misplacement). An audit would catch all three in one pass."
+        },
+        {
+          "kind": "mythbust",
+          "icon": "🚫",
+          "title": "Myth: More Context Is Always Safer",
+          "body": "Many builders think 'just include everything, it can't hurt.' But bloated context can bury the important parts, waste your token budget, and even confuse the model with conflicting or irrelevant info. Auditing means being deliberate, not maximal."
+        },
+        {
+          "kind": "visual",
+          "icon": "⚖️",
+          "title": "Messy vs. Audited Context Window",
+          "body": "Compare a context window before and after an audit pass.",
+          "compare": {
+            "left": {
+              "emoji": "🌀",
+              "tag": "Before Audit",
+              "text": "Duplicate chat history, an entire unused manual, and the user's real question buried in the middle."
+            },
+            "right": {
+              "emoji": "✅",
+              "tag": "After Audit",
+              "text": "One clean copy of relevant history, only the needed manual excerpt, and the question placed prominently near the end."
+            }
+          }
+        }
+      ]
+    },
+    {
+      "type": "practice",
+      "exercises": [
+        {
+          "id": "p1",
+          "type": "multiple_choice",
+          "xp": 2,
+          "prompt": "During a context audit, you find a 500-word legal disclaimer sitting between the user's question and the retrieved document that answers it. What's the best label for this problem?",
+          "options": [
+            {
+              "id": "a",
+              "text": "Waste, because the disclaimer takes up tokens without helping answer the question",
+              "correct": false
+            },
+            {
+              "id": "b",
+              "text": "Misplacement, because the disclaimer is separating the question from the info needed to answer it",
+              "correct": true
+            },
+            {
+              "id": "c",
+              "text": "Redundancy, because the disclaimer repeats the question",
+              "correct": false
+            },
+            {
+              "id": "d",
+              "text": "Compression, because the disclaimer summarizes the document",
+              "correct": false
+            }
+          ],
+          "explain": "The core issue here is position: the disclaimer is wedged between two pieces that need to be close together (the question and the answering document), making it harder for the model to connect them. That's misplacement. It might also be somewhat wasteful, but the most precise and important label given its location is misplacement, since fixing the order would immediately help even if the disclaimer content stayed."
+        },
+        {
+          "id": "p2",
+          "type": "true_false",
+          "xp": 2,
+          "prompt": "True or False: If a context window has enough token budget left over, it's fine to leave duplicate or irrelevant content in it since there's no cost to doing so.",
+          "options": [
+            {
+              "id": "true",
+              "text": "True",
+              "correct": false
+            },
+            {
+              "id": "false",
+              "text": "False",
+              "correct": true
+            }
+          ],
+          "explain": "False. Even with token budget to spare, duplicate or irrelevant content can distract the model, bury the truly important pieces, and slow down processing. Having room left doesn't mean clutter is free—auditing is about clarity and relevance, not just fitting under a token limit."
+        },
+        {
+          "id": "p3",
+          "type": "fill_blank",
+          "xp": 2,
+          "prompt": "Fill in the blank.",
+          "sentence": "When the same paragraph of instructions appears twice in a context window, that is an example of redundancy.",
+          "blank": "redundancy",
+          "words": [
+            "redundancy",
+            "compression",
+            "latency"
+          ],
+          "explain": "Redundancy means the same information appears more than once, taking up space without adding value. Spotting repeated content is one of the first things to check in a context audit."
+        },
+        {
+          "id": "p4",
+          "type": "spot_the_ai",
+          "xp": 2,
+          "prompt": "Which of these three context-audit notes was most likely written by an AI assistant rather than a careful human engineer?",
+          "options": [
+            {
+              "id": "a",
+              "text": "\"Removed duplicate system prompt (appeared 2x at lines 4 and 88), trimmed unused API docs section, moved user query to end of payload.\"",
+              "correct": false
+            },
+            {
+              "id": "b",
+              "text": "\"This context window demonstrates exceptional utilization of informational content, embodying best-in-class practices for optimal retrieval-augmented synergy.\"",
+              "correct": true
+            },
+            {
+              "id": "c",
+              "text": "\"Found 3 redundant chat turns and one irrelevant 800-token PDF excerpt; flagging both for removal before next test run.\"",
+              "correct": false
+            }
+          ],
+          "explain": "Option B is vague, uses inflated buzzwordy phrases like 'exceptional utilization' and 'optimal retrieval-augmented synergy' without pointing to any specific, checkable detail in the payload. Real audit notes (like A and C) name exact locations, counts, and concrete items—that specificity is what a human doing real work produces, while generic praise with no actionable detail is a common AI tell."
+        }
+      ]
+    },
+    {
+      "type": "boss",
+      "exercises": [
+        {
+          "id": "b1",
+          "type": "multiple_choice",
+          "xp": 5,
+          "prompt": "You audit a context payload for a customer-support agent. It contains: (1) the full 40-message chat history repeated twice, (2) the company's entire 5000-word return policy pasted in full even though only shipping questions are asked, (3) the user's actual question buried in the middle of the payload, (4) a short, relevant order lookup result placed right before the question. Which fix would most improve this context window?",
+          "options": [
+            {
+              "id": "a",
+              "text": "Delete the order lookup result since it's the shortest piece",
+              "correct": false
+            },
+            {
+              "id": "b",
+              "text": "Remove the duplicate chat history, trim the return policy to only the relevant section, and move the user's question near the end",
+              "correct": true
+            },
+            {
+              "id": "c",
+              "text": "Add the full company employee handbook for extra context",
+              "correct": false
+            },
+            {
+              "id": "d",
+              "text": "Translate the entire payload into a different language to save tokens",
+              "correct": false
+            }
+          ],
+          "explain": "This payload has all three classic problems: redundancy (chat history duplicated), waste (an entire 5000-word policy when only a snippet is relevant), and misplacement (the actual question buried instead of positioned where the model attends most, near the end). Fixing all three—deduplicating, trimming to relevance, and repositioning the question—directly attacks each problem. Deleting the useful order lookup or adding an unrelated handbook would make things worse, and translating doesn't address token waste or structure at all. This is the core skill of a context audit: read the payload like a suitcase inspector, spot exactly what's duplicated, unnecessary, or oddly placed, and fix each issue deliberately rather than guessing."
+        }
+      ]
+    }
+  ]
+}

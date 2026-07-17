@@ -1,0 +1,222 @@
+{
+  "id": "u463-l5",
+  "unit": 463,
+  "day": 2320,
+  "tier": "LLM Application Engineering",
+  "tierIcon": "🔌",
+  "title": "Evaluating Multi-Hop RAG",
+  "icon": "📐",
+  "concept": "Benchmarks and datasets specifically designed to test multi-hop reasoning and retrieval capability.",
+  "xp": 15,
+  "hearts": 3,
+  "estMinutes": 7,
+  "segments": [
+    {
+      "type": "warmup",
+      "exercises": [
+        {
+          "id": "w1",
+          "type": "multiple_choice",
+          "xp": 1,
+          "prompt": "In the last lesson, we discussed multi-hop failure modes. What is 'error compounding' in a multi-hop retrieval chain?",
+          "options": [
+            {
+              "id": "w_1",
+              "text": "The system gets faster with each hop.",
+              "correct": false
+            },
+            {
+              "id": "w_2",
+              "text": "An error in an early retrieval step compounds and ruins all subsequent hops.",
+              "correct": true
+            },
+            {
+              "id": "w_3",
+              "text": "The model forgets the original user prompt entirely.",
+              "correct": false
+            }
+          ],
+          "explain": "In multi-hop RAG, error compounding means that if the system retrieves an incorrect document in an early step, that bad information is used to formulate the next query, completely derailing the rest of the chain."
+        }
+      ]
+    },
+    {
+      "type": "teach",
+      "cards": [
+        {
+          "kind": "hook",
+          "icon": "🕵️",
+          "title": "Grading the Journey",
+          "body": "How do we know if our multi-hop RAG system is actually connecting the dots, or just guessing the final answer by luck? We need specialized evaluation benchmarks that grade the journey, not just the destination."
+        },
+        {
+          "kind": "definition",
+          "icon": "📊",
+          "title": "Multi-Hop Benchmarks",
+          "body": "Multi-hop evaluation uses specialized benchmarks like HotpotQA, MuSiQue, or Bamboogle. These datasets contain questions that cannot be answered with a single document, forcing us to test if our system successfully finds the connection between multiple pieces of information."
+        },
+        {
+          "kind": "analogy",
+          "icon": "🏃",
+          "title": "The Relay Race Relay",
+          "body": "Think of evaluating multi-hop RAG like grading a relay race rather than a solo sprint. If you only look at the final runner crossing the finish line, you miss the runner who dropped the baton in the second leg. evaluating multi-hop systems requires measuring the success of each handoff."
+        },
+        {
+          "kind": "example",
+          "icon": "🎯",
+          "title": "Testing with HotpotQA",
+          "body": "Using HotpotQA, we test our system with: 'Which team plays its home games at the stadium named after the father of the owner of the Dallas Cowboys?'. The system must first find the stadium name (AT&T Stadium / Cotton Bowl), then find the team, and we measure if it successfully retrieved both intermediate documents."
+        },
+        {
+          "kind": "mythbust",
+          "icon": "🚫",
+          "title": "The 'Right Answer, Wrong Way' Trap",
+          "body": "Many believe that if the final answer is correct, the RAG pipeline is working perfectly. However, the system might have gotten lucky or bypassed the steps entirely; we must evaluate both the intermediate retrieval steps and the final answer."
+        },
+        {
+          "kind": "visual",
+          "icon": "👁️",
+          "title": "Evaluation Focus",
+          "body": "Comparing single-hop benchmarks with multi-hop benchmarks reveals how they test different depths of retrieval.",
+          "compare": {
+            "left": {
+              "emoji": "🔍",
+              "tag": "Single-Hop Eval",
+              "text": "Tests if the model can find a single fact directly matching the question in one document lookup."
+            },
+            "right": {
+              "emoji": "🪜",
+              "tag": "Multi-Hop Eval",
+              "text": "Tests if the model can follow a chain of links across multiple documents to find the final answer."
+            }
+          }
+        }
+      ]
+    },
+    {
+      "type": "practice",
+      "exercises": [
+        {
+          "id": "p1",
+          "type": "multiple_choice",
+          "xp": 2,
+          "prompt": "What makes datasets like HotpotQA uniquely suited for evaluating multi-hop RAG systems?",
+          "options": [
+            {
+              "id": "mc_1",
+              "text": "They are much shorter and faster to run than single-hop datasets.",
+              "correct": false
+            },
+            {
+              "id": "mc_2",
+              "text": "They provide multi-step questions along with the specific documents needed for each reasoning step.",
+              "correct": true
+            },
+            {
+              "id": "mc_3",
+              "text": "They completely ignore the final answer and only look at vector search latency.",
+              "correct": false
+            },
+            {
+              "id": "mc_4",
+              "text": "They do not require any ground-truth answers for comparison.",
+              "correct": false
+            }
+          ],
+          "explain": "Multi-hop benchmarks like HotpotQA contain 'supporting facts' or ground-truth evidence chains, allowing developers to measure if the system retrieved the correct intermediate documents at each hop."
+        },
+        {
+          "id": "p2",
+          "type": "true_false",
+          "xp": 2,
+          "prompt": "True or False: If a multi-hop RAG system fails on its first retrieval step, the entire reasoning chain is likely to collapse.",
+          "options": [
+            {
+              "id": "tf_true",
+              "text": "True",
+              "correct": true
+            },
+            {
+              "id": "tf_false",
+              "text": "False",
+              "correct": false
+            }
+          ],
+          "explain": "If the first retrieval fails, the system receives bad context, making it nearly impossible to retrieve the correct second document or generate the correct final answer. This is why we must evaluate every hop."
+        },
+        {
+          "id": "p3",
+          "type": "fill_blank",
+          "xp": 2,
+          "prompt": "Fill in the blank to complete the statement about multi-hop evaluation benchmarks.",
+          "sentence": "We use specialized benchmarks like MuSiQue to test if our RAG system can successfully resolve complex multi-step reasoning chains.",
+          "blank": "MuSiQue",
+          "words": [
+            "MuSiQue",
+            "SQuAD",
+            "BERTScore"
+          ],
+          "explain": "MuSiQue is a prominent benchmark specifically designed for testing multi-hop reasoning by requiring models to resolve multi-step connection chains."
+        },
+        {
+          "id": "p4",
+          "type": "spot_the_ai",
+          "xp": 2,
+          "prompt": "Which of the following query prompts is generated to evaluate a multi-hop RAG pipeline?",
+          "options": [
+            {
+              "id": "sai_1",
+              "text": "Where was Barack Obama born?",
+              "correct": false
+            },
+            {
+              "id": "sai_2",
+              "text": "What is the population of the birthplace of the spouse of the 44th US President?",
+              "correct": true
+            },
+            {
+              "id": "sai_3",
+              "text": "Who is Michelle Obama?",
+              "correct": false
+            }
+          ],
+          "explain": "Option B mimics a classic multi-hop QA evaluation style, asking for an answer that requires finding the spouse first, and then finding that spouse's birthplace. Options A and C are simple single-hop lookups."
+        }
+      ]
+    },
+    {
+      "type": "boss",
+      "exercises": [
+        {
+          "id": "b1",
+          "type": "multiple_choice",
+          "xp": 5,
+          "prompt": "Imagine you are building a production-grade multi-hop RAG system for a financial analysis firm. To ensure your system is not hallucinating intermediate connections, which evaluation dataset setup should you choose and why?",
+          "options": [
+            {
+              "id": "opt_1",
+              "text": "Standard single-hop datasets like SQuAD because they test simple fact retrieval.",
+              "correct": false
+            },
+            {
+              "id": "opt_2",
+              "text": "Datasets like HotpotQA and MuSiQue because they contain multi-step questions and ground-truth reasoning chains.",
+              "correct": true
+            },
+            {
+              "id": "opt_3",
+              "text": "Using only the final LLM output accuracy while ignoring intermediate retrieval steps.",
+              "correct": false
+            },
+            {
+              "id": "opt_4",
+              "text": "Evaluating the system using basic keyword matching algorithms without any external documents.",
+              "correct": false
+            }
+          ],
+          "explain": "Evaluating multi-hop RAG requires datasets like HotpotQA and MuSiQue, which specifically provide multi-hop questions alongside the exact ground-truth reasoning chains (the 'supporting facts') needed to verify if the model retrieved the correct intermediate clues."
+        }
+      ]
+    }
+  ]
+}

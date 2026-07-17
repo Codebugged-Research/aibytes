@@ -1,0 +1,222 @@
+{
+  "id": "u419-l5",
+  "unit": 419,
+  "day": 2100,
+  "tier": "LLM Application Engineering",
+  "tierIcon": "🔌",
+  "title": "Capstone: Fix a Broken Context Pipeline",
+  "icon": "🛠️",
+  "concept": "Diagnosing and repairing a context assembly with rot, poor ordering, and no compression; 'Next up: Advanced Context Engineering.'.",
+  "xp": 15,
+  "hearts": 3,
+  "estMinutes": 7,
+  "segments": [
+    {
+      "type": "warmup",
+      "exercises": [
+        {
+          "id": "w1",
+          "type": "multiple_choice",
+          "xp": 1,
+          "prompt": "Quick recap: Which of these was NOT one of the common context engineering mistakes we covered last lesson?",
+          "options": [
+            {
+              "id": "a",
+              "text": "Dumping entire documents into the context instead of relevant excerpts",
+              "correct": false
+            },
+            {
+              "id": "b",
+              "text": "Ignoring token budgets and overflowing the context window",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "Using a smaller AI model to save on computing costs",
+              "correct": true
+            }
+          ],
+          "explain": "Choosing a smaller model relates to cost/performance tradeoffs, not context engineering mistakes. The real mistakes we covered were dumping whole documents (instead of relevant pieces), ignoring token budgets, and burying the user's actual question in a wall of text."
+        }
+      ]
+    },
+    {
+      "type": "teach",
+      "cards": [
+        {
+          "kind": "hook",
+          "icon": "🚨",
+          "title": "Your Bot Just Gave a Weird Answer",
+          "body": "You ask your AI assistant a simple question, but it replies with something from a conversation you had last week - totally unrelated. Something's broken in how its context was built. Time to play doctor and fix the pipeline!"
+        },
+        {
+          "kind": "definition",
+          "icon": "🔧",
+          "title": "Fixing a Broken Pipeline",
+          "body": "Repairing a context pipeline means finding and fixing three common problems together: rot (stale, irrelevant, or outdated info), poor ordering (important stuff buried or scattered), and no compression (raw dumps instead of summaries). You diagnose first, then repair each piece."
+        },
+        {
+          "kind": "analogy",
+          "icon": "🧰",
+          "title": "Think Like a Mechanic",
+          "body": "A broken context pipeline is like a messy toolbox: rusty tools (stale info) mixed with fresh ones, no order, and way too much stuff crammed in. A good mechanic sorts the toolbox first, keeps only what's needed for the job, and puts the most-used tools on top."
+        },
+        {
+          "kind": "example",
+          "icon": "📋",
+          "title": "Before and After",
+          "body": "BEFORE: A support bot's context includes a customer's entire 2-year ticket history, unsorted, with the current question tucked in the middle. AFTER: It includes a 3-sentence summary of past issues, the 2 most relevant recent tickets, and the current question clearly labeled at the end, right before the model responds."
+        },
+        {
+          "kind": "mythbust",
+          "icon": "🚫",
+          "title": "Myth: One Fix Solves Everything",
+          "body": "Some think removing old info alone fixes a broken pipeline. Not true! Even fresh, relevant info can fail if it's poorly ordered or never compressed. A real fix addresses rot, order, AND compression together - fixing just one leaves the others still broken."
+        },
+        {
+          "kind": "visual",
+          "icon": "⚖️",
+          "title": "Broken vs. Repaired Pipeline",
+          "body": "Compare how the same information looks before and after a proper context engineering fix.",
+          "compare": {
+            "left": {
+              "emoji": "🗑️",
+              "tag": "Broken Pipeline",
+              "text": "5000 tokens of raw, unsorted history; stale facts mixed with new ones; question buried in the middle"
+            },
+            "right": {
+              "emoji": "✨",
+              "tag": "Repaired Pipeline",
+              "text": "300-token summary of relevant history; only recent/relevant facts kept; question clearly placed for max attention"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "type": "practice",
+      "exercises": [
+        {
+          "id": "p1",
+          "type": "multiple_choice",
+          "xp": 2,
+          "prompt": "A pipeline has good ordering and no rot, but still overflows the token budget with raw, uncompressed text. What's still broken?",
+          "options": [
+            {
+              "id": "a",
+              "text": "Nothing - ordering and freshness are all that matter",
+              "correct": false
+            },
+            {
+              "id": "b",
+              "text": "Compression is missing, so the pipeline may get truncated or cost too much",
+              "correct": true
+            },
+            {
+              "id": "c",
+              "text": "The pipeline needs more rot removed",
+              "correct": false
+            },
+            {
+              "id": "d",
+              "text": "The user's question should be deleted",
+              "correct": false
+            }
+          ],
+          "explain": "Even with fresh, well-ordered info, if it's never compressed (summarized/condensed), it can still overflow the token budget, get cut off, or cost more than necessary. Compression is a separate, essential repair step."
+        },
+        {
+          "id": "p2",
+          "type": "true_false",
+          "xp": 2,
+          "prompt": "True or False: If you fix the ordering of a context pipeline so the question is placed well, you don't need to worry about removing outdated or irrelevant information.",
+          "options": [
+            {
+              "id": "a",
+              "text": "True",
+              "correct": false
+            },
+            {
+              "id": "b",
+              "text": "False",
+              "correct": true
+            }
+          ],
+          "explain": "False! Ordering and rot are separate problems. Even perfectly placed context can mislead the model if it's stale or irrelevant. A full repair addresses rot, ordering, and compression all together, not just one piece."
+        },
+        {
+          "id": "p3",
+          "type": "fill_blank",
+          "xp": 2,
+          "prompt": "Fill in the blank:",
+          "sentence": "When repairing a context pipeline, you should remove rot, apply compression, and fix the ordering so the most important content is easy for the model to find.",
+          "blank": "compression",
+          "words": [
+            "compression",
+            "encryption",
+            "duplication"
+          ],
+          "explain": "Compression means summarizing or condensing information so it fits the token budget without losing the important meaning - a key repair step alongside removing rot and fixing order."
+        },
+        {
+          "id": "p4",
+          "type": "spot_the_ai",
+          "xp": 2,
+          "prompt": "Which context pipeline description sounds like it was generated by an AI trying to sound impressive but is actually poorly engineered (rot + no compression + bad order)?",
+          "options": [
+            {
+              "id": "a",
+              "text": "\"Our pipeline filters context by recency and relevance, summarizes older content, and places the user's query prominently for the model to attend to.\"",
+              "correct": false
+            },
+            {
+              "id": "b",
+              "text": "\"Leveraging comprehensive full-history integration, our system ingests all available data in raw form to ensure nothing is ever missed, appending the query wherever convenient.\"",
+              "correct": true
+            },
+            {
+              "id": "c",
+              "text": "\"We compress long documents into short summaries and reorder sections so the most relevant parts appear closest to the question.\"",
+              "correct": false
+            }
+          ],
+          "explain": "Option B uses impressive-sounding words like 'comprehensive' and 'leveraging' but actually describes a broken pipeline: it dumps ALL raw data (no compression, likely includes rot) and places the query 'wherever convenient' (no intentional ordering). Good engineering, like options A and C, is specific about filtering, summarizing, and deliberate placement."
+        }
+      ]
+    },
+    {
+      "type": "boss",
+      "exercises": [
+        {
+          "id": "b1",
+          "type": "multiple_choice",
+          "xp": 5,
+          "prompt": "Final check: Your AI assistant's context pipeline pulls 5000 tokens of raw chat logs from 3 months ago, pastes them in random order, and puts the user's actual question at the very top of a huge wall of text (but the model still ignores it). What's the BEST fix, in order?",
+          "options": [
+            {
+              "id": "a",
+              "text": "Delete the logs entirely so the pipeline has nothing to send",
+              "correct": false
+            },
+            {
+              "id": "b",
+              "text": "Filter out old/irrelevant logs (remove rot), summarize what's left (compress), then order by relevance with the user's question placed prominently near the end/top where the model attends most",
+              "correct": true
+            },
+            {
+              "id": "c",
+              "text": "Keep all 5000 tokens but ask the model nicely to focus on the question",
+              "correct": false
+            },
+            {
+              "id": "d",
+              "text": "Add even more historical data so the model has full context",
+              "correct": false
+            }
+          ],
+          "explain": "Fixing a broken pipeline means treating rot, ordering, and compression as separate but connected problems: (1) remove stale/irrelevant info so it doesn't mislead the model, (2) compress what remains (summarize) so you don't blow the token budget, and (3) place the most important content - especially the user's actual question - where the model is most likely to attend to it. Just deleting everything or piling on more data doesn't solve the real problem, and asking nicely doesn't fix a structural issue. This is the core workflow of context engineering: diagnose what's wrong, then repair each piece deliberately. Next up: Advanced Context Engineering."
+        }
+      ]
+    }
+  ]
+}

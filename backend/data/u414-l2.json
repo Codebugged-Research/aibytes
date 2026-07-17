@@ -1,0 +1,222 @@
+{
+  "id": "u414-l2",
+  "unit": 414,
+  "day": 2072,
+  "tier": "LLM Application Engineering",
+  "tierIcon": "🔌",
+  "title": "Separating Prompts from Application Logic",
+  "icon": "🗂️",
+  "concept": "Externalizing prompt text into config or a prompt registry instead of hardcoding strings.",
+  "xp": 15,
+  "hearts": 3,
+  "estMinutes": 7,
+  "segments": [
+    {
+      "type": "warmup",
+      "exercises": [
+        {
+          "id": "w1",
+          "type": "multiple_choice",
+          "xp": 1,
+          "prompt": "Quick recap: why did we say prompts need version control and rollback, just like code?",
+          "options": [
+            {
+              "id": "a",
+              "text": "Because prompts can silently change or 'drift' over time, and a bad edit needs to be traceable and reversible",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "Because AI models refuse to run without a version number attached",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "Because version control makes prompts run faster on the GPU",
+              "correct": false
+            }
+          ],
+          "explain": "Right — prompts drift like code: small edits pile up, and without versioning you can't tell what changed or roll back a bad update. That's why treating prompts like code (with history and rollback) matters."
+        }
+      ]
+    },
+    {
+      "type": "teach",
+      "cards": [
+        {
+          "kind": "hook",
+          "icon": "🕵️",
+          "title": "Where Did That Prompt Go?",
+          "body": "A teammate needs to fix a typo in your AI's instructions. But the text is buried inside a function, 200 lines deep, in a file called utils_v2_final.py. Finding it takes 20 minutes — that's a hardcoding problem."
+        },
+        {
+          "kind": "definition",
+          "icon": "📦",
+          "title": "What Does 'Separating Prompts' Mean?",
+          "body": "Instead of typing prompt text straight into your app's code (like 'prompt = \"Summarize this...\"' buried in a function), you store it somewhere else — a config file, database, or prompt registry. Your code then just asks for the prompt by name."
+        },
+        {
+          "kind": "analogy",
+          "icon": "🍔",
+          "title": "The Recipe Card, Not the Chef's Memory",
+          "body": "A restaurant writes recipes on cards in a binder, not scribbled in the chef's head. Anyone can update the card without retraining the chef. A prompt registry is that recipe binder for your AI app."
+        },
+        {
+          "kind": "example",
+          "icon": "🧾",
+          "title": "Hardcoded vs. Externalized",
+          "body": "Hardcoded: your Python file has the line 'system_prompt = \"You are a helpful support bot...\"' typed right in the middle of the code. Externalized: your code says 'get_prompt(\"support_bot_greeting\")' and the actual wording lives in a prompts.yaml file or a database table anyone can edit."
+        },
+        {
+          "kind": "mythbust",
+          "icon": "🚫",
+          "title": "Myth: 'It's just a string, hardcoding is fine'",
+          "body": "A prompt isn't just a string — it's a piece of behavior that changes often, needs testing, and often gets edited by non-coders like prompt writers or product managers. Treating it like a random variable name hides it from the people who need to change it safely."
+        },
+        {
+          "kind": "visual",
+          "icon": "⚖️",
+          "title": "Two Ways to Store a Prompt",
+          "body": "Same prompt, two very different setups.",
+          "compare": {
+            "left": {
+              "emoji": "🧵",
+              "tag": "Hardcoded",
+              "text": "Prompt text typed directly inside app.py, scattered across 10 files, mixed with logic"
+            },
+            "right": {
+              "emoji": "🗂️",
+              "tag": "Externalized",
+              "text": "Prompt text lives in one prompts.yaml or registry, code just calls it by name"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "type": "practice",
+      "exercises": [
+        {
+          "id": "p1",
+          "type": "multiple_choice",
+          "xp": 2,
+          "prompt": "Which of these is the clearest sign that prompts are NOT separated from application logic?",
+          "options": [
+            {
+              "id": "a",
+              "text": "Prompt text is typed directly inside function bodies across many files",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "Prompts are stored in a YAML file with names and version numbers",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "A non-engineer can edit a prompt without touching the codebase",
+              "correct": false
+            },
+            {
+              "id": "d",
+              "text": "Prompts are fetched from a database table by ID",
+              "correct": false
+            }
+          ],
+          "explain": "When prompt text is typed directly inside functions across files, it's mixed into the logic — that's hardcoding. The other options all describe prompts living outside the code, which is the separated approach."
+        },
+        {
+          "id": "p2",
+          "type": "true_false",
+          "xp": 2,
+          "prompt": "True or False: Storing prompts in a separate config file means you can update wording without redeploying your entire application.",
+          "options": [
+            {
+              "id": "a",
+              "text": "True",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "False",
+              "correct": false
+            }
+          ],
+          "explain": "True! If your code just fetches prompts by name from an external file or database, updating the file (or database entry) changes the behavior instantly — no code redeploy needed, which is a huge speed win."
+        },
+        {
+          "id": "p3",
+          "type": "fill_blank",
+          "xp": 2,
+          "prompt": "Fill in the blank:",
+          "sentence": "Instead of hardcoding text, teams store prompts in a central registry so the code can just call get_prompt to fetch them.",
+          "blank": "get_prompt",
+          "words": [
+            "get_prompt",
+            "print_text",
+            "run_model"
+          ],
+          "explain": "get_prompt represents the idea of asking the registry for the prompt by name, instead of the code containing the actual wording itself."
+        },
+        {
+          "id": "p4",
+          "type": "spot_the_ai",
+          "xp": 2,
+          "prompt": "Which of these three descriptions of a 'prompt registry' sounds like AI-generated filler rather than a real, useful description?",
+          "options": [
+            {
+              "id": "a",
+              "text": "A prompt registry is a centralized place — like a config file or database — where prompt text is stored with names and versions, separate from app code.",
+              "correct": false
+            },
+            {
+              "id": "b",
+              "text": "A prompt registry is a revolutionary paradigm-shifting solution that synergizes prompt excellence to unlock unprecedented AI-powered value across the enterprise.",
+              "correct": true
+            },
+            {
+              "id": "c",
+              "text": "A prompt registry lets engineers update wording without redeploying the whole application, since the code just looks up the prompt by name.",
+              "correct": false
+            }
+          ],
+          "explain": "Option B is full of vague buzzwords ('paradigm-shifting', 'synergizes', 'unprecedented value') but says nothing concrete about what a prompt registry actually does. The other two options describe real, specific mechanics."
+        }
+      ]
+    },
+    {
+      "type": "boss",
+      "exercises": [
+        {
+          "id": "b1",
+          "type": "multiple_choice",
+          "xp": 5,
+          "prompt": "Your team's app has 'summarize_prompt = \"Summarize this in 3 bullet points...\"' typed directly inside 15 different Python files across the codebase. What's the BEST fix, combining what you know about drift and separation?",
+          "options": [
+            {
+              "id": "a",
+              "text": "Move the prompt text into a central prompt registry/config, and have all 15 files reference it by name and version",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "Copy-paste the exact same string into any new files too, to keep things consistent",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "Delete 14 of the copies and keep only one, chosen at random",
+              "correct": false
+            },
+            {
+              "id": "d",
+              "text": "Add a comment above each hardcoded prompt explaining what it does",
+              "correct": false
+            }
+          ],
+          "explain": "Centralizing the prompt solves both problems at once: it stops drift (one source of truth to version and roll back) and stops hardcoding (logic just references a name/version instead of owning the text). Comments or random deletion don't fix the root issue — the text is still scattered and un-versioned. This is the foundation you'll build on as we cover templating, testing, and deployment strategies next!"
+        }
+      ]
+    }
+  ]
+}

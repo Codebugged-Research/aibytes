@@ -1,0 +1,222 @@
+{
+  "id": "u450-l3",
+  "unit": 450,
+  "day": 2253,
+  "tier": "LLM Application Engineering",
+  "tierIcon": "🔌",
+  "title": "Why Vector Similarity Alone Isn't Enough",
+  "icon": "🔍",
+  "concept": "Embedding similarity is a coarse proxy for relevance; reranking directly scores query-document relevance.",
+  "xp": 15,
+  "hearts": 3,
+  "estMinutes": 7,
+  "segments": [
+    {
+      "type": "warmup",
+      "exercises": [
+        {
+          "id": "w1",
+          "type": "multiple_choice",
+          "xp": 1,
+          "prompt": "Recall from last lesson: How does a two-stage retrieval pipeline balance cost and quality?",
+          "options": [
+            {
+              "id": "opt_1",
+              "text": "Cheap retrieval first, followed by expensive reranking.",
+              "correct": true
+            },
+            {
+              "id": "opt_2",
+              "text": "Expensive reranking first, followed by cheap retrieval.",
+              "correct": false
+            },
+            {
+              "id": "opt_3",
+              "text": "Running both steps at the same time to save compute.",
+              "correct": false
+            }
+          ],
+          "explain": "The two-stage pipeline uses a cheap first stage (retriever) to gather a broad set of candidates, followed by an expensive second stage (reranker) to order them perfectly."
+        }
+      ]
+    },
+    {
+      "type": "teach",
+      "cards": [
+        {
+          "kind": "hook",
+          "icon": "🗺️",
+          "title": "The Neighborhood Trap",
+          "body": "We often trust vector similarity to find the perfect answer. But in reality, vectors only tell us if two documents hang out in the same neighborhood, not if they are actually talking to each other."
+        },
+        {
+          "kind": "definition",
+          "icon": "🎯",
+          "title": "Proxy vs. Precision",
+          "body": "Vector similarity is a coarse proxy for relevance because it only measures how close two texts are in a general concept space. Rerankers directly score the specific relationship and relevance between a query and a document."
+        },
+        {
+          "kind": "analogy",
+          "icon": "🕵️‍♂️",
+          "title": "The Librarian Review",
+          "body": "Think of a library catalog search as the fast retriever that finds 50 books mentioning 'Apple'. Reranking is like an expert librarian who actually reads the cover of those 50 books to pull out the ones about the tech company instead of the fruit."
+        },
+        {
+          "kind": "example",
+          "icon": "🐕",
+          "title": "The Chocolate Catastrophe",
+          "body": "A user searches for 'Can I feed dogs chocolate?' Vector search might rank a document titled 'Healthy chocolate recipes for humans' very high because both texts share similar food concepts, even though it's dangerous for dogs."
+        },
+        {
+          "kind": "mythbust",
+          "icon": "🧼",
+          "title": "The Similarity Illusion",
+          "body": "Many believe that high vector similarity guarantees high relevance. In practice, a document can have a high similarity score because it shares generic terms, yet fail to answer the user's specific question."
+        },
+        {
+          "kind": "visual",
+          "icon": "⚖️",
+          "title": "Closeness vs. Relevance",
+          "body": "Vector similarity looks at general thematic overlap, while reranking evaluates the direct connection between the question and the answer.",
+          "compare": {
+            "left": {
+              "emoji": "📍",
+              "tag": "Vector Similarity",
+              "text": "Measures general closeness: 'Do these two texts talk about similar things?'"
+            },
+            "right": {
+              "emoji": "⚖️",
+              "tag": "Reranking",
+              "text": "Measures direct utility: 'Does this document actually answer this query?'"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "type": "practice",
+      "exercises": [
+        {
+          "id": "p1",
+          "type": "multiple_choice",
+          "xp": 2,
+          "prompt": "Why does vector similarity alone often return documents that are topically related but fail to answer the specific query?",
+          "options": [
+            {
+              "id": "opt_1",
+              "text": "Because vector search only works with exact word matches.",
+              "correct": false
+            },
+            {
+              "id": "opt_2",
+              "text": "Vector similarity is a coarse proxy that measures general topic overlap, not direct relevance.",
+              "correct": true
+            },
+            {
+              "id": "opt_3",
+              "text": "Because vector search is too slow to find the correct answer.",
+              "correct": false
+            },
+            {
+              "id": "opt_4",
+              "text": "Because vectors cannot capture semantic meaning.",
+              "correct": false
+            }
+          ],
+          "explain": "Vector similarity only checks if the query and document reside in a similar semantic neighborhood, which does not guarantee that the document actually answers the question."
+        },
+        {
+          "id": "p2",
+          "type": "true_false",
+          "xp": 2,
+          "prompt": "True or False: Vector similarity alone is always sufficient to guarantee the most relevant document is ranked first.",
+          "options": [
+            {
+              "id": "opt_true",
+              "text": "True",
+              "correct": false
+            },
+            {
+              "id": "opt_false",
+              "text": "False",
+              "correct": true
+            }
+          ],
+          "explain": "Vector search is great at finding a broad set of candidate documents, but it is not precise enough to guarantee the absolute best document is ranked first."
+        },
+        {
+          "id": "p3",
+          "type": "fill_blank",
+          "xp": 2,
+          "prompt": "Fill in the blank to complete the explanation of vector limitations:",
+          "sentence": "Vector similarity is only a coarse proxy for actual relevance.",
+          "blank": "proxy",
+          "words": [
+            "proxy",
+            "guarantee",
+            "replacement"
+          ],
+          "explain": "Vector similarity only acts as a rough proxy (an approximation) for real relevance, meaning it can miss the exact context of the user's query."
+        },
+        {
+          "id": "p4",
+          "type": "spot_the_ai",
+          "xp": 2,
+          "prompt": "Identify which statement accurately describes how a reranker works:",
+          "options": [
+            {
+              "id": "opt_1",
+              "text": "Reranking works by increasing the dimensions of the pre-computed document vectors so they match the query better.",
+              "correct": false
+            },
+            {
+              "id": "opt_2",
+              "text": "Reranking works by deleting all documents that do not contain the exact keywords of the query.",
+              "correct": false
+            },
+            {
+              "id": "opt_3",
+              "text": "Reranking feeds the query and candidate document together into a model to calculate a direct relevance score.",
+              "correct": true
+            }
+          ],
+          "explain": "Option C is the AI-generated answer because it correctly identifies how a reranker scores the query and document together as a pair, rather than just comparing individual pre-computed vectors."
+        }
+      ]
+    },
+    {
+      "type": "boss",
+      "exercises": [
+        {
+          "id": "b1",
+          "type": "multiple_choice",
+          "xp": 5,
+          "prompt": "An engineer notices that a search query for 'How do I cancel my plan?' returns documents about pricing tiers and signup bonuses first, while the actual cancellation guide is ranked 15th. Why does this happen, and how does reranking fix it?",
+          "options": [
+            {
+              "id": "opt_1",
+              "text": "Vector search always retrieves the single most relevant document first.",
+              "correct": false
+            },
+            {
+              "id": "opt_2",
+              "text": "Vector similarity is a coarse proxy for overall theme, while rerankers directly score query-document relevance.",
+              "correct": true
+            },
+            {
+              "id": "opt_3",
+              "text": "Vector search checks for exact keyword matches, while reranking checks for semantic similarity.",
+              "correct": false
+            },
+            {
+              "id": "opt_4",
+              "text": "Vector similarity is slow and accurate, while reranking is fast but cheap.",
+              "correct": false
+            }
+          ],
+          "explain": "Vector similarity checks if the general theme or vocabulary of the document matches the query, acting as a broad filter. However, it cannot reliably tell if the document directly answers the query's specific question. A cross-encoder reranker scores the document's direct relevance to the query, fixing the ordering."
+        }
+      ]
+    }
+  ]
+}

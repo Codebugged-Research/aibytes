@@ -1,0 +1,222 @@
+{
+  "id": "u469-l4",
+  "unit": 469,
+  "day": 2349,
+  "tier": "LLM Application Engineering",
+  "tierIcon": "🔌",
+  "title": "Exposing MCP Tools to the Model",
+  "icon": "🔌",
+  "concept": "Translating discovered MCP tools into the model's native function-calling format so it can choose to invoke them.",
+  "xp": 15,
+  "hearts": 3,
+  "estMinutes": 7,
+  "segments": [
+    {
+      "type": "warmup",
+      "exercises": [
+        {
+          "id": "w1",
+          "type": "multiple_choice",
+          "xp": 1,
+          "prompt": "In the previous lesson, we learned how to invoke an MCP tool. What two key pieces of information must the client send in the 'tools/call' request?",
+          "options": [
+            {
+              "id": "w1",
+              "text": "Just the server's IP address",
+              "correct": false
+            },
+            {
+              "id": "w2",
+              "text": "The tool's name and the arguments requested by the model",
+              "correct": true
+            },
+            {
+              "id": "w3",
+              "text": "A raw screenshot of the model's response text",
+              "correct": false
+            }
+          ],
+          "explain": "To run a tool, the client sends a 'tools/call' request containing both the tool's unique name and the specific arguments the model chose."
+        }
+      ]
+    },
+    {
+      "type": "teach",
+      "cards": [
+        {
+          "kind": "hook",
+          "icon": "🧠",
+          "title": "Giving the LLM Hands",
+          "body": "Now that your client knows how to invoke a tool, how does the AI brain actually find out those tools exist? We have to translate the server's tools into a language the LLM understands so it can choose when to run them!"
+        },
+        {
+          "kind": "definition",
+          "icon": "🔄",
+          "title": "Format Translation",
+          "body": "Exposing MCP tools to a model means converting the standard MCP tool schema—which lists the tool's name, description, and input parameters—into the specific format expected by your LLM provider, such as OpenAI's tool definitions or Anthropic's tool declarations."
+        },
+        {
+          "kind": "analogy",
+          "icon": "🗣️",
+          "title": "The Translation Booth",
+          "body": "Think of an MCP server as a international chef speaking French, and your LLM as an English-speaking guest. The MCP Client acts as the translator, taking the French menu (MCP tools) and rewriting it in English (the LLM's function schema) so the guest can order."
+        },
+        {
+          "kind": "example",
+          "icon": "📝",
+          "title": "Bridging the Gap",
+          "body": "If an MCP server advertises a tool 'get_weather(city)', the client reads this JSON Schema, translates it to match OpenAI's 'type: \"function\"' structure, and passes it in the 'tools' parameter when calling the OpenAI API."
+        },
+        {
+          "kind": "mythbust",
+          "icon": "🕵️‍♂️",
+          "title": "LLMs Don't Speak MCP Directly",
+          "body": "You might think LLMs natively understand the MCP protocol out of the box. They don't! The LLM only knows about the tools because your client application translates the MCP tool list and passes it to the model during the API request."
+        },
+        {
+          "kind": "visual",
+          "icon": "🗺️",
+          "title": "Mapping the Schemas",
+          "body": "The client converts MCP definitions on the left into the specific structure required by your LLM provider on the right.",
+          "compare": {
+            "left": {
+              "emoji": "🛠️",
+              "tag": "MCP Server Tool",
+              "text": "name: \"read_file\", inputSchema: {...}"
+            },
+            "right": {
+              "emoji": "🤖",
+              "tag": "LLM API Format",
+              "text": "type: \"function\", function: {name: \"read_file\", parameters: {...}}"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "type": "practice",
+      "exercises": [
+        {
+          "id": "p1",
+          "type": "multiple_choice",
+          "xp": 2,
+          "prompt": "When an LLM decides to use one of the exposed MCP tools, what does it actually output?",
+          "options": [
+            {
+              "id": "q1",
+              "text": "The model connects to the MCP server and runs the code directly.",
+              "correct": false
+            },
+            {
+              "id": "q2",
+              "text": "The model ignores the tools and only generates conversational responses.",
+              "correct": false
+            },
+            {
+              "id": "q3",
+              "text": "The model returns a tool call request telling the client which tool to execute and with what arguments.",
+              "correct": true
+            },
+            {
+              "id": "q4",
+              "text": "The model rewrites the server's code to run inside the user's browser.",
+              "correct": false
+            }
+          ],
+          "explain": "Models like GPT-4 or Claude do not execute code themselves; they return a structured request (like a JSON object with arguments) telling the client which tool they want to run."
+        },
+        {
+          "id": "p2",
+          "type": "true_false",
+          "xp": 2,
+          "prompt": "True or False: The MCP client is responsible for both presenting tools to the LLM and executing them when requested.",
+          "options": [
+            {
+              "id": "t1",
+              "text": "True",
+              "correct": true
+            },
+            {
+              "id": "t2",
+              "text": "False",
+              "correct": false
+            }
+          ],
+          "explain": "The client acts as the bridge. It must fetch the tools, format them for the LLM, receive the LLM's decision, execute the tool on the server, and return the result to the LLM."
+        },
+        {
+          "id": "p3",
+          "type": "fill_blank",
+          "xp": 2,
+          "prompt": "Fill in the missing word to describe how we make MCP tool definitions compatible with an LLM's API:",
+          "sentence": "Before sending tools to the model, your client must perform a translation of the schema format.",
+          "blank": "translation",
+          "words": [
+            "translation",
+            "deletion",
+            "encryption"
+          ],
+          "explain": "Translation is key because different LLM providers expect slightly different JSON schemas for tool definitions than the standard MCP format."
+        },
+        {
+          "id": "p4",
+          "type": "spot_the_ai",
+          "xp": 2,
+          "prompt": "Identify the structured format that represents an MCP tool translated for an LLM provider's API:",
+          "options": [
+            {
+              "id": "s1",
+              "text": "An MCP server configuration file mapping local Python scripts to terminal commands.",
+              "correct": false
+            },
+            {
+              "id": "s2",
+              "text": "A client-side array format: [{'type': 'function', 'function': {'name': 'fetch_weather', 'description': 'Get temperature', 'parameters': {...}}}]",
+              "correct": true
+            },
+            {
+              "id": "s3",
+              "text": "A raw network socket streaming binary data directly from the server to the client database.",
+              "correct": false
+            }
+          ],
+          "explain": "Option B shows an AI-generated format where an MCP tool definition has been translated into the specific nested structure expected by an LLM provider's API (e.g., specifying type 'function' and passing the parameters schema)."
+        }
+      ]
+    },
+    {
+      "type": "boss",
+      "exercises": [
+        {
+          "id": "b1",
+          "type": "multiple_choice",
+          "xp": 5,
+          "prompt": "You want to build an autonomous agent loop that can use any MCP server's tools dynamically. What is the correct sequence of steps your client must perform?",
+          "options": [
+            {
+              "id": "b1",
+              "text": "The model automatically connects to the MCP server directly using its weights.",
+              "correct": false
+            },
+            {
+              "id": "b2",
+              "text": "List the MCP tools, translate their schemas to the model's format, send them to the model, and watch for tool calls.",
+              "correct": true
+            },
+            {
+              "id": "b3",
+              "text": "Manually hardcode each tool directly into the model's core training dataset.",
+              "correct": false
+            },
+            {
+              "id": "b4",
+              "text": "Convert all MCP tools into plain English text prompts and disable structured JSON tool calls.",
+              "correct": false
+            }
+          ],
+          "explain": "To expose tools successfully, the client must first query the MCP server for available tools (`tools/list`), translate those schemas into the format the specific model provider expects (like OpenAI or Anthropic format), send them to the model, and then check if the model's response contains a request to invoke one of those tools."
+        }
+      ]
+    }
+  ]
+}

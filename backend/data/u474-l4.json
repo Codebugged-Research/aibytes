@@ -1,0 +1,222 @@
+{
+  "id": "u474-l4",
+  "unit": 474,
+  "day": 2374,
+  "tier": "LLM Application Engineering",
+  "tierIcon": "🔌",
+  "title": "Tracing a Failure End to End",
+  "icon": "🗺️",
+  "concept": "Using pipeline logs to walk backward from a bad answer to the exact stage that introduced the error.",
+  "xp": 15,
+  "hearts": 3,
+  "estMinutes": 7,
+  "segments": [
+    {
+      "type": "warmup",
+      "exercises": [
+        {
+          "id": "w1",
+          "type": "multiple_choice",
+          "xp": 1,
+          "prompt": "In our last lesson on generation failures, what happens when the LLM 'ignores good context'?",
+          "options": [
+            {
+              "id": "opt_1",
+              "text": "The vector database fails to find any matching documents",
+              "correct": false
+            },
+            {
+              "id": "opt_2",
+              "text": "The LLM ignores correct retrieved context and hallucinates anyway",
+              "correct": true
+            },
+            {
+              "id": "opt_3",
+              "text": "The user query is too short for the system to process",
+              "correct": false
+            }
+          ],
+          "explain": "In the last lesson, we learned that sometimes retrieval works perfectly, but the LLM still ignores the good context and generates a hallucinated answer anyway."
+        }
+      ]
+    },
+    {
+      "type": "teach",
+      "cards": [
+        {
+          "kind": "hook",
+          "icon": "🕵️‍♂️",
+          "title": "Where Did It Go Wrong?",
+          "body": "When a chatbot gives a bad answer, you can't just blame the LLM. RAG pipelines have many moving parts, and finding the culprit requires acting like a detective following a trail of breadcrumbs."
+        },
+        {
+          "kind": "definition",
+          "icon": "🔍",
+          "title": "What is Tracing?",
+          "body": "Tracing is the process of logging and examining the inputs and outputs of every single component in your RAG pipeline—from user query to final generation—to locate where an error was introduced."
+        },
+        {
+          "kind": "analogy",
+          "icon": "🚰",
+          "title": "The Muddy Pipe Analogy",
+          "body": "Imagine a water purification pipeline where the water comes out muddy. Instead of guessing, you start at the tap and trace the pipe backward, checking each valve and filter until you find the exact spot where the dirt entered."
+        },
+        {
+          "kind": "example",
+          "icon": "📋",
+          "title": "A Real-World Trace",
+          "body": "A user asks for the price of Plan A. The log shows: 1) Query: 'Plan A cost', 2) Retrieved: 'Plan B costs $10', 3) LLM Output: '$10'. Looking at this log, you instantly see the LLM did its job, but the retrieval step pulled the wrong plan."
+        },
+        {
+          "kind": "mythbust",
+          "icon": "🚫",
+          "title": "Don't Guess, Trace!",
+          "body": "Many developers think they have to guess what went wrong by looking only at the final bad output. In reality, modern logging tools let you inspect the exact inputs and outputs of every single step to find the truth instantly."
+        },
+        {
+          "kind": "visual",
+          "icon": "📊",
+          "title": "Tracing vs. Guessing",
+          "body": "Compare how debugging looks with and without full pipeline tracing. Tracking each step removes the mystery.",
+          "compare": {
+            "left": {
+              "emoji": "🤷‍♂️",
+              "tag": "No Tracing",
+              "text": "Only see the bad final answer. You have to guess if the search failed or the LLM hallucinated."
+            },
+            "right": {
+              "emoji": "🛠️",
+              "tag": "With Tracing",
+              "text": "Inspect Query -> Retriever -> Prompt -> LLM. See exactly where the bad data entered."
+            }
+          }
+        }
+      ]
+    },
+    {
+      "type": "practice",
+      "exercises": [
+        {
+          "id": "p1",
+          "type": "multiple_choice",
+          "xp": 2,
+          "prompt": "Why is logging every step of a RAG pipeline (tracing) useful for debugging?",
+          "options": [
+            {
+              "id": "opt_1",
+              "text": "It automatically rewrites the code to fix the bug",
+              "correct": false
+            },
+            {
+              "id": "opt_2",
+              "text": "It reveals the exact inputs and outputs of each stage to pinpoint the error",
+              "correct": true
+            },
+            {
+              "id": "opt_3",
+              "text": "It replaces the LLM with a more expensive model",
+              "correct": false
+            },
+            {
+              "id": "opt_4",
+              "text": "It blocks users from asking questions that might fail",
+              "correct": false
+            }
+          ],
+          "explain": "Tracing saves developer time by showing the inputs and outputs of each module, pinpointing the exact failure point (like bad retrieval) instead of forcing you to guess."
+        },
+        {
+          "id": "p2",
+          "type": "true_false",
+          "xp": 2,
+          "prompt": "True or False: If a RAG system outputs a hallucination, the error is always located in the LLM generation stage.",
+          "options": [
+            {
+              "id": "opt_1",
+              "text": "True",
+              "correct": false
+            },
+            {
+              "id": "opt_2",
+              "text": "False",
+              "correct": true
+            }
+          ],
+          "explain": "Even if the LLM output is wrong, the root cause could be that the retriever fetched bad documents. You must check the retrieved context first."
+        },
+        {
+          "id": "p3",
+          "type": "fill_blank",
+          "xp": 2,
+          "prompt": "Fill in the blank to describe how we debug a RAG pipeline failure using logs.",
+          "sentence": "To find the source of an error, we trace backward from the final response to the original query.",
+          "blank": "backward",
+          "words": [
+            "backward",
+            "forward",
+            "randomly"
+          ],
+          "explain": "By tracing backward from the bad output, we can inspect each previous step's output to find the exact point where incorrect information first entered the pipeline."
+        },
+        {
+          "id": "p4",
+          "type": "spot_the_ai",
+          "xp": 2,
+          "prompt": "Identify which of these log traces was generated by an AI bot rather than representing a real pipeline execution log:",
+          "options": [
+            {
+              "id": "opt_1",
+              "text": "[Step 2: Retrieval] Input: 'Refund policy' -> Output: [Doc#4: 'No refunds after 30 days']",
+              "correct": false
+            },
+            {
+              "id": "opt_2",
+              "text": "The system has completed the tracing process. Please analyze the logs to locate the error in the pipeline.",
+              "correct": true
+            },
+            {
+              "id": "opt_3",
+              "text": "[Step 3: Generation] Input: Context: [Doc#4] Prompt: 'How long to refund?' -> Output: '30 days'",
+              "correct": false
+            }
+          ],
+          "explain": "Option B is generated by an AI because it provides a generic, slightly robotic template-like answer. Options A and C represent realistic debug logs showing trace data."
+        }
+      ]
+    },
+    {
+      "type": "boss",
+      "exercises": [
+        {
+          "id": "b1",
+          "type": "multiple_choice",
+          "xp": 5,
+          "prompt": "You run a trace on a failed RAG query. The user asked for \"2024 revenue\", the query rewriter output \"2024 revenue\", the vector database returned a document about \"2023 revenue\", and the LLM accurately summarized that 2023 document. Which component introduced the error?",
+          "options": [
+            {
+              "id": "opt_1",
+              "text": "The LLM Generator, because it should have known the document was wrong",
+              "correct": false
+            },
+            {
+              "id": "opt_2",
+              "text": "The Query Rewriter, because it generated a bad query for the database",
+              "correct": false
+            },
+            {
+              "id": "opt_3",
+              "text": "The Retrieval step, because the correct query retrieved an incorrect document",
+              "correct": true
+            },
+            {
+              "id": "opt_4",
+              "text": "The User Interface, because it displayed the final incorrect response",
+              "correct": false
+            }
+          ],
+          "explain": "To trace a failure, you work backward. The final answer was wrong, but the prompt looked correct, meaning the generation step succeeded. The prompt contained the wrong document, which points to a failure in the retrieval step. The database query itself was correct, so the database itself is where the bad document was selected."
+        }
+      ]
+    }
+  ]
+}

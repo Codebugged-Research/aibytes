@@ -1,0 +1,222 @@
+{
+  "id": "u463-l3",
+  "unit": 463,
+  "day": 2318,
+  "tier": "LLM Application Engineering",
+  "tierIcon": "🔌",
+  "title": "Iterative Retrieve-Reason-Retrieve",
+  "icon": "🔄",
+  "concept": "Retrieving for the first sub-question, reasoning over the result, then using that to form the next retrieval query.",
+  "xp": 15,
+  "hearts": 3,
+  "estMinutes": 7,
+  "segments": [
+    {
+      "type": "warmup",
+      "exercises": [
+        {
+          "id": "w1",
+          "type": "multiple_choice",
+          "xp": 1,
+          "prompt": "In the last lesson, we learned about 'Decomposing a Multi-Hop Question'. What does this about 'Decomposing a Multi-Hop Question': What is 'Decomposing a Multi-Hop Question'?",
+          "options": [
+            {
+              "id": "a",
+              "text": "Breaking a complex question into smaller, ordered sub-questions",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "Translating a question into multiple different languages",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "Combining multiple distinct user profiles into a single prompt",
+              "correct": false
+            }
+          ],
+          "explain": "Decomposition is the process of breaking down a complex multi-hop question into a series of smaller, sequential sub-questions that can be solved step-by-step."
+        }
+      ]
+    },
+    {
+      "type": "teach",
+      "cards": [
+        {
+          "kind": "hook",
+          "icon": "🔗",
+          "title": "Connecting the Dots",
+          "body": "When a question requires connecting dots that aren't in the same document, a single search query won't cut it. You have to find the first clue, read it, and let that clue guide your very next search."
+        },
+        {
+          "kind": "definition",
+          "icon": "🔄",
+          "title": "The Iteration Loop",
+          "body": "Iterative Retrieve-Reason-Retrieve is a process where an LLM acts as an agent. It retrieves information for a sub-question, reasons over the retrieved text to find a missing link, and then formulates a brand-new query to fetch the next piece of information."
+        },
+        {
+          "kind": "analogy",
+          "icon": "🕵️",
+          "title": "The Detective's Notebook",
+          "body": "Think of a detective solving a mystery. Instead of guessing the whole story at once, they find one clue (retrieve), think about what it means (reason), and use that new clue to search for the next location (retrieve again)."
+        },
+        {
+          "kind": "example",
+          "icon": "🏟️",
+          "title": "Stadium Search in Action",
+          "body": "To answer 'Who designed the stadium where Team Y plays?', the LLM first retrieves where Team Y plays ('Stadium Alpha'). It reasons that it now needs the architect of 'Stadium Alpha', and queries the database specifically for that architect."
+        },
+        {
+          "kind": "mythbust",
+          "icon": "🚫",
+          "title": "The Dependency Trap",
+          "body": "You might think LLMs can generate all sub-queries at the very beginning. But if the second query depends on the answer to the first (like finding a person's hometown first), you cannot generate the second query until you have retrieved the first answer!"
+        },
+        {
+          "kind": "visual",
+          "icon": "📊",
+          "title": "Single-Step vs. Iterative RAG",
+          "body": "Traditional RAG tries to find everything in one go, whereas Iterative RAG uses a feedback loop to build queries step-by-step.",
+          "compare": {
+            "left": {
+              "emoji": "🎯",
+              "tag": "Single-Step RAG",
+              "text": "One query -> retrieves documents -> generates final answer."
+            },
+            "right": {
+              "emoji": "🔄",
+              "tag": "Iterative RAG",
+              "text": "Query 1 -> Retrieve 1 -> Reason -> Query 2 -> Retrieve 2 -> Final Answer."
+            }
+          }
+        }
+      ]
+    },
+    {
+      "type": "practice",
+      "exercises": [
+        {
+          "id": "p1",
+          "type": "multiple_choice",
+          "xp": 2,
+          "prompt": "What is the primary role of the LLM during the 'Reason' phase of the Retrieve-Reason-Retrieve loop?",
+          "options": [
+            {
+              "id": "a",
+              "text": "It acts as a static vector database index.",
+              "correct": false
+            },
+            {
+              "id": "b",
+              "text": "It reads the retrieved facts and writes the next search query based on them.",
+              "correct": true
+            },
+            {
+              "id": "c",
+              "text": "It translates the user's natural language into SQL code only.",
+              "correct": false
+            },
+            {
+              "id": "d",
+              "text": "It bypasses the vector search entirely to save time.",
+              "correct": false
+            }
+          ],
+          "explain": "The LLM acts as the reasoning engine, reading the newly retrieved facts to decide what specific information is still missing and how to search for it next."
+        },
+        {
+          "id": "p2",
+          "type": "true_false",
+          "xp": 2,
+          "prompt": "True or False: In iterative RAG, you can always run all your searches in parallel at the very start of the process.",
+          "options": [
+            {
+              "id": "a",
+              "text": "True",
+              "correct": false
+            },
+            {
+              "id": "b",
+              "text": "False",
+              "correct": true
+            }
+          ],
+          "explain": "Each step of the loop relies on the output of the prior step. If you run them at the same time, you won't have the necessary keywords (like the name of the stadium or city) to search for in the second step."
+        },
+        {
+          "id": "p3",
+          "type": "fill_blank",
+          "xp": 2,
+          "prompt": "Fill in the blank to complete the description of the iterative process:",
+          "sentence": "In iterative RAG, the agent uses the retrieved answer of the first step to construct the second query.",
+          "blank": "second query",
+          "words": [
+            "second query",
+            "system prompt",
+            "vector database"
+          ],
+          "explain": "Iterative RAG relies on using the output of the previous step to dynamically build the query for the next step."
+        },
+        {
+          "id": "p4",
+          "type": "spot_the_ai",
+          "xp": 2,
+          "prompt": "Which of the following logs represents an AI system performing iterative Retrieve-Reason-Retrieve?",
+          "options": [
+            {
+              "id": "a",
+              "text": "Search Query: 'Who is the CEO of Company X?' -> Output: 'The CEO of Company X is Alice.'",
+              "correct": false
+            },
+            {
+              "id": "b",
+              "text": "Search Query: 'When was Company X founded?' -> Output: 'Company X was founded in 2015.'",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "Search Query 1: 'Who is the CEO of Company X?' -> Result: 'Alice'. Thought: 'Now I need Alice's undergraduate university.' -> Search Query 2: 'Where did Alice go to college?' -> Result: 'State University'.",
+              "correct": true
+            }
+          ],
+          "explain": "Option C represents an AI agent executing a step-by-step iterative loop: searching for a dependency, reasoning over the intermediate result, and searching again with the new clue. Options A and B are simple single-step lookups."
+        }
+      ]
+    },
+    {
+      "type": "boss",
+      "exercises": [
+        {
+          "id": "b1",
+          "type": "multiple_choice",
+          "xp": 5,
+          "prompt": "You need to answer: 'What is the current population of the birthplace of the founder of Company X?' How should your iterative RAG system execute this?",
+          "options": [
+            {
+              "id": "a",
+              "text": "Run two independent vector searches in parallel and merge the documents",
+              "correct": false
+            },
+            {
+              "id": "b",
+              "text": "Find the founder's birthplace first, extract the city name, and use it to search for that city's population",
+              "correct": true
+            },
+            {
+              "id": "c",
+              "text": "Generate a single query combining the founder's name and the word 'population' directly",
+              "correct": false
+            },
+            {
+              "id": "d",
+              "text": "Skip retrieval for the first step and guess the birthplace using the LLM's static weights",
+              "correct": false
+            }
+          ],
+          "explain": "Iterative RAG shines because each hop depends on the previous answer. We retrieve the birthplace of the founder first, find 'Brooklyn', and then use 'Brooklyn' to search for its current population. We cannot ask both at once because the second question depends on the first answer."
+        }
+      ]
+    }
+  ]
+}

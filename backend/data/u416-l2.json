@@ -1,0 +1,222 @@
+{
+  "id": "u416-l2",
+  "unit": 416,
+  "day": 2082,
+  "tier": "LLM Application Engineering",
+  "tierIcon": "🔌",
+  "title": "Lost-in-the-Middle, the Mechanism",
+  "icon": "🥪",
+  "concept": "Attention allocation favors the start and end of the context window, burying information placed in the middle.",
+  "xp": 15,
+  "hearts": 3,
+  "estMinutes": 7,
+  "segments": [
+    {
+      "type": "warmup",
+      "exercises": [
+        {
+          "id": "w1",
+          "type": "multiple_choice",
+          "xp": 1,
+          "prompt": "Quick recap: In the last lesson, we learned that context rot means a model's accuracy can degrade even when the prompt is well within the stated context limit. What causes this degradation?",
+          "options": [
+            {
+              "id": "a",
+              "text": "Irrelevant or excess context accumulating and diluting the model's focus, even if the total length is technically allowed",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "The model automatically deletes tokens once it hits the context limit",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "The context window physically shrinks the longer a conversation runs",
+              "correct": false
+            }
+          ],
+          "explain": "Right! Context rot happens because piling on irrelevant or excess information dilutes the model's effective focus, hurting accuracy, even when you're nowhere near the stated token limit. Today we dig into ONE specific mechanism behind this: where information sits matters too."
+        }
+      ]
+    },
+    {
+      "type": "teach",
+      "cards": [
+        {
+          "kind": "hook",
+          "icon": "🥪",
+          "title": "The Sandwiched Fact",
+          "body": "Ask an LLM a question where the answer sits smack in the middle of a long document, and watch it confidently give you the wrong answer. Move that exact same sentence to the top, and suddenly it nails it."
+        },
+        {
+          "kind": "definition",
+          "icon": "🎯",
+          "title": "What is Lost-in-the-Middle?",
+          "body": "Lost-in-the-middle is the finding that LLMs pay more attention to information at the very start and very end of their context window, and less attention to information buried in the middle. Same content, different position, different recall."
+        },
+        {
+          "kind": "analogy",
+          "icon": "📚",
+          "title": "The Bookshelf Attention Effect",
+          "body": "Imagine skimming a shelf of 50 books: you clearly remember the first few and the last few titles, but the ones crammed in the middle blur together. LLMs do something similar with tokens in their context window."
+        },
+        {
+          "kind": "example",
+          "icon": "🔍",
+          "title": "A Real Test",
+          "body": "Researchers gave a model 10 documents and asked it to find one fact. When the fact was in document 1 or document 10, accuracy was high. When the exact same fact was in document 5, accuracy dropped sharply, even though nothing else changed."
+        },
+        {
+          "kind": "mythbust",
+          "icon": "🚫",
+          "title": "Myth: More Context Placement Doesn't Matter",
+          "body": "Many assume that as long as a fact is 'somewhere in the prompt,' the model will find it equally well. Not true! WHERE you place information inside the context window significantly changes how well the model uses it, independent of context length."
+        },
+        {
+          "kind": "visual",
+          "icon": "📊",
+          "title": "Attention Across a Document",
+          "body": "Picture a U-shaped curve of accuracy plotted against where a fact sits in the context. High at the start, dips low in the middle, rises again at the end.",
+          "compare": {
+            "left": {
+              "emoji": "🟢",
+              "tag": "Start & End",
+              "text": "Fact placed here: model recalls it accurately most of the time, attention is naturally strong."
+            },
+            "right": {
+              "emoji": "🔴",
+              "tag": "Middle",
+              "text": "Same fact placed here: recall accuracy drops noticeably, even though nothing else about the prompt changed."
+            }
+          }
+        }
+      ]
+    },
+    {
+      "type": "practice",
+      "exercises": [
+        {
+          "id": "p1",
+          "type": "multiple_choice",
+          "xp": 2,
+          "prompt": "Why does information in the middle of a long context tend to get 'lost' by an LLM?",
+          "options": [
+            {
+              "id": "a",
+              "text": "Because the model runs out of memory storage space",
+              "correct": false
+            },
+            {
+              "id": "b",
+              "text": "Because attention allocation is skewed toward the start and end positions, giving middle tokens less effective focus",
+              "correct": true
+            },
+            {
+              "id": "c",
+              "text": "Because middle tokens are automatically deleted before processing",
+              "correct": false
+            },
+            {
+              "id": "d",
+              "text": "Because the model reads text backwards",
+              "correct": false
+            }
+          ],
+          "explain": "It's not about storage or deletion, the tokens are still there. The mechanism is that attention (the model's way of weighing which parts of input matter most) tends to concentrate on the start and end of the context, so middle content gets comparatively less effective focus even though it's technically present."
+        },
+        {
+          "id": "p2",
+          "type": "true_false",
+          "xp": 2,
+          "prompt": "True or False: The lost-in-the-middle effect means a model literally cannot see or access tokens placed in the middle of its context window.",
+          "options": [
+            {
+              "id": "a",
+              "text": "True",
+              "correct": false
+            },
+            {
+              "id": "b",
+              "text": "False",
+              "correct": true
+            }
+          ],
+          "explain": "False. The model CAN technically access every token in its context window, middle included. The problem isn't visibility, it's that attention allocation gives those middle tokens less effective weight, making the model less likely to use them accurately, not physically unable to see them."
+        },
+        {
+          "id": "p3",
+          "type": "fill_blank",
+          "xp": 2,
+          "prompt": "Fill in the blank:",
+          "sentence": "The lost-in-the-middle effect happens because attention allocation favors the start and end of the context window.",
+          "blank": "attention allocation",
+          "words": [
+            "attention allocation",
+            "token counting",
+            "file compression"
+          ],
+          "explain": "The core mechanism is attention allocation: the model's internal focus mechanism naturally weights the beginning and end of the context more heavily, leaving middle content under-attended."
+        },
+        {
+          "id": "p4",
+          "type": "spot_the_ai",
+          "xp": 2,
+          "prompt": "Which of these explanations of lost-in-the-middle was most likely written by an AI trying to sound technical but actually getting the mechanism wrong?",
+          "options": [
+            {
+              "id": "a",
+              "text": "Lost-in-the-middle happens because attention weights are typically higher for tokens near the beginning and end of the context, so information placed in between receives comparatively less effective attention during processing.",
+              "correct": false
+            },
+            {
+              "id": "b",
+              "text": "Lost-in-the-middle occurs because the model's neural pathways physically degrade the longer text sits in RAM, causing bit-level corruption of middle tokens before they can be read.",
+              "correct": true
+            },
+            {
+              "id": "c",
+              "text": "Lost-in-the-middle describes a pattern where models recall facts from the start or end of a long context better than facts placed in the middle, even when total context length stays the same.",
+              "correct": false
+            }
+          ],
+          "explain": "Option B is fabricated pseudo-science. There's no 'bit-level corruption' or physical degradation happening in RAM. That's not how neural networks or memory work. The real mechanism is about attention weighting patterns, not hardware decay."
+        }
+      ]
+    },
+    {
+      "type": "boss",
+      "exercises": [
+        {
+          "id": "b1",
+          "type": "multiple_choice",
+          "xp": 5,
+          "prompt": "You're building a chatbot that reads a 20-page company policy document to answer employee questions. Testing shows it nails questions about the intro and conclusion sections but keeps missing details from pages 8-14. Based on the lost-in-the-middle mechanism, what's the best fix to try FIRST?",
+          "options": [
+            {
+              "id": "a",
+              "text": "Switch to a model with a smaller context window",
+              "correct": false
+            },
+            {
+              "id": "b",
+              "text": "Move the most important policy details to the start or end of the document, or retrieve only the relevant chunk instead of dumping the whole document",
+              "correct": true
+            },
+            {
+              "id": "c",
+              "text": "Add more irrelevant filler text to pages 8-14 to make them longer",
+              "correct": false
+            },
+            {
+              "id": "d",
+              "text": "Ask the question in a different language",
+              "correct": false
+            }
+          ],
+          "explain": "Since attention naturally favors the start and end of context, the fix is to either reposition critical info to those 'high-attention zones' or avoid the problem entirely by retrieving just the relevant chunk (like with RAG) instead of feeding the whole document every time. A smaller context window doesn't fix the attention bias, and filler text makes the middle problem worse, not better."
+        }
+      ]
+    }
+  ]
+}

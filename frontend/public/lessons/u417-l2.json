@@ -1,0 +1,222 @@
+{
+  "id": "u417-l2",
+  "unit": 417,
+  "day": 2087,
+  "tier": "LLM Application Engineering",
+  "tierIcon": "🔌",
+  "title": "Labeling Context Sources",
+  "icon": "🏷️",
+  "concept": "Tagging each chunk of injected context with its source and reliability so the model can weigh it appropriately.",
+  "xp": 15,
+  "hearts": 3,
+  "estMinutes": 7,
+  "segments": [
+    {
+      "type": "warmup",
+      "exercises": [
+        {
+          "id": "w1",
+          "type": "multiple_choice",
+          "xp": 1,
+          "prompt": "In the previous lesson, we organized context into ordered layers (system rules, memory, retrieved facts, conversation, current query). What was the main benefit of doing that?",
+          "options": [
+            {
+              "id": "a",
+              "text": "It gives the model a predictable structure so it knows what kind of information it's reading and in what priority order",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "It makes the AI respond in a bigger font",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "It automatically deletes the user's question after each turn",
+              "correct": false
+            }
+          ],
+          "explain": "Layering context gives the model a clear, predictable structure — like sections in a report — so it can tell system instructions apart from retrieved facts or casual conversation, and prioritize accordingly."
+        }
+      ]
+    },
+    {
+      "type": "teach",
+      "cards": [
+        {
+          "kind": "hook",
+          "icon": "🕵️",
+          "title": "Would You Trust a Rumor Like a Fact?",
+          "body": "Imagine your friend tells you a fact, but you don't know if they read it in a science journal or heard it from a stranger on the bus. That difference matters a LOT — and your AI needs to know it too."
+        },
+        {
+          "kind": "definition",
+          "icon": "🏷️",
+          "title": "What Is Source Labeling?",
+          "body": "Source labeling means attaching a small tag to every chunk of context you inject — like [SOURCE: official_docs, TRUST: high] or [SOURCE: user_chat, TRUST: unverified]. This gives the model metadata about where information came from and how much to trust it."
+        },
+        {
+          "kind": "analogy",
+          "icon": "📰",
+          "title": "Think Like a News Editor",
+          "body": "A good news editor never mixes an eyewitness quote with an anonymous internet rumor without labeling which is which. Tagging context sources is the same: it tells the model 'this part is verified, this part is a guess' so it can report responsibly."
+        },
+        {
+          "kind": "example",
+          "icon": "🧾",
+          "title": "A Labeled Chunk in Action",
+          "body": "Instead of just pasting text, you might inject: '[SOURCE: internal_wiki | RELIABILITY: verified] Return window is 30 days.' vs '[SOURCE: user_forum | RELIABILITY: unverified] I heard returns are 60 days.' Now the model can tell these apart instead of treating them as equally true."
+        },
+        {
+          "kind": "mythbust",
+          "icon": "🚫",
+          "title": "Myth: All Retrieved Text Is Equally True",
+          "body": "Just because a chunk of text got pulled into the context window doesn't mean it's accurate. A retrieved Wikipedia snippet, a scraped blog post, and an official API response can all look identical to the model unless you explicitly label their trust level."
+        },
+        {
+          "kind": "visual",
+          "icon": "🔖",
+          "title": "Unlabeled vs Labeled Context",
+          "body": "Same information, very different outcomes depending on whether the model knows where it came from.",
+          "compare": {
+            "left": {
+              "emoji": "❓",
+              "tag": "Unlabeled Chunk",
+              "text": "'Refunds take 60 days.' — model has no idea if this is official policy or a rumor, so it might repeat it as fact."
+            },
+            "right": {
+              "emoji": "🏷️",
+              "tag": "Labeled Chunk",
+              "text": "'[SOURCE: forum_post | TRUST: low] Refunds take 60 days.' — model knows to treat this cautiously and prefer higher-trust sources."
+            }
+          }
+        }
+      ]
+    },
+    {
+      "type": "practice",
+      "exercises": [
+        {
+          "id": "p1",
+          "type": "multiple_choice",
+          "xp": 2,
+          "prompt": "Why should you label context chunks with their source and reliability?",
+          "options": [
+            {
+              "id": "a",
+              "text": "So the model can decide how much weight to give each piece of information",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "So the context window uses fewer tokens overall",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "So the text renders in a nicer font on screen",
+              "correct": false
+            },
+            {
+              "id": "d",
+              "text": "Because it's required by every LLM API regardless of use case",
+              "correct": false
+            }
+          ],
+          "explain": "Labeling isn't about saving space or formatting — it's about giving the model the information it needs to judge trustworthiness, similar to how a human weighs a peer-reviewed study more heavily than a random tweet."
+        },
+        {
+          "id": "p2",
+          "type": "true_false",
+          "xp": 2,
+          "prompt": "True or False: Once context is retrieved and placed in the window, it doesn't matter whether you tag its source, since the model treats all text the same way.",
+          "options": [
+            {
+              "id": "a",
+              "text": "True",
+              "correct": false
+            },
+            {
+              "id": "b",
+              "text": "False",
+              "correct": true
+            }
+          ],
+          "explain": "False — without tags, the model has no way to distinguish a verified fact from an unverified rumor. Source labels are what let the model appropriately weigh different chunks instead of treating everything as equally trustworthy."
+        },
+        {
+          "id": "p3",
+          "type": "fill_blank",
+          "xp": 2,
+          "prompt": "Fill in the blank:",
+          "sentence": "Tagging each context chunk with its source and reliability helps the model know how much to trust it.",
+          "blank": "reliability",
+          "words": [
+            "reliability",
+            "length",
+            "font"
+          ],
+          "explain": "The word 'reliability' is the key term for describing how trustworthy a labeled source is — it tells the model whether to lean on that chunk heavily or treat it with caution."
+        },
+        {
+          "id": "p4",
+          "type": "spot_the_ai",
+          "xp": 2,
+          "prompt": "Which of these three context-tagging examples looks AI-generated (i.e., auto-created without a human reviewing the trust label)?",
+          "options": [
+            {
+              "id": "a",
+              "text": "[SOURCE: legal_team_pdf | REVIEWED: yes | TRUST: high] 'Contracts must be signed within 30 days.'",
+              "correct": false
+            },
+            {
+              "id": "b",
+              "text": "[SOURCE: random_scrape_batch_9981 | TRUST: high] 'The moon is made of cheese according to some sites.'",
+              "correct": true
+            },
+            {
+              "id": "c",
+              "text": "[SOURCE: support_ticket#4521 | TRUST: low, unverified customer claim] 'Customer says refund took 2 weeks.'",
+              "correct": false
+            }
+          ],
+          "explain": "Option B is a red flag: an obviously false, joke-like claim was auto-labeled 'TRUST: high,' which suggests no human sanity-check occurred — reliable tagging systems reserve high-trust labels for verified, credible sources, not random scraped junk."
+        }
+      ]
+    },
+    {
+      "type": "boss",
+      "exercises": [
+        {
+          "id": "b1",
+          "type": "multiple_choice",
+          "xp": 5,
+          "prompt": "You're building a customer support AI. It has: (1) the company's official refund policy doc, (2) a support ticket from an angry customer describing what they think the policy is, (3) a random forum post about the product. A user asks 'What's your refund policy?' How should the context window handle this?",
+          "options": [
+            {
+              "id": "a",
+              "text": "Tag all three sources so the model prioritizes the official policy doc as authoritative and treats the forum post as low-confidence background",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "Feed all three in randomly with no labels so the model can 'figure it out' naturally",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "Only ever include the official policy doc and never show any other source, even for context",
+              "correct": false
+            },
+            {
+              "id": "d",
+              "text": "Tag the forum post as the most trustworthy since it's the most recent one added",
+              "correct": false
+            }
+          ],
+          "explain": "Labeling sources by reliability lets the model do what a smart human would: lean hard on the official, verified document while treating the customer's guess and the random forum post as unreliable color commentary, not fact. This is the whole point of source tagging — it's not about hiding weaker sources, it's about telling the model HOW much to trust each one so it doesn't accidentally quote a forum rumor as company policy. That wraps up the core skills of structuring context windows well — nice work leveling up your prompt engineering toolkit!"
+        }
+      ]
+    }
+  ]
+}

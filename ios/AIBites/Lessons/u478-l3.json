@@ -1,0 +1,222 @@
+{
+  "id": "u478-l3",
+  "unit": 478,
+  "day": 2393,
+  "tier": "LLM Application Engineering",
+  "tierIcon": "🔌",
+  "title": "Context Engineering Across the Stack",
+  "icon": "🗃️",
+  "concept": "Applying context budget discipline to tool results, retrieved chunks, and conversation history together.",
+  "xp": 15,
+  "hearts": 3,
+  "estMinutes": 7,
+  "segments": [
+    {
+      "type": "warmup",
+      "exercises": [
+        {
+          "id": "w1",
+          "type": "multiple_choice",
+          "xp": 1,
+          "prompt": "In the last lesson, how did our agent dynamically gather information from different sources?",
+          "options": [
+            {
+              "id": "w1",
+              "text": "Hardcode a single database search for every user query.",
+              "correct": false
+            },
+            {
+              "id": "w2",
+              "text": "Use an agent loop to select the best MCP retrieval tool based on the user's prompt.",
+              "correct": true
+            },
+            {
+              "id": "w3",
+              "text": "Manually copy-paste search results into the model.",
+              "correct": false
+            }
+          ],
+          "explain": "In the last lesson, we learned that agents can use tools (often exposed via MCP) to fetch dynamic search results when the user's query requires external data."
+        }
+      ]
+    },
+    {
+      "type": "teach",
+      "cards": [
+        {
+          "kind": "hook",
+          "icon": "⚖️",
+          "title": "The Data Influx Problem",
+          "body": "When you combine search engines, external tools, and long chat histories, your AI's brain can quickly overflow. Learning how to budget these inputs prevents your agent from getting confused or running up massive token bills."
+        },
+        {
+          "kind": "definition",
+          "icon": "📐",
+          "title": "What is Context Engineering?",
+          "body": "Context Engineering is the practice of selectively fitting conversation history, retrieved documents (RAG), and tool outputs (MCP) into the LLM's limited context window without losing crucial details."
+        },
+        {
+          "kind": "analogy",
+          "icon": "🧳",
+          "title": "The Suitcase Strategy",
+          "body": "Think of your context window like a carry-on suitcase. Instead of packing your entire wardrobe (all database records), you pack a travel-sized tooth paste (summarized history), a lightweight jacket (the most relevant RAG chunk), and one essential pair of shoes (tool output)."
+        },
+        {
+          "kind": "example",
+          "icon": "📝",
+          "title": "Token Diet in Action",
+          "body": "If an MCP database tool returns 500 rows of raw data, a context-aware application will summarize the rows into a brief description before feeding it into the agent's memory, saving thousands of tokens."
+        },
+        {
+          "kind": "mythbust",
+          "icon": "🧹",
+          "title": "The Infinite Window Illusion",
+          "body": "Many believe that massive context windows mean we don't need to manage context size anymore. In reality, sending too much junk data makes agents slower, more expensive, and much more likely to ignore the correct answer hidden in the noise."
+        },
+        {
+          "kind": "visual",
+          "icon": "⚖️",
+          "title": "Comparing Context Budgets",
+          "body": "Let's look at how context space is allocated when we manage it versus when we don't.",
+          "compare": {
+            "left": {
+              "emoji": "🗑️",
+              "tag": "Unmanaged Context",
+              "text": "80% full of raw tool outputs and repetitive chat history, leaving no room for new queries."
+            },
+            "right": {
+              "emoji": "📊",
+              "tag": "Managed Context",
+              "text": "Balanced mix of compressed history, top 3 RAG chunks, and a clean summary of tool outputs."
+            }
+          }
+        }
+      ]
+    },
+    {
+      "type": "practice",
+      "exercises": [
+        {
+          "id": "p1",
+          "type": "multiple_choice",
+          "xp": 2,
+          "prompt": "What is the main danger of passing raw, unpruned tool outputs directly into the prompt alongside RAG search results?",
+          "options": [
+            {
+              "id": "mc1",
+              "text": "It makes the agent run much faster.",
+              "correct": false
+            },
+            {
+              "id": "mc2",
+              "text": "It can overload the context window, causing slow responses and high token costs.",
+              "correct": true
+            },
+            {
+              "id": "mc3",
+              "text": "It automatically increases the model's accuracy.",
+              "correct": false
+            },
+            {
+              "id": "mc4",
+              "text": "It bypasses the need for API keys.",
+              "correct": false
+            }
+          ],
+          "explain": "Including every piece of raw data without limits will quickly exceed the LLM's context window, causing errors or losing track of the user's original request."
+        },
+        {
+          "id": "p2",
+          "type": "true_false",
+          "xp": 2,
+          "prompt": "Summarizing older conversation history is an effective way to stay under your context budget.",
+          "options": [
+            {
+              "id": "tf1",
+              "text": "True",
+              "correct": true
+            },
+            {
+              "id": "tf2",
+              "text": "False",
+              "correct": false
+            }
+          ],
+          "explain": "Summarization and pruning are essential tools for context engineering, allowing you to fit more conceptual information into fewer tokens."
+        },
+        {
+          "id": "p3",
+          "type": "fill_blank",
+          "xp": 2,
+          "prompt": "Fill in the missing concept that represents managing token limits across tools and retrieval:",
+          "sentence": "To keep the agent fast and cheap, we must enforce a strict context budget across all inputs.",
+          "blank": "context budget",
+          "words": [
+            "context budget",
+            "database key",
+            "API speed"
+          ],
+          "explain": "A context budget is the limit on total tokens we set to keep our agent efficient, cheap, and accurate."
+        },
+        {
+          "id": "p4",
+          "type": "spot_the_ai",
+          "xp": 2,
+          "prompt": "Which of these responses shows an AI agent successfully synthesizing context-budgeted information from history, RAG, and tools?",
+          "options": [
+            {
+              "id": "sai1",
+              "text": "[SYSTEM]: Context buffer set to 8192 tokens. Chunk size 500. Tool status: OK.",
+              "correct": false
+            },
+            {
+              "id": "sai2",
+              "text": "Based on our conversation history, your search query returned 3 relevant user guides, and the database tool reports your subscription is active. Here is the summary...",
+              "correct": true
+            },
+            {
+              "id": "sai3",
+              "text": "SELECT * FROM users INNER JOIN logs ON users.id = logs.user_id WHERE users.active = true;",
+              "correct": false
+            }
+          ],
+          "explain": "Option B demonstrates an AI agent output where it has combined historical context, RAG search results, and tool outputs into a structured, budgeted summary. Options A and C are generic system logs or database dumps."
+        }
+      ]
+    },
+    {
+      "type": "boss",
+      "exercises": [
+        {
+          "id": "b1",
+          "type": "multiple_choice",
+          "xp": 5,
+          "prompt": "You are building an agent that calls a database search tool, retrieves 5 large PDF chunks, and maintains a long conversation. If you are approaching the context window limit, what is the best strategy to balance your context budget?",
+          "options": [
+            {
+              "id": "b1",
+              "text": "Discard all tool outputs first because they are usually too verbose.",
+              "correct": false
+            },
+            {
+              "id": "b2",
+              "text": "Prioritizing the latest tool results, keeping only highly relevant RAG chunks, and aggressively summarizing older chat history.",
+              "correct": true
+            },
+            {
+              "id": "b3",
+              "text": "Send the entire raw database response to the model and let the LLM figure out where to truncate it.",
+              "correct": false
+            },
+            {
+              "id": "b4",
+              "text": "Disable RAG retrieval completely whenever an MCP tool is actively running.",
+              "correct": false
+            }
+          ],
+          "explain": "Prioritizing the latest tool outputs and compressing the older chat history ensures the agent has the exact data needed to take the next action without spilling over the context limit. Just discarding tool outputs entirely would prevent the agent from seeing what it just did!"
+        }
+      ]
+    }
+  ]
+}

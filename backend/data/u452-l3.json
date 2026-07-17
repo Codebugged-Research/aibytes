@@ -1,0 +1,222 @@
+{
+  "id": "u452-l3",
+  "unit": 452,
+  "day": 2263,
+  "tier": "LLM Application Engineering",
+  "tierIcon": "🔌",
+  "title": "Listwise vs Pointwise Reranking",
+  "icon": "📊",
+  "concept": "Scoring each document independently versus reasoning about the relative order of the whole candidate list at once.",
+  "xp": 15,
+  "hearts": 3,
+  "estMinutes": 7,
+  "segments": [
+    {
+      "type": "warmup",
+      "exercises": [
+        {
+          "id": "w1",
+          "type": "multiple_choice",
+          "xp": 1,
+          "prompt": "In the last lesson, we explored LLM-based reranking. What is the core idea behind the process of:",
+          "options": [
+            {
+              "id": "a",
+              "text": "Generating new documents from scratch to replace the search index.",
+              "correct": false
+            },
+            {
+              "id": "b",
+              "text": "Prompting an LLM to evaluate and reorder candidate search results.",
+              "correct": true
+            },
+            {
+              "id": "c",
+              "text": "Converting documents into static vector embeddings using an encoder model.",
+              "correct": false
+            }
+          ],
+          "explain": "Using LLMs as rerankers involves prompting them with a query and candidate documents, leveraging their deep natural language understanding to judge how well the content matches the query."
+        }
+      ]
+    },
+    {
+      "type": "teach",
+      "cards": [
+        {
+          "kind": "hook",
+          "icon": "🔍",
+          "title": "Zooming In vs. Seeing the Big Picture",
+          "body": "When an LLM reranks search results, it can look at candidates one by one or evaluate them all together. How we present these options to the model changes the speed, cost, and quality of our final search results."
+        },
+        {
+          "kind": "definition",
+          "icon": "⚖️",
+          "title": "Pointwise vs Listwise Reranking",
+          "body": "Pointwise reranking scores each document independently without looking at the other documents. Listwise reranking processes the entire candidate list at once, allowing the model to compare documents side-by-side to determine the absolute best order."
+        },
+        {
+          "kind": "analogy",
+          "icon": "📝",
+          "title": "The Grading Table Analogy",
+          "body": "Think of grading a stack of essays. Pointwise reranking is like grading each essay individually, writing a score from 1-100 on it. Listwise reranking is like laying all the essays out on a table and sorting them from best to worst by directly comparing them to each other."
+        },
+        {
+          "kind": "example",
+          "icon": "🍰",
+          "title": "Comparing the Results",
+          "body": "If you search for 'easy baking recipes', a pointwise reranker scores a chocolate cake recipe an 8/10 and a brownie recipe an 8/10 separately. A listwise reranker looks at both, realizes they are too similar, and ranks the chocolate cake first while pushing a cookie recipe higher for variety."
+        },
+        {
+          "kind": "mythbust",
+          "icon": "🚫",
+          "title": "The 'More is Always Better' Trap",
+          "body": "Many assume listwise reranking is always superior because it sees everything. However, feeding dozens of documents to an LLM at once uses massive amounts of tokens, makes the model slow, and can cause it to lose track of documents in the middle of a long prompt."
+        },
+        {
+          "kind": "visual",
+          "icon": "👁️",
+          "title": "Two Ways of Seeing",
+          "body": "Comparing how pointwise and listwise models view candidate documents.",
+          "compare": {
+            "left": {
+              "emoji": "🕵️",
+              "tag": "Pointwise",
+              "text": "Scores each document one-by-one. Fast and cheap, but blind to duplicates."
+            },
+            "right": {
+              "emoji": "🎪",
+              "tag": "Listwise",
+              "text": "Compares all documents together. Excellent ranking context, but slow and token-heavy."
+            }
+          }
+        }
+      ]
+    },
+    {
+      "type": "practice",
+      "exercises": [
+        {
+          "id": "p1",
+          "type": "multiple_choice",
+          "xp": 2,
+          "prompt": "How does a listwise reranking model operate?",
+          "options": [
+            {
+              "id": "a",
+              "text": "It scores each candidate document completely in isolation on a scale from 1 to 10.",
+              "correct": false
+            },
+            {
+              "id": "b",
+              "text": "It feeds the query and multiple candidate documents to the model at once to decide the relative order.",
+              "correct": true
+            },
+            {
+              "id": "c",
+              "text": "It discards the query and only compares the document lengths.",
+              "correct": false
+            },
+            {
+              "id": "d",
+              "text": "It ranks documents purely based on alphabetical order.",
+              "correct": false
+            }
+          ],
+          "explain": "Listwise reranking accepts the query and a list of multiple candidates together, letting the model weigh them against each other to output the final sorted list."
+        },
+        {
+          "id": "p2",
+          "type": "true_false",
+          "xp": 2,
+          "prompt": "True or False: A major drawback of pointwise reranking is that it struggles to eliminate redundant or duplicate documents from the final list.",
+          "options": [
+            {
+              "id": "a",
+              "text": "True",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "False",
+              "correct": false
+            }
+          ],
+          "explain": "Pointwise reranking evaluates each document by itself. Since there is no comparison happening between documents during the scoring step, it cannot know if it is returning five identical copies of the same information."
+        },
+        {
+          "id": "p3",
+          "type": "fill_blank",
+          "xp": 2,
+          "prompt": "Fill in the blank to describe the independent document scoring method.",
+          "sentence": "Because it evaluates each candidate in isolation, pointwise reranking is fast but cannot detect duplicate information across candidates.",
+          "blank": "pointwise",
+          "words": [
+            "pointwise",
+            "listwise",
+            "cross-encoder"
+          ],
+          "explain": "Pointwise reranking scores each document on its own, which makes it highly parallelizable and fast, but it cannot compare documents against one another during the scoring phase."
+        },
+        {
+          "id": "p4",
+          "type": "spot_the_ai",
+          "xp": 2,
+          "prompt": "Identify which description of LLM-based reranking is AI-generated/nonsense:",
+          "options": [
+            {
+              "id": "a",
+              "text": "We prompt the LLM: 'Given query Q and document D, output a relevance score from 1 to 5.' We repeat this for each document.",
+              "correct": false
+            },
+            {
+              "id": "b",
+              "text": "We prompt the LLM: 'Here is query Q and a list of 10 documents. Reorder this list from most to least relevant.'",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "We apply a sliding window cross-entropy attention matrix to dynamically factorize the listwise embeddings of all documents.",
+              "correct": true
+            }
+          ],
+          "explain": "Option C is generated by an AI because it uses typical hallucinated/conflated technical jargon ('sliding window cross-entropy attention matrix' and 'matrix factorization') that doesn't actually describe how standard listwise prompting or pointwise LLM reranking is implemented. Options A and B describe standard engineering approaches."
+        }
+      ]
+    },
+    {
+      "type": "boss",
+      "exercises": [
+        {
+          "id": "b1",
+          "type": "multiple_choice",
+          "xp": 5,
+          "prompt": "You are designing a high-throughput search system and need to choose between pointwise and listwise reranking. Which trade-off analysis is correct?",
+          "options": [
+            {
+              "id": "a",
+              "text": "Pointwise methods look at the whole list to eliminate redundant information, while listwise methods process items in parallel.",
+              "correct": false
+            },
+            {
+              "id": "b",
+              "text": "Listwise methods are cheaper and faster, while pointwise methods suffer from token limit constraints.",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "Pointwise evaluates each document in isolation (cheaper but lacks context), while listwise compares them together (better ranking but slower/costlier).",
+              "correct": true
+            },
+            {
+              "id": "d",
+              "text": "Pointwise and listwise methods have the exact same computational footprint and token usage.",
+              "correct": false
+            }
+          ],
+          "explain": "Pointwise reranking evaluates each document in isolation, making it faster and cheaper, but it cannot adjust the score of one document based on what else is in the candidate list. Listwise reranking evaluates documents in context together, allowing it to remove duplicates or resolve relative differences, but it suffers from high computational cost and token limits."
+        }
+      ]
+    }
+  ]
+}

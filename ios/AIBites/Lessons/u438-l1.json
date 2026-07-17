@@ -1,0 +1,222 @@
+{
+  "id": "u438-l1",
+  "unit": 438,
+  "day": 2191,
+  "tier": "LLM Application Engineering",
+  "tierIcon": "🔌",
+  "title": "Inverted File Index (IVF)",
+  "icon": "🗂️",
+  "concept": "Clustering vectors into partitions (via k-means) and searching only the nearest few partitions at query time.",
+  "xp": 15,
+  "hearts": 3,
+  "estMinutes": 7,
+  "segments": [
+    {
+      "type": "warmup",
+      "exercises": [
+        {
+          "id": "w1",
+          "type": "multiple_choice",
+          "xp": 1,
+          "prompt": "Why do we use vector embeddings for similarity search in LLM applications?",
+          "options": [
+            {
+              "id": "w_1",
+              "text": "They capture semantic meaning as dense numerical vectors.",
+              "correct": true
+            },
+            {
+              "id": "w_2",
+              "text": "They represent exact keyword matches using sparse boolean flags.",
+              "correct": false
+            },
+            {
+              "id": "w_3",
+              "text": "They compress text files into ZIP archives for faster network transfer.",
+              "correct": false
+            }
+          ],
+          "explain": "Before diving into advanced indexing, recall that semantic search depends on embeddings, which represent the underlying meaning of text as high-dimensional coordinates."
+        }
+      ]
+    },
+    {
+      "type": "teach",
+      "cards": [
+        {
+          "kind": "hook",
+          "icon": "⚡",
+          "title": "The Needle in a Haystack",
+          "body": "When vector databases grow to millions of items, comparing your query to every single vector takes too long. IVF solves this by creating shortcuts, letting you bypass most of the data to find your nearest neighbors in milliseconds."
+        },
+        {
+          "kind": "definition",
+          "icon": "🗂️",
+          "title": "What is IVF?",
+          "body": "An Inverted File Index (IVF) is an index structure that partitions vector space into clusters using k-means. At query time, we find the closest cluster centers (centroids) and only search the vectors inside those specific clusters."
+        },
+        {
+          "kind": "analogy",
+          "icon": "📚",
+          "title": "The Library Sections",
+          "body": "Imagine organizing books in a massive library. Instead of searching every shelf, you group similar books into sections like 'Sci-Fi' or 'Cookbooks'. When looking for a recipe, you only search the 'Cookbooks' section, ignoring the rest."
+        },
+        {
+          "kind": "example",
+          "icon": "🔍",
+          "title": "Speeding up 1 Million Vectors",
+          "body": "If you have 1 million embedding vectors, search is slow. By building an IVF index with 1,000 clusters, your query only compares itself to the 1,000 cluster centers, and then scans the vectors in the nearest few clusters, ignoring 99% of the database."
+        },
+        {
+          "kind": "mythbust",
+          "icon": "🤔",
+          "title": "The Border Trap",
+          "body": "People think clustering guarantees finding the exact closest vector. In reality, IVF is an approximate method; if a neighbor lies right on the border of a cluster, it might be missed if we don't search enough nearby clusters."
+        },
+        {
+          "kind": "visual",
+          "icon": "🗺️",
+          "title": "Flat Search vs. IVF",
+          "body": "Instead of searching a flat, unorganized grid of data points, IVF creates neat zones (Voronoi partitions) centered around key markers.",
+          "compare": {
+            "left": {
+              "emoji": "📦",
+              "tag": "Flat Search",
+              "text": "Compare your query to all 100,000 vectors one by one."
+            },
+            "right": {
+              "emoji": "🎯",
+              "tag": "IVF Search",
+              "text": "Find the closest cluster center, then search only the 100 vectors inside it."
+            }
+          }
+        }
+      ]
+    },
+    {
+      "type": "practice",
+      "exercises": [
+        {
+          "id": "p1",
+          "type": "multiple_choice",
+          "xp": 2,
+          "prompt": "Why does IVF make similarity search much faster?",
+          "options": [
+            {
+              "id": "opt_1",
+              "text": "It compresses each vector to a single bit.",
+              "correct": false
+            },
+            {
+              "id": "opt_2",
+              "text": "It limits the search to the nearest few clusters instead of scanning everything.",
+              "correct": true
+            },
+            {
+              "id": "opt_3",
+              "text": "It runs the query on GPU hardware only.",
+              "correct": false
+            },
+            {
+              "id": "opt_4",
+              "text": "It automatically deletes older vectors from memory.",
+              "correct": false
+            }
+          ],
+          "explain": "Searching only the nearest clusters (specified by the nprobe parameter) saves huge amounts of CPU cycles by skipping the vast majority of unrelated vectors."
+        },
+        {
+          "id": "p2",
+          "type": "true_false",
+          "xp": 2,
+          "prompt": "True or False: Using IVF guarantees that you will always find the exact mathematical nearest neighbor in the dataset.",
+          "options": [
+            {
+              "id": "tf_t",
+              "text": "True",
+              "correct": false
+            },
+            {
+              "id": "tf_f",
+              "text": "False",
+              "correct": true
+            }
+          ],
+          "explain": "IVF is an Approximate Nearest Neighbor (ANN) search technique, which trades a tiny amount of accuracy for massive gains in speed."
+        },
+        {
+          "id": "p3",
+          "type": "fill_blank",
+          "xp": 2,
+          "prompt": "Fill in the missing algorithm used to group vectors:",
+          "sentence": "IVF uses the k-means algorithm to group similar vectors into clusters.",
+          "blank": "k-means",
+          "words": [
+            "k-means",
+            "quicksort",
+            "gradient descent"
+          ],
+          "explain": "k-means is the clustering algorithm used by IVF to group similar vectors together around central points called centroids."
+        },
+        {
+          "id": "p4",
+          "type": "spot_the_ai",
+          "xp": 2,
+          "prompt": "Identify the incorrect explanation of IVF index mechanics:",
+          "options": [
+            {
+              "id": "sai_1",
+              "text": "IVF partitions the high-dimensional space into clusters, representing each cluster by its centroid to bypass distant data points during query execution.",
+              "correct": false
+            },
+            {
+              "id": "sai_2",
+              "text": "At query time, the system compares the target query vector to the cluster centroids, selecting only the closest lists to scan.",
+              "correct": false
+            },
+            {
+              "id": "sai_3",
+              "text": "IVF speeds up vector searches by converting decimal embedding values into inverted text tags that can be read by classic database engines.",
+              "correct": true
+            }
+          ],
+          "explain": "The prompt asks to select the option that has a fabricated explanation. The first two options accurately describe IVF mechanics, while the third option invents a fake term 'inverted text tags' that has nothing to do with vector search."
+        }
+      ]
+    },
+    {
+      "type": "boss",
+      "exercises": [
+        {
+          "id": "b1",
+          "type": "multiple_choice",
+          "xp": 5,
+          "prompt": "How does an Inverted File Index (IVF) accelerate similarity search in large-scale vector databases?",
+          "options": [
+            {
+              "id": "ans_a",
+              "text": "It groups vectors using k-means and searches only the most similar partition clusters at query time.",
+              "correct": true
+            },
+            {
+              "id": "ans_b",
+              "text": "It compares the query vector to every single vector in the database to guarantee 100% accurate results.",
+              "correct": false
+            },
+            {
+              "id": "ans_c",
+              "text": "It converts dense vectors into text documents to index them inside traditional search engines.",
+              "correct": false
+            },
+            {
+              "id": "ans_d",
+              "text": "It deletes outlier vectors during database ingestion to save storage space.",
+              "correct": false
+            }
+          ],
+          "explain": "By using k-means clustering, IVF divides the vector space into voronoi cells. Searching only the nearest centroids (nprobe) instead of all vectors in the database directly reduces the time complexity from O(N) linear scan to O(nprobe * (N/k)), making searches incredibly fast."
+        }
+      ]
+    }
+  ]
+}

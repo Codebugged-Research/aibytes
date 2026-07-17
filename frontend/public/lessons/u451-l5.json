@@ -1,0 +1,222 @@
+{
+  "id": "u451-l5",
+  "unit": 451,
+  "day": 2260,
+  "tier": "LLM Application Engineering",
+  "tierIcon": "🔌",
+  "title": "Late Interaction Models",
+  "icon": "🔀",
+  "concept": "ColBERT-style models that keep per-token vectors and interact at query time, sitting between bi- and cross-encoders.",
+  "xp": 15,
+  "hearts": 3,
+  "estMinutes": 7,
+  "segments": [
+    {
+      "type": "warmup",
+      "exercises": [
+        {
+          "id": "w1",
+          "type": "multiple_choice",
+          "xp": 1,
+          "prompt": "In the two-stage tradeoff system we learned last time, how do we combine bi-encoders and cross-encoders?",
+          "options": [
+            {
+              "id": "w1",
+              "text": "We use cross-encoders to scan millions of documents, then bi-encoders to summarize them.",
+              "correct": false
+            },
+            {
+              "id": "w2",
+              "text": "We use a fast bi-encoder for coarse retrieval, and a precise cross-encoder for final reranking.",
+              "correct": true
+            },
+            {
+              "id": "w3",
+              "text": "We completely replace neural search with keyword matching to avoid latency.",
+              "correct": false
+            }
+          ],
+          "explain": "The two-stage retrieval pipeline uses a fast bi-encoder first to filter millions down to a few candidates, followed by a slow but highly accurate cross-encoder to rank the final results."
+        }
+      ]
+    },
+    {
+      "type": "teach",
+      "cards": [
+        {
+          "kind": "hook",
+          "icon": "⚡",
+          "title": "The Best of Both Worlds?",
+          "body": "We know bi-encoders are lightning fast but lose detail, while cross-encoders are deeply accurate but painfully slow. What if we could build a hybrid that gives us token-level detail without the massive computation delay? Enter Late Interaction."
+        },
+        {
+          "kind": "definition",
+          "icon": "⏳",
+          "title": "What is Late Interaction?",
+          "body": "Late interaction models, like ColBERT, encode queries and documents separately (like bi-encoders) but keep individual vectors for every single word token. They delay the interaction step until the very end, comparing all query tokens against all document tokens using a fast alignment step."
+        },
+        {
+          "kind": "analogy",
+          "icon": "📚",
+          "title": "The Index Skim Analogy",
+          "body": "Imagine a bi-encoder as checking a library catalog and a cross-encoder as reading every book word-for-word. A late interaction model is like skimming the index of the top books: you don't read the whole text, but you still match specific terms to find the exact pages you need."
+        },
+        {
+          "kind": "example",
+          "icon": "🥐",
+          "title": "Late Interaction in Action",
+          "body": "In a ColBERT search for 'bakery croissant recipe', the query tokens ('bakery', 'croissant', 'recipe') are matched individually against the token vectors of a document. The system finds the maximum similarity for each query word against all document words and sums them up."
+        },
+        {
+          "kind": "mythbust",
+          "icon": "🚫",
+          "title": "Not as Slow as You Think",
+          "body": "You might think late interaction is just as slow as a cross-encoder because it compares individual tokens. In reality, because the document token vectors are pre-computed and stored in advance, the query-time comparison is just a fast matrix multiplication."
+        },
+        {
+          "kind": "visual",
+          "icon": "📊",
+          "title": "Comparing Interaction Timing",
+          "body": "Comparing how different models handle the interaction between query and document.",
+          "compare": {
+            "left": {
+              "emoji": "🤝",
+              "tag": "Cross-Encoder",
+              "text": "Early joint attention. Deep token-to-token interaction from the start. Very slow."
+            },
+            "right": {
+              "emoji": "⏳",
+              "tag": "Late Interaction",
+              "text": "Separate token encoding first. Fast alignment of token vectors at the very end."
+            }
+          }
+        }
+      ]
+    },
+    {
+      "type": "practice",
+      "exercises": [
+        {
+          "id": "p1",
+          "type": "multiple_choice",
+          "xp": 2,
+          "prompt": "Where do late interaction models sit on the trade-off spectrum?",
+          "options": [
+            {
+              "id": "mc_1",
+              "text": "They are slower than cross-encoders.",
+              "correct": false
+            },
+            {
+              "id": "mc_2",
+              "text": "They sit between bi-encoders and cross-encoders in both speed and accuracy.",
+              "correct": true
+            },
+            {
+              "id": "mc_3",
+              "text": "They discard all token-level information to save space.",
+              "correct": false
+            },
+            {
+              "id": "mc_4",
+              "text": "They require passing the query and document together through a joint Transformer.",
+              "correct": false
+            }
+          ],
+          "explain": "Late interaction models stand between bi-encoders and cross-encoders by keeping separate encoders but allowing token-to-token comparison at the end."
+        },
+        {
+          "id": "p2",
+          "type": "true_false",
+          "xp": 2,
+          "prompt": "True or False: In a late interaction model, document token embeddings can be pre-calculated and stored before a query is ever made.",
+          "options": [
+            {
+              "id": "tf_true",
+              "text": "True",
+              "correct": true
+            },
+            {
+              "id": "tf_false",
+              "text": "False",
+              "correct": false
+            }
+          ],
+          "explain": "Documents can be encoded offline ahead of time because the query and document are still processed through separate neural networks."
+        },
+        {
+          "id": "p3",
+          "type": "fill_blank",
+          "xp": 2,
+          "prompt": "Fill in the blank to describe what late interaction models preserve for comparison:",
+          "sentence": "Late interaction models preserve token-level details by keeping vectors for every word instead of compressing the text into one single vector.",
+          "blank": "token-level",
+          "words": [
+            "token-level",
+            "sentence-level",
+            "low-resolution"
+          ],
+          "explain": "Unlike bi-encoders which compress everything into a single global vector, late interaction models preserve token-level details for richer matching."
+        },
+        {
+          "id": "p4",
+          "type": "spot_the_ai",
+          "xp": 2,
+          "prompt": "Identify the description of a late interaction model.",
+          "options": [
+            {
+              "id": "sai_1",
+              "text": "A model that condenses the entire document text into a single 768-dimensional dense vector representation.",
+              "correct": false
+            },
+            {
+              "id": "sai_2",
+              "text": "A model that outputs multiple vectors per document and uses a MaxSim operator to align query and document tokens late in the pipeline.",
+              "correct": true
+            },
+            {
+              "id": "sai_3",
+              "text": "A model that concatenates the query and document at the input layer before feedforward processing.",
+              "correct": false
+            }
+          ],
+          "explain": "Option B is written by an AI as it uses technical jargon ('MaxSim operator', 'all-pairs token interaction') to describe the mechanic of late interaction models, whereas the others describe standard bi-encoders or cross-encoders."
+        }
+      ]
+    },
+    {
+      "type": "boss",
+      "exercises": [
+        {
+          "id": "b1",
+          "type": "multiple_choice",
+          "xp": 5,
+          "prompt": "How do ColBERT-style late interaction models balance high accuracy with fast query performance?",
+          "options": [
+            {
+              "id": "opt_b1",
+              "text": "We pre-compute and store per-token embeddings for documents, then run a fast token-to-token similarity alignment at search time.",
+              "correct": true
+            },
+            {
+              "id": "opt_b2",
+              "text": "We feed the combined query and document tokens into a single Transformer model only at query time.",
+              "correct": false
+            },
+            {
+              "id": "opt_b3",
+              "text": "We compress documents into a single global vector and queries into another, then calculate a simple cosine similarity.",
+              "correct": false
+            },
+            {
+              "id": "opt_b4",
+              "text": "We bypass neural embeddings entirely and rely on classic keyword-counting algorithms like TF-IDF.",
+              "correct": false
+            }
+          ],
+          "explain": "Late interaction models like ColBERT compute and store token-level embeddings during document ingestion. At search time, the query's token embeddings are compared to these pre-computed document token embeddings using a fast MaxSim operator. This achieves near-cross-encoder quality with bi-encoder-like speeds because the heavy document encoding is done offline."
+        }
+      ]
+    }
+  ]
+}

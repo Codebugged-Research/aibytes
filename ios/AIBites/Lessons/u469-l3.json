@@ -1,0 +1,222 @@
+{
+  "id": "u469-l3",
+  "unit": 469,
+  "day": 2348,
+  "tier": "LLM Application Engineering",
+  "tierIcon": "🔌",
+  "title": "Invoking a Tool from the Client",
+  "icon": "📞",
+  "concept": "Sending a tool call request with arguments and handling the structured response.",
+  "xp": 15,
+  "hearts": 3,
+  "estMinutes": 7,
+  "segments": [
+    {
+      "type": "warmup",
+      "exercises": [
+        {
+          "id": "w1",
+          "type": "multiple_choice",
+          "xp": 1,
+          "prompt": "In the previous lesson, we learned about discovering what a server can do. What is this step called?",
+          "options": [
+            {
+              "id": "wu_1",
+              "text": "Sending a ping to check the server's CPU usage",
+              "correct": false
+            },
+            {
+              "id": "wu_2",
+              "text": "Asking the server to list its available capabilities and tools",
+              "correct": true
+            },
+            {
+              "id": "wu_3",
+              "text": "Downloading the entire source code of the server",
+              "correct": false
+            }
+          ],
+          "explain": "Before invoking a tool, the client discovers available tools and capabilities by calling the list capabilities method (like 'listTools') on the connected server."
+        }
+      ]
+    },
+    {
+      "type": "teach",
+      "cards": [
+        {
+          "kind": "hook",
+          "icon": "📥",
+          "title": "From Listing to Action",
+          "body": "Knowing what tools a server has is like reading a restaurant menu. But reading isn't eating! To actually get things done, your client needs to know how to place an order by sending arguments and handling the response."
+        },
+        {
+          "kind": "definition",
+          "icon": "🛠️",
+          "title": "What is Tool Invocation?",
+          "body": "Invoking a tool means sending a formal request from the client to the server, specifying the tool's name and the exact argument values it expects. The server executes the function and returns a structured response, typically containing text, images, or resource references."
+        },
+        {
+          "kind": "analogy",
+          "icon": "🍔",
+          "title": "The Burger Order Analogy",
+          "body": "Think of the client like a customer ordering a custom burger. The server is the chef. Instead of just pointing, the client fills out a specific order slip (the tool arguments) and hand-delivers it. The chef cooks the burger and hands back a structured tray (the tool result) containing the food."
+        },
+        {
+          "kind": "example",
+          "icon": "🌤️",
+          "title": "A Client-to-Server Call",
+          "body": "If a server offers a tool named 'fetch_weather' that takes a 'city' argument, the client sends a request object like: { name: 'fetch_weather', arguments: { city: 'London' } }. The server responds with structured text detailing the temperature and conditions."
+        },
+        {
+          "kind": "mythbust",
+          "icon": "🚫",
+          "title": "Where Does the Work Happen?",
+          "body": "Many beginners think that invoking a tool means the client executes the code. In reality, the client only sends the request; the server does all the heavy lifting and code execution, then sends back the clean results."
+        },
+        {
+          "kind": "visual",
+          "icon": "↔️",
+          "title": "Request vs. Response",
+          "body": "Understanding the difference between what goes out to the server and what comes back to the client.",
+          "compare": {
+            "left": {
+              "emoji": "📤",
+              "tag": "Request",
+              "text": "Tool name + key-value arguments sent from client to server."
+            },
+            "right": {
+              "emoji": "📥",
+              "tag": "Response",
+              "text": "Structured list of content blocks (text/images) returned to client."
+            }
+          }
+        }
+      ]
+    },
+    {
+      "type": "practice",
+      "exercises": [
+        {
+          "id": "p1",
+          "type": "multiple_choice",
+          "xp": 2,
+          "prompt": "How does the server package the results of a tool execution back to the client?",
+          "options": [
+            {
+              "id": "mc_1",
+              "text": "A raw HTML webpage containing ads",
+              "correct": false
+            },
+            {
+              "id": "mc_2",
+              "text": "A structured object containing content blocks like text or images",
+              "correct": true
+            },
+            {
+              "id": "mc_3",
+              "text": "A direct link to download a Python execution script",
+              "correct": false
+            },
+            {
+              "id": "mc_4",
+              "text": "A simple yes or no boolean flag",
+              "correct": false
+            }
+          ],
+          "explain": "The response from an MCP tool call returns a structured list of content blocks, which can be text, images, or other media types, allowing the client to safely parse the output."
+        },
+        {
+          "id": "p2",
+          "type": "true_false",
+          "xp": 2,
+          "prompt": "True or False: To invoke a tool, the client can just send a raw text message like 'hey server run the calculator' to the server.",
+          "options": [
+            {
+              "id": "tf_true",
+              "text": "True",
+              "correct": false
+            },
+            {
+              "id": "tf_false",
+              "text": "False",
+              "correct": true
+            }
+          ],
+          "explain": "Clients and servers communicate using structured messages (like JSON-RPC). Sending raw, unformatted text strings would cause parsing errors."
+        },
+        {
+          "id": "p3",
+          "type": "fill_blank",
+          "xp": 2,
+          "prompt": "Fill in the missing word to describe how we supply parameters to an MCP tool.",
+          "sentence": "An MCP client invokes a tool by sending its name along with the structured arguments required by the server.",
+          "blank": "arguments",
+          "words": [
+            "arguments",
+            "cookies",
+            "headers"
+          ],
+          "explain": "When calling a tool, we must supply the required arguments as a structured object so the server knows exactly what parameters to run the tool with."
+        },
+        {
+          "id": "p4",
+          "type": "spot_the_ai",
+          "xp": 2,
+          "prompt": "Which of the following represents a standard structured response returned by an MCP server after a tool invocation?",
+          "options": [
+            {
+              "id": "sai_1",
+              "text": "HTTP/1.1 301 Moved Permanently\\nLocation: /weather-data",
+              "correct": false
+            },
+            {
+              "id": "sai_2",
+              "text": "{\\n  \\\"content\\\": [\\n    {\\n      \\\"type\\\": \\\"text\\\",\\n      \\\"text\\\": \\\"The current weather in Tokyo is 18°C and clear.\\\"\\n    }\\n  ]\\n}",
+              "correct": true
+            },
+            {
+              "id": "sai_3",
+              "text": "SELECT * FROM weather WHERE city = 'Tokyo';",
+              "correct": false
+            }
+          ],
+          "explain": "Option B is the correct AI-style representation of an MCP tool call response, formatted with a structured 'content' array containing a text block. Option A is an HTTP redirect, and Option C is a raw SQL query."
+        }
+      ]
+    },
+    {
+      "type": "boss",
+      "exercises": [
+        {
+          "id": "b1",
+          "type": "multiple_choice",
+          "xp": 5,
+          "prompt": "Imagine your MCP client wants to call a tool named 'calculate_tax' on a server. What must the client send in its request, and what structure does it expect in return?",
+          "options": [
+            {
+              "id": "opt_1",
+              "text": "A request object with the tool's name and arguments; the server returns a structured response containing a 'content' array.",
+              "correct": true
+            },
+            {
+              "id": "opt_2",
+              "text": "A raw text string with the tool name; the server returns a simple, unformatted stream of console logs.",
+              "correct": false
+            },
+            {
+              "id": "opt_3",
+              "text": "An empty ping request; the server automatically detects what inputs to use based on the client's past history.",
+              "correct": false
+            },
+            {
+              "id": "opt_4",
+              "text": "A binary file upload; the server returns an encrypted database connection string.",
+              "correct": false
+            }
+          ],
+          "explain": "To invoke a tool, the client must send a request with both the tool's name and its required input arguments. If successful, the server replies with a structured response that contains a 'content' array, which holds the text, image, or resource data generated by the tool."
+        }
+      ]
+    }
+  ]
+}

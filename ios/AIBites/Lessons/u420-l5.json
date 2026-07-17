@@ -1,0 +1,222 @@
+{
+  "id": "u420-l5",
+  "unit": 420,
+  "day": 2105,
+  "tier": "LLM Application Engineering",
+  "tierIcon": "🔌",
+  "title": "Fallback Strategies",
+  "icon": "🪂",
+  "concept": "What to inject when retrieval returns nothing useful or context would exceed the budget.",
+  "xp": 15,
+  "hearts": 3,
+  "estMinutes": 7,
+  "segments": [
+    {
+      "type": "warmup",
+      "exercises": [
+        {
+          "id": "w1",
+          "type": "multiple_choice",
+          "xp": 1,
+          "prompt": "Quick recap: when splitting a fixed token budget across conversation history, retrieved docs, and tool results, what's the main goal?",
+          "options": [
+            {
+              "id": "a",
+              "text": "Always give history 90% of the budget since it's most recent",
+              "correct": false
+            },
+            {
+              "id": "b",
+              "text": "Allocate tokens based on what actually helps answer THIS query, adjusting the split as needed",
+              "correct": true
+            },
+            {
+              "id": "c",
+              "text": "Split the budget exactly evenly into three equal thirds every time",
+              "correct": false
+            }
+          ],
+          "explain": "There's no fixed magic ratio — the smart approach is to allocate tokens based on what's actually useful for the current query, sometimes favoring docs, sometimes history, sometimes tool output. Rigid rules (90% history, or equal thirds) ignore what the query actually needs."
+        }
+      ]
+    },
+    {
+      "type": "teach",
+      "cards": [
+        {
+          "kind": "hook",
+          "icon": "🕳️",
+          "title": "What Happens When the Well Runs Dry?",
+          "body": "You built a great retrieval pipeline... but what happens the moment it finds nothing useful, or finds too much to fit? Most beginner bots either crash, go silent, or worse — confidently make stuff up. Today we fix that."
+        },
+        {
+          "kind": "definition",
+          "icon": "📋",
+          "title": "What Is a Fallback Strategy?",
+          "body": "A fallback strategy is your app's backup plan for when retrieval returns nothing useful, or when the good stuff won't fit in the token budget. Instead of injecting junk or crashing, you inject something safer: a clear 'no context found' note, a shorter summary, or a request for clarification."
+        },
+        {
+          "kind": "analogy",
+          "icon": "🧑‍🍳",
+          "title": "The Chef With No Fresh Ingredients",
+          "body": "A good chef doesn't cancel dinner if the fridge is empty of one item — they swap in a substitute or say 'we're out of that today.' A good AI app doesn't crash or hallucinate when retrieval comes up empty — it swaps in a graceful fallback."
+        },
+        {
+          "kind": "example",
+          "icon": "🔍",
+          "title": "A Support Bot Hits a Dead End",
+          "body": "User asks about a product feature that doesn't exist yet. Retrieval returns nothing above the relevance threshold. Fallback: instead of forcing in unrelated docs, the system prompt gets a note: 'No matching documentation found — answer generally and suggest contacting support.' The model stays honest instead of making something up."
+        },
+        {
+          "kind": "mythbust",
+          "icon": "🚫",
+          "title": "Myth: More Context Is Always Safer",
+          "body": "Not true! If retrieval returns weak or irrelevant matches, stuffing them into the prompt just to 'fill space' often makes answers WORSE, not better — the model treats junk context as trustworthy. Sometimes the safest fallback is injecting less, not more."
+        },
+        {
+          "kind": "visual",
+          "icon": "⚖️",
+          "title": "Two Kinds of Fallback Failures",
+          "body": "Fallbacks handle two different emergencies: nothing relevant was found, or too much was found for the budget. Each needs its own fix.",
+          "compare": {
+            "left": {
+              "emoji": "🕳️",
+              "tag": "Nothing Useful Found",
+              "text": "Inject a clear 'no reliable context' note instead of forcing weak matches — let the model say 'I'm not sure' or ask a follow-up."
+            },
+            "right": {
+              "emoji": "📦",
+              "tag": "Too Much to Fit",
+              "text": "Inject a compressed summary or the single best-ranked chunk instead of everything — trim gracefully, don't just cut off mid-sentence."
+            }
+          }
+        }
+      ]
+    },
+    {
+      "type": "practice",
+      "exercises": [
+        {
+          "id": "p1",
+          "type": "multiple_choice",
+          "xp": 2,
+          "prompt": "Retrieval found 5 relevant chunks, but including all of them would exceed the token budget by a lot. What's the best fallback approach?",
+          "options": [
+            {
+              "id": "a",
+              "text": "Include all 5 chunks anyway and let the model figure out truncation",
+              "correct": false
+            },
+            {
+              "id": "b",
+              "text": "Rank the chunks and include only the top-scoring ones that fit, possibly summarizing the rest",
+              "correct": true
+            },
+            {
+              "id": "c",
+              "text": "Throw out all 5 chunks and inject nothing since they don't all fit",
+              "correct": false
+            },
+            {
+              "id": "d",
+              "text": "Pick 5 random chunks from the full document set instead",
+              "correct": false
+            }
+          ],
+          "explain": "The smart fallback is graceful degradation: keep the most relevant pieces that actually fit the budget, and optionally compress or summarize the rest. Dumping everything in (A) risks silent truncation mid-sentence, discarding everything (C) wastes good information, and random selection (D) ignores relevance entirely."
+        },
+        {
+          "id": "p2",
+          "type": "true_false",
+          "xp": 2,
+          "prompt": "True or False: If retrieval returns low-confidence results, it's always better to inject them anyway rather than tell the model no good context was found.",
+          "options": [
+            {
+              "id": "a",
+              "text": "True",
+              "correct": false
+            },
+            {
+              "id": "b",
+              "text": "False",
+              "correct": true
+            }
+          ],
+          "explain": "False. Injecting low-confidence matches can mislead the model into treating shaky information as solid evidence. Often it's safer to be transparent — tell the model no strong match was found — so it can hedge, ask a clarifying question, or rely on general knowledge instead."
+        },
+        {
+          "id": "p3",
+          "type": "fill_blank",
+          "xp": 2,
+          "prompt": "Fill in the blank:",
+          "sentence": "When retrieval returns nothing above the relevance threshold, a good fallback is to explicitly tell the model that no reliable context was found instead of forcing in weak matches.",
+          "blank": "relevance threshold",
+          "words": [
+            "relevance threshold",
+            "token limit",
+            "system prompt"
+          ],
+          "explain": "The relevance threshold is the score cutoff that decides whether a retrieved chunk is 'good enough' to use. When nothing clears that bar, that's the trigger for a fallback plan rather than forcing weak results into the prompt."
+        },
+        {
+          "id": "p4",
+          "type": "spot_the_ai",
+          "xp": 2,
+          "prompt": "Which of these three context-injection behaviors is most likely AI-generated boilerplate rather than a thoughtful fallback design?",
+          "options": [
+            {
+              "id": "a",
+              "text": "\"If retrieval confidence is low, inject a note: 'No strongly relevant documents were found for this query.'\"",
+              "correct": false
+            },
+            {
+              "id": "b",
+              "text": "\"I have thoroughly searched all available knowledge sources across the universe and can confirm with 100% certainty that no information exists on this topic.\"",
+              "correct": true
+            },
+            {
+              "id": "c",
+              "text": "\"When the best chunk still exceeds the token budget, truncate it at a sentence boundary and note that it was shortened.\"",
+              "correct": false
+            }
+          ],
+          "explain": "Option B is a red flag: real retrieval systems can't honestly claim '100% certainty' or having searched 'the universe' — that's overconfident, generic-sounding filler language typical of ungrounded AI text, not a real engineering fallback. Options A and C describe specific, realistic, implementable fallback behaviors."
+        }
+      ]
+    },
+    {
+      "type": "boss",
+      "exercises": [
+        {
+          "id": "b1",
+          "type": "multiple_choice",
+          "xp": 5,
+          "prompt": "Your app retrieves docs for a user question, but ALL retrieved chunks score below your relevance threshold, AND the top result alone would blow the token budget if force-included. What's the best fallback plan?",
+          "options": [
+            {
+              "id": "a",
+              "text": "Include the top result anyway, truncating it until it fits, and don't mention anything to the model",
+              "correct": false
+            },
+            {
+              "id": "b",
+              "text": "Skip injecting the low-quality docs, tell the model explicitly that no reliable context was found, and let it answer from general knowledge or ask a clarifying question",
+              "correct": true
+            },
+            {
+              "id": "c",
+              "text": "Return an error message to the user and stop processing",
+              "correct": false
+            },
+            {
+              "id": "d",
+              "text": "Randomly select a few low-scoring chunks and inject them without labeling them as unreliable",
+              "correct": false
+            }
+          ],
+          "explain": "Option B is correct because it handles BOTH problems at once: it respects the token budget (no forced truncated junk) and it prevents silent hallucination by telling the model 'you have no solid grounding here.' Truncating a bad match (A) still feeds garbage in. Erroring out (C) is a poor user experience when the model could still help. Injecting unlabeled low-quality chunks (D) is the worst — the model will trust them as if they were solid evidence. The core lesson of fallback strategies: when retrieval fails or budget is tight, be explicit about the gap rather than faking confidence."
+        }
+      ]
+    }
+  ]
+}

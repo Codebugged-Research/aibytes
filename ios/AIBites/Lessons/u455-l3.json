@@ -1,0 +1,222 @@
+{
+  "id": "u455-l3",
+  "unit": 455,
+  "day": 2278,
+  "tier": "LLM Application Engineering",
+  "tierIcon": "🔌",
+  "title": "A RAG Request, Traced Step by Step",
+  "icon": "🧭",
+  "concept": "Following one user question through chunking-time indexes, retrieval, reranking, context assembly, and generation.",
+  "xp": 15,
+  "hearts": 3,
+  "estMinutes": 7,
+  "segments": [
+    {
+      "type": "warmup",
+      "exercises": [
+        {
+          "id": "w1",
+          "type": "multiple_choice",
+          "xp": 1,
+          "prompt": "From our previous lesson on RAG's two halves, what is the primary job of the offline indexing pipeline's offline indexing phase?",
+          "options": [
+            {
+              "id": "w_1",
+              "text": "Generating the final response text",
+              "correct": false
+            },
+            {
+              "id": "w_2",
+              "text": "Parsing documents, splitting them into chunks, and storing their embeddings",
+              "correct": true
+            },
+            {
+              "id": "w_3",
+              "text": "Accepting the user's search query and converting it to a vector",
+              "correct": false
+            }
+          ],
+          "explain": "The offline pipeline handles ingest, chunking, and indexing. The online pipeline executes live when a user submits a query to retrieve information and generate a response."
+        }
+      ]
+    },
+    {
+      "type": "teach",
+      "cards": [
+        {
+          "kind": "hook",
+          "icon": "🚀",
+          "title": "Inside the Live Pipeline",
+          "body": "We know that RAG has an offline prep phase and an online execution phase. But what exactly happens millisecond-by-millisecond when a user actually hits 'Submit' on a question? Let's trace the journey!"
+        },
+        {
+          "kind": "definition",
+          "icon": "🔍",
+          "title": "Tracing a RAG Request",
+          "body": "Tracing a RAG request means tracking a user's question as it is converted into a vector, matched against stored document chunks, sorted by relevance, and finally packaged into a prompt for the LLM to read and answer."
+        },
+        {
+          "kind": "analogy",
+          "icon": "🍳",
+          "title": "The Kitchen Analogy",
+          "body": "Think of a RAG request like a busy restaurant kitchen. The customer's order (query) is read, the chef retrieves raw ingredients from the fridge (retrieval), sorts the best ones to the front (reranking), preps them onto a clean plate (context assembly), and cooks the final dish (generation)."
+        },
+        {
+          "kind": "example",
+          "icon": "📝",
+          "title": "A Password Reset Request",
+          "body": "When a user asks 'How do I reset my password?', RAG converts this query to a vector, finds the top 10 most similar help-center chunks, narrows them down to the best 3 via a reranker, builds a prompt, and hands it to the LLM."
+        },
+        {
+          "kind": "mythbust",
+          "icon": "🚫",
+          "title": "The LLM Doesn't Search",
+          "body": "Many believe the LLM searches the vector database directly. In reality, the database is searched using vector math before the LLM is even called; the LLM only reads the final text results we package for it."
+        },
+        {
+          "kind": "visual",
+          "icon": "📊",
+          "title": "Retrieving vs. Reranking",
+          "body": "Compare the fast, broad-net retrieval phase with the slower, high-precision sorting phase.",
+          "compare": {
+            "left": {
+              "emoji": "🎣",
+              "tag": "Retrieval",
+              "text": "Quickly pulls top 50 match candidates using fast vector math."
+            },
+            "right": {
+              "emoji": "🎯",
+              "tag": "Reranking",
+              "text": "Carefully sorts those top 50 down to the absolute best 3."
+            }
+          }
+        }
+      ]
+    },
+    {
+      "type": "practice",
+      "exercises": [
+        {
+          "id": "p1",
+          "type": "multiple_choice",
+          "xp": 2,
+          "prompt": "What happens during the 'context assembly' phase of a RAG request?",
+          "options": [
+            {
+              "id": "mc_1",
+              "text": "Reranking the chunks using a cross-encoder model",
+              "correct": false
+            },
+            {
+              "id": "mc_2",
+              "text": "Splitting large PDFs into smaller text chunks",
+              "correct": false
+            },
+            {
+              "id": "mc_3",
+              "text": "Inserting the retrieved text chunks into a prompt template for the LLM",
+              "correct": true
+            },
+            {
+              "id": "mc_4",
+              "text": "Converting the user's text query into a vector representation",
+              "correct": false
+            }
+          ],
+          "explain": "Context assembly is the process of pasting the retrieved document chunks directly into the prompt template alongside the user's original query."
+        },
+        {
+          "id": "p2",
+          "type": "true_false",
+          "xp": 2,
+          "prompt": "True or False: The online retrieval phase relies on the index built during the offline indexing phase to find matching documents.",
+          "options": [
+            {
+              "id": "tf_1",
+              "text": "True",
+              "correct": true
+            },
+            {
+              "id": "tf_2",
+              "text": "False",
+              "correct": false
+            }
+          ],
+          "explain": "Retrieval uses the embeddings created during the offline indexing phase to find matching content in the vector database."
+        },
+        {
+          "id": "p3",
+          "type": "fill_blank",
+          "xp": 2,
+          "prompt": "Fill in the missing word for the sorting step:",
+          "sentence": "After fetching the initial documents, we use reranking to order them by exact relevance.",
+          "blank": "reranking",
+          "words": [
+            "reranking",
+            "chunking",
+            "indexing"
+          ],
+          "explain": "Reranking is the step that takes the rough list of retrieved chunks and sorts them using a more precise model to ensure the best information is placed first."
+        },
+        {
+          "id": "p4",
+          "type": "spot_the_ai",
+          "xp": 2,
+          "prompt": "Which of the following describes how context assembly feeds into the final generation step?",
+          "options": [
+            {
+              "id": "sai_1",
+              "text": "The vector database automatically answers the question using built-in keyword logic.",
+              "correct": false
+            },
+            {
+              "id": "sai_2",
+              "text": "The LLM writes the question back into the vector database for future indexing.",
+              "correct": false
+            },
+            {
+              "id": "sai_3",
+              "text": "The retrieved chunks are pasted into a prompt template, which is then sent to the LLM to generate the final response.",
+              "correct": true
+            }
+          ],
+          "explain": "Option C is correct because the prompt template acts as the container where the retrieved document chunks are pasted before being sent to the LLM."
+        }
+      ]
+    },
+    {
+      "type": "boss",
+      "exercises": [
+        {
+          "id": "b1",
+          "type": "multiple_choice",
+          "xp": 5,
+          "prompt": "Let's trace a user's question through the entire active online pipeline. Which of the following shows the correct chronological order of operations?",
+          "options": [
+            {
+              "id": "opt_1",
+              "text": "Query → Embed → Retrieve Chunks → Rerank → Assemble Prompt → Generate Answer",
+              "correct": true
+            },
+            {
+              "id": "opt_2",
+              "text": "Query → Generate Answer → Embed → Retrieve Chunks → Rerank",
+              "correct": false
+            },
+            {
+              "id": "opt_3",
+              "text": "Query → Rerank → Assemble Prompt → Embed → Retrieve Chunks",
+              "correct": false
+            },
+            {
+              "id": "opt_4",
+              "text": "Query → Embed → Assemble Prompt → Generate Answer → Rerank",
+              "correct": false
+            }
+          ],
+          "explain": "In a real RAG request, we convert the user's query into an embedding to retrieve relevant chunks, rerank them to bubble up the best ones, assemble them into a neat prompt template, and feed that final prompt to the LLM to generate the answer."
+        }
+      ]
+    }
+  ]
+}

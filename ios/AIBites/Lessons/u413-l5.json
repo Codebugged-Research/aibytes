@@ -1,0 +1,222 @@
+{
+  "id": "u413-l5",
+  "unit": 413,
+  "day": 2070,
+  "tier": "LLM Application Engineering",
+  "tierIcon": "🔌",
+  "title": "Chains vs a Single Long Prompt",
+  "icon": "🔗",
+  "concept": "When decomposition improves reliability versus when it just adds latency and complexity.",
+  "xp": 15,
+  "hearts": 3,
+  "estMinutes": 7,
+  "segments": [
+    {
+      "type": "warmup",
+      "exercises": [
+        {
+          "id": "w1",
+          "type": "multiple_choice",
+          "xp": 1,
+          "prompt": "Quick recap: why is error propagation in chains a big deal?",
+          "options": [
+            {
+              "id": "a",
+              "text": "Because a mistake in an early step can silently corrupt every step that follows, since later steps trust the earlier output",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "Because chains always run slower than a single prompt no matter what",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "Because chains use more tokens than necessary, which is purely a cost issue",
+              "correct": false
+            }
+          ],
+          "explain": "Right — in a chain, each step usually assumes the previous step's output was correct. If step one goes wrong and nobody catches it, that error quietly flows downstream and taints everything after it, which is why intermediate validation matters."
+        }
+      ]
+    },
+    {
+      "type": "teach",
+      "cards": [
+        {
+          "kind": "hook",
+          "icon": "🤔",
+          "title": "More Steps = More Reliable... Right?",
+          "body": "It's tempting to think breaking every prompt into tiny chained steps always makes your AI app better. But sometimes that's like taking the scenic route to the mailbox next door — you just added delay without adding safety."
+        },
+        {
+          "kind": "definition",
+          "icon": "⚖️",
+          "title": "Decomposition Isn't Free",
+          "body": "Splitting a task into a chain of prompts trades speed for control: you get more chances to check and fix things, but you also pay in extra time, cost, and complexity. It's a tool for specific problems, not a rule to always follow."
+        },
+        {
+          "kind": "analogy",
+          "icon": "🍳",
+          "title": "Recipe vs. One-Pot Dump",
+          "body": "A single long prompt is like dumping every ingredient in a pot at once and hoping dinner works out. A chain is like following a recipe step by step: chop, sauté, simmer, taste. The recipe takes longer but you can fix a mistake before it ruins the whole meal."
+        },
+        {
+          "kind": "example",
+          "icon": "🧾",
+          "title": "Two Real Tasks",
+          "body": "Summarizing one short paragraph? One prompt is fine — nothing to verify in between. Turning a bug report into a fix: first extract the error, then find the likely cause, then write the patch — a chain, because each step needs the last one to be right before moving on."
+        },
+        {
+          "kind": "mythbust",
+          "icon": "🚫",
+          "title": "Myth: Chains Are Always Safer",
+          "body": "Not true! Every extra step in a chain adds latency, cost, and a new place for errors or weird formatting to creep in. If a task is simple and low-risk, one well-written prompt can be faster AND just as reliable as a five-step chain."
+        },
+        {
+          "kind": "visual",
+          "icon": "📊",
+          "title": "Weighing Your Options",
+          "body": "Before chaining, ask: does step two truly need a verified result from step one? If yes, chain it. If the task is simple and forgiving, a single prompt saves time without losing quality.",
+          "compare": {
+            "left": {
+              "emoji": "📜",
+              "tag": "Single Prompt",
+              "text": "Fast, cheap, simple — great for short, self-contained tasks with low risk if something's slightly off."
+            },
+            "right": {
+              "emoji": "🔗",
+              "tag": "Chain",
+              "text": "Slower, costs more calls — but lets you validate each step, ideal when steps depend on each other or use different tools."
+            }
+          }
+        }
+      ]
+    },
+    {
+      "type": "practice",
+      "exercises": [
+        {
+          "id": "p1",
+          "type": "multiple_choice",
+          "xp": 2,
+          "prompt": "Which task is the BEST candidate for a single long prompt instead of a chain?",
+          "options": [
+            {
+              "id": "a",
+              "text": "Rewriting one short sentence to sound friendlier",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "Researching a topic across five sources, comparing them, and writing a report with citations",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "Extracting structured data from a document, then using that data to call three different APIs",
+              "correct": false
+            },
+            {
+              "id": "d",
+              "text": "Planning a multi-day trip that requires checking flight availability, then hotel availability, then budget totals in sequence",
+              "correct": false
+            }
+          ],
+          "explain": "Rewriting one short sentence is a small, self-contained task with nothing to verify in between — a single prompt handles it fine. The other options all involve multiple dependent steps (research then compare, extract then call APIs, check flights then hotels then budget) where a chain lets you catch problems before they cascade."
+        },
+        {
+          "id": "p2",
+          "type": "true_false",
+          "xp": 2,
+          "prompt": "True or False: Adding more steps to a prompt chain always improves the final output's accuracy.",
+          "options": [
+            {
+              "id": "true",
+              "text": "True",
+              "correct": false
+            },
+            {
+              "id": "false",
+              "text": "False",
+              "correct": true
+            }
+          ],
+          "explain": "False. Each extra step adds latency, cost, and a new opportunity for an error or format mismatch to appear. More steps only help when each one is actually checking or building on necessary information — otherwise you're just adding overhead."
+        },
+        {
+          "id": "p3",
+          "type": "fill_blank",
+          "xp": 2,
+          "prompt": "Fill in the blank.",
+          "sentence": "Chaining tends to help most when a task has several dependent steps, each needing a different skill, tool, or format, and mistakes are costly enough to justify checking work along the way.",
+          "blank": "dependent",
+          "words": [
+            "dependent",
+            "colorful",
+            "identical"
+          ],
+          "explain": "Dependent steps are the key signal — when step two truly needs a correct step one to work, a chain lets you verify along the way instead of hoping one giant prompt gets everything right at once."
+        },
+        {
+          "id": "p4",
+          "type": "spot_the_ai",
+          "xp": 2,
+          "prompt": "A developer explains their chaining choice. Which explanation sounds AI-generated (vague and overly generic) rather than a real engineer's reasoning?",
+          "options": [
+            {
+              "id": "a",
+              "text": "We chained this because step 2 needs the verified customer ID from step 1's database lookup before it can safely place an order.",
+              "correct": false
+            },
+            {
+              "id": "b",
+              "text": "Chaining is a powerful technique that enhances reliability and unlocks robust, scalable AI workflows for a wide range of use cases.",
+              "correct": true
+            },
+            {
+              "id": "c",
+              "text": "We kept this as one prompt since it's just reformatting a paragraph — nothing downstream depends on an intermediate check.",
+              "correct": false
+            }
+          ],
+          "explain": "Option B is full of vague buzzwords ('powerful', 'unlocks', 'robust', 'wide range of use cases') but never says what the actual task or dependency is — a telltale sign of generic AI filler text. Real engineering reasoning (like options A and C) points to a specific dependency or lack of one."
+        }
+      ]
+    },
+    {
+      "type": "boss",
+      "exercises": [
+        {
+          "id": "b1",
+          "type": "multiple_choice",
+          "xp": 5,
+          "prompt": "You're building a tool that takes a messy customer email, figures out the customer's intent, looks up their order in a database, and writes a personalized reply. Which design choice is best, and why?",
+          "options": [
+            {
+              "id": "a",
+              "text": "Use a chain: classify intent, fetch order data, then generate the reply as separate steps, because the tool call and personalization each need to build on a verified previous result",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "Use one giant prompt with the classification instructions, database schema, and reply-writing style guide all crammed together, because fewer steps always means fewer errors",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "Always decompose everything into as many tiny steps as possible, since more steps are always more reliable no matter the task",
+              "correct": false
+            },
+            {
+              "id": "d",
+              "text": "Use one giant prompt because latency is the only thing that matters, and accuracy on tool calls doesn't matter",
+              "correct": false
+            }
+          ],
+          "explain": "This task has a hard dependency: you can't write a good reply until you know the intent, and you can't fetch the right order until you know the intent too. That's exactly when chaining helps — each step's output is a checkpoint you can verify before the next step uses it, especially since a tool call (database lookup) is involved. But decomposition isn't automatically better everywhere: extra steps that don't depend on each other just add latency and more chances for errors to sneak in. The skill is telling these two situations apart: chain when steps genuinely depend on verified prior results or need different tools/formats; stay single-prompt when the task is simple enough for the model to reliably do in one clean pass."
+        }
+      ]
+    }
+  ]
+}

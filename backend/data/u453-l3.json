@@ -1,0 +1,222 @@
+{
+  "id": "u453-l3",
+  "unit": 453,
+  "day": 2268,
+  "tier": "LLM Application Engineering",
+  "tierIcon": "🔌",
+  "title": "Why RRF Doesn't Need Score Normalization",
+  "icon": "⚖️",
+  "concept": "Using rank position instead of raw scores sidesteps the incomparable-score-scales problem entirely.",
+  "xp": 15,
+  "hearts": 3,
+  "estMinutes": 7,
+  "segments": [
+    {
+      "type": "warmup",
+      "exercises": [
+        {
+          "id": "w1",
+          "type": "multiple_choice",
+          "xp": 1,
+          "prompt": "How did we calculate the final score of a document using the RRF formula in the last lesson?",
+          "options": [
+            {
+              "id": "wu_a",
+              "text": "By multiplying the raw scores of documents across different search lists.",
+              "correct": false
+            },
+            {
+              "id": "wu_b",
+              "text": "By summing the reciprocal ranks, calculated as 1 / (k + rank), for each list.",
+              "correct": true
+            },
+            {
+              "id": "wu_c",
+              "text": "By averaging the raw cosine similarity scores of the top 100 documents.",
+              "correct": false
+            }
+          ],
+          "explain": "The RRF formula scores each document by summing 1 / (k + rank) across all the search result lists where that document appears."
+        }
+      ]
+    },
+    {
+      "type": "teach",
+      "cards": [
+        {
+          "kind": "hook",
+          "icon": "🔀",
+          "title": "The Apples-to-Oranges Problem",
+          "body": "Combining search results from different engines is a nightmare because one might use BM25 scores (0 to infinity) while another uses cosine similarity (0 to 1). RRF solves this without complex math by ignoring the scores entirely and focusing only on the order."
+        },
+        {
+          "kind": "definition",
+          "icon": "⚖️",
+          "title": "Bypassing Normalization",
+          "body": "Score normalization is the complex process of scaling different scoring systems to fit the same range. RRF bypasses this completely by throwing away the raw scores and only looking at the sorted rank order (1st, 2nd, 3rd) of the documents."
+        },
+        {
+          "kind": "analogy",
+          "icon": "🏆",
+          "title": "The Universal Grading Curve",
+          "body": "Imagine trying to compare a student's grade of 95% in a super easy class to an A+ in a brutally hard class. Instead of trying to adjust the percentages, you just look at their class rank: they finished 1st in both classes. Rank acts as a universal translator."
+        },
+        {
+          "kind": "example",
+          "icon": "📝",
+          "title": "Blending 150 and 0.99",
+          "body": "Suppose Search Engine A scores a document 150 points (Rank 1) and Search Engine B scores it 0.99 points (Rank 1). Instead of trying to scale 150 and 0.99, RRF simply calculates 1/(k+1) for both sources to get their final combined score."
+        },
+        {
+          "kind": "mythbust",
+          "icon": "🚫",
+          "title": "Myth: Raw Scores are Always Better",
+          "body": "You might think we lose valuable information by discarding the raw scores. In practice, raw scores are often noisy and highly sensitive to query length; relative ranks are much more stable and reliable for merging."
+        },
+        {
+          "kind": "visual",
+          "icon": "👁️",
+          "title": "Visualizing the Shift",
+          "body": "Instead of struggling to align raw scores that use completely different units, we simply map them to their relative ranks.",
+          "compare": {
+            "left": {
+              "emoji": "📊",
+              "tag": "Raw Scores",
+              "text": "Engine A: 124.5, 98.2\\nEngine B: 0.89, 0.72"
+            },
+            "right": {
+              "emoji": "🔢",
+              "tag": "RRF Ranks",
+              "text": "Engine A: Rank 1, Rank 2\\nEngine B: Rank 1, Rank 2"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "type": "practice",
+      "exercises": [
+        {
+          "id": "p1",
+          "type": "multiple_choice",
+          "xp": 2,
+          "prompt": "How does Reciprocal Rank Fusion (RRF) sidestep the problem of incompatible score scales from different search tools?",
+          "options": [
+            {
+              "id": "mc_a",
+              "text": "It multiplies the raw scores by a constant weight factor.",
+              "correct": false
+            },
+            {
+              "id": "mc_b",
+              "text": "It uses the document's rank position instead of its raw score.",
+              "correct": true
+            },
+            {
+              "id": "mc_c",
+              "text": "It converts all raw scores into vector coordinates.",
+              "correct": false
+            },
+            {
+              "id": "mc_d",
+              "text": "It shifts the decimal points of the scores dynamically.",
+              "correct": false
+            }
+          ],
+          "explain": "RRF only looks at the document's position (1st, 2nd, 3rd, etc.) in the list of results, which is a simple integer, bypassing the incompatible raw scores."
+        },
+        {
+          "id": "p2",
+          "type": "true_false",
+          "xp": 2,
+          "prompt": "True or False: Using rank position instead of raw scores makes RRF immune to differences in score scales between search engines.",
+          "options": [
+            {
+              "id": "tf_true",
+              "text": "True",
+              "correct": true
+            },
+            {
+              "id": "tf_false",
+              "text": "False",
+              "correct": false
+            }
+          ],
+          "explain": "By using ranks (1, 2, 3...) instead of raw scores, RRF avoids the need to scale or normalize different scoring systems."
+        },
+        {
+          "id": "p3",
+          "type": "fill_blank",
+          "xp": 2,
+          "prompt": "Fill in the blank to complete the explanation of RRF's score independence.",
+          "sentence": "Because RRF uses the rank position of each document, it does not need to normalize the original raw scores.",
+          "blank": "rank position",
+          "words": [
+            "rank position",
+            "average score",
+            "vector length"
+          ],
+          "explain": "RRF relies entirely on the rank position of a document in each list, meaning it doesn't matter what the original raw score scale was."
+        },
+        {
+          "id": "p4",
+          "type": "spot_the_ai",
+          "xp": 2,
+          "prompt": "Which formula correctly represents the Reciprocal Rank Fusion calculation for a document?",
+          "options": [
+            {
+              "id": "sai_a",
+              "text": "Score = Sum of 1 / (k + raw_score) across all search lists.",
+              "correct": false
+            },
+            {
+              "id": "sai_b",
+              "text": "Score = Sum of 1 / (k + rank) across all search lists.",
+              "correct": true
+            },
+            {
+              "id": "sai_c",
+              "text": "Score = Sum of (k + rank) divided by the raw score.",
+              "correct": false
+            }
+          ],
+          "explain": "The correct formula uses the rank (1st, 2nd, etc.) of the document in the list, not the raw score value itself."
+        }
+      ]
+    },
+    {
+      "type": "boss",
+      "exercises": [
+        {
+          "id": "b1",
+          "type": "multiple_choice",
+          "xp": 5,
+          "prompt": "Why does RRF successfully combine results from a keyword search engine (which might output scores like 12.5 and 8.2) and a vector database (which might output scores between 0.0 and 1.0) without any scaling math?",
+          "options": [
+            {
+              "id": "ans_a",
+              "text": "RRF only uses the ordinal rank position, discarding the raw scores entirely.",
+              "correct": true
+            },
+            {
+              "id": "ans_b",
+              "text": "RRF automatically converts all raw scores into percentages before adding them.",
+              "correct": false
+            },
+            {
+              "id": "ans_c",
+              "text": "RRF requires all search engines to use cosine similarity scales.",
+              "correct": false
+            },
+            {
+              "id": "ans_d",
+              "text": "RRF scales the scores using a neural network layer before fusion.",
+              "correct": false
+            }
+          ],
+          "explain": "By converting raw scores into rank positions, RRF completely ignores the original scale (whether it is 0 to 1, or 1 to 100). The formula 1/(k + rank) only cares about the relative order of documents, making it immune to different scoring distributions."
+        }
+      ]
+    }
+  ]
+}

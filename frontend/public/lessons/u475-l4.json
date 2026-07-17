@@ -1,0 +1,222 @@
+{
+  "id": "u475-l4",
+  "unit": 475,
+  "day": 2379,
+  "tier": "LLM Application Engineering",
+  "tierIcon": "🔌",
+  "title": "Precomputing & Caching Embeddings",
+  "icon": "🗄️",
+  "concept": "Embedding documents once at ingest time and caching query embeddings for repeated queries.",
+  "xp": 15,
+  "hearts": 3,
+  "estMinutes": 7,
+  "segments": [
+    {
+      "type": "warmup",
+      "exercises": [
+        {
+          "id": "w1",
+          "type": "multiple_choice",
+          "xp": 1,
+          "prompt": "How does streaming generation help improve the user-does streaming generation improve the user experience in a user's experience in-app latency?",
+          "options": [
+            {
+              "id": "wu_1",
+              "text": "It speeds up the backend search databases.",
+              "correct": false
+            },
+            {
+              "id": "wu_2",
+              "text": "It sends tokens to the user as they are generated, reducing perceived waiting time.",
+              "correct": true
+            },
+            {
+              "id": "wu_3",
+              "text": "It compresses the text embeddings.",
+              "correct": false
+            }
+          ],
+          "explain": "Streaming outputs tokens to the user bit-by-bit as they are generated, which reduces the perceived wait time (time-to-first-token)."
+        }
+      ]
+    },
+    {
+      "type": "teach",
+      "cards": [
+        {
+          "kind": "hook",
+          "icon": "⚡",
+          "title": "Stop Re-embedding the Wheel",
+          "body": "Generating embeddings requires sending text to a neural network, which takes valuable milliseconds. If we do this repeatedly for the same documents or identical search queries, we waste CPU cycles and money. How can we make this step instant?"
+        },
+        {
+          "kind": "definition",
+          "icon": "💾",
+          "title": "What is Precomputing & Caching?",
+          "body": "Precomputing embeddings means converting your document library into vectors once during ingestion, rather than on-the-fly. Caching query embeddings saves the vector results of common user searches so you don't have to call the expensive embedding model again."
+        },
+        {
+          "kind": "analogy",
+          "icon": "📚",
+          "title": "The Library Translator Analogy",
+          "body": "Think of embedding documents like translating a massive library into a secret code. If you translate the books once and keep them on the shelves, you can search them instantly. If you translated every book from scratch every single time a visitor walked in, your library would be painfully slow!"
+        },
+        {
+          "kind": "example",
+          "icon": "🛍️",
+          "title": "Retrieval in Action",
+          "body": "An online store runs a RAG assistant. They precalculate vectors for their entire product catalog overnight. When users repeatedly ask 'How do I return items?', the system pulls the cached query embedding instantly without asking the embedding model to process the text again."
+        },
+        {
+          "kind": "mythbust",
+          "icon": "🚫",
+          "title": "The Real-Time Illusion",
+          "body": "You might think embedding models are so fast that we can just calculate everything in real-time. In reality, network overhead and model inference times quickly stack up under high traffic, leading to laggy user experiences."
+        },
+        {
+          "kind": "visual",
+          "icon": "⚖️",
+          "title": "Ingestion vs. Query Time",
+          "body": "Comparing how we handle static documents versus dynamic user queries to optimize speed.",
+          "compare": {
+            "left": {
+              "emoji": "📚",
+              "tag": "Ingest Time",
+              "text": "Embed documents once and store them in a vector database."
+            },
+            "right": {
+              "emoji": "🔍",
+              "tag": "Query Time",
+              "text": "Cache frequent search vectors to bypass the embedding API."
+            }
+          }
+        }
+      ]
+    },
+    {
+      "type": "practice",
+      "exercises": [
+        {
+          "id": "p1",
+          "type": "multiple_choice",
+          "xp": 2,
+          "prompt": "How does query embedding caching reduce latency?",
+          "options": [
+            {
+              "id": "mc_1",
+              "text": "It deletes old documents from the database.",
+              "correct": false
+            },
+            {
+              "id": "mc_2",
+              "text": "It stores the vector representation of a query to reuse for identical future searches.",
+              "correct": true
+            },
+            {
+              "id": "mc_3",
+              "text": "It translates the query into multiple languages.",
+              "correct": false
+            },
+            {
+              "id": "mc_4",
+              "text": "It compresses the LLM's final response text.",
+              "correct": false
+            }
+          ],
+          "explain": "Query caching checks if the exact same query text has been searched before. If it has, we return the saved vector immediately, bypassing the slow embedding API call."
+        },
+        {
+          "id": "p2",
+          "type": "true_false",
+          "xp": 2,
+          "prompt": "True or False: Computing document embeddings on-the-fly for every user query is bad for RAG latency.",
+          "options": [
+            {
+              "id": "tf_true",
+              "text": "True",
+              "correct": true
+            },
+            {
+              "id": "tf_false",
+              "text": "False",
+              "correct": false
+            }
+          ],
+          "explain": "Document embeddings only need to be computed once when the document is added or updated in your knowledge base. Repeating this during query time is highly inefficient."
+        },
+        {
+          "id": "p3",
+          "type": "fill_blank",
+          "xp": 2,
+          "prompt": "Fill in the blank to complete the rule of efficient RAG pipelines:",
+          "sentence": "We should always convert our documents into vector embeddings at ingest time so we do not waste latency during a user search.",
+          "blank": "ingest time",
+          "words": [
+            "ingest time",
+            "runtime",
+            "generation time"
+          ],
+          "explain": "Documents are static, so we can convert them to embeddings once at ingest time and store them, saving precious live-query time."
+        },
+        {
+          "id": "p4",
+          "type": "spot_the_ai",
+          "xp": 2,
+          "prompt": "Identify which explanation of embedding optimization was written by an AI:",
+          "options": [
+            {
+              "id": "sai_1",
+              "text": "We can speed up embeddings by converting all text files into image files before sending them to the model.",
+              "correct": false
+            },
+            {
+              "id": "sai_2",
+              "text": "To save latency, we should run the embedding model only when the user complains about slow speeds.",
+              "correct": false
+            },
+            {
+              "id": "sai_3",
+              "text": "By embedding our knowledge base during the ingestion phase, we avoid running expensive embedding models during live user queries.",
+              "correct": true
+            }
+          ],
+          "explain": "The third response is generated by an AI because it accurately describes precalculating document vectors once at ingestion and reusing them to avoid redundant real-time computation."
+        }
+      ]
+    },
+    {
+      "type": "boss",
+      "exercises": [
+        {
+          "id": "b1",
+          "type": "multiple_choice",
+          "xp": 5,
+          "prompt": "You want to design a highly optimized RAG pipeline for a busy customer support bot. What is the most latency-efficient way to handle embeddings for both documents and search queries?",
+          "options": [
+            {
+              "id": "boss_1",
+              "text": "Embedding all documents on-the-fly and caching only the LLM's final text output.",
+              "correct": false
+            },
+            {
+              "id": "boss_2",
+              "text": "Re-calculating document vectors on every query but caching the user's search history.",
+              "correct": false
+            },
+            {
+              "id": "boss_3",
+              "text": "Precomputing document vectors once at ingestion, and caching query vectors to bypass LLM/embedding API calls for repeat searches.",
+              "correct": true
+            },
+            {
+              "id": "boss_4",
+              "text": "Converting all text to uppercase to make embedding calculations run faster on the GPU.",
+              "correct": false
+            }
+          ],
+          "explain": "Precomputing embeddings at ingestion stores document vectors permanently in a database. Caching query embeddings avoids recalculating vectors for identical searches. Combining both eliminates redundant work and keeps your pipeline running at maximum speed."
+        }
+      ]
+    }
+  ]
+}
