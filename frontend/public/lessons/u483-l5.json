@@ -1,0 +1,222 @@
+{
+  "id": "u483-l5",
+  "unit": 483,
+  "day": 2420,
+  "tier": "AI Agents & Agentic AI",
+  "tierIcon": "🤖",
+  "title": "Observation Latency",
+  "icon": "⏳",
+  "concept": "Handling slow environment updates (e.g. browser paint, network request) before the agent takes its next turn.",
+  "xp": 15,
+  "hearts": 3,
+  "estMinutes": 7,
+  "segments": [
+    {
+      "type": "warmup",
+      "exercises": [
+        {
+          "id": "w1",
+          "type": "multiple_choice",
+          "xp": 1,
+          "prompt": "Last lesson: why does an agent doing a UI task sometimes need a screenshot AND the text logs?",
+          "options": [
+            {
+              "id": "a",
+              "text": "The screenshot gives visual grounding the text alone can't show, like button positions.",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "Screenshots are always smaller files than text.",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "Text logs are never useful for agents.",
+              "correct": false
+            }
+          ],
+          "explain": "Multi-modal observation means combining pixels (what the screen looks like) with text (logs, code). The image shows layout and buttons; the text adds precise details. Together they give the agent a fuller picture."
+        }
+      ]
+    },
+    {
+      "type": "teach",
+      "cards": [
+        {
+          "kind": "hook",
+          "icon": "⏳",
+          "title": "The Awkward Pause",
+          "body": "You click a button and the page spins for two seconds. If an agent 'looks' before the page finishes loading, it sees a half-blank screen. Acting on that is a recipe for mistakes."
+        },
+        {
+          "kind": "definition",
+          "icon": "📖",
+          "title": "What Is Observation Latency?",
+          "body": "Observation latency is the delay between when an agent acts and when the environment finishes updating. Slow things like page paints or network replies mean the newest observation isn't ready yet."
+        },
+        {
+          "kind": "analogy",
+          "icon": "📸",
+          "title": "Photo Before the Smile",
+          "body": "It's like taking a group photo the instant someone says 'cheese' — before everyone smiles. Snap too early and you capture a blurry, unfinished moment. A good agent waits for things to settle first."
+        },
+        {
+          "kind": "example",
+          "icon": "🌐",
+          "title": "Waiting for the Page",
+          "body": "An agent clicks 'Search', then pauses until the results actually load before reading the screen. Without that pause it might read 'No results' — which was just the page mid-loading."
+        },
+        {
+          "kind": "mythbust",
+          "icon": "🚫",
+          "title": "Myth: Faster Is Always Better",
+          "body": "Rushing to the next turn isn't smarter. Acting on a stale, half-loaded observation wastes turns fixing errors. A short, well-timed wait often finishes the whole task faster."
+        },
+        {
+          "kind": "visual",
+          "icon": "⚖️",
+          "title": "Peek Early vs. Wait",
+          "body": "Same click, two timings. Waiting for the update gives the agent the true state of the world.",
+          "compare": {
+            "left": {
+              "emoji": "⚡",
+              "tag": "Peek Too Early",
+              "text": "Reads a blank, still-loading page and picks a wrong action."
+            },
+            "right": {
+              "emoji": "✅",
+              "tag": "Wait, Then Look",
+              "text": "Reads the finished page and acts on real, current info."
+            }
+          }
+        }
+      ]
+    },
+    {
+      "type": "practice",
+      "exercises": [
+        {
+          "id": "p1",
+          "type": "multiple_choice",
+          "xp": 2,
+          "prompt": "An agent submits a network request that takes 3 seconds. What's the smart way to handle observation latency?",
+          "options": [
+            {
+              "id": "a",
+              "text": "Wait for a signal that the response arrived, then read the new observation.",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "Read the screen instantly and assume the data is already there.",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "Skip the request and guess the answer.",
+              "correct": false
+            },
+            {
+              "id": "d",
+              "text": "Take ten more actions before checking anything.",
+              "correct": false
+            }
+          ],
+          "explain": "The response isn't ready for 3 seconds. A smart agent waits for a completion signal (or a stable page) before observing, so it acts on real data instead of an empty loading state."
+        },
+        {
+          "id": "p2",
+          "type": "true_false",
+          "xp": 2,
+          "prompt": "True or False: An agent can safely act on an observation captured before the page finished painting.",
+          "options": [
+            {
+              "id": "a",
+              "text": "True",
+              "correct": false
+            },
+            {
+              "id": "b",
+              "text": "False",
+              "correct": true
+            }
+          ],
+          "explain": "An unfinished paint may show missing buttons or stale text. Acting on it leads to wrong moves. The agent should wait for the update to complete first."
+        },
+        {
+          "id": "p3",
+          "type": "fill_blank",
+          "xp": 2,
+          "prompt": "Fill in the blank about slow environment updates.",
+          "sentence": "Observation latency is the delay before the environment finishes its update, so the agent should wait before it looks.",
+          "blank": "wait",
+          "words": [
+            "wait",
+            "guess",
+            "ignore"
+          ],
+          "explain": "Because the update takes time, the agent should wait for it to finish so its next observation reflects the true, current state."
+        },
+        {
+          "id": "p4",
+          "type": "spot_the_ai",
+          "xp": 2,
+          "prompt": "Which explanation of observation latency sounds AI-generated (smooth but generic)?",
+          "options": [
+            {
+              "id": "a",
+              "text": "Observation latency refers to the temporal gap between an action and the availability of an updated environmental state, necessitating synchronization before subsequent processing.",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "My agent kept reading 'empty cart' — turns out the page just hadn't loaded yet. Adding a wait fixed it.",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "I made it pause until the spinner disappeared, then it read the right page.",
+              "correct": false
+            }
+          ],
+          "explain": "The AI-style answer is polished and abstract with fancy words but no concrete detail. The human ones mention real, specific fixes like a spinner or an 'empty cart' glitch."
+        }
+      ]
+    },
+    {
+      "type": "boss",
+      "exercises": [
+        {
+          "id": "b1",
+          "type": "multiple_choice",
+          "xp": 5,
+          "prompt": "An agent must fill a web form, click Submit, then confirm success. Submit triggers a slow network save. Which full approach best handles observation latency across the whole unit's ideas?",
+          "options": [
+            {
+              "id": "a",
+              "text": "After Submit, wait for a completion signal, then take a fresh screenshot plus read the logs before deciding the save worked.",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "Read the screen the instant Submit is clicked and declare success.",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "Ignore the screen entirely and rely only on old text from before submitting.",
+              "correct": false
+            },
+            {
+              "id": "d",
+              "text": "Keep clicking Submit repeatedly to force the page to update faster.",
+              "correct": false
+            }
+          ],
+          "explain": "Good observing means seeing the true, current, complete state. That combines everything in this unit: wait out the latency, then gather a multi-modal observation (screenshot + logs) to confirm reality before acting. Rushing or reusing stale data leads to false 'success'. Great work — you've finished Observing the Environment!"
+        }
+      ]
+    }
+  ]
+}

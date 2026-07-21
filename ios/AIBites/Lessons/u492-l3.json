@@ -1,0 +1,222 @@
+{
+  "id": "u492-l3",
+  "unit": 492,
+  "day": 2463,
+  "tier": "AI Agents & Agentic AI",
+  "tierIcon": "🤖",
+  "title": "Timeout Handling",
+  "icon": "⏱️",
+  "concept": "Setting strict execution timeouts on tools (like shell commands or database queries) to prevent infinite hangs.",
+  "xp": 15,
+  "hearts": 3,
+  "estMinutes": 7,
+  "segments": [
+    {
+      "type": "warmup",
+      "exercises": [
+        {
+          "id": "w1",
+          "type": "multiple_choice",
+          "xp": 1,
+          "prompt": "Last lesson: when a tool finishes running, what does the agent capture to build a clean observation?",
+          "options": [
+            {
+              "id": "a",
+              "text": "Just the color of the terminal window",
+              "correct": false
+            },
+            {
+              "id": "b",
+              "text": "The output text, any error text, and a success/failure code",
+              "correct": true
+            },
+            {
+              "id": "c",
+              "text": "Only the exact time the tool started",
+              "correct": false
+            }
+          ],
+          "explain": "A clean observation is built from stdout (normal output), stderr (error text), and the return code that says whether it worked. That way the agent knows exactly what happened."
+        }
+      ]
+    },
+    {
+      "type": "teach",
+      "cards": [
+        {
+          "kind": "hook",
+          "icon": "🕳️",
+          "title": "The command that never comes back",
+          "body": "An agent runs a shell command to fetch data. But the server is stuck, so the command just... waits. Forever. The whole agent freezes with it."
+        },
+        {
+          "kind": "definition",
+          "icon": "⏱️",
+          "title": "What is a timeout?",
+          "body": "A timeout is a strict time limit you set on a tool. If the tool doesn't finish in that many seconds, it gets stopped automatically so the agent can move on."
+        },
+        {
+          "kind": "analogy",
+          "icon": "🍜",
+          "title": "Like a kitchen timer",
+          "body": "You put noodles on and set a timer for 5 minutes. If something goes wrong and they aren't done, the timer still rings and you check instead of standing there all night."
+        },
+        {
+          "kind": "example",
+          "icon": "🗄️",
+          "title": "Timeout in action",
+          "body": "A database query is given a 10-second timeout. The database hangs, so at 10 seconds the query is cancelled. The agent gets a 'timed out' message and tries a smaller query instead."
+        },
+        {
+          "kind": "mythbust",
+          "icon": "🚫",
+          "title": "Myth: longer is always safer",
+          "body": "Some think a huge timeout prevents problems. But a 10-minute limit still lets a stuck tool freeze the agent for 10 minutes. Short, sensible limits keep the agent responsive."
+        },
+        {
+          "kind": "visual",
+          "icon": "⚖️",
+          "title": "Timeout vs. no timeout",
+          "body": "The difference is whether a stuck tool can ever stop.",
+          "compare": {
+            "left": {
+              "emoji": "♾️",
+              "tag": "No timeout",
+              "text": "Tool hangs and the agent waits forever, doing nothing."
+            },
+            "right": {
+              "emoji": "⏱️",
+              "tag": "With timeout",
+              "text": "Tool is cut off after a set time, and the agent recovers."
+            }
+          }
+        }
+      ]
+    },
+    {
+      "type": "practice",
+      "exercises": [
+        {
+          "id": "p1",
+          "type": "multiple_choice",
+          "xp": 2,
+          "prompt": "Why do we set a strict timeout on a tool like a shell command?",
+          "options": [
+            {
+              "id": "a",
+              "text": "To make the command run faster than normal",
+              "correct": false
+            },
+            {
+              "id": "b",
+              "text": "To stop the tool if it hangs, so the agent doesn't freeze forever",
+              "correct": true
+            },
+            {
+              "id": "c",
+              "text": "To hide any error messages from the user",
+              "correct": false
+            },
+            {
+              "id": "d",
+              "text": "To make the output look more colorful",
+              "correct": false
+            }
+          ],
+          "explain": "A timeout is a safety limit. If a command gets stuck, the timeout cancels it so the agent can report the problem and keep going instead of hanging."
+        },
+        {
+          "id": "p2",
+          "type": "true_false",
+          "xp": 2,
+          "prompt": "True or False: A timeout guarantees a tool will always finish successfully.",
+          "options": [
+            {
+              "id": "t",
+              "text": "True",
+              "correct": false
+            },
+            {
+              "id": "f",
+              "text": "False",
+              "correct": true
+            }
+          ],
+          "explain": "False. A timeout only guarantees the tool will STOP after a set time. It may stop by finishing, or it may be cancelled for taking too long. It doesn't force success."
+        },
+        {
+          "id": "p3",
+          "type": "fill_blank",
+          "xp": 2,
+          "prompt": "Fill in the blank about why short limits help.",
+          "sentence": "A very long timeout still lets a stuck tool freeze the agent, so a short sensible limit keeps it more responsive.",
+          "blank": "responsive",
+          "words": [
+            "responsive",
+            "expensive",
+            "colorful"
+          ],
+          "explain": "Short, sensible limits mean a stuck tool gets cut off quickly, so the agent stays responsive and can recover fast."
+        },
+        {
+          "id": "p4",
+          "type": "spot_the_ai",
+          "xp": 2,
+          "prompt": "Which timeout message was written by an AI agent's tool handler?",
+          "options": [
+            {
+              "id": "a",
+              "text": "Query cancelled: exceeded 10s timeout. Retrying with a narrower filter.",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "ummm the thing broke i think just try again lol",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "The database is my friend and we are both very tired today",
+              "correct": false
+            }
+          ],
+          "explain": "The AI handler gives a clear, structured message: what happened (cancelled), why (timeout exceeded), and the next step (retry narrower). The others are casual or nonsense."
+        }
+      ]
+    },
+    {
+      "type": "boss",
+      "exercises": [
+        {
+          "id": "b1",
+          "type": "multiple_choice",
+          "xp": 5,
+          "prompt": "An agent runs a shell command that hangs. It has a 15-second timeout. What is the correct sequence of events?",
+          "options": [
+            {
+              "id": "a",
+              "text": "The agent waits forever because the command never returns",
+              "correct": false
+            },
+            {
+              "id": "b",
+              "text": "At 15 seconds the command is cancelled, a 'timed out' observation is captured, and the agent decides what to do next",
+              "correct": true
+            },
+            {
+              "id": "c",
+              "text": "The command is ignored immediately and no observation is made",
+              "correct": false
+            },
+            {
+              "id": "d",
+              "text": "The timeout makes the command finish instantly with a success code",
+              "correct": false
+            }
+          ],
+          "explain": "A timeout sets a hard limit: at 15 seconds the stuck command is stopped, and just like capturing normal outputs, the agent records a clean 'timed out' observation so it can recover and choose the next action. Timeouts turn silent hangs into visible, handleable events."
+        }
+      ]
+    }
+  ]
+}

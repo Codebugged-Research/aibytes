@@ -1,0 +1,222 @@
+{
+  "id": "u482-l2",
+  "unit": 482,
+  "day": 2412,
+  "tier": "AI Agents & Agentic AI",
+  "tierIcon": "🤖",
+  "title": "Parsing Action Intents",
+  "icon": "🔎",
+  "concept": "Regex extraction, XML-tag parsing, and structured schema JSON decoding to identify tool call parameters.",
+  "xp": 15,
+  "hearts": 3,
+  "estMinutes": 7,
+  "segments": [
+    {
+      "type": "warmup",
+      "exercises": [
+        {
+          "id": "w1",
+          "type": "multiple_choice",
+          "xp": 1,
+          "prompt": "In the basic agent loop from last lesson, what happens AFTER the tool runs?",
+          "options": [
+            {
+              "id": "a",
+              "text": "The result is fed back into the prompt so the LLM can decide the next step",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "The loop stops forever, no matter what",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "The user has to retype the whole question",
+              "correct": false
+            }
+          ],
+          "explain": "The agent loop is a cycle: prompt the LLM, parse its chosen action, run the tool, then feed the result back in. That feedback lets the LLM keep going until the task is done."
+        }
+      ]
+    },
+    {
+      "type": "teach",
+      "cards": [
+        {
+          "kind": "hook",
+          "icon": "🗣️",
+          "title": "The AI wants to use a tool",
+          "body": "An AI agent might say 'I want to search the web for pizza recipes.' But your code can't read a sentence like a human. It needs the exact tool name and inputs, cleanly separated."
+        },
+        {
+          "kind": "definition",
+          "icon": "📋",
+          "title": "Parsing action intents",
+          "body": "Parsing means pulling the important parts out of the AI's text. We grab which tool to call and what parameters to give it, turning messy words into a clean instruction your code can run."
+        },
+        {
+          "kind": "analogy",
+          "icon": "🍔",
+          "title": "Like reading an order ticket",
+          "body": "A cook reads a ticket and pulls out 'burger, no onions, extra cheese.' Parsing does the same: it scans the AI's message and extracts the tool and its exact ingredients."
+        },
+        {
+          "kind": "example",
+          "icon": "🏷️",
+          "title": "Three ways to grab it",
+          "body": "Regex hunts for a pattern like 'search(pizza)'. XML tags wrap it: <tool>search</tool>. JSON gives a labeled box: {\"tool\": \"search\", \"query\": \"pizza\"}. All three point to the same action."
+        },
+        {
+          "kind": "mythbust",
+          "icon": "🚫",
+          "title": "Myth: any text is fine",
+          "body": "People think the AI can just chat freely and code will 'figure it out.' Not true. If the format is loose, parsing breaks. Clear tags or JSON make extraction reliable."
+        },
+        {
+          "kind": "visual",
+          "icon": "⚖️",
+          "title": "Messy vs. structured",
+          "body": "Structured output is far easier to parse than free chatter.",
+          "compare": {
+            "left": {
+              "emoji": "😵",
+              "tag": "Free text",
+              "text": "'Umm maybe search for pizza recipes?' Hard to extract cleanly."
+            },
+            "right": {
+              "emoji": "✅",
+              "tag": "JSON",
+              "text": "{\"tool\":\"search\",\"query\":\"pizza recipes\"} Easy to read exactly."
+            }
+          }
+        }
+      ]
+    },
+    {
+      "type": "practice",
+      "exercises": [
+        {
+          "id": "p1",
+          "type": "multiple_choice",
+          "xp": 2,
+          "prompt": "Why do agents often ask the AI to reply using XML tags or JSON instead of plain sentences?",
+          "options": [
+            {
+              "id": "a",
+              "text": "So the tool name and parameters can be extracted reliably",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "Because JSON makes the AI think faster",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "To make the answer longer",
+              "correct": false
+            },
+            {
+              "id": "d",
+              "text": "Because plain sentences are illegal in code",
+              "correct": false
+            }
+          ],
+          "explain": "Structured formats like XML tags and JSON put the tool name and parameters in predictable spots, so your parser can grab them without guessing."
+        },
+        {
+          "id": "p2",
+          "type": "true_false",
+          "xp": 2,
+          "prompt": "True or False: Regex, XML-tag parsing, and JSON decoding can all be used to pull out which tool the AI wants to call.",
+          "options": [
+            {
+              "id": "a",
+              "text": "True",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "False",
+              "correct": false
+            }
+          ],
+          "explain": "All three are common parsing methods. Regex matches patterns, XML tags wrap the value, and JSON decoding reads labeled fields, each extracting the tool call."
+        },
+        {
+          "id": "p3",
+          "type": "fill_blank",
+          "xp": 2,
+          "prompt": "Fill in the blank about labeled output.",
+          "sentence": "A JSON reply like {\"tool\": \"search\"} lets code read the tool name from a clearly labeled field.",
+          "blank": "labeled",
+          "words": [
+            "labeled",
+            "hidden",
+            "random"
+          ],
+          "explain": "JSON stores values under names (labels), so code can look up the exact field it needs instead of guessing from a sentence."
+        },
+        {
+          "id": "p4",
+          "type": "spot_the_ai",
+          "xp": 2,
+          "prompt": "Which reply looks like AI output already formatted for easy parsing?",
+          "options": [
+            {
+              "id": "a",
+              "text": "{\"tool\": \"weather\", \"parameters\": {\"city\": \"Tokyo\"}}",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "hey can u maybe check the weather somewhere idk",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "Weather is nice today, I think. Not sure though!",
+              "correct": false
+            }
+          ],
+          "explain": "The JSON option clearly labels the tool and its parameters, exactly the structured format agents use so code can decode the action reliably."
+        }
+      ]
+    },
+    {
+      "type": "boss",
+      "exercises": [
+        {
+          "id": "b1",
+          "type": "multiple_choice",
+          "xp": 5,
+          "prompt": "Your agent gets this AI reply: <tool>calculator</tool><input>5+3</input>. Which statement is fully correct about parsing this action intent?",
+          "options": [
+            {
+              "id": "a",
+              "text": "XML tags mark the tool and input, so a parser can extract 'calculator' and '5+3' to run the tool",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "You must feed the whole sentence to the tool as-is, tags included",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "Only JSON can ever be parsed; XML tags are useless",
+              "correct": false
+            },
+            {
+              "id": "d",
+              "text": "The agent should ignore the input and just guess the answer",
+              "correct": false
+            }
+          ],
+          "explain": "Parsing action intents means extracting the tool name and its parameters from the AI's output. Here the <tool> and <input> tags mark exactly what to grab, so code can call the calculator with '5+3'. Whether you use regex, XML tags, or JSON, the goal is the same: turn messy AI text into a clean tool call your loop can execute."
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,222 @@
+{
+  "id": "u492-l2",
+  "unit": 492,
+  "day": 2462,
+  "tier": "AI Agents & Agentic AI",
+  "tierIcon": "🤖",
+  "title": "Capturing Tool Outputs",
+  "icon": "📋",
+  "concept": "Capturing stdout, stderr, return codes, and return values to construct a clean observation.",
+  "xp": 15,
+  "hearts": 3,
+  "estMinutes": 7,
+  "segments": [
+    {
+      "type": "warmup",
+      "exercises": [
+        {
+          "id": "w1",
+          "type": "multiple_choice",
+          "xp": 1,
+          "prompt": "Last lesson: why do agents run tool code inside an isolated environment like Docker or a temporary virtualenv?",
+          "options": [
+            {
+              "id": "a",
+              "text": "To keep risky code sandboxed so it can't harm the main system",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "To make the code run slower on purpose",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "To hide the tool from the agent forever",
+              "correct": false
+            }
+          ],
+          "explain": "Isolated execution contexts act like a safety bubble: if a tool misbehaves or runs untrusted code, the damage stays contained and the main system stays safe."
+        }
+      ]
+    },
+    {
+      "type": "teach",
+      "cards": [
+        {
+          "kind": "hook",
+          "icon": "👂",
+          "title": "The agent needs to 'hear back'",
+          "body": "When an agent runs a tool, it can't just fire and forget. It has to catch everything the tool says so it knows what actually happened."
+        },
+        {
+          "kind": "definition",
+          "icon": "📋",
+          "title": "Capturing tool outputs",
+          "body": "After a tool runs, we collect four things: stdout (normal output), stderr (error messages), the return code (success or failure number), and the return value (the actual result). Together they form the observation the agent reads next."
+        },
+        {
+          "kind": "analogy",
+          "icon": "🍕",
+          "title": "Like a pizza delivery receipt",
+          "body": "stdout is the pizza itself, stderr is the note saying 'sorry, no napkins', the return code is the 'delivered OK' stamp, and the return value is the total on the receipt. You need all of it to know how the order went."
+        },
+        {
+          "kind": "example",
+          "icon": "💻",
+          "title": "A tool that lists files",
+          "body": "You run a 'list files' tool. stdout = the file names, stderr = empty, return code = 0 (success). The agent bundles these into a tidy observation and decides its next move."
+        },
+        {
+          "kind": "mythbust",
+          "icon": "❌",
+          "title": "Myth: only the result matters",
+          "body": "Beginners often keep just the return value and toss the rest. But stderr and the return code tell the agent WHY something failed. Throwing them away leaves the agent blind to errors."
+        },
+        {
+          "kind": "visual",
+          "icon": "🔀",
+          "title": "Two output streams",
+          "body": "Tools speak on two channels at once. Keeping them separate lets the agent tell good news from bad news.",
+          "compare": {
+            "left": {
+              "emoji": "✅",
+              "tag": "stdout",
+              "text": "Normal results: the answer, the data, the list you asked for."
+            },
+            "right": {
+              "emoji": "⚠️",
+              "tag": "stderr",
+              "text": "Errors and warnings: what went wrong or looked suspicious."
+            }
+          }
+        }
+      ]
+    },
+    {
+      "type": "practice",
+      "exercises": [
+        {
+          "id": "p1",
+          "type": "multiple_choice",
+          "xp": 2,
+          "prompt": "A tool finishes with a return code of 0, empty stderr, and files listed in stdout. What should the agent conclude?",
+          "options": [
+            {
+              "id": "a",
+              "text": "The tool ran successfully and it can trust the stdout result",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "The tool crashed and should be retried",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "The return value is unknowable",
+              "correct": false
+            },
+            {
+              "id": "d",
+              "text": "stderr being empty means the tool never ran",
+              "correct": false
+            }
+          ],
+          "explain": "A return code of 0 means success, and empty stderr means no errors were reported. So the stdout output is safe to trust as the observation."
+        },
+        {
+          "id": "p2",
+          "type": "true_false",
+          "xp": 2,
+          "prompt": "True or False: stderr should be captured even when a tool seems to succeed.",
+          "options": [
+            {
+              "id": "a",
+              "text": "True",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "False",
+              "correct": false
+            }
+          ],
+          "explain": "True. stderr can carry warnings even on success, and capturing it always gives the agent the full picture to construct a clean, complete observation."
+        },
+        {
+          "id": "p3",
+          "type": "fill_blank",
+          "xp": 2,
+          "prompt": "Fill in the blank about failure signals.",
+          "sentence": "A non-zero return code usually tells the agent that the tool ran into a failure.",
+          "blank": "return code",
+          "words": [
+            "return code",
+            "pizza",
+            "warmup"
+          ],
+          "explain": "The 'return code' is the number a tool reports when it finishes. Zero means success, and a non-zero value signals a failure the agent should notice."
+        },
+        {
+          "id": "p4",
+          "type": "spot_the_ai",
+          "xp": 2,
+          "prompt": "Which observation summary reads like it was cleanly auto-generated by an agent capturing all four outputs?",
+          "options": [
+            {
+              "id": "a",
+              "text": "Tool: list_files | return_code: 0 | stdout: [notes.txt, data.csv] | stderr: (empty) | result: 2 files found",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "idk it kinda worked i think the files showed up somewhere maybe",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "The files are there. Trust me. No need to check the code.",
+              "correct": false
+            }
+          ],
+          "explain": "The AI-built observation is structured and captures all four pieces: return code, stdout, stderr, and a result value. That clean format is exactly what an agent constructs to reason about next steps."
+        }
+      ]
+    },
+    {
+      "type": "boss",
+      "exercises": [
+        {
+          "id": "b1",
+          "type": "multiple_choice",
+          "xp": 5,
+          "prompt": "An agent runs a 'fetch data' tool. It gets: return code 1, stdout empty, stderr says 'connection timed out', return value None. What is the smartest way to build the observation and act?",
+          "options": [
+            {
+              "id": "a",
+              "text": "Record all four fields, note the failure from the non-zero code and stderr message, and decide to retry or report the timeout",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "Ignore the return code and pretend the tool succeeded",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "Keep only the empty stdout and move on as if data arrived",
+              "correct": false
+            },
+            {
+              "id": "d",
+              "text": "Delete stderr because errors are not useful to the agent",
+              "correct": false
+            }
+          ],
+          "explain": "A clean observation captures stdout, stderr, the return code, and the return value together. Here the return code 1 plus the stderr timeout message clearly signal failure, so the agent knows to retry or report instead of pretending success. Capturing every channel is what lets an agent react to reality instead of guessing."
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,222 @@
+{
+  "id": "u491-l2",
+  "unit": 491,
+  "day": 2457,
+  "tier": "AI Agents & Agentic AI",
+  "tierIcon": "🤖",
+  "title": "Coercing Model Outputs",
+  "icon": "🔧",
+  "concept": "Handling common parameter formatting errors, like stringified numbers, missing fields, or nested dicts.",
+  "xp": 15,
+  "hearts": 3,
+  "estMinutes": 7,
+  "segments": [
+    {
+      "type": "warmup",
+      "exercises": [
+        {
+          "id": "w1",
+          "type": "multiple_choice",
+          "xp": 1,
+          "prompt": "Last lesson: before running a tool, why do we check the model's arguments against a schema (like Pydantic)?",
+          "options": [
+            {
+              "id": "a",
+              "text": "To catch bad or wrong-typed arguments before they break the tool",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "To make the model reply faster",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "To hide the tool from the model",
+              "correct": false
+            }
+          ],
+          "explain": "A schema is a checklist for arguments. Checking against it first catches mistakes (like a missing field or wrong type) before they cause a crash inside your tool."
+        }
+      ]
+    },
+    {
+      "type": "teach",
+      "cards": [
+        {
+          "kind": "hook",
+          "icon": "📦",
+          "title": "The model shipped you a messy box",
+          "body": "You asked for a number, but the model sent \"42\" with quotes. Same value, wrong wrapping. Now what?"
+        },
+        {
+          "kind": "definition",
+          "icon": "🔧",
+          "title": "What is coercion?",
+          "body": "Coercion means gently fixing the shape of a value so it matches what your tool expects. It turns a stringified \"42\" into the number 42, fills a missing field with a default, or unpacks a nested dict."
+        },
+        {
+          "kind": "analogy",
+          "icon": "🔌",
+          "title": "Like a travel adapter",
+          "body": "Your device works, but the plug is the wrong shape for the wall. An adapter reshapes the plug without changing the electricity. Coercion reshapes the model's output without changing what it means."
+        },
+        {
+          "kind": "example",
+          "icon": "🧾",
+          "title": "Three common messes",
+          "body": "Stringified number: \"7\" should become 7. Missing field: no \"unit\" so default it to \"celsius\". Nested dict: {\"location\": {\"city\": \"Paris\"}} when you just wanted \"Paris\"."
+        },
+        {
+          "kind": "mythbust",
+          "icon": "🚫",
+          "title": "Myth: just crash on any mismatch",
+          "body": "Rejecting every tiny format slip wastes good outputs. Many errors are safe to auto-fix, like \"42\" to 42. Coerce the easy ones, and only reject when meaning is truly unclear."
+        },
+        {
+          "kind": "visual",
+          "icon": "⚖️",
+          "title": "Raw output vs coerced output",
+          "body": "Same intent, cleaned-up shape ready for your tool to use.",
+          "compare": {
+            "left": {
+              "emoji": "🗑️",
+              "tag": "Raw",
+              "text": "{\"temp\": \"42\", \"unit\": null}"
+            },
+            "right": {
+              "emoji": "✨",
+              "tag": "Coerced",
+              "text": "{\"temp\": 42, \"unit\": \"celsius\"}"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "type": "practice",
+      "exercises": [
+        {
+          "id": "p1",
+          "type": "multiple_choice",
+          "xp": 2,
+          "prompt": "The model returns {\"count\": \"3\"} but your tool needs a real number. What does coercion do?",
+          "options": [
+            {
+              "id": "a",
+              "text": "Convert the string \"3\" into the number 3",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "Throw the whole request away",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "Ask the user to retype it",
+              "correct": false
+            },
+            {
+              "id": "d",
+              "text": "Rename the field to \"3\"",
+              "correct": false
+            }
+          ],
+          "explain": "A stringified number is a safe, common slip. Coercion converts \"3\" into 3 so the tool gets the type it expects, no re-prompting needed."
+        },
+        {
+          "id": "p2",
+          "type": "true_false",
+          "xp": 2,
+          "prompt": "True or False: If a required field is missing, one option is to fill it with a sensible default value.",
+          "options": [
+            {
+              "id": "a",
+              "text": "True",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "False",
+              "correct": false
+            }
+          ],
+          "explain": "True. When a field like \"unit\" is missing, coercion can supply a safe default (e.g. \"celsius\") instead of failing, as long as the default is reasonable."
+        },
+        {
+          "id": "p3",
+          "type": "fill_blank",
+          "xp": 2,
+          "prompt": "Fill in the blank about fixing model output shapes.",
+          "sentence": "Turning a stringified \"5\" into the real number 5 is an example of coercion.",
+          "blank": "coercion",
+          "words": [
+            "coercion",
+            "deletion",
+            "encryption"
+          ],
+          "explain": "Reshaping a value so it matches the expected type, like \"5\" to 5, is coercion. It keeps the meaning while fixing the format."
+        },
+        {
+          "id": "p4",
+          "type": "spot_the_ai",
+          "xp": 2,
+          "prompt": "Which tool-argument object was AI-generated with a typical formatting slip a coercer would fix?",
+          "options": [
+            {
+              "id": "a",
+              "text": "{\"days\": \"14\", \"location\": {\"city\": \"Rome\"}}",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "{\"days\": 14, \"city\": \"Rome\"}",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "{\"days\": 14, \"city\": \"Rome\", \"unit\": \"metric\"}",
+              "correct": false
+            }
+          ],
+          "explain": "The AI output stringified the number (\"14\") and nested the city inside an extra dict. A coercer would unwrap the nesting and convert \"14\" to 14 to match the clean schema."
+        }
+      ]
+    },
+    {
+      "type": "boss",
+      "exercises": [
+        {
+          "id": "b1",
+          "type": "multiple_choice",
+          "xp": 5,
+          "prompt": "Your weather tool expects {\"city\": string, \"days\": number, \"unit\": string}. The model returns {\"days\": \"3\", \"location\": {\"city\": \"Tokyo\"}}. What's the best coercion step-by-step fix?",
+          "options": [
+            {
+              "id": "a",
+              "text": "Unwrap city from the nested dict, convert \"3\" to 3, and default the missing unit to something sensible like \"celsius\"",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "Reject the whole thing and re-prompt the model from scratch",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "Keep \"days\" as the string \"3\" and hope the tool figures it out",
+              "correct": false
+            },
+            {
+              "id": "d",
+              "text": "Delete the days field since it's the wrong type",
+              "correct": false
+            }
+          ],
+          "explain": "Good coercion fixes each mess in place: unpack nested dicts to grab the value you need (\"Tokyo\"), convert stringified numbers (\"3\" to 3), and fill missing fields with safe defaults. This rescues a usable output instead of throwing it away, while keeping the model's real intent intact."
+        }
+      ]
+    }
+  ]
+}

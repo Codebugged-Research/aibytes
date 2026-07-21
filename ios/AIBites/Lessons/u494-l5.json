@@ -1,0 +1,222 @@
+{
+  "id": "u494-l5",
+  "unit": 494,
+  "day": 2475,
+  "tier": "AI Agents & Agentic AI",
+  "tierIcon": "🤖",
+  "title": "Capstone: Build the Tool Execution Pipeline",
+  "icon": "🔧",
+  "concept": "Integrating parameter validation, timeout controls, and error feedback into a robust tool executor; 'Next up: Agent Memory Systems.'.",
+  "xp": 15,
+  "hearts": 3,
+  "estMinutes": 7,
+  "segments": [
+    {
+      "type": "warmup",
+      "exercises": [
+        {
+          "id": "w1",
+          "type": "multiple_choice",
+          "xp": 1,
+          "prompt": "Last lesson covered tool integration mistakes. Which is a common one to avoid?",
+          "options": [
+            {
+              "id": "a",
+              "text": "Returning raw error messages straight from the tool",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "Adding a timeout to slow tools",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "Checking inputs before running a tool",
+              "correct": false
+            }
+          ],
+          "explain": "Returning raw exceptions is a classic mistake. They confuse the agent and can leak internal details. Good executors add timeouts and validation, and turn errors into clear feedback."
+        }
+      ]
+    },
+    {
+      "type": "teach",
+      "cards": [
+        {
+          "kind": "hook",
+          "icon": "🏗️",
+          "title": "Time to Build It All",
+          "body": "You've learned validation, timeouts, and error feedback one piece at a time. Now let's snap them together into one sturdy tool executor that an agent can trust."
+        },
+        {
+          "kind": "definition",
+          "icon": "⚙️",
+          "title": "What Is a Tool Execution Pipeline?",
+          "body": "A pipeline is a fixed order of safety steps every tool call passes through. First check the inputs, then run with a time limit, then hand back clean results or a friendly error."
+        },
+        {
+          "kind": "analogy",
+          "icon": "🛂",
+          "title": "Like Airport Security",
+          "body": "Before you board, you check your ticket, pass through the scanner, and get clear directions if something's wrong. A tool call goes through the same gates before it 'boards' the agent's plan."
+        },
+        {
+          "kind": "example",
+          "icon": "🌦️",
+          "title": "A Weather Tool in Action",
+          "body": "The agent asks for weather in 'Paris'. Step 1: validate the city is a real string. Step 2: call the API with a 5-second timeout. Step 3: if it fails, return 'Weather service unavailable, try again' instead of a crash."
+        },
+        {
+          "kind": "mythbust",
+          "icon": "🚫",
+          "title": "Myth: One Big Try-Catch Is Enough",
+          "body": "Wrapping everything in a single catch hides where things broke. A real pipeline handles each stage separately, so you know if it was bad input, a timeout, or a tool failure."
+        },
+        {
+          "kind": "visual",
+          "icon": "🔀",
+          "title": "Fragile vs Robust Executor",
+          "body": "A robust pipeline turns messy failures into calm, useful feedback the agent can act on.",
+          "compare": {
+            "left": {
+              "emoji": "💥",
+              "tag": "Fragile",
+              "text": "Runs tool blindly, crashes on bad input, leaks raw errors, hangs forever."
+            },
+            "right": {
+              "emoji": "🛡️",
+              "tag": "Robust",
+              "text": "Validates input, sets a timeout, returns clean errors the agent understands."
+            }
+          }
+        }
+      ]
+    },
+    {
+      "type": "practice",
+      "exercises": [
+        {
+          "id": "p1",
+          "type": "multiple_choice",
+          "xp": 2,
+          "prompt": "In a robust tool execution pipeline, what is the correct order of stages?",
+          "options": [
+            {
+              "id": "a",
+              "text": "Validate inputs, run with a timeout, return clean result or error",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "Run the tool, then check if the inputs were valid",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "Return the raw error first, then validate",
+              "correct": false
+            },
+            {
+              "id": "d",
+              "text": "Skip validation and just add a timeout",
+              "correct": false
+            }
+          ],
+          "explain": "Validation comes first so you never run a tool with bad inputs. The timeout protects against hanging. Clean error feedback comes last so the agent can recover gracefully."
+        },
+        {
+          "id": "p2",
+          "type": "true_false",
+          "xp": 2,
+          "prompt": "True or False: A good pipeline should return the raw crash message from a broken tool directly to the agent.",
+          "options": [
+            {
+              "id": "a",
+              "text": "True",
+              "correct": false
+            },
+            {
+              "id": "b",
+              "text": "False",
+              "correct": true
+            }
+          ],
+          "explain": "False. Raw crash messages confuse the agent and can leak internal details. The pipeline should translate failures into clear, actionable feedback."
+        },
+        {
+          "id": "p3",
+          "type": "fill_blank",
+          "xp": 2,
+          "prompt": "Fill in the missing pipeline stage.",
+          "sentence": "Before running any tool, the pipeline should validate the inputs to catch bad parameters early.",
+          "blank": "validate",
+          "words": [
+            "validate",
+            "ignore",
+            "delete"
+          ],
+          "explain": "Validation is the first gate. Checking parameters early prevents wasted calls and confusing failures deep inside the tool."
+        },
+        {
+          "id": "p4",
+          "type": "spot_the_ai",
+          "xp": 2,
+          "prompt": "Which tool-error message was written by an AI to be clean and helpful?",
+          "options": [
+            {
+              "id": "a",
+              "text": "The weather service didn't respond in time. Please try again in a moment.",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "Traceback (most recent call last): line 42 NullPointerException",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "ERR_0x8F undefined socket hang up ECONNRESET",
+              "correct": false
+            }
+          ],
+          "explain": "The AI-written message is calm, plain, and tells the agent what to do next. The others are raw technical dumps that a robust pipeline should never pass through unfiltered."
+        }
+      ]
+    },
+    {
+      "type": "boss",
+      "exercises": [
+        {
+          "id": "b1",
+          "type": "multiple_choice",
+          "xp": 5,
+          "prompt": "An agent calls a search tool. The user gave an empty query, the API is slow today, and sometimes it crashes. What should a fully robust pipeline do, in order?",
+          "options": [
+            {
+              "id": "a",
+              "text": "Reject the empty query first, run with a timeout so it can't hang, and return a clear message if it crashes",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "Run the search immediately and only check the query afterward",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "Let it run with no time limit and pass the raw crash back to the agent",
+              "correct": false
+            },
+            {
+              "id": "d",
+              "text": "Wrap everything in one catch and return 'error' with no details",
+              "correct": false
+            }
+          ],
+          "explain": "A robust executor layers all three defenses together: validation stops the empty query before wasting a call, the timeout stops the slow API from hanging the agent, and clean error feedback lets the agent recover instead of crashing. That combination is what makes tools safe to hand an agent. Next up: Agent Memory Systems."
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,222 @@
+{
+  "id": "u483-l3",
+  "unit": 483,
+  "day": 2418,
+  "tier": "AI Agents & Agentic AI",
+  "tierIcon": "🤖",
+  "title": "Observation Schema Design",
+  "icon": "📋",
+  "concept": "Standardizing tool feedback formats so the agent parses successes, warnings, and crashes identically.",
+  "xp": 15,
+  "hearts": 3,
+  "estMinutes": 7,
+  "segments": [
+    {
+      "type": "warmup",
+      "exercises": [
+        {
+          "id": "w1",
+          "type": "multiple_choice",
+          "xp": 1,
+          "prompt": "Last lesson: why does an agent filter out giant stack traces and repeated UI boilerplate before reading tool results?",
+          "options": [
+            {
+              "id": "a",
+              "text": "To save token space and focus on what matters",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "To make the tools run faster",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "Because stack traces are always useless",
+              "correct": false
+            }
+          ],
+          "explain": "Filtering noise trims junk like repeated records and boilerplate so the agent spends its limited attention (tokens) on the important signal. This lesson goes further: making what's left arrive in one tidy, predictable shape."
+        }
+      ]
+    },
+    {
+      "type": "teach",
+      "cards": [
+        {
+          "kind": "hook",
+          "icon": "🎁",
+          "title": "Same Box, Every Time",
+          "body": "Imagine every tool wrapped its answer in a different-shaped box. The agent would waste effort unwrapping each one. A shared format means it opens every box the same way."
+        },
+        {
+          "kind": "definition",
+          "icon": "📋",
+          "title": "What Is an Observation Schema?",
+          "body": "An observation schema is a fixed format that every tool uses to report back. It always includes the same labeled parts, like a status and a message, so the agent reads them the same way each time."
+        },
+        {
+          "kind": "analogy",
+          "icon": "🏥",
+          "title": "Like a Hospital Chart",
+          "body": "Every patient chart has the same slots: name, temperature, notes. A nurse can glance at any chart and find what they need instantly. A schema gives tool results those same reliable slots."
+        },
+        {
+          "kind": "example",
+          "icon": "🏷️",
+          "title": "One Shape for Three Outcomes",
+          "body": "A search tool succeeds: {status: 'success', data: results}. It warns: {status: 'warning', message: 'slow'}. It crashes: {status: 'error', message: 'timeout'}. Same shape, different status word."
+        },
+        {
+          "kind": "mythbust",
+          "icon": "❌",
+          "title": "Myth: The Agent Just Figures It Out",
+          "body": "People think a smart agent can parse any messy format. But unpredictable shapes cause misreads: a crash gets mistaken for a success. A schema removes that guessing."
+        },
+        {
+          "kind": "visual",
+          "icon": "⚖️",
+          "title": "Messy vs. Standardized",
+          "body": "Without a schema, each tool speaks its own language. With a schema, they all fill in the same form.",
+          "compare": {
+            "left": {
+              "emoji": "🌀",
+              "tag": "No schema",
+              "text": "One tool says 'OK', another 'done!', another '{err:1}'. Agent must guess each meaning."
+            },
+            "right": {
+              "emoji": "✅",
+              "tag": "Schema",
+              "text": "Every tool returns status + message. Agent checks one field to know what happened."
+            }
+          }
+        }
+      ]
+    },
+    {
+      "type": "practice",
+      "exercises": [
+        {
+          "id": "p1",
+          "type": "multiple_choice",
+          "xp": 2,
+          "prompt": "Why standardize tool feedback into one observation schema?",
+          "options": [
+            {
+              "id": "a",
+              "text": "So the agent parses successes, warnings, and crashes the same reliable way",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "So tools can hide their errors from the agent",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "So the agent never has to read messages at all",
+              "correct": false
+            },
+            {
+              "id": "d",
+              "text": "To make every tool return the exact same data",
+              "correct": false
+            }
+          ],
+          "explain": "A shared schema means the agent looks in the same place every time to learn if a tool succeeded, warned, or crashed. Reliable parsing prevents dangerous mix-ups."
+        },
+        {
+          "id": "p2",
+          "type": "true_false",
+          "xp": 2,
+          "prompt": "True or false: If a crash and a success are reported in totally different shapes, the agent is more likely to misread one as the other.",
+          "options": [
+            {
+              "id": "a",
+              "text": "True",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "False",
+              "correct": false
+            }
+          ],
+          "explain": "Different shapes force the agent to guess. A crash dressed up like a success can slip through. A shared schema with a clear status field avoids this."
+        },
+        {
+          "id": "p3",
+          "type": "fill_blank",
+          "xp": 2,
+          "prompt": "Fill in the blank about schema design.",
+          "sentence": "A good observation schema uses the same status field so the agent can tell success from a crash the same way every time.",
+          "blank": "status",
+          "words": [
+            "status",
+            "color",
+            "password"
+          ],
+          "explain": "The status field is the labeled slot that says success, warning, or error. Keeping it consistent lets the agent parse every outcome identically."
+        },
+        {
+          "id": "p4",
+          "type": "spot_the_ai",
+          "xp": 2,
+          "prompt": "Which tool result was written by an AI following a clean observation schema?",
+          "options": [
+            {
+              "id": "a",
+              "text": "{ \"status\": \"error\", \"message\": \"Request timed out after 30s\" }",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "oops it broke lol try again maybe",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "ERROR!!! something went wrong somewhere ok bye",
+              "correct": false
+            }
+          ],
+          "explain": "The AI output uses the fixed schema shape: a labeled status and a clear message. The others are messy, human-sounding notes the agent would struggle to parse reliably."
+        }
+      ]
+    },
+    {
+      "type": "boss",
+      "exercises": [
+        {
+          "id": "b1",
+          "type": "multiple_choice",
+          "xp": 5,
+          "prompt": "An agent uses three tools that each report differently: one returns 'success', one returns a raw error dump, one returns an empty reply on failure. The agent keeps treating failures as wins. What's the best fix?",
+          "options": [
+            {
+              "id": "a",
+              "text": "Wrap every tool's output in one shared schema with a consistent status field for success, warning, and error",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "Tell the agent to try harder to guess what each format means",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "Remove all error messages so nothing looks broken",
+              "correct": false
+            },
+            {
+              "id": "d",
+              "text": "Only ever use the one tool that says 'success'",
+              "correct": false
+            }
+          ],
+          "explain": "The problem is inconsistent shapes, so the agent can't reliably spot failures. Standardizing every tool into one observation schema gives a single status field to check, so successes, warnings, and crashes are parsed identically. That's the whole point of schema design: predictable feedback the agent can trust."
+        }
+      ]
+    }
+  ]
+}

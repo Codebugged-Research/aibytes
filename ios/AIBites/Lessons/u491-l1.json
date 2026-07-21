@@ -1,0 +1,222 @@
+{
+  "id": "u491-l1",
+  "unit": 491,
+  "day": 2456,
+  "tier": "AI Agents & Agentic AI",
+  "tierIcon": "🤖",
+  "title": "Type Checking Tool Arguments",
+  "icon": "🔍",
+  "concept": "Validating model-generated tool arguments against a schema (like JSON Schema or Pydantic) before calling.",
+  "xp": 15,
+  "hearts": 3,
+  "estMinutes": 7,
+  "segments": [
+    {
+      "type": "warmup",
+      "exercises": [
+        {
+          "id": "w1",
+          "type": "multiple_choice",
+          "xp": 1,
+          "prompt": "Welcome to Parameter Validation! When an AI agent decides to use a tool, what does it actually produce?",
+          "options": [
+            {
+              "id": "a",
+              "text": "A set of arguments (like the values to fill into the tool)",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "The finished result of the tool, skipping the tool",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "A brand new tool it invents from scratch",
+              "correct": false
+            }
+          ],
+          "explain": "When an agent calls a tool, it generates the arguments (inputs) to hand over. The tool then runs with those inputs. Because the model wrote those inputs, we should double-check them first!"
+        }
+      ]
+    },
+    {
+      "type": "teach",
+      "cards": [
+        {
+          "kind": "hook",
+          "icon": "🎣",
+          "title": "The Model Can Fib",
+          "body": "An AI might call a weather tool with city set to the number 42 instead of \"Paris\". If you run the tool blindly, it crashes or gives nonsense. We need a bouncer at the door."
+        },
+        {
+          "kind": "definition",
+          "icon": "📋",
+          "title": "Type Checking Tool Arguments",
+          "body": "Before running a tool, you compare the model's arguments to a schema (a rulebook that says which fields exist and what type each should be). If something doesn't match, you reject it."
+        },
+        {
+          "kind": "analogy",
+          "icon": "🛂",
+          "title": "Passport Control",
+          "body": "A schema is like an airport checkpoint. It checks your name is text, your age is a number, and no fields are missing. Only valid 'passengers' get through to the tool."
+        },
+        {
+          "kind": "example",
+          "icon": "🌤️",
+          "title": "Weather Tool Check",
+          "body": "Schema says: city must be text, days must be a whole number. Model sends city: \"Paris\", days: \"three\". The check fails because \"three\" is text, not a number. Caught before it crashes!"
+        },
+        {
+          "kind": "mythbust",
+          "icon": "❌",
+          "title": "\"The Model Always Gets It Right\"",
+          "body": "Nope! Models often send strings where numbers belong, misspell field names, or forget required fields. Validation is your safety net, not an insult to the model."
+        },
+        {
+          "kind": "visual",
+          "icon": "⚖️",
+          "title": "Valid vs Invalid Arguments",
+          "body": "A schema sorts good arguments from bad ones before any tool runs.",
+          "compare": {
+            "left": {
+              "emoji": "✅",
+              "tag": "Passes",
+              "text": "city: \"Paris\", days: 3 — text and number match the schema."
+            },
+            "right": {
+              "emoji": "🚫",
+              "tag": "Fails",
+              "text": "city: 42, days: \"three\" — types are wrong, so it's rejected."
+            }
+          }
+        }
+      ]
+    },
+    {
+      "type": "practice",
+      "exercises": [
+        {
+          "id": "p1",
+          "type": "multiple_choice",
+          "xp": 2,
+          "prompt": "A tool schema requires 'temperature' to be a number. The model sends temperature: \"hot\". What should validation do?",
+          "options": [
+            {
+              "id": "a",
+              "text": "Reject it because \"hot\" is text, not a number",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "Run the tool anyway and hope for the best",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "Change the schema to accept any word",
+              "correct": false
+            },
+            {
+              "id": "d",
+              "text": "Delete the temperature field silently",
+              "correct": false
+            }
+          ],
+          "explain": "The schema demands a number, but \"hot\" is text. Good validation catches the mismatch and rejects it before the tool runs, preventing a crash or garbage output."
+        },
+        {
+          "id": "p2",
+          "type": "true_false",
+          "xp": 2,
+          "prompt": "True or False: Tools like JSON Schema or Pydantic let you define the expected type of each tool argument and check the model's output against it.",
+          "options": [
+            {
+              "id": "a",
+              "text": "True",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "False",
+              "correct": false
+            }
+          ],
+          "explain": "True! JSON Schema and Pydantic are exactly the rulebooks you use to declare each field's type and then validate the model's arguments against those rules."
+        },
+        {
+          "id": "p3",
+          "type": "fill_blank",
+          "xp": 2,
+          "prompt": "Fill in the blank about checking tool inputs.",
+          "sentence": "Before calling a tool, we compare the model's arguments to a schema to make sure each field has the correct type.",
+          "blank": "schema",
+          "words": [
+            "schema",
+            "password",
+            "receipt"
+          ],
+          "explain": "A schema is the rulebook listing each field and its expected type. Comparing arguments to it is how we type-check before calling the tool."
+        },
+        {
+          "id": "p4",
+          "type": "spot_the_ai",
+          "xp": 2,
+          "prompt": "Which validation error message was written by an AI to sound clear and helpful?",
+          "options": [
+            {
+              "id": "a",
+              "text": "Field 'days' expected a number but received the text \"three\". Please provide a whole number like 3.",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "err 0x1F bad input somewhere idk",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "It broke. Try again maybe.",
+              "correct": false
+            }
+          ],
+          "explain": "The AI-written message names the exact field, explains what type was expected versus received, and suggests a fix — clear and actionable, unlike the vague or cryptic ones."
+        }
+      ]
+    },
+    {
+      "type": "boss",
+      "exercises": [
+        {
+          "id": "b1",
+          "type": "multiple_choice",
+          "xp": 5,
+          "prompt": "An agent calls a booking tool. Schema: guests = whole number (required), name = text (required). The model sends name: \"Sam\", guests: \"two\". What's the best action?",
+          "options": [
+            {
+              "id": "a",
+              "text": "Reject the call: guests is \"two\" (text) but the schema requires a whole number, so it fails validation before the tool runs.",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "Run the booking tool immediately since name is valid.",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "Ignore the schema — models are always right about types.",
+              "correct": false
+            },
+            {
+              "id": "d",
+              "text": "Book zero guests to be safe.",
+              "correct": false
+            }
+          ],
+          "explain": "Even though name is fine, the tool can't run until ALL required fields match their types. Here guests came in as text (\"two\") instead of a whole number, so validation should reject it before calling the tool. The big takeaway: always type-check model-generated arguments against your schema first — it's your safety net against crashes and nonsense."
+        }
+      ]
+    }
+  ]
+}

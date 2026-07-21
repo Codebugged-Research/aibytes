@@ -1,0 +1,222 @@
+{
+  "id": "u491-l5",
+  "unit": 491,
+  "day": 2460,
+  "tier": "AI Agents & Agentic AI",
+  "tierIcon": "🤖",
+  "title": "Handling Unrecognized Arguments",
+  "icon": "🧹",
+  "concept": "Stripping or translating extra arguments the model generated that aren't in the tool schema.",
+  "xp": 15,
+  "hearts": 3,
+  "estMinutes": 7,
+  "segments": [
+    {
+      "type": "warmup",
+      "exercises": [
+        {
+          "id": "w1",
+          "type": "multiple_choice",
+          "xp": 1,
+          "prompt": "Recap: A tool needs a 'units' setting, but the model forgot to include it. What does a sensible default do?",
+          "options": [
+            {
+              "id": "a",
+              "text": "Fills in a safe standard value so the tool still runs",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "Crashes the loop until the model tries again",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "Deletes the whole tool call",
+              "correct": false
+            }
+          ],
+          "explain": "A sensible default supplies a safe standard value for a missing argument, so the tool can run instead of crashing the agent loop."
+        }
+      ]
+    },
+    {
+      "type": "teach",
+      "cards": [
+        {
+          "kind": "hook",
+          "icon": "🎁",
+          "title": "An extra gift nobody asked for",
+          "body": "Sometimes the model adds arguments the tool never listed, like a 'color' field for a weather lookup. The tool doesn't know what to do with the surprise extra."
+        },
+        {
+          "kind": "definition",
+          "icon": "📖",
+          "title": "Unrecognized arguments",
+          "body": "These are extra fields the model generated that aren't in the tool's schema. You either strip (remove) them or translate them into a field the tool actually understands."
+        },
+        {
+          "kind": "analogy",
+          "icon": "✈️",
+          "title": "Packing for the airport",
+          "body": "The tool schema is your suitcase with labeled pockets. If the model hands you an item with no matching pocket, you either leave it behind (strip) or fit it into a pocket that works (translate)."
+        },
+        {
+          "kind": "example",
+          "icon": "🌦️",
+          "title": "A weather tool example",
+          "body": "Schema wants 'city' and 'day'. The model also sends 'temperature_unit'. You strip it out so the tool gets only 'city' and 'day', and it runs cleanly."
+        },
+        {
+          "kind": "mythbust",
+          "icon": "🚫",
+          "title": "Myth: Extra arguments are harmless",
+          "body": "Not true! Many tools throw an error the moment they see a field they don't recognize. Ignoring extras can crash the whole call."
+        },
+        {
+          "kind": "visual",
+          "icon": "🔀",
+          "title": "Strip vs. Translate",
+          "body": "Two ways to handle an unknown argument the model added.",
+          "compare": {
+            "left": {
+              "emoji": "🧹",
+              "tag": "Strip",
+              "text": "Remove the extra field entirely so only valid ones remain."
+            },
+            "right": {
+              "emoji": "🔁",
+              "tag": "Translate",
+              "text": "Rename or map it to a real schema field the tool understands."
+            }
+          }
+        }
+      ]
+    },
+    {
+      "type": "practice",
+      "exercises": [
+        {
+          "id": "p1",
+          "type": "multiple_choice",
+          "xp": 2,
+          "prompt": "A tool schema accepts only 'query' and 'limit'. The model sends 'query', 'limit', and 'sort_order'. 'sort_order' isn't in the schema. What's a safe move?",
+          "options": [
+            {
+              "id": "a",
+              "text": "Strip 'sort_order' before calling the tool",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "Send all three and hope the tool ignores it",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "Delete 'query' and 'limit' too",
+              "correct": false
+            },
+            {
+              "id": "d",
+              "text": "Crash the loop on purpose",
+              "correct": false
+            }
+          ],
+          "explain": "Since 'sort_order' isn't in the schema, stripping it leaves only valid fields, so the tool runs without an unexpected-argument error."
+        },
+        {
+          "id": "p2",
+          "type": "true_false",
+          "xp": 2,
+          "prompt": "True or False: If the model's extra field means the same thing as a real schema field, you can translate it by mapping it to that field instead of stripping it.",
+          "options": [
+            {
+              "id": "a",
+              "text": "True",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "False",
+              "correct": false
+            }
+          ],
+          "explain": "True. Translation preserves the model's intent by mapping the extra field to a valid one, which is better than throwing useful info away."
+        },
+        {
+          "id": "p3",
+          "type": "fill_blank",
+          "xp": 2,
+          "prompt": "Complete the rule for handling unknown fields.",
+          "sentence": "If an argument isn't in the schema, you can strip it or translate it into a valid field.",
+          "blank": "strip",
+          "words": [
+            "strip",
+            "trust",
+            "duplicate"
+          ],
+          "explain": "Stripping removes the unrecognized argument so only schema-valid fields reach the tool."
+        },
+        {
+          "id": "p4",
+          "type": "spot_the_ai",
+          "xp": 2,
+          "prompt": "Which explanation of handling unrecognized arguments was AI-generated?",
+          "options": [
+            {
+              "id": "a",
+              "text": "When a model adds a field the tool schema doesn't define, you remove it or remap it to a known field so the tool call stays valid.",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "just leeve the wierd field in it prolly wont matter lol",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "delete evryting and start over always thats the rule",
+              "correct": false
+            }
+          ],
+          "explain": "The AI-generated answer is clear, accurate, and complete, describing both stripping and remapping, while the others are sloppy and wrong."
+        }
+      ]
+    },
+    {
+      "type": "boss",
+      "exercises": [
+        {
+          "id": "b1",
+          "type": "multiple_choice",
+          "xp": 5,
+          "prompt": "A booking tool's schema has only 'date' and 'guests'. The model outputs 'date', 'guests', and 'seating_area'. The tool crashes on unknown fields, but 'seating_area' actually matches an optional 'section' field the schema DOES support. What's the best fix?",
+          "options": [
+            {
+              "id": "a",
+              "text": "Translate 'seating_area' into the valid 'section' field, then call the tool",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "Send all three fields unchanged and let it crash",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "Strip 'seating_area' even though its meaning is supported",
+              "correct": false
+            },
+            {
+              "id": "d",
+              "text": "Supply a default for 'seating_area' and keep the unknown name",
+              "correct": false
+            }
+          ],
+          "explain": "Because the tool rejects unknown fields, you must not send 'seating_area' as-is. Since its meaning maps to the real 'section' field, translating keeps the user's intent AND passes validation. Stripping would work but needlessly loses useful info. Great job! You've now mastered validating types, coercing values, applying defaults, and cleaning up extra arguments so your agent's tool calls stay safe and reliable."
+        }
+      ]
+    }
+  ]
+}

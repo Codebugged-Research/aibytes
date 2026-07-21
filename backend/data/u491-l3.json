@@ -1,0 +1,222 @@
+{
+  "id": "u491-l3",
+  "unit": 491,
+  "day": 2458,
+  "tier": "AI Agents & Agentic AI",
+  "tierIcon": "🤖",
+  "title": "Feedback Loops for Format Errors",
+  "icon": "🔁",
+  "concept": "Returning JSON schema validation errors to the model so it self-corrects and retries with valid arguments.",
+  "xp": 15,
+  "hearts": 3,
+  "estMinutes": 7,
+  "segments": [
+    {
+      "type": "warmup",
+      "exercises": [
+        {
+          "id": "w1",
+          "type": "multiple_choice",
+          "xp": 1,
+          "prompt": "Last lesson: the model sends the number 5 as the text \"5\" (with quotes). What does coercion do here?",
+          "options": [
+            {
+              "id": "a",
+              "text": "Rejects the tool call forever",
+              "correct": false
+            },
+            {
+              "id": "b",
+              "text": "Converts the text \"5\" into the real number 5",
+              "correct": true
+            },
+            {
+              "id": "c",
+              "text": "Asks the user to type it again",
+              "correct": false
+            }
+          ],
+          "explain": "Coercion quietly fixes small format mismatches, like turning a stringified number \"5\" into an actual number 5, so the tool still works."
+        }
+      ]
+    },
+    {
+      "type": "teach",
+      "cards": [
+        {
+          "kind": "hook",
+          "icon": "🤔",
+          "title": "When Fixing Isn't Enough",
+          "body": "Sometimes the model's arguments are too broken to auto-fix. A required field is missing, or a value makes no sense. Now what?"
+        },
+        {
+          "kind": "definition",
+          "icon": "🔁",
+          "title": "Feedback Loop",
+          "body": "Instead of crashing, you send the validation error back to the model as a message. The model reads what went wrong and tries again with corrected arguments."
+        },
+        {
+          "kind": "analogy",
+          "icon": "📝",
+          "title": "Like a Teacher's Red Pen",
+          "body": "A good teacher doesn't just fail your essay. They circle the mistake and hand it back so you can fix it. The error message is that red pen for the AI."
+        },
+        {
+          "kind": "example",
+          "icon": "📨",
+          "title": "In Action",
+          "body": "Model calls book_flight but forgets the date. You reply: 'Error: field date is required.' The model re-calls book_flight, this time including the date."
+        },
+        {
+          "kind": "mythbust",
+          "icon": "❌",
+          "title": "Myth: Just Retry the Same Call",
+          "body": "Blindly retrying the exact same broken call gets the same error. The model needs to SEE the specific error text to know what to fix."
+        },
+        {
+          "kind": "visual",
+          "icon": "⚖️",
+          "title": "Silent Fail vs Feedback",
+          "body": "One dead-ends. The other teaches the model to correct itself.",
+          "compare": {
+            "left": {
+              "emoji": "🧱",
+              "tag": "Silent Crash",
+              "text": "Tool errors out, task stops, no explanation sent back."
+            },
+            "right": {
+              "emoji": "🔁",
+              "tag": "Feedback Loop",
+              "text": "Clear error goes back to the model, which retries with valid arguments."
+            }
+          }
+        }
+      ]
+    },
+    {
+      "type": "practice",
+      "exercises": [
+        {
+          "id": "p1",
+          "type": "multiple_choice",
+          "xp": 2,
+          "prompt": "The model's tool call fails schema validation because a required field is missing. What's the best next step?",
+          "options": [
+            {
+              "id": "a",
+              "text": "Send the specific validation error back to the model so it can retry",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "Silently drop the request and move on",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "Retry the exact same call with no changes",
+              "correct": false
+            },
+            {
+              "id": "d",
+              "text": "Delete the tool so it can't be called again",
+              "correct": false
+            }
+          ],
+          "explain": "Returning the actual error text lets the model understand the problem and self-correct with valid arguments on the next try."
+        },
+        {
+          "id": "p2",
+          "type": "true_false",
+          "xp": 2,
+          "prompt": "True or False: A helpful validation error message should clearly name what went wrong.",
+          "options": [
+            {
+              "id": "a",
+              "text": "True",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "False",
+              "correct": false
+            }
+          ],
+          "explain": "Specific messages like 'field date is required' tell the model exactly what to fix, making self-correction fast and reliable."
+        },
+        {
+          "id": "p3",
+          "type": "fill_blank",
+          "xp": 2,
+          "prompt": "Fill in the blank about self-correction.",
+          "sentence": "When you return a validation error, the model can retry with corrected arguments.",
+          "blank": "corrected",
+          "words": [
+            "corrected",
+            "random",
+            "hidden"
+          ],
+          "explain": "The whole point of the feedback loop is that the model reads the error and produces corrected arguments the next time."
+        },
+        {
+          "id": "p4",
+          "type": "spot_the_ai",
+          "xp": 2,
+          "prompt": "Which error message was written by an AI to be clear and self-correcting?",
+          "options": [
+            {
+              "id": "a",
+              "text": "Validation failed: 'passengers' must be a positive integer, but received -2. Please provide a value of 1 or more.",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "Error.",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "something broke lol try again idk",
+              "correct": false
+            }
+          ],
+          "explain": "The AI-written message names the exact field, the bad value, and how to fix it, which is exactly what a model needs to self-correct."
+        }
+      ]
+    },
+    {
+      "type": "boss",
+      "exercises": [
+        {
+          "id": "b1",
+          "type": "multiple_choice",
+          "xp": 5,
+          "prompt": "An agent calls set_reminder({\"time\": \"tomorrow\", \"minutes\": \"thirty\"}). The schema needs 'minutes' to be a number. Coercion can't turn 'thirty' into a number. What is the smartest recovery?",
+          "options": [
+            {
+              "id": "a",
+              "text": "Return an error to the model: 'minutes must be a number (e.g. 30), got \"thirty\"' and let it retry",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "Guess that 'thirty' means 30 and hope it's right",
+              "correct": false
+            },
+            {
+              "id": "c",
+              "text": "Crash the agent so a human restarts it",
+              "correct": false
+            },
+            {
+              "id": "d",
+              "text": "Retry the identical call automatically until it works",
+              "correct": false
+            }
+          ],
+          "explain": "Coercion handles easy fixes, but when a value can't be safely converted, the feedback loop takes over: send a clear, specific error back so the model self-corrects and retries with valid arguments. Guessing risks wrong actions, crashing wastes the task, and blind retries repeat the mistake. Combining coercion with error feedback makes agents robust against messy model output."
+        }
+      ]
+    }
+  ]
+}
