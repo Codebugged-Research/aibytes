@@ -1,5 +1,6 @@
 import { motion, AnimatePresence } from 'framer-motion';
-import { Flame, Zap, Award, RotateCcw, ChevronRight, ShieldCheck, AlertCircle, LogOut, Palette } from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
+import { Flame, Zap, Award, RotateCcw, ChevronRight, ShieldCheck, AlertCircle, LogOut, Palette, Target } from 'lucide-react';
 import { useProgress } from '../hooks/useProgress';
 import { getCompletedLessons, resetAllProgress, setOnboarded, setUser } from '../utils/storage';
 import { Button, Card } from '../components/ui-components';
@@ -19,6 +20,7 @@ const cardVariants = {
 };
 
 export const Profile = () => {
+  const navigate = useNavigate();
   const { xp, streak, refreshProgress } = useProgress();
   const completedLessons = getCompletedLessons();
   const [showReset, setShowReset] = useState(false);
@@ -210,6 +212,28 @@ export const Profile = () => {
           })}
         </motion.div>
       </div>
+
+      {/* Learning Focus */}
+      <motion.div
+        className="pt-2"
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ delay: 0.6 }}
+      >
+        <motion.button
+          onClick={() => navigate('/learning-focus')}
+          className="w-full flex items-center justify-between gap-2 bg-white border border-slate-200 text-slate-800 font-bold text-sm py-3.5 px-4 rounded-2xl shadow-sm"
+          whileTap={{ scale: 0.96 }}
+          whileHover={{ borderColor: '#CBD5E1', boxShadow: '0 4px 14px rgba(0,0,0,0.07)' }}
+          data-testid="learning-focus-button"
+        >
+          <span className="flex items-center gap-2">
+            <Target size={16} strokeWidth={2.5} className="text-[#6248FF]" />
+            Learning Focus
+          </span>
+          <ChevronRight size={14} strokeWidth={2.5} className="text-slate-400" />
+        </motion.button>
+      </motion.div>
 
       {/* Reset Section */}
       <motion.div

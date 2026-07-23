@@ -3,10 +3,11 @@ import { useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { ShieldCheck, Loader2, ArrowLeft, Phone, Mail } from 'lucide-react';
 import { Mascot } from './Mascot';
-import { setOnboarded, setUser } from '../utils/storage';
+import { setOnboarded, setUser, setTopicPrefs } from '../utils/storage';
 import { playHappyChime, playPop } from '../utils/sound';
 import { dialForIso } from '../utils/countries';
 import { PhoneField } from './PhoneField';
+import { TopicChips } from './TopicChips';
 import { ThemeToggle } from './ThemeToggle';
 
 const GoogleIcon = ({ size = 18 }) => (
@@ -63,7 +64,7 @@ const stepAnim = {
 
 export const Onboarding = ({ onComplete }) => {
   const navigate = useNavigate();
-  const [step, setStep] = useState('welcome'); // welcome | loading | phone | email | otp | details | success
+  const [step, setStep] = useState('welcome'); // welcome | loading | phone | email | otp | details | topics | success
   const [provider, setProvider] = useState('google'); // label for loading screen
   const [countryIso, setCountryIso] = useState('IN');
   const [phone, setPhone] = useState('');
@@ -73,6 +74,8 @@ export const Onboarding = ({ onComplete }) => {
   const [email, setEmail] = useState('');
   const [loginMethod, setLoginMethod] = useState(''); // 'phone' | 'email'
   const [resend, setResend] = useState(0);
+  const [selectedTopics, setSelectedTopics] = useState([]);
+  const [pendingFinish, setPendingFinish] = useState(null); // { method, payload } queued until the topics step completes
   const otpRefs = useRef([]);
   const cc = dialForIso(countryIso);
   const emailValid = /\S+@\S+\.\S+/.test(email.trim());
@@ -91,6 +94,23 @@ export const Onboarding = ({ onComplete }) => {
     setTimeout(() => { setOnboarded(true); navigate('/', { replace: true }); onComplete(); }, 2400);
   };
 
+  // Account creation is done, but we still need the learner's topic focus
+  // before celebrating — queue the finish() call for the topics step.
+  const goToTopics = (method, payload) => {
+    setPendingFinish({ method, payload });
+    setStep('topics');
+  };
+
+  const toggleTopic = (id) => {
+    playPop();
+    setSelectedTopics((prev) => (prev.includes(id) ? prev.filter((t) => t !== id) : [...prev, id]));
+  };
+
+  const finishTopics = () => {
+    setTopicPrefs(selectedTopics);
+    if (pendingFinish) finish(pendingFinish.method, pendingFinish.payload);
+  };
+
   const handleOAuth = (which) => {
     playPop();
     setProvider(which);
@@ -98,7 +118,7 @@ export const Onboarding = ({ onComplete }) => {
     const mock = which === 'apple'
       ? { name: 'Learner', email: 'you@icloud.com' }
       : { name: 'Learner', email: 'you@gmail.com' };
-    setTimeout(() => finish(which, mock), 1500);
+    setTimeout(() => goToTopics(which, mock), 1500);
   };
 
   const phoneDigits = phone.replace(/\D/g, '');
@@ -149,7 +169,7 @@ export const Onboarding = ({ onComplete }) => {
     if (isPhone && !emailValid) return;
     const fullName = `${firstName.trim()} ${lastName.trim()}`;
     if (isPhone) {
-      finish('phone', {
+      goToTopics('phone', {
         name: fullName,
         firstName: firstName.trim(),
         lastName: lastName.trim(),
@@ -157,7 +177,7 @@ export const Onboarding = ({ onComplete }) => {
         phone: `${cc} ${phone}`
       });
     } else if (isEmail) {
-      finish('email', {
+      goToTopics('email', {
         name: fullName,
         firstName: firstName.trim(),
         lastName: lastName.trim(),
@@ -401,6 +421,19 @@ export const Onboarding = ({ onComplete }) => {
                   className={primaryBtnCls}
                 >
                   Continue
+                </button>
+              </motion.div>
+            )}
+
+            {step === 'topics' && (
+              <motion.div key="topics" {...stepAnim} className="space-y-5">
+                <div className="text-center space-y-1.5">
+                  <h2 className="text-2xl font-black text-slate-900 tracking-tight" style={{ fontFamily: 'Outfit, sans-serif' }}>What do you want to learn?</h2>
+                  <p className="text-sm text-slate-500 font-medium">Pick your focus areas — we&apos;ll bring those lessons forward. You can change this anytime from your profile.</p>
+                </div>
+                <TopicChips selected={selectedTopics} onToggle={toggleTopic} />
+                <button data-testid="topics-continue" onClick={finishTopics} className={primaryBtnCls}>
+                  {selectedTopics.length > 0 ? 'Start learning' : 'Skip for now'}
                 </button>
               </motion.div>
             )}

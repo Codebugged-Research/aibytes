@@ -7,7 +7,18 @@ const STORAGE_KEYS = {
   COMPLETED_LESSONS: 'aiquest_completed',
   CURRENT_LESSON: 'aiquest_current',
   LESSON_PROGRESS: 'aiquest_lesson_progress',
-  VOICE: 'aiquest_voice'
+  VOICE: 'aiquest_voice',
+  TOPIC_PREFS: 'aiquest_topic_prefs'
+};
+
+// Learning-focus survey — array of TOPIC_CATEGORIES ids the learner picked.
+// Empty array means "no preference" (original curriculum order).
+export const getTopicPrefs = () => {
+  try { return JSON.parse(localStorage.getItem(STORAGE_KEYS.TOPIC_PREFS) || '[]'); } catch (e) { return []; }
+};
+
+export const setTopicPrefs = (ids) => {
+  try { localStorage.setItem(STORAGE_KEYS.TOPIC_PREFS, JSON.stringify(ids || [])); } catch (e) { /* noop */ }
 };
 
 export const getXP = () => {

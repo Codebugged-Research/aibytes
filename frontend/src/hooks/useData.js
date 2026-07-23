@@ -1,4 +1,6 @@
 import { useState, useEffect } from 'react';
+import { getTopicPrefs } from '../utils/storage';
+import { reorderUnitsByTopics } from '../utils/topics';
 
 export const useCurriculum = () => {
   const [curriculum, setCurriculum] = useState(null);
@@ -7,7 +9,11 @@ export const useCurriculum = () => {
   useEffect(() => {
     fetch('/lessons/index.json')
       .then(r => r.json())
-      .then(data => setCurriculum(data))
+      .then(data => {
+        const prefs = getTopicPrefs();
+        const units = prefs.length ? reorderUnitsByTopics(data.units, prefs) : data.units;
+        setCurriculum({ ...data, units });
+      })
       .catch(() => setCurriculum({
         app: "AIBites",
         units: [

@@ -9,6 +9,7 @@ import { Profile } from './pages/Profile';
 import { Activity } from './pages/Activity';
 import { Leaderboard } from './pages/Leaderboard';
 import { LessonPlayer } from './pages/LessonPlayer';
+import { LearningFocus } from './pages/LearningFocus';
 import { PhoneWrapper } from './components/PhoneWrapper';
 import { Onboarding } from './components/Onboarding';
 import { getOnboarded } from './utils/storage';
@@ -86,6 +87,7 @@ function App() {
                     <Route path="/profile" element={<Profile />} />
                   </Route>
                   <Route path="/lesson/:lessonId" element={<LessonPlayer />} />
+                  <Route path="/learning-focus" element={<LearningFocus />} />
                 </Routes>
               )}
             </AnimatePresence>
