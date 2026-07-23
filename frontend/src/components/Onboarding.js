@@ -4,6 +4,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { ShieldCheck, Loader2, ArrowLeft, Phone, Mail } from 'lucide-react';
 import { Mascot } from './Mascot';
 import { setOnboarded, setUser, setTopicPrefs } from '../utils/storage';
+import { invalidateCurriculumCache } from '../hooks/useData';
 import { playHappyChime, playPop } from '../utils/sound';
 import { dialForIso } from '../utils/countries';
 import { PhoneField } from './PhoneField';
@@ -108,6 +109,7 @@ export const Onboarding = ({ onComplete }) => {
 
   const finishTopics = () => {
     setTopicPrefs(selectedTopics);
+    invalidateCurriculumCache();
     if (pendingFinish) finish(pendingFinish.method, pendingFinish.payload);
   };
 

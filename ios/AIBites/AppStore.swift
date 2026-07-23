@@ -9,7 +9,9 @@ final class AppStore: ObservableObject {
     @Published var onboarded: Bool
     @Published var user: User?
     @Published var progress: Progress
-    @Published var curriculum: Curriculum = Curriculum(app: "AIBites", units: [])
+    @Published var curriculum: Curriculum = Curriculum(app: "AIBites", units: []) {
+        didSet { rebuildOrderedUnits() }
+    }
     @Published var voiceEnabled = false          // session-only, opt-in (matches MVP)
     @Published var theme: String {               // "light" | "dark" (web theme.js)
         didSet { UserDefaults.standard.set(theme, forKey: "aiquest_theme") }
@@ -25,7 +27,22 @@ final class AppStore: ObservableObject {
     /// Learning-focus survey picks (TopicCategory ids). Empty = no preference,
     /// curriculum stays in its original order. Persisted like everything else.
     @Published var topicPrefs: [String] {
-        didSet { UserDefaults.standard.set(topicPrefs, forKey: "aiquest_topic_prefs") }
+        didSet {
+            UserDefaults.standard.set(topicPrefs, forKey: "aiquest_topic_prefs")
+            rebuildOrderedUnits()
+        }
+    }
+
+    /// Cached result of Topics.reorder — rebuilt only when curriculum or
+    /// topicPrefs actually change, instead of on every access (this was
+    /// previously a computed property recalculated on every SwiftUI render
+    /// pass and on every completeLesson() call, which showed up as jank).
+    private(set) var orderedUnits: [Unit] = []
+    private(set) var orderedLessons: [String] = []
+
+    private func rebuildOrderedUnits() {
+        orderedUnits = Topics.reorder(curriculum.units, selected: Set(topicPrefs))
+        orderedLessons = orderedUnits.flatMap { $0.lessons.map(\.id) }
     }
 
     private var token: String?
@@ -100,15 +117,6 @@ final class AppStore: ObservableObject {
 
     func isCompleted(_ id: String) -> Bool { progress.completedLessons.contains(id) }
 
-    /// Units reordered by the learner's topic preference (see Topics.reorder).
-    var orderedUnits: [Unit] {
-        Topics.reorder(curriculum.units, selected: Set(topicPrefs))
-    }
-
-    /// Global lesson order across units → used for locking.
-    var orderedLessons: [String] {
-        orderedUnits.flatMap { $0.lessons.map(\.id) }
-    }
 
     func isLocked(_ id: String) -> Bool {
         // ponytail: all lessons unlocked for now; restore sequential gating by reverting this to the prevDone check

@@ -9,16 +9,20 @@ enum API {
 
     struct APIError: Error { let message: String }
 
-    // MARK: Curriculum / lessons (bundled JSON is the offline fallback)
+    // MARK: Curriculum / lessons — bundled JSON ships with every build and is
+    // always in sync (the generation pipeline commits backend/frontend/iOS
+    // copies together), so it loads instantly. Network is only consulted when
+    // a bundled copy is missing, instead of blocking every lesson transition
+    // on a round-trip the local copy already answers.
 
     static func curriculum() async -> Curriculum {
-        if let c: Curriculum = try? await get("/api/curriculum") { return c }
-        return bundled("index.json") ?? Curriculum(app: "AIBites", units: [])
+        if let c: Curriculum = bundled("index.json") { return c }
+        return (try? await get("/api/curriculum")) ?? Curriculum(app: "AIBites", units: [])
     }
 
     static func lesson(_ id: String) async -> Lesson? {
-        if let l: Lesson = try? await get("/api/lessons/\(id)") { return l }
-        return bundled("\(id).json")
+        if let l: Lesson = bundled("\(id).json") { return l }
+        return try? await get("/api/lessons/\(id)")
     }
 
     // MARK: Auth / progress
@@ -43,6 +47,32 @@ enum API {
         return try await send("PUT", "/api/progress", body: body, token: token)
     }
 
+    // MARK: Email OTP
+
+    static func requestOtp(email: String) async throws {
+        try await postDetailed("/api/auth/otp/request", body: ["email": email])
+    }
+
+    static func verifyOtp(email: String, code: String) async throws {
+        try await postDetailed("/api/auth/otp/verify", body: ["email": email, "code": code])
+    }
+
+    // MARK: SMS OTP
+
+    static func requestSmsOtp(phone: String) async throws {
+        try await postDetailed("/api/auth/otp/sms/request", body: ["phone": phone])
+    }
+
+    static func verifySmsOtp(phone: String, code: String) async throws {
+        try await postDetailed("/api/auth/otp/sms/verify", body: ["phone": phone, "code": code])
+    }
+
+    // MARK: Google Sign-In
+
+    static func googleAuth(idToken: String) async throws -> AuthResponse {
+        try await post("/api/auth/google", body: ["idToken": idToken])
+    }
+
     // MARK: - Low-level helpers
 
     private static func get<T: Decodable>(_ path: String) async throws -> T {
@@ -54,6 +84,21 @@ enum API {
 
     private static func post<T: Decodable>(_ path: String, body: [String: Any]) async throws -> T {
         try await send("POST", path, body: body, token: nil)
+    }
+
+    /// POST that ignores the response body but surfaces the server's `detail`
+    /// message on failure (FastAPI's HTTPException shape) instead of a bare status code.
+    private static func postDetailed(_ path: String, body: [String: Any]) async throws {
+        guard let url = URL(string: baseURL + path) else { throw APIError(message: "bad url") }
+        var req = URLRequest(url: url)
+        req.httpMethod = "POST"
+        req.setValue("application/json", forHTTPHeaderField: "Content-Type")
+        req.httpBody = try JSONSerialization.data(withJSONObject: body)
+        let (data, resp) = try await URLSession.shared.data(for: req)
+        guard (resp as? HTTPURLResponse)?.statusCode == 200 else {
+            let json = (try? JSONSerialization.jsonObject(with: data)) as? [String: Any]
+            throw APIError(message: (json?["detail"] as? String) ?? "Something went wrong. Try again.")
+        }
     }
 
     private static func send<T: Decodable>(_ method: String, _ path: String,

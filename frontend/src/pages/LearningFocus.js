@@ -4,6 +4,7 @@ import { motion } from 'framer-motion';
 import { ArrowLeft } from 'lucide-react';
 import { TopicChips } from '../components/TopicChips';
 import { getTopicPrefs, setTopicPrefs } from '../utils/storage';
+import { invalidateCurriculumCache } from '../hooks/useData';
 import { playPop } from '../utils/sound';
 
 // Full-screen page (outside the tab Layout, like LessonPlayer) so learners can
@@ -19,6 +20,7 @@ export const LearningFocus = () => {
 
   const save = () => {
     setTopicPrefs(selected);
+    invalidateCurriculumCache();
     navigate(-1);
   };
 
