@@ -1,4 +1,5 @@
 import SwiftUI
+import GoogleSignIn
 
 /// Onboarding — mirrors the web Onboarding.js flow:
 /// welcome → (phone | email) → OTP (demo: any 6 digits) → details → success,
@@ -6,7 +7,7 @@ import SwiftUI
 /// client-side. Combines first+last into `name` and calls store.completeOnboarding.
 struct OnboardingView: View {
     @EnvironmentObject var store: AppStore
-    enum Step: String { case welcome, phone, email, otp, details, loading, success }
+    enum Step: String { case welcome, phone, email, otp, details, topics, loading, success }
 
     // UITest.* is inert unless the DEBUG screenshot harness sets UITEST_ env vars.
     @State private var step: Step = UITest.str("STEP").flatMap(Step.init(rawValue:)) ?? .welcome
@@ -20,6 +21,11 @@ struct OnboardingView: View {
     @State private var resend = UITest.int("RESEND") ?? 0
     @State private var burst = false
     @FocusState private var otpFocused: Bool
+    @State private var otpError: String? = nil
+    @State private var verifyingOtp = false
+    @State private var otpBackendAvailable = false
+    @State private var selectedTopics: Set<String> = []
+    @State private var pendingFinish: (() -> Void)? = nil   // queued until the topics step completes
 
     private let cc = "+91"                        // web default (dialForIso 'IN')
 
@@ -85,6 +91,7 @@ struct OnboardingView: View {
                                     case .otp:      otpStep
                                     case .details:  detailsStep
                                     case .loading:  loadingStep
+                                    case .topics:   topicsStep
                                     default:        successStep
                                     }
                                 }
@@ -149,7 +156,7 @@ struct OnboardingView: View {
             VStack(spacing: 10) {
                 // Google — white pill with border
                 authButton(bg: Theme.card, fg: Theme.ink, border: Theme.border) {
-                    method = "google"; provider = "google"; startOAuth()
+                    method = "google"; provider = "google"; startGoogleSignIn()
                 } label: {
                     HStack(spacing: 12) {
                         GoogleGlyph().frame(width: 19, height: 19)
@@ -235,6 +242,7 @@ struct OnboardingView: View {
 
             PrimaryButton(title: "Send code", enabled: phoneDigits.count >= 6) { sendCode() }
         }
+        .onAppear { if UITest.flag("AUTO_SEND") { sendCode() } }
     }
 
     private var emailStep: some View {
@@ -273,9 +281,13 @@ struct OnboardingView: View {
                     .focused($otpFocused)
                     .foregroundColor(.clear)
                     .accentColor(.clear)
+                    .disabled(verifyingOtp)
                     .onChange(of: otp) { _, v in
                         otp = String(v.filter(\.isNumber).prefix(6))
-                        if otp.count == 6 {
+                        guard otp.count == 6 else { return }
+                        if (method == "email" || method == "phone"), otpBackendAvailable {
+                            verifyOtp()
+                        } else {
                             DispatchQueue.main.asyncAfter(deadline: .now() + 0.22) {
                                 if otp.count == 6 { go(.details) }   // demo: any 6 accepted
                             }
@@ -303,15 +315,29 @@ struct OnboardingView: View {
             .contentShape(Rectangle())
             .onTapGesture { otpFocused = true }
 
-            Text("Demo — enter any 6 digits")
-                .font(Theme.inter(10)).foregroundColor(Theme.inkFaint)
+            Group {
+                if let otpError {
+                    Text(otpError)
+                        .font(Theme.inter(11, .semibold)).foregroundColor(Theme.red600)
+                        .multilineTextAlignment(.center)
+                } else if verifyingOtp {
+                    HStack(spacing: 6) {
+                        ProgressView().scaleEffect(0.7)
+                        Text(otp.isEmpty ? "Sending code…" : "Verifying…")
+                    }
+                    .font(Theme.inter(10)).foregroundColor(Theme.inkFaint)
+                } else if !otpBackendAvailable {
+                    Text("Demo — enter any 6 digits")
+                        .font(Theme.inter(10)).foregroundColor(Theme.inkFaint)
+                }
+            }
 
             Group {
                 if resend > 0 {
                     Text("Resend code in \(resend)s")
                         .font(Theme.inter(12, .semibold)).foregroundColor(Theme.inkFaint)
                 } else {
-                    Button { resend = 30 } label: {
+                    Button { resendCode() } label: {
                         Text("Resend code")
                             .font(Theme.inter(12, .bold)).foregroundColor(Theme.violet)
                     }
@@ -343,6 +369,15 @@ struct OnboardingView: View {
                     .textFieldStyle(OnbFieldStyle())
             }
             PrimaryButton(title: "Continue", enabled: detailsValid) { completeDetails() }
+        }
+    }
+
+    private var topicsStep: some View {
+        stepScaffold(title: "What do you want to learn?",
+                     subtitle: "Pick your focus areas — we'll bring those lessons forward. You can change this anytime from your profile.",
+                     onBack: nil) {
+            TopicChipGrid(selected: selectedTopics) { toggleTopic($0) }
+            PrimaryButton(title: selectedTopics.isEmpty ? "Skip for now" : "Start learning") { finishTopics() }
         }
     }
 
@@ -402,27 +437,132 @@ struct OnboardingView: View {
 
     private func go(_ s: Step) { withAnimation { step = s } }
 
+    /// Account identity is resolved, but we still want the learner's topic
+    /// focus before celebrating — queue the final action for the topics step.
+    private func goToTopics(_ completion: @escaping () -> Void) {
+        pendingFinish = completion
+        go(.topics)
+    }
+
+    private func toggleTopic(_ id: String) {
+        if selectedTopics.contains(id) { selectedTopics.remove(id) } else { selectedTopics.insert(id) }
+    }
+
+    private func finishTopics() {
+        store.topicPrefs = Array(selectedTopics)
+        pendingFinish?()
+    }
+
     private func startOAuth() {
         go(.loading)
         // Simulated OAuth → mock account → straight to success (web skips details).
         email = provider == "apple" ? "you@icloud.com" : "you@gmail.com"
         first = "Learner"; last = ""
         DispatchQueue.main.asyncAfter(deadline: .now() + 1.5) {
-            finish(name: "Learner", phone: nil)
+            goToTopics { finish(name: "Learner", phone: nil) }
+        }
+    }
+
+    /// Real Google Sign-In: presents Google's native sheet, gets a verified ID
+    /// token, and has the backend confirm it before ever touching our JWT/DB.
+    private func startGoogleSignIn() {
+        go(.loading)
+        guard let rootVC = UIApplication.shared.connectedScenes
+            .compactMap({ ($0 as? UIWindowScene)?.keyWindow })
+            .first?.rootViewController else { go(.welcome); return }
+        Task {
+            do {
+                let result = try await GIDSignIn.sharedInstance.signIn(withPresenting: rootVC)
+                guard let idToken = result.user.idToken?.tokenString else { go(.welcome); return }
+                let res = try await API.googleAuth(idToken: idToken)
+                goToTopics {
+                    go(.success)
+                    DispatchQueue.main.asyncAfter(deadline: .now() + 2.2) {
+                        store.applyAuth(res)
+                    }
+                }
+            } catch {
+                go(.welcome)   // user cancelled, or sign-in/verification failed
+            }
         }
     }
 
     private func sendCode() {
         otp = ""
         resend = 30
+        otpError = nil
         go(.otp)
+        if method == "email" { requestOtp() }
+        else if method == "phone" { requestSmsCode() }
+    }
+
+    private func resendCode() {
+        resend = 30
+        otp = ""
+        otpError = nil
+        if method == "email" { requestOtp() }
+        else if method == "phone" { requestSmsCode() }
+    }
+
+    private func requestOtp() {
+        verifyingOtp = true
+        otpError = nil
+        let addr = email.trimmingCharacters(in: .whitespaces)
+        Task {
+            do {
+                try await API.requestOtp(email: addr)
+                otpBackendAvailable = true
+            } catch {
+                otpBackendAvailable = false
+                otpError = "Couldn't send a code right now — you can continue for this test, enter any 6 digits."
+            }
+            verifyingOtp = false
+        }
+    }
+
+    /// SMS OTP via Twilio Verify — same shape as requestOtp, different transport.
+    private func requestSmsCode() {
+        verifyingOtp = true
+        otpError = nil
+        let fullPhone = cc + phoneDigits
+        Task {
+            do {
+                try await API.requestSmsOtp(phone: fullPhone)
+                otpBackendAvailable = true
+            } catch {
+                otpBackendAvailable = false
+                otpError = "Couldn't send a code right now — you can continue for this test, enter any 6 digits."
+            }
+            verifyingOtp = false
+        }
+    }
+
+    private func verifyOtp() {
+        verifyingOtp = true
+        otpError = nil
+        let code = otp
+        Task {
+            do {
+                if method == "phone" {
+                    try await API.verifySmsOtp(phone: cc + phoneDigits, code: code)
+                } else {
+                    try await API.verifyOtp(email: email.trimmingCharacters(in: .whitespaces), code: code)
+                }
+                verifyingOtp = false
+                go(.details)
+            } catch {
+                verifyingOtp = false
+                otpError = (error as? API.APIError)?.message ?? "Incorrect code. Try again."
+                otp = ""
+            }
+        }
     }
 
     private func completeDetails() {
         guard detailsValid else { return }
         let name = "\(first.trimmingCharacters(in: .whitespaces)) \(last.trimmingCharacters(in: .whitespaces))"
             .trimmingCharacters(in: .whitespaces)
-        finish(name: name, phone: method == "phone" ? "\(cc) \(phone)" : nil)
+        goToTopics { finish(name: name, phone: method == "phone" ? "\(cc) \(phone)" : nil) }
     }
 
     private func finish(name: String, phone: String?) {

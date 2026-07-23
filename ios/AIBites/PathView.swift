@@ -8,7 +8,7 @@ struct PathView: View {
     let startLesson: (String) -> Void
     @State private var nodePulse = false
 
-    private var units: [Unit] { store.curriculum.units }
+    private var units: [Unit] { store.orderedUnits }
     private var ordered: [String] { store.orderedLessons }
 
     private enum NodeState { case done, current, locked }

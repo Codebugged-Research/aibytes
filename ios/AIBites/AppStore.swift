@@ -22,7 +22,11 @@ final class AppStore: ObservableObject {
     @Published var frozenStreak: Int {
         didSet { UserDefaults.standard.set(frozenStreak, forKey: "aiquest_frozen_streak") }
     }
-
+    /// Learning-focus survey picks (TopicCategory ids). Empty = no preference,
+    /// curriculum stays in its original order. Persisted like everything else.
+    @Published var topicPrefs: [String] {
+        didSet { UserDefaults.standard.set(topicPrefs, forKey: "aiquest_topic_prefs") }
+    }
 
     private var token: String?
     private let d = UserDefaults.standard
@@ -30,6 +34,7 @@ final class AppStore: ObservableObject {
     init() {
         notifsSeen = UserDefaults.standard.bool(forKey: "aiquest_notifs_seen")
         frozenStreak = UserDefaults.standard.integer(forKey: "aiquest_frozen_streak")
+        topicPrefs = UserDefaults.standard.stringArray(forKey: "aiquest_topic_prefs") ?? []
         if UITest.flag("RESET") {
             let ud = UserDefaults.standard
             for key in ["aiquest_token", "aiquest_user", "aiquest_progress", "aiquest_onboarded"] {
@@ -95,9 +100,14 @@ final class AppStore: ObservableObject {
 
     func isCompleted(_ id: String) -> Bool { progress.completedLessons.contains(id) }
 
+    /// Units reordered by the learner's topic preference (see Topics.reorder).
+    var orderedUnits: [Unit] {
+        Topics.reorder(curriculum.units, selected: Set(topicPrefs))
+    }
+
     /// Global lesson order across units → used for locking.
     var orderedLessons: [String] {
-        curriculum.units.flatMap { $0.lessons.map(\.id) }
+        orderedUnits.flatMap { $0.lessons.map(\.id) }
     }
 
     func isLocked(_ id: String) -> Bool {

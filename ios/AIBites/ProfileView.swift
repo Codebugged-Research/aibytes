@@ -10,15 +10,24 @@ struct ProfileView: View {
     @State private var showReset = false
     @State private var avatarPopped = false
     @State private var ringPulse = false
+    @State private var showLearningFocus = false
 
     // #FFE27C avatar + amber-200 border + amber-300→violet-400 ring
     private let avatarFill = Color(hex: 0xFFE27C)
     private let amber200   = Color(hex: 0xFDE68A)
     private let amber300   = Color(hex: 0xFCD34D)
 
-    // Web hardcodes these on the profile card (no personalization) — matched literally.
-    private var initials: String { "AV" }
-    private var displayName: String { "AI Learner" }
+    private var displayName: String {
+        let name = (store.user?.name ?? "").trimmingCharacters(in: .whitespaces)
+        return name.isEmpty ? "AI Learner" : name
+    }
+
+    private var initials: String {
+        let parts = displayName.split(separator: " ").filter { !$0.isEmpty }
+        if parts.count >= 2 { return "\(parts[0].prefix(1))\(parts[1].prefix(1))".uppercased() }
+        if let first = parts.first { return String(first.prefix(2)).uppercased() }
+        return "AI"
+    }
 
     var body: some View {
         ScrollView {
@@ -27,12 +36,14 @@ struct ProfileView: View {
                 profileCard
                 statistics
                 resetSection
+                learningFocusRow
                 appearanceRow
                 logoutButton
             }
             .padding(.horizontal, 24).padding(.top, 6).padding(.bottom, 120)
         }
         .background(Theme.bg)
+        .sheet(isPresented: $showLearningFocus) { LearningFocusView().environmentObject(store) }
     }
 
     // MARK: header
@@ -179,6 +190,32 @@ struct ProfileView: View {
             }
         }
         .padding(.top, 2)
+    }
+
+    // MARK: learning focus
+
+    private var learningFocusRow: some View {
+        Button { showLearningFocus = true } label: {
+            HStack(spacing: 12) {
+                Circle().fill(Theme.slate50)
+                    .frame(width: 36, height: 36)
+                    .overlay(Image(systemName: "target")
+                        .font(.system(size: 15, weight: .semibold)).foregroundColor(Theme.violet))
+                VStack(alignment: .leading, spacing: 2) {
+                    Text("Learning Focus").font(Theme.outfit(14, .bold)).foregroundColor(Theme.ink)
+                    Text("Prioritize topics on your path").font(Theme.inter(12, .medium)).foregroundColor(Theme.inkFaint)
+                }
+                Spacer()
+                Image(systemName: "chevron.right")
+                    .font(.system(size: 13, weight: .bold)).foregroundColor(Theme.inkFaint)
+            }
+            .padding(.horizontal, 16).padding(.vertical, 12)
+            .background(Theme.card)
+            .clipShape(RoundedRectangle(cornerRadius: 16, style: .continuous))
+            .overlay(RoundedRectangle(cornerRadius: 16, style: .continuous).stroke(Theme.border, lineWidth: 1))
+            .shadow(color: .black.opacity(0.03), radius: 6, y: 2)
+        }
+        .buttonStyle(.plain)
     }
 
     // MARK: appearance
