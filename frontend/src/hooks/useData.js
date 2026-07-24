@@ -1,27 +1,16 @@
 import { useState, useEffect } from 'react';
-import { getTopicPrefs, getRolePref, setRolePref, getShowAllLessons, setShowAllLessons } from '../utils/storage';
-import { reorderUnitsByTopics } from '../utils/topics';
+import { getRolePref, setRolePref, getShowAllLessons, setShowAllLessons } from '../utils/storage';
 import { applyRoleFilter } from '../utils/roles';
 
 // The curriculum (400KB+ of JSON across 500+ units) is effectively static
-// for a session — the only thing that can change it client-side is the
-// topic-priority reorder, and callers invalidate this cache explicitly via
-// invalidateCurriculumCache() when that happens (Onboarding/LearningFocus
-// after setTopicPrefs). Without this, every Home/Path mount re-fetched and
-// re-parsed the whole file and re-ran the reorder from scratch, which is
-// what made navigating around the app feel slow after every lesson.
+// for a session, so it's fetched and parsed once and reused across every
+// Home/Path mount instead of refetching per navigation.
 let cachedCurriculum = null;
 let fetchPromise = null;
 
 export const invalidateCurriculumCache = () => {
   cachedCurriculum = null;
   fetchPromise = null;
-};
-
-const buildCurriculum = (data) => {
-  const prefs = getTopicPrefs();
-  const units = prefs.length ? reorderUnitsByTopics(data.units, prefs) : data.units;
-  return { ...data, units };
 };
 
 export const useCurriculum = () => {
@@ -39,7 +28,7 @@ export const useCurriculum = () => {
     }
     fetchPromise
       .then(data => {
-        cachedCurriculum = buildCurriculum(data);
+        cachedCurriculum = data;
         setCurriculum(cachedCurriculum);
       })
       .catch(() => {

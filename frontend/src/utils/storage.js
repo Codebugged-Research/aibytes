@@ -8,23 +8,12 @@ const STORAGE_KEYS = {
   CURRENT_LESSON: 'aiquest_current',
   LESSON_PROGRESS: 'aiquest_lesson_progress',
   VOICE: 'aiquest_voice',
-  TOPIC_PREFS: 'aiquest_topic_prefs',
   ROLE_PREF: 'aiquest_role_pref',
   SHOW_ALL_LESSONS: 'aiquest_show_all_lessons'
 };
 
-// Learning-focus survey — array of TOPIC_CATEGORIES ids the learner picked.
-// Empty array means "no preference" (original curriculum order).
-export const getTopicPrefs = () => {
-  try { return JSON.parse(localStorage.getItem(STORAGE_KEYS.TOPIC_PREFS) || '[]'); } catch (e) { return []; }
-};
-
-export const setTopicPrefs = (ids) => {
-  try { localStorage.setItem(STORAGE_KEYS.TOPIC_PREFS, JSON.stringify(ids || [])); } catch (e) { /* noop */ }
-};
-
 // Role-based path — a single ROLES id (see utils/roles.js), or null for "no
-// role picked" (topic-reorder-only behavior, nothing hidden).
+// role picked" (nothing filtered).
 export const getRolePref = () => {
   try { return localStorage.getItem(STORAGE_KEYS.ROLE_PREF) || null; } catch (e) { return null; }
 };

@@ -1,11 +1,10 @@
 import SwiftUI
 
-/// Sheet presented from Profile > Learning Focus — lets the learner revisit
-/// and change the topic-priority survey they saw during onboarding.
+/// Sheet presented from Profile > Your Role — lets the learner revisit
+/// and change the role they picked during onboarding.
 struct LearningFocusView: View {
     @EnvironmentObject var store: AppStore
     @Environment(\.dismiss) private var dismiss
-    @State private var selected: Set<String> = []
     @State private var role: String? = nil
 
     var body: some View {
@@ -20,20 +19,9 @@ struct LearningFocusView: View {
 
                     RoleList(selected: role) { role = $0 }
 
-                    VStack(alignment: .leading, spacing: 6) {
-                        Text("Learning focus").font(Theme.head(24)).foregroundColor(Theme.ink)
-                        Text("Pick your focus areas — we'll bring those lessons forward on your path. Leave everything unselected to learn in the original order.")
-                            .font(Theme.body(14)).foregroundColor(Theme.inkSoft)
-                    }
-
-                    TopicChipGrid(selected: selected) { id in
-                        if selected.contains(id) { selected.remove(id) } else { selected.insert(id) }
-                    }
-
                     PrimaryButton(title: "Save") {
-                        store.topicPrefs = Array(selected)
                         store.rolePref = role
-                        store.showAllLessons = false   // switching role/topics resets the escape hatch
+                        store.showAllLessons = false   // switching role resets the escape hatch
                         dismiss()
                     }
                 }
@@ -48,7 +36,6 @@ struct LearningFocusView: View {
                 }
             }
             .onAppear {
-                selected = Set(store.topicPrefs)
                 role = store.rolePref
             }
         }

@@ -1,5 +1,5 @@
-// Role-based learning paths. Unlike TOPIC_CATEGORIES (which only reorders),
-// a role FILTERS the curriculum down to a curated unit whitelist — someone
+// Role-based learning paths — a role FILTERS the curriculum down to a
+// curated unit whitelist — someone
 // who picks "Project Manager" shouldn't have to scroll past 55 units of
 // classical ML math to find what's relevant to their job. Unit 0
 // (Orientation) is implicit for every role; roles.js callers should not

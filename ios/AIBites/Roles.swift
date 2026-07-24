@@ -1,7 +1,7 @@
 import SwiftUI
 
-/// Role-based learning paths — Swift port of the web utils/roles.js. Unlike
-/// TopicCategory (which only reorders), a Role FILTERS the curriculum down
+/// Role-based learning paths — Swift port of the web utils/roles.js. A Role
+/// FILTERS the curriculum down
 /// to a curated unit whitelist: someone who picks "Project Manager"
 /// shouldn't have to scroll past 55 units of classical ML math to find
 /// what's relevant to their job. `unitIds == nil` means "no filter" (the
@@ -68,9 +68,8 @@ enum Roles {
     }
 }
 
-/// A single selectable role row — radio semantics (single-select), unlike
-/// TopicChip's multi-select checkmark grid. Shared by OnboardingView's role
-/// step and LearningFocusView (Profile > Learning Focus).
+/// A single selectable role row — radio semantics (single-select). Shared
+/// by OnboardingView's role step and LearningFocusView (Profile > Your Role).
 struct RoleRow: View {
     let role: Role
     let isOn: Bool

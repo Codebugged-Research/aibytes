@@ -24,16 +24,8 @@ final class AppStore: ObservableObject {
     @Published var frozenStreak: Int {
         didSet { UserDefaults.standard.set(frozenStreak, forKey: "aiquest_frozen_streak") }
     }
-    /// Learning-focus survey picks (TopicCategory ids). Empty = no preference,
-    /// curriculum stays in its original order. Persisted like everything else.
-    @Published var topicPrefs: [String] {
-        didSet {
-            UserDefaults.standard.set(topicPrefs, forKey: "aiquest_topic_prefs")
-            rebuildOrderedUnits()
-        }
-    }
     /// Role-based path — a single Roles id, or nil for "no role picked"
-    /// (topic-reorder-only behavior, nothing hidden).
+    /// (nothing filtered).
     @Published var rolePref: String? {
         didSet {
             UserDefaults.standard.set(rolePref, forKey: "aiquest_role_pref")
@@ -52,17 +44,16 @@ final class AppStore: ObservableObject {
     /// The active role's metadata (icon/label), or nil if none picked.
     var activeRole: Role? { Roles.byId(rolePref) }
 
-    /// Cached result of Topics.reorder + Roles.filter — rebuilt only when
-    /// curriculum, topicPrefs, rolePref, or showAllLessons actually change,
-    /// instead of on every access (this was previously a computed property
-    /// recalculated on every SwiftUI render pass and on every
-    /// completeLesson() call, which showed up as jank).
+    /// Cached result of Roles.filter — rebuilt only when curriculum,
+    /// rolePref, or showAllLessons actually change, instead of on every
+    /// access (this was previously a computed property recalculated on
+    /// every SwiftUI render pass and on every completeLesson() call, which
+    /// showed up as jank).
     private(set) var orderedUnits: [Unit] = []
     private(set) var orderedLessons: [String] = []
 
     private func rebuildOrderedUnits() {
-        let reordered = Topics.reorder(curriculum.units, selected: Set(topicPrefs))
-        orderedUnits = Roles.filter(reordered, roleId: rolePref, showAll: showAllLessons)
+        orderedUnits = Roles.filter(curriculum.units, roleId: rolePref, showAll: showAllLessons)
         orderedLessons = orderedUnits.flatMap { $0.lessons.map(\.id) }
     }
 
@@ -72,7 +63,6 @@ final class AppStore: ObservableObject {
     init() {
         notifsSeen = UserDefaults.standard.bool(forKey: "aiquest_notifs_seen")
         frozenStreak = UserDefaults.standard.integer(forKey: "aiquest_frozen_streak")
-        topicPrefs = UserDefaults.standard.stringArray(forKey: "aiquest_topic_prefs") ?? []
         rolePref = UserDefaults.standard.string(forKey: "aiquest_role_pref")
         showAllLessons = UserDefaults.standard.bool(forKey: "aiquest_show_all_lessons")
         if UITest.flag("RESET") {

@@ -2,10 +2,10 @@ import { motion } from 'framer-motion';
 import { Check } from 'lucide-react';
 import { ROLES } from '../utils/roles';
 
-// Single-select list of role rows (radio semantics — unlike TopicChips'
-// multi-select grid, only one role applies at a time). `selected` is a
-// single role id or null, `onSelect(id)` picks one; picking the already-
-// selected role clears it back to null (no role = show everything).
+// Single-select list of role rows (radio semantics — only one role applies
+// at a time). `selected` is a single role id or null; `onSelect(id)` picks
+// one — picking the already-selected role clears it back to null (no role
+// means show everything).
 export const RoleChips = ({ selected, onSelect }) => {
   return (
     <div className="space-y-2" data-testid="role-chips">
