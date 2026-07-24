@@ -3,12 +3,13 @@ import { useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { ShieldCheck, Loader2, ArrowLeft, Phone, Mail } from 'lucide-react';
 import { Mascot } from './Mascot';
-import { setOnboarded, setUser, setTopicPrefs } from '../utils/storage';
+import { setOnboarded, setUser, setTopicPrefs, setRolePref } from '../utils/storage';
 import { invalidateCurriculumCache } from '../hooks/useData';
 import { playHappyChime, playPop } from '../utils/sound';
 import { dialForIso } from '../utils/countries';
 import { PhoneField } from './PhoneField';
 import { TopicChips } from './TopicChips';
+import { RoleChips } from './RoleChips';
 import { ThemeToggle } from './ThemeToggle';
 
 const GoogleIcon = ({ size = 18 }) => (
@@ -65,7 +66,7 @@ const stepAnim = {
 
 export const Onboarding = ({ onComplete }) => {
   const navigate = useNavigate();
-  const [step, setStep] = useState('welcome'); // welcome | loading | phone | email | otp | details | topics | success
+  const [step, setStep] = useState('welcome'); // welcome | loading | phone | email | otp | details | topics | role | success
   const [provider, setProvider] = useState('google'); // label for loading screen
   const [countryIso, setCountryIso] = useState('IN');
   const [phone, setPhone] = useState('');
@@ -76,7 +77,8 @@ export const Onboarding = ({ onComplete }) => {
   const [loginMethod, setLoginMethod] = useState(''); // 'phone' | 'email'
   const [resend, setResend] = useState(0);
   const [selectedTopics, setSelectedTopics] = useState([]);
-  const [pendingFinish, setPendingFinish] = useState(null); // { method, payload } queued until the topics step completes
+  const [selectedRole, setSelectedRole] = useState(null);
+  const [pendingFinish, setPendingFinish] = useState(null); // { method, payload } queued until the topics/role steps complete
   const otpRefs = useRef([]);
   const cc = dialForIso(countryIso);
   const emailValid = /\S+@\S+\.\S+/.test(email.trim());
@@ -110,6 +112,11 @@ export const Onboarding = ({ onComplete }) => {
   const finishTopics = () => {
     setTopicPrefs(selectedTopics);
     invalidateCurriculumCache();
+    setStep('role');
+  };
+
+  const finishRole = () => {
+    setRolePref(selectedRole);
     if (pendingFinish) finish(pendingFinish.method, pendingFinish.payload);
   };
 
@@ -436,6 +443,21 @@ export const Onboarding = ({ onComplete }) => {
                 <TopicChips selected={selectedTopics} onToggle={toggleTopic} />
                 <button data-testid="topics-continue" onClick={finishTopics} className={primaryBtnCls}>
                   {selectedTopics.length > 0 ? 'Start learning' : 'Skip for now'}
+                </button>
+              </motion.div>
+            )}
+
+            {step === 'role' && (
+              <motion.div key="role" {...stepAnim} className="space-y-5">
+                <div className="text-center space-y-1.5">
+                  <h2 className="text-2xl font-black text-slate-900 tracking-tight" style={{ fontFamily: 'Outfit, sans-serif' }}>What's your role?</h2>
+                  <p className="text-sm text-slate-500 font-medium">We&apos;ll build a path with just what matters for your work — skip this to see every lesson instead.</p>
+                </div>
+                <div className="max-h-72 overflow-y-auto pr-1 -mr-1">
+                  <RoleChips selected={selectedRole} onSelect={setSelectedRole} />
+                </div>
+                <button data-testid="role-continue" onClick={finishRole} className={primaryBtnCls}>
+                  {selectedRole ? 'Start learning' : 'Show me everything'}
                 </button>
               </motion.div>
             )}

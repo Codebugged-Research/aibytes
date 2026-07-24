@@ -6,11 +6,20 @@ struct LearningFocusView: View {
     @EnvironmentObject var store: AppStore
     @Environment(\.dismiss) private var dismiss
     @State private var selected: Set<String> = []
+    @State private var role: String? = nil
 
     var body: some View {
         NavigationStack {
             ScrollView {
                 VStack(alignment: .leading, spacing: 20) {
+                    VStack(alignment: .leading, spacing: 6) {
+                        Text("Your role").font(Theme.head(24)).foregroundColor(Theme.ink)
+                        Text("Pick a role to filter your path down to what matters for your work. Leave unselected to see every lesson.")
+                            .font(Theme.body(14)).foregroundColor(Theme.inkSoft)
+                    }
+
+                    RoleList(selected: role) { role = $0 }
+
                     VStack(alignment: .leading, spacing: 6) {
                         Text("Learning focus").font(Theme.head(24)).foregroundColor(Theme.ink)
                         Text("Pick your focus areas — we'll bring those lessons forward on your path. Leave everything unselected to learn in the original order.")
@@ -23,6 +32,8 @@ struct LearningFocusView: View {
 
                     PrimaryButton(title: "Save") {
                         store.topicPrefs = Array(selected)
+                        store.rolePref = role
+                        store.showAllLessons = false   // switching role/topics resets the escape hatch
                         dismiss()
                     }
                 }
@@ -36,7 +47,10 @@ struct LearningFocusView: View {
                     Button("Close") { dismiss() }
                 }
             }
-            .onAppear { selected = Set(store.topicPrefs) }
+            .onAppear {
+                selected = Set(store.topicPrefs)
+                role = store.rolePref
+            }
         }
     }
 }

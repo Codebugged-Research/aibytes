@@ -20,6 +20,9 @@ struct PathView: View {
     var body: some View {
         ScrollView {
             VStack(spacing: 0) {
+                if let role = store.activeRole {
+                    roleBanner(role)
+                }
                 ForEach(Array(units.enumerated()), id: \.element.id) { ui, unit in
                     unitSection(unit, index: ui)
                 }
@@ -30,6 +33,39 @@ struct PathView: View {
         .onAppear {
             withAnimation(.easeOut(duration: 2).repeatForever(autoreverses: false)) { nodePulse = true }
         }
+    }
+
+    private func roleBanner(_ role: Role) -> some View {
+        HStack(spacing: 12) {
+            HStack(spacing: 8) {
+                Text(role.icon).font(.system(size: 18))
+                VStack(alignment: .leading, spacing: 1) {
+                    Text("YOUR PATH").font(Theme.outfit(9, .bold)).foregroundColor(Theme.violet).tracking(1)
+                    Text(role.label).font(Theme.outfit(13, .bold)).foregroundColor(Theme.slate800)
+                }
+            }
+            Spacer()
+            Button {
+                store.showAllLessons.toggle()
+            } label: {
+                HStack(spacing: 4) {
+                    Image(systemName: "sparkles").font(.system(size: 10, weight: .bold))
+                    Text(store.showAllLessons ? "Back to \(role.label) path" : "Show all \(store.curriculum.units.count) units")
+                        .font(Theme.outfit(11, .bold))
+                }
+                .foregroundColor(Theme.violet)
+                .padding(.horizontal, 10).padding(.vertical, 6)
+                .background(Theme.card)
+                .clipShape(Capsule())
+                .overlay(Capsule().stroke(Theme.violet.opacity(0.3), lineWidth: 1))
+            }
+            .buttonStyle(.plain)
+        }
+        .padding(.horizontal, 16).padding(.vertical, 12)
+        .background(Theme.tintViolet)
+        .clipShape(RoundedRectangle(cornerRadius: 16, style: .continuous))
+        .overlay(RoundedRectangle(cornerRadius: 16, style: .continuous).stroke(Theme.violet.opacity(0.15), lineWidth: 1))
+        .padding(.horizontal, 16).padding(.top, 16).padding(.bottom, 4)
     }
 
     private func unitSection(_ unit: Unit, index: Int) -> some View {

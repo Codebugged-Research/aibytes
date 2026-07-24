@@ -7,7 +7,7 @@ import GoogleSignIn
 /// client-side. Combines first+last into `name` and calls store.completeOnboarding.
 struct OnboardingView: View {
     @EnvironmentObject var store: AppStore
-    enum Step: String { case welcome, phone, email, otp, details, topics, loading, success }
+    enum Step: String { case welcome, phone, email, otp, details, topics, role, loading, success }
 
     // UITest.* is inert unless the DEBUG screenshot harness sets UITEST_ env vars.
     @State private var step: Step = UITest.str("STEP").flatMap(Step.init(rawValue:)) ?? .welcome
@@ -25,6 +25,7 @@ struct OnboardingView: View {
     @State private var verifyingOtp = false
     @State private var otpBackendAvailable = false
     @State private var selectedTopics: Set<String> = []
+    @State private var selectedRole: String? = nil
     @State private var pendingFinish: (() -> Void)? = nil   // queued until the topics step completes
 
     private let cc = "+91"                        // web default (dialForIso 'IN')
@@ -92,6 +93,7 @@ struct OnboardingView: View {
                                     case .details:  detailsStep
                                     case .loading:  loadingStep
                                     case .topics:   topicsStep
+                                    case .role:     roleStep
                                     default:        successStep
                                     }
                                 }
@@ -381,6 +383,15 @@ struct OnboardingView: View {
         }
     }
 
+    private var roleStep: some View {
+        stepScaffold(title: "What's your role?",
+                     subtitle: "We'll build a path with just what matters for your work — skip this to see every lesson instead.",
+                     onBack: nil) {
+            RoleList(selected: selectedRole) { selectedRole = $0 }
+            PrimaryButton(title: selectedRole == nil ? "Show me everything" : "Start learning") { finishRole() }
+        }
+    }
+
     private var loadingStep: some View {
         VStack(spacing: 14) {
             ProgressView().tint(Theme.violet).scaleEffect(1.3)
@@ -450,6 +461,11 @@ struct OnboardingView: View {
 
     private func finishTopics() {
         store.topicPrefs = Array(selectedTopics)
+        go(.role)
+    }
+
+    private func finishRole() {
+        store.rolePref = selectedRole
         pendingFinish?()
     }
 

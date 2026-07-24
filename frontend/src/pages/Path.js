@@ -1,16 +1,18 @@
 import { useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import { Check, Zap, Star, ChevronRight, Lock } from 'lucide-react';
-import { useCurriculum } from '../hooks/useData';
+import { Check, Zap, Star, ChevronRight, Lock, Sparkles } from 'lucide-react';
+import { useCurriculum, useRoleFilter } from '../hooks/useData';
 import { isLessonCompleted } from '../utils/storage';
 import { getIconForEmoji } from '../utils/icons';
 import { Skeleton } from '../components/Skeleton';
 import { useState } from 'react';
 import { StartLearningTransition } from '../components/StartLearningTransition';
+import { roleById, applyRoleFilter } from '../utils/roles';
 
 export const Path = () => {
   const navigate = useNavigate();
   const { curriculum, loading } = useCurriculum();
+  const { role, showAll, toggleShowAll } = useRoleFilter();
   const [pendingLesson, setPendingLesson] = useState(null);
   const [showTransition, setShowTransition] = useState(false);
   const startLesson = (id) => { setPendingLesson(id); setShowTransition(true); };
@@ -23,7 +25,9 @@ export const Path = () => {
     );
   }
 
-  const units = curriculum?.units || [];
+  const allUnits = curriculum?.units || [];
+  const units = applyRoleFilter(allUnits, role, showAll);
+  const activeRole = roleById(role);
 
   const getLessonState = (lesson) => {
     if (isLessonCompleted(lesson.id)) return 'done';
@@ -39,6 +43,25 @@ export const Path = () => {
       transition={{ duration: 0.35 }}
     >
       <div className="pb-8">
+        {activeRole && (
+          <div className="mx-4 mt-4 mb-1 flex items-center justify-between gap-3 bg-violet-50 border border-violet-100 rounded-2xl px-4 py-3" data-testid="role-banner">
+            <div className="flex items-center gap-2 min-w-0">
+              <span className="text-lg flex-shrink-0">{activeRole.icon}</span>
+              <div className="min-w-0">
+                <p className="text-[10px] font-bold uppercase tracking-wider text-violet-500">Your path</p>
+                <p className="text-xs font-bold text-slate-800 truncate">{activeRole.label}</p>
+              </div>
+            </div>
+            <button
+              onClick={toggleShowAll}
+              data-testid="show-all-toggle"
+              className="flex-shrink-0 inline-flex items-center gap-1 text-[11px] font-bold text-violet-600 bg-white border border-violet-200 rounded-full px-3 py-1.5 hover:bg-violet-50 transition-colors"
+            >
+              <Sparkles size={11} />
+              {showAll ? `Back to ${activeRole.label} path` : `Show all ${allUnits.length} units`}
+            </button>
+          </div>
+        )}
         {units.map((unit, unitIndex) => {
           const completedCount = unit.lessons.filter(l => isLessonCompleted(l.id)).length;
           const lessons = unit.lessons;
