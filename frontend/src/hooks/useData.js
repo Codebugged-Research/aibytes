@@ -1,6 +1,4 @@
 import { useState, useEffect } from 'react';
-import { getRolePref, setRolePref, getShowAllLessons, setShowAllLessons } from '../utils/storage';
-import { applyRoleFilter } from '../utils/roles';
 
 // The curriculum (400KB+ of JSON across 500+ units) is effectively static
 // for a session, so it's fetched and parsed once and reused across every
@@ -100,30 +98,4 @@ export const useLesson = (lessonId) => {
   }, [lessonId]);
 
   return { lesson, loading, error };
-};
-
-// Role-based path state — separate from the curriculum cache above since
-// role/showAll changes are cheap, local, and don't need a refetch. Consumers
-// (Path.js, Home.js) combine this with useCurriculum()'s units via
-// applyRoleFilter(units, role, showAll) at render time.
-export const useRoleFilter = () => {
-  const [role, setRoleState] = useState(() => getRolePref());
-  const [showAll, setShowAllState] = useState(() => getShowAllLessons());
-
-  const setRole = (roleId) => {
-    setRolePref(roleId);
-    setRoleState(roleId);
-    setShowAllLessons(false);
-    setShowAllState(false);
-  };
-
-  const toggleShowAll = () => {
-    setShowAllState((prev) => {
-      const next = !prev;
-      setShowAllLessons(next);
-      return next;
-    });
-  };
-
-  return { role, showAll, setRole, toggleShowAll };
 };

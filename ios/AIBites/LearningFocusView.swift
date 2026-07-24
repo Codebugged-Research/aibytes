@@ -21,7 +21,6 @@ struct LearningFocusView: View {
 
                     PrimaryButton(title: "Save") {
                         store.rolePref = role
-                        store.showAllLessons = false   // switching role resets the escape hatch
                         dismiss()
                     }
                 }

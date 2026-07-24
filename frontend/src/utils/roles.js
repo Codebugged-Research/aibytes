@@ -103,10 +103,3 @@ export const filterUnitsByRole = (units, roleId) => {
   return units.filter((unit) => allowed.has(unit.id));
 };
 
-/// Convenience wrapper: applies the role filter only when a role is picked
-/// AND the learner hasn't opted into "show all lessons" — the two pieces of
-/// state that gate whether filtering happens at all.
-export const applyRoleFilter = (units, roleId, showAll) => {
-  if (!roleId || showAll) return units;
-  return filterUnitsByRole(units, roleId);
-};

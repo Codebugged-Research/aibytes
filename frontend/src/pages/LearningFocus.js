@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { ArrowLeft } from 'lucide-react';
 import { RoleChips } from '../components/RoleChips';
-import { getRolePref, setRolePref, setShowAllLessons } from '../utils/storage';
+import { getRolePref, setRolePref } from '../utils/storage';
 import { invalidateCurriculumCache } from '../hooks/useData';
 import { playPop } from '../utils/sound';
 
@@ -20,7 +20,6 @@ export const LearningFocus = () => {
 
   const save = () => {
     setRolePref(role);
-    setShowAllLessons(false); // switching role resets the escape hatch
     invalidateCurriculumCache();
     navigate(-1);
   };

@@ -8,8 +8,7 @@ const STORAGE_KEYS = {
   CURRENT_LESSON: 'aiquest_current',
   LESSON_PROGRESS: 'aiquest_lesson_progress',
   VOICE: 'aiquest_voice',
-  ROLE_PREF: 'aiquest_role_pref',
-  SHOW_ALL_LESSONS: 'aiquest_show_all_lessons'
+  ROLE_PREF: 'aiquest_role_pref'
 };
 
 // Role-based path — a single ROLES id (see utils/roles.js), or null for "no
@@ -23,16 +22,6 @@ export const setRolePref = (roleId) => {
     if (roleId) localStorage.setItem(STORAGE_KEYS.ROLE_PREF, roleId);
     else localStorage.removeItem(STORAGE_KEYS.ROLE_PREF);
   } catch (e) { /* noop */ }
-};
-
-// Escape hatch: when a role filter is active, lets the learner see the full
-// catalog without abandoning their role selection.
-export const getShowAllLessons = () => {
-  try { return localStorage.getItem(STORAGE_KEYS.SHOW_ALL_LESSONS) === '1'; } catch (e) { return false; }
-};
-
-export const setShowAllLessons = (value) => {
-  try { localStorage.setItem(STORAGE_KEYS.SHOW_ALL_LESSONS, value ? '1' : '0'); } catch (e) { /* noop */ }
 };
 
 export const getXP = () => {

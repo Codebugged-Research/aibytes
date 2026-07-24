@@ -60,10 +60,9 @@ enum Roles {
     }
 
     /// Filters units to a role's whitelist. Applies only when a role is
-    /// picked (non-nil unitIds) AND showAll is false — the two gates that
-    /// decide whether filtering happens at all.
-    static func filter(_ units: [Unit], roleId: String?, showAll: Bool) -> [Unit] {
-        guard let role = byId(roleId), let allowed = role.unitIds, !showAll else { return units }
+    /// picked (non-nil unitIds) — the gate for whether filtering happens.
+    static func filter(_ units: [Unit], roleId: String?) -> [Unit] {
+        guard let role = byId(roleId), let allowed = role.unitIds else { return units }
         return units.filter { allowed.contains($0.id) }
     }
 }

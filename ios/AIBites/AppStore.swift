@@ -32,28 +32,19 @@ final class AppStore: ObservableObject {
             rebuildOrderedUnits()
         }
     }
-    /// Escape hatch: when a role filter is active, lets the learner see the
-    /// full catalog without abandoning their role selection.
-    @Published var showAllLessons: Bool {
-        didSet {
-            UserDefaults.standard.set(showAllLessons, forKey: "aiquest_show_all_lessons")
-            rebuildOrderedUnits()
-        }
-    }
 
     /// The active role's metadata (icon/label), or nil if none picked.
     var activeRole: Role? { Roles.byId(rolePref) }
 
-    /// Cached result of Roles.filter — rebuilt only when curriculum,
-    /// rolePref, or showAllLessons actually change, instead of on every
-    /// access (this was previously a computed property recalculated on
-    /// every SwiftUI render pass and on every completeLesson() call, which
-    /// showed up as jank).
+    /// Cached result of Roles.filter — rebuilt only when curriculum or
+    /// rolePref actually change, instead of on every access (this was
+    /// previously a computed property recalculated on every SwiftUI render
+    /// pass and on every completeLesson() call, which showed up as jank).
     private(set) var orderedUnits: [Unit] = []
     private(set) var orderedLessons: [String] = []
 
     private func rebuildOrderedUnits() {
-        orderedUnits = Roles.filter(curriculum.units, roleId: rolePref, showAll: showAllLessons)
+        orderedUnits = Roles.filter(curriculum.units, roleId: rolePref)
         orderedLessons = orderedUnits.flatMap { $0.lessons.map(\.id) }
     }
 
@@ -64,7 +55,6 @@ final class AppStore: ObservableObject {
         notifsSeen = UserDefaults.standard.bool(forKey: "aiquest_notifs_seen")
         frozenStreak = UserDefaults.standard.integer(forKey: "aiquest_frozen_streak")
         rolePref = UserDefaults.standard.string(forKey: "aiquest_role_pref")
-        showAllLessons = UserDefaults.standard.bool(forKey: "aiquest_show_all_lessons")
         if UITest.flag("RESET") {
             let ud = UserDefaults.standard
             for key in ["aiquest_token", "aiquest_user", "aiquest_progress", "aiquest_onboarded"] {
