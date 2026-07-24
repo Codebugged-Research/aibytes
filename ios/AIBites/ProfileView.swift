@@ -202,8 +202,8 @@ struct ProfileView: View {
                     .overlay(Image(systemName: "target")
                         .font(.system(size: 15, weight: .semibold)).foregroundColor(Theme.violet))
                 VStack(alignment: .leading, spacing: 2) {
-                    Text("Learning Focus").font(Theme.outfit(14, .bold)).foregroundColor(Theme.ink)
-                    Text("Prioritize topics on your path").font(Theme.inter(12, .medium)).foregroundColor(Theme.inkFaint)
+                    Text("Your Role").font(Theme.outfit(14, .bold)).foregroundColor(Theme.ink)
+                    Text("Change your role anytime").font(Theme.inter(12, .medium)).foregroundColor(Theme.inkFaint)
                 }
                 Spacer()
                 Image(systemName: "chevron.right")

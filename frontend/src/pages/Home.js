@@ -3,7 +3,8 @@ import { useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Flame, Zap, TrendingUp, ChevronRight, Award, Check, Sparkles } from 'lucide-react';
 import { useProgress } from '../hooks/useProgress';
-import { useCurriculum } from '../hooks/useData';
+import { useCurriculum, useRoleFilter } from '../hooks/useData';
+import { applyRoleFilter } from '../utils/roles';
 import { isLessonCompleted, setStreak, addXP, getUser } from '../utils/storage';
 import { Button, Card, ProgressBar } from '../components/ui-components';
 import { Skeleton, HomeScreenSkeleton } from '../components/Skeleton';
@@ -25,6 +26,7 @@ export const Home = () => {
   const navigate = useNavigate();
   const { xp, streak, refreshProgress } = useProgress();
   const { curriculum, loading } = useCurriculum();
+  const { role, showAll } = useRoleFilter();
   const [xpPopped, setXpPopped] = useState(false);
   const [showUnfreeze, setShowUnfreeze] = useState(false);
 
@@ -36,7 +38,9 @@ export const Home = () => {
     setShowUnfreeze(false);
   };
 
-  const allLessons = curriculum?.units?.flatMap(u => u.lessons) || [];
+  const allUnits = curriculum?.units || [];
+  const roleUnits = applyRoleFilter(allUnits, role, showAll);
+  const allLessons = roleUnits.flatMap(u => u.lessons);
   const completedCount = allLessons.filter(l => isLessonCompleted(l.id)).length;
   const totalLessons   = allLessons.length || 15;
   const firstName = (getUser()?.name || '').trim().split(' ')[0] || 'there';

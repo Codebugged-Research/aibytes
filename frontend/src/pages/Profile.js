@@ -229,7 +229,7 @@ export const Profile = () => {
         >
           <span className="flex items-center gap-2">
             <Target size={16} strokeWidth={2.5} className="text-[#6248FF]" />
-            Learning Focus
+            Your Role
           </span>
           <ChevronRight size={14} strokeWidth={2.5} className="text-slate-400" />
         </motion.button>

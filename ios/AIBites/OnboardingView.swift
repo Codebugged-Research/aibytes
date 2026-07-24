@@ -7,7 +7,7 @@ import GoogleSignIn
 /// client-side. Combines first+last into `name` and calls store.completeOnboarding.
 struct OnboardingView: View {
     @EnvironmentObject var store: AppStore
-    enum Step: String { case welcome, phone, email, otp, details, topics, role, loading, success }
+    enum Step: String { case welcome, phone, email, otp, details, role, loading, success }
 
     // UITest.* is inert unless the DEBUG screenshot harness sets UITEST_ env vars.
     @State private var step: Step = UITest.str("STEP").flatMap(Step.init(rawValue:)) ?? .welcome
@@ -24,9 +24,8 @@ struct OnboardingView: View {
     @State private var otpError: String? = nil
     @State private var verifyingOtp = false
     @State private var otpBackendAvailable = false
-    @State private var selectedTopics: Set<String> = []
     @State private var selectedRole: String? = nil
-    @State private var pendingFinish: (() -> Void)? = nil   // queued until the topics step completes
+    @State private var pendingFinish: (() -> Void)? = nil   // queued until the role step completes
 
     private let cc = "+91"                        // web default (dialForIso 'IN')
 
@@ -92,7 +91,6 @@ struct OnboardingView: View {
                                     case .otp:      otpStep
                                     case .details:  detailsStep
                                     case .loading:  loadingStep
-                                    case .topics:   topicsStep
                                     case .role:     roleStep
                                     default:        successStep
                                     }
@@ -374,15 +372,6 @@ struct OnboardingView: View {
         }
     }
 
-    private var topicsStep: some View {
-        stepScaffold(title: "What do you want to learn?",
-                     subtitle: "Pick your focus areas — we'll bring those lessons forward. You can change this anytime from your profile.",
-                     onBack: nil) {
-            TopicChipGrid(selected: selectedTopics) { toggleTopic($0) }
-            PrimaryButton(title: selectedTopics.isEmpty ? "Skip for now" : "Start learning") { finishTopics() }
-        }
-    }
-
     private var roleStep: some View {
         stepScaffold(title: "What's your role?",
                      subtitle: "We'll build a path with just what matters for your work — skip this to see every lesson instead.",
@@ -448,19 +437,10 @@ struct OnboardingView: View {
 
     private func go(_ s: Step) { withAnimation { step = s } }
 
-    /// Account identity is resolved, but we still want the learner's topic
-    /// focus before celebrating — queue the final action for the topics step.
-    private func goToTopics(_ completion: @escaping () -> Void) {
+    /// Account identity is resolved, but we still want the learner's role
+    /// before celebrating — queue the final action for the role step.
+    private func goToRole(_ completion: @escaping () -> Void) {
         pendingFinish = completion
-        go(.topics)
-    }
-
-    private func toggleTopic(_ id: String) {
-        if selectedTopics.contains(id) { selectedTopics.remove(id) } else { selectedTopics.insert(id) }
-    }
-
-    private func finishTopics() {
-        store.topicPrefs = Array(selectedTopics)
         go(.role)
     }
 
@@ -475,7 +455,7 @@ struct OnboardingView: View {
         email = provider == "apple" ? "you@icloud.com" : "you@gmail.com"
         first = "Learner"; last = ""
         DispatchQueue.main.asyncAfter(deadline: .now() + 1.5) {
-            goToTopics { finish(name: "Learner", phone: nil) }
+            goToRole { finish(name: "Learner", phone: nil) }
         }
     }
 
@@ -491,7 +471,7 @@ struct OnboardingView: View {
                 let result = try await GIDSignIn.sharedInstance.signIn(withPresenting: rootVC)
                 guard let idToken = result.user.idToken?.tokenString else { go(.welcome); return }
                 let res = try await API.googleAuth(idToken: idToken)
-                goToTopics {
+                goToRole {
                     go(.success)
                     DispatchQueue.main.asyncAfter(deadline: .now() + 2.2) {
                         store.applyAuth(res)
@@ -578,7 +558,7 @@ struct OnboardingView: View {
         guard detailsValid else { return }
         let name = "\(first.trimmingCharacters(in: .whitespaces)) \(last.trimmingCharacters(in: .whitespaces))"
             .trimmingCharacters(in: .whitespaces)
-        goToTopics { finish(name: name, phone: method == "phone" ? "\(cc) \(phone)" : nil) }
+        goToRole { finish(name: name, phone: method == "phone" ? "\(cc) \(phone)" : nil) }
     }
 
     private func finish(name: String, phone: String?) {
